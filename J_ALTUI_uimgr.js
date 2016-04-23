@@ -18,7 +18,7 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights 
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
 copies of the Software, and to permit persons to whom the Software is 
-furnished to do so, subject to the following conditions: 
+furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in 
 all copies or substantial portions of the Software.
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var AltUI_revision = "$Revision: 1537 $";
+var AltUI_revision = "$Revision: 1538 $";
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
@@ -276,6 +276,8 @@ var styles ="						\
 		height:100%;			\
 		z-index: -1;			\
 	}							\
+	.altui-ace-editor .ui-resizable-helper { border: 2px dotted #00F; }		\
+	.altui-ace-editor .ui-resizable-handle { background-color: white; }		\
 	#altui-editor-text .ui-resizable-helper { border: 2px dotted #00F; }	\
 	#altui-editor-text .ui-resizable-handle { background-color: white; }	\
 	.altui-variable-title {	\
@@ -6403,6 +6405,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{ id:32, title:_T('Workflow'), onclick:'UIManager.pageWorkflow()', parent:31 },
 			{ id:33, title:_T('Workflow Report'), onclick:'UIManager.pageWorkflowReport()', parent:31 },
 			{ id:34, title:_T('License'), onclick:'UIManager.pageLicense()', parent:0 },
+			{ id:35, title:_T('Evolutions'), onclick:'UIManager.pageEvolutions()', parent:0 },		
 		];
 
 		function _parentsOf(child) {
@@ -7869,6 +7872,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				editor.getSession().setMode( "ace/mode/lua" );
 				editor.setTheme( "ace/theme/"+init );
 				editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
+				// resize
+				$(elem).resizable({
+					// containment: "parent",
+					maxWidth:$(elem).closest(".panel").innerWidth()-30, // ugly but easier, padding 15 on 
+					stop: function( event, ui ) {
+						editor.resize();
+					}
+				});				
 			});
 
 			$('#altui-state-form')
@@ -9329,6 +9340,35 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.done( function (data, textStatus, jqXHR) {
 					console.log(data);
 			});
+		});
+	},
+	
+	pageEvolutions: function() {
+		function _displayFeatures(features) {
+				var html ="";
+				html += "<ul>";
+				$.each(features, function(i,f) {
+					html += "<li>{0}</li>".format(f)
+				});
+				html += "</ul>";
+				return html;
+		};
+		
+		UIManager.clearPage(_T('Evolutions'),_T("Evolutions"),UIManager.oneColumnLayout);		
+		$.ajax({
+				// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
+				url:'https://script.google.com/macros/s/AKfycbwWlgs1x0u1OpKKvaVFywb7XY_FfZ2dGcasvnD576RUbBP1OQc/exec',	// prod
+				dataType: "json",
+				data: { appname:'AltUI',command:'history' },
+				cache:false
+			})
+		.done( function (data, textStatus, jqXHR) {
+				var panels = [];
+				$.each(data, function(idx,version) {
+					panels.push( {id: version.v , title: "V "+version.v, html: _displayFeatures(version.features) } );
+				});
+				var html = HTMLUtils.createAccordeon('altui-evolutions',panels );
+			$(".altui-mainpanel").append(html);
 		});
 	},
 	
@@ -12125,6 +12165,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.on( "click", "#altui-remoteaccess", UIManager.pageRemoteAccess )
 				.on( "click", "#altui-license-page", UIManager.pageLicense )
 				.on( "click", "#altui-credits", UIManager.pageCredits )
+				.on( "click", "#altui-evolutions", UIManager.pageEvolutions)
 				.on( "click", "#altui-oscommand", UIManager.pageOsCommand )
 				.on( "click", "#altui-luastart", UIManager.pageLuaStart )
 				.on( "click", "#altui-luatest", UIManager.pageLuaTest )
@@ -12382,7 +12423,7 @@ $(document).ready(function() {
 		body+="			<li class='dropdown-header'>About</li>";
 		body+="			<li><a id='altui-license-page' href='#'>"+_T("License Fees")+"</a></li>";
 		body+="			<li><a id='altui-credits' href='#'>"+_T("Credits")+"</a></li>";
-		body+="			<li><a id='altui-evolutions' href='http://forum.micasaverde.com/index.php/topic,33308.msg244110.html#msg244110'>"+_T("Evolutions")+"</a></li>";
+		body+="			<li><a id='altui-evolutions' href='#'>"+_T("Evolutions")+"</a></li>";
 		body+="			<li><a id='altui-support' href='http://forum.micasaverde.com/index.php?board=78.0'>"+_T("Support")+"</a></li>";
 		body+="		  </ul>";
 		body+="		</li>";
