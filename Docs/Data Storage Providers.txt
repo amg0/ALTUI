@@ -1,0 +1,100 @@
+[b]ALTUI & DataStorage Providers[/b]
+
+DataStorage Providers are an alternative to the thingspeak integration that ALTUI provides. they are optional external module which can be used to receive the notification of a variable change and do whatever you want with it ( storage in another cloud, in a DB etc ). The user can choose which underlying DataStorage provider he wants to chose when he selects the Variable Push option.
+
+You can implement DataStorage Providers as a LUA plugin, a piece of code in openLuup, or even something completely external like a node.js app running on some kind of Ux box ( like a raspberry ) as long as you can call a http GET and have a handler to be called in return in a url via a GET request
+
+The high level summary on how it works is:
+- ALTUI load DataProviders config from its variable
+- or ALTUI UPNP action is called to register a new data provider
+- the User configures a watch on a variable by specifying the provider he wants to use and the parameters required by this provider
+- when the variable changes, ALTUI calls the DataStorage provider with the same parameters as a LUA watch + the DataProvider specific parameters
+
+Lets see the details : 
+
+[u][b]DataStorage Declaration
+[/b][/u]
+ALTUI device has a new variable called [b]DataStorageProviders [/b]to keep this data provider configuration persistent accross reload/reboot
+
+Thingspeak is allways provided by ALTUI but additional DataStorage can be dynamically declared by a UPNP action "[b]RegisterDataProvider[/b]" requiring 3 parameters.
+[code]        <action>
+            <name>RegisterDataProvider</name>
+            <argumentList>
+                <argument>
+                    <name>newName</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>Name</relatedStateVariable>
+                </argument>
+                <argument>
+                    <name>newUrl</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>Url</relatedStateVariable>
+                </argument>
+                <argument>
+                    <name>newJsonParameters</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>JsonParameters</relatedStateVariable>
+                </argument>
+            </argumentList>
+        </action>[/code]
+
+-[b]Name [/b]: must be a unique name. ( thingspeak with the built in ALTUI thingspeak integration )
+-[b]Url [/b]: a URL that will be called as a callback when a variable change ( variable for which the user has selected a data push for this provider )
+-[b]JSON parameter[/b]:  a string representation of a JSON object specifying the user-interface parameters that the user must fill in.
+
+
+That JSON is an indexed array of parameter objects. each parameter object defines a particular parameter
+
+For thingspeak for instance, in LUA such an object would be like this. note it is a true indexed array. order and indexes matters.
+[code]{
+[1] 	= { ["key"]= "channelid", ["label"]="Channel ID", ["type"]="number" },	
+[2]	= { ["key"]= "readkey", ["label"]="Read API Key", ["type"]="text" },	
+[3] 	= { ["key"]= "writekey", ["label"]="Write API Key", ["type"]="text" },	
+[4] 	= { ["key"]= "fieldnum", ["label"]="Field Number", ["type"]="number", ["default"]=1 },	
+[5] 	= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url" , ["default"]="//api.thingspeak.com/channels/{0}/charts/{3}?key={1}&width=450&height=260&results=60&dynamic=true"}
+}[/code]
+
+in the UPNP action you would use the JSON stringified format of that object so something like:
+in JSON
+[code][{"type":"number","key":"channelid","label":"Channel ID"},{"type":"text","key":"readkey","label":"Read API Key"},{"type":"text","key":"writekey","label":"Write API Key"},{"default":1,"type":"number","key":"fieldnum","label":"Field Number"},{"default":"//api.thingspeak.com/channels/{0}/charts/{3}?key={1}&width=450&height=260&results=60&dynamic=true","type":"url","key":"graphicurl","label":"Graphic Url"}][/code]
+key is internal , label is what the user sees in the dialog box, type is a HTML 5 INPUT Type, default is a default value
+
+By convention, the parameter named "[b]graphicurl[/b]" is reserved to be a url with some [i]{n}[/i] placeholders inside which are replaced at the time of displaying a graphic in an iFRAME 
+whose src attribute is that url where the [i]{n}[/i] are replaced by the value of the n-th parameter of the array
+
+
+[u][b]When a variable change happens[/b][/u]
+
+if a DataStorage Provider was selected for that variable, ALTUI will call the url passed as part of the datastorage declaration with the following parameters:
+[code]-http://url...?lul_device=<n>&lul_variable=<n>&old=<n>&new=<n>&lastupdate=<n>&key=value&...  for all parameters provided on the DataStorage declaration
+-http verb = GET [/code]
+
+Caveat: calling UPNP action using http as documented by MCV requires to url encode the parameters. example, for a datastorage provider defined as:
+[code][{"type":"text","key":"toto","label":"To To"},{"default":"//www.google.com/{0}","type":"url","key":"graphicurl","label":"Graphic Url"}][/code]
+
+The url to call the UPNP action to register the provider would be:
+[code]http://192.168.1.16/port_3480/data_request?id=action&output_format=json&DeviceNum=216&serviceId=urn:upnp-org:serviceId:altui1&action=RegisterDataProvider&newName=toto&newUrl=http%3A%2F%2F192.168.1.16%2Fport_3480%2Fdata_request%3Fid%3Dlr_ALTUI_Handler%26command%3DdataPush&newJsonParameters=%5B%7B%22type%22%3A%22text%22%2C%22key%22%3A%22toto%22%2C%22label%22%3A%22To%20To%22%7D%2C%7B%22default%22%3A%22%2F%2Fwww.google.com%2F%7B0%7D%22%2C%22type%22%3A%22url%22%2C%22key%22%3A%22graphicurl%22%2C%22label%22%3A%22Graphic%20Url%22%7D%5D
+[/code]
+
+In return, when receiving the parameters back from ALTUI when it calls [code]http://url...?lul_device=<n>&lul_variable=<n>&old=<n>&new=<n>&lastupdate=<n>&key=value&...[/code]
+remember that the parameter values will be urlencoded so you need to urldecode them ( replace + with space etc ) 
+For example ALTUI is calling this hypothetical "toto" data storage provider by 
+[code]http://url?&toto=This+is+a+text&graphicurl=%2F%2Fwww.google.com%2F%7B0%7D[/code]
+
+[code]function url_encode(str)
+  if (str) then
+    str = string.gsub (str, "\n", "\r\n")
+    str = string.gsub (str, "([^%w %-%_%.%~])",
+        function (c) return string.format ("%%%02X", string.byte(c)) end)
+    str = string.gsub (str, " ", "+")
+  end
+  return str	
+end
+
+function url_decode(str)
+  str = string.gsub (str, "+", " ")
+  str = string.gsub (str, "%%(%x%x)",
+      function(h) return string.char(tonumber(h,16)) end)
+  str = string.gsub (str, "\r\n", "\n")
+  return str
+end[/code]

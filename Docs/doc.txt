@@ -1,0 +1,225 @@
+[u][b]An alternative UI for VERA boxes based on UI5 UI7[/b][/u]
+
+This plugin offers an alternative user interface for your VERA(s) controllers that is more pleasant and works on any kind of device as a web application which will automatically adjust to screen size
+
+It works as a simple plugin and you just need your browser. it supports UI5 and UI7 veras and can aggregate in the same screen the devices from multiple seperate VERA boxes.
+It is not just a re skin of UI5/7, and will offer a number of additional feature
+
+[b]LATEST VERSION[/b] : [glow=red,2,300]v 1.33.1438 April 8 2016[/glow] : 
+
+[b]Extra features not present in UI5 UI7[/b]:
+[list]
+[li]Fully responsive design / all form factors supported , no need to install a new application on your mobile [/li]
+[li]Fully skinable based on bootstrap 3 css. fixed background image / transparency[/li]
+[li]works equally well on UI5 and UI7 boxes and thus offers an enhanced experience even on older boxes without adding load to your controller. it maximizes the power of our modern browser and seldomly relies on the VERA controller[/li]
+[li]works with [b]multiple VERA controllers[/b], you can see & interact with devices and scenes of multiple controllers transparently. (but no support for secure vera)[/li]
+[li]user defined custom synoptic panels[/li]
+[list]
+[li]made of elements out of your devices ( variables, actions, images, text ) but also cameras,  graphical gauges, box frames[/li]
+[li]can mix and match devices from multiple VERA controllers (but no support for secure vera)[/li]
+[li]nice Hi/FI like on/off button[/li]
+[li]nice analog gauges to display a chosen device variable value[/li]
+[li]with a full Wysiwig editor mode for pages[/li]
+[li]drag and drop of control to add/remove and aligns[/li]
+[li]selectable page background with CSS3 property : gradiant, images or even video background if you want ![/li]
+[/list]
+[li]extensible design with javascript modules for plugins dashboard & control panels[/li]
+[li]compatibility with most 3rd party plugins (IPhone locator google map), all but a few custom devices are controllable.[/li]
+[li]all custom icons are displayed , [glow=red,2,300]even in remote access[/glow] mode[/li]
+[li]Complex graphics made with D3JS library, animated graphs for device parent child relationships, zWave neighbors, zWave routes & route quality.[/li]
+[li]Power/Energy consumption graph[/li]
+[li]Parent Child relationship on a force layout d3js map[/li]
+[li]zWave neighborhood map with color based on PollOk % status. Click able node on zWave map[/li]
+[li]zWave Route Quality Chart[/li]
+[li]Table of device with choose able / sortable columns and ability to export[/li]
+[li]trigger remote execution of user chooseable unix OS command and display output.[/li] 
+[li]History button to automatically display Scene last Execution timestamps from the lua log files[/li]
+[li]Device: Variables displayed ordered alphabetically and with enhanced display format ( dates shown as dates, url as url )[/li]
+[li]Device: Variables just click and edit, no messy checkbox to edit variable even to enter JSON or special characters[/li]
+[li]Device: detailled view of utilisation in scene actions or triggers[/li]
+[li]History button to automatically display Device Variable Changes from the lua log files[/li]
+[li]supports view of VERA lua log file with ANSI color display[/li]
+[li]Auto detection of new version & updates[/li]
+[li]Client device specific Favorite device / scene selection ( your favorites may be different on your phone or your pc)[/li]
+[li]Persistence of settings, preferences, filtering selection in various screens[/li]
+[li]Powerful filter on pages ( by category, room, name, battery )[/li]
+[li]Visible battery status[/li]
+[li]Plugin page: List of installed, direct button to reach the store, update from store, uninstall, to reach help page from the author, direct button to view content/download plugin files [/li]
+[li]Plugin page: plugin files selectio and easy content display in editor[/li]
+[li]Display of manually installed plugin[/li]
+[li]Camera: live video feed in local mode, images in remote mode[/li]
+[li]Debug tool screen enabling to get all device information, to get one device / all variable info, to search all devices for a given variable name (pattern matching), or to call a javascript piece of code, including the ALTUI object apis[/li]
+[li]Scene trigger can be a [b]device variable watch[/b] without any line of LUA code. supports conditional expression and with an optional Stable since x Sec choice[/li]
+[li]Blockly editor for watch expressions[/li]
+[li]Easy built in theme switcher for chosing predefined bootswatch themes[/li]
+[li]Colored syntax Lua editor[/li]
+[li]Speech reconigtion ( chrome desktop only ) for device / scenes[/li]
+[li]External Data storage provider integration ( thingspeak ecmoncs ) + public API to integrate yours[/li]
+[li]Graphical view on charts coming back from these data providers[/li]
+[li]Engine to run [glow=red,2,300]logic workflows[/glow] with state and transitions and graphical User Interface to view and edit them[/li]
+[/list]
+
+[b]Features equivalent to UI5 UI7[/b]:
+[list]
+[li]local and remote access via UI7 MMS authentication servers[/li]
+[li]fully featured for room devices scenes plugins[/li]
+[li]Room: List, Create, Rename[/li]
+[li]Scene: List, Execution, Create, Edit ( triggers, timers, actions, event lua code, time restriction, housemode selection )[/li]
+[li]Scene Mode selection  ( UI7 only )[/li]
+[li]Scene Pause feature : in one click[/li]
+[li]Trigger time range restriction ( new feature of latest UI7, now in AltUI too )[/li]
+[li]Device: List, responsive design page, "as you type" Filter by name/category/room[/li]
+[li]Device: small dashboard panels to fit many device on one screen. Dynamic icons as defined by the plugin author in the JSON file[/li]
+[li]Device: Variables: List & Edit with enhanced display format ( dates shown as dates, url as url )[/li]
+[li]Device: Notifications on events, Notifications to users[/li]
+[li]Device: UpnP Actions: List & trigger with parameters [/li]
+[li]Device: Control panel: per the static JSON file of the author. Display "flash" and "javascript" tab. In addition it can be customized via a ALTUI plugin.[/li]
+[li]Device: Attributes: List / Edit with enhanced display format ( dates shown as dates, url as url )[/li]
+[li]Device: UpdateNeighbours feature in device Actions dialog box[/li]
+[li]Custom pages: Use mode (kiosk) and Edit. User can create its own set of custom pages by drag and drop of widgets 
+like device icon, web images, device action button, device variable/labels, camera picture or google gage. 
+Alignment tools to create nice looking panel, customizable background by css3 ( images, gradiant... ), persistent storage of the pages on the VERA box by the LUA plugin [/li]
+[li]Lua test code editor with return and output print() display/ Lua startup code editor[/li]
+[li]scene editor[/li]
+[li]Plugin management ( install,  updates, deletes )[/li]
+[li]language aware ( EN FR IT provided ) , open design to add other languages as well[/li]
+[li]Compatible with most plugins including those with javascript tabs using the UI5 UI7 javascript API. like the RGBW plugin support[/li]
+[/list]
+
+[b]Customization[/b]
+[list]
+[li]Each device type can have its own custom panel : Datamine, Infoviewer, Weather, Light sensor, Holiday plugins, IPhone Locator, IPX800[/li]
+[li]Simple javascript API to dynamically load custom plugins to display device small panels, 
+device large control panels, device icons. ask me for details, but basically you do not need to master lots of things as long as 
+you know how to use jquery and to write HTML elements in a parent container. I will integrate your contributions[/li]
+[li]External Data storage provider integration API[/li]
+[li]Display of Watts & last trip date on device dashboards[/li]
+[li]Skinnable based on bootstrap styles you can find on https://bootswatch.com/[/li]
+[li]Extensible architecture ( device dashboard & panel can be extended by a custom JS module ). developpers are welcomed to contact me on how to do this.  There is a UPNP action called [u]registerPlugin()[/u] for plugins to dynamically register with ALTUI, @reneboer used it and explained here: http://forum.micasaverde.com/index.php/topic,30310.msg242498.html#msg242498[/li]
+[li]Selectable home page by a url parameter ( home= )[/li]
+[li]Selectable language by a url parameter ( lang= )[/li]
+[li]language list extensible by a simple javascript, [u]ask me & contribute if you want[/u][/li]
+[li]Themes & Styling[/li]
+[list]
+[li]you can take a bootstrap CSS from any bootstrap 3 CSS web sites out there providing template, or you can start from the default[/li]
+[li]you then create your own CSS file which is incremental to that initial base[/li]
+[li]you put that CSS file somewhere ( I put mines on my google drive ) , you can put it on your vera under /www and point to it if you are concerned about working without internet dependency.[/li]
+[li]if your css file points to a bitmap, you will also need to put these bitmap file somewhere, note the url and make your CSS point to it. your CSS typically include things like : 
+background-image: url(http://ssssssss/mycss.css);[/li]
+[li]you declare the path of that CSS into the variable [b]ThemeCSS[/b] of your ALTUI device[/li]
+[li]you reload ALTUI/refresh browser[/li]
+[li][u][b]Example [/b][/u]: I provided the working example of fixed wood texture background with transparency in the "Styling" folder in the code.mios.com repository that you can access: http://code.mios.com/trac/mios_alternate_ui/browser [/li]
+[li]More info on theming: [url=http://forum.micasaverde.com/index.php/topic,30310.msg243792.html#msg243792]http://forum.micasaverde.com/index.php/topic,30310.msg243792.html#msg243792[/url][/li]
+[/list]
+[/list]
+
+Although the prefered way to customize the display of a device in ALTUI is to write a small javascript plugin, 
+ALTUI provides a fast and easy customization of display of a device by the mean of 2 reserved service/variables 
+that can be added manually by the user to any device. ID = 'urn:upnp-org:serviceId:altui1' , Variable = 'DisplayLine1' and 'DisplayLine2'
+[list type=decimal]
+[li]you add the variables to the device.[/li]
+[li]if no drawing plugin is specified , then altui will look for these variables, if found, it will display one ( or both ) 
+per line. each variable text content is included in a <div> which has a CSS class called altui-DisplayLine1 or 
+altui-DisplayLine2 for possible theming if needed. Variable content will be HTML encoded so that HTML injection is not possible[/li]
+[li]if no drawing plugin is specified and if ALTUI does not find these one of these 2 variables, it will display the default 
+ellipsis glyph , signifying "default drawing"[/li]
+[/list]
+
+
+[b]Prerequisite requirements[/b]
+[list]
+[li]Just a classical plugin , no extra HW or servers[/li]
+[/list]
+
+[b]HOW TO USE / LOCAL and REMOTE ACCESS[/b]
+[list]
+[li]UI5 & UI7 local access: http://<yourip>/port_3480/data_request?id=lr_ALTUI_Handler&command=home#[/li]
+[li]optional parameter:  
+[list]
+[li][b]lang[/b]=xx for language ( fr,en,it )[/li]
+[li][b]home[/b]=xx where xx is one of pageHome, pageUsePages, pageDevices, pageScenes to force a start page[/li]
+[li][b]layout[/b]=lean for pageUsePages in case you do not want to see Menu & Message area[/li]
+[/list]
+example : http://192.168.1.16/port_3480/data_request?id=lr_ALTUI_Handler&command=home&lang=en&home=pageUsePages&layout=lean [/li]
+[li]UI7 remote access: https://vera-ui.strongcubedfitness.com/Veralogin.php [/li]
+[li]UI5 remote access : method explained here => http://forum.micasaverde.com/index.php/topic,30310.msg225132.html#msg225132
+[/li]
+[/list]
+
+[b]OFFICIAL VERSION   in Mios store[/b]
+[list]
+[li][url=http://apps.mios.com/plugin.php?id=8246]http://apps.mios.com/plugin.php?id=8246[/url][/li]
+[/list]
+
+[b]INSTALL[/b]
+[list]
+[li]official version : by the store or the UI7 "Apps' menu.[/li]
+[li]latest version : accept the autoupdate dialog box proposal , or install by opening this link in your browser  
+[url=http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31071]http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31071[/url]
+ignore error messages displayed by this page and wait until your unit reloads...[/li]
+[/list]
+
+[b]ALTUI Device VARIABLES[/b]
+[list]
+[li][b]PluginConfig [/b]: JSON structure to configure ALTUI optional modules. a UPNP action registerPlugin() can be used to programmatically add a ALTUI-plugin for custom device drawing[/li]
+[li][b]RemoteAccess [/b]: remote access url for MMS login[/li]
+[li][b]ThemeCSS [/b]: a full url to download a CSS skin for ALTUI[/li]
+[li][b]UI7Check [/b]: true if running on UI7[/li]
+[li][b]Version [/b]: the LUA plugin version[/li]
+[li][b]LocalCDN [/b]: a full path name from VERA root '/' where the necessary files for ALTUI are stored. can be left empty and ALTUI will get files from the internet but this option enables an internet free operation of ALTUI[/li]
+[li][b]ExtraController [/b]: a optional , comma seperated list of additional VERA controllers to use. the main controller must not be listed and this variable can be left emtpy if you use only one VERA with ALTUI[/li]
+[li][b]Debug [/b]: 1 for extra debugging logs[/li]
+[li][b]Data_xx_xx[/b] variables : internal storage for ALTUI user pages definitions[/li]
+[li][b]Data_CustomPages_0[/b] : JSON array of user custom page names[/li]
+[li][b]VariablesToWatch[/b]: semi column ';' seperated list of watch variable instructions. Each watch is instructions is in this format : "service#variable#deviceid#sceneid#lua_expr#blockly xml".
+sceneid is the scene to run if the lua expression is true. lua expressions uses old and new as variables for the watched variable where old = previous value and new = new value. example:
+urn:micasaverde-com:serviceId:SceneController1#LastSceneID#208#71#(old==2)and(new==1) (the xml is optional and only there if the expression was edited with the [u][b]Blockly[/b][/u] editor). 
+ALTUI scene editor will take care of editing this [b]VariablesToWatch[/b] variable.
+[/li]
+[/list]
+
+[b]UPNP ACTIONS[/b]
+[list]
+[li]registerPlugin(newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc)[/li]
+[li]RegisterDataProvider(newName, newUrl, newJsonParameters)[/li]
+[/list]
+
+
+
+[b]Some DOCs in French[/b]
+[list]
+[li]Generic Introduction & Tutorial : [url=http://code.mios.com/trac/mios_alternate_ui/export/100/Doc%20FR%20ALTUI%20-%20Part1.docx]http://code.mios.com/trac/mios_alternate_ui/export/100/Doc%20FR%20ALTUI%20-%20Part1.docx[/url][/li]
+[li]Custom Page Tutorial : [url=http://code.mios.com/trac/mios_alternate_ui/export/100/Doc%20FR%20ALTUI%20-%20Part2.docx]http://code.mios.com/trac/mios_alternate_ui/export/100/Doc%20FR%20ALTUI%20-%20Part2.docx[/url][/li]
+[li]Extension coding tutorial : [url=http://code.mios.com/trac/mios_alternate_ui/export/100/Doc%20FR%20ALTUI%20-%20Part3.docx]http://code.mios.com/trac/mios_alternate_ui/export/100/Doc%20FR%20ALTUI%20-%20Part3.docx[/url][/li]
+[/list]
+
+[b]Overall DOC in English[/b] : 
+[list]
+[li][url=http://code.mios.com/trac/mios_alternate_ui/export/1071/Docs/doc.docx]http://code.mios.com/trac/mios_alternate_ui/export/1071/Docs/doc.docx[/url][/li]
+[li][url=http://code.mios.com/trac/mios_alternate_ui/export/1071/Docs/doc.pdf]http://code.mios.com/trac/mios_alternate_ui/export/1071/Docs/doc.pdf[/url][/li]
+[/list]
+
+[b]BLOG & Web Magazine[/b]
+[list]
+[li]AltUI, an introduction: [url=http://www.domotique-info.fr/2015/04/altui-pour-vera-une-alternative-ui5-ou-ui7/]http://www.domotique-info.fr/2015/04/altui-pour-vera-une-alternative-ui5-ou-ui7/[/url][/li]
+[li]
+Custom Page tutorial: [url=http://www.touteladomotique.com/index.php?option=com_content&view=article&id=1444:altui-user-interface-alternative-pour-vera-custom-pages&catid=5:domotique&Itemid=89#.VTewKFXtlBc]http://www.touteladomotique.com/index.php?option=com_content&view=article&id=1444:altui-user-interface-alternative-pour-vera-custom-pages&catid=5:domotique&Itemid=89#.VTewKFXtlBc[/url][/li]
+[li]Extensibility for programmers : [url=http://www.touteladomotique.com/index.php?option=com_content&view=article&id=1445:altuin-user-interface-alternative-pour-vera-extensions&catid=5:domotique&Itemid=89#.VTi-C1Xtmko]http://www.touteladomotique.com/index.php?option=com_content&view=article&id=1445:altuin-user-interface-alternative-pour-vera-extensions&catid=5:domotique&Itemid=89#.VTi-C1Xtmko[/url][/li]
+[/list]
+
+[b]SOURCE code[/b]: 
+Read only access to everybody on [url=http://code.mios.com/trac/mios_alternate_ui/browser]http://code.mios.com/trac/mios_alternate_ui/browser[/url] but for non commercial use.
+
+[b]COST[/b]
+[list]
+[li]Gift-ware for non commercial use, all features available in any case,  but please consider the option to:[/li]
+[list]
+[li]Donate via the paypal button to support the effort, yearly subscription[/li]
+[li]Rank the app in the app store[/li]
+[li]Make noise in the forum:)[/li]
+[/list]
+[/list]
+
+Feedbacks & Help more than welcomed.
+thx !
+amg0.
