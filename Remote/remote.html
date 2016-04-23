@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <title>VERA AltUI</title>
+		<style>
+	body { padding-top: 70px; }
+	</style>
+
+</head>
+
+<body role="document">
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>		  
+          <a class="navbar-brand" href="#"></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><img class="imgLogo" src="http://192.168.1.16/cmh/skins/default/img/other/logoSmall.png"></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+    <div class="container-fluid theme-showcase" role="main">
+		<div class="row">
+			<div class="col-sm-10 col-sm-push-2">
+				<h1 id="altui-pagetitle" >Remote Login to VERA Alternate UI</h1>
+				<p id="altui-pagemessage"></p>
+				<div class="altui-mainpanel row">
+					<div class="col-xs-12">
+						<div id ="altui-login-form" class="form-inline">
+						  <div class="form-group">
+							<label class="sr-only" for="altui-login-name">Email address</label>
+							<input type="text" class="form-control" id="altui-login-name" placeholder="Enter login">
+						  </div>
+						  <div class="form-group">
+							<label class="sr-only" for="altui-login-pwd">Password</label>
+							<input type="password" class="form-control" id="altui-login-pwd" placeholder="Password">
+						  </div>
+						  <div class="checkbox">
+							<label>
+							  <input type="checkbox"> Remember me
+							</label>
+						  </div>
+						  <button type="submit" class="btn btn-default altui-login-request">Sign in</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2 col-sm-pull-10">
+				<div class="altui-leftnav btn-group-vertical" role="group" aria-label="...">
+					<!--
+					<button type="button" class="btn btn-default">One</button>
+					<button type="button" class="btn btn-default">Deux</button>
+					<button type="button" class="btn btn-default">Trois</button>
+					-->
+				</div>
+			</div>
+		</div>
+    </div> <!-- /container -->
+	
+    <!-- Bootstrap core JavaScript    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	<!-- Latest compiled and minified JavaScript -->
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+
+	<script type='text/javascript'>
+/**
+FROM : http://www.movable-type.co.uk/scripts/sha1.html
+ * SHA-1 hash function reference implementation.
+ *
+ * @namespace
+ */
+var Sha1 = {};
+
+/**
+ * Generates SHA-1 hash of string.
+ *
+ * @param   {string} msg - (Unicode) string to be hashed.
+ * @returns {string} Hash of msg as hex character string.
+ */
+Sha1.hash = function(msg) {
+    // convert string to UTF-8, as SHA only deals with byte-streams
+    msg = msg.utf8Encode();
+
+    // constants [§4.2.1]
+    var K = [ 0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6 ];
+
+    // PREPROCESSING
+
+    msg += String.fromCharCode(0x80);  // add trailing '1' bit (+ 0's padding) to string [§5.1.1]
+
+    // convert string msg into 512-bit/16-integer blocks arrays of ints [§5.2.1]
+    var l = msg.length/4 + 2; // length (in 32-bit integers) of msg + ‘1’ + appended length
+    var N = Math.ceil(l/16);  // number of 16-integer-blocks required to hold 'l' ints
+    var M = new Array(N);
+
+    for (var i=0; i<N; i++) {
+        M[i] = new Array(16);
+        for (var j=0; j<16; j++) {  // encode 4 chars per integer, big-endian encoding
+            M[i][j] = (msg.charCodeAt(i*64+j*4)<<24) | (msg.charCodeAt(i*64+j*4+1)<<16) |
+                (msg.charCodeAt(i*64+j*4+2)<<8) | (msg.charCodeAt(i*64+j*4+3));
+        } // note running off the end of msg is ok 'cos bitwise ops on NaN return 0
+    }
+    // add length (in bits) into final pair of 32-bit integers (big-endian) [§5.1.1]
+    // note: most significant word would be (len-1)*8 >>> 32, but since JS converts
+    // bitwise-op args to 32 bits, we need to simulate this by arithmetic operators
+    M[N-1][14] = ((msg.length-1)*8) / Math.pow(2, 32); M[N-1][14] = Math.floor(M[N-1][14]);
+    M[N-1][15] = ((msg.length-1)*8) & 0xffffffff;
+
+    // set initial hash value [§5.3.1]
+    var H0 = 0x67452301;
+    var H1 = 0xefcdab89;
+    var H2 = 0x98badcfe;
+    var H3 = 0x10325476;
+    var H4 = 0xc3d2e1f0;
+
+    // HASH COMPUTATION [§6.1.2]
+
+    var W = new Array(80); var a, b, c, d, e;
+    for (var i=0; i<N; i++) {
+
+        // 1 - prepare message schedule 'W'
+        for (var t=0;  t<16; t++) W[t] = M[i][t];
+        for (var t=16; t<80; t++) W[t] = Sha1.ROTL(W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16], 1);
+
+        // 2 - initialise five working variables a, b, c, d, e with previous hash value
+        a = H0; b = H1; c = H2; d = H3; e = H4;
+
+        // 3 - main loop
+        for (var t=0; t<80; t++) {
+            var s = Math.floor(t/20); // seq for blocks of 'f' functions and 'K' constants
+            var T = (Sha1.ROTL(a,5) + Sha1.f(s,b,c,d) + e + K[s] + W[t]) & 0xffffffff;
+            e = d;
+            d = c;
+            c = Sha1.ROTL(b, 30);
+            b = a;
+            a = T;
+        }
+
+        // 4 - compute the new intermediate hash value (note 'addition modulo 2^32')
+        H0 = (H0+a) & 0xffffffff;
+        H1 = (H1+b) & 0xffffffff;
+        H2 = (H2+c) & 0xffffffff;
+        H3 = (H3+d) & 0xffffffff;
+        H4 = (H4+e) & 0xffffffff;
+    }
+
+    return Sha1.toHexStr(H0) + Sha1.toHexStr(H1) + Sha1.toHexStr(H2) +
+           Sha1.toHexStr(H3) + Sha1.toHexStr(H4);
+};
+
+
+/**
+ * Function 'f' [§4.1.1].
+ * @private
+ */
+Sha1.f = function(s, x, y, z)  {
+    switch (s) {
+        case 0: return (x & y) ^ (~x & z);           // Ch()
+        case 1: return  x ^ y  ^  z;                 // Parity()
+        case 2: return (x & y) ^ (x & z) ^ (y & z);  // Maj()
+        case 3: return  x ^ y  ^  z;                 // Parity()
+    }
+};
+
+/**
+ * Rotates left (circular left shift) value x by n positions [§3.2.5].
+ * @private
+ */
+Sha1.ROTL = function(x, n) {
+    return (x<<n) | (x>>>(32-n));
+};
+
+
+/**
+ * Hexadecimal representation of a number.
+ * @private
+ */
+Sha1.toHexStr = function(n) {
+    // note can't use toString(16) as it is implementation-dependant,
+    // and in IE returns signed numbers when used on full words
+    var s="", v;
+    for (var i=7; i>=0; i--) { v = (n>>>(i*4)) & 0xf; s += v.toString(16); }
+    return s;
+};
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
+
+/** Extend String object with method to encode multi-byte string to utf8
+ *  - monsur.hossa.in/2012/07/20/utf-8-in-javascript.html */
+if (typeof String.prototype.utf8Encode == 'undefined') {
+    String.prototype.utf8Encode = function() {
+        return unescape( encodeURIComponent( this ) );
+    };
+}
+
+/** Extend String object with method to decode utf8 string to multi-byte */
+if (typeof String.prototype.utf8Decode == 'undefined') {
+    String.prototype.utf8Decode = function() {
+        try {
+            return decodeURIComponent( escape( this ) );
+        } catch (e) {
+            return this; // invalid UTF-8? return as-is
+        }
+    };
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+if (typeof module != 'undefined' && module.exports) module.exports = Sha1; // CommonJs export
+if (typeof define == 'function' && define.amd) define([], function() { return Sha1; }); // AMD
+
+if (typeof String.prototype.format == 'undefined') {
+	String.prototype.format = function()
+	{
+	   var content = this;
+	   for (var i=0; i < arguments.length; i++)
+	   {
+			var replacement = new RegExp('\\{' + i + '\\}', 'g');	// regex requires \ and assignment into string requires \\
+			content = content.replace(replacement, arguments[i]);  
+	   }
+	   return content;
+	};
+};
+
+function getAuthToken( user, pwd, cbfunc )
+{
+	var pwdSeed = "oZ7QE6LcLJp6fiWzdqZc";
+	var SHA1UserPassword = Sha1.hash( user+pwd+pwdSeed );
+	var url = "https://us-autha11.mios.com/autha/auth/username/{0}?SHA1Password={1}&PK_Oem=1".format(user,SHA1UserPassword);
+	$.ajax( {
+		url: url,
+		type: "GET",
+		//crossDomain: true,
+		dataType: "text"
+	})
+	.done(function(data, textStatus, jqXHR) {
+		//{"Identity":"eyJFeHBpcmVzIjoxNDI0MzUwMTM4LCJHZW5lcmF0ZWQiOjE0MjQyNjM3MzgsIlBlcm1pc3Npb25zIjpbeyJQS19QZXJtaXNzaW9uIjoxLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MywiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo0LCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjYsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6OSwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxNCwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxNSwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxNywiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxOCwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxOSwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyMCwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyMSwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyMiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyMywiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyNSwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyNiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyNywiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyOCwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyOSwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjozMCwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo0MSwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo0MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo0MywiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo1MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo2MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo3MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo4MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo5MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxMDIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MTEyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjEyMiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxMzIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MTQyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjE1MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxNjIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MTcyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjE4MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxOTIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MjAyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjIxMiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyMjIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MjMyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjI0MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyNTIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MjYyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjI3MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoyODIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MjkyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjMwMiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjozMTIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MzIyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjMzMiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjozNDIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6NDgyLCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjQ5MiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo1ODIsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6Njg1LCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjcwNSwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjo3MzEsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MTU5NiwiTW9kZSI6MX0seyJQS19QZXJtaXNzaW9uIjoxNjA2LCJNb2RlIjoxfSx7IlBLX1Blcm1pc3Npb24iOjE2MTYsIk1vZGUiOjF9LHsiUEtfUGVybWlzc2lvbiI6MTYyNiwiTW9kZSI6MX1dLCJQS19BY2NvdW50IjoyNjAwNjEsIlBLX0FjY291bnRUeXBlIjo1LCJQS19BY2NvdW50Q2hpbGQiOjAsIlBLX0FjY291bnRfUGFyZW50IjoyMzc1LCJQS19BcHAiOjAsIlBLX09lbSI6MSwiUEtfT2VtX1VzZXIiOiIiLCJQS19QZXJtaXNzaW9uUm9sZSI6MTAsIlBLX1VzZXIiOjEzMDk5NDEsIlBLX1NlcnZlcl9BdXRoIjoxLCJQS19TZXJ2ZXJfQWNjb3VudCI6NiwiUEtfU2VydmVyX0V2ZW50IjoxNCwiU2VydmVyX0F1dGgiOiJ2ZXJhLXVzLW9lbS1hdXRoYTExLm1pb3MuY29tIiwiVXNlcm5hbWUiOiJhbWcxIn0=",
+		//"IdentitySignature":"j3tTIHuG00MLrT4K1H209RJdRzePshEZmbLMMtWgTdYSar70gAYiFCp/cF8lxZEGlhwWP36hKIvENYe4+5nRPgamfwtBPkKi9ykp6tWqS/fLMB+YxfndepdG351qt42AwK28l8I+AQ4u5vmolbzxKnqLoXMXg5avqEz5VpRArE9mu1XADJJqfLGTZX8WqYJY1ariPUghUT0/raTfbKsBXLbetLdavQtp2ngC6rbsDxhpt7nc3Ci13LX0m9m6E8XZwVjiP/78m3B361mzG8MNx15Z992Z5y+klJK8bNAtqw05qbOHyYuSc2+b24tOsBtY/dWWv5zaIZ8oyRHuBLoXiA==",
+		//"Server_Event":"vera-us-oem-event12.mios.com","Server_Event_Alt":"vera-us-oem-event11.mios.com",
+		//"Server_Account":"vera-us-oem-account12.mios.com",
+		//"Server_Account_Alt":"vera-us-oem-account11.mios.com"}"
+		var result = JSON.parse(data);
+		var AuthToken  		= result.Identity;
+		var AuthSigToken    = result.IdentitySignature;
+		var Server_Account	= result.Server_Account;
+		cbfunc(AuthToken,AuthSigToken,Server_Account);
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(textStatus);
+		alert('Request failed:'+textStatus);
+	})
+	.always(function() {
+	});
+};
+
+function getSessionToken(server, AuthToken, AuthSigToken, cbfunc )
+{
+	var url = "https://"+server+"/info/session/token";
+	$.ajax( {
+		url: url,
+		type: "GET",
+		//crossDomain: true,
+		dataType: "text",
+		headers: {
+			"MMSAuth":AuthToken,
+			"MMSAuthSig":AuthSigToken
+		}
+	})
+	.done(function(SessionToken, textStatus, jqXHR) {
+		console.log("Server:"+server+" Session Token:"+SessionToken);		
+		//Server:vera-us-oem-account12.mios.com Session Token:00F53955C8BB0B3EAB729D285DDC7F5F79FCCE
+		cbfunc(SessionToken);
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(textStatus);
+		alert('Request failed:'+textStatus);
+	})
+	.always(function() {
+	});
+};
+
+function getDeviceList( server, SessionToken, cbfunc )
+{
+	var url = "https://"+server+"/locator/locator/locator";
+	$.ajax( {
+		url: url,
+		type: "GET",
+		//crossDomain: true,
+		dataType: "json",
+		headers: {
+			"MMSSession":SessionToken,
+		}
+	})
+	.done(function(data, textStatus, jqXHR) {
+		cbfunc(data.Devices);
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(textStatus);
+		alert('Request failed:'+textStatus);
+	})
+	.always(function() {
+	});
+};
+
+function getAccountDevices(Server_Account,PK_Account,SessionToken,cbfunc)
+{
+	var url = "https://{0}/account/account/account/{1}/devices".format(Server_Account,PK_Account);
+	$.ajax( {
+		url: url,
+		type: "GET",
+		//crossDomain: true,
+		dataType: "json",
+		headers: {
+			"MMSSession":SessionToken,
+		}
+	})
+	.done(function(data, textStatus, jqXHR) {
+		cbfunc(data.Devices);
+//remote.html:364 {"PK_Device":"35101627","PK_DeviceType":"1","PK_DeviceSubType":"2","MacAddress":"00:0e:8f:7f:71:ab","Server_Device":"vera-us-oem-device12.mios.com","Server_Device_Alt":"vera-us-oem-device11.mios.com","PK_Installation":"256712","DeviceAssigned":"2015-01-31 22:55:10"}
+//remote.html:364 {"PK_Device":"45101392","PK_DeviceType":"1","PK_DeviceSubType":"2","MacAddress":"d4:21:22:fc:cc:ad","Server_Device":"vera-us-oem-device11.mios.com","Server_Device_Alt":"vera-us-oem-device12.mios.com","PK_Installation":"256712","Using_2G":"0","DeviceAssigned":"2015-02-16 12:10:46"}
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(textStatus);
+		alert('Request failed:'+textStatus);
+	})
+	.always(function() {
+	});	
+};
+
+	$(document).ready(function() {
+		//var authd11Server = "us-authd11.mios.com";
+		var authd11Server = "vera-us-oem-authd11.mios.com";
+
+		// collapse on click on small screens
+		$(".navbar-nav a").on("click",function() {
+			//	$(".navbar-toggle").click();
+			if ($(this).data("toggle") != "dropdown")	// not for the More... button
+				$(".navbar-collapse").collapse('hide');
+		});
+
+		$(".altui-login-request").click( function () {
+		
+			var user = $("#altui-login-name").val().toLowerCase();
+			var pwd = $("#altui-login-pwd").val();
+			getAuthToken( user,pwd, function ( AuthToken, AuthSigToken, Server_Account ) {
+
+				if (0) // local method
+				{
+					getSessionToken( authd11Server, AuthToken, AuthSigToken, function(SessionToken) {
+						//var json = JSON.parse( atob(AuthToken) );
+						//var PK_Account = json.PK_Account;
+						getDeviceList(authd11Server,SessionToken,function(deviceTable) {
+							$.each(deviceTable, function(i,v) {
+								console.log( JSON.stringify(v) );
+							});
+						});
+					});
+				} 
+				else {
+					var json = JSON.parse( atob(AuthToken) );
+					var PK_Account = json.PK_Account;
+					getSessionToken( Server_Account, AuthToken, AuthSigToken, function(SessionToken2) {
+						getAccountDevices(Server_Account,PK_Account,SessionToken2,function(deviceTable) {
+							$.each(deviceTable, function(i,v) {
+								console.log( JSON.stringify(v) );
+								$('#altui-pagemessage').append("<pre>"+JSON.stringify(v)+"</pre>");
+							});
+						});
+					});
+				}
+			});
+			
+		});
+	});
+	</script>
+	<hr>
+	<footer><p class="text-center"><small id="altui-footer">AltUI, amg0</small></p><span id="debug"></span></footer>
+</body>
+</html>
