@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.38"
+local version = "v1.39"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -187,6 +187,19 @@ local function run_scene(id)
     local resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:HomeAutomationGateway1", "RunScene", {SceneNum = tostring(id)}, 0)
 	return resultCode, resultString, job, returnArguments
 end
+
+------------------------------------------------
+-- Pushing Box
+------------------------------------------------
+ function ALTUI_notify( pushingbox_DID, str )
+	local modurl = require "socket.url"
+    -- local pushingbox_DID="v1ACD9310D0FD754"
+	debug(string.format("ALTUI_notify( %s, %s )",pushingbox_DID, str))
+    local newstr = modurl.escape( str or "" )
+    luup.inet.wget("http://api.pushingbox.com/pushingbox?devid=" .. pushingbox_DID .. "&value=" .. newstr .. "" )
+    return true
+end
+
 
 local function getDataFor( deviceID,name,prefix )
 	local prefix = prefix or "Data_"
@@ -891,7 +904,7 @@ local function executeStateLua(lul_device,workflow_idx,state,label)
 		if (f==nil) then
 			error(string.format("Wkflow - loadstring %s failed to compile, msg=%s",lua,msg))
 		else
-			local env = { Bag = WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ] }
+			local env = { ALTUI_notify=ALTUI_notify, Bag = WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ] }
 			setfenv(f, setmetatable (env, {__index = _G, __newindex = _G}))
 			local status,res= pcall(  f )
 			
@@ -1057,9 +1070,6 @@ function proxyGet(lul_device,newUrl,resultName)
 	return 1,data
 end
 
--- <s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/' s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'>   <s:Body>      <u:ModifyUserData xmlns:u='urn:schemas-micasaverde-org:service:HomeAutomationGateway:1'>         <inUserData>		 	{&quot;devices&quot;:{},&quot;scenes&quot;:{&quot;scenes_57&quot;:{&quot;timers&quot;:[],&quot;triggers&quot;:[{&quot;name&quot;:&quot;Below 1km&quot;,&quot;enabled&quot;:1,&quot;template&quot;:&quot;2&quot;,&quot;device&quot;:&quot;94&quot;,&quot;arguments&quot;:[{&quot;id&quot;:&quot;1&quot;,&quot;value&quot;:&quot;1&quot;}],&quot;LastEval&quot;:1,&quot;last_run&quot;:1437377298}],&quot;groups&quot;:[{&quot;delay&quot;:0,&quot;actions&quot;:[]}],&quot;name&quot;:&quot;Alexis 1km&quot;,&quot;lua&quot;:&quot;--- message\nlocal current = os.time()\nlocal message = \&quot;\\nBelow 1km. \\n Heure:\&quot; .. os.date(\&quot;%c\&quot;,current) .. \&quot;\\n\&quot;\npushingbox_notify( message  )\nreturn true&quot;,&quot;id&quot;:57,&quot;room&quot;:&quot;11&quot;,&quot;modeStatus&quot;:&quot;1,2,3,4&quot;,&quot;paused&quot;:0,&quot;favorite&quot;:false,&quot;altuiid&quot;:&quot;0-57&quot;,&quot;last_run&quot;:1437376224,&quot;Timestamp&quot;:1437377258}},&quot;sections&quot;:{},&quot;rooms&quot;:{},&quot;InstalledPlugins&quot;:[],&quot;PluginSettings&quot;:[],&quot;users&quot;:{}}		 	</inUserData>         <DataFormat>json</DataFormat>      </u:ModifyUserData>   </s:Body></s:Envelope>
--- <s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/' s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'>   <s:Body>      <u:ModifyUserData xmlns:u='urn:schemas-micasaverde-org:service:HomeAutomationGateway:1'>         <inUserData>		 	{&quot;devices&quot;:{},&quot;scenes&quot;:{&quot;scenes_57&quot;:{&quot;timers&quot;:[],&quot;triggers&quot;:[{&quot;name&quot;:&quot;Below 1km&quot;,&quot;enabled&quot;:1,&quot;template&quot;:&quot;2&quot;,&quot;device&quot;:&quot;94&quot;,&quot;arguments&quot;:[{&quot;id&quot;:&quot;1&quot;,&quot;value&quot;:&quot;1&quot;}],&quot;LastEval&quot;:1,&quot;last_run&quot;:1437379023}],&quot;groups&quot;:[{&quot;delay&quot;:0,&quot;actions&quot;:[]}],&quot;name&quot;:&quot;Alexis 1km&quot;,&quot;lua&quot;:&quot;--- message\nlocal current = os.time()\nlocal message = \&quot;\\nBelow 1km. \\n Heure:\&quot; .. os.date(\&quot;%c\&quot;,current) .. \&quot;\\n\&quot;\npushingbox_notify( message  )\nreturn true&quot;,&quot;id&quot;:57,&quot;room&quot;:&quot;11&quot;,&quot;modeStatus&quot;:&quot;1,2,3,4&quot;,&quot;paused&quot;:1,&quot;favorite&quot;:false,&quot;altuiid&quot;:&quot;0-57&quot;,&quot;Timestamp&quot;:1437378982,&quot;last_run&quot;:1437379024}},&quot;sections&quot;:{},&quot;rooms&quot;:{},&quot;InstalledPlugins&quot;:[],&quot;PluginSettings&quot;:[],&quot;users&quot;:{}}		 	</inUserData>         <DataFormat>json</DataFormat>      </u:ModifyUserData>   </s:Body></s:Envelope>
-
 -- 
 -- WARNING the SOAPACTION header requires to be inside double quotes 
 -- otherwise it RETURNS http500
@@ -1068,7 +1078,6 @@ function proxySoap(lul_device,newUrl,soapaction,envelop,body)
 	debug(string.format("proxySoap lul_device:%d soapaction:%s",lul_device,soapaction))	
 	debug(string.format("body:%s",body))
 	local mybody = string.format(envelop,xml_encode(body))
-	-- local mybody="<s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/' s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'>   <s:Body>      <u:ModifyUserData xmlns:u='urn:schemas-micasaverde-org:service:HomeAutomationGateway:1'>         <inUserData>		 	{&quot;devices&quot;:{},&quot;scenes&quot;:{&quot;scenes_57&quot;:{&quot;timers&quot;:[],&quot;triggers&quot;:[{&quot;name&quot;:&quot;Below 1km&quot;,&quot;enabled&quot;:1,&quot;template&quot;:&quot;2&quot;,&quot;device&quot;:&quot;94&quot;,&quot;arguments&quot;:[{&quot;id&quot;:&quot;1&quot;,&quot;value&quot;:&quot;1&quot;}],&quot;LastEval&quot;:1,&quot;last_run&quot;:1437379682}],&quot;groups&quot;:[{&quot;delay&quot;:0,&quot;actions&quot;:[]}],&quot;name&quot;:&quot;Alexis 1km&quot;,&quot;lua&quot;:&quot;--- message\nlocal current = os.time()\nlocal message = \&quot;\\nBelow 1km. \\n Heure:\&quot; .. os.date(\&quot;%c\&quot;,current) .. \&quot;\\n\&quot;\npushingbox_notify( message  )\nreturn true&quot;,&quot;id&quot;:57,&quot;room&quot;:&quot;11&quot;,&quot;modeStatus&quot;:&quot;1,2,3,4&quot;,&quot;paused&quot;:0,&quot;favorite&quot;:false,&quot;altuiid&quot;:&quot;0-57&quot;,&quot;last_run&quot;:1437379024,&quot;Timestamp&quot;:1437379040}},&quot;sections&quot;:{},&quot;rooms&quot;:{},&quot;InstalledPlugins&quot;:[],&quot;PluginSettings&quot;:[],&quot;users&quot;:{}}		 	</inUserData>         <DataFormat>json</DataFormat>      </u:ModifyUserData>   </s:Body></s:Envelope>"
 	debug(string.format("mybody:%s",mybody))
 	local result = {}
 	local request, code = http.request({
@@ -1390,7 +1399,6 @@ end
 ------------------------------------------------
 -- Get File ( uncompress & return content )
 ------------------------------------------------
-
 local function getScriptContent( filename )
 	log("getScriptContent("..filename..")")
 	local url_req = "http://127.0.0.1:3480/"..filename
@@ -1402,6 +1410,7 @@ local function getScriptContent( filename )
 	end
 	return req_result
 end
+
 
 ------------------------------------------------------------------------------------------------
 -- Http handlers : Communication FROM ALTUI
@@ -2608,7 +2617,7 @@ function _evaluateUserExpression(lul_device, lul_service, lul_variable,old,new,l
 		-- set Environment
 		local env = {}
 		if (opt_wkflowidx~=nil) then
-			env = { Bag = WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] }
+			env = { ALTUI_notify=ALTUI_notify, Bag = WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] }
 		end
 		setfenv(f, setmetatable (env, {__index = _G, __newindex = _G}))
 		local func = f()	-- call it
@@ -3075,7 +3084,7 @@ function registerHandlers()
 		if (f==nil) then
 			luup.log(string.format("ALTUI: loadstring %s failed to compile, msg=%s",lua,results),1)
 		else
-			setfenv (f, setmetatable ({print=myPrint, pretty=pretty}, {__index = _G, __newindex = _G}))
+			setfenv (f, setmetatable ({ print=myPrint, pretty=pretty}, {__index = _G, __newindex = _G}))
 			local ok
 				ok, results = pcall (f)	-- call it
 				luup.log(string.format("ALTUI: Evaluation of lua code returned: %s",tostring(results)),50)
