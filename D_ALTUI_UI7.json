@@ -1,0 +1,320 @@
+{
+  "flashicon": "http://code.mios.com/trac/mios_alternate_ui/export/12/iconALTUI.png",
+  "default_icon": "http://code.mios.com/trac/mios_alternate_ui/export/12/iconALTUI.png",
+  "halloIconsDir": "pics\/hallo",
+  "x": "2",
+  "y": "4",
+  "inScene": "1",
+  "doc_url": {
+    "doc_language": 1,
+    "doc_manual": 1,
+    "doc_version": 1,
+    "doc_platform": 0,
+    "doc_page": "http:\/\/code.mios.com\/trac\/mios_iphone-detector\/browser\/trunk\/altui",
+    "doc_forced_url": {
+      "text": "http:\/\/www.google.com"
+    }
+  },
+  "ToggleButton": 1,
+  "Tabs": [
+	{
+		"Label": {
+			"lang_tag": "tabname_control",
+			"text": "Control"
+		},
+		"Position": "1",
+		"TopNavigationTab": "1",
+		"TabType": "flash",
+		"SceneGroup": [
+			{
+				"id": "1",
+				"top": "0",
+				"left": "0",
+				"x": "2",
+				"y": "1"
+			}
+		],
+		"ControlGroup": [
+			{
+				"id": "1",
+				"isSingle": "1",
+				"scenegroup": "1"
+			}
+		],
+		"Control": [
+			{
+				"ControlType": "label",
+				"top": "0",
+				"left": "0",
+				"text_align": "left",
+				"Label": {
+					"lang_tag": "workflow_label",
+					"text": "Workflow Mode:"
+				},
+				"Display": {
+					"Top": 10,
+					"Left": 10,
+					"Width": 50,
+					"Height": 20
+				}
+			},
+			{
+				"ControlType": "multi_state_button",
+				"top": "0",
+				"left": "1",
+				"Display": {
+					"Top": 0,
+					"Left": 140
+				},
+				"states": [
+					{
+						"Label": {
+							"lang_tag": "workflow_on",
+							"text": "Workflow"
+						},
+						"ControlGroup": "1",
+						"Display": {
+							"Service": "urn:upnp-org:serviceId:altui1",
+							"Variable": "EnableWorkflows",
+							"Value": "1"
+						},
+						"Command": {
+							"Service": "urn:upnp-org:serviceId:altui1",
+							"Action": "EnableWorkflows",
+							"Parameters": [
+								{
+									"Name": "newWorkflowMode",
+									"Value": "1"
+								}
+							]
+						},
+						"ControlCode": "workflow_on"
+					},
+					{
+						"Label": {
+							"lang_tag": "workflow_off",
+							"text": "Normal"
+						},
+						"ControlGroup": "1",
+						"Display": {
+							"Service": "urn:upnp-org:serviceId:altui1",
+							"Variable": "EnableWorkflows",
+							"Value": "0"
+						},
+						"Command": {
+							"Service": "urn:upnp-org:serviceId:altui1",
+							"Action": "EnableWorkflows",
+							"Parameters": [
+								{
+									"Name": "newWorkflowMode",
+									"Value": "0"
+								}
+							]
+						},
+						"ControlCode": "workflow_off"
+					}
+				]
+			},
+			{
+				"ControlType": "label",
+				"top": "0",
+				"left": "0",
+				"text_align": "left",
+				"Label": {
+					"lang_tag": "debug_label",
+					"text": "Debug Mode:"
+				},
+				"Display": {
+					"Top": 60,
+					"Left": 10,
+					"Width": 50,
+					"Height": 20
+				}
+			},
+			{
+				"ControlType": "multi_state_button",
+				"top": "0",
+				"left": "0",
+				"Display": {
+					"Top": 50,
+					"Left": 140
+				},
+				"states": [
+					{
+						"Label": {
+							"lang_tag": "debug_on",
+							"text": "Debug"
+						},
+						"ControlGroup": "1",
+						"Display": {
+							"Service": "urn:upnp-org:serviceId:altui1",
+							"Variable": "Debug",
+							"Value": "1"
+						},
+						"Command": {
+							"Service": "urn:upnp-org:serviceId:altui1",
+							"Action": "SetDebug",
+							"Parameters": [
+								{
+									"Name": "newDebugMode",
+									"Value": "1"
+								}
+							]
+						},
+						"ControlCode": "debug_on"
+					},
+					{
+						"Label": {
+							"lang_tag": "debug_off",
+							"text": "UnDebug"
+						},
+						"ControlGroup": "1",
+						"Display": {
+							"Service": "urn:upnp-org:serviceId:altui1",
+							"Variable": "Debug",
+							"Value": "0"
+						},
+						"Command": {
+							"Service": "urn:upnp-org:serviceId:altui1",
+							"Action": "SetDebug",
+							"Parameters": [
+								{
+									"Name": "newDebugMode",
+									"Value": "0"
+								}
+							]
+						},
+						"ControlCode": "debug_off"
+					}
+				]
+			},
+			{
+				"ControlGroup": "1",
+				"ControlType": "button",
+				"top": "1",
+				"left": "0",
+				"Label": {
+					"lang_tag": "altui_reset",
+					"text": "Reset"
+				},
+				"Display": {
+					"Service": "urn:upnp-org:serviceId:altui1",
+					"Variable": "Present",
+					"Value": "1",
+					"Top": 110,
+					"Left": 140,
+					"Width": 75,
+					"Height": 20
+				},
+				"Command": { 
+					"Service": "urn:upnp-org:serviceId:altui1",
+					"Action": "Reset", 
+					"Parameters": [] 
+				} 
+			},
+			{
+				"ControlType": "label",
+				"top": "1",
+				"left": "0",
+				"text_align": "left",
+				"Label": {
+					"lang_tag": "altui_version",
+					"text": "Version"
+				},
+				"Display": {
+					"Top": 110,
+					"Left": 10,
+					"Width": 50,
+					"Height": 20
+				}
+			},
+			{
+				"ControlGroup": "2",
+				"ControlType": "variable",
+				"top": "-1",
+				"left": "0",
+				"x": "1",
+				"text_align": "left",
+				"Display": {
+					"Service": "urn:upnp-org:serviceId:altui1",
+					"Variable": "Version",
+					"Top": 130,
+					"Left": 10,
+					"Width": 50,
+					"Height": 20
+				}
+			}
+		]
+	},
+	{
+		"Label": {
+			"lang_tag": "settings",
+			"text": "Settings"
+		},
+		"Position": "2",
+		"TopNavigationTab": "1",
+		"TabType": "javascript",
+		"ScriptName": "J_ALTUI.js",
+		"Function": "altui_Settings"
+	},
+	{
+      "Label": {
+        "lang_tag": "advanced",
+        "text": "Advanced"
+      },
+      "Position": "3",
+      "TabType": "javascript",
+      "ScriptName": "shared.js",
+      "Function": "advanced_device"
+    },
+    {
+      "Label": {
+        "lang_tag": "logs",
+        "text": "Logs"
+      },
+      "Position": "4",
+      "TabType": "javascript",
+      "ScriptName": "shared.js",
+      "Function": "device_logs"
+    },
+    {
+      "Label": {
+        "lang_tag": "notifications",
+        "text": "Notifications"
+      },
+      "Position": "5",
+      "TabType": "javascript",
+      "ScriptName": "shared.js",
+      "Function": "device_notifications"
+    },
+	{
+		"Label": {
+			"lang_tag": "ui7_device_scenes",
+			"text": "Scenes"
+		},
+		"Position": "6",
+		"TabType": "javascript",
+		"ScriptName": "shared.js",
+		"Function": "device_scenes"
+	},
+	{
+		"Label": {
+			"lang_tag": "donate",
+			"text": "Donate"
+		},
+		"TopNavigationTab": "1",
+		"Position": "7",
+		"TabType": "javascript",
+		"ScriptName": "J_ALTUI.js",
+		"Function": "altui_Donate"
+	}
+],
+  "sceneList": {
+  },
+  "eventList":{
+  },
+  "eventList2": [
+	],
+  "DeviceType": "urn:schemas-upnp-org:device:altui:1",
+  "device_type": "urn:schemas-upnp-org:device:altui:1"
+}
