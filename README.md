@@ -28,7 +28,7 @@ Alternative user interface for MCV Vera Home Automation controllers
  
 ##Licensing
 - open source for personal use
-- optional registration & licensing fee ( 2 € per month ), avaiable as 6m, 1y and 2y package
+- optional registration & licensing fee ( 2 € per month ), order from within the application, available as 6m, 1y and 2y package
 - commercial resseling requires a commercial contract with the author , amg0
 
 ##Backend Home Automation Controllers
