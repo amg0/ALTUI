@@ -16,11 +16,13 @@ Alternative user interface for MCV Vera Home Automation controllers
 - Skinnable, localized user interface
 - display and act on devices
 - display all devices variables and UPNP actions
-- display and act on scenes
+- display and act on scenes, ability to trigger scenes based on device variable changes
 - display device variable history
 - Ability to create custom user pages with widgets, drag and drop editor
 - Ability to create Logical State Machines (workflows) to create complex sequence of home automation actions
 - Various backend control features ( debug log )
+- Remote access possible via the remote access servers ( MMS ) of Vera using the same credentials
+- Automatic detection and update to new versions ( only for registered users )
  
 ##Licensing
 - open source for personal use
