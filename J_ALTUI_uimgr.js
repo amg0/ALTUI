@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var AltUI_revision = "$Revision: 1541 $";
+var AltUI_revision = "$Revision: 1543 $";
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
@@ -9338,13 +9338,29 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					cache:false
 				})
 			.done( function (data, textStatus, jqXHR) {
-					console.log(data);
+				// alert('success')
+			})
+			.fail( function() {
+				// alert('failure')
 			});
 		});
 	},
-	
+		
 	pageEvolutions: function() {
-		function _displayFeatures(features) {
+
+		UIManager.clearPage(_T('Evolutions'),_T("Evolutions"),UIManager.oneColumnLayout);		
+		
+		$.ajax({
+				// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
+				url:'https://script.google.com/macros/s/AKfycbwWlgs1x0u1OpKKvaVFywb7XY_FfZ2dGcasvnD576RUbBP1OQc/exec',	// prod
+				method:	"GET",
+				data: { appname:'AltUI', command:'history' },
+				cache:false,
+				dataType: "jsonp",
+				// processData: false			// prevent jquery to process data to receive it as pure TEXT			
+			})
+		.done( function (data, textStatus, jqXHR) {
+			function _displayFeatures(features) {
 				var html ="";
 				html += "<ul>";
 				$.each(features, function(i,f) {
@@ -9352,23 +9368,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				});
 				html += "</ul>";
 				return html;
-		};
-		
-		UIManager.clearPage(_T('Evolutions'),_T("Evolutions"),UIManager.oneColumnLayout);		
-		$.ajax({
-				// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
-				url:'https://script.google.com/macros/s/AKfycbwWlgs1x0u1OpKKvaVFywb7XY_FfZ2dGcasvnD576RUbBP1OQc/exec',	// prod
-				dataType: "json",
-				data: { appname:'AltUI',command:'history' },
-				cache:false
-			})
-		.done( function (data, textStatus, jqXHR) {
-				var panels = [];
-				$.each(data, function(idx,version) {
-					panels.push( {id: version.v , title: "V "+version.v, html: _displayFeatures(version.features) } );
-				});
-				var html = HTMLUtils.createAccordeon('altui-evolutions',panels );
+			};
+			if ($.isArray( data )==false)
+				data = JSON.parse(data);
+			var panels = [];
+			$.each(data, function(idx,version) {
+				panels.push( {id: version.v , title: "V "+version.v, html: _displayFeatures(version.features) } );
+			});
+			var html = HTMLUtils.createAccordeon('altui-evolutions',panels );
 			$(".altui-mainpanel").append(html);
+		})
+		.fail( function( jqxhr, textStatus, errorThrown  ) {
+			$(".altui-mainpanel").append("<pre>{0}</pre>".format( JSON.stringify(jqxhr) ));
 		});
 	},
 	
