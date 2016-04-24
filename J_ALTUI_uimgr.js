@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var AltUI_revision = "$Revision: 1545 $";
+var AltUI_revision = "$Revision: 1548 $";
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
@@ -9360,12 +9360,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// processData: false			// prevent jquery to process data to receive it as pure TEXT			
 			})
 		.done( function (data, textStatus, jqXHR) {
-			function _displayFeatures(features) {
+			function _displayFeatures(v,features) {
 				var html ="";
 				html += "<ul>";
 				$.each(features, function(i,f) {
 					html += "<li>{0}</li>".format(f)
 				});
+				html += "<li><a href='https://github.com/amg0/ALTUI/releases/tag/{0}'>See in <span class='text-info'>GitHub</span></a></li>".format(v)
 				html += "</ul>";
 				return html;
 			};
@@ -9373,7 +9374,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				data = JSON.parse(data);
 			var panels = [];
 			$.each(data, function(idx,version) {
-				panels.push( {id: version.v , title: "V "+version.v, html: _displayFeatures(version.features) } );
+				panels.push( {id: version.v , title: "V "+version.v, html: _displayFeatures(version.v,version.features) } );
 			});
 			var html = HTMLUtils.createAccordeon('altui-evolutions',panels );
 			$(".altui-mainpanel").append(html);
