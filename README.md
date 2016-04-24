@@ -7,9 +7,11 @@ Alternative user interface for MCV Vera Home Automation controllers
 ##Value Proposition
   - improves standard UI5 UI7 user experience
   - add new functionalities to VERA controllers
-    - workflows
+    - Workflows (logical state machines)
     - Device watches to trigger scene
-    - ability to construct custom user panels
+    - Ability to construct custom user panels
+    - Integration with Cloud Data storage to store variable history ( thingspeak, emoncms )
+    - Integration with pushingbox notification
   - works with openLuup ( open source Vera-like controller ) 
 
 ##Features
