@@ -31,5 +31,5 @@ Alternative user interface for MCV Vera Home Automation controllers
 
 ##Backend Home Automation Controllers
 ALTUI works with the following backend home automation controllers
-- openLuup : OpenLuup is an opensource, Vera like controller which runs most of the VERA plugins : https://github.com/akbooer/openLuup
+- openLuup : OpenLuup is an opensource, Lua based, Vera like controller which runs most of the VERA plugins. More information here: https://github.com/akbooer/openLuup
 - MCV Vera3, Vera Lite, Vera Edge, Vera Plus : http://getvera.com/
