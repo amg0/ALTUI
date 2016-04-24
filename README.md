@@ -23,6 +23,8 @@ Alternative user interface for MCV Vera Home Automation controllers
 - Various backend control features ( debug log )
 - Remote access possible via the remote access servers ( MMS ) of Vera using the same credentials
 - Automatic detection and update to new versions ( only for registered users )
+- Multicontroller mode ( can work with several VERAs and display all in one user interface )
+- graphical representation of your network/ routes
  
 ##Licensing
 - open source for personal use
