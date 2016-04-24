@@ -12,16 +12,6 @@ Alternative user interface for MCV Vera Home Automation controllers
     - ability to construct custom user panels
   - works with openLuup ( open source Vera-like controller ) 
 
-##Licensing
-- open source for personal use
-- optional registration & licensing fee ( 2 € per month ), avaiable as 6m, 1y and 2y package
-- commercial resseling requires a commercial contract with the author , amg0
-
-##Backend Home Automation Controllers
-ALTUI works with the following backend home automation controllers
-- openLuup : OpenLuup is an opensource, Vera like controller which runs most of the VERA plugins : https://github.com/akbooer/openLuup
-- MCV Vera3, Vera Lite, Vera Edge, Vera Plus : http://getvera.com/
-
 ##Features
 - Skinnable, localized user interface
 - display and act on devices
@@ -31,3 +21,13 @@ ALTUI works with the following backend home automation controllers
 - Ability to create custom user pages with widgets, drag and drop editor
 - Ability to create Logical State Machines (workflows) to create complex sequence of home automation actions
 - Various backend control features ( debug log )
+ 
+##Licensing
+- open source for personal use
+- optional registration & licensing fee ( 2 € per month ), avaiable as 6m, 1y and 2y package
+- commercial resseling requires a commercial contract with the author , amg0
+
+##Backend Home Automation Controllers
+ALTUI works with the following backend home automation controllers
+- openLuup : OpenLuup is an opensource, Vera like controller which runs most of the VERA plugins : https://github.com/akbooer/openLuup
+- MCV Vera3, Vera Lite, Vera Edge, Vera Plus : http://getvera.com/
