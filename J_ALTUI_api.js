@@ -1277,7 +1277,8 @@ var api = {
 	isZWaveChild: function (deviceId) {
 		// API version 6
 		// UNIMPLEMENTED - return false by default
-		return MultiBox.isDeviceZwave(_JSAPI_ctx.deviceid);
+		var device = MultiBox.getDeviceByID(_JSAPI_ctx.controllerid,deviceId)
+		return MultiBox.isDeviceZwave(device);
 	},
 	setDeviceProperty: function(deviceId, attributeName, attributeValue, options) {
 		return this.setDeviceAttribute(deviceId, attributeName, attributeValue, options);

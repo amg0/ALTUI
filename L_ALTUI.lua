@@ -1498,7 +1498,7 @@ local htmlLayout = [[
 
 	@csslinks@
 	@style@
-    <title>AltUI</title>
+    <title></title>
 </head>
 
 <body role="document">

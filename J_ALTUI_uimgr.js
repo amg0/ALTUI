@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var AltUI_revision = "$Revision: 1543 $";
+var AltUI_revision = "$Revision: 1545 $";
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
@@ -592,7 +592,7 @@ var styles ="						\
 	  margin: auto;		\
 	}		\
 	.imgLogo {		\
-		display: block;		\
+		display: none;		\
 		max-width: 150px;		\
 		margin-left: auto;		\
 		margin-right: auto;		\
@@ -12132,6 +12132,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			case 'on_ui_initFinished':
 				bUIReady =true;
 				Localization.doBranding();
+				$(".imgLogo").show();
 				break;
 			case 'on_ui_userDataLoaded':
 				bEngineReady=true;
@@ -12446,7 +12447,7 @@ $(document).ready(function() {
 		body+="</div> <!-- /container -->";
 		body+="<div id='altui-background'></div>";
 		$("#wrap").prepend(body);
-		
+				
 		// client side override of theme if defined
 		var clientsideThemecss= MyLocalStorage.getSettings("Theme");
 		if (clientsideThemecss != null)
@@ -12463,6 +12464,7 @@ $(document).ready(function() {
 	};
 
 	function _onInitLocalization() {
+		Localization.setTitle("ALTUI")
 		if (isNullOrEmpty(g_Options))
 			_onInitLocalization2();
 		else {

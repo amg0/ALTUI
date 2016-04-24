@@ -77,7 +77,6 @@ var Localization = ( function (undefined) {
 	var _initTerms = function(terms) {
 		_terms = $.extend(_terms,terms);
 		_unknown_terms = {};
-		Localization.setTitle("Vera ALTUI")
 	};
 	
 	var _dumpTerms = function() {
