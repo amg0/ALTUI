@@ -50,7 +50,8 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var AltUI_revision = "$Revision: 1550 $";
+var ALTUI_revision = "$Revision: 1552 $";
+var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
@@ -4914,8 +4915,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// license valid
 			$("footer #registration").html("<span class='text-success'>, {0} / {1}</span>".format(_T("Registered Version"),(res.license.date!=null) ? res.license.date : ''));
 			$("footer #altui-license-page").remove();
+			ALTUI_registered = true;
 		} else 
 		{
+			ALTUI_registered = false;
 			if ($("#wrap #altui-license").length==0) {
 				// rotating license message
 				var close = "<button class='close altui-pagemessage-close' type='button' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
@@ -4981,7 +4984,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			};
 			var re = /\$Revision:\s*(\d*).*\$/; 
 			var m;
-			if ((m = re.exec(AltUI_revision)) !== null) {
+			if ((m = re.exec(ALTUI_revision)) !== null) {
 				
 				function _unregisteredFooter(footerstr) {
 					$("small#altui-footer").html( footerstr );
@@ -5016,6 +5019,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				delete footerMap.paypal
 
 				// JSONP call that will trigger a response with a call to UIManager.googleScript
+				ALTUI_registered = false;
 				$.ajax({
 					// crossDomain :true,
 					// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
@@ -9366,7 +9370,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$.each(features, function(i,f) {
 					html += "<li>{0}</li>".format(f)
 				});
-				html += "<li><a href='https://github.com/amg0/ALTUI/releases/tag/{0}'>See in <span class='text-info'>GitHub</span></a></li>".format(v)
+				if (ALTUI_registered==true)
+					html += "<li><a href='https://github.com/amg0/ALTUI/releases/tag/{0}'>See in <span class='text-info'>GitHub</span></a></li>".format(v)
 				html += "</ul>";
 				return html;
 			};
