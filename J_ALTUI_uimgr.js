@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var AltUI_revision = "$Revision: 1548 $";
+var AltUI_revision = "$Revision: 1550 $";
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
@@ -9519,7 +9519,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		UIManager.clearPage(_T('LuaTest'),_T("LUA Code Test"),UIManager.oneColumnLayout);
 		$(".altui-mainpanel").append("<p>"+_T("This test code will succeed if it is syntactically correct. It must be the body of a function and can return something. The return object and console output will be displayed)")+"</p>");
 		var lastOne = MyLocalStorage.getSettings("LastOne_LuaTest") || "return true";
-		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',"Lua Test Code",lastOne,true,_T("Submit"),function(lua) {
+		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Test Code"),lastOne,true,_T("Submit"),function(lua) {
 			MyLocalStorage.setSettings("LastOne_LuaTest",lua);
 			MultiBox.runLua(0,lua, function(res) {
 				res = $.extend({success:false, result:"",output:""},res);
@@ -9732,7 +9732,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		function _prepareUI( ctrlid ) {
 			var lua = MultiBox.getLuaStartup(ctrlid );
-			UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',"Lua Startup Code",lua,null,"Submit",function(newlua) {
+			UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Startup Code"),lua,null,"Submit",function(newlua) {
 				if (newlua!=lua) {
 					DialogManager.confirmDialog(_T("do you want to change lua startup code ? if yes, it will generate a LUA reload, be patient..."),function(result) {
 						if (result==true) {

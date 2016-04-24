@@ -398,7 +398,10 @@ Localization.init( {
 	"Resellers or Integrators are welcome to contact me for eventual commercial agreements.":"Resellers or Integrators are welcome to contact me for eventual commercial agreements.",
 	"Check for Updates":"Check for Updates",
 	"Unregistered Version":"Unregistered Version",
-	"active":"active"
+	"active":"active",
+	"Device zWave Parameters":"Paramètres module zWave",
+	"Lua Editor":"Éditeur Lua",
+	"Recording...":"Enregistrement...",
 });
 
 // override rules with localized version
