@@ -463,7 +463,7 @@ var Interface = function (undefined) {
 					($myModal.modal("hide"))
 
 				displayConfirmationPopup ? 
-					DialogManager.dlgAddDialogButton($myModal, true, _T("Ok"),'showMessagePopup_success',{ 'data-modal_role':'success'}):
+					DialogManager.dlgAddDialogButton($myModal, true, _T("Ok"),'showMessagePopup_success','altui-confim-dlg',{ 'data-modal_role':'success'}):
 					(btnTitle = "Ok")
 
 				$myModal.off("hide.bs.modal").on("hide.bs.modal", function() {
