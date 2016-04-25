@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1564 $";
+var ALTUI_revision = "$Revision: 1566 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5272,15 +5272,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		if (bFirst==true) {
 			var favoriteTemplate = "";
-			favoriteTemplate += "<div class='altui-favorites-device pull-left' >";
+			favoriteTemplate += "<div id='{0}' class='altui-favorites-device pull-left' >";
 				favoriteTemplate += "<div class='altui-favorites-device-container' >";
 						favoriteTemplate += "<div class='altui-favorites-title'>";
 							favoriteTemplate += "<small class='text-muted'>";
-							favoriteTemplate += "{0}";
+							favoriteTemplate += "{1}";
 							favoriteTemplate += "</small>";
 						favoriteTemplate += "</div>";
 					favoriteTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
-						favoriteTemplate += "{1}";
+						favoriteTemplate += "{2}";
 					favoriteTemplate += "</div></div>";
 				favoriteTemplate += "</div>";
 			favoriteTemplate += "</div>";
@@ -5294,7 +5294,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			if ( MyLocalStorage.getSettings('ShowWeather')==1 )
 			{
 				var meteoTemplate = "";
-				meteoTemplate += "<div class='altui-favorites-weather pull-left' >";
+				meteoTemplate += "<div id='{0}' class='altui-favorites-weather pull-left' >";
 					meteoTemplate += "<div class='altui-favorites-device-container' >";
 						meteoTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
 							meteoTemplate += "{1}";
@@ -5308,21 +5308,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var html_meteo="";
 				html_meteo +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
 				html_meteo +=('</a><div id="awcc1439296613816" class="aw-widget-current"  data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
-				html +=(meteoTemplate.format("",html_meteo))
+				html +=(meteoTemplate.format("meteo",html_meteo))
 			}
 			
 			// draw Housemode
 			if (UIManager.UI7Check()==true)
 			{
 				var housemodeTemplate = "";
-				housemodeTemplate += "<div class='altui-favorites-housemode pull-left' >";
+				housemodeTemplate += "<div id='{0}' class='altui-favorites-housemode pull-left' >";
 					housemodeTemplate += "<div class='altui-favorites-device-container' >";
 						housemodeTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
 							housemodeTemplate += "{1}";
 						housemodeTemplate += "</div></div>";
 					housemodeTemplate += "</div>";
 				housemodeTemplate += "</div>";
-				html +=(housemodeTemplate.format("", HouseModeEditor.displayModes2('altui-housemode-group','',[]) ))
+				html +=(housemodeTemplate.format("housemode", HouseModeEditor.displayModes2('altui-housemode-group','',[]) ))
 			}
 
 			// CSS technique of http://stackoverflow.com/questions/20456694/grid-of-responsive-squares
@@ -5330,12 +5330,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					return device.favorite; 
 				}, function(devices) {
 				$.each(devices, function(idx,device) {
-					html +=favoriteTemplate.format(device.name,_drawFavoriteDevice(device));
+					html +=favoriteTemplate.format("d"+device.altuiid,device.name,_drawFavoriteDevice(device));
 				})
 
 				MultiBox.getScenes(null, function(scene) { return scene.favorite; }, function (scenes) {
 					$.each(scenes, function(idx,scene) {
-						html +=favoriteTemplate.format(scene.name,_drawFavoriteScene(scene.altuiid));
+						html +=favoriteTemplate.format("s"+scene.altuiid,scene.name,_drawFavoriteScene(scene.altuiid));
 					})
 
 					// close col & row
@@ -5366,10 +5366,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					
 					// make them sortalble
 					$( ".altui-favorites-sortable" ).sortable({
-						// containment:"parent",
+						containment:".altui-mainpanel",
 						cursor: "move",
 						// placeholder: "altui-favorites-device",
 						revert: true,
+						stop: function( ui,event) {
+							var sortedIDs = $( ".altui-favorites-sortable" ).sortable( "toArray" );
+						}
 						// scroll: false
 					});
 					// start the housemode refresh sequence
@@ -9599,6 +9602,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			["Bootstrap Multiselect","http://davidstutz.github.io/bootstrap-multiselect/","Bootstrap based Multiselect control"],		
 			["ACE editor","https://ace.c9.io/","ACE code editor"],		
 			["JointJS","http://www.jointjs.com/","JointJS graphic library"],		
+			["JustGage","http://justgage.com/","justGage vectorial gage"],		
 			["amg0","http://forum.micasaverde.com/","reachable as amg0 on this forum "]
 		];
 		
