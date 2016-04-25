@@ -1435,6 +1435,7 @@ local htmlLocalScripts = [[
     <script src="@localcdn@/jsapi.js"></script> 	
 	<script src="@localcdn@/spectrum.min.js"></script>
 	<script src="@localcdn@/raphael-min.js"></script>
+	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
 	<script src="J_ALTUI_utils.js" ></script>
 	<script src="J_ALTUI_api.js" ></script>
 	<script src="J_ALTUI_upnp.js" ></script>
@@ -1455,6 +1456,7 @@ local htmlScripts = [[
 	<script type="text/javascript"  
 	  src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>
+	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
 	<script src="J_ALTUI_utils.js" ></script>
 	<script src="J_ALTUI_api.js" ></script>
 	<script src="J_ALTUI_upnp.js" ></script>
@@ -1832,7 +1834,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				--------------------------------
 				-- preload scripts of ALTUI
 				--------------------------------
-				for k,v in pairs({"J_ALTUI_jquery.ui.touch-punch.min.js","J_ALTUI_b_blockly_compressed.js","J_ALTUI_b_blocks_compressed.js","J_ALTUI_b_"..lang..".js","J_ALTUI_b_javascript_compressed.js","J_ALTUI_b_lua_compressed.js"}) do
+				for k,v in pairs({"J_ALTUI_b_blockly_compressed.js","J_ALTUI_b_blocks_compressed.js","J_ALTUI_b_"..lang..".js","J_ALTUI_b_javascript_compressed.js","J_ALTUI_b_lua_compressed.js"}) do
 					scripts[idx] = v
 					loaded[scripts[idx]]=true
 					idx = idx+1
