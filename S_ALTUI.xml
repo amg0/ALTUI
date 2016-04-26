@@ -84,6 +84,12 @@
             <shortCode>controlpanelfunc</shortCode>
         </stateVariable>
         <stateVariable sendEvents="no">
+            <name>FavoriteFunc</name>
+            <dataType>string</dataType>
+            <defaultValue></defaultValue>
+            <shortCode>favoritefunc</shortCode>
+        </stateVariable>
+        <stateVariable sendEvents="no">
             <name>Name</name>
             <dataType>string</dataType>
             <defaultValue></defaultValue>
@@ -174,6 +180,11 @@
                     <name>newControlPanelFunc</name>
                     <direction>in</direction>
                     <relatedStateVariable>ControlPanelFunc</relatedStateVariable>
+                </argument>
+                <argument>
+                    <name>newFavoriteFunc</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>FavoriteFunc</relatedStateVariable>
                 </argument>
             </argumentList>
         </action>

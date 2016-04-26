@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1575 $";
+var ALTUI_revision = "$Revision: 1580 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -519,7 +519,7 @@ var styles ="						\
 		position:relative;			/* so child are positioned relatve to it */  \
 		margin:0%;				\
 		overflow:hidden;			\
-		outline: 1px solid black;	\
+		border: 1px solid black;	\
 	}		\
 	div.altui-favorites-weather {		\
 		width: 50%;					\
@@ -527,7 +527,7 @@ var styles ="						\
 		position:relative;			/* so child are positioned relatve to it */  \
 		margin:0%;					\
 		overflow:hidden;			\
-		outline: 1px solid black;	\
+		border: 1px solid black;	\
 	}\
 	div.altui-favorites-device-container { \
 		position:absolute;										\
@@ -560,7 +560,7 @@ var styles ="						\
 	.altui-sonos-tile-img {\
 		width:100%;	\
 	}\
-	div.altui-favorites-device:hover, div.altui-favorites-scene:hover {				\
+	div.altui-favorites-housemode:hover, div.altui-favorites-weather:hover, div.altui-favorites-device:hover, div.altui-favorites-scene:hover {				\
 		cursor: pointer;		\
 		border-color: green;		\
 	}		\
@@ -729,6 +729,10 @@ var styles ="						\
 		padding-left: 3px;	\
 		padding-right: 3px;	\
 	}				\
+	img.altui-favorite-icon {\
+		width:70%;	\
+		height:70%;	\
+	}\
 	.altui-device-icon {			\
 		cursor: pointer;	\
 		margin-left: 0px;	\
@@ -5183,9 +5187,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		if ($(".altui-favorites-device-container").length>0) {
 			var width = $(".altui-favorites-device-container").innerWidth();
 			$(".altui-favorites-scene-content")
-				.css("font-size",Math.floor(width/5))
+				.css("font-size",Math.floor(width/6))
 			$(".altui-favorites-device-content")
-				.css("font-size",Math.floor(width/5))
+				.css("font-size",Math.floor(width/6))
+			$(".altui-favorites-smalltext")
+				.css("font-size",Math.floor(width/12))
 		}
 	};
 
@@ -5257,7 +5263,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += "<span>{0}</span> <span class='altui-favorites-smalltext'>W</span>".format(watts || "-");				
 					break;
 				default:
-					html += "-";
+					var _altuitypesDB = MultiBox.getALTUITypesDB();	// Master controller
+					var dt = _altuitypesDB[device.device_type];
+					if (dt!=null && dt.FavoriteFunc!=null ) {
+						html += Altui_ExecuteFunctionByName(dt.FavoriteFunc, window, device);
+					}
+					else
+						html += "-";
 					break;
 			}
 			html += "</div>";
@@ -5422,7 +5434,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					
 		} else {
 			// refresh all existing favorites
-			$(".altui-favorites-device").each( function(idx,elem) {
+			$(".altui-favorites-device").not(".altui-norefresh").each( function(idx,elem) {
 				var content = $(elem).find(".altui-favorites-device-content");
 				if (content.length>0) {
 					var altuiid = content.data("altuiid");
@@ -6595,6 +6607,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	displayTimers		: _displayTimers,
 	jobStatusToColor	: _jobStatusToColor,
 	defaultDeviceDrawWatts: _defaultDeviceDrawWatts,	// default HTML for Watts & UserSuppliedWattage variable
+	deviceIcon			: _deviceIconHtml,				//( device, zindex, onclick )
 	deviceDraw 			: _deviceDraw,					// draw the mini device on device page; can be customized by a plugin by ["DeviceDrawFunc"]
 	deviceDrawVariables : _deviceDrawVariables,			// draw the device variables
 	deviceDrawActions 	: _deviceDrawActions,			// draw the device Upnp Actions

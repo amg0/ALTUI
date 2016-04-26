@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.40"
+local version = "v1.41"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -2293,6 +2293,7 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_iphone.js",
 		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawAltUI",
 		["ControlPanelFunc"]="ALTUI_IPhoneLocator.drawAltUIControlPanel",
+		["FavoriteFunc"]="ALTUI_IPhoneLocator.drawAltUIFavorite",
 	}
 	tbl["urn:schemas-futzle-com:device:holidayvirtualswitch:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
@@ -2555,20 +2556,21 @@ function UPNPregisterDataProvider(lul_device, newName, newUrl, newJsonParameters
 	return 0
 end
 
-function UPNPregisterPlugin(lul_device,newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc)
+function UPNPregisterPlugin(lul_device,newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc,newFavoriteFunc)
 	newScriptFile = newScriptFile or ""
 	newDeviceDrawFunc = newDeviceDrawFunc or ""
 	newStyleFunc = newStyleFunc or ""
 	newDeviceIconFunc = newDeviceIconFunc or ""
 	newControlPanelFunc = newControlPanelFunc or ""
-	log(string.format("UPNPregisterPlugin(%d,%s,%s,%s,%s,%s,%s)",lul_device,newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc))
+	newFavoriteFunc = newFavoriteFunc or ""
+	log(string.format("UPNPregisterPlugin(%d,%s,%s,%s,%s,%s,%s,%s)",lul_device,newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc,newFavoriteFunc))
 	if (newDeviceType ~= "") then
 		local tbljson = getSetVariable(ALTUI_SERVICE, "PluginConfig", lul_device, json.encode( getDefaultConfig() ) )
 		local tbl = json.decode(tbljson)
 		if (tbl[newDeviceType] == nil) then
 			tbl[newDeviceType]={}
 		end
-		for k,v  in pairs({ ["ScriptFile"]=newScriptFile,["DeviceDrawFunc"]=newDeviceDrawFunc,["StyleFunc"]=newStyleFunc,["DeviceIconFunc"]=newDeviceIconFunc,["ControlPanelFunc"]=newControlPanelFunc}) do
+		for k,v  in pairs({ ["ScriptFile"]=newScriptFile,["DeviceDrawFunc"]=newDeviceDrawFunc,["StyleFunc"]=newStyleFunc,["DeviceIconFunc"]=newDeviceIconFunc,["ControlPanelFunc"]=newControlPanelFunc,["FavoriteFunc"]=newFavoriteFunc}) do
 			if (v~="") then
 				tbl[newDeviceType][k]=v
 			end

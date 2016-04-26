@@ -19,6 +19,19 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		style += "#altui-cplus-keytbl td {text-align:center;     vertical-align:middle;}";
 		style += ".altui-cplus-button { width: 70px; font-size:12px;}";
 		style += ".altui-ipx  { margin-top: 10px; }";	
+		style += "\
+			.spin {\
+				animation: spinAround 10s linear infinite;\
+			}\
+			@keyframes spinAround {\
+				from {\
+					transform: rotate(0deg)\
+				}\
+				to {\
+					transform: rotate(360deg);\
+				}\
+			}\
+		";
 		return style;
 	};
 
@@ -30,6 +43,17 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	};
+	
+	function _drawAltUIFavorite( device) {
+		var html = UIManager.deviceIcon(device)
+					.replace('altui-device-icon','altui-device-icon altui-favorite-icon spin')
+					.replace('pull-left','')
+		// var html = "<span>ok</span>"
+		html += "<script type='text/javascript'>";
+		html += " $('.altui-favorites-device#d{0}').addClass('altui-norefresh')".format(device.altuiid);
 		html += "</script>";
 		return html;
 	};
@@ -179,6 +203,7 @@ html+="<tr><td><button class='altui-cplus-button btn btn-default' id='VOL-'>VOL-
 	drawIPX		: _drawIPX,
 	drawAltUI 	: _drawAltUI,
 	drawAltUIControlPanel:_drawAltUIControlPanel,
+	drawAltUIFavorite:_drawAltUIFavorite,
 	drawCanalplus : _drawCanalplus,
 	drawCanaplusControlPanel : _drawCanaplusControlPanel,
 	
