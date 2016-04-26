@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1573 $";
+var ALTUI_revision = "$Revision: 1575 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -519,8 +519,7 @@ var styles ="						\
 		position:relative;			/* so child are positioned relatve to it */  \
 		margin:0%;				\
 		overflow:hidden;			\
-		border-width:1px;			\
-		border-style: solid;		\
+		outline: 1px solid black;	\
 	}		\
 	div.altui-favorites-weather {		\
 		width: 50%;					\
@@ -528,8 +527,7 @@ var styles ="						\
 		position:relative;			/* so child are positioned relatve to it */  \
 		margin:0%;					\
 		overflow:hidden;			\
-		border-width:1px;			\
-		border-style: solid;		\
+		outline: 1px solid black;	\
 	}\
 	div.altui-favorites-device-container { \
 		position:absolute;										\
@@ -538,23 +536,30 @@ var styles ="						\
 		width:100%; /* = 100% - 2*0% padding */		\
 		padding: 0% 0%;										\
 	} \
-	.altui-favorites-title {		\
+	.altui-favorites-title { \
 		white-space: nowrap; overflow: hidden; text-overflow: ellipsis;		\
-		height: 15%;  	\
-		width: 100%; max-width: 100% 	\
-	}		\
+		position:absolute; \
+		z-index: 99; \
+		top: 0px; \
+		width: 100%; max-width: 100% \
+	} \
 	.altui-favorites-smalltext { \
 		font-size:0.3em;	\
 	} \
 	div.altui-favorites-table { \
+		position:absolute; \
+		top: 0px; \
 		display:table;		\
 		width:100%;		\
-		height:85%;	/* title takes 10%*/	\
+		height:100%;	\
 	} \
 	div.altui-favorites-table-cell { \
 		display:table-cell;		\
 		vertical-align:middle;	\
 	} \
+	.altui-sonos-tile-img {\
+		width:100%;	\
+	}\
 	div.altui-favorites-device:hover, div.altui-favorites-scene:hover {				\
 		cursor: pointer;		\
 		border-color: green;		\
@@ -5195,6 +5200,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			if (isNaN(watts)==false) 
 				html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format(watts);
 			switch(device.device_type) {
+				case "urn:schemas-micasaverde-com:device:Sonos:1":
+					var src = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:AVTransport', 'CurrentAlbumArt');
+					html += "<img class='altui-sonos-tile-img' src='{0}' ></img>".format(src)
+					break;
 				case "urn:schemas-micasaverde-com:device:LightSensor:1":
 					var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' ); 
 					html += "<span>{0}</span> <span class='altui-favorites-smalltext'>lux</span>".format(level/*+ws.tempFormat*/);
