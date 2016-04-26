@@ -179,7 +179,6 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				device.ip,	//ip
 				MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
 			);
-			var width = $('.altui-favorites-device#d'+device.altuiid).innerWidth();
 			var div = $("<div class='altui-camera-picture'></div>")
 				.css({
 					"background-image": streamurl,
