@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.41"
+local version = "v1.42"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -2279,10 +2279,12 @@ local function getDefaultConfig()
 	tbl["urn:schemas-upnp-org:device:DigitalSecurityCamera:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawCamera",
+		["FavoriteFunc"]="ALTUI_PluginDisplays.drawCameraTile",
 	}
 	tbl["urn:schemas-upnp-org:device:DigitalSecurityCamera:2"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawCamera",
+		["FavoriteFunc"]="ALTUI_PluginDisplays.drawCameraTile",
 	}
 	tbl["urn:schemas-upnp-org:device:cplus:1"]= {
 		["ScriptFile"]="J_ALTUI_iphone.js",

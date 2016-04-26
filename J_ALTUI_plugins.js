@@ -164,6 +164,40 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			return div.wrap( "<div></div>" ).parent().html();
 		}
 	}
+	function _drawCameraTile(device) {
+		var html="";
+		var video = (MyLocalStorage.getSettings('ShowVideoThumbnail') || 0)==1;
+		var urlHead = MultiBox.getUrlHead(device.altuiid) 
+		if ( MultiBox.isRemoteAccess() || (video==false) ) {
+			var img = $("<img class='altui-camera-picture'></img>")
+				.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
+				.css('width','100%')
+
+			html =  img.wrap( "<div></div>" ).parent().html();
+		} else {
+			var streamurl = "url(http://{0}{1})".format(
+				device.ip,	//ip
+				MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
+			);
+			var width = $('.altui-favorites-device#d'+device.altuiid).innerWidth();
+			var div = $("<div class='altui-camera-picture'></div>")
+				.css({
+					"background-image": streamurl,
+					"background-size": "cover",
+					position: 'absolute',
+					top: '0px',
+					bottom: '0px',
+					left: '0px',
+					right: '0px'
+					})
+				// .css("background-size","contain")
+			html= div.wrap( "<div></div>" ).parent().html();
+			html += "<script type='text/javascript'>";
+			html += " $('.altui-favorites-device#d{0}').addClass('altui-norefresh')".format(device.altuiid);
+			html += "</script>";
+		}
+		return html;
+	}
 	
 	function _drawVswitch( device ) {
 		var html ="";
@@ -1141,6 +1175,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawHeater	   : _drawHeater,
 	drawZoneThermostat : _drawZoneThermostat,
 	drawCamera     : _drawCamera,
+	drawCameraTile     : _drawCameraTile,
 	drawVswitch	   : _drawVswitch,
 	onSliderChange : _onSliderChange,
 	drawDoorSensor : _drawDoorSensor,

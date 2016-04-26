@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1581 $";
+var ALTUI_revision = "$Revision: 1584 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5338,7 +5338,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			favoriteTemplate += "<div id='{0}' class='altui-favorites-device pull-left' >";
 				favoriteTemplate += "<div class='altui-favorites-device-container' >";
 						favoriteTemplate += "<div class='altui-favorites-title'>";
-							favoriteTemplate += "<small class='text-muted'>";
+							favoriteTemplate += "<small class='text-info'>";
 							favoriteTemplate += "{1}";
 							favoriteTemplate += "</small>";
 						favoriteTemplate += "</div>";
@@ -5421,6 +5421,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$( ".altui-favorites-sortable" ).sortable({
 				containment:".altui-mainpanel",
 				cursor: "move",
+				delay: 200,
+				distance: 10,
 				// placeholder: "altui-favorites-device",
 				revert: true,
 				stop: function( ui,event) {
@@ -6096,7 +6098,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			function(devices) {
 				DialogManager.dlgAddDevices2(dialog, 'altui-select-device', widget.properties.deviceid, _T("Device"), devices.filter(
 					function(device) {		// filter function
-						return (device.device_type=="urn:schemas-upnp-org:device:DigitalSecurityCamera:2");
+						return (device.device_type=="urn:schemas-upnp-org:device:DigitalSecurityCamera:2") || (device.device_type=="urn:schemas-upnp-org:device:DigitalSecurityCamera:1");
 					})
 				);
 				DialogManager.dlgAddDevices2(dialog, 'altui-device-trigger', widget.properties.triggerdeviceid, _T("Trigger"), devices);
