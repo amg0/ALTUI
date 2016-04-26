@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1580 $";
+var ALTUI_revision = "$Revision: 1581 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4989,10 +4989,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								// do not touch _safeScripts contents
 								if ( $.inArray( scriptname, _safeScripts) == -1) {
 									data = _fixScriptPostLoad( scriptname , data, ui7style );
-									var code = "//# sourceURL="+scriptname+"\n"+data;
+									data = "//# sourceURL="+scriptname+"\n"+data;
 								}
 								
-								$('script[data-src="'+scriptname+'"]').text(code);
+								$('script[data-src="'+scriptname+'"]').text(data);
 								_defereddisplay(true);
 							})
 						}

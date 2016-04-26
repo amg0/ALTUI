@@ -872,12 +872,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					// jsonp.ud.rooms.push(room);
 				});
 			if (data.InstalledPlugins2)
-				var pluginSettings = data.PluginSettings
+				var pluginSettings = data.PluginSettings;	// specific for UI5 user data
 				$.each(data.InstalledPlugins2, function(idx,plugin) {
 					plugin.altuiid = "{0}-{1}".format(_uniqID,idx);
-					for (var j=0;j<pluginSettings.length;j++) {
-						if (pluginSettings[j].plugin_id == plugin.id) {
-							plugin.AltuiSettings = pluginSettings[j];
+					if(pluginSettings) {
+						for (var j=0;j<pluginSettings.length;j++) {
+							if (pluginSettings[j].plugin_id == plugin.id) {
+								plugin.AltuiSettings = pluginSettings[j];
+							}
 						}
 					}
 				});
