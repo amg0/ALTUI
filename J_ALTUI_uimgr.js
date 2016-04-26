@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1571 $";
+var ALTUI_revision = "$Revision: 1573 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5271,6 +5271,48 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 		}
 		if (bFirst==true) {
+			var favoritesToDraw=[];	// will then be sorted according to last saved preference
+			
+			// draw meteo
+			if ( MyLocalStorage.getSettings('ShowWeather')==1 )
+				favoritesToDraw.push({name:"meteo"});
+
+			// draw Housemode
+			if (UIManager.UI7Check()==true)
+				favoritesToDraw.push({name:"housemode"});
+
+			MultiBox.getDevices(null , function(device) { return device.favorite; }, function(devices) {
+				$.each(devices, function(idx,device) {
+					favoritesToDraw.push({name:"d"+device.altuiid, device:device});
+				})
+
+				MultiBox.getScenes(null, function(scene) { return scene.favorite; }, function (scenes) {
+					$.each(scenes, function(idx,scene) {
+						favoritesToDraw.push({name:"s"+scene.altuiid, scene:scene});
+					})
+				})
+			});
+			
+			// reorder favorites
+			//["housemode", "meteo", "d0-178", "d0-65", "d0-63", "d0-137", "d0-138", "d0-112", "d0-191", "d0-188", "d0-147", "s0-43", "s0-44"]
+			var favoritesOrder = MyLocalStorage.getSettings('FavoritesOrder'); 
+			if (favoritesOrder!=null) {
+				function findIndexByName(name) {
+					for (var k=0; k<favoritesToDraw.length; k++ ) {
+						if ( favoritesToDraw[k].name == name )
+							return k;
+					}
+					return -1;
+				}
+				for(var i=0; i<favoritesOrder.length; i++) {
+					var j = findIndexByName( favoritesOrder[i] )
+					var temp =  favoritesToDraw[i];
+					favoritesToDraw[i] = favoritesToDraw[j];
+					favoritesToDraw[j] = temp;
+				}
+			}
+			// draw them
+			// CSS technique of http://stackoverflow.com/questions/20456694/grid-of-responsive-squares
 			var favoriteTemplate = "";
 			favoriteTemplate += "<div id='{0}' class='altui-favorites-device pull-left' >";
 				favoriteTemplate += "<div class='altui-favorites-device-container' >";
@@ -5289,96 +5331,86 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			
 			html += "<div class='altui-favorites row'>";
 			html += "<div class='altui-favorites-sortable col-xs-12'>";
-			
-			// draw meteo
-			if ( MyLocalStorage.getSettings('ShowWeather')==1 )
-			{
-				var meteoTemplate = "";
-				meteoTemplate += "<div id='{0}' class='altui-favorites-weather pull-left' >";
-					meteoTemplate += "<div class='altui-favorites-device-container' >";
-						meteoTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
-							meteoTemplate += "{1}";
-						meteoTemplate += "</div></div>";
+			$.each(favoritesToDraw,function(idx,fav) {
+				if (fav.name=="meteo") {
+					var meteoTemplate = "";
+					meteoTemplate += "<div id='{0}' class='altui-favorites-weather pull-left' >";
+						meteoTemplate += "<div class='altui-favorites-device-container' >";
+							meteoTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
+								meteoTemplate += "{1}";
+							meteoTemplate += "</div></div>";
+						meteoTemplate += "</div>";
 					meteoTemplate += "</div>";
-				meteoTemplate += "</div>";
-				var language = getQueryStringValue("lang") || window.navigator.userLanguage || window.navigator.language;
-				var ws = MultiBox.getWeatherSettings();
-				if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
-					ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride'); 
-				var html_meteo="";
-				html_meteo +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
-				html_meteo +=('</a><div id="awcc1439296613816" class="aw-widget-current"  data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
-				html +=(meteoTemplate.format("meteo",html_meteo))
-			}
-			
-			// draw Housemode
-			if (UIManager.UI7Check()==true)
-			{
-				var housemodeTemplate = "";
-				housemodeTemplate += "<div id='{0}' class='altui-favorites-housemode pull-left' >";
-					housemodeTemplate += "<div class='altui-favorites-device-container' >";
-						housemodeTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
-							housemodeTemplate += "{1}";
-						housemodeTemplate += "</div></div>";
-					housemodeTemplate += "</div>";
-				housemodeTemplate += "</div>";
-				html +=(housemodeTemplate.format("housemode", HouseModeEditor.displayModes2('altui-housemode-group','',[]) ))
-			}
-
-			// CSS technique of http://stackoverflow.com/questions/20456694/grid-of-responsive-squares
-			MultiBox.getDevices(null , function(device) { 
-					return device.favorite; 
-				}, function(devices) {
-				$.each(devices, function(idx,device) {
-					html +=favoriteTemplate.format("d"+device.altuiid,device.name,_drawFavoriteDevice(device));
-				})
-
-				MultiBox.getScenes(null, function(scene) { return scene.favorite; }, function (scenes) {
-					$.each(scenes, function(idx,scene) {
-						html +=favoriteTemplate.format("s"+scene.altuiid,scene.name,_drawFavoriteScene(scene.altuiid));
-					})
-
-					// close col & row
-					html += "</div>";		
-					html += "</div>";		
-
-					$(".altui-favorites").replaceWith(html);
-
-					// do JS run actions, after DOM is in place
-					var valueFontColor = getCSS('color','text-info');
-					$(".altui-gauge-favorite").each(function(idx,elem) {
-						var altuiid = $(elem).data('altuiid');
-						var g = new JustGage({
-							id: "altui-gauge-favorite-"+altuiid,
-							value: $(elem).data("temp"),
-							min: 0,
-							max: 40,
-							relativeGaugeSize: true,
-							formatNumber: true,
-							decimals:1,
-							valueFontColor: valueFontColor
-						  });
-						$(elem).data("justgage",  g);
-						return true;
-					});
-					// resize favorite
-					_resizeFavorites();
+					var language = getQueryStringValue("lang") || window.navigator.userLanguage || window.navigator.language;
+					var ws = MultiBox.getWeatherSettings();
+					if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
+						ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride'); 
+					var html_meteo="";
+					html_meteo +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
+					html_meteo +=('</a><div id="awcc1439296613816" class="aw-widget-current"  data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
+					html +=(meteoTemplate.format("meteo",html_meteo))
 					
-					// make them sortalble
-					$( ".altui-favorites-sortable" ).sortable({
-						containment:".altui-mainpanel",
-						cursor: "move",
-						// placeholder: "altui-favorites-device",
-						revert: true,
-						stop: function( ui,event) {
-							var sortedIDs = $( ".altui-favorites-sortable" ).sortable( "toArray" );
-						}
-						// scroll: false
-					});
-					// start the housemode refresh sequence
-					UIManager.drawHouseMode();
-				})
+				} else if (fav.name == "housemode" ) {
+					var housemodeTemplate = "";
+					housemodeTemplate += "<div id='{0}' class='altui-favorites-housemode pull-left' >";
+						housemodeTemplate += "<div class='altui-favorites-device-container' >";
+							housemodeTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
+								housemodeTemplate += "{1}";
+							housemodeTemplate += "</div></div>";
+						housemodeTemplate += "</div>";
+					housemodeTemplate += "</div>";
+					html +=(housemodeTemplate.format("housemode", HouseModeEditor.displayModes2('altui-housemode-group','',[]) ))
+					
+				} else if (fav.name[0]=="d") {
+					html +=favoriteTemplate.format(fav.name,fav.device.name,_drawFavoriteDevice(fav.device));
+					
+				} else if (fav.name[0]=="s") {
+					html +=favoriteTemplate.format(fav.name,fav.scene.name,_drawFavoriteScene(fav.scene.altuiid));
+					
+				}
 			});
+
+			// close col & row
+			html += "</div>";		
+			html += "</div>";		
+
+			$(".altui-favorites").replaceWith(html);
+
+			// do JS run actions, after DOM is in place
+			var valueFontColor = getCSS('color','text-info');
+			$(".altui-gauge-favorite").each(function(idx,elem) {
+				var altuiid = $(elem).data('altuiid');
+				var g = new JustGage({
+					id: "altui-gauge-favorite-"+altuiid,
+					value: $(elem).data("temp"),
+					min: 0,
+					max: 40,
+					relativeGaugeSize: true,
+					formatNumber: true,
+					decimals:1,
+					valueFontColor: valueFontColor
+				  });
+				$(elem).data("justgage",  g);
+				return true;
+			});
+			// resize favorite
+			_resizeFavorites();
+			
+			// make them sortalble
+			$( ".altui-favorites-sortable" ).sortable({
+				containment:".altui-mainpanel",
+				cursor: "move",
+				// placeholder: "altui-favorites-device",
+				revert: true,
+				stop: function( ui,event) {
+					var sortedFavorites = $( ".altui-favorites-sortable" ).sortable( "toArray" );
+					MyLocalStorage.setSettings('FavoritesOrder',sortedFavorites); 
+				}
+				// scroll: false
+			});
+			// start the housemode refresh sequence
+			UIManager.drawHouseMode();
+					
 		} else {
 			// refresh all existing favorites
 			$(".altui-favorites-device").each( function(idx,elem) {
@@ -6738,11 +6770,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					case "urn:schemas-upnp-org:device:VSwitch:1":
 						MultiBox.runAction( device, "urn:upnp-org:serviceId:VSwitch1","ToggleState", {} );
 						break;
-					case "urn:schemas-upnp-org:device:cplus:1":
-						// var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:cplus1', 'Present' ); 
-						// status = parseInt(status);
-						// MultiBox.runAction( device, "urn:upnp-org:serviceId:cplus1","SetPower", {newPowerState: 1-status} );
-						// break;
+					case "urn:schemas-upnp-org:device:cplus:1":;
 					default:
 						UIManager.pageControlPanel(altuiid);
 						break;
