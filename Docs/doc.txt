@@ -5,7 +5,7 @@ This plugin offers an alternative user interface for your VERA(s) controllers th
 It works as a simple plugin and you just need your browser. it supports UI5 and UI7 veras and can aggregate in the same screen the devices from multiple seperate VERA boxes.
 It is not just a re skin of UI5/7, and will offer a number of additional feature
 
-[b]LATEST VERSION[/b] : [glow=red,2,300]v 1.33.1438 April 8 2016[/glow] : 
+[b]LATEST VERSION[/b] : [glow=red,2,300]v 1.42.1590 April 27 2016[/glow] : 
 
 [b]Extra features not present in UI5 UI7[/b]:
 [list]
@@ -155,7 +155,7 @@ example : http://192.168.1.16/port_3480/data_request?id=lr_ALTUI_Handler&command
 [list]
 [li]official version : by the store or the UI7 "Apps' menu.[/li]
 [li]latest version : accept the autoupdate dialog box proposal , or install by opening this link in your browser  
-[url=http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31071]http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31071[/url]
+[url=http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31370]http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31370[/url]
 ignore error messages displayed by this page and wait until your unit reloads...[/li]
 [/list]
 
@@ -180,7 +180,7 @@ ALTUI scene editor will take care of editing this [b]VariablesToWatch[/b] variab
 
 [b]UPNP ACTIONS[/b]
 [list]
-[li]registerPlugin(newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc)[/li]
+[li]registerPlugin(newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc,newFavoriteFunc)[/li]
 [li]RegisterDataProvider(newName, newUrl, newJsonParameters)[/li]
 [/list]
 
