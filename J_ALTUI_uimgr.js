@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1587 $";
+var ALTUI_revision = "$Revision: 1590 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -730,8 +730,8 @@ var styles ="						\
 		padding-right: 3px;	\
 	}				\
 	img.altui-favorite-icon {\
-		width:70%;	\
-		height:70%;	\
+		width:60%;	\
+		height:60%;	\
 	}\
 	.altui-device-icon {			\
 		cursor: pointer;	\
@@ -5199,6 +5199,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _drawFavoriteGauge(device,temp) {
 			return '<div class="altui-gauge-favorite" id="altui-gauge-favorite-{0}" data-altuiid="{0}" data-name="{1}" data-temp="{2}"></div>'.format(device.altuiid,device.name,temp);
 		}
+		function _drawDefaultFavoriteDevice(device) {
+			return UIManager.deviceIcon(device).replace('altui-device-icon','altui-device-icon altui-favorite-icon').replace('pull-left','');
+		}
 		function _drawFavoriteDevice(device) {
 			var html="";
 			html += "<div class='altui-favorites-device-content' data-altuiid='{0}'>".format(device.altuiid);
@@ -5269,7 +5272,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						html += Altui_ExecuteFunctionByName(dt.FavoriteFunc, window, device);
 					}
 					else
-						html += "-";
+						html += _drawDefaultFavoriteDevice(device);
 					break;
 			}
 			html += "</div>";
@@ -5327,9 +5330,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				}
 				for(var i=0; i<favoritesOrder.length; i++) {
 					var j = findIndexByName( favoritesOrder[i] )
-					var temp =  favoritesToDraw[i];
-					favoritesToDraw[i] = favoritesToDraw[j];
-					favoritesToDraw[j] = temp;
+					if (j!=-1) {
+						var temp =  favoritesToDraw[i];
+						favoritesToDraw[i] = favoritesToDraw[j];
+						favoritesToDraw[j] = temp;
+					}
 				}
 			}
 			// draw them
@@ -5432,6 +5437,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				}
 				// scroll: false
 			});
+
+			// update order
+			var sortedFavorites = $( ".altui-favorites-sortable" ).sortable( "toArray" );
+			MyLocalStorage.setSettings('FavoritesOrder',sortedFavorites); 
+			
 			// start the housemode refresh sequence
 			UIManager.drawHouseMode();
 					
@@ -6786,6 +6796,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					case "urn:schemas-upnp-org:device:BinaryLight:1":
 						var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ); 
 						MultiBox.runAction(device,"urn:upnp-org:serviceId:SwitchPower1","SetTarget", {newTargetValue:1-parseInt(status||1)});
+						break;
+					case "urn:schemas-micasaverde-com:device:DoorLock:1":
+						var status = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:DoorLock1', 'Status' ); 
+						MultiBox.runAction(device,"urn:micasaverde-com:serviceId:DoorLock1","SetTarget", {newTargetValue:1-parseInt(status||1)});
 						break;
 					case "urn:schemas-micasaverde-com:device:WindowCovering:1"	:
 					case "urn:schemas-upnp-org:device:DimmableLight:1":
