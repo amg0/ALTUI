@@ -391,8 +391,9 @@ var MultiBox = ( function( window, undefined ) {
 		var id = controllerid || 0;
 		return _controllers[id].controller.getDeviceByAltID( parentdevid , altid );
 	};
-	function _getDeviceByType(str) {
-		return _controllers[0].controller.getDeviceByType(str);
+	function _getDeviceByType(controllerid,str) {
+		var id = controllerid || 0;
+		return _controllers[id].controller.getDeviceByType(str);
 	};
 	function _getDeviceActions(device,cbfunc) {
 		if (device==null) {

@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1590 $";
+var ALTUI_revision = "$Revision: 1596 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5032,20 +5032,36 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		if (res.update && res.update.valid) {
 			var bUpdate = ( (res.license && res.license.valid==true) || (res.update.forced==true) ) 
-			var buttons = bUpdate ? null : [];
+			var buttons = bUpdate ? [
+				{isdefault:false, label:_T("Close for 24h"), id:'altui-close-24h' },
+				{isdefault:true, label:_T("Yes")}
+			] : [];
 			var dialogText = bUpdate ? _T("a newer version #{0} of ALTUI is available, do you want to upgrade ?").format(res.update.newVersion)
 									 : _T("a newer version #{0} of ALTUI is available, auto upgrade requires a registered version").format(res.update.newVersion)
-			DialogManager.confirmDialog(dialogText ,
-			function(result) {
-				if (result==true)
-					MultiBox.triggerAltUIUpgrade(res.update.newVersion,res.update.newTrac);
-			},
-			buttons);
-			var html ="<ul>";
-			html += $.map(res.update.newFeatures,function(e) { return "<li>"+e+"</li>"} ).join('');
-			html +="</ul>"
-			$("div#dialogModal .row-fluid").append(html);
+									 
+			var now = new Date();
+			var date = MyLocalStorage.getSettings("PostPoneUpdate");
+			if ( ( date == null ) || ( new Date(date) < now) ) {
+				DialogManager.confirmDialog(dialogText , function(result) {
+					if (result==true)
+						MultiBox.triggerAltUIUpgrade(res.update.newVersion,res.update.newTrac);
+					},
+					buttons
+				);
+				$('div#dialogs')		
+					.off('click',"#altui-close-24h")
+					.on('click',"#altui-close-24h",function() {
+						var date = new Date();
+						date.setDate(date.getDate() + 1);
+						MyLocalStorage.setSettings("PostPoneUpdate",date)
+					});
+				var html ="<ul>";
+				html += $.map(res.update.newFeatures,function(e) { return "<li>"+e+"</li>"} ).join('');
+				html +="</ul>"
+				$("div#dialogModal .row-fluid").append(html);
+			}
 		}
+		return (res.update && res.update.valid)
 	};
 	
 	function _refreshFooterSize() {
@@ -5125,7 +5141,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					if (timer) clearTimeout( timer );
 					// display and update immediately
 					_unregisteredFooter(footerstr);
-					UIManager.googleScript(data);
+					var bUpgrade = UIManager.googleScript(data);
+					if ((bManual==true) && (bUpgrade==false)) {
+						DialogManager.infoDialog(_T("Check for Updates"),_T("You already have the latest version"));
+					}
 				});
 			}
 		}
@@ -5403,6 +5422,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$(".altui-favorites").replaceWith(html);
 
 			// do JS run actions, after DOM is in place
+			var ws = MultiBox.getWeatherSettings();
+			if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
+				ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride'); 
+
 			var valueFontColor = getCSS('color','text-info');
 			$(".altui-gauge-favorite").each(function(idx,elem) {
 				var altuiid = $(elem).data('altuiid');
@@ -5410,7 +5433,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					id: "altui-gauge-favorite-"+altuiid,
 					value: $(elem).data("temp"),
 					min: 0,
-					max: 40,
+					max: (ws.tempFormat.toLowerCase() == 'c') ? 40 : 110,
 					relativeGaugeSize: true,
 					formatNumber: true,
 					decimals:1,
@@ -10518,7 +10541,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var color = {};
 				var nColor = 0;
 				if (devices) {
-					var zwavenet = MultiBox.getDeviceByType("urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
+					var zwavenet = MultiBox.getDeviceByType(0,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
 					if (zwavenet) {
 						color[zwavenet.device_type]=nColor++;
 						data.nodes.push({ 
@@ -11053,7 +11076,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 				data.root={ id:0, zwid:0, name:"root", children:[] };
 				if (devices) {
-					var zwavenet = MultiBox.getDeviceByType("urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
+					var zwavenet = MultiBox.getDeviceByType(0,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
 					if (zwavenet) {
 						color[zwavenet.device_type]=nColor++;
 						data.nodes.push({ 
@@ -11584,10 +11607,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		UIManager.genericTableDraw('Pushes','push',model);
 	},
+	
 	pageTblControllers:function() {
+		var _buttons = [
+			{id:"altui-ctrl-heal", glyph:"glyphicon-heart-empty", label:_T("ZWave Heal")},
+			{id:"altui-ctrl-inclusion", glyph:"glyphicon-plus", label:_T("ZWave Inclusion")},
+			{id:"altui-ctrl-exclusion", glyph:"glyphicon-minus", label:_T("ZWave Exclusion")},
+		];
+
 		function _displayControllerInfo(box_info) {
-			return HTMLUtils.array2Table(box_info,"PK_AccessPoint",[]);
+			var html ="";
+			html += "<div class='altui-ctrl-tools'>{0}</div>".format(HTMLUtils.drawToolbar( _buttons ));
+			html +=  HTMLUtils.array2Table(_buildArrayFromParams(box_info),null,[],_T("Details"),null,'altui-controller-params');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
+			return html;
 		};
+		
 		UIManager.clearPage(_T('TblControllers'),_T("Table Controllers"),UIManager.oneColumnLayout);
 		var html="";
 		html+="<div>";
@@ -11606,16 +11640,96 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		bFirst=true;
 		$.each(controllers, function( idx, controller) {
 			var name  = (controller.ip == "" ) ? "Main" : controller.ip ;
-			html+="    <div role='tabpanel' class='tab-pane {2}' id='altui_ctrl_{0}'><pre class='pre-scrollable'>{1}</pre></div>".format(
+			html+="    <div role='tabpanel' class='altui-controller-panel tab-pane {2}' id='altui_ctrl_{0}'>{1}</div>".format(
 				idx,
-				// _displayControllerInfo(controller.box_info),
-				JSON.stringify(controller.box_info,null,2),
+				_displayControllerInfo(controller.box_info),
 				(bFirst==true ? 'active' : ''));
 			bFirst=false;
 		});
 		html+="  </div>";
 		html+="</div>";
 		$(".altui-mainpanel").append( html );
+		
+		// interactivity
+		$("#altui-ctrl-heal").click(function() {
+			var panel = $(this).closest('.altui-controller-panel');
+			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			var zwavenet = MultiBox.getDeviceByType(id,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
+			if (zwavenet!=null) {
+				DialogManager.confirmDialog(_T("Are you sure you want to heal your zwave network"),function(result) {
+					if (result==true) {
+						// local URN  = "urn:micasaverde-com:serviceId:ZWaveNetwork1"
+						// local ACT  = "HealNetwork"
+						// local BATT = {BatteryMinutes=30}  -- Default 30. Nightly 60.
+						// local ITR  = {StressCycles=2}     -- Default probably ample.
+						// local START= {StartStage=1}       
+						// local STOP = {StopStage=3}        -- Default 7. UI7.10 or greater probably needs to go no further than 3.
+						// luup.call_action(URN, ACT, BATT, ITR, START, STOP)
+						MultiBox.runAction( zwavenet, "urn:micasaverde-com:serviceId:ZWaveNetwork1", "HealNetwork", {
+							BatteryMinutes:30,
+							StressCycles:2,
+							StartStage:1,
+							StopStage:3
+						}, function(result) {
+							alert(result);
+						});
+					}
+				});
+			}
+		});
+		$("#altui-ctrl-inclusion").click( function() {
+			// <s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+			// <s:Body>	
+			// <u:AddNodes xmlns:u="urn:schemas-micasaverde-org:service:ZWaveNetwork:1">		
+			// <InclusionMode>LowPower</InclusionMode>		
+			// <NodeType>1</NodeType>		
+			// <Timeout>0</Timeout>		
+			// <Multiple>1</Multiple>		
+			// <ControllerShift>0</ControllerShift>		
+			// <Reload>0</Reload>	
+			// </u:AddNodes>
+			// </s:Body>
+			// </s:Envelope>
+			var panel = $(this).closest('.altui-controller-panel');
+			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			var zwavenet = MultiBox.getDeviceByType(id,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
+			if (zwavenet!=null) {
+				DialogManager.confirmDialog(_T("Are you sure you want to enter Inclusion mode"),function(result) {
+					if (result==true) {
+						MultiBox.runAction( zwavenet, "urn:micasaverde-com:serviceId:ZWaveNetwork1", "AddNodes", {
+							InclusionMode:'LowPower',
+							NodeType:1,
+							Timeout:120,
+							Multiple:1,
+							ControllerShift:0,
+							Reload:0
+						}, function(result) {
+							alert(result);
+						});
+					}
+				});
+			}
+		});
+		$("#altui-ctrl-exclusion").click( function() {
+			var panel = $(this).closest('.altui-controller-panel');
+			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			var zwavenet = MultiBox.getDeviceByType(id,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
+			if (zwavenet!=null) {
+				DialogManager.confirmDialog(_T("Are you sure you want to enter Exclusion mode"),function(result) {
+					if (result==true) {
+						MultiBox.runAction( zwavenet, "urn:micasaverde-com:serviceId:ZWaveNetwork1", "RemoveNodes", {
+							InclusionMode:'LowPower',
+							NodeType:1,
+							Timeout:120,
+							Multiple:1,
+							Reload:0
+						}, function(result) {
+							alert(result);
+						});
+					}
+				});
+			}
+		});
 	},
 	pageTblScenes: function() {
 		UIManager.clearPage(_T('TblScenes'),_T("Table Scenes"),UIManager.oneColumnLayout);

@@ -495,15 +495,15 @@ var DialogManager = ( function() {
 								message,							// body
 								""));								// size
 		$.each(buttons,function(i,button) {
-			// [{isdefault:true, label:_T("Yes")}]
-			DialogManager.dlgAddDialogButton(dialog, button.isdefault, button.label);
+			DialogManager.dlgAddDialogButton(dialog, button.isdefault, button.label, '', button.id , { 'data-dismiss':'modal'} );
 		});
+		
 		// buttons
 		$('div#dialogs')		
-			.off('submit',"div#dialogModal form")
-			.on( 'submit',"div#dialogModal form", function() {
+			.off('click',"div#dialogModal button.btn-primary")
+			.on( 'click',"div#dialogModal button.btn-primary", function() {
 				result = true;
-				dialog.modal('hide');
+				// dialog.modal('hide');
 			})
 			.off('hide.bs.modal',"div#dialogModal")
 			.on( 'hide.bs.modal',"div#dialogModal", function() {
