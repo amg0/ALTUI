@@ -505,8 +505,8 @@ var DialogManager = ( function() {
 				result = true;
 				// dialog.modal('hide');
 			})
-			.off('hide.bs.modal',"div#dialogModal")
-			.on( 'hide.bs.modal',"div#dialogModal", function() {
+			.off('hidden.bs.modal',"div#dialogModal")
+			.on( 'hidden.bs.modal',"div#dialogModal", function() {
 				if ($.isFunction(cbfunc))
 					(cbfunc)(result);
 			});
