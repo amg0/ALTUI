@@ -441,7 +441,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 				"ModifyUserData",								// action
 				encodeURIComponent(url),						// url
 				encodeURIComponent(xml.format("%s")),			// envelop with a %s
-				encodeURIComponent( JSON.stringify(target) )  	// body , just uri encoded for now,  LUA will xml encode
+				encodeURIComponent( JSON.stringify(target) )  	// body , just uri encoded for now,  Lua will xml encode
 				);
 				
 			return $.ajax({

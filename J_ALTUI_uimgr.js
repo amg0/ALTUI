@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1600 $";
+var ALTUI_revision = "$Revision: 1602 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1330,9 +1330,7 @@ var SceneEditor = function (scene) {
 					variable:	watch.variable
 				}
 				DialogManager.dlgAddVariables(dialog, null, widget, function() {
-					// DialogManager.dlgAddLine( dialog , "LuaExpression", _T("LUA Expression with new=newvalue and old=oldvalue"), watch.luaexpr , _T("Expression with old new as variables and lua operators like <  >  <= >= == ~="), {required:''} ); 
-					DialogManager.dlgAddBlockly( dialog , "LuaExpression", _T("LUA Expression with new=newvalue and old=oldvalue"), watch.luaexpr, watch.xml, _T("Expression with old new as variables and lua operators like <  >  <= >= == ~="), {required:''} ); 
-					// DialogManager.dlgAddBlockly( dialog , "LuaExpression2", _T("Blockly Value"), "" ); 
+					DialogManager.dlgAddBlockly( dialog , "LuaExpression", _T("Lua Expression with new=newvalue and old=oldvalue"), watch.luaexpr, watch.xml, _T("Expression with old new as variables and lua operators like <  >  <= >= == ~="), {required:''} ); 
 					$('div#dialogModal').modal();
 				});
 			},
@@ -8328,10 +8326,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							}
 						}
 						DialogManager.dlgAddVariables(dialog, null, widget, function() {
-							DialogManager.dlgAddLine(dialog, "LuaExpression", _T("LUA Expression with new=newvalue and old=oldvalue"), 
+							DialogManager.dlgAddLine(dialog, "LuaExpression", _T("Lua Expression with new=newvalue and old=oldvalue"), 
 								condition ? condition.luaexpr : "",
 								_T("Expression with old new as variables and lua operators like <  >  <= >= == ~="), {required:''})
-							// DialogManager.dlgAddBlockly( dialog , "LuaExpression", _T("LUA Expression with new=newvalue and old=oldvalue"), "", "", _T("Expression with old new as variables and lua operators like <  >  <= >= == ~="), {required:''} ); 
 							DialogManager.dlgAddCheck(dialog,'Trigger', condition ? condition.triggeronly : false, _T("Only when triggered"));
 							$('div#dialogModal').modal();
 							$('div#dialogs')
@@ -8846,7 +8843,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						$("#altui-copy-clipboard").off()
 						.on('click',function(e) {
 							editor.selectAll();
-							$(this).after("<div id='toto'></div>")
+							$(this).after("<pre id='toto'></pre>")
 							$("#toto").text( editor.getCopyText() )
 							Altui_SelectText('toto')
 							document.execCommand('copy');
@@ -9741,15 +9738,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	
 	pageEditorForm: function (domparent, htmlid, title,txt,outputarea,button,onClickCB) {
+		var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
+		var copybutton = buttonTemplate.format( 'altui-copy-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'default',_T("Copy"));
 		var html = "";
 		html +="<form class='altui-editor-form col-sm-11' role='form' action='javascript:void(0);'>";
 		html +="  <div class='form-group'>";
-		html +="    <label for='altui-editor-text'>"+title+":</label>";
+		html +="    <label for='altui-editor-text'>"+title+":</label>"+copybutton;
 		// html +="    <textarea id='altui-editor-text' rows='15' class='form-control' placeholder='xxx'>"+txt.htmlEncode()+"</textarea>";
 		html +="    <div id='altui-editor-text'>"+txt.htmlEncode()+"</div>";
 		html +="  </div>";
 		if (outputarea!=null) {
-			var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
 			html +="  <div class='form-group'>";
 			html +="    <label for='altui-editor-result'>"+_T("Return Result")+":</label>";
 			html +=  buttonTemplate.format( 'altui-copyresult-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'default',_T("Copy"));
@@ -9778,6 +9776,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 		});
 		
+		$("#altui-copy-clipboard-"+htmlid).click( function() {
+			editor.selectAll();
+			$(this).after("<pre id='toto'></pre>")
+			$("#toto").text( editor.getCopyText() )
+			Altui_SelectText('toto')
+			document.execCommand('copy');
+			$("#toto").remove()
+		});
 		$("#altui-copyresult-clipboard-"+htmlid).click( function() {
 			Altui_SelectText( "altui-editor-result" );
 			document.execCommand('copy');
@@ -9804,7 +9810,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageLuaTest: function ()
 	{
-		UIManager.clearPage(_T('LuaTest'),_T("LUA Code Test"),UIManager.oneColumnLayout);
+		UIManager.clearPage(_T('LuaTest'),_T("Lua Code Test"),UIManager.oneColumnLayout);
 		$(".altui-mainpanel").append("<p>"+_T("This test code will succeed if it is syntactically correct. It must be the body of a function and can return something. The return object and console output will be displayed)")+"</p>");
 		var lastOne = MyLocalStorage.getSettings("LastOne_LuaTest") || "return true";
 		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Test Code"),lastOne,true,_T("Submit"),function(lua) {
@@ -10022,7 +10028,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var lua = MultiBox.getLuaStartup(ctrlid );
 			UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Startup Code"),lua,null,"Submit",function(newlua) {
 				if (newlua!=lua) {
-					DialogManager.confirmDialog(_T("do you want to change lua startup code ? if yes, it will generate a LUA reload, be patient..."),function(result) {
+					DialogManager.confirmDialog(_T("do you want to change Lua startup code ? if yes, it will generate a Lua reload, be patient..."),function(result) {
 						if (result==true) {
 							MultiBox.setStartupCode(ctrlid,newlua)
 								.done( function(){
@@ -10037,7 +10043,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		}
 
-		UIManager.clearPage(_T('LuaStart'),_T("LUA Startup"),UIManager.oneColumnLayout);
+		UIManager.clearPage(_T('LuaStart'),_T("Lua Startup"),UIManager.oneColumnLayout);
 		
 		// DOES NOT WORK on other ctrl as the url gets too long
 		
@@ -12898,7 +12904,7 @@ $(document).ready(function() {
 			} );
 			head.appendChild(script);
 		} else {
-			// if lang is on the url, the js is already loaded by the LUA module. 
+			// if lang is on the url, the js is already loaded by the Lua module. 
 			AltuiDebug.debug("Locale file not needed");
 			_onInitLocalization();
 		}

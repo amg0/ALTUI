@@ -391,7 +391,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				arr = $.grep( arr, filterfunc );
 			if ($.isFunction( func )) {
 				for (var idx=0; idx<arr.length; idx++) {
-					func(idx+1,arr[idx]);	// device id in LUA is idx+1
+					func(idx+1,arr[idx]);	// device id in Lua is idx+1
 				}
 			}
 		};
@@ -747,7 +747,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 	function _refreshEngine() {
 		var jqxhr = _httpGet("?id=lu_status2&output_format=json&DataVersion="+_status_data_DataVersion+"&Timeout={0}&MinimumDelay=1500".format(
-				(_uniqID==0 ? 60 : 5 )			// cannot afford to wait 60 sec in the LUA handler for Proxied units
+				(_uniqID==0 ? 60 : 5 )			// cannot afford to wait 60 sec in the Lua handler for Proxied units
 			),
 			{beforeSend: function(xhr) { xhr.overrideMimeType('text/plain'); }},
 			function(data, textStatus, jqXHR)
@@ -924,7 +924,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 	function _loadEngine( user_data ) {
 		AltuiDebug.debug("_loadEngine()");
-		if (user_data) {	// if received in parameter ( like pre-prepared by LUA module )
+		if (user_data) {	// if received in parameter ( like pre-prepared by Lua module )
 			_user_data	= user_data;
 		} else {	// or try to get from cache
 			var verabox = MyLocalStorage.get("VeraBox"+_uniqID);
@@ -1817,7 +1817,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 			if ( ($.isFunction(filterfunc)==false) || (filterfunc(elem)==true) ) {
 				res.push(elem);
 				if ($.isFunction( func ))
-					func(idx+1,elem);	// device id in LUA is idx+1
+					func(idx+1,elem);	// device id in Lua is idx+1
 			}
 		});
 	

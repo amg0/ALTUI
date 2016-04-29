@@ -217,7 +217,7 @@ var MultiBox = ( function( window, undefined ) {
 	};	
 	function _isUI5(controller) {
 		if (controller==0)
-			return (_devicetypesDB[0]["info"].ui7Check == "false" );	// we were told by LUA plugin
+			return (_devicetypesDB[0]["info"].ui7Check == "false" );	// we were told by Lua plugin
 		return _controllers[controller].controller.isUI5();
 	};
 	function _getDataProviders(cbfunc) {
@@ -822,7 +822,7 @@ var MultiBox = ( function( window, undefined ) {
 	// Device Type DB
 	getALTUITypesDB			: _getALTUITypesDB,			// no param
 	getDeviceTypesDB 		: _getDeviceTypesDB,		// ( controllerid )
-	addDeviceType 			: _addDeviceType,			// (devtype, obj)				update devitetype plugin function calls ( from LUA )
+	addDeviceType 			: _addDeviceType,			// (devtype, obj)				update devitetype plugin function calls ( from Lua )
 	updateDeviceTypeUPnpDB	: _updateDeviceTypeUPnpDB,	//( controllerid, devtype, Dfilename )		update devicetype UPNP information ( from D_xx S_xx files )
 	updateDeviceTypeUIDB 	: _updateDeviceTypeUIDB,	//( controllerid, devtype, ui_definitions)		update devicetype UI static infos ( from user_data )
 	getDeviceStaticData		: _getDeviceStaticData,		//(device)
