@@ -402,7 +402,12 @@ Localization.init( {
 	"Device zWave Parameters":"Paramètres module zWave",
 	"Lua Editor":"Éditeur Lua",
 	"Recording...":"Enregistrement...",
-	"Close for 24h":"Fermer pour 24h"
+	"Close for 24h":"Fermer pour 24h",
+	"Backup Controller":"Backup Controller",
+	"ZWave Heal":"ZWave Heal",
+	"ZWave Inclusion":"ZWave Inclusion",
+	"ZWave Exclusion":"ZWave Exclusion",
+	"Details":"Details"
 });
 
 // override rules with localized version

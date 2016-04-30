@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
  
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1602 $";
+var ALTUI_revision = "$Revision: 1608 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -11616,6 +11616,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageTblControllers:function() {
 		var _buttons = [
+			{id:"altui-ctrl-backup", glyph:"glyphicon-save", label:_T("Backup Controller")},
 			{id:"altui-ctrl-heal", glyph:"glyphicon-heart-empty", label:_T("ZWave Heal")},
 			{id:"altui-ctrl-inclusion", glyph:"glyphicon-plus", label:_T("ZWave Inclusion")},
 			{id:"altui-ctrl-exclusion", glyph:"glyphicon-minus", label:_T("ZWave Exclusion")},
@@ -11657,6 +11658,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$(".altui-mainpanel").append( html );
 		
 		// interactivity
+		$("#altui-ctrl-backup").click(function() {
+			var panel = $(this).closest('.altui-controller-panel');
+			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			MultiBox.RequestBackup( id, function(data) {
+				PageMessage.message(_T("Backup competed"));
+			});
+		});
 		$("#altui-ctrl-heal").click(function() {
 			var panel = $(this).closest('.altui-controller-panel');
 			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
@@ -11684,18 +11692,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 		});
 		$("#altui-ctrl-inclusion").click( function() {
-			// <s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-			// <s:Body>	
-			// <u:AddNodes xmlns:u="urn:schemas-micasaverde-org:service:ZWaveNetwork:1">		
-			// <InclusionMode>LowPower</InclusionMode>		
-			// <NodeType>1</NodeType>		
-			// <Timeout>0</Timeout>		
-			// <Multiple>1</Multiple>		
-			// <ControllerShift>0</ControllerShift>		
-			// <Reload>0</Reload>	
-			// </u:AddNodes>
-			// </s:Body>
-			// </s:Envelope>
 			var panel = $(this).closest('.altui-controller-panel');
 			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
 			var zwavenet = MultiBox.getDeviceByType(id,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");

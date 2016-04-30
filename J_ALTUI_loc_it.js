@@ -244,7 +244,7 @@ Localization.init( {
 	"an error happened during the execution":"an error happened during the execution",
 	"Controller":"Controller",
 	"Counters have been reset properly":"Counters have been reset properly",
-	"do you want to change lua startup code ? if yes, it will generate a LUA reload, be patient...":"do you want to change lua startup code ? if yes, it will generate a LUA reload, be patient...",
+	"do you want to change Lua startup code ? if yes, it will generate a Lua reload, be patient...":"do you want to change Lua startup code ? if yes, it will generate a Lua reload, be patient...",
 	"Lua Startup code has been modified":"Lua Startup code has been modified",
 	"Header":"Header",
 	"Delay":"Delay",
@@ -262,7 +262,7 @@ Localization.init( {
 	"Trigger":"Trigger",
 	"Device Variable Watches":"Device Variable Watches",
 	"Watch":"Watch",
-	"LUA Expression with new=newvalue and old=oldvalue":"LUA Expression with new=newvalue and old=oldvalue",
+	"Lua Expression with new=newvalue and old=oldvalue":"Lua Expression with new=newvalue and old=oldvalue",
 	"Expression with old new as variables and lua operators like <  >  <= >= == ~=":"Expression with old new as variables and lua operators like <   >   <=  >=  ==  ~=",
 	"Logs":"Logs",
 	"Play":"Play",
@@ -404,7 +404,12 @@ Localization.init( {
 	"Device zWave Parameters":"Paramètres module zWave",
 	"Lua Editor":"Éditeur Lua",
 	"Recording...":"Enregistrement...",
-	"Close for 24h":"Fermer pour 24h"
+	"Close for 24h":"Fermer pour 24h",
+	"Backup Controller":"Backup Controller",
+	"ZWave Heal":"ZWave Heal",
+	"ZWave Inclusion":"ZWave Inclusion",
+	"ZWave Exclusion":"ZWave Exclusion",
+	"Details":"Details"
 	});
 
 // override rules with localized version

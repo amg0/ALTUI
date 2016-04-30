@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.42"
+local version = "v1.44"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -187,19 +187,6 @@ local function run_scene(id)
     local resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:HomeAutomationGateway1", "RunScene", {SceneNum = tostring(id)}, 0)
 	return resultCode, resultString, job, returnArguments
 end
-
-------------------------------------------------
--- Pushing Box
-------------------------------------------------
- function ALTUI_notify( pushingbox_DID, str )
-	local modurl = require "socket.url"
-    -- local pushingbox_DID="v1ACD9310D0FD754"
-	debug(string.format("ALTUI_notify( %s, %s )",pushingbox_DID, str))
-    local newstr = modurl.escape( str or "" )
-    luup.inet.wget("http://api.pushingbox.com/pushingbox?devid=" .. pushingbox_DID .. "&value=" .. newstr .. "" )
-    return true
-end
-
 
 local function getDataFor( deviceID,name,prefix )
 	local prefix = prefix or "Data_"
@@ -460,7 +447,7 @@ local function processTimers(lul_device)
 				luup.call_delay("TimerManagerCallback", duration, v["data"])
 			end
 		else
-			debug(string.format("Timer - already armed in LUA - wait for the callback "))
+			debug(string.format("Timer - already armed in Lua - wait for the callback "))
 		end
 	end
 	saveTimerDB(lul_device)
@@ -950,9 +937,9 @@ local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate)
 		cancelStateTimers(lul_device,workflow_idx,oldstate.id)
 		
 		-- execute onExit of old state
+		executeStateLua(lul_device,workflow_idx,oldstate,"onExitLua")
 		executeStateActions(lul_device,workflow_idx,oldstate,"onExit")
 		executeStateScenes(lul_device,workflow_idx,oldstate,"onExitScenes")
-		executeStateLua(lul_device,workflow_idx,oldstate,"onExitLua")
 
 		-- change active state
 		Workflows[workflow_idx]["graph_json"].active_state = newstate.id
@@ -961,9 +948,9 @@ local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate)
 		debug(string.format("Wkflow - setting new active state: %s, %s",newstate.id, newstate.attrs[".label"].text))
 
 		-- execute onEnter of new state
+		executeStateLua(lul_device,workflow_idx,newstate,"onEnterLua")
 		executeStateActions(lul_device,workflow_idx,newstate,"onEnter")
 		executeStateScenes(lul_device,workflow_idx,newstate,"onEnterScenes")
-		executeStateLua(lul_device,workflow_idx,newstate,"onEnterLua")
 		armLinkTimersAndWatches(lul_device,workflow_idx,newstate)
 
 		-- let some time pass up so that actions can be executed, then re-evaluate the workflow
@@ -3078,15 +3065,19 @@ function registerHandlers()
 	  end
 	  return val(Lua, 1, '_')
 	end
+	
+	 function ALTUI_notify( pushingbox_DID, str )
+		local modurl = require "socket.url"
+		-- debug(string.format("ALTUI_notify( %s, %s )",pushingbox_DID, str))
+		local newstr = modurl.escape( str or "" )
+		luup.inet.wget("http://api.pushingbox.com/pushingbox?devid=" .. pushingbox_DID .. "&value=" .. newstr .. "" )
+		return true
+	end
 
 	function ALTUI_LuaRunHandler(lul_request, lul_parameters, lul_outputformat)
 		local lua = lul_parameters["lua"]
 		luup.log(string.format("ALTUI: runLua(%s)",lua),50)
-		
-		-- prepare print result and override print function
 		printResult = {}
-		
-		-- prepare execution 
 		local errcode = 0
 		local f,results = loadstring(lua)
 		if (f==nil) then

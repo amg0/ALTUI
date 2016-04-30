@@ -348,7 +348,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				PageMessage.message( "Reboot request failed", "danger");
 		});
 	};
-	function _modifyDevice(id,cbfunc) {
+	function _modifyDevice(deviceid,cbfunc) {
 		var device = _getDeviceByID( deviceid );
 		if (device==null)
 			return null;
@@ -1603,6 +1603,29 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		});
 		return jqxhr;
 	};
+	function _RequestBackup( cbfunc ) {
+		var ip = _getIpAddr();
+		var url = "http://{0}/cgi-bin/cmh/backup.sh?external=1".format(ip=="" ? window.location.host : ip);
+		var res = window.open( url, '_blank');
+		if ($.isFunction(cbfunc)) {
+			(cbfunc)(res);
+		}
+		// window.open
+		// var jqxhr = _httpGet( url, {}, function(data, textStatus, jqXHR) {
+			// if ((data!=null) && (data!="ERROR")) {
+				// if ($.isFunction(cbfunc)) {
+					// (cbfunc)(data);
+				// }
+			// }
+			// else {
+				// PageMessage.message(_T("Failure"), "warning");
+				// if ($.isFunction(cbfunc)) {
+					// (cbfunc)(null);
+				// }
+			// }
+		// });
+		// return jqxhr;
+	}
 	
   // explicitly return public methods when this object is instantiated
   return {
@@ -1714,6 +1737,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	clearEngine		: _clearEngine,
 	loadEngine 		: _loadEngine, 		// optional user_data
 	isUserDataCached	: _isUserDataCached,
+	RequestBackup : _RequestBackup,
+
 	initEngine		: function( firstuserdata ) 	{
 						_loadEngine( firstuserdata );
 						_initDataEngine();				// init the data collection engine
@@ -2241,6 +2266,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	clearEngine		: _todo,
 	loadEngine 		: _todo,
 	isUserDataCached	: _isUserDataCached,
-	initEngine		: 	_initEngine
+	initEngine		: 	_initEngine,
+	RequestBackup : _todo
   };
 });	// not invoked, object does not exists

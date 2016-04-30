@@ -226,6 +226,9 @@ var MultiBox = ( function( window, undefined ) {
 	function _initializeJsonp(controller) {
 		return _controllers[controller].controller.initializeJsonp();
 	};
+	function _RequestBackup(controller, cbfunc) {
+		return _controllers[controller].controller.RequestBackup(cbfunc);
+	}
 	function _initializeSysinfo(controller) {
 		return _controllers[controller].controller.initializeSysinfo();	
 	}
@@ -833,6 +836,7 @@ var MultiBox = ( function( window, undefined ) {
 	getHouseMode	: function(cb) 	{	return _controllers[0].controller.getHouseMode(cb); },		// (cbfunc)
 	setHouseMode	: _setHouseMode,		// (newmode,cbfunc)
 	getHouseModeSwitchDelay : _getHouseModeSwitchDelay,
+	RequestBackup: _RequestBackup,
 	
 	// Rooms
 	getRooms		: _getRooms,		// in the future getRooms could cache the information and only call _getRooms when needed
