@@ -5192,8 +5192,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		} else if ( width <800 ) {
 			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'25%',"padding-bottom":'25%'});
 			$(".altui-favorites-weather").css({width:'50%',"padding-bottom":'25%'});
-		} else if ( width <1200 ){
+		} else if ( width <1000 ){
 			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"padding-bottom":'20%'});
+			$(".altui-favorites-weather").css({width:'40%',"padding-bottom":'20%'});
+		} else if ( width <1200 ){
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"padding-bottom":'15%'});
 			$(".altui-favorites-weather").css({width:'40%',"padding-bottom":'20%'});
 		} else {
 			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'10%',"padding-bottom":'10%'});
