@@ -2879,7 +2879,7 @@ function delWatch( lul_device, service, variable, deviceid, sceneid, expression,
 		for k,v  in pairs(variableWatch:split(';')) do
 			-- local wservice,wvariable,wdevice,wscene,wexpression,wxml  = getWatchParams(v)
 			-- if (service~=wservice) or (variable~=wvariable) or (deviceid~=wdevice) or (sceneid~=wscene) or (expression~=wexpression) or (xml~=wxml) then
-			if (v~=watchline) then
+			if (v~=watchline) and (( (v..'#')~=watchline)) then
 				debug(string.format("Keeping this watch: [%s], wanting this watch: [%s]",v,watchline))
 				table.insert(toKeep, v)
 			end
