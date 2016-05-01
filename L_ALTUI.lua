@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.44"
+local version = "v1.45"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -2782,7 +2782,7 @@ function addWatch( lul_device, service, variable, deviceid, sceneid, expression,
 		local variableWatch= getSetVariable(ALTUI_SERVICE, "VariablesToSend", lul_device, "")
 		local bFound = false;
 		for k,v  in pairs(variableWatch:split(';')) do
-			if (v==watchline) then
+			if (v==watchline) or (((v..'#')==watchline) ) then
 				debug(string.format("watch line already exist:%s",v))
 				bFound = true;
 			end
