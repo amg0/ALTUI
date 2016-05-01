@@ -1435,8 +1435,10 @@ var HTMLUtils = (function() {
 				preareas.push(tool.collapsetarget)
 			}
 			toolbarHtml+="  <button type='button' class='btn btn-default'  {1} id='{0}' >".format(tool.id,collapsecss);
-			var glyph = "<span class='glyphicon {0}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}'></span>".format(tool.glyph,tool.label);
-			toolbarHtml+=(glyph+ "&nbsp;" + tool.label);
+			var glyph = "<span class='glyphicon {0}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}'></span>".format(tool.glyph,tool.label || '');
+			toolbarHtml += glyph;
+			if (tool.label)
+				toolbarHtml+=("&nbsp;" + tool.label);
 			toolbarHtml+="  </button>";			
 		});
 		toolbarHtml+="</div>";			

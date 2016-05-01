@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1609 $";
+var ALTUI_revision = "$Revision: 1611 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7995,7 +7995,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-workflow-report", glyph:"glyphicon-list", label:_T("Report")},
 			{id:"altui-workflow-history", collapsetarget:"#altui-workflow-history-text", glyph:"glyphicon-calendar", label:_T("History")},
 			{id:"altui-workflow-bag", collapsetarget:"#altui-workflow-bag-text", glyph:"glyphicon-compressed", label:_T("Bag")},
-			{id:"altui-workflow-export", glyph:"glyphicon-floppy-save", label:_T("Import/Export")}
+			{id:"altui-workflow-export", glyph:"glyphicon-floppy-save", label:_T("Import/Export")},
+			{id:"altui-workflow-zoomin", glyph:"glyphicon-plus" },
+			{id:"altui-workflow-zoomout", glyph:"glyphicon-minus" },
 		];
 		function _clearPage() {
 			$(".altui-workflow-toolbar").remove();
@@ -8773,6 +8775,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// return cell.isLink() ? onDeleteLink(cell) : onDeleteNode(cell) ;
 			_showSaveNeeded();
 		})
+		$("#altui-workflow-zoomin").click(function() {
+			var scale = V(paper.viewport).scale(); 
+			paper.scale(1.25*scale.sx, 1.25*scale.sy);
+			paper.fitToContent({ padding:2 })
+		});
+		$("#altui-workflow-zoomout").click(function() {
+			var scale = V(paper.viewport).scale(); 
+			paper.scale(0.75*scale.sx, 0.75*scale.sy)
+			paper.fitToContent({ padding:2 })
+		});
 		$("#altui-workflow-newstate").click(function() {
 			//var elements = workflow.graph.getElements();
 			Node("New",0,0);
