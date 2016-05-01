@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1611 $";
+var ALTUI_revision = "$Revision: 1613 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8608,7 +8608,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		//
 		// Set up Jointjs things
 		//
-		var selected = null;
+		var selected = [];
 		var graph = new joint.dia.Graph();
 		var paper = new joint.dia.Paper({
 			el: $('#altui-workflow-canvas'),
@@ -8740,15 +8740,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				cellView.model.toFront()
 				return;
 			}
-			if (selected!=null) {
-				if (selected != cellView.model.id) {
-					var cell = graph.getCell( selected );
+			if (evt.ctrlKey==false) {
+				$.each(selected, function(k,s) {
+					var cell = graph.getCell( s );
 					var view = cell.findView(paper);
-					view.unhighlight(cell);
-					selected = null;
+					view.unhighlight(cell);					
+				});
+				selected=[ cellView.model.id ];
+			} else {
+				if ($.inArray(cellView.model.id,selected)==-1) {
+					selected.push(cellView.model.id);
 				}
 			}
-			selected = cellView.model.id;
 			cellView.highlight(cellView.model);
 		});
 		
@@ -8777,12 +8780,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		})
 		$("#altui-workflow-zoomin").click(function() {
 			var scale = V(paper.viewport).scale(); 
-			paper.scale(1.25*scale.sx, 1.25*scale.sy);
+			paper.scale(1.20*scale.sx, 1.20*scale.sy);
 			paper.fitToContent({ padding:2 })
 		});
 		$("#altui-workflow-zoomout").click(function() {
 			var scale = V(paper.viewport).scale(); 
-			paper.scale(0.75*scale.sx, 0.75*scale.sy)
+			paper.scale(0.80*scale.sx, 0.80*scale.sy)
 			paper.fitToContent({ padding:2 })
 		});
 		$("#altui-workflow-newstate").click(function() {
@@ -8793,14 +8796,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 		$("#altui-workflow-delete").click(function() {
 			//var elements = workflow.graph.getElements();
-			if (selected!=null) {
+			if (selected.length>0) {
 				DialogManager.confirmDialog(_T("Are you sure you want to delete this element"),function(result) {
 					if (result==true) {
-						var cell = graph.getCell( selected );
-						if (isStartNode(cell))
-							return;
-						cell.remove();
-						selected = null;
+						$.each(selected, function(k,s) {
+							var cell = graph.getCell( s );
+							if (isStartNode(cell)==false)
+								cell.remove();
+						});
+						selected = [];
 						_showSaveNeeded();
 						_saveGraph();
 					}
