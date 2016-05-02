@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1613 $";
+var ALTUI_revision = "$Revision: 1614 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7998,6 +7998,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-workflow-export", glyph:"glyphicon-floppy-save", label:_T("Import/Export")},
 			{id:"altui-workflow-zoomin", glyph:"glyphicon-plus" },
 			{id:"altui-workflow-zoomout", glyph:"glyphicon-minus" },
+			{id:"altui-workflow-rotate", glyph:"glyphicon-repeat" },
 		];
 		function _clearPage() {
 			$(".altui-workflow-toolbar").remove();
@@ -8564,9 +8565,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var m1 = new joint.shapes.devs.Model({
 				position: { x: x, y: y },
 				size: { width: 90, height: 90 },
-				inPorts: ['in1','in2'],
-				outPorts: ['out1','out2'],
+				inPorts: ['in1','in2','in3'],
+				outPorts: ['out1','out2','out3'],
 				attrs: {
+					'.port-body': { r: 7 },
 					'.label': { text: label, 'ref-x': .5, 'ref-y': .2 },
 					rect: { fill: 'lightblue' },
 					'.inPorts circle': { fill: '#16A085', magnet: 'passive', type: 'input' },
@@ -8643,7 +8645,41 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// cf http://stackoverflow.com/questions/35443524/jointjs-why-pointerclick-event-doesnt-work-only-pointerdown-gets-fired
 			clickThreshold: 1,
 		});
-		
+		function _rotateCell(cell) {
+			var angle = cell.attributes.angle;
+			angle = (angle + 90) % 360;
+			cell.rotate(angle,true);
+			var labelXform = ""
+			switch (angle) {
+				case 0:
+					// labelXform = "translate(45,18) rotate(0,0,0)";
+					labelXform = "rotate(0,0,0)";
+					cell.attr({
+						'.inPorts .port-label' : { transform: 'rotate(0,0,0)' } ,
+						'.outPorts .port-label': { transform: 'rotate(0,0,0)' } ,
+					});
+					break;
+				case 90:
+					// labelXform = "translate(18,45) rotate(-90,0,0)";
+					labelXform = "rotate(-90,0,0)";
+					break;
+				case 180:
+					cell.attr({
+						'.inPorts .port-label' : { transform: 'rotate(180,-22,4)' } ,
+						'.outPorts .port-label': { transform: 'rotate(180, 27,4)' } ,
+					});
+					// labelXform = "translate(45,72) rotate(-180,0,0)";
+					labelXform = "rotate(-180,0,0)";
+					break;
+				case 270:
+					// labelXform = "translate(72,45) rotate(-270,0,0)";
+					labelXform = "rotate(-270,0,0)";
+					break;
+			}
+			cell.attr({
+				'.label' : { transform:labelXform }
+			})
+		};
 		//
 		// Callbacks / Interactivity
 		//
@@ -8768,7 +8804,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 		paper.on('cell:pointerdblclick', function(cellView, evt, x, y) { 
 			handleDblClick(cellView, evt, x, y);
-		})
+		});
+		paper.on('blank:pointerclick', function(cellView, evt, x, y) { 
+			$.each(selected, function(k,s) {
+				var cell = graph.getCell( s );
+				var view = cell.findView(paper);
+				view.unhighlight(cell);					
+			});
+			selected=[ ];
+		});
 		graph.on('change:position change:position change:source change:target change:vertices', function(cell) { 
 			paper.fitToContent({ padding:2 })
 			_.defer(_saveGraph);
@@ -8787,6 +8831,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var scale = V(paper.viewport).scale(); 
 			paper.scale(0.80*scale.sx, 0.80*scale.sy)
 			paper.fitToContent({ padding:2 })
+		});
+		$('#altui-workflow-rotate').click(function() {
+			if (selected.length>0) {
+				$.each(selected, function(k,s) {
+					var cell = graph.getCell( s );
+					_rotateCell(cell);
+				});
+				_showSaveNeeded();
+				_saveGraph();
+			}
 		});
 		$("#altui-workflow-newstate").click(function() {
 			//var elements = workflow.graph.getElements();
