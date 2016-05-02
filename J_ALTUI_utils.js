@@ -2152,6 +2152,8 @@ var WorkflowManager = (function() {
 		$.each(workflows,  function(i,w) {
 			w = $.extend( {}, _def_workflow, w);
 			delete w.active_states;
+			
+			workflows[i].graph_json = JSON.stringify(w.graph_json)
 		})
 	};
 	

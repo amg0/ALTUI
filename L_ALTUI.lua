@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.45"
+local version = "v1.46"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -38,7 +38,7 @@ local WorkflowsActiveState = {}	-- hash indexed by workflow altuiid
 local WorkflowsVariableBag = {}	-- hash indexed by workflow altuiid
 local Workflows = {}					-- Workflow database made from the persistent description
 local ForcedValidLinks = {}			-- array of 'id' = true for links which must be considered as true
-local strWorkflowDescription = ""
+-- local strWorkflowDescription = ""
 local strWorkflowTransitionTemplate = "Wkflow - Workflow: %s, Valid Transition found:%s, Active State:%s=>%s"	-- needed for ALTUI grep & history log feature
 local Timers = {}					-- to Persist timers accross VERA reboots
 -- Timers = {
@@ -570,19 +570,30 @@ end
 
 -- get workflow description from the store variables
 local function getWorkflowsDescr(lul_device)
+	local workflows={}
 	debug(string.format("Wkflow - getWorkflowsDescr(%s)",lul_device))
 	local workflowlist = getDataFor( lul_device, "Workflows", "Wflow_" ) or "{}"
 	if (workflowlist=="[]") then
 		workflowlist="{}"
 	end
 	local workflows_tbl = json.decode( workflowlist )
-	local result2_tbl ={}
 	for k,v in pairs(workflows_tbl) do
 		local data = getDataFor( lul_device, v , "Wflow_")
-		table.insert(  result2_tbl , data )
+		
+		local status,results = pcall( json.decode, data)
+		if (status==true) then
+			if (results~=nil) then
+				workflows[ #workflows +1 ] = results
+			else
+				error(string.format("Wkflow - getWorkflowsDescr failed to decoded the json  %s",  data  ))
+			end
+		else
+			error(string.format("Wkflow - getWorkflowsDescr failed to decoded the json  %s",  data  ))
+		end
+				
 	end
-	debug(string.format("Wkflow - getWorkflowsDescr returning %s","["..table.concat(result2_tbl, ",").."]"))
-	return "["..table.concat(result2_tbl, ",").."]"
+	debug(string.format("Wkflow - getWorkflowsDescr returning %s",  json.encode(workflows)  ))
+	return workflows
 end
 
 local function findStartState(idx)
@@ -694,11 +705,19 @@ local function initWorkflows(lul_device)
 	WorkflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
 	debug(string.format("Wkflow - WorkflowsActiveState = %s",json.encode(WorkflowsActiveState)))
 
-	strWorkflowDescription = getWorkflowsDescr(lul_device)
-	Workflows = json.decode(strWorkflowDescription)
+	Workflows = getWorkflowsDescr(lul_device)
 	-- decode the graph json which is stored as a string inside the string
 	for k,v in pairs(Workflows) do 
-		Workflows[k]["graph_json"] = json.decode(Workflows[k]["graph_json"])
+		
+		local status,results = pcall( json.decode, Workflows[k]["graph_json"])
+		if (status==true) then
+			Workflows[k]["graph_json"] = results
+		else
+			error(string.format("Wkflow - initWorkflows fails to decode graph for workflow %s", Workflows[k].altuiid ))
+			Workflows[k]["graph_json"] = {}
+		end
+		
+		
 		if (WorkflowsVariableBag[Workflows[k].altuiid]==nil) then
 			WorkflowsVariableBag[Workflows[k].altuiid] = {}
 		end
@@ -1868,7 +1887,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				variables["localbootstrap"] = localbootstrap
 				variables["devicetypes"] = json.encode(tbl)
 				variables["custompages"] = "["..table.concat(result_tbl, ",").."]"
-				variables["workflows"] = strWorkflowDescription
+				variables["workflows"] = json.encode(Workflows)
 				variables["ThemeCSS"] = luup.variable_get(ALTUI_SERVICE, "ThemeCSS", deviceID) or ""
 				variables["ServerOptions"] = serverOptions
 				variables["style"] = htmlStyle
