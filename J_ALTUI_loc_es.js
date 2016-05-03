@@ -407,7 +407,8 @@ Localization.init( {
 	"ZWave Heal":"ZWave Heal",
 	"ZWave Inclusion":"ZWave Inclusion",
 	"ZWave Exclusion":"ZWave Exclusion",
-	"Details":"Details"
+	"Details":"Details",
+	"You already have the latest version":"You already have the latest version"
 });
 
 // override rules with localized version

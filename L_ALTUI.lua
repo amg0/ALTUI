@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.46"
+local version = "v1.47"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -713,8 +713,10 @@ local function initWorkflows(lul_device)
 		if (status==true) then
 			Workflows[k]["graph_json"] = results
 		else
-			error(string.format("Wkflow - initWorkflows fails to decode graph for workflow %s", Workflows[k].altuiid ))
-			Workflows[k]["graph_json"] = {}
+			error(string.format("Wkflow - initWorkflows fails to decode graph string for workflow %s", Workflows[k].altuiid ))
+			Workflows[k]["graph_json"] = {
+				cells={}
+			}
 		end
 		
 		
@@ -748,7 +750,11 @@ local function initWorkflows(lul_device)
 			if (curstate == nil ) then
 				curstate  = stateFromID(workflow["graph_json"].cells  , findStartStateID(workflow_idx) )
 			end
-			armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
+			if (curstate ~= nil) then
+				armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
+			else
+				error(string.format("Wflow - Cannot start to arm worklow %s as curtstate is null",workflow.altuiid))
+			end
 		end
 	end
 	-- debug(string.format("Wkflow - WorkflowWatches: %s",json.encode(WorkflowWatches)))

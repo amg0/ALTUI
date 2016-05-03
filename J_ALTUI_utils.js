@@ -2157,7 +2157,10 @@ var WorkflowManager = (function() {
 			w = $.extend( {}, _def_workflow, w);
 			delete w.active_states;
 			
-			workflows[i].graph_json = JSON.stringify(w.graph_json)
+			// if not compacted, compact it
+			// if already string, do not touch it
+			if ($.isPlainObject(_workflows[i].graph_json))
+				_workflows[i].graph_json = JSON.stringify(w.graph_json)
 		})
 	};
 	

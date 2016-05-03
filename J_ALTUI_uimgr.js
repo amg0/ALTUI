@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1617 $";
+var ALTUI_revision = "$Revision: 1621 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8545,9 +8545,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _saveGraph(bPersist) {
 			WorkflowManager.setGraph(workflow.altuiid,JSON.stringify( graph.toJSON() ));
 			if (bPersist==true) {
+				show_loading( _T("Saving workflow") );
 				WorkflowManager.resyncScenes(workflow.altuiid);
 				WorkflowManager.sanitizeWorkflow(workflow.altuiid);
-				WorkflowManager.saveWorkflow(workflow.altuiid);
+				$.when( WorkflowManager.saveWorkflow(workflow.altuiid) )
+				.done( function() {
+					hide_loading();
+				} )
 				_showSaveNeeded(false);
 			}
 		}
@@ -9038,7 +9042,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		$("#altui-workflow-save")
 			.on('click',function() {
+				show_loading( _T("Saving workflows") );
 				WorkflowManager.saveWorkflows(function() {
+					hide_loading();
 					$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
 				});
 			});
