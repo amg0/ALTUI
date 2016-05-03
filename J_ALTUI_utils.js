@@ -93,11 +93,15 @@ var Localization = ( function (undefined) {
 	function _setTitle(title) {
 		$("title").text(title);
 	};
+	function _forceOption(name,value) {
+		UIManager.forceOption(name,value);
+	};
 	return {
 		_T : __T,
 		init : _initTerms,
 		dump : _dumpTerms,
-		setTitle : _setTitle,											// str
+		setTitle : _setTitle,	// (str)
+		forceOption : _forceOption,	// (name, value)
 		setBrandingCallback : function(cb) { _brandingCallback =  $.isFunction(cb) ? cb : null  },	// func
 		doBranding : function() { if ($.isFunction(_brandingCallback)) { (_brandingCallback)() } } 
 	}

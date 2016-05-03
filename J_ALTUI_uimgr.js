@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1616 $";
+var ALTUI_revision = "$Revision: 1617 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3897,8 +3897,9 @@ var UIManager  = ( function( window, undefined ) {
 			// };
 			
 		if (device) {
-			var directstreaming = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" );
-			if (MultiBox.isRemoteAccess() || isNullOrEmpty(directstreaming) || isIE11()  )
+			var directstreaming = MultiBox.getStatus( device, "urn:upnp-org:serviceId:altui1", "DirectStreamingURL2" ) || MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" );
+			var video = (MyLocalStorage.getSettings('ShowVideoThumbnail') || 0)==1;
+			if (MultiBox.isRemoteAccess() || isNullOrEmpty(directstreaming) || isIE11() || (video==false) )
 			{
 				obj = $("<img></img>")
 					.attr('src',"data_request?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
@@ -3922,7 +3923,7 @@ var UIManager  = ( function( window, undefined ) {
 			{
 				var streamurl = "url(http://{0}{1})".format(
 					device.ip,	//ip
-					MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
+					directstreaming	//DirectStreamingURL
 				);
 
 				obj = $("<div ></div>") .css({
@@ -4327,7 +4328,7 @@ var UIManager  = ( function( window, undefined ) {
 				case "image": {
 					//{"ControlGroup":"3","ControlType":"image","top":"0","left":"0","Display":{"url":"?id=request_image&cam=","Top":0,"Left":0,"Width":320,"Height":240}}
 					var container = $(domparent).parents(".altui-device-controlpanel-container").addClass("altui-norefresh");
-					var directstreaming = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" );
+					var directstreaming = MultiBox.getStatus( device, "urn:upnp-org:serviceId:altui1", "DirectStreamingURL2" ) || MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" );
 					if (MultiBox.isRemoteAccess() || isNullOrEmpty(directstreaming) || isIE11() ) {
 						var img = $("<img></img>")
 							.appendTo($(domparent))
@@ -5606,7 +5607,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					MyLocalStorage.setSettings(opt.id, opt._default);
 		});
 	};
-	
+	function _forceOptions(name,value) {
+		$.each( _checkOptions, function(idx,opt) {
+			if (opt.id == name ) {
+				MyLocalStorage.setSettings(opt.id, value);
+				opt.hidden = true;
+				return;
+			}
+		});
+		AltuiDebug.debug("_forceOptions() : Undefined option name:%s",name);
+	};	
 	function _initBlockly(callback) {
 		var language = getQueryStringValue("lang") || window.navigator.userLanguage || window.navigator.language;
 		language = language.substring(0, 2);
@@ -6614,6 +6624,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	//---------------------------------------------------------
 	initEngine 		: _initEngine, 
 	initLocalizedGlobals : _initLocalizedGlobals,
+	forceOptions 	: _forceOptions,	// (name,value)
 	loadScript 		: _loadScript,	//(scriptLocationAndName) 
 	loadD3Script	: _loadD3Script,
 	clearScripts	: _clearScripts,
@@ -12429,9 +12440,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html +="  <div class='panel-body'>";
 		html += "  <div class='row'>";
 			$.each(_checkOptions, function(id,check) {
-				html += "<div class='col-sm-6'>";
-				html += _displayOption(id,check);
-				html += "</div>";
+				if (check.hidden!=true) {
+					html += "<div class='col-sm-6'>";
+					html += _displayOption(id,check);
+					html += "</div>";
+				}
 			});		
 		html +="   </div>";
 		html +="  </div>";

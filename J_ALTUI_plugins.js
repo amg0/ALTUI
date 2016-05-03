@@ -149,7 +149,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		} else {
 			var streamurl = "url(http://{0}{1})".format(
 				device.ip,	//ip
-				MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
+				MultiBox.getStatus( device, "urn:upnp-org:serviceId:altui1", "DirectStreamingURL2" ) || MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
 			);
 			var div = $("<div class='altui-camera-picture'></div>")
 				.css({
@@ -177,7 +177,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		} else {
 			var streamurl = "url(http://{0}{1})".format(
 				device.ip,	//ip
-				MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
+				MultiBox.getStatus( device, "urn:upnp-org:serviceId:altui1", "DirectStreamingURL2" ) || MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
 			);
 			var div = $("<div class='altui-camera-picture'></div>")
 				.css({

@@ -20,6 +20,7 @@ Localization.init( {
 });
 
 Localization.setTitle("my title");
+Localization.forceOption("ShowVideoThumbnail",0);
 Localization.setBrandingCallback( function() {
 	$("#altui-theme-selector").remove();
 	$("#altui-support").attr('href','http://www.google.com');
