@@ -168,32 +168,43 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html="";
 		var video = (MyLocalStorage.getSettings('ShowVideoThumbnail') || 0)==1;
 		var urlHead = MultiBox.getUrlHead(device.altuiid) 
-		if ( MultiBox.isRemoteAccess() || (video==false) ) {
-			var img = $("<img class='altui-camera-picture'></img>")
-				.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
-				.css('width','100%')
-
-			html =  img.wrap( "<div></div>" ).parent().html();
-		} else {
-			var streamurl = "url(http://{0}{1})".format(
-				device.ip,	//ip
-				MultiBox.getStatus( device, "urn:upnp-org:serviceId:altui1", "DirectStreamingURL2" ) || MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
-			);
-			var div = $("<div class='altui-camera-picture'></div>")
-				.css({
-					"background-image": streamurl,
-					"background-size": "cover",
-					position: 'absolute',
-					top: '0px',
-					bottom: '0px',
-					left: '0px',
-					right: '0px'
-					})
-				// .css("background-size","contain")
-			html= div.wrap( "<div></div>" ).parent().html();
-			html += "<script type='text/javascript'>";
-			html += " $('.altui-favorites-device#d{0}').addClass('altui-norefresh')".format(device.altuiid);
-			html += "</script>";
+		var devicedom = $(".altui-favorites-device-content[data-altuiid='{0}']".format(device.altuiid)).closest(".altui-favorites-device")
+		if (devicedom.length>0) {
+			devicedom.addClass("altui-norefresh");
+			if ( MultiBox.isRemoteAccess() || (video==false) ) {
+				var img = $("<img id='{0}' class='altui-camera-picture'></img>".format(device.altuiid))
+					.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
+					.css('width','100%')
+				html =  img.wrap( "<div></div>" ).parent().html();
+				function _refresh(id,altuiid) {
+					$("img#{0}".format(altuiid))
+						.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
+						.css('width','100%')
+					HTMLUtils.startTimer('altui-camera-tile-timer-'+altuiid,3000,_refresh,altuiid)
+				};
+				HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refresh,device.altuiid)
+			} else {
+				var streamurl = "url(http://{0}{1})".format(
+					device.ip,	//ip
+					MultiBox.getStatus( device, "urn:upnp-org:serviceId:altui1", "DirectStreamingURL2" ) || MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:Camera1", "DirectStreamingURL" )	//DirectStreamingURL
+				);
+				var div = $("<div class='altui-camera-picture'></div>")
+					.css({
+						"background-image": streamurl,
+						"background-size": "contain",
+						"background-repeat": "no-repeat",
+						position: 'absolute',
+						top: '20px',
+						bottom: '0px',
+						left: '0px',
+						right: '0px'
+						})
+					// .css("background-size","contain")
+				html= div.wrap( "<div></div>" ).parent().html();
+				html += "<script type='text/javascript'>";
+				html += " $('.altui-favorites-device#d{0}').addClass('altui-norefresh')".format(device.altuiid);
+				html += "</script>";
+			}
 		}
 		return html;
 	}

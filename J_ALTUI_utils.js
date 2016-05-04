@@ -1528,7 +1528,7 @@ var HTMLUtils = (function() {
 
 	function _startTimer(id,ms,callback,data) {
 		if ($(".altui-timers #"+id).length>0) {
-			AltuiDebug.warning("Cannot schedule twice the same timer %s",id);
+			AltuiDebug.warning("Cannot schedule twice the same timer "+id);
 			return;			
 		}
 		var timerdiv = $(".altui-timers");
