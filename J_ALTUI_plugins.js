@@ -164,6 +164,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			return div.wrap( "<div></div>" ).parent().html();
 		}
 	}
+	function _refreshCameraTile(id,altuiid) {
+		$("img#{0}".format(altuiid))
+			.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
+			.css('width','100%')
+		HTMLUtils.startTimer('altui-camera-tile-timer-'+altuiid,3000,_refreshCameraTile,altuiid)
+	};
 	function _drawCameraTile(device) {
 		var html="";
 		var video = (MyLocalStorage.getSettings('ShowVideoThumbnail') || 0)==1;
@@ -176,13 +182,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
 					.css('width','100%')
 				html =  img.wrap( "<div></div>" ).parent().html();
-				function _refresh(id,altuiid) {
-					$("img#{0}".format(altuiid))
-						.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
-						.css('width','100%')
-					HTMLUtils.startTimer('altui-camera-tile-timer-'+altuiid,3000,_refresh,altuiid)
-				};
-				HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refresh,device.altuiid)
+				HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refreshCameraTile,device.altuiid)
 			} else {
 				var streamurl = "url(http://{0}{1})".format(
 					device.ip,	//ip
