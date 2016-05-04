@@ -164,11 +164,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			return div.wrap( "<div></div>" ).parent().html();
 		}
 	}
-	function _refreshCameraTile(id,altuiid) {
-		$("img#{0}".format(altuiid))
+	function _refreshCameraTile(id,device) {
+		var urlHead = MultiBox.getUrlHead(device.altuiid) 
+		$("img#{0}".format(device.altuiid))
 			.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
 			.css('width','100%')
-		HTMLUtils.startTimer('altui-camera-tile-timer-'+altuiid,3000,_refreshCameraTile,altuiid)
+		HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refreshCameraTile,device)
 	};
 	function _drawCameraTile(device) {
 		var html="";
@@ -182,7 +183,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
 					.css('width','100%')
 				html =  img.wrap( "<div></div>" ).parent().html();
-				HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refreshCameraTile,device.altuiid)
+				HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refreshCameraTile,device)
 			} else {
 				var streamurl = "url(http://{0}{1})".format(
 					device.ip,	//ip
