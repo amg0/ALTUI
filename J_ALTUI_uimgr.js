@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1622 $";
+var ALTUI_revision = "$Revision: 1623 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3625,7 +3625,7 @@ var UIManager  = ( function( window, undefined ) {
 									str = baseIconName + ".png";
 							}
 							else
-								str = si[0] || defaultIconSrc;	// incase si is an empty [}
+								str = si[0] || ui_static_data.default_icon || defaultIconSrc;	// incase si is an empty [}
 							AltuiDebug.debug("Icon for device id:"+id+"  str :"+str);
 					}
 					else if (ui_static_data.dynamic_icons !=undefined)	//  some dynamic icons found
