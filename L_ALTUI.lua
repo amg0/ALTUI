@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.47"
+local version = "v1.48"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -3040,6 +3040,14 @@ end
 ------------------------------------------------
 -- STARTUP Sequence
 ------------------------------------------------
+function loadCode( code )
+	local req = "http://127.0.0.1:3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code="
+	-- code = "require 'L_ALTUI_LuaRunHandler'\n"
+	req = req .. modurl.escape(code)
+	local httpcode,content = luup.inet.wget(req)
+	return httpcode,content
+end
+
 function registerHandlers()
 	luup.register_handler("myALTUI_Handler","ALTUI_Handler")
 	-- luup.register_handler('ALTUI_LuaRunHandler','ALTUI_LuaRunHandler')
@@ -3090,14 +3098,6 @@ function registerHandlers()
 	  end
 	  return val(Lua, 1, '_')
 	end
-	
-	 function ALTUI_notify( pushingbox_DID, str )
-		local modurl = require "socket.url"
-		-- debug(string.format("ALTUI_notify( %s, %s )",pushingbox_DID, str))
-		local newstr = modurl.escape( str or "" )
-		luup.inet.wget("http://api.pushingbox.com/pushingbox?devid=" .. pushingbox_DID .. "&value=" .. newstr .. "" )
-		return true
-	end
 
 	function ALTUI_LuaRunHandler(lul_request, lul_parameters, lul_outputformat)
 		local lua = lul_parameters["lua"]
@@ -3120,10 +3120,53 @@ function registerHandlers()
 	luup.register_handler('ALTUI_LuaRunHandler','ALTUI_LuaRunHandler')
 	]]	
 
-	local req = "http://127.0.0.1:3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code="
-	-- code = "require 'L_ALTUI_LuaRunHandler'\n"
-	req = req .. modurl.escape(code)
-	local httpcode,content = luup.inet.wget(req)
+	local code2 = [[
+		ALTUI = {}
+		function ALTUI.notify( pushingbox_DID, str )
+			local modurl = require "socket.url"
+			-- debug(string.format("ALTUI_notify( %s, %s )",pushingbox_DID, str))
+			local newstr = modurl.escape( str or "" )
+			luup.inet.wget("http://api.pushingbox.com/pushingbox?devid=" .. pushingbox_DID .. "&value=" .. newstr .. "" )
+			return true
+		end
+		function  ALTUI.time_is_between(startTime,endTime)
+			local hour = tonumber( startTime:sub( startTime:find("%d+") ) )
+			local minute = tonumber(startTime:sub(-2))
+			if hour and minute then
+				startTime = hour * 100 + minute
+			else
+				luup.log("ERROR: invalid start time")
+				return false
+			end
+			hour = tonumber( endTime:sub( endTime:find("%d+") ) )
+			minute = tonumber(endTime:sub(-2))
+			if hour and minute then
+				endTime = hour * 100 + minute
+			else
+				luup.log("ERROR: invalid end time")
+				return false
+			end
+			local currentTime = os.date("*t")
+			currentTime = currentTime.hour * 100 + currentTime.min
+			--luup.log("startTime = " .. startTime .. "; currentTime = " .. currentTime .. "; endTime = " .. endTime)
+			if startTime <= endTime then
+				-- Both the start time and the end time are in the same day:
+				-- if the current time is in the given interval, run the scene.
+				if startTime <= currentTime and currentTime <= endTime then
+					return true
+				end
+			else
+				-- The start time is before midnight, and the end time is after midnight:
+				-- if the current time is not outside the given interval, run the scene.
+				if not (endTime < currentTime and currentTime < startTime) then
+					return true
+				end
+			end
+			return false
+		end
+	]]	
+	local httpcode,content = loadCode(code)
+	httpcode,content = loadCode(code2)
 	return httpcode
 end
 
