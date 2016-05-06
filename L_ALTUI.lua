@@ -1441,12 +1441,16 @@ end
 local htmlLocalScripts = [[
     <script src="@localcdn@/jquery.min.js"></script>
     <script src="@localcdn@/lodash.min.js"></script>
+    <script src="@localcdn@/backbone-min.js"></script>
 	<script src="@localcdn@/bootstrap.min.js"></script>
     <script src="@localcdn@/jquery-ui.min.js"></script> 
     <script src="@localcdn@/jquery.bootgrid.min.js"></script> 	
-    <script src="@localcdn@/jsapi.js"></script> 	
+    <script src="@localcdn@/joint.min.js"></script> 	
 	<script src="@localcdn@/spectrum.min.js"></script>
 	<script src="@localcdn@/raphael-min.js"></script>
+	<script src="@localcdn@/ace.js"></script>
+	<script src="@localcdn@/joint.shapes.devs.min.js"></script>
+    <script src="@localcdn@/jsapi.js"></script> 	
 	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
 	<script src="J_ALTUI_utils.js" ></script>
 	<script src="J_ALTUI_api.js" ></script>
@@ -1458,13 +1462,17 @@ local htmlLocalScripts = [[
     -- <script src="@localcdn@/d3.min.js"></script> 	
 
 local htmlScripts = [[
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" ></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script> 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
-	<script src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.1/spectrum.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" ></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script> 
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.min.js" ></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.1/spectrum.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.shapes.devs.min.js"></script>
 	<script type="text/javascript"  
 	  src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>
@@ -1491,6 +1499,7 @@ local htmlLocalCSSlinks = [[
 	<link rel="stylesheet" href="@localcdn@/bootstrap.min.css">
 	<link rel="stylesheet" href="@localcdn@/jquery.bootgrid.min.css">
     <link rel="stylesheet" type="text/css" href="@localcdn@/spectrum.min.css">
+    <link rel="stylesheet" type="text/css" href="@localcdn@/joint.css">
 ]]
 
 local htmlCSSlinks = [[
@@ -1498,6 +1507,7 @@ local htmlCSSlinks = [[
 	<link rel="stylesheet" type="text/css" href="@localbootstrap@">
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.1/spectrum.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.css">
 ]]
 
 local htmlLayout = [[

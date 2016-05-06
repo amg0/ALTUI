@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1624 $";
+var ALTUI_revision = "$Revision: 1631 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5637,30 +5637,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 	}
 	function _initACEandJoint() {
-		$("title").before("<link rel='stylesheet' type='text/css' href='//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.css'>");
+		// $("title").before("<link rel='stylesheet' type='text/css' href='//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.css'>");
 		$.when( HtmlResourcesDB.loadResourcesAsync([ 
 				"https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js",
+				"https://cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.shapes.devs.min.js"
 				// "http://www.jointjs.com/js/vendor/lodash/lodash.min.js",
 				// "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js",
 				]) )
 			.done(function(){
-				$.when(HtmlResourcesDB.loadResourcesAsync([
-					"https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js",
-					// "https://cdn.jsdelivr.net/justgage/1.0.1/justgage.min.js"
-					// "http://www.jointjs.com/js/vendor/backbone/backbone-min.js",
-					// "https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.1/backbone-min.js",
-				]))
-				.done(function() {
-					$.when(HtmlResourcesDB.loadResourcesAsync([
-						"https://cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.min.js",
-					]))
-					.done(function(){
-						HtmlResourcesDB.loadResourcesAsync([
-							"https://cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.shapes.devs.min.js"
-							// "http://www.jointjs.com/cms/downloads/joint.shapes.devs.js"					
-						])
-					})
-				})
 			})
 	};
 	
@@ -5700,7 +5684,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		_initDB(devicetypes,cbfunc);
 		_setTheme(themecss);
 		_initMultiSelect();
-		_initACEandJoint();
+		// _initACEandJoint();
 		_initBlockly();
 	};
 
@@ -9042,11 +9026,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		$("#altui-workflow-save")
 			.on('click',function() {
+				console.log("preparing to call saveWorkflows()")
 				show_loading( _T("Saving workflows") );
-				WorkflowManager.saveWorkflows(function() {
-					hide_loading();
-					$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
-				});
+				_.defer( function() {
+					WorkflowManager.saveWorkflows(function() {
+						_.defer( hide_loading );
+						console.log("saveWorkflows() worked properly")
+						$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
+					});
+				} )
 			});
 		$(".altui-mainpanel")
 			.off()
