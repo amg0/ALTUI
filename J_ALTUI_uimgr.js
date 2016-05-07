@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1631 $";
+var ALTUI_revision = "$Revision: 1632 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7714,8 +7714,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							MultiBox.editScene( newid.altuiid , clone, function(data) {
 								if ( (data!=null) && (data!="ERROR") ) {
 									PageMessage.message(_T("Cloned Scene {0} successfully").format(scene.name), "success");
-									_.defer( function() { 
-										setTimeout(function() {
+									_.delay(function() {
 												// clone watches
 												UIManager.pageScenes();
 												
@@ -7730,8 +7729,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 														});
 													}
 												});
-											},3000);
-									}) 
+											},2500);
 								}
 								else {
 									PageMessage.message(_T("Could not edit Scene {0}").format(clone.name), "warning");
@@ -9026,12 +9024,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		$("#altui-workflow-save")
 			.on('click',function() {
-				console.log("preparing to call saveWorkflows()")
 				show_loading( _T("Saving workflows") );
 				_.defer( function() {
 					WorkflowManager.saveWorkflows(function() {
-						_.defer( hide_loading );
-						console.log("saveWorkflows() worked properly")
+						_.delay( hide_loading,500 );
 						$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
 					});
 				} )
@@ -9080,9 +9076,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var altuiid = $(obj).data("altuiid");
 					var activestate = data.states[altuiid];
 					var workflow = WorkflowManager.getWorkflow( altuiid );
-					var arr = JSON.parse(workflow.graph_json).cells.filter( function(e) {return e.id == activestate} )
-					if (arr.length>0) {
-						$(obj).find(".altui-active-state-name").text( arr[0].attrs[".label"].text )
+					if (workflow.graph_json) {
+						var arr = JSON.parse(workflow.graph_json).cells.filter( function(e) {return e.id == activestate} )
+						if (arr.length>0) {
+							$(obj).find(".altui-active-state-name").text( arr[0].attrs[".label"].text )
+						}
 					}
 				});
 				HTMLUtils.startTimer('altui-workflow-page-timer',3000,_refresh,null)
