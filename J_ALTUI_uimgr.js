@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1632 $";
+var ALTUI_revision = "$Revision: 1634 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5346,12 +5346,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					}
 					return -1;
 				}
+				var posToInsert = 0;
 				for(var i=0; i<favoritesOrder.length; i++) {
 					var j = findIndexByName( favoritesOrder[i] )
 					if (j!=-1) {
-						var temp =  favoritesToDraw[i];
-						favoritesToDraw[i] = favoritesToDraw[j];
+						var temp =  favoritesToDraw[posToInsert ];
+						favoritesToDraw[posToInsert ] = favoritesToDraw[j];
 						favoritesToDraw[j] = temp;
+						posToInsert ++;
 					}
 				}
 			}
@@ -5588,8 +5590,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	};
 	
 	function _initOptions(serveroptions) {
-		if (isNullOrEmpty(serveroptions))
+		if (isNullOrEmpty(serveroptions)) {
 			serveroptions="{}";
+		}
 		var defaults = JSON.parse(serveroptions);
 		// option1=val1,option2=val2,...
 		// serveroptions = atob(serveroptions);
@@ -9025,12 +9028,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$("#altui-workflow-save")
 			.on('click',function() {
 				show_loading( _T("Saving workflows") );
-				_.defer( function() {
-					WorkflowManager.saveWorkflows(function() {
-						_.delay( hide_loading,500 );
-						$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
-					});
-				} )
+				_.defer( setTimeout,function() {
+								WorkflowManager.saveWorkflows(function() {
+									_.defer( setTimeout,hide_loading,1000)
+									$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
+								});
+							},1000) 
 			});
 		$(".altui-mainpanel")
 			.off()
@@ -12406,7 +12409,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					tbl[key]=btoa(val.toString())
 				}
 			});
-			var old_options = JSON.parse( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "ServerOptions" ) );
+			var serveroptions_str = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "ServerOptions" );
+			if (isNullOrEmpty(serveroptions_str))
+				serveroptions_str="{}";
+			var old_options = JSON.parse(  serveroptions_str );
 			old_options = $.extend(true,old_options,tbl);
 			MultiBox.setStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "ServerOptions", JSON.stringify(old_options) );
 		};
