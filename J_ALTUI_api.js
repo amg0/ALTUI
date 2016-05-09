@@ -1013,14 +1013,14 @@ var api = {
 		return jQuery.parseJSON(_JSAPI_ctx.sysinfoJson);
 	},
 	getDataRequestURL: function() {
-		return data_request_url;
+		return window.location.pathname;	//"http://192.168.1.16/port_3480/data_request"
 	},
 	getSendCommandURL: function() {
 		return send_command_url;
 	},
 	getUserData:  function () {
 		// should return the userdata object
-		_JSAPI_ctx.application.userData;
+		return jsonp.ud;
 	},
 	getCpanelDeviceId: function () {
 		return _JSAPI_ctx.deviceid;

@@ -9,11 +9,12 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-var UPnPHelper = (function(ip_addr,veraidx) {
+var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 	//---------------------------------------------------------
 	// private functions
 	//---------------------------------------------------------	
 	var _ipaddr = (ip_addr.trim()) || '';
+	var _bIsOpenLuup = bIsOpenLuup;
 	var _veraidx = veraidx || 0;
 	var _proxyresultarea = "altuictrl"+_veraidx;
 	var _urlhead = (_ipaddr=='') ? window.location.pathname : ("http://{0}/port_3480/data_request".format(_ipaddr));
@@ -97,7 +98,11 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	
 	function _buildHAGSoapUrl()
 	{
-		var url = _getUrlHead().replace('/port_3480/data_request','/port_49451/upnp/control/hag');
+		var url ='';
+		if (_bIsOpenLuup==true)
+			url = _getUrlHead().replace('/data_request','/upnp/control/hag');
+		else
+			url = _getUrlHead().replace('/port_3480/data_request','/port_49451/upnp/control/hag');
 		return url;
 	}
 	
@@ -387,7 +392,6 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 // </s:Envelope>	
 	function _ModifyUserData( user_data, cbfunc )
 	{
-		
 		var target = {
 			"devices":{},
 			"scenes":{},
@@ -584,7 +588,8 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		// Public  functions
 		//---------------------------------------------------------
 		 
-		getIpAddr		: function () 	{ return _ipaddr; },
+		getIpAddr		: function () 				{ return _ipaddr; },
+		setOpenLuupMode : function (bIsOpenLuup)	{ _bIsOpenLuup = bIsOpenLuup; },
 		reloadEngine	: _reloadEngine,
 		getUrlHead		: _getUrlHead,
 		proxify			: _proxify,			// ( url )

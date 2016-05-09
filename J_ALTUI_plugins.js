@@ -166,10 +166,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	}
 	function _refreshCameraTile(id,device) {
 		var urlHead = MultiBox.getUrlHead(device.altuiid) 
-		$("img#{0}".format(device.altuiid))
-			.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
-			.css('width','100%')
-		HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refreshCameraTile,device)
+		var elem = $("img#{0}".format(device.altuiid))
+		if (elem.length>0) {
+			$(elem)
+				.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
+				.css('width','100%')
+			HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refreshCameraTile,device)
+		}
 	};
 	function _drawCameraTile(device) {
 		var html="";

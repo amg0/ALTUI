@@ -234,7 +234,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
   //---------------------------------------------------------
 	var _uniqID = uniq_id;								// assigned by Multibox, unique, can be used for Settings & other things
 	var _hagdevice = { id: 0, altuiid:"{0}-0".format(_uniqID) };							// special device for HAG, service=S_HomeAutomationGateway1.xml
-	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id);	// for common UPNP ajax
+	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id,false);	// for common UPNP ajax
 	var _dataEngine = null;
 	var _sysinfo = null;
 	var _rooms = null;
@@ -840,6 +840,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			var bFirst = (_user_data_DataVersion==1);
 			if ($.isPlainObject( data )==false)
 				data = JSON.parse(data);
+			_upnpHelper.setOpenLuupMode(data.SvnVersion == undefined);
 			$.extend(_user_data, data);
 			// _user_data = cloneObject(data);	
 			_user_data_DataVersion = data.DataVersion;
