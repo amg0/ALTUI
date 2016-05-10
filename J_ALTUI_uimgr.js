@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1640 $";
+var ALTUI_revision = "$Revision: 1643 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7979,6 +7979,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	
 	pageWorkflow: function ( altuiid ) {
+		var workflow = WorkflowManager.getWorkflow(altuiid);
+		if (workflow==null) return;
 		var bSaveNeeded = false;
 		var plusButton = xsbuttonTemplate.format("{0}","altui-add-item",plusGlyph,"Add");
 		var delButton = xsbuttonTemplate.format("{0}","altui-delete-item-{1}",deleteGlyph,"Del");
@@ -7998,6 +8000,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-workflow-zoomout", glyph:"glyphicon-minus" },
 			{id:"altui-workflow-rotate", glyph:"glyphicon-repeat" },
 		];
+		var selected = [];
+		var graph = new joint.dia.Graph();
+		
 		function _clearPage() {
 			$(".altui-workflow-toolbar").remove();
 			$(".altui-mainpanel").empty();
@@ -8167,6 +8172,31 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				});				
 			});
 
+			// auto complete
+			var w = WorkflowManager.getWorkflowDescr( workflow.altuiid );
+			var states = $.map( w.states.filter( function(s) { return (s.isStart()==false) && (s.name != Model.name) }) , function(s) { return s.name } );
+			$('#altui-form-StateName').autocomplete({
+				source: states,
+				// appendTo: "#altui-device-name-filter",
+				delay: 200,
+				select: function( event, ui ) {
+					var selected = ui.item.value;
+					ui.item.value = _T("Clone of {0}").format(ui.item.value);
+					$.each( w.states, function(i,s) {
+						if (s.name == selected) {
+							var srccell = graph.getCell(s.id);
+							$("#altui-onEnter").replaceWith( _displayActions( "altui-onEnter",srccell.attributes.prop.onEnter) )
+							$("#altui-onExit").replaceWith( _displayActions( "altui-onExit",srccell.attributes.prop.onExit) )
+							$("#altui-onEnterScenes").replaceWith( _displayScenes( "altui-onEnterScenes",srccell.attributes.prop.onEnterScenes) )
+							$("#altui-onExitScenes").replaceWith( _displayScenes( "altui-onExitScenes",srccell.attributes.prop.onExitScenes) )
+							ace.edit( "altui-onEnterLua" ).setValue(srccell.attributes.prop.onEnterLua,-1);
+							ace.edit( "altui-onExitLua" ).setValue(srccell.attributes.prop.onExitLua,-1);
+						}
+					})
+				},
+				// change: function(event, ui ) {
+				// },
+			});
 			$('#altui-state-form')
 			.off()
 			.on( 'submit', function(e) {
@@ -8414,6 +8444,28 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$("#toolbox block[type='whensince']").remove();
 			
 			var luaexpr_col =$("table#altui-conditions th[data-column-id='luaexpr']").index();
+			// auto complete
+			var w = WorkflowManager.getWorkflowDescr( workflow.altuiid );
+			var transitions= $.map( w.transitions.filter( function(s) { return (s.name != Model.name) }) , function(s) { return s.name } );
+			$('#altui-form-LinkName').autocomplete({
+				source: transitions,
+				// appendTo: "#altui-device-name-filter",
+				delay: 200,
+				select: function( event, ui ) {
+					var selected = ui.item.value;
+					ui.item.value = _T("Clone of {0}").format(ui.item.value);
+					$.each( w.transitions, function(i,s) {
+						if (s.name == selected) {
+							var srccell = graph.getCell(s.id);
+							$("#altui-conditions").html( _displayConditions( 'altui-conditions',srccell.attributes.prop.conditions) );
+							$("#altui-schedule").html( _displaySchedule( 'altui-schedule', srccell.attributes.prop.schedule )  );
+							$("#altui-timername").val( srccell.attributes.prop.timer );
+							$("#altui-duration").val( srccell.attributes.prop.duration );
+						}
+					})
+				}
+			});
+				
 			$('#altui-link-form')
 			.off()
 			.on( 'submit', function(e) {
@@ -8594,9 +8646,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// function onDeleteNode(cell){
 		// }
 
-		var workflow = WorkflowManager.getWorkflow(altuiid);
-		if (workflow==null)
-			return;
+		workflow = WorkflowManager.getWorkflow(altuiid);
+		if (workflow==null) return;
 		WorkflowManager.sanitizeWorkflow(workflow.altuiid);
 		
 		UIManager.clearPage(_T('Workflow'),_T("Workflow Editor"),UIManager.oneColumnLayout);
@@ -8612,8 +8663,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		//
 		// Set up Jointjs things
 		//
-		var selected = [];
-		var graph = new joint.dia.Graph();
 		var paper = new joint.dia.Paper({
 			el: $('#altui-workflow-canvas'),
 			width: $('#altui-workflow-canvas').parent().innerWidth()-30, height: 600, gridSize: 1,

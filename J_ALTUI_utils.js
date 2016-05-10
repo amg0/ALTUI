@@ -2112,6 +2112,13 @@ var Workflow = function (altuiid) {
 			return $.map( $.grep(_graph.cells, function(e) { return e.type != "link" }) , function(s) {
 				return new WorkflowState(_graph,s);
 			})
+		},
+		get transitions() { 
+			if (_graph==null)
+				return []
+			return $.map( $.grep(_graph.cells, function(e) { return e.type == "link" }) , function(s) {
+				return new WorkflowLink(_graph,s);
+			})			
 		}
 	}
 };
