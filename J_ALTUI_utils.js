@@ -1630,10 +1630,10 @@ var AltuiDebug = ( function (undefined) {
 	
 	function _debug(str) {
 		if (g_debug==true)
-			console.log(new Date().toISOString()+": ALTUI "+g_DeviceTypes.info["PluginVersion"]+":"+str);
+			console.log(new Date().toISOString()+": ALTUI "+g_ALTUI.g_DeviceTypes.info["PluginVersion"]+":"+str);
 	};
 	function _warning(str) {
-			console.log(new Date().toISOString()+": ALTUI "+g_DeviceTypes.info["PluginVersion"]+":"+str);
+			console.log(new Date().toISOString()+": ALTUI "+g_ALTUI.g_DeviceTypes.info["PluginVersion"]+":"+str);
 	}
 	
 	return {
@@ -2204,7 +2204,7 @@ var WorkflowManager = (function() {
 	};
 
 	function _forceReloadWorkflows() {
-		var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var names = $.map( _workflows, function(workflow,idx) {	return workflow.name;	} );
 		MultiBox.saveData( "Wflow", "Workflows", JSON.stringify(names), function(data) {
 			if (data!="") {
@@ -2312,7 +2312,7 @@ var WorkflowManager = (function() {
 		return false;
 	};
 	function _resetWorkflow(altuiid) {
-		var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		MultiBox.runAction( altuidevice, "urn:upnp-org:serviceId:altui1", "ResetWorkflow", {workflowAltuiid:altuiid} );
 	};
 	function _pauseWorkflow(altuiid, bPause) {
@@ -2371,7 +2371,7 @@ var WorkflowManager = (function() {
 			if ( (scene.groups) && (scene.groups.length>0) ) {
 				if ( (scene.groups[0].actions) && (scene.groups[0].actions.length>0) ) {
 					var action = scene.groups[0].actions[0];
-					if ( (action.device == g_MyDeviceID) 
+					if ( (action.device == g_ALTUI.g_MyDeviceID) 
 						&& (action.service == "urn:upnp-org:serviceId:altui1") 
 						&& (action.action == "TriggerTransition")
 						&& (action.arguments.length>0) 
@@ -2400,7 +2400,7 @@ var WorkflowManager = (function() {
 				"groups":[
 					{"delay":0,"actions":[
 						{
-								"device": g_MyDeviceID ,
+								"device": g_ALTUI.g_MyDeviceID ,
 								"service":"urn:upnp-org:serviceId:altui1",
 								"action":"TriggerTransition",
 								"arguments":[
@@ -2463,7 +2463,7 @@ var WorkflowManager = (function() {
 			if ( (scene.groups) && (scene.groups.length>0) ) {
 				if ( (scene.groups[0].actions) && (scene.groups[0].actions.length>0) ) {
 					var action = scene.groups[0].actions[0];
-					if ( (action.device == g_MyDeviceID) 
+					if ( (action.device == g_ALTUI.g_MyDeviceID) 
 						&& (action.service == "urn:upnp-org:serviceId:altui1") 
 						&& (action.action == "TriggerTransition")
 						&& (action.arguments.length>0) 

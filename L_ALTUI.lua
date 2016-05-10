@@ -11,7 +11,7 @@ local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.48"
+local version = "v1.48b"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -25,10 +25,8 @@ local https = require ("ssl.https")
 local ltn12 = require("ltn12")
 local modurl = require "socket.url"
 
-
 local tmpprefix = "/tmp/altui_"		-- prefix for tmp files
 local hostname = ""
-
 
 local DataProviders={}					-- DataProviders database
 local DataProvidersCallbacks={}		-- map names to functions in the local context, only for embedded providers registered within this module in LUA
@@ -1578,16 +1576,20 @@ local htmlLayout = [[
 		function drawVisualization() {
 			//console.log('google loaded');
 		};
-		var g_DeviceTypes =  JSON.parse('@devicetypes@');
-		var g_CustomPages = @custompages@;
-		var g_Workflows = @workflows@;
-		var g_CustomTheme = '@ThemeCSS@';
-		var g_OrgTheme = g_CustomTheme;
-		var g_MyDeviceID = @mydeviceid@;
-		var g_Options = '@ServerOptions@';
-		var g_ExtraController = '@extracontroller@';
-		var g_FirstUserData = @firstuserdata@;
-		var g_jspath = '';
+		var g_ALTUI = {
+			 g_MyDeviceID : @mydeviceid@,
+			 g_ExtraController : '@extracontroller@',
+			 g_svnVersion : '@svnVersion@',
+			 g_FirstUserData : @firstuserdata@,
+			 g_jspath : '',
+			 g_CustomTheme : '@ThemeCSS@',
+			 g_Options : '@ServerOptions@',
+			 g_DeviceTypes :  JSON.parse('@devicetypes@'),
+			 g_CustomPages : @custompages@,
+			 g_Workflows : @workflows@
+		}
+		g_ALTUI.g_OrgTheme = g_ALTUI.g_CustomTheme;
+		
 		// -->
 	</script>
 	<div id="wrap"></div>
@@ -1908,6 +1910,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				variables["ServerOptions"] = serverOptions
 				variables["style"] = htmlStyle
 				variables["mydeviceid"] = deviceID
+				variables["svnVersion"] = luup.attr_get("SvnVersion",0)
 				variables["extracontroller"] = getSetVariable(ALTUI_SERVICE, "ExtraController", deviceID, "")
 				-- variables["firstuserdata"] = "{}"
 				variables["firstuserdata"] = getFirstUserData()	-- ( json.encode( getFirstUserData() )	-- :gsub("'", "\'") )

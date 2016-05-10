@@ -18,11 +18,11 @@ var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 	var _veraidx = veraidx || 0;
 	var _proxyresultarea = "altuictrl"+_veraidx;
 	var _urlhead = (_ipaddr=='') ? window.location.pathname : ("http://{0}/port_3480/data_request".format(_ipaddr));
-	// var _proxyhead = "/port_3480/data_request?id=action&output_format=json&DeviceNum={0}&serviceId=urn:upnp-org:serviceId:altui1&resultName={1}&action=ProxyGet&newUrl=".format(g_MyDeviceID,_proxyresultarea);
+	// var _proxyhead = "/port_3480/data_request?id=action&output_format=json&DeviceNum={0}&serviceId=urn:upnp-org:serviceId:altui1&resultName={1}&action=ProxyGet&newUrl=".format(g_ALTUI.g_MyDeviceID,_proxyresultarea);
 	var _proxyhead = "?id=lr_ALTUI_Handler&command=proxyget&resultName=none&newUrl=";
 
 	// return "/port_3480/data_request?id=action&output_format=json&DeviceNum={0}&serviceId=urn:upnp-org:serviceId:altui1&resultName=altuictrl{1}&action=ProxyGet&newUrl=http://{2}/port_3480/data_request"
-	// 		.format(g_MyDeviceID,idx,box.ip);	// ALTUI device for proxy if needed (secondary vera)
+	// 		.format(g_ALTUI.g_MyDeviceID,idx,box.ip);	// ALTUI device for proxy if needed (secondary vera)
 	function _proxify(url) {
 		var url = (_ipaddr=='') ? url : (_proxyhead + encodeURIComponent( url ));
 		return url;
@@ -587,9 +587,7 @@ var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 		//---------------------------------------------------------
 		// Public  functions
 		//---------------------------------------------------------
-		 
-		getIpAddr		: function () 				{ return _ipaddr; },
-		setOpenLuupMode : function (bIsOpenLuup)	{ _bIsOpenLuup = bIsOpenLuup; },
+		getIpAddr		: function () 		{ return _ipaddr; },
 		reloadEngine	: _reloadEngine,
 		getUrlHead		: _getUrlHead,
 		proxify			: _proxify,			// ( url )

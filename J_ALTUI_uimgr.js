@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1639 $";
+var ALTUI_revision = "$Revision: 1640 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1206,7 +1206,7 @@ var SceneEditor = function (scene) {
 		"0-0":_T("No Room")
 	};
 	var scenecontroller = MultiBox.controllerOf(scene.altuiid).controller;
-	var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+	var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 	var scenewatches = MultiBox.getWatches("VariablesToWatch",function(watch) { return (watch.sceneid == scene.id) && (scenecontroller==0) });
 	
 	function _makeAltuiid(controllerid,id) {
@@ -2815,7 +2815,7 @@ var UIManager  = ( function( window, undefined ) {
 		var head = document.getElementsByTagName('head')[0];
 		var script = document.createElement('script');
 		script.type = 'text/javascript';
-		script.src = g_jspath + scriptLocationAndName;
+		script.src = g_ALTUI.g_jspath + scriptLocationAndName;
 		script.setAttribute("data-src", scriptLocationAndName);
 
 		// once script is loaded, we can call style function in it
@@ -2824,7 +2824,7 @@ var UIManager  = ( function( window, undefined ) {
 	};
 	
 	function _loadD3Script( drawfunc ) {
-		var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var localcdn = ( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalCDN" ).trim() || "");
 		var scriptname = (localcdn=="") ? "//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" : (localcdn+"/d3.min.js");	//supports https
 		var len = $('script[src="'+scriptname+'"]').length;
@@ -3141,7 +3141,7 @@ var UIManager  = ( function( window, undefined ) {
 			return html;
 		};
 		function buildPushForm(providers,pushData,device,varid) {
-			var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+			var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 			var state = MultiBox.getStateByID( device.altuiid, varid );
 
 			var html = "";
@@ -3196,7 +3196,7 @@ var UIManager  = ( function( window, undefined ) {
 		var model = {};
 		if (device!=null) {
 			var watches = {};
-			var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+			var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 			$.each(MultiBox.getWatches("VariablesToSend",function(watch) { return (watch.deviceid == device.altuiid); }), function(i,watch) {
 				watches[watch.service+'_'+watch.variable] = watch;
 			});
@@ -5110,7 +5110,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-default', "{0} {1}".format(usdGlyph,_T("License")),'default',_T("License"));
 
 				// get template
-				var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 				var footerTemplate =  MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "FooterBranding" )
 					|| "<p>${appname} ${luaversion}.${jsrevision}, ${copyright} 2015 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></p><span>${paypal}</span>";
 				var tmpl = _.template(footerTemplate.trim());
@@ -5214,6 +5214,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	};
 
 	function _redrawFavorites( bFirst) {
+		if ( $(".altui-favorites").length==0 )
+			return;
 		function _drawFavoriteGauge(device,temp) {
 			return '<div class="altui-gauge-favorite" id="altui-gauge-favorite-{0}" data-altuiid="{0}" data-name="{1}" data-temp="{2}"></div>'.format(device.altuiid,device.name,temp);
 		}
@@ -5664,19 +5666,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	};
 	function _setTheme(themecss) {
 		if (isNullOrEmpty(themecss)) {
-			themecss = g_OrgTheme;
-			$("link[href='"+g_CustomTheme+"']").attr('href',themecss);
-			g_CustomTheme = themecss;
+			themecss = g_ALTUI.g_OrgTheme;
+			$("link[href='"+g_ALTUI.g_CustomTheme+"']").attr('href',themecss);
+			g_ALTUI.g_CustomTheme = themecss;
 			MyLocalStorage.setSettings("Theme",null);
 		} else {
-			var link = $("link[href='{0}']".format(g_CustomTheme));
+			var link = $("link[href='{0}']".format(g_ALTUI.g_CustomTheme));
 			if (link.length>0) {
 				$(link).attr('href',themecss);					
 			} else {
 				// if (themecss && (themecss.trim()!="") )
 				$("title").after("<link rel='stylesheet' href='"+themecss+"'>");			
 			}
-			g_CustomTheme = themecss;
+			g_ALTUI.g_CustomTheme = themecss;
 			MyLocalStorage.setSettings("Theme",themecss);
 		}
 	};
@@ -9306,8 +9308,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageUsePages: function ()
 	{
-		// var pages = g_CustomPages;
-		// PageManager.init(g_CustomPages);
+		// var pages = g_ALTUI.g_CustomPages;
+		// PageManager.init(g_ALTUI.g_CustomPages);
 		UIManager.clearPage(_T('Custom Pages'),"",UIManager.oneColumnLayout);
 		
 		// lean layout if requested
@@ -9380,8 +9382,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$('div#dialogModal').modal();
 		};
 		
-		// var pages = g_CustomPages;
-		// PageManager.init(g_CustomPages);
+		// var pages = g_ALTUI.g_CustomPages;
+		// PageManager.init(g_ALTUI.g_CustomPages);
 
 		function _createPageEditorHtml() {
 			var pageTabs = _createPageTabsHtml( true );		// edit mode
@@ -12401,7 +12403,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			MyLocalStorage.setSettings(name, value);
 			
 			// save a copy of the simple options to Vera
-			var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+			var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 			var altui_settings = MyLocalStorage.get("ALTUI_Settings");
 			var tbl={}
 			$.each(altui_settings,function(key,val) {
@@ -12903,24 +12905,24 @@ $(document).ready(function() {
 		// client side override of theme if defined
 		var clientsideThemecss= MyLocalStorage.getSettings("Theme");
 		if (clientsideThemecss != null)
-			g_CustomTheme = clientsideThemecss;
+			g_ALTUI.g_CustomTheme = clientsideThemecss;
 		
 		ALTUI_Templates = ALTUI_Templates_Factory();
 		
-		UIManager.initEngine(styles.format(window.location.hostname), g_DeviceTypes, g_CustomTheme, g_Options, function() {
-			PageManager.init(g_CustomPages);
-			WorkflowManager.init(g_Workflows);
-			MultiBox.initEngine(g_ExtraController,g_FirstUserData,g_DeviceTypes.info["controllerType"]);
+		UIManager.initEngine(styles.format(window.location.hostname), g_ALTUI.g_DeviceTypes, g_ALTUI.g_CustomTheme, g_ALTUI.g_Options, function() {
+			PageManager.init(g_ALTUI.g_CustomPages);
+			WorkflowManager.init(g_ALTUI.g_Workflows);
+			MultiBox.initEngine(g_ALTUI.g_ExtraController,g_ALTUI.g_FirstUserData,g_ALTUI.g_DeviceTypes.info["controllerType"]);
 			EventBus.publishEvent("on_ui_initFinished");
 		});
 	};
 
 	function _onInitLocalization() {
 		Localization.setTitle("ALTUI")
-		if (isNullOrEmpty(g_Options))
+		if (isNullOrEmpty(g_ALTUI.g_Options))
 			_onInitLocalization2();
 		else {
-			var reserved = JSON.parse( g_Options ).reserved
+			var reserved = JSON.parse( g_ALTUI.g_Options ).reserved
 			if (isNullOrEmpty(reserved))
 				_onInitLocalization2();
 			else {
@@ -12943,10 +12945,10 @@ $(document).ready(function() {
 		}
 	};
 	
-	AltuiDebug.SetDebug( g_DeviceTypes.info["debug"] ) ;
+	AltuiDebug.SetDebug( g_ALTUI.g_DeviceTypes.info["debug"] ) ;
 	AltuiDebug.debug("starting engines");
-	AltuiDebug.debug("Configuration: "+JSON.stringify(g_DeviceTypes));
-	AltuiDebug.debug("Custom Pages: "+JSON.stringify(g_CustomPages));
+	AltuiDebug.debug("Configuration: "+JSON.stringify(g_ALTUI.g_DeviceTypes));
+	AltuiDebug.debug("Custom Pages: "+JSON.stringify(g_ALTUI.g_CustomPages));
 
 	EventBus.registerEventHandler("on_ui_initFinished",UIManager,UIManager.signal);
 	EventBus.registerEventHandler("on_ui_userDataLoaded",UIManager,UIManager.signal);
@@ -12972,7 +12974,7 @@ $(document).ready(function() {
 	} else {
 		if (getQueryStringValue("lang")=="") {
 			// if lang is NOT on the url, we need to load the language module. 
-			var scriptLocationAndName = g_jspath + 'J_ALTUI_loc_'+ language.substring(0, 2) + '.js' ;
+			var scriptLocationAndName = g_ALTUI.g_jspath + 'J_ALTUI_loc_'+ language.substring(0, 2) + '.js' ;
 			var head = document.getElementsByTagName('head')[0];
 			var script = document.createElement('script');
 			script.type = 'text/javascript';

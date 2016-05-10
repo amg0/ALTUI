@@ -66,7 +66,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		}
 
 		var devices = MultiBox.getDevicesSync();
-		var device = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+		var device = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		
 		var html ="";
 		html += "<div class='col-xs-12'>";

@@ -234,7 +234,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
   //---------------------------------------------------------
 	var _uniqID = uniq_id;								// assigned by Multibox, unique, can be used for Settings & other things
 	var _hagdevice = { id: 0, altuiid:"{0}-0".format(_uniqID) };							// special device for HAG, service=S_HomeAutomationGateway1.xml
-	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id,false);	// for common UPNP ajax
+	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id,g_ALTUI.g_svnVersion == '');	// for common UPNP ajax
 	var _dataEngine = null;
 	var _sysinfo = null;
 	var _rooms = null;
@@ -552,7 +552,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 	
 	function _isWorkflowEnabled() {
-		var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var variable = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "EnableWorkflows" ) || "0";
 		return (parseInt(variable)==1)
 	};
@@ -840,7 +840,6 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			var bFirst = (_user_data_DataVersion==1);
 			if ($.isPlainObject( data )==false)
 				data = JSON.parse(data);
-			_upnpHelper.setOpenLuupMode(data.SvnVersion == undefined);
 			$.extend(_user_data, data);
 			// _user_data = cloneObject(data);	
 			_user_data_DataVersion = data.DataVersion;
@@ -1493,7 +1492,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		if ((whichwatches!="VariablesToWatch") && (whichwatches!="VariablesToSend")) 
 			return null;
 		var linefunc = (whichwatches=="VariablesToWatch") ? _getWatchLineParams : _getPushLineParams
-		var altuidevice = MultiBox.getDeviceByID( 0, g_MyDeviceID );
+		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var variable = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", whichwatches ) || "";
 		var result=[];
 		$.each(variable.split(';'), function(i,line) {
