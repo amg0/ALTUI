@@ -9,9 +9,10 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
+local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.48b"
+local version = "v1.49"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -880,7 +881,7 @@ local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent
 				debug("Wkflow - Condition is evaluated in real time - no TriggerOnly")
 				new,old,lastupdate = luup.variable_get(cond.service, cond.variable, devid ) , "" , os.time()
 			end
-			local results = _evaluateUserExpression(devid, cond.service, cond.variable,old,new,lastupdate,cond.luaexpr,workflow_idx) 	
+			local results = _evaluateUserExpression(lul_device,devid, cond.service, cond.variable,old,new,lastupdate,cond.luaexpr,workflow_idx) 	
 			local res,delay = results[1], results[2] or nil
 			if (  res ~= true) then
 				return false
@@ -1802,7 +1803,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 		command ="default"
 	end
 	
-	local deviceID = tonumber(lul_parameters["DeviceNum"] or findALTUIDevice() )
+	local deviceID = this_device or tonumber(lul_parameters["DeviceNum"] or findALTUIDevice() )
 	
 	-- switch table
 	local action = {
@@ -2629,11 +2630,11 @@ function timeOf(timestamp)
   return os.difftime(timestamp,t2)
 end
 
-function _evaluateUserExpression(lul_device, lul_service, lul_variable,old,new,lastupdate,expr,opt_wkflowidx)
-	debug(string.format("_evaluateUserExpression(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old,new,tostring(lastupdate),expr))
+function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,old,new,lastupdate,expr,opt_wkflowidx)
+	debug(string.format("_evaluateUserExpression(%s,%s,%s,%s,%s,%s,%s,%s)",lul_device, devid, lul_service, lul_variable,old,new,tostring(lastupdate),expr))
 	local results = {}
 	local code = [[
-		return function(lul_device, lul_service, lul_variable, expr)
+		return function(devid, lul_service, lul_variable, expr)
 			local old='%s'
 			local new='%s'
 			local lastupdate=%s
@@ -2658,7 +2659,7 @@ function _evaluateUserExpression(lul_device, lul_service, lul_variable,old,new,l
 
 		-- Call it now
 		setfenv(func, setmetatable (env, {__index = _G, __newindex = _G}))
-		status,results = pcall( func, lul_device, lul_service, lul_variable,expr )
+		status,results = pcall( func, devid, lul_service, lul_variable,expr )
 
 		if (status==true) then
 			-- update from Environment
@@ -2704,7 +2705,7 @@ function evaluateExpression(watch,lul_device, lul_service, lul_variable,expr,old
 		return
 	end
 	
-	local results = _evaluateUserExpression(lul_device, lul_service, lul_variable,old,new,lastupdate,expr,nil)
+	local results = _evaluateUserExpression(this_device, lul_device, lul_service, lul_variable,old,new,lastupdate,expr,nil)
 	local res,delay = results[1], results[2] or nil
 	
 	-- if it evaluates as FALSE , do not do anything & cancel timer
@@ -3306,6 +3307,7 @@ end
 		
 function initstatus(lul_device)
 	lul_device = tonumber(lul_device)
+	this_device = lul_device
 	log("initstatus("..lul_device..") starting version: "..version)	
 	checkVersion(lul_device)
 	hostname = getIP()

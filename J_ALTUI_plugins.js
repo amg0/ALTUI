@@ -24,7 +24,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	// return styles needed by this plugin module
 	function _getStyle() {
 		var style="";
-		style += ".altui-watts, .altui-volts, .altui-dimmable, .altui-countdown  {font-size: 16px;}";
+		style += ".altui-watts, .altui-volts, .altui-countdown  {font-size: 16px;}";
 		style += ".altui-temperature  {font-size: 16px;}";
 		style += ".altui-temperature-heater  {font-size: 12px;}";
 		style += ".altui-temperature-minor  {font-size: 8px;}";
@@ -40,7 +40,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-heater-container { position:absolute; left:71px; right:16px; } .altui-heater-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-heater-container .col-xs-3 { padding-left:1px; padding-right:1px; text-align:center;}  .altui-heater-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
 		style += ".altui-heater-container select.input-sm { height:22px; padding:0;}"; 
 		style += ".altui-cyan { color:cyan;}";
-		style += ".altui-dimmable-slider { margin-left: 60px; margin-right: 70px;}";	
+		style += ".altui-dimmable  {font-size: 14px; padding-left:16px;}";
+		style += ".altui-dimmable-slider { margin-left: 60px; margin-right: 70px; margin-top:5px;}";	
 		style += ".altui-colorpicker { margin-top: 2px; width:30px; margin-right: 15px; }";	
 		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";	
 		style += ".altui-infoviewer-pattern { font-size: 14px; }";	
@@ -578,15 +579,16 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	}
 	function _drawDimmable( device, colorpicker ) {
 
-		var html = "";
-		var onebody = $(".altui-device-body:first");
-		
+		var html = UIManager.defaultDeviceDrawWatts(device);
 		// load level
 		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelTarget' )); 
 		if (isNaN(level)==true) 
 			level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' )); 
 		
 		html += ("<span id='slider-val-"+device.altuiid+"' class='altui-dimmable' >"+level+"% </span>");
+
+
+		// var onebody = $(".altui-device-body:first");
 
 		// on off button
 		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' )); 
@@ -647,7 +649,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		
 		// dimming
 		html+=("<div id='slider-{0}' class='altui-dimmable-slider' ></div>").format(device.altuiid);
-		
+				
 		// on off 
 		$('#altui-colorpicker-{0}'.format(device.altuiid,current)).spectrum('destroy');
 		html += "<script type='text/javascript'>";
