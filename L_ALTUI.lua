@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.49"
+local version = "v1.50"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -784,7 +784,7 @@ local function resetWorkflow(lul_device,workflowAltuiid)
 		
 		-- reset workflow variables
 		WorkflowsVariableBag[workflowAltuiid] = {}
-		luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), tonumber(lul_device))
+		setVariableIfChanged(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), tonumber(lul_device))
 
 		-- schedule execution
 		if (WFLOW_MODE == true) then
@@ -922,7 +922,7 @@ local function executeStateLua(lul_device,workflow_idx,state,label)
 			-- results = func(lul_device, lul_service, lul_variable,expr)
 			if (status==true) then
 				WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ] = env.Bag
-				luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), tonumber(lul_device))
+				setVariableIfChanged(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), tonumber(lul_device))
 				debug(string.format("Wkflow - Lua code res:%s, Bag=%s",tostring(res),json.encode(WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ])))
 			else
 				error(string.format("Wkflow - Lua code Exception occured, Err Msg: %s",res))
@@ -2665,7 +2665,7 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 			-- update from Environment
 			if (opt_wkflowidx~=nil) then
 				WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] = env.Bag
-				luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
+				setVariableIfChanged(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 			end
 			debug(string.format("Evaluation of user watch expression returned: %s",json.encode(results)))
 		else
