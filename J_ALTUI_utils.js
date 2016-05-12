@@ -1913,7 +1913,7 @@ var PageManager = (function() {
 		function _savePage(idx,callback) {
 			if (idx<_pages.length) {
 				var page = _pages[idx];
-				MultiBox.saveData( "Data", page.name, JSON.stringify(page), function(data) {
+				MultiBox.saveData( "Data", page.id.toString(), JSON.stringify(page), function(data) {
 					if (data!="")
 						PageMessage.message("Save for "+page.name+" succeeded.", "success");
 					else
@@ -1921,7 +1921,7 @@ var PageManager = (function() {
 					(callback)();
 				});
 			} else {
-				var names = $.map( _pages, function(page,idx) {	return page.name;	} );
+				var names = $.map( _pages, function(page,idx) {	return page.id;	} );
 				MultiBox.saveData( "Data", "CustomPages", JSON.stringify(names), function(data) {
 					if (data!="")
 						PageMessage.message("Save Pages success", "success");
@@ -1978,7 +1978,9 @@ var PageManager = (function() {
 			});
 		return result;
 	};
-	
+	function _getPages() {
+		return _pages;
+	};
 	function _updateChildrenInPage( page, widgetid, position , size, zindex )
 	{
 		if (page.children)
@@ -2052,6 +2054,7 @@ var PageManager = (function() {
 		clearStorage : _clearStorage,
 		forEachPage: _forEachPage,
 		getPageFromName: _getPageFromName,
+		getPages: _getPages,
 		savePages: _savePages,
 		addPage: _addPage,
 		deletePage: _deletePage,
