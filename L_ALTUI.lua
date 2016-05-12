@@ -722,20 +722,23 @@ local function initWorkflows(lul_device)
 		if (WorkflowsVariableBag[Workflows[k].altuiid]==nil) then
 			WorkflowsVariableBag[Workflows[k].altuiid] = {}
 		end
-		local last_known_active = Workflows[k]["graph_json"].active_state
-		-- if no active state or state is unknown, start from START
+		
+		-- try the  stored active state
+		local last_known_active = WorkflowsActiveState[ Workflows[k].altuiid ]
 		if ( (last_known_active == nil) or ( isValidState(Workflows[k],last_known_active)==false ) ) then
-			last_known_active = WorkflowsActiveState[ Workflows[k].altuiid ]
+			-- try the one stored in the workflow descr
+			last_known_active = Workflows[k]["graph_json"].active_state
 			if ( (last_known_active == nil) or ( isValidState(Workflows[k],last_known_active)==false ) ) then
+				-- if no active state or state is unknown, start from START
 				local state = findStartStateID(k)
 				Workflows[k]["graph_json"].active_state = state
 				WorkflowsActiveState[ Workflows[k].altuiid ] = state
 			else
-				Workflows[k]["graph_json"].active_state = last_known_active
+				WorkflowsActiveState[ Workflows[k].altuiid ]= last_known_active
 			end
 		else
-			-- last known active is fine
-			WorkflowsActiveState[ Workflows[k].altuiid ] = last_known_active
+			-- also save it in workflow descr
+			Workflows[k]["graph_json"].active_state = last_known_active
 		end
 	end
 
@@ -852,7 +855,7 @@ local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent
 	end
 	-- otherwise check if timer expired
 	if (link.prop.timer ~= "") then
-		debug(string.format("Wkflow - link has an expired timer."))
+		debug(string.format("Wkflow - link has a timer."))
 		local res = link.prop.expired
 		link.prop.expired = false
 		if (res==true) then
@@ -1055,10 +1058,20 @@ end
 -- not local as used in luup.call_delay
 function executeWorkflows(lul_device , watchevent )
 	if (WFLOW_MODE==true) then
-		debug(string.format("Wkflow - executeWorkflows(%s)",lul_device))
-		for k,v in pairs(Workflows) do 
-			evalWorkflowState( lul_device, k , watchevent )
+		debug(string.format("Wkflow - executeWorkflows(%s , %s)",lul_device,json.encode(watchevent)))
+
+		if (watchevent~=nil) then
+			debug(string.format("Wkflow - executeWorkflows limited to specific workflows"))
+			for k,v in pairs(watchevent.watch['Expressions']['workflow']) do
+				local workflow_idx = findWorkflowIdx(v.WorkflowAltuiID)
+				evalWorkflowState( lul_device, workflow_idx, watchevent )
+			end
+		else
+			for k,v in pairs(Workflows) do 
+				evalWorkflowState( lul_device, k , watchevent )
+			end
 		end
+	
 		-- all evaluated, so now reset  any forced valid link to {}
 		ForcedValidLinks={}
 		return

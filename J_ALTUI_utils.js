@@ -1634,10 +1634,17 @@ var AltuiDebug = ( function (undefined) {
 	};
 	function _warning(str) {
 			console.log(new Date().toISOString()+": ALTUI "+g_ALTUI.g_DeviceTypes.info["PluginVersion"]+":"+str);
+	};
+	function _setDebug(bDebug)	{ 
+		g_debug=bDebug; 
+		if (g_debug==true) {
+			setTimeout(function() {
+				PageMessage.message( "ALTUI in debug mode", "warning");
+			}, 10000)
+		}
 	}
-	
 	return {
-		SetDebug: function(bDebug)	{ g_debug=bDebug; },
+		SetDebug: _setDebug,
 		IsDebug : function()		{ return g_debug; },
 		debug: _debug,
 		warning: _warning,
@@ -2212,7 +2219,7 @@ var WorkflowManager = (function() {
 
 	function _forceReloadWorkflows() {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
-		var names = $.map( _workflows, function(workflow,idx) {	return workflow.name;	} );
+		var names = $.map( _workflows, function(workflow,idx) {	return workflow.altuiid;	} );
 		MultiBox.saveData( "Wflow", "Workflows", JSON.stringify(names), function(data) {
 			if (data!="") {
 				PageMessage.message("Save Workflows success", "success");
@@ -2235,7 +2242,7 @@ var WorkflowManager = (function() {
 		if (_workflows[idx] !=null) {
 			var workflow = _workflows[idx];
 			
-			MultiBox.saveData( "Wflow", workflow.name, JSON.stringify(workflow), function(data) {
+			MultiBox.saveData( "Wflow", workflow.altuiid, JSON.stringify(workflow), function(data) {
 			if (data!="") {
 				PageMessage.message("Save for "+workflow.name+" succeeded.", "success");
 				MyLocalStorage.set("Workflows",_workflows);
