@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1655 $";
+var ALTUI_revision = "$Revision: 1656 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1980,15 +1980,6 @@ var SceneEditor = function (scene) {
 		HouseModeEditor.runActions( '.altui-mainpanel', function() {
 			_showSaveNeeded();
 		});
-		// $(".altui-mainpanel")
-			// .on("click",".altui-housemode",function(){ 
-				// var div = $(this).find("div.housemode");
-				// if (div.hasClass("preset_selected"))
-					// div.removeClass("preset_selected").addClass("preset_unselected");
-				// else
-					// div.removeClass("preset_unselected").addClass("preset_selected");
-				// _showSaveNeeded();
-			// })
 
 		$(".altui-mainpanel")
 			.on("click",".altui-deltrigger",function(){ 
@@ -2063,7 +2054,14 @@ var SceneEditor = function (scene) {
 								delete item.type;
 								item.arguments=UIManager.buildArrayFromParams(item.params);
 								delete item.params;
-								scene.groups[idg].actions.push(item)
+								// fix the item device number to remove the ALTUIID format 
+								var info = MultiBox.controllerOf(item.device);
+								if (info.controller==scenecontroller) {
+									item.device = info.id;
+									scene.groups[idg].actions.push(item);
+								} else {
+									PageMessage.message(_T("Unsupported function to use a device on a different box than the scene"),"warning")
+								}
 								break;
 							case 'variable_set':
 							case 'scene':

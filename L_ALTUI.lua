@@ -918,7 +918,7 @@ local function executeStateLua(lul_device,workflow_idx,state,label)
 		if (f==nil) then
 			error(string.format("Wkflow - loadstring %s failed to compile, msg=%s",lua,msg))
 		else
-			local env = { ALTUI_notify=ALTUI_notify, Bag = WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ] }
+			local env = { ALTUI=ALTUI, Bag = WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ] }
 			setfenv(f, setmetatable (env, {__index = _G, __newindex = _G}))
 			local status,res= pcall(  f )
 			
@@ -2683,7 +2683,7 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 		-- set Environment
 		local env = {}
 		if (opt_wkflowidx~=nil) then
-			env = { ALTUI_notify=ALTUI_notify, Bag = WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] }
+			env = { ALTUI=ALTUI, Bag = WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] }
 		end
 		setfenv(f, setmetatable (env, {__index = _G, __newindex = _G}))
 		local func = f()	-- call it
