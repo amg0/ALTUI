@@ -661,6 +661,12 @@ var MultiBox = ( function( window, undefined ) {
 	function _getWorkflowHistory(altuiid, cbfunc) {
 		return _controllers[0].controller.getWorkflowHistory(altuiid, cbfunc);
 	};
+	function _getWorkflows(cbfunc) {
+		return _controllers[0].controller.getWorkflows(cbfunc);
+	};	
+	function _getCustomPages(cbfunc) {
+		return _controllers[0].controller.getCustomPages(cbfunc);		
+	}
 	function _isWorkflowEnabled() {
 		return _controllers[0].controller.isWorkflowEnabled();
 	};
@@ -918,10 +924,14 @@ var MultiBox = ( function( window, undefined ) {
 	runSceneByAltuiID	: _runSceneByAltuiID,
 	
 	// workflows
+	getWorkflows		: _getWorkflows,
 	getWorkflowStatus	: _getWorkflowStatus,
 	getWorkflowHistory	: _getWorkflowHistory,
 	isWorkflowEnabled 	: _isWorkflowEnabled,
 
+	// pages
+	getCustomPages : _getCustomPages,
+	
 	// Plugins
 	getPlugins			: _getPlugins,			//( func , endfunc ) 
 	deletePlugin		: _deletePlugin,		//(id,function(result)

@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1652 $";
+var ALTUI_revision = "$Revision: 1655 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -12960,10 +12960,19 @@ $(document).ready(function() {
 		ALTUI_Templates = ALTUI_Templates_Factory();
 		
 		UIManager.initEngine(styles.format(window.location.hostname), g_ALTUI.g_DeviceTypes, g_ALTUI.g_CustomTheme, g_ALTUI.g_Options, function() {
-			PageManager.init(g_ALTUI.g_CustomPages);
-			WorkflowManager.init(g_ALTUI.g_Workflows);
 			MultiBox.initEngine(g_ALTUI.g_ExtraController,g_ALTUI.g_FirstUserData,g_ALTUI.g_DeviceTypes.info["controllerType"]);
-			EventBus.publishEvent("on_ui_initFinished");
+
+			// prepared defered calls
+			var toload = [
+				MultiBox.getCustomPages(function(pages) { PageManager.init(pages) }),
+				MultiBox.getWorkflows( function(workflows) { WorkflowManager.init(workflows) }) 
+			];
+			
+			// when all is done, signal we are ready
+			$.when.apply( $, toload)
+			.then( function() {
+				EventBus.publishEvent("on_ui_initFinished");
+			});
 		});
 	};
 
@@ -12998,7 +13007,6 @@ $(document).ready(function() {
 	AltuiDebug.SetDebug( g_ALTUI.g_DeviceTypes.info["debug"] ) ;
 	AltuiDebug.debug("starting engines");
 	AltuiDebug.debug("Configuration: "+JSON.stringify(g_ALTUI.g_DeviceTypes));
-	AltuiDebug.debug("Custom Pages: "+JSON.stringify(g_ALTUI.g_CustomPages));
 
 	EventBus.registerEventHandler("on_ui_initFinished",UIManager,UIManager.signal);
 	EventBus.registerEventHandler("on_ui_userDataLoaded",UIManager,UIManager.signal);

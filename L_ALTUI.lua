@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.50"
+local version = "v1.51"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -1599,8 +1599,8 @@ local htmlLayout = [[
 			 g_CustomTheme : '@ThemeCSS@',
 			 g_Options : '@ServerOptions@',
 			 g_DeviceTypes :  JSON.parse('@devicetypes@'),
-			 g_CustomPages : @custompages@,
-			 g_Workflows : @workflows@
+			 //g_CustomPages : @custompages@,
+			 //g_Workflows : @workflows@
 		}
 		g_ALTUI.g_OrgTheme = g_ALTUI.g_CustomTheme;
 		
@@ -1891,16 +1891,17 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 						)
 				end
 				
-				local pagelist = getDataFor( deviceID, "CustomPages" ) or "{}"
-				if (pagelist=="[]") then
-					pagelist="{}"
-				end
-				local custompages_tbl = json.decode( pagelist )
-				local result_tbl ={}
-				for k,v in pairs(custompages_tbl) do
-					local data = getDataFor( deviceID, v )
-					table.insert(  result_tbl , data )
-				end
+				-- get pages
+				-- local pagelist = getDataFor( deviceID, "CustomPages" ) or "{}"
+				-- if (pagelist=="[]") then
+					-- pagelist="{}"
+				-- end
+				-- local custompages_tbl = json.decode( pagelist )
+				-- local result_tbl ={}
+				-- for k,v in pairs(custompages_tbl) do
+					-- local data = getDataFor( deviceID, v )
+					-- table.insert(  result_tbl , data )
+				-- end
 				
 				-- local custompages = luup.variable_get(ALTUI_SERVICE, "CustomPages", deviceID) or "[]"
 				-- custompages = string.gsub(custompages,"'","\\x27")
@@ -1918,8 +1919,8 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				variables["favicon"] = favicon
 				variables["localbootstrap"] = localbootstrap
 				variables["devicetypes"] = json.encode(tbl)
-				variables["custompages"] = "["..table.concat(result_tbl, ",").."]"
-				variables["workflows"] = json.encode(Workflows)
+				-- variables["custompages"] = "["..table.concat(result_tbl, ",").."]"
+				-- variables["workflows"] = json.encode(Workflows)
 				variables["ThemeCSS"] = luup.variable_get(ALTUI_SERVICE, "ThemeCSS", deviceID) or ""
 				variables["ServerOptions"] = serverOptions
 				variables["style"] = htmlStyle
@@ -2015,6 +2016,24 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 		["getWorkflowsBag"] = 
 			function(params)	-- return the data providers database in JSON
 				return  json.encode(WorkflowsVariableBag), "application/json"
+			end,
+		["getWorkflows"] = 
+			function(params)	-- return the data providers database in JSON
+				return  json.encode(Workflows), "application/json"
+			end,
+		["getCustomPages"]=
+			function(params)
+				local pagelist = getDataFor( deviceID, "CustomPages" ) or "{}"
+				if (pagelist=="[]") then
+					pagelist="{}"
+				end
+				local custompages_tbl = json.decode( pagelist )
+				local result_tbl ={}
+				for k,v in pairs(custompages_tbl) do
+					local data = getDataFor( deviceID, v )
+					table.insert(  result_tbl , data )
+				end
+				return  "["..table.concat(result_tbl, ",").."]", "application/json"
 			end,
 		["datapush"] = 
 			function(params)	-- return the data providers database in JSON

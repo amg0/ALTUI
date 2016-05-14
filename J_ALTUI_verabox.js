@@ -556,11 +556,22 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		var variable = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "EnableWorkflows" ) || "0";
 		return (parseInt(variable)==1)
 	};
+
+	function _getCustomPages(cbfunc) {
+		var jqxhr = _httpGet("?id=lr_ALTUI_Handler&command=getCustomPages",{dataType: "json",},cbfunc);
+		return jqxhr;
+	};
+
 	function _getWorkflowStatus(cbfunc) {
 		var jqxhr = _httpGet("?id=lr_ALTUI_Handler&command=getWorkflowsStatus",{dataType: "json",},cbfunc);
 		return jqxhr;
 	};
 	
+	function _getWorkflows(cbfunc) {
+		var jqxhr = _httpGet("?id=lr_ALTUI_Handler&command=getWorkflows",{dataType: "json",},cbfunc);
+		return jqxhr;
+	};
+
 	function _getWorkflowHistory(altuiid,cbfunc) {
 		// var cmd = "cat /var/log/cmh/LuaUPnP.log | grep 'Wkflow - nextWorkflowState('".format(altuiid);
 		// var cmd = "tail -n 2000 /var/log/cmh/LuaUPnP.log | grep '[0123456789]: ALTUI: Wkflow - nextWorkflowState(.*, {0},.*==>'".format(altuiid);
@@ -1339,29 +1350,42 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 		// we need a workaround to pass data via a POST but for now, all we have is a Get
 		// we know that 5400 char is ok, above it fails
-		var result="ok";
-		var maxchar = 2000;
-		var todo = data.length;
-		var done = 0;
-		var npage = 0;
+		var context = {
+			key: key,
+			name: name,
+			data: data,
+			maxchar: 2000,
+			done: 0,
+			npage: 0
+		};
+		
+		// var result="ok";
+		// var todo = data.length;
+		// var maxchar = 2000;
+		// var done = 0;
+		// var npage = 0;
 
-		function _doPart() {
-			var len = Math.min( maxchar , data.length - done ) ;
+		function _doPart(context) {
+			var len = Math.min( context.maxchar , context.data.length - context.done ) ;
 			if (len>0) {
-				var part = data.substring( done, done+len);
-				_saveDataChunk(key, name, npage, part,  function(data) {
+				data = context.data;
+				var part = data.substring( context.done, context.done+len);
+				console.log("doPart() %o from:%d len:%d",context,context.done,len)
+				_saveDataChunk(context.key, context.name, context.npage, part,  function(data) {
 					if (data=="")
 						cbfunc("");	// error
 					else {
-						done += len;
-						npage++;
-						_doPart();
+						context.done += len;
+						context.npage++;
+						setTimeout(_doPart, 400, context )
+						// _doPart(context);
 					}
 				});
 			}
 			else {
+				console.log("doPart() - clearData %o",context)
 				// no more data to send but we need to clean up Vera to remove extra variable
-				_clearData(key, name, npage, function(data) {
+				_clearData(context.key, context.name, context.npage, function(data) {
 					// now it is finished
 					cbfunc("ok");
 				});
@@ -1369,7 +1393,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		};	
 		
 		// start and result is asynchronous
-		_doPart();
+		_doPart(context);
 	};
 
 	function _getSceneHistory( id, cbfunc) {
@@ -1672,6 +1696,12 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	getScenesSync	: function() 		{ return _scenes; },
 	getSceneByID 	: _getSceneByID,
 	getNewSceneID	: _getNewSceneID,
+
+	// pages
+	getCustomPages : _getCustomPages,
+	
+	// worklflows
+	getWorkflows 	: _getWorkflows,
 	getWorkflowStatus : _getWorkflowStatus,
 	getWorkflowHistory: _getWorkflowHistory,
 	isWorkflowEnabled : _isWorkflowEnabled,
@@ -2196,6 +2226,12 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	getScenesSync	: _getScenesSync,
 	getSceneByID 	: _getSceneByID,
 	getNewSceneID	: _getNewSceneID,
+
+	// pages
+	getCustomPages : _todo,
+	
+	// worklflows
+	getWorkflows 	: _todo,
 	getWorkflowStatus : _todo,
 	getWorkflowHistory: _todo,
 	isWorkflowEnabled : function() {return false},

@@ -2458,7 +2458,7 @@ var WorkflowManager = (function() {
 			return;
 		
 		var graph = JSON.parse(workflow.graph_json);
-		var links = $.grep(graph.cells, function(e) { return e.type == "link" });
+		var links = (graph==null) ? [] : $.grep(graph.cells, function(e) { return e.type == "link" });
 		var maplinks = {}
 		// for all link conditions which contains a schedule
 		// find the corresponding scene, if found edit , otherwise create
