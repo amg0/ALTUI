@@ -1205,10 +1205,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	}
 	function _editScene(sceneid,scene,cbfunc)
 	{
-		show_loading();
+		// show_loading();
 		_updateSceneUserData( scene );
 		return _upnpHelper.sceneAction(scene,function(data) {
-			hide_loading();
+			// hide_loading();
 			if ($.isFunction(cbfunc))
 				(cbfunc)(data);
 			else {

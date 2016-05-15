@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.51"
+local version = "v1.52"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -1037,11 +1037,19 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 	local stateid = Workflows[workflow_idx]["graph_json"].active_state 
 	local cells = Workflows[workflow_idx]["graph_json"].cells 
 	local oldstate = stateFromID(cells,stateid)
-	debug(string.format("Wkflow - active state:%s, %s",stateid,oldstate.attrs[".label"].text))
 	
 	-- add start state conditions. Start State is like a link object and has same properties as a link
 	-- if workflow is paused, or if Start transitions are matching, move to start
 	local start = findStartState(workflow_idx) 
+	if (start == nil) then
+		error(string.format("Wkflow - null start state, cannot evaluate workflow. delete this workflow"))
+		return false
+	end
+	if (oldstate ==nil ) then
+		oldstate = start
+	end
+	debug(string.format("Wkflow - active state:%s, %s",stateid,oldstate.attrs[".label"].text))
+	
 	if ( (Workflows[workflow_idx].paused==true) or (evaluateStateTransition(lul_device,start,workflow_idx,watchevent)) ) then
 		--- reset workflow to START state
 		log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Reset to Start", oldstate.attrs[".label"].text, start.attrs[".label"].text));

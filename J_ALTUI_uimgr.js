@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1656 $";
+var ALTUI_revision = "$Revision: 1660 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1973,7 +1973,8 @@ var SceneEditor = function (scene) {
 				});
 				
 				// save the scene
-				MultiBox.editScene(scene.altuiid,scene);
+				show_loading();
+				$.when(MultiBox.editScene(scene.altuiid,scene)).done( hide_loading );
 				_showSaveNeeded(false);
 			});
 
@@ -7678,7 +7679,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var altuiid = $(this).closest(".altui-scene").data('altuiid');
 					var scene = MultiBox.getSceneByAltuiID(altuiid);
 					scene.paused = (scene.paused==1) ? 0 : 1; 
-					MultiBox.editScene( altuiid , scene );
+					show_loading();
+					$.when(MultiBox.editScene( altuiid , scene )).done( hide_loading);
 				})
 				// .off("click",".altui-runscene")
 				.on("click",".altui-runscene",function() {
@@ -8460,6 +8462,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							$("#altui-schedule").html( _displaySchedule( 'altui-schedule', srccell.attributes.prop.schedule )  );
 							$("#altui-timername").val( srccell.attributes.prop.timer );
 							$("#altui-duration").val( srccell.attributes.prop.duration );
+							Model.prop.schedule = cloneObject(srccell.attributes.prop.schedule);
+							Model.prop.conditions = cloneObject(srccell.attributes.prop.conditions);
+							Model.prop.timer = cloneObject(srccell.attributes.prop.timer);
+							Model.prop.duration = cloneObject(srccell.attributes.prop.duration);
 						}
 					})
 				}

@@ -2307,6 +2307,8 @@ var WorkflowManager = (function() {
 	function _deleteWorkflow(altuiid) {
 		var idx = _findWorkflowIdxByAltuiid(altuiid);
 		if (idx!=null) {				
+			// delete scenes for this workflow			
+			WorkflowManager.deleteScenes(altuiid);
 			_workflows.splice(idx,1);
 			_saveNeeded = true;
 			return true;
@@ -2451,6 +2453,29 @@ var WorkflowManager = (function() {
 			MultiBox.deleteScene(scheduled_scene)
 		}
 	};
+	function _deleteScenes(workflow_altuiid) {
+		// for all the other scenes for this workflow which try to trigger an existant link or a link which does not have a schedule, delete the scene
+		var todel=[];
+		$.each(MultiBox.getScenesSync(), function(i,scene) {
+			if ( (scene.groups) && (scene.groups.length>0) ) {
+				if ( (scene.groups[0].actions) && (scene.groups[0].actions.length>0) ) {
+					var action = scene.groups[0].actions[0];
+					if ( (action.device == g_ALTUI.g_MyDeviceID) 
+						&& (action.service == "urn:upnp-org:serviceId:altui1") 
+						&& (action.action == "TriggerTransition")
+						&& (action.arguments.length>0) 
+						&& (action.arguments[0].value == workflow_altuiid))
+					{
+						// scene for this workflow but link is not valid
+						todel.push(scene);
+					}
+				}
+			}
+		})
+		$.each(todel, function(idx,scene) {
+			MultiBox.deleteScene(scene)
+		})
+	}
 	function _resyncScenes(workflow_altuiid) {
 		// find workflow
 		var workflow = _getWorkflow(workflow_altuiid)
@@ -2512,11 +2537,12 @@ var WorkflowManager = (function() {
 		getLinkProperties: function( obj )	{ return $.extend(true,{},_def_linkprops, obj) },
 		getWorkflows : function()	{ return _workflows; },
 		getWorkflow: _getWorkflow,
-		setWorkflow: _setWorkflow,									// workflow
-		getWorkflowStats : _getWorkflowStats,					// (altuiid)
-		getWorkflowDescr : _getWorkflowDescr,					// (altuiid)
+		setWorkflow: _setWorkflow,	// workflow
+		getWorkflowStats : _getWorkflowStats,		// (altuiid)
+		getWorkflowDescr : _getWorkflowDescr,	// (altuiid)
 		clearLinkScheduleScene : _clearLinkScheduleScene,	// workflow_altuiid, link
-		resyncScenes : _resyncScenes ,								// workflow_altuiid
+		deleteScenes : _deleteScenes,	// workflow_altuiid
+		resyncScenes : _resyncScenes,	// workflow_altuiid
 		setGraph: _setGraph,
 		saveWorkflows : _saveWorkflows,
 		saveWorkflow : _saveWorkflow,				// (altuiid)
