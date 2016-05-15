@@ -49,6 +49,53 @@ local Timers = {}					-- to Persist timers accross VERA reboots
 --http://192.168.1.5/port_3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&DeviceNum=81&Code=getMapUrl(81)
 
 ------------------------------------------------
+-- ALTUI --
+-- DUplicate code to have it available both in global scene/etc and in workflows
+------------------------------------------------
+ALTUI = {}
+function ALTUI.notify( pushingbox_DID, str )
+	local modurl = require "socket.url"
+	-- debug(string.format("ALTUI_notify( %s, %s )",pushingbox_DID, str))
+	local newstr = modurl.escape( str or "" )
+	luup.inet.wget("http://api.pushingbox.com/pushingbox?devid=" .. pushingbox_DID .. "&value=" .. newstr .. "" )
+	return true
+end
+function  ALTUI.time_is_between(startTime,endTime)
+	local hour = tonumber( startTime:sub( startTime:find("%d+") ) )
+	local minute = tonumber(startTime:sub(-2))
+	if hour and minute then
+		startTime = hour * 100 + minute
+	else
+		luup.log("ERROR: invalid start time")
+		return false
+	end
+	hour = tonumber( endTime:sub( endTime:find("%d+") ) )
+	minute = tonumber(endTime:sub(-2))
+	if hour and minute then
+		endTime = hour * 100 + minute
+	else
+		luup.log("ERROR: invalid end time")
+		return false
+	end
+	local currentTime = os.date("*t")
+	currentTime = currentTime.hour * 100 + currentTime.min
+	--luup.log("startTime = " .. startTime .. "; currentTime = " .. currentTime .. "; endTime = " .. endTime)
+	if startTime <= endTime then
+		-- Both the start time and the end time are in the same day:
+		-- if the current time is in the given interval, run the scene.
+		if startTime <= currentTime and currentTime <= endTime then
+			return true
+		end
+	else
+		-- The start time is before midnight, and the end time is after midnight:
+		-- if the current time is not outside the given interval, run the scene.
+		if not (endTime < currentTime and currentTime < startTime) then
+			return true
+		end
+	end
+	return false
+end
+------------------------------------------------
 -- Debug --
 ------------------------------------------------
 local function log(text, level)
