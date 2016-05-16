@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1660 $";
+var ALTUI_revision = "$Revision: 1663 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9202,7 +9202,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		var pluginTemplate = "<tr data-altuiid='{9}'><td>{6}</td><td>{0}<div><small>{9}</small></div></td><td>{1}.{2}</td><td>{10}</td><td>{7}</td><td>{3} {4}</td><td>{5}</td><td>{8}</td></tr>";
 		function drawPlugin(idx, plugin) {
-			var iconTemplate = "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>";
+			var iconTemplate = ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
 			var filebutton = _getFileButton(plugin);
 			var helpbutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-question-sign',  glyphTemplate.format("question-sign","Help",""), "Help");
 			var infobutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-info-sign',  glyphTemplate.format("info-sign","Information",""), "Info");
@@ -9218,7 +9218,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				helpbutton,
 				infobutton,
 				inputbox+updatebutton,
-				iconTemplate.format(plugin.Icon),
+				iconTemplate,
 				filebutton,
 				deletebutton,
 				plugin.altuiid,
