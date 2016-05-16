@@ -9327,7 +9327,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				if (id==undefined)	return;
 				DialogManager.confirmDialog(_T("are you sure you want to update plugin #{0}").format(id),function(result) {
 					if (result==true) {
-						var val = $("#altui-plugin-version-"+id).val();
+						var val = $("#altui-plugin-version-"+altuiid).val();
 						if ($.isNumeric(val)==true) {
 							MultiBox.updatePluginVersion(altuiid,id,val,function(result) {
 								PageMessage.message( _T("Update Plugin succeeded, be patient Luup will reload"), "success");
