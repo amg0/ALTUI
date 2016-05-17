@@ -26,6 +26,9 @@ local https = require ("ssl.https")
 local ltn12 = require("ltn12")
 local modurl = require "socket.url"
 
+-- compress contribution akbooer
+-- local compress = require "L_ALTUI_compress"
+
 local tmpprefix = "/tmp/altui_"		-- prefix for tmp files
 local hostname = ""
 
@@ -3271,10 +3274,30 @@ function registerHandlers()
 	return httpcode
 end
 
+local function testCompress()
+	log("testCompress()")
+	local lzw = compress.new "LZW2"
+	local text = "a test string to compress, a test string to compress, a test string to compress, a test string to compress"
+	local t = socket.gettime()
+	local code, D = lzw.encode(text)
+
+	log(("time for encode %0.3f (s)"): format (socket.gettime() - t))
+	log ( ("text: %d, LZW: %d, (%0.1f%%)"): format (#text, #code, #code*100/#text ) )
+
+	t = socket.gettime()
+	local decoded = lzw.decode (code)
+	log (("time for decode %0.3f (s)"): format (socket.gettime() - t))
+
+	assert (decoded == text, "encode/decode loop incorrect")
+	log "encode/decode loop tested OK!"
+end
+
 function startupDeferred(lul_device)
 	lul_device = tonumber(lul_device)
 	log("startupDeferred, called on behalf of device:"..lul_device)
-		
+	
+	-- testCompress()
+	
 	local debugmode = getSetVariable(ALTUI_SERVICE, "Debug", lul_device, "0")
 	local oldversion = getSetVariable(ALTUI_SERVICE, "Version", lul_device, version)
 	local present = getSetVariable(ALTUI_SERVICE,"Present", lul_device, 0)

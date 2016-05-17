@@ -541,6 +541,7 @@ var DialogManager = ( function() {
 	function _triggerDialog( trigger, controller, cbfunc ) {
 		var dialog = DialogManager.createPropertyDialog(_T('Trigger'));
 		var device = MultiBox.getDeviceByID( controller ,trigger.device);
+		var event = _findEventFromTriggerTemplate( device, trigger.template );
 		DialogManager.dlgAddLine( dialog , "TriggerName", _T("TriggerName"), trigger.name, "", {required:''} ); 
 		DialogManager.dlgAddDevices( dialog , '', device ? device.altuiid : NULL_DEVICE, 
 			function() {			// callback
@@ -557,7 +558,7 @@ var DialogManager = ( function() {
 			trigger.device = parseInt(MultiBox.controllerOf( $("#altui-select-device").val() ).id) ;
 			trigger.template = $("#altui-select-events").val();
 			trigger.arguments = [];
-			$(".altui-arguments input").each( function(idx,elem)
+			$(".altui-arguments input,.altui-arguments select").each( function(idx,elem)
 			{
 				var id = $(elem).prop('id').substring("altui-event-param".length);
 				trigger.arguments.push( {id:id, value: $(elem).val() } );
@@ -1038,14 +1039,37 @@ var DialogManager = ( function() {
 		};
 
 		function _getEventArguments( selected_event, args ) {
+			function _findValue(arg) {
+				var ret = {key:null,value:null};
+				$.each(arg, function(k,v) {
+					if (k!="HumanFriendlyText")
+					{
+						ret = {key:k,value:v};
+						return false;
+					}
+				});
+				return ret;
+			};
 			var propertyline="";
 			if ((selected_event!=null) && (selected_event.argumentList)) 
 			{
 				$.each(selected_event.argumentList, function(idx,eventarg) {
 					propertyline += "<div class='form-group'>";
 					propertyline += "	<label for='altui-event-param{0}'>{1} {2}</label>".format(idx,eventarg.name,eventarg.comparisson);
-					propertyline += "	<input required id='altui-event-param{0}' type='text' class='form-control' value='{1}' placeholder='default to {2}'></input>"
-						.format(eventarg.id, _findArgumentValue(args,eventarg.id,eventarg.defaultValue), eventarg.defaultValue );
+					var selectedvalue = _findArgumentValue(args,eventarg.id,eventarg.defaultValue);
+					if (eventarg.allowedValueList && $.isArray(eventarg.allowedValueList)) {
+						propertyline += "<select id='altui-event-param{0}' class='form-control'>".format(eventarg.id);
+						$.each(eventarg.allowedValueList,function(k,v) {
+							var val = _findValue(v);
+							var text = v.HumanFriendlyText.text.replace("_DEVICE_NAME_","device").replace("_ARGUMENT_VALUE_",val)
+							propertyline += "<option {2} value='{0}'>{1}</option>".format(val.value,text, (val.value==selectedvalue) ? 'selected' : '' );
+						});
+						propertyline += "</select>"
+					} else {
+						propertyline += "	<input required id='altui-event-param{0}' type='text' class='form-control' value='{1}' placeholder='default to {2}'></input>"
+							.format(eventarg.id, selectedvalue, eventarg.defaultValue || '' );
+					}
+						
 					propertyline += "</div>";
 					// (argument.value !=undefined) ? argument.value : eventarg.defaultValue );	
 				});

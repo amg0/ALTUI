@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1663 $";
+var ALTUI_revision = "$Revision: 1664 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -950,6 +950,7 @@ function _displayDeviceName(controller,deviceid) {
 	var device = MultiBox.isAltuiid(deviceid) ? MultiBox.getDeviceByAltuiID(deviceid) : MultiBox.getDeviceByID(controller,deviceid);
 	return (device==null) ? 'invalid device' : (device.name + "<small class='text-muted'> (#"+device.altuiid+")</small>");
 };
+
 function _formatAction(controller,action) {
 	function _displayArguments(Thearguments) {
 		var html=[];
@@ -965,25 +966,26 @@ function _formatAction(controller,action) {
 	}
 };
 
+function _findEventFromTriggerTemplate(device,template)
+{
+	var static_data = MultiBox.getDeviceStaticData(device);
+	var event = null;
+	if (static_data)
+		$.each(static_data.eventList2, function( idx,e) {
+			if (e.id == template) {
+				event = e;
+				return false;
+			}
+		});
+	return event;
+};
+
 function _formatTrigger(controller,trigger)
 {
-	function _findEventFromTriggerTemplate(controller,device,template)
-	{
-		var static_data = MultiBox.getDeviceStaticData(device);
-		var event = null;
-		if (static_data)
-			$.each(static_data.eventList2, function( idx,e) {
-				if (e.id == template) {
-					event = e;
-					return false;
-				}
-			});
-		return event;
-	};
 	var line = {};
 	var deviceid = trigger.device;
 	var device = MultiBox.getDeviceByID(controller,deviceid);
-	var event = _findEventFromTriggerTemplate( controller,device, trigger.template );
+	var event = _findEventFromTriggerTemplate( device, trigger.template );
 	line.name = trigger.name;
 	line.device = device.name + "<small class='text-muted'> (#"+device.altuiid+")</small>";
 	line.descr = event.label.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>");
@@ -997,10 +999,23 @@ function _formatTrigger(controller,trigger)
 			$.each(event.argumentList, function(idx,eventarg) {
 				if (eventarg.id==id)
 				{
+					var value = (argument.value !=undefined) ? argument.value : eventarg.defaultValue;
+					if (eventarg.allowedValueList) {
+						$.each(eventarg.allowedValueList,function(j,possiblevalue) {
+							$.each(possiblevalue,function(k,v) {
+								if (k != "HumanFriendlyText") {
+									if  ( (v == value) && (possiblevalue.HumanFriendlyText!=undefined) ) {
+										value = possiblevalue.HumanFriendlyText.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>").replace("_ARGUMENT_VALUE_",value)
+									}
+								}
+							});
+						});
+					} else if (eventarg.HumanFriendlyText && eventarg.HumanFriendlyText.text)
+						line.descr = eventarg.HumanFriendlyText.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>").replace("_ARGUMENT_VALUE_",value)
 					line.condition +="{0} {1} {2}".format(
 						eventarg.name,
 						eventarg.comparisson,
-						(argument.value !=undefined) ? argument.value : eventarg.defaultValue );	
+						value );	
 					return false;	// we had a match
 				}				
 			});
