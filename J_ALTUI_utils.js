@@ -1032,7 +1032,7 @@ var DialogManager = ( function() {
 				}
 				select.append("<option value='{0}' {2}>{1}</option>".format(
 					event.id,
-					event.label.text,
+					event.label.text.replace("_DEVICE_NAME_","device"),
 					selected));
 			});
 			return select.wrap( "<div></div>" ).parent().html();
