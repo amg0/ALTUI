@@ -465,10 +465,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 	function _drawZoneThermostat( device ) {
 		var userOperatingMode1Items = [
-			{label:"Off", value:"Off" , service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewMode" },
-			{label:"Auto", value:"AutoChangeOver" , service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewMode"},
-			{label:"Cool", value:"CoolOn" , service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewMode"},
-			{label:"Heat", value:"HeatOn", service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewMode"}
+			{label:"Off", value:"Off" , service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewModeTarget" },
+			{label:"Auto", value:"AutoChangeOver" , service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewModeTarget"},
+			{label:"Cool", value:"CoolOn" , service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewModeTarget"},
+			{label:"Heat", value:"HeatOn", service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewModeTarget"}
 		];
 		var userHVACFanOperatingMode1Items = [
 			{label:"Auto", value:"Auto", service:"urn:upnp-org:serviceId:HVAC_FanOperatingMode1", action:"SetMode" , name:"NewMode"},
