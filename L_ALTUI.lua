@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.52"
+local version = "v1.53"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -2285,10 +2285,16 @@ end
 local function getDefaultConfig()
 	local tbl = {}
 
+
 	tbl["urn:schemas-upnp-org:device:BinaryLight:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawBinaryLight",
 		["StyleFunc"]="ALTUI_PluginDisplays.getStyle",
+		-- ["ControlPanelFunc"]="ALTUI_PluginDisplays.drawBinLightControlPanel",
+	}
+	tbl["urn:schemas-futzle-com:device:WeMoControllee:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawBinaryLight",
 		-- ["ControlPanelFunc"]="ALTUI_PluginDisplays.drawBinLightControlPanel",
 	}
 	tbl["urn:schemas-upnp-org:device:RGBController:1"]= {
@@ -2365,6 +2371,10 @@ local function getDefaultConfig()
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawDimmable",
 	}
 	tbl["urn:schemas-micasaverde-com:device:MotionSensor:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMotion",
+	}
+	tbl["urn:schemas-futzle-com:device:WeMoSensor:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMotion",
 	}
