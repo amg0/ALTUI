@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1671 $";
+var ALTUI_revision = "$Revision: 1672 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8457,7 +8457,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						{id:'Schedules', title:_T("Schedules"), html: _displaySchedule( 'altui-schedule', Model.prop.schedule ) },
 						{id:'Timers', title:_T("Timers"), html:HTMLUtils.drawFormFields( [
 							{ id:"altui-timername", label:_T("Timer Name"), type:"input", value: Model.prop.timer, opt:null },
-							{ id:"altui-duration", label:_T("Duration (sec)"), type:"input", inputtype:"number", value: Model.prop.duration, opt:null },
+							{ id:"altui-duration", label:_T("Duration (sec or min-max)"), type:"input",  pattern:"(\\d+(\\-\\d+)?)$", value: Model.prop.duration, opt:null },
 						])},
 					]},
 					{ id:"altui-btn-bar", type:"buttonbar", value:[

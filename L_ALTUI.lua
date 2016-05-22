@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.53"
+local version = "v1.54"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -724,7 +724,15 @@ local function armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
 			local tbl = {lul_device,workflow_idx,curstate.id,link.target.id,link.id}
 			debug(string.format("Wkflow - Arming Timer (%s, %s) ",lul_device, json.encode(tbl)))
 			debug(string.format("Wkflow - link props:%s",json.encode(link.prop)))
-			setTimer( lul_device, "workflowTimerCB",link.prop.duration,table.concat(tbl, "#")  )
+			if tonumber( link.prop.duration) ~=nil then
+				setTimer( lul_device, "workflowTimerCB",link.prop.duration,table.concat(tbl, "#")  )
+			else
+				-- min, max generates a random
+				local parts = link.prop.duration:split("-")
+				local duration = math.random(parts[1],parts[2])
+				debug(string.format("Wkflow - arming timer with random duration %d",duration))
+				setTimer( lul_device, "workflowTimerCB",duration,table.concat(tbl, "#")  )
+			end
 		end
 		-- make sure we have a watch for all the conditions
 		for c,cond in pairs(link.prop.conditions) do
@@ -3434,6 +3442,10 @@ function initstatus(lul_device)
 	local delay = 1		-- delaying first refresh by x seconds
 	debug("initstatus("..lul_device..") startup for Root device, delay:"..delay)
 	-- http://192.168.1.5:3480/data_request?id=lr_IPX800_Handler
+	
+	-- almost random seed
+	math.randomseed( os.time() )
+	
 	luup.call_delay("startupDeferred", delay, tostring(lul_device))		
 end
  

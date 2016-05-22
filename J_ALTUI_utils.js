@@ -1506,11 +1506,13 @@ var HTMLUtils = (function() {
 				case "input":
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
 					var type = (line.inputtype!=undefined) ? "type='{0}'".format(line.inputtype) : "";
-					html +="<input id='{0}' class='form-control' value='{1}' {2} {3}></input>".format(
+					var pattern = (line.pattern != undefined ) ? "pattern='{0}'".format(line.pattern) : "";
+					html +="<input id='{0}' class='form-control' value='{1}' {2} {3} {4}></input>".format(
 						line.id,
 						line.value,
 						HTMLUtils.optionsToString(line.opt),
-						type);
+						type,
+						pattern);
 					break;
 				case "accordeon":
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
