@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1665 $";
+var ALTUI_revision = "$Revision: 1671 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -390,7 +390,6 @@ var styles ="						\
 	}					\
 	.altui-custompage-canvas {	\
 		position: relative;		\
-		height:500px;			\
 	}							\
 	.altui-tabcontent-fix	{	\
 	  padding-top: 15px; \
@@ -5447,17 +5446,27 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var valueFontColor = getCSS('color','text-info');
 			$(".altui-gauge-favorite").each(function(idx,elem) {
 				var altuiid = $(elem).data('altuiid');
+				var temp = $(elem).data("temp");
+				var gageCfg = $.extend( 
+					{
+						min:0,
+						max: (ws.tempFormat.toLowerCase() == 'c') ? 40 : 110
+					} , 
+					$(elem).data("altuiconfig")
+					);
+				gageCfg.max = Math.max(temp, gageCfg.max);
+				gageCfg.min = Math.min(temp, gageCfg.min);			
 				var g = new JustGage({
 					id: "altui-gauge-favorite-"+altuiid,
-					value: $(elem).data("temp"),
-					min: 0,
-					max: (ws.tempFormat.toLowerCase() == 'c') ? 40 : 110,
+					value: temp,
+					min: gageCfg.min,
+					max: gageCfg.max,
 					relativeGaugeSize: true,
 					formatNumber: true,
 					decimals:1,
 					valueFontColor: valueFontColor
 				  });
-				$(elem).data("justgage",  g);
+				$(elem).data("justgage",  g).data("altuiconfig",gageCfg);
 				return true;
 			});
 			// resize favorite
@@ -6574,14 +6583,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	};
 	
 	function _getPageHtml(page,bEditMode) {
+		var height = 0;
 		var pageHtml = "<div class='altui-custompage-canvas' style='z-index:0;'>";
 		if (page.children)
 			$.each(page.children, function(idx,child) {							
 				pageHtml += _getWidgetHtml( child, bEditMode , page );
+				height = Math.max( (child.position.top || 0)  + (child.size.height || 20), height);
 			});
 		pageHtml += "</div>";
-		var str = "<div role='tabpanel' class='tab-pane altui-page-content-one' id='altui-page-content-{0}' >{1}</div>".format(page.name.replace(' ','_'),pageHtml); // no white space in IDs
-		var elem = $(str).css('background',page.background);
+		height = Math.max( 500 , height);
+		var pageelem = $(pageHtml).height(height);
+		var pageelemhtml = pageelem.wrap( "<div></div>" ).parent().html();
+		var str = "<div role='tabpanel' class='tab-pane altui-page-content-one' id='altui-page-content-{0}' >{1}</div>".format(page.name.replace(' ','_'),pageelemhtml); // no white space in IDs
+		var elem = $(str).css('background',page.background).height(height+1);
 		return elem.wrap( "<div></div>" ).parent().html();
 	};
 	
@@ -9574,6 +9588,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					}
 				}
 			})
+			.parent().resizable({
+				stop: function( event, ui ) {
+					var elem = ui.element;
+					$(elem).find(".altui-custompage-canvas").width( ui.size.width).height(ui.size.height);
+				}
+			});
 		};
 		
 		// draw page & toolbox

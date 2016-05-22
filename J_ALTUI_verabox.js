@@ -1370,7 +1370,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			if (len>0) {
 				data = context.data;
 				var part = data.substring( context.done, context.done+len);
-				console.log("doPart() %o from:%d len:%d",context,context.done,len)
+				// console.log("doPart() %o from:%d len:%d",context,context.done,len)
 				_saveDataChunk(context.key, context.name, context.npage, part,  function(data) {
 					if (data=="")
 						cbfunc("");	// error
@@ -1383,7 +1383,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				});
 			}
 			else {
-				console.log("doPart() - clearData %o",context)
+				// console.log("doPart() - clearData %o",context)
 				// no more data to send but we need to clean up Vera to remove extra variable
 				_clearData(context.key, context.name, context.npage, function(data) {
 					// now it is finished
