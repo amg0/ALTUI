@@ -147,7 +147,7 @@ function altui_Settings(deviceID) {
 		'<tr><td>Open</td><td> <div class="btn-group">'+htmlOpenLocal+htmlRemote+'</div> </td></tr>' +
 		'<tr><td>Theme</td><td> '+htmlTheme+' </td></tr>' +
 		'<tr><td>Home Page Url Parameters</td><td> '+htmlHome+' </td></tr>' +
-		'<tr><td>url options</td><td><ul><li><b>home</b>=(pageHome , pageRooms , pageDevices , pageScenes , pageSceneEdit , pagePlugins , pageUsePages , pageEditPages , pageCredits , pageLuaTest , pageLuaStart , pageOptions , pageEditor , pageZwave , pageLocalization , pagePower , pageChildren , pageRoutes , pageQuality , pageTblDevices , pageOsCommand)</li><li><b>lang</b>=(en , fr , it)</li><li><b>Layout</b>=lean</li></ul></td></tr>' +
+		'<tr><td>url options</td><td><ul><li><b>home</b>=(pageHome , pageRooms , pageDevices , pageScenes , pageSceneEdit , pagePlugins , pageUsePages , pageEditPages , pageCredits , pageLuaTest , pageLuaStart , pageOptions , pageEditor , pageZwave , pageLocalization , pagePower , pageChildren , pageRoutes , pageQuality , pageTblDevices , pageOsCommand)</li><li><b>lang</b>=(en , fr , it)</li><li><b>Layout</b>=lean</li><li><b>nPage</b>=nnn</li></ul></td></tr>' +
 		'<tr><td>Local CDN ?</td><td> '+htmlCDN+' </td></tr>' +
 		'<tr><td>Local Bootstrap ?</td><td> '+htmlBootstrap+' </td></tr>' +
 		'<tr><td>Extra Controllers</td><td> '+htmlCTRL+' </td></tr>' +
