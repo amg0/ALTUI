@@ -100,7 +100,7 @@ Localization.init( {
 	"Camera":"Caméra",
 	"On Off":"On Off",
 	"Gauge":"Jauge",
-	"Device Icon":"Icône du périphérique",
+	"Device Icon":"Icône",
 	"Scene":"Scène",
 	"Multi State":"Multi Etats",
 	"Mo":"Lu",
