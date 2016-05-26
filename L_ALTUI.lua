@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.54"
+local version = "v1.55"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -724,14 +724,20 @@ local function armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
 			local tbl = {lul_device,workflow_idx,curstate.id,link.target.id,link.id}
 			debug(string.format("Wkflow - Arming Timer (%s, %s) ",lul_device, json.encode(tbl)))
 			debug(string.format("Wkflow - link props:%s",json.encode(link.prop)))
-			if tonumber( link.prop.duration) ~=nil then
-				setTimer( lul_device, "workflowTimerCB",link.prop.duration,table.concat(tbl, "#")  )
+			local duration = tonumber( link.prop.duration )
+			if (duration~=nil) then
+				if (duration >0) then
+					setTimer( lul_device, "workflowTimerCB",duration,table.concat(tbl, "#")  )
+				else
+					-- 0 duration means immediate, we continue the workflow immediately
+					workflowTimerCB(table.concat(tbl, "#"))
+				end
 			else
 				-- min, max generates a random
-				local parts = link.prop.duration:split("-")
-				local duration = math.random(parts[1],parts[2])
-				debug(string.format("Wkflow - arming timer with random duration %d",duration))
-				setTimer( lul_device, "workflowTimerCB",duration,table.concat(tbl, "#")  )
+				local parts = duration:split("-")
+				local randduration = math.random(parts[1],parts[2])
+				debug(string.format("Wkflow - arming timer with random duration %d",randduration))
+				setTimer( lul_device, "workflowTimerCB",randduration,table.concat(tbl, "#")  )
 			end
 		end
 		-- make sure we have a watch for all the conditions

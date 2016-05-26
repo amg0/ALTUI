@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1678 $";
+var ALTUI_revision = "$Revision: 1680 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6533,11 +6533,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		return _getPageSelector(page)+" .altui-widget#"+widget.id
 	};
 	
-	function _createPageTabsHtml( bEditMode ) {
+	function _createPageTabsHtml( bEditMode , idxPage ) {
+		if (idxPage ==null)
+			idxPage = -1;
+		
 		var actions = "";
 		var lines = new Array();
 		PageManager.forEachPage( function( idx, page) {
-			lines.push( "<li id='altui-page-{1}' role='presentation' ><a href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,page.name.replace(' ','_')) ); // no white space in ID
+			if ((idxPage==-1) || (idx==idxPage)) {
+				lines.push( "<li id='altui-page-{1}' role='presentation' ><a href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,page.name.replace(' ','_')) ); // no white space in ID
+			}
 		});
 		
 		if (bEditMode==true) {
@@ -6553,7 +6558,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			actions+="</li>";
 			actions+="<li><a id='altui-page-action-save' href='#'>"+_T("Save All Pages")+"</a></li>";
 		}
-		return "<ul class='nav nav-tabs' id='altui-page-tabs' role='tablist'>"+lines.join('')+actions+"</ul>";
+		return "<ul class='nav nav-tabs {2}' id='altui-page-tabs' role='tablist'>{0}{1}</ul>".format(
+			lines.join(''),actions, (idxPage==-1) ? '' : "hidden");
 	};
 
 	function _getWidgetHtml( widget , bEditMode, page )
@@ -9405,24 +9411,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// $("#altui-pagetitle").text("Your Custom Pages");
 
 		var nPage = parseInt(getQueryStringValue("nPage") || -1) ;
-		if (nPage==-1) {
-			var pageTabs = _createPageTabsHtml() ;
-			var Html = "<div class='tab-content altui-page-contents'>";
-			PageManager.forEachPage( function( idx, page) {
+		var pageTabs = _createPageTabsHtml( false, nPage ) ;
+		var Html = "<div class='tab-content altui-page-contents'>";
+		PageManager.forEachPage( function( idx, page) {
+				if ( (nPage==-1) || (nPage==idx) ) {
 					Html += _getPageHtml(page,false)	;// no edit mode
-			});
-			Html += "</div>";
-			
-			$(".altui-mainpanel").html( "<div class='col-xs-12'>"+pageTabs + Html +"</div>");
-			$('#altui-page-tabs a:first').tab('show');
-		} else {
-			var Html  = "";
-			PageManager.forEachPage( function( idx, page) {
-					if (idx==nPage)
-						Html += _getPageHtml(page,false)	;// no edit mode
-			});
-			$(".altui-mainpanel").html( "<div class='col-xs-12'>"+ Html +"</div>");
-		}
+				}
+		});
+		Html += "</div>";
+		
+		$(".altui-mainpanel").html( "<div class='col-xs-12'>"+pageTabs + Html +"</div>");
+		$('#altui-page-tabs a:first').tab('show');
 		_updateDynamicDisplayTools( false );
 	},
 	
