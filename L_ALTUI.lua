@@ -730,11 +730,12 @@ local function armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
 					setTimer( lul_device, "workflowTimerCB",duration,table.concat(tbl, "#")  )
 				else
 					-- 0 duration means immediate, we continue the workflow immediately
-					workflowTimerCB(table.concat(tbl, "#"))
+					setTimer( lul_device, "workflowTimerCB",duration,table.concat(tbl, "#")  )
+					-- workflowTimerCB(table.concat(tbl, "#"))
 				end
 			else
 				-- min, max generates a random
-				local parts = duration:split("-")
+				local parts = link.prop.duration:split("-")
 				local randduration = math.random(parts[1],parts[2])
 				debug(string.format("Wkflow - arming timer with random duration %d",randduration))
 				setTimer( lul_device, "workflowTimerCB",randduration,table.concat(tbl, "#")  )
