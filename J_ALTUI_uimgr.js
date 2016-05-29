@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1684 $";
+var ALTUI_revision = "$Revision: 1686 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6948,8 +6948,31 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageRooms : function ()
 	{
 		var _AllDevices = MultiBox.getDevicesSync();
+		var _AllScenes= MultiBox.getScenesSync();
 
-		function _roomSummary(room) {
+		function _roomScenes(room) {
+			// devices of the room
+			var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
+			var selectedscenes=[];
+			var scenes =$.grep(_AllScenes,function(s) {
+				var scontroller = MultiBox.controllerOf(s.altuiid).controller;
+				if ( scontroller==rcontroller ) {
+					if (s.room == room.id)
+						selectedscenes.push(s.altuiid);	// is in this room
+					return true;	// same controller room
+				}
+				return false;		
+			});
+
+			var Html="";
+			Html+='<select class="altui-scenes-room" id="{0}" multiple="multiple">'.format(room.altuiid);
+			$.each(_AllScenes , function(i,scene){
+				Html+='<option value="{0}" {2}>{1}</option>'.format( scene.altuiid,scene.name, ($.inArray(scene.altuiid,selectedscenes)!=-1) ? 'selected':'' );
+			});
+			Html+='</select>';
+			return Html;
+		}
+		function _roomDevices(room) {
 			// devices of the room
 			var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
 			var selecteddevices=[];
@@ -6970,11 +6993,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 			Html+='</select>';
 			return Html;
-			// var devices = $.grep( MultiBox.getDevicesSync(), function(d) {
-				// var dcontroller = MultiBox.controllerOf(d.altuiid).controller;
-				// return (d.room == room.id) && ( dcontroller==rcontroller);
-			// });
-			// return devices.length;
 		};
 		
 		UIManager.clearPage(_T('Rooms'),_T("Rooms"),UIManager.oneColumnLayout);
@@ -6996,19 +7014,58 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// table of rooms
 		$(".altui-mainpanel")
 			.append( _createControllerSelect('altui-controller-select'))
-			.append($("<div class='col-xs-12'><table id='table' class='table table-condensed'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
+			.append($("<div class='col-xs-12'><table id='table' class='table table-condensed'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Scenes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
 		$("#altui-controller-select").closest(".form-group").append(formHtml);
 		
-		var roomListTemplate = "<tr data-altuiid='{0}'><td>{0}</td><td><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td></tr>";	
+		var roomListTemplate = "<tr data-altuiid='{0}'><td>{0}</td><td><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td><td>{4}</td></tr>";	
 		MultiBox.getRooms( null,null,function( rooms) {
 			if (rooms) {
 				$.each(rooms.sort(altuiSortByName), function(idx,room) {
 					var id = room.altuiid;
 					var delButtonHtml = smallbuttonTemplate.format( id, 'altui-delroom', deleteGlyph);
 					var viewButtonHtml = smallbuttonTemplate.format( id, 'altui-viewroom', searchGlyph);
-					$(".altui-mainpanel tbody").append( roomListTemplate.format(id,(room!=null) ? room.name : _T("No Room"),_roomSummary(room),viewButtonHtml+delButtonHtml) );
+					$(".altui-mainpanel tbody").append( roomListTemplate.format(id,(room!=null) ? room.name : _T("No Room"),_roomDevices(room),_roomScenes(room),viewButtonHtml+delButtonHtml) );
 				});
+				
 				// display multiselects
+				$(".altui-scenes-room").multiselect({
+					disableIfEmpty: true,
+					enableHTML : true,
+					includeSelectAllOption: true,
+					maxHeight: 300,
+					buttonClass: 'btn btn-default btn-sm',
+					onChange: function(element, checked) {
+						var scenealtuiid = $(element).val();
+						 var scene= MultiBox.getSceneByAltuiID( scenealtuiid );
+						 if (checked==false) {
+							 scene.room = 0;
+						 } else {
+							 // put the scene in that room
+							 var room_altuiid = $(element).closest(".altui-scenes-room").prop("id")
+							 var roominfo = MultiBox.controllerOf(room_altuiid);
+							 scene.room = roominfo.id;
+						 }
+						 MultiBox.editScene(scenealtuiid,scene,function(data) {
+								if ( (data!=null) && (data!="ERROR") ) {
+									PageMessage.message(_T("Scene {0} edited successfully").format(scene.name), "success");
+								}
+								else {
+									PageMessage.message(_T("Scene {0} could be edited successfully").format(scene.name), "error");
+								}
+						 });
+						 
+						 // unselect from other rooms
+						 $("tr").each(function(i,tr) {
+							 var altuiid = $(tr).data("altuiid")
+							 if ( (altuiid!="") && (altuiid != room_altuiid) ) {
+								 // deselect the selected device from other menu
+								 var multiselect = $(tr).find(".altui-scenes-room");
+								 $(multiselect).multiselect('deselect',scenealtuiid);								 
+							 }
+						 });
+					}
+				});
+				
 				$(".altui-devices-room").multiselect({
 					disableIfEmpty: true,
 					enableHTML : true,
