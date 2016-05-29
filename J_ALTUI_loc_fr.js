@@ -415,7 +415,11 @@ Localization.init( {
 	"ZWave Inclusion":"ZWave Inclusion",
 	"ZWave Exclusion":"ZWave Exclusion",
 	"Details":"Details",
-	"You already have the latest version":"Vous avez déjà une version à jour"
+	"You already have the latest version":"Vous avez déjà une version à jour",
+	"Prevent drag and drop of favorites to reorder them":"Empeche le re-agencement des favoris",
+	"Lock favorites position":"Fixer la position des favoris",
+	"LockFavoritePosition:Prevent drag and drop of favorites to reorder them":"LockFavoritePosition: Empeche de re-ordonner les favoris"
+
 });
 
 // override rules with localized version

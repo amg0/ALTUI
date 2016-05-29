@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1681 $";
+var ALTUI_revision = "$Revision: 1684 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2391,6 +2391,7 @@ var UIManager  = ( function( window, undefined ) {
 		{ id:'StickyFooter', type:'checkbox', label:"Sticky Footer to bottom", _default:0, help:'Fixes the footer at the bottom of the page but could have performance issues on mobile browsers'},
 		{ id:'UseUI7Heater', type:'checkbox', label:"Use new UI7 behavior for Heater devices", _default:0, help:'technical option to trigger the UI7 behavior for heater'},
 		{ id:'ShowAllRows', type:'checkbox', label:"Show all rows in grid tables", _default:0, help:'allways show all the lines in the grid tables, or have a row count selector instead'},
+		{ id:'LockFavoritePosition', type:'checkbox', label:"Lock favorites position", _default:0, help:'Prevent drag and drop of favorites to reorder them'},
 		{ id:'Menu2ColumnLimit', type:'number', label:"2-columns Menu's limit", _default:15, min:2, max:30, help:'if a menu has more entries than this number then show the menu entries in 2 columns'  },
 		{ id:'TempUnitOverride', type:'select', label:"Weather Temp Unit (UI5)", _default:'c', choices:'c|f', help:'Unit for temperature'  }
 	];
@@ -4174,7 +4175,7 @@ var UIManager  = ( function( window, undefined ) {
 							var valueNow = MultiBox.getStatus( device, control.Display.Service, control.Display.Variable )
 							bActif = (valueToMatch==valueNow);
 						}
-						var button = $( "<button type='button' class='btn btn-sm btn-{1} altui-controlpanel-button'>{0}</button>".format(control.Label.text, bActif ? 'primary' : 'default'))
+						var button = $( "<button type='button' class='btn btn-xs btn-{1} altui-controlpanel-button'>{0}</button>".format(control.Label.text, bActif ? 'primary' : 'default'))
 							.appendTo( $(domparent) );
 						
 						control.Display.Width = Math.max( control.Display.Width || 10 , $(button).outerWidth() );
@@ -5472,8 +5473,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// resize favorite
 			_resizeFavorites();
 			
-			// make them sortalble
+			// make them sortable
 			$( ".altui-favorites-sortable" ).sortable({
+				disabled: (MyLocalStorage.getSettings('LockFavoritePosition')==1) ,
 				containment:".altui-mainpanel",
 				tolerance: "pointer",
 				cursor: "move",
@@ -5481,6 +5483,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				distance: 10,
 				// placeholder: "altui-favorites-device",
 				revert: true,
+				// start: function (ui,event) {
+					// if (MyLocalStorage.getSettings('LockFavoritePosition')==1) {
+						// $( ".altui-favorites-sortable" ).sortable( "option", "disabled", true ).sortable("refresh");
+					// }
+				// },
 				stop: function( ui,event) {
 					var sortedFavorites = $( ".altui-favorites-sortable" ).sortable( "toArray" );
 					MyLocalStorage.setSettings('FavoritesOrder',sortedFavorites); 

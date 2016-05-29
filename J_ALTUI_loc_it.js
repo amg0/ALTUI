@@ -410,7 +410,10 @@ Localization.init( {
 	"ZWave Inclusion":"ZWave Inclusion",
 	"ZWave Exclusion":"ZWave Exclusion",
 	"Details":"Details",
-	"You already have the latest version":"You already have the latest version"
+	"You already have the latest version":"You already have the latest version",
+	"Prevent drag and drop of favorites to reorder them":"Prevent drag and drop of favorites to reorder them",
+	"Lock favorites position":"Lock favorites position",
+	"LockFavoritePosition:Prevent drag and drop of favorites to reorder them":"LockFavoritePosition:Prevent drag and drop of favorites to reorder them"
 	});
 
 // override rules with localized version
