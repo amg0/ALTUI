@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1686 $";
+var ALTUI_revision = "$Revision: 1688 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1539,7 +1539,7 @@ var SceneEditor = function (scene) {
 	function _displayAction(action,ida,idg) {
 		var actioninfo = _formatAction(scenecontroller,action);
 		var html="";
-		html +="<tr>";
+		html +="<tr class='altui-scene-action'>";
 		html += "<td>{0}</td><td>{1} (<small class='text-muted'>{2}</small>)</td>".format(
 			actioninfo.device,			// _displayDevice(action.device),
 			actioninfo.action,			// action.action, 
@@ -1637,7 +1637,7 @@ var SceneEditor = function (scene) {
 		html += smallbuttonTemplate.format( idx, 'altui-editgroup', editGlyph, 'Edit group');
 		html +="</td>";			
 		html += "<td>";
-		html +="<table class='table table-condensed' data-group-idx='"+idx+"'>";
+		html +="<table class='table table-condensed altui-scene-group' data-group-idx='"+idx+"'>";
 		html +="<tbody>";
 		$.each(group.actions, function(ida,action) {
 			html += _displayAction(action,ida,idx);
@@ -1708,6 +1708,32 @@ var SceneEditor = function (scene) {
 		_updateAccordeonHeaders();
 	};
 
+	function _displayActions() {
+		var html="";
+		html += UIManager.displayJson( 'Actions', scene.groups );
+		try {
+			html +="<table class='table table-condensed'>";
+			html +="<tbody>";
+			if (scene.groups)
+			{
+				$.each(scene.groups, function(idx,group){
+					html += _displayGroup(group,idx);
+				});
+			}
+			html +=("<tr><td colspan='3'>"+smallbuttonTemplate.format( -1 , 'altui-addgroup', plusGlyph,_T('Delay'))+" "+_T('Delay')+"</td></tr>");
+			html +="</tbody>";
+			html +="</table>";
+		}
+		catch(err) {
+			var str = _T("error happened during decoding actions, probable duplicate ID or invalid format");
+			html +="</tbody>";
+			html +="</table>";
+			html +="<span class='text-danger'>"+str+"</span>";
+			PageMessage.message( str, "danger");
+		}
+		return html;
+	};
+	
 	function _sceneEditDraw() {
 		// var htmlSceneAddButtonTmpl = "  <button type='submit' class='btn btn-default {0}'>"+plusGlyph+"</button>";
 		var rooms = $.grep( MultiBox.getRoomsSync(), function(room,idx) {
@@ -1793,31 +1819,6 @@ var SceneEditor = function (scene) {
 			html += _displayWatches(scenewatches);
 			return html;
 		}
-		function _displayActions() {
-			var html="";
-			html += UIManager.displayJson( 'Actions', scene.groups );
-			try {
-				html +="<table class='table table-condensed'>";
-				html +="<tbody>";
-				if (scene.groups)
-				{
-					$.each(scene.groups, function(idx,group){
-						html += _displayGroup(group,idx);
-					});
-				}
-				html +=("<tr><td colspan='3'>"+smallbuttonTemplate.format( -1 , 'altui-addgroup', plusGlyph,_T('Delay'))+" "+_T('Delay')+"</td></tr>");
-				html +="</tbody>";
-				html +="</table>";
-			}
-			catch(err) {
-				var str = _T("error happened during decoding actions, probable duplicate ID or invalid format");
-				html +="</tbody>";
-				html +="</table>";
-				html +="<span class='text-danger'>"+str+"</span>";
-				PageMessage.message( str, "danger");
-			}
-			return html;
-		}
 		function _displayLua() {
 			var html="";
 			var lua = (scene.lua!=undefined) ? scene.lua : "";
@@ -1863,9 +1864,39 @@ var SceneEditor = function (scene) {
 	};
 	
 	function _runActions(  ) {
+		// var that = this;	// hold editor object
 		//
 		// actions
 		//
+		var draggable_options = {
+            helper: "clone",
+            start: function(event, ui) {
+			}
+		};
+		var droppable_options = {
+			drop: function(event, ui) {
+				var ids = ui.draggable.find("button.altui-delaction").prop("id").split(".");
+				var group = scene.groups[ ids[0] ];
+				var action = group.actions[ ids[1] ];
+				group.actions.splice( ids[1], 1 );
+				
+				var newgroupid = $(this).closest("table").data("group-idx");
+				scene.groups[ newgroupid ].actions.push(action);
+				
+				// now update the UI
+				var tbody = $(this).parents("tbody");
+				$(this).parents("tr").siblings("[data-group-idx={0}]".format(ids[0])).replaceWith( _displayGroup(group,ids[0] ) );
+				$(this).parents("tr").replaceWith( _displayGroup(scene.groups[ newgroupid ],newgroupid) );
+				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-action").draggable(draggable_options);
+				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group").droppable(droppable_options);
+				$(tbody).find("tr[data-group-idx={0}]".format(newgroupid)).find(".altui-scene-action").draggable(draggable_options);
+				$(tbody).find("tr[data-group-idx={0}]".format(newgroupid)).find(".altui-scene-group").droppable(droppable_options);
+			}
+		};
+		
+		$(".altui-scene-action").draggable(draggable_options);
+		$(".altui-scene-group").droppable(droppable_options);
+		
 		var editor = ace.edit( "altui-luascene" );
 		editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
 		editor.getSession().setMode( "ace/mode/lua" )
@@ -1876,6 +1907,7 @@ var SceneEditor = function (scene) {
 					_showSaveNeeded();
 				}
 			});
+			
 		$("div#altui-luascene").resizable({
 			// containment: "parent",
 			maxWidth:$("div#altui-luascene").closest(".panel").innerWidth()-30, // ugly but easier, padding 15 on each size
@@ -1888,6 +1920,7 @@ var SceneEditor = function (scene) {
 		
 		$(".altui-json-code").hide();
 		$(".altui-mainpanel")
+			.off("click")
 			.on("click",".altui-luatrigger",function() { 
 				var id = parseInt($(this).prop('id'));
 				LuaEditor.openDialog( scene.triggers[id].lua !=undefined ? scene.triggers[id].lua : "" , function(code){
@@ -1931,26 +1964,11 @@ var SceneEditor = function (scene) {
 				$("#blocklyDivCode").text("");
 				$(".altui-blockly-editor").toggle(false);
 				$(".blocklyToolboxDiv").remove();
-			});
-		
-		$(".altui-toggle-json").click( function() {
-			var id = $(this).closest('.panel').prop('id');
-			var type = "#altui-json-"+id;
-			$(type).toggle();
-		});
-		
-		$(".altui-mainpanel")
+			})
 			.on("click",".altui-runscene",function() {
 				var altuiid = $(this).prop('id');
 				var scene = MultiBox.getSceneByAltuiID(altuiid);
 				MultiBox.runScene( scene );
-			})
-			.on("change","#altui-scene-name-input",function() { 
-				if ( $("#altui-scene-name-input").val() != scene.name ) {
-					scene.name = $("#altui-scene-name-input").val();
-					_showSaveNeeded();
-					_updateAccordeonHeaders();
-				}
 			})
 			.on("click",".altui-scene-editbutton",function(){ 
 				scene.lua =  editor.getValue();
@@ -1990,13 +2008,7 @@ var SceneEditor = function (scene) {
 				show_loading();
 				$.when(MultiBox.editScene(scene.altuiid,scene)).done( hide_loading );
 				_showSaveNeeded(false);
-			});
-
-		HouseModeEditor.runActions( '.altui-mainpanel', function() {
-			_showSaveNeeded();
-		});
-
-		$(".altui-mainpanel")
+			})
 			.on("click",".altui-deltrigger",function(){ 
 				scene.triggers.splice( $(this).prop('id') , 1 );
 				$(this).parents("tr").remove();
@@ -2135,6 +2147,27 @@ var SceneEditor = function (scene) {
 				$(this).toggleClass("activated paused");
 				_showSaveNeeded();
 			});
+
+			
+		$(".altui-toggle-json").click( function() {
+			var id = $(this).closest('.panel').prop('id');
+			var type = "#altui-json-"+id;
+			$(type).toggle();
+		});
+		
+		$(".altui-mainpanel")
+			.off("change")
+			.on("change","#altui-scene-name-input",function() { 
+				if ( $("#altui-scene-name-input").val() != scene.name ) {
+					scene.name = $("#altui-scene-name-input").val();
+					_showSaveNeeded();
+					_updateAccordeonHeaders();
+				}
+			})
+
+		HouseModeEditor.runActions( '.altui-mainpanel', function() {
+			_showSaveNeeded();
+		});
 		
 		$("#altui-room-list").change( function() {
 			scene.room = $(this).val();
@@ -2164,6 +2197,7 @@ var SceneEditor = function (scene) {
 	return {
 		sceneEditDraw 	: _sceneEditDraw,
 		runActions 		: _runActions,
+		// displayActions  : _displayActions
 	}
 };
 
