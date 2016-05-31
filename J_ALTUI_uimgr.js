@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1688 $";
+var ALTUI_revision = "$Revision: 1689 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1869,6 +1869,7 @@ var SceneEditor = function (scene) {
 		// actions
 		//
 		var draggable_options = {
+			disabled: (ALTUI_registered==false),
             helper: "clone",
             start: function(event, ui) {
 			}
