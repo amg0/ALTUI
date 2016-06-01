@@ -1,3 +1,4 @@
+module ("L_ALTUI_compress", package.seeall)
 --
 -- Data compression 
 --
@@ -9,7 +10,7 @@
 -- note that JSON quoted printable characters are: " \ /
 
 
-local function new (header)
+function new (header)
   header = header or ''
   local code_alphabet = -- this one is the unescaped JSON character set
     [==[ !#$%&'()*+,-.0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~]==]
@@ -117,7 +118,6 @@ local function new (header)
     decode = unlzw,
   }
   
-end
 
 -----
 --
@@ -144,6 +144,8 @@ end
 
 --print "encode/decode loop tested OK!"
 
-return {new = new}
+-- return {new = new}
 
 -----
+end
+

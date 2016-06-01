@@ -2023,15 +2023,15 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				debug(string.format("ALTUI_Handler: save_data( name:%s npage:%s)",name,npage))
 				local variablename = prefix..name.."_"..npage
 				if (data=="") then
-					debug(string.format("ALTUI_Handler: save_data( ) - Empty data",name,npage))
-					luup.variable_set(ALTUI_SERVICE, variablename, "", deviceID)
+					-- debug(string.format("ALTUI_Handler: save_data( ) - Empty data",name,npage))
+					luup.variable_set(ALTUI_SERVICE, variablename, " ", deviceID) -- avoid empty str as it seems to delete variable
 					return "ok", "text/plain"
 				else
-					debug(string.format("ALTUI_Handler: save_data( ) - Not Empty data",name,npage))
+					-- debug(string.format("ALTUI_Handler: save_data( ) - Not Empty data",name,npage))
 					data = modurl.unescape( data )
-					debug(string.format("ALTUI_Handler: save_data( ) - url decoded",name,npage))
+					-- debug(string.format("ALTUI_Handler: save_data( ) - url decoded",name,npage))
 					luup.variable_set(ALTUI_SERVICE, variablename, data, deviceID)
-					debug(string.format("ALTUI_Handler: save_data( ) - returns:%s",data))
+					-- debug(string.format("ALTUI_Handler: save_data( ) - returns:%s",data))
 					return data, "text/plain"
 				end
 			end,
@@ -3299,23 +3299,23 @@ function registerHandlers()
 	return httpcode
 end
 
-local function testCompress()
-	log("testCompress()")
-	local lzw = compress.new "LZW2"
-	local text = "a test string to compress, a test string to compress, a test string to compress, a test string to compress"
-	local t = socket.gettime()
-	local code, D = lzw.encode(text)
+-- local function testCompress()
+	-- log("testCompress()")
+	-- local lzw = compress.new "LZW2"
+	-- local text = "a test string to compress, a test string to compress, a test string to compress, a test string to compress"
+	-- local t = socket.gettime()
+	-- local code, D = lzw.encode(text)
 
-	log(("time for encode %0.3f (s)"): format (socket.gettime() - t))
-	log ( ("text: %d, LZW: %d, (%0.1f%%)"): format (#text, #code, #code*100/#text ) )
+	-- log(("time for encode %0.3f (s)"): format (socket.gettime() - t))
+	-- log ( ("text: %d, LZW: %d, (%0.1f%%)"): format (#text, #code, #code*100/#text ) )
 
-	t = socket.gettime()
-	local decoded = lzw.decode (code)
-	log (("time for decode %0.3f (s)"): format (socket.gettime() - t))
+	-- t = socket.gettime()
+	-- local decoded = lzw.decode (code)
+	-- log (("time for decode %0.3f (s)"): format (socket.gettime() - t))
 
-	assert (decoded == text, "encode/decode loop incorrect")
-	log "encode/decode loop tested OK!"
-end
+	-- assert (decoded == text, "encode/decode loop incorrect")
+	-- log "encode/decode loop tested OK!"
+-- end
 
 function startupDeferred(lul_device)
 	lul_device = tonumber(lul_device)

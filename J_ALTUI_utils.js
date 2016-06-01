@@ -1379,6 +1379,19 @@ var HTMLUtils = (function() {
 		var viscols = viscols || [idcolumn];
 		// html+="<div class='col-xs-12'>";
 		if ( (arr) && ($.isArray(arr) && (arr.length>0)) ) {
+			var display_order = [];
+			var keys= Object.keys(arr[0]);
+			$.each(viscols,function(k,v) {
+				if ($.inArray(v,keys)!=-1) {
+					display_order.push(v);
+				}
+			});
+			$.each(keys,function(k,v) {
+				if ($.inArray(v,viscols)==-1) {
+					display_order.push(v);
+				}				
+			});
+			
 			var bFirst=true;
 			html+="<table id='{1}' class='table table-condensed table-hover table-striped {0}'>".format(cls || '', htmlid || 'altui-grid' );
 			if (caption)
@@ -1387,7 +1400,7 @@ var HTMLUtils = (function() {
 				if (bFirst) {
 					html+="<thead>"
 					html+="<tr>"
-					$.each(obj, function(k,v) {
+					$.each(display_order,function(_k,k) {
 						html+="<th style='text-transform: capitalize;' data-column-id='{0}' {1} {2}>".format(
 							k,
 							(k==idcolumn) ? "data-identifier='true'" : "",
@@ -1402,9 +1415,9 @@ var HTMLUtils = (function() {
 					bFirst=false;
 				}
 				html+="<tr>"
-				$.each(obj, function(k,v) {
+				$.each(display_order,function(_k,k) {
 					html+="<td>"
-					html+=v;
+					html+=(obj[k]!=undefined) ? obj[k] : '';
 					html+="</td>"
 				});
 				html+="</tr>"
