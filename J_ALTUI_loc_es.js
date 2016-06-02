@@ -411,8 +411,8 @@ Localization.init( {
 	"You already have the latest version":"You already have the latest version",
 	"Prevent drag and drop of favorites to reorder them":"Prevent drag and drop of favorites to reorder them",
 	"Lock favorites position":"Lock favorites position",
-	"LockFavoritePosition:Prevent drag and drop of favorites to reorder them":"LockFavoritePosition:Prevent drag and drop of favorites to reorder them"
-
+	"LockFavoritePosition:Prevent drag and drop of favorites to reorder them":"LockFavoritePosition:Prevent drag and drop of favorites to reorder them",
+	"Top":"Top","Page Up":"Page Up","Page Down":"Page Down","Bottom":"Bottom"
 });
 
 // override rules with localized version
