@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1691 $";
+var ALTUI_revision = "$Revision: 1692 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8797,7 +8797,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
 		}
 
-		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( _toolsWorkflow ) );	
+		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow ) );	
 		_showSaveNeeded(false);
 
 		$(".altui-mainpanel").append("<div class='col-xs-12'><div id='altui-workflow-canvas'></div></div>");
@@ -9210,7 +9210,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
 		}
 		
-		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( _toolsMain ) );	
+		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsMain ) );	
 		_drawWorkflows( WorkflowManager.getWorkflows() )
 
 		$("#altui-workflow-create")
@@ -10014,16 +10014,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	
 	pageEditorForm: function (domparent, htmlid, title,txt,outputarea,button,onClickCB) {
-		var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
-		var copybutton = buttonTemplate.format( 'altui-copy-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'default',_T("Copy"));
+		var _tools= [
+			{id:'altui-copy-clipboard-'+htmlid,  glyph:"glyphicon-copy", label:_T("Copy")},
+			{id:'altui-top-'+htmlid, glyph:"glyphicon-fast-backward", label:_T("Top")},
+			{id:'altui-pageup-'+htmlid, glyph:"glyphicon-step-backward", label:_T("Page Up")},
+			{id:'altui-pagedown-'+htmlid, glyph:"glyphicon-step-forward", label:_T("Page Down")},
+			{id:'altui-bottom-'+htmlid, glyph:"glyphicon-fast-forward", label:_T("Bottom")},
+		];
+		// var copybutton = buttonTemplate.format( 'altui-copy-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'default',_T("Copy"));
 		var html = "";
 		html +="<form class='altui-editor-form col-sm-11' role='form' action='javascript:void(0);'>";
 		html +="  <div class='form-group'>";
-		html +="    <label for='altui-editor-text'>"+title+":</label>"+copybutton;
-		// html +="    <textarea id='altui-editor-text' rows='15' class='form-control' placeholder='xxx'>"+txt.htmlEncode()+"</textarea>";
+		html +="    <label for='altui-editor-text'>"+title+":</label>"
+		html += HTMLUtils.drawToolbar(htmlid+'-toolbar',_tools);
 		html +="    <div id='altui-editor-text'>"+txt.htmlEncode()+"</div>";
 		html +="  </div>";
 		if (outputarea!=null) {
+			var glyph = glyphTemplate.format('copy',_T("Copy to clipboard"), '');
 			html +="  <div class='form-group'>";
 			html +="    <label for='altui-editor-result'>"+_T("Return Result")+":</label>";
 			html +=  buttonTemplate.format( 'altui-copyresult-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'default',_T("Copy"));
@@ -10060,6 +10067,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			document.execCommand('copy');
 			$("#toto").remove()
 		});
+		$('#altui-top-'+htmlid).click( function() {
+			editor.navigateFileStart()
+		});
+		$('#altui-bottom-'+htmlid).click( function() {
+			editor.navigateFileEnd()
+		});
+		$('#altui-pageup-'+htmlid).click( function() {
+			editor.gotoPageUp()
+		});
+		$('#altui-pagedown-'+htmlid).click( function() {
+			editor.gotoPageDown()
+		});
 		$("#altui-copyresult-clipboard-"+htmlid).click( function() {
 			Altui_SelectText( "altui-editor-result" );
 			document.execCommand('copy');
@@ -10087,7 +10106,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageLuaTest: function ()
 	{
 		UIManager.clearPage(_T('LuaTest'),_T("Lua Code Test"),UIManager.oneColumnLayout);
-		$(".altui-mainpanel").append("<p>"+_T("This test code will succeed if it is syntactically correct. It must be the body of a function and can return something. The return object and console output will be displayed)")+"</p>");
+		$(".altui-mainpanel").append("<div class='col-xs-12'><p>"+_T("This test code will succeed if it is syntactically correct. It must be the body of a function and can return something. The return object and console output will be displayed)")+"</p></div>");
 		var lastOne = MyLocalStorage.getSettings("LastOne_LuaTest") || "return true";
 		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Test Code"),lastOne,true,_T("Submit"),function(lua) {
 			MyLocalStorage.setSettings("LastOne_LuaTest",lua);
@@ -11903,7 +11922,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				box_info[k]= HTMLUtils.enhanceValue(v);
 			});
 			var html ="";
-			html += "<div class='altui-ctrl-tools'>{0}</div>".format(HTMLUtils.drawToolbar( _buttons ));
+			html += "<div class='altui-ctrl-tools'>{0}</div>".format(HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _buttons ));
 			html +=  HTMLUtils.array2Table(_buildArrayFromParams(box_info),null,[],_T("Details"),null,'altui-controller-params');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
 			return html;
 		};

@@ -1466,10 +1466,10 @@ var HTMLUtils = (function() {
 		return html
 	};	
 	
-	function _drawToolbar(_tools) {
+	function _drawToolbar(htmlid,tools) {
 		var toolbarHtml="<div>";	
 		var preareas=[];
-		$.each(_tools, function(idx,tool) {
+		$.each(tools, function(idx,tool) {
 			var collapsecss = "";
 			if (tool.collapsetarget) {
 				collapsecss="data-toggle='collapse' data-target='{0}'".format(tool.collapsetarget);
@@ -1490,7 +1490,7 @@ var HTMLUtils = (function() {
 			toolbarHtml+="<div class='collapse' id='{0}'></div>".format(idPre);
 		});
 		toolbarHtml+="</div>";	
-		return "<div class='altui-workflow-toolbar'>"+toolbarHtml+"</div>" ;
+		return "<div class='{0}'>{1}</div>" .format(htmlid,toolbarHtml);
 	};
 	function _drawFormFields( model  ) {
 		var html ="";
