@@ -1381,8 +1381,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 						context.done += len;
 						context.npage++;
 						context.handle = data;
-						setTimeout(_doPart, 400, context )
-						// _doPart(context);
+						// setTimeout(_doPart, 400, context )
+						_doPart(context);
 					}
 				});
 			}

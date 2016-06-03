@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.55b"
+local version = "v1.56"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -27,7 +27,8 @@ local ltn12 = require("ltn12")
 local modurl = require "socket.url"
 
 -- compress contribution akbooer
--- local compress = require "L_ALTUI_compress"
+local compress = require "L_ALTUI_LuaRunHandler"
+local lzw = compress.new "LZW2"
 
 local tmpprefix = "/tmp/altui_"		-- prefix for tmp files
 local hostname = ""
@@ -259,8 +260,34 @@ local function getDataFor( deviceID,name,prefix )
 	if (result=="") then
 		return nil
 	end
+	
+	if (result:sub(1, 4) == "LZW2") then
+		result = lzw.decode(result)
+	end
 	debug("returning "..result)
 	return result
+end
+
+local function setDataFor( deviceID,name,prefix,data )
+	local nmax = 2000
+	local npage = 0
+	local name = prefix..name
+	name = name:gsub(" ", "+")	-- spaces are replaced by '+'
+	local length = data:len()
+	
+	-- save by chunks
+	for start = 1,length,nmax  do
+		luup.variable_set(ALTUI_SERVICE, name.."_"..npage, data:sub(start,start+nmax-1), deviceID)
+		npage = npage+1
+	end
+
+	-- clear next unused variables chunks
+	local var = luup.variable_get(ALTUI_SERVICE, name.."_"..npage,  deviceID)
+	while ((var ~= nil) and (var ~="" )) do
+		luup.variable_set(ALTUI_SERVICE, name.."_"..npage, "", deviceID)
+		npage = npage+1
+		var = luup.variable_get(ALTUI_SERVICE, name.."_"..npage,  deviceID)
+	end
 end
 
 local function setDebugMode(lul_device,newDebugMode)
@@ -2036,13 +2063,13 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local variablename = prefix..name.."_"..npage
 				if (data=="") then
 					-- debug(string.format("ALTUI_Handler: save_data( ) - Empty data",name,npage))
-					ReceivedData[handle]["pages"][npage] = ""
+					ReceivedData[handle]["pages"][0] = ""
 					-- luup.variable_set(ALTUI_SERVICE, variablename, " ", deviceID) -- avoid empty str as it seems to delete variable
 				else
 					-- debug(string.format("ALTUI_Handler: save_data( ) - Not Empty data",name,npage))
 					data = modurl.unescape( data )
 					-- debug(string.format("ALTUI_Handler: save_data( ) - url decoded",name,npage))
-					ReceivedData[handle]["pages"][npage] = data
+					ReceivedData[handle]["pages"][0] = ( ReceivedData[handle]["pages"][0] or "" ) .. data
 					-- luup.variable_set(ALTUI_SERVICE, variablename, data, deviceID)
 					-- debug(string.format("ALTUI_Handler: save_data( ) - returns:%s",data))
 				end
@@ -2061,26 +2088,26 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				debug(string.format("ALTUI_Handler: ReceivedData:%s",json.encode(ReceivedData)))
 
 				prefix = prefix .. "_"
-				local variablename = prefix..name.."_"..npage
-				-- cleanup all found data until we find
-				local var = luup.variable_get(ALTUI_SERVICE, variablename,  deviceID)
-				while ((var ~= nil) and (var ~="" )) do
-					ReceivedData[handle]["pages"][npage] = ""
-					-- luup.variable_set(ALTUI_SERVICE, variablename, "", deviceID)
-					npage = npage + 1
-					variablename = prefix..name.."_"..npage
-					var = luup.variable_get(ALTUI_SERVICE, variablename,  deviceID)
-				end
-				
+				local variablename = prefix..name.."_0"
+
 				-- now save the received data
-				for k,v in pairs(ReceivedData[handle]["pages"]) do
-					variablename = prefix..ReceivedData[handle]["name"].."_"..k
-					luup.variable_set(ALTUI_SERVICE, variablename, ReceivedData[handle]["pages"][k], deviceID)
+				-- local lzw = compress.new "LZW2"
+				local curpage = 0
+				local len1 = ReceivedData[handle]["pages"][curpage]:len()
+				local compressed_data = ReceivedData[handle]["pages"][curpage]
+				local len2 = len1
+				if (len1 > 2000 ) then
+					compressed_data = lzw.encode( ReceivedData[handle]["pages"][curpage] )
+					len2 = compressed_data:len()
+					debug(string.format("ALTUI_Handler: compression len1:%d len2:%d rate:%f",len1,len2,len2/len1))
 				end
 				
-				-- clear the handle
+				-- save and clear the handle
+				setDataFor( deviceID,name,prefix,compressed_data )
+				ReceivedData[handle]["pages"][0] = ""
 				ReceivedData[handle] = nil
 				debug(string.format("ALTUI_Handler: After Clearing ReceivedData:%s",json.encode(ReceivedData)))
+				
 				return "0", "text/plain"
 			end,
 		-- ["run_lua"] = 
