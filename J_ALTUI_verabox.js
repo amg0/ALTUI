@@ -1276,11 +1276,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return batteryLevel; // Math.floor((Math.random() * 100) + 1);
 	};
 	
-	function _clearData(key, name, npage, cbfunc) {
+	function _clearData(handle, key, name, npage, cbfunc) {
 		if (_uniqID!=0)	// only supported on master controller
 			return;
 			
-		AltuiDebug.debug("_clearData( {0}, page:{1} )".format(name,npage));
+		AltuiDebug.debug("_clearData( {2}, {0}, page:{1} )".format(name,npage,handle));
 		var result = "";
 		var url = "data_request?id=lr_ALTUI_Handler&command=clear_data";//&pages="+encodeURIComponent(JSON.stringify(pages));
 		var jqxhr = $.ajax( {
@@ -1290,7 +1290,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			data: {
 				prefix: key,
 				name: name,
-				npage: npage
+				npage: npage,
+				handle: handle
 			}
 		})
 		.done(function(data) {
@@ -1307,11 +1308,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		});
 	};
 	
-	function _saveDataChunk(key, name, npage, data, cbfunc) {
+	function _saveDataChunk(handle, key, name, npage, data, cbfunc) {
 		if (_uniqID!=0)	// only supported on master controller
 			return;
 
-		AltuiDebug.debug("_saveDataChunk( {3}, {0}, page:{1}, data:{2} chars  )".format(name,npage,data.length,key));
+		AltuiDebug.debug("_saveDataChunk( {4},{3}, {0}, page:{1}, data:{2} chars  )".format(name,npage,data.length,key,handle));
 		var result = "";
 		var url = "data_request?id=lr_ALTUI_Handler&command=save_data";//&pages="+encodeURIComponent(JSON.stringify(pages));
 		var jqxhr = $.ajax( {
@@ -1322,11 +1323,12 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				prefix: key,
 				name: name,
 				npage: npage,
+				handle: handle,
 				data: encodeURIComponent(data)
 			}
 		})
 		.done(function(data, textStatus, jqXHR) {
-			AltuiDebug.debug("_saveDataChunk( {4}, {0}, page:{1}, data:{2} chars  ) => Res:{3}".format(name,npage,data.length,JSON.stringify(data),key));
+			AltuiDebug.debug("_saveDataChunk( {5}, {4}, {0}, page:{1}, data:{2} chars  ) => Res:{3}".format(name,npage,data.length,JSON.stringify(data),key,handle));
 			if ( $.isFunction( cbfunc ) )  {
 				cbfunc(data);			
 			}
@@ -1354,6 +1356,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			key: key,
 			name: name,
 			data: data,
+			handle: "",
 			maxchar: 2000,
 			done: 0,
 			npage: 0
@@ -1371,12 +1374,13 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				data = context.data;
 				var part = data.substring( context.done, context.done+len);
 				// console.log("doPart() %o from:%d len:%d",context,context.done,len)
-				_saveDataChunk(context.key, context.name, context.npage, part,  function(data) {
-					if (data=="")
+				_saveDataChunk(context.handle, context.key, context.name, context.npage, part,  function(data) {
+					if ((data=="") || (data=="-1") || (data=="handler failed"))
 						cbfunc("");	// error
 					else {
 						context.done += len;
 						context.npage++;
+						context.handle = data;
 						setTimeout(_doPart, 400, context )
 						// _doPart(context);
 					}
@@ -1385,7 +1389,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			else {
 				// console.log("doPart() - clearData %o",context)
 				// no more data to send but we need to clean up Vera to remove extra variable
-				_clearData(context.key, context.name, context.npage, function(data) {
+				_clearData(context.handle, context.key, context.name, context.npage, function(data) {
 					// now it is finished
 					cbfunc("ok");
 				});

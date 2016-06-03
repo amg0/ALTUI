@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.55"
+local version = "v1.55b"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -43,10 +43,7 @@ local ForcedValidLinks = {}			-- array of 'id' = true for links which must be co
 -- local strWorkflowDescription = ""
 local strWorkflowTransitionTemplate = "Wkflow - Workflow: %s, Valid Transition found:%s, Active State:%s=>%s"	-- needed for ALTUI grep & history log feature
 local Timers = {}					-- to Persist timers accross VERA reboots
--- Timers = {
-	-- { ["id"]="toto", ["expireson"]=1234 },
-	-- { ["id"]="titi", ["expireson"]=1234 },
--- }
+local ReceivedData = {}				-- buffer for receiving split data chunks
 
 --calling a function from HTTP in the device context
 --http://192.168.1.5/port_3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&DeviceNum=81&Code=getMapUrl(81)
@@ -2018,39 +2015,73 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local name = lul_parameters["name"]
 				local npage = lul_parameters["npage"]
 				local data = lul_parameters["data"]
+				local handle = lul_parameters["handle"]
 				local prefix = lul_parameters["prefix"] or "Data"
+				debug(string.format("ALTUI_Handler: save_data( name:%s npage:%s handle:%s)",name,npage,handle or ''))
+
 				prefix = prefix .. "_"
-				debug(string.format("ALTUI_Handler: save_data( name:%s npage:%s)",name,npage))
+				if (tonumber(npage)==0) then
+					handle = os.time()	-- vague possibility of conflict but not realistic
+					handle = tostring(handle)
+					ReceivedData[handle] = {
+						["name"] = name,
+						["pages"] = {},
+					}
+				end
+				debug(string.format("ALTUI_Handler: ReceivedData:%s",json.encode(ReceivedData)))
+				if (handle==nil) or (ReceivedData[handle]==nil) then
+					return "-1", "text/plain"
+				end
+				
 				local variablename = prefix..name.."_"..npage
 				if (data=="") then
 					-- debug(string.format("ALTUI_Handler: save_data( ) - Empty data",name,npage))
-					luup.variable_set(ALTUI_SERVICE, variablename, " ", deviceID) -- avoid empty str as it seems to delete variable
-					return "ok", "text/plain"
+					ReceivedData[handle]["pages"][npage] = ""
+					-- luup.variable_set(ALTUI_SERVICE, variablename, " ", deviceID) -- avoid empty str as it seems to delete variable
 				else
 					-- debug(string.format("ALTUI_Handler: save_data( ) - Not Empty data",name,npage))
 					data = modurl.unescape( data )
 					-- debug(string.format("ALTUI_Handler: save_data( ) - url decoded",name,npage))
-					luup.variable_set(ALTUI_SERVICE, variablename, data, deviceID)
+					ReceivedData[handle]["pages"][npage] = data
+					-- luup.variable_set(ALTUI_SERVICE, variablename, data, deviceID)
 					-- debug(string.format("ALTUI_Handler: save_data( ) - returns:%s",data))
-					return data, "text/plain"
 				end
+				return handle, "text/plain"
 			end,
 		["clear_data"] = 
 			function(params)
+				local prefix = lul_parameters["prefix"] or "Data"
 				local name = lul_parameters["name"]
 				local npage = lul_parameters["npage"]
-				local prefix = lul_parameters["prefix"] or "Data"
+				local handle = lul_parameters["handle"]
+				if (handle==nil) or (ReceivedData[handle]==nil) then
+					return "-1", "text/plain"
+				end
+				debug(string.format("ALTUI_Handler: clear_data( name:%s npage:%s handle:%s)",name,npage,handle or ''))
+				debug(string.format("ALTUI_Handler: ReceivedData:%s",json.encode(ReceivedData)))
+
 				prefix = prefix .. "_"
 				local variablename = prefix..name.."_"..npage
 				-- cleanup all found data until we find
 				local var = luup.variable_get(ALTUI_SERVICE, variablename,  deviceID)
 				while ((var ~= nil) and (var ~="" )) do
-					luup.variable_set(ALTUI_SERVICE, variablename, "", deviceID)
+					ReceivedData[handle]["pages"][npage] = ""
+					-- luup.variable_set(ALTUI_SERVICE, variablename, "", deviceID)
 					npage = npage + 1
 					variablename = prefix..name.."_"..npage
 					var = luup.variable_get(ALTUI_SERVICE, variablename,  deviceID)
 				end
-				return "ok", "text/plain"
+				
+				-- now save the received data
+				for k,v in pairs(ReceivedData[handle]["pages"]) do
+					variablename = prefix..ReceivedData[handle]["name"].."_"..k
+					luup.variable_set(ALTUI_SERVICE, variablename, ReceivedData[handle]["pages"][k], deviceID)
+				end
+				
+				-- clear the handle
+				ReceivedData[handle] = nil
+				debug(string.format("ALTUI_Handler: After Clearing ReceivedData:%s",json.encode(ReceivedData)))
+				return "0", "text/plain"
 			end,
 		-- ["run_lua"] = 
 			-- function(params)

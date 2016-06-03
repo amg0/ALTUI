@@ -1122,10 +1122,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				var status = parseInt(MultiBox.getStatus(device,"urn:dcineco-com:serviceId:MSwitch1","Status"+(btnid+1)));
 
 				html += "<div class='col-xs-3'>";
-				html+= ("<button id='{0}' type='button' class='altui-multiswitch-open btn btn-default btn-xs {2}' >{1}</button>".format( 
+				html+= ("<button id='{0}' data-btnid='{0}' type='button' class='altui-multiswitch-open altui-multiswitch-open-{3} btn btn-default btn-xs {2}' >{1}</button>".format( 
 					btnid ,
 					name  ,
-					(status==1) ? 'btn-info' : ''
+					(status==1) ? 'btn-info' : '',
+					device.altuiid
 					)) ;
 				// html+= "x";
 				html += "</div>";
@@ -1136,7 +1137,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 		html += "</div>";
 		html += "<script type='text/javascript'>";
-		html += " $('button.altui-multiswitch-open').on('click', function() { 	";
+		html += " $('button.altui-multiswitch-open-{0}').on('click', function() { 	".format(device.altuiid);
 		html += " 	var btnid = parseInt($(this).prop('id'))+1;					";
 		html += "   var action = 'SetStatus'+btnid; 							";
 		html += "   var params = {}; params['newStatus'+btnid]=-1;				";
