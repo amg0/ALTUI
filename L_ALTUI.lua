@@ -26,7 +26,7 @@ local https = require ("ssl.https")
 local ltn12 = require("ltn12")
 local modurl = require "socket.url"
 
--- compress contribution akbooer
+local bUseCompress = false
 local compress = require "L_ALTUI_LuaRunHandler"
 local lzw = compress.new "LZW2"
 
@@ -2096,7 +2096,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local len1 = ReceivedData[handle]["pages"][curpage]:len()
 				local compressed_data = ReceivedData[handle]["pages"][curpage]
 				local len2 = len1
-				if (len1 > 2000 ) then
+				if (len1 > 2000 ) and (bUseCompress==true) then
 					compressed_data = lzw.encode( ReceivedData[handle]["pages"][curpage] )
 					len2 = compressed_data:len()
 					debug(string.format("ALTUI_Handler: compression len1:%d len2:%d rate:%f",len1,len2,len2/len1))
