@@ -234,7 +234,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
   //---------------------------------------------------------
 	var _uniqID = uniq_id;								// assigned by Multibox, unique, can be used for Settings & other things
 	var _hagdevice = { id: 0, altuiid:"{0}-0".format(_uniqID) };							// special device for HAG, service=S_HomeAutomationGateway1.xml
-	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id,g_ALTUI.g_svnVersion == '');	// for common UPNP ajax
+	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id);			// for common UPNP ajax
 	var _dataEngine = null;
 	var _sysinfo = null;
 	var _rooms = null;
@@ -917,6 +917,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
 				EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);				
 			}
+			
+			_upnpHelper.setOpenLuup( _isOpenLuup(_user_data) );
+			
 		}
 	};
 
@@ -1000,6 +1003,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		var bi = _getBoxInfo()
 		return (bi.BuildVersion==undefined) || (bi.BuildVersion.startsWith("*1.5."));
 	};
+	function _isOpenLuup(user_data) {
+		if ( (user_data.BuildVersion==undefined) || (user_data.BuildVersion.startsWith("*1.5")==true) )
+			return false;
+		return (user_data.SvnVersion==undefined)
+	}
 	function _getLuaStartup() {
 		return _user_data.StartupCode || "";
 	};
@@ -1671,6 +1679,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	getIcon			: _getIcon, 		// workaround to get image from vera box
 	getWeatherSettings : _getWeatherSettings,
 	isUI5			: _isUI5,				
+	isOpenLuup : _isOpenLuup,
 	getBoxInfo		: _getBoxInfo,		//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()
 	getLuaStartup 	: _getLuaStartup,
@@ -2201,6 +2210,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	getIcon			: _todo, 		// workaround to get image from vera box
 	getWeatherSettings : _getWeatherSettings,
 	isUI5			: function() 	{return false},				
+	isOpenLuup : function() 	{return false},
 	getBoxInfo		: _getBoxInfo,				//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()
 	getLuaStartup 	: _todo,

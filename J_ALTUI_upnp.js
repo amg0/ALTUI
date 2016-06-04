@@ -9,12 +9,12 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
+var UPnPHelper = (function(ip_addr,veraidx) {
 	//---------------------------------------------------------
 	// private functions
 	//---------------------------------------------------------	
+	var _bIsOpenLuup = false;
 	var _ipaddr = (ip_addr.trim()) || '';
-	var _bIsOpenLuup = bIsOpenLuup;
 	var _veraidx = veraidx || 0;
 	var _proxyresultarea = "altuictrl"+_veraidx;
 	var _urlhead = (_ipaddr=='') ? window.location.pathname : ("http://{0}/port_3480/data_request".format(_ipaddr));
@@ -397,6 +397,7 @@ var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 			"scenes":{},
 			"sections":{},
 			"rooms":{},
+			"installedPlugins2":{},
 			"InstalledPlugins":[],
 			"PluginSettings":[],
 			"users":{}
@@ -432,12 +433,12 @@ var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 			.done(function(data, textStatus, jqXHR) {
 				_unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
 					if ($.isFunction( cbfunc ))
-						cbfunc(data);
+						cbfunc(data, jqXHR);
 				});
 			})
 			.fail(function(jqXHR, textStatus, errorThrown) {
 				if ($.isFunction( cbfunc ))
-					cbfunc(null);
+					cbfunc(null, jqXHR);
 			});
 		} else {
 			// proxy mode
@@ -458,12 +459,12 @@ var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 			.done(function(data, textStatus, jqXHR) {
 				_unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
 					if ($.isFunction( cbfunc ))
-						cbfunc(data);
+						cbfunc(data, jqXHR);
 				});
 			})
 			.fail(function(jqXHR, textStatus, errorThrown) {
 				if ($.isFunction( cbfunc ))
-					cbfunc(null);
+					cbfunc(null,jqXHR);
 			});
 		}
 	};
@@ -480,6 +481,10 @@ var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 		if (0) {
 			// Local mode
 			var id = newscene.id;	
+			if (id == ALTUI_NEW_SCENE_ID) {
+				id = 1000000;
+				newscene.id = id;
+			}
 			var target = {
 				"devices":{},
 				"scenes":{},
@@ -491,13 +496,15 @@ var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 			};
 			target.scenes["scenes_"+id]=newscene;
 			// console.log( JSON.stringify(target));
-			_ModifyUserData( target, function(result) {
-				if (result==null) {
-					PageMessage.message( "Scene action failed!", "warning" );				
-				}
-				else {
-					PageMessage.message( "Scene action succeeded! a LUUP reload will happen now, be patient", "success" );			
-				}
+			_ModifyUserData( target, function(result,jqXHR) {
+				if ($.isFunction(cbfunc))
+					(cbfunc)(result,jqXHR);
+				// if (result==null) {
+					// PageMessage.message( "Scene action failed!", "warning" );				
+				// }
+				// else {
+					// PageMessage.message( "Scene action succeeded! a LUUP reload will happen now, be patient", "success" );			
+				// }
 			});		
 		} else {
 			if (newscene.id==ALTUI_NEW_SCENE_ID)
@@ -587,6 +594,7 @@ var UPnPHelper = (function(ip_addr,veraidx,bIsOpenLuup) {
 		//---------------------------------------------------------
 		// Public  functions
 		//---------------------------------------------------------
+		setOpenLuup	: function(b) 		{ _bIsOpenLuup = b; },
 		getIpAddr		: function () 		{ return _ipaddr; },
 		reloadEngine	: _reloadEngine,
 		getUrlHead		: _getUrlHead,
