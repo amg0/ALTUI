@@ -477,8 +477,11 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		delete newscene['altuiid'];
 		delete newscene['active'];
 		
+		// check the length of the scene to choose between GET or POST method
+		var json = JSON.stringify(newscene)
+		// if (0) {
 		// if (_ipaddr=='') {
-		if (0) {
+		if (json.length >= 5000) {
 			// Local mode
 			var id = newscene.id;	
 			if (id == ALTUI_NEW_SCENE_ID) {
