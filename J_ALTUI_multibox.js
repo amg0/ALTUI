@@ -436,11 +436,11 @@ var MultiBox = ( function( window, undefined ) {
 		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getDeviceVariableHistory( device, varidx, cbfunc);
 	};
 	function _delWatch( w ) {
-		w = $.extend({sceneid:-1, expression:'true', xml:'', provider:''},w);
+		w = $.extend({sceneid:-1, luaexpr:'true', xml:'', provider:''},w);
 		return _controllers['0'].controller.delWatch( w  )
 	};
 	function _addWatch( w ) {
-		w = $.extend({sceneid:-1, expression:'true', xml:'', provider:''},w);
+		w = $.extend({sceneid:-1, luaexpr:'true', xml:'', provider:''},w);
 		return _controllers['0'].controller.addWatch( w  )
 	};
 	function _getWatches(whichwatches,filterfunc) {

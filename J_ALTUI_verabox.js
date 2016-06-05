@@ -1470,10 +1470,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		// for thingspeak = a table of channelid, readkey, writekey, field, graphicurl
 		var url = "?id=lr_ALTUI_Handler&command={8}&service={0}&variable={1}&device={2}&scene={3}&expression={4}&xml={5}&provider={6}&providerparams={7}".format(
 			w.service, w.variable, w.deviceid, w.sceneid, 
-			encodeURIComponent(w.luaexpr), 
-			encodeURIComponent(w.xml), 
+			encodeURIComponent(w.luaexpr || ''), 
+			encodeURIComponent(w.xml || '' ), 
 			w.provider, 
-			encodeURIComponent( JSON.stringify(w.params) ),
+			encodeURIComponent( JSON.stringify(w.params || [] ) ),
 			cmd
 		);
 		var jqxhr = _httpGet( url, {}, function(data, textStatus, jqXHR) {

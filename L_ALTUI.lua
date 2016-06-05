@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.56"
+local version = "v1.57"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -3031,9 +3031,24 @@ function _delWatch(service, variable, deviceid, sceneid, expression, xml, provid
 					removed = removed +1
 				end
 			end
+			
+			-- remove the same number of entries from the expressions table with expression==(true) and SceneID==-1
+			local expr_deleted = 0
+			local n2 = tablelength(registeredWatches[devidstr][service][variable]['Expressions']["true"])
+			for i=n2, 1 , -1 do
+				if (registeredWatches[devidstr][service][variable]['Expressions']["true"][i].SceneID ==  -1) then
+					registeredWatches[devidstr][service][variable]['Expressions']["true"][i] = nil
+					expr_deleted  = expr_deleted +1
+					if (expr_deleted == removed) then
+							break
+					end
+				end
+			end
+			
 			if (removed == n) then
 				registeredWatches[devidstr][service][variable]['DataProviders'][provider]=nil
 			end
+			
 		else
 			-- watch for scene
 			local n = tablelength(registeredWatches[devidstr][service][variable]['Expressions'][expression])
