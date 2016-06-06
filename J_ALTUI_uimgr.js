@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1700 $";
+var ALTUI_revision = "$Revision: 1704 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -277,6 +277,7 @@ var styles ="						\
 		height:100%;			\
 		z-index: -1;			\
 	}							\
+	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }		\
 	.altui-ace-editor .ui-resizable-helper { border: 2px dotted #00F; }		\
 	.altui-ace-editor .ui-resizable-handle { background-color: white; }		\
 	#altui-editor-text .ui-resizable-helper { border: 2px dotted #00F; }	\
@@ -1539,7 +1540,7 @@ var SceneEditor = function (scene) {
 	function _displayAction(action,ida,idg) {
 		var actioninfo = _formatAction(scenecontroller,action);
 		var html="";
-		html +="<tr class='altui-scene-action'>";
+		html +="<tr class='altui-scene-action' id='{0}.{1}'>".format(idg,ida);
 		html += "<td>{0}</td><td>{1} (<small class='text-muted'>{2}</small>)</td>".format(
 			actioninfo.device,			// _displayDevice(action.device),
 			actioninfo.action,			// action.action, 
@@ -1865,39 +1866,51 @@ var SceneEditor = function (scene) {
 	};
 	
 	function _runActions(  ) {
-		// var that = this;	// hold editor object
-		//
-		// actions
-		//
-		var draggable_options = {
+		//http://stackoverflow.com/questions/15416275/why-does-the-update-event-in-jquery-sortable-seem-to-run-twice-when-testing-for
+		var sortable_options = {
+			axis: "y",
+			// containment: ".panel-body",
+			// handle: ".altui-scene-action",
+			items: "tr.altui-scene-action",		// prevent selection of last line which is not an action
+			connectWith: ".altui-scene-group tbody",		// allow to drop in other action groups
+			placeholder: "altui-sortable-placeholder",
+			forcePlaceholderSize : true,
+			// opacity: 1,
+			cursor: "move",
+			delay: 150,
 			disabled: (ALTUI_registered==false),
-            helper: "clone",
-            start: function(event, ui) {
-			}
-		};
-		var droppable_options = {
-			drop: function(event, ui) {
-				var ids = ui.draggable.find("button.altui-delaction").prop("id").split(".");
-				var group = scene.groups[ ids[0] ];
-				var action = group.actions[ ids[1] ];
-				group.actions.splice( ids[1], 1 );
+			distance: 5,
+			tolerance: "pointer",
+			revert: true,
+            stop: function(event, ui) {
+				var ids = ui.item.prop("id").split(".");
+				var org_group = scene.groups[ ids[0] ];
+				var action = org_group.actions[ ids[1] ];
+				var new_groupid = ui.item.parent().closest(".altui-scene-group").data("group-idx");
 				
-				var newgroupid = $(this).closest("table").data("group-idx");
-				scene.groups[ newgroupid ].actions.push(action);
+				org_group.actions.splice( ids[1], 1 );
+				var arr = $(this).parents("tbody").find("tr[data-group-idx={0}]".format(new_groupid)).find(".altui-scene-group tbody").sortable( "toArray" );
+				// insert new elem at the right position 
+				var index = $.inArray(ui.item.prop("id"),arr);
+				scene.groups[ new_groupid ].actions.splice(index, 0, action)
+				_showSaveNeeded();
 				
 				// now update the UI
 				var tbody = $(this).parents("tbody");
-				$(this).parents("tr").siblings("[data-group-idx={0}]".format(ids[0])).replaceWith( _displayGroup(group,ids[0] ) );
-				$(this).parents("tr").replaceWith( _displayGroup(scene.groups[ newgroupid ],newgroupid) );
-				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-action").draggable(draggable_options);
-				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group").droppable(droppable_options);
-				$(tbody).find("tr[data-group-idx={0}]".format(newgroupid)).find(".altui-scene-action").draggable(draggable_options);
-				$(tbody).find("tr[data-group-idx={0}]".format(newgroupid)).find(".altui-scene-group").droppable(droppable_options);
+				_.defer( function() {
+					if (ids[0]  != new_groupid ) {
+						$(tbody).find("tr[data-group-idx={0}]".format(new_groupid)).replaceWith( _displayGroup(scene.groups[ new_groupid ],new_groupid) );
+						$(tbody).find("tr[data-group-idx={0}]".format(new_groupid)).find(".altui-scene-group tbody").sortable(sortable_options);
+					}
+					$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).replaceWith( _displayGroup(org_group,ids[0] ) );
+					$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group tbody").sortable(sortable_options);				
+				});
+				
 			}
 		};
-		
-		$(".altui-scene-action").draggable(draggable_options);
-		$(".altui-scene-group").droppable(droppable_options);
+		// $(".altui-scene-action").draggable(draggable_options);
+		$(".altui-scene-group tbody").sortable(sortable_options);
+		// $(".altui-scene-group").droppable(droppable_options);
 		
 		var editor = ace.edit( "altui-luascene" );
 		editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
