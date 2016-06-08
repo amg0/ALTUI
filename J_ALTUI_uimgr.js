@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1704 $";
+var ALTUI_revision = "$Revision: 1705 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6781,6 +6781,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{ id:33, title:_T('Workflow Report'), onclick:'UIManager.pageWorkflowReport()', parent:31 },
 			{ id:34, title:_T('License'), onclick:'UIManager.pageLicense()', parent:0 },
 			{ id:35, title:_T('Evolutions'), onclick:'UIManager.pageEvolutions()', parent:0 },		
+			{ id:36, title:_T('App Store'), onclick:'UIManager.pageAppStore()', parent:0 },
 		];
 
 		function _parentsOf(child) {
@@ -6812,6 +6813,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	
 	// pages
+	appStoreLayout: function(title)
+	{
+		var body="";
+		body+="	<div class='altui-layout row'>";
+		body+="		<div class='col-xs-12 altui-mainpanel'>";
+		body+="		</div>";
+		body+="	</div>";
+		return body;
+	},
 	oneColumnLayout: function(title)
 	{
 		var body="";
@@ -9297,6 +9307,103 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		}
 		_refresh();
+	},
+	
+	pageAppStore: function()
+	{
+		function _displayCategories() {
+			var html = "";
+			html += "<div class='altui-store-categories btn-group-vertical'>"
+				html += "<button type='button' class='btn btn-default'>";
+					html += "Category 1 <span class='badge'>3</span>"
+				html += "</button>"
+				html += "<button type='button' class='btn btn-default'>";
+					html += "Category 2 <span class='badge'>5</span>"
+				html += "</button>"
+			html += "</div>"
+			return html;
+		}
+		function _displayCarousel() {
+			var html = "";
+			html += "<div id='carousel-example-generic' class='carousel slide altui-store-carousel' data-ride='carousel'>"
+			html += "  <!-- Indicators -->"
+			html += "  <ol class='carousel-indicators'>"
+			html += "    <li data-target='#carousel-example-generic' data-slide-to='0' class='active'></li>"
+			html += "    <li data-target='#carousel-example-generic' data-slide-to='1'></li>"
+			html += "    <li data-target='#carousel-example-generic' data-slide-to='2'></li>"
+			html += "  </ol>"
+			html += "  <!-- Wrapper for slides -->"
+			html += "  <div class='carousel-inner'>"
+			html += "    <div class='item active'>"
+			html += "      <img src='http://placehold.it/1200x315' alt='...'>"
+			html += "      <div class='carousel-caption'>"
+			html += "      	<h3>Caption Text</h3>"
+			html += "      </div>"
+			html += "    </div>"
+			html += "    <div class='item'>"
+			html += "      <img src='http://placehold.it/1200x315' alt='...'>"
+			html += "      <div class='carousel-caption'>"
+			html += "      	<h3>Caption Text</h3>"
+			html += "      </div>"
+			html += "    </div>"
+			html += "    <div class='item'>"
+			html += "      <img src='http://placehold.it/1200x315' alt='...'>"
+			html += "      <div class='carousel-caption'>"
+			html += "      	<h3>Caption Text</h3>"
+			html += "      </div>"
+			html += "    </div>"
+			html += "  </div>"
+			html += "  <!-- Controls -->"
+			html += "  <a class='left carousel-control' href='#carousel-example-generic' role='button' data-slide='prev'>"
+			html += "    <span class='glyphicon glyphicon-chevron-left'></span>"
+			html += "  </a>"
+			html += "  <a class='right carousel-control' href='#carousel-example-generic' role='button' data-slide='next'>"
+			html += "    <span class='glyphicon glyphicon-chevron-right'></span>"
+			html += "  </a>"
+			html += "</div> <!-- Carousel -->"
+			return html;
+		}
+		function _displayItems() {
+			var html = "";
+			html += "<div class='altui-store-items row'>";
+				html += "<div class='col-xs-4'>"
+					html += "<div class='panel panel-default'>"
+					html += "  <div class='panel-body'>A plugin</div>"
+					html += "</div>"
+				html += "</div>"
+				html += "<div class='col-xs-4'>"
+					html += "<div class='panel panel-default'>"
+					html += "  <div class='panel-body'>A plugin</div>"
+					html += "</div>"
+				html += "</div>"
+				html += "<div class='col-xs-4'>"
+					html += "<div class='panel panel-default'>"
+					html += "  <div class='panel-body'>A plugin</div>"
+					html += "</div>"
+				html += "</div>"
+			html += "</div>";
+			return html;
+		}
+
+		UIManager.clearPage(_T('App Store'),_T("Application Store"),UIManager.appStoreLayout);
+		$("#altui-pagemessage").remove();
+
+		var html = "";
+
+		// carousel
+		html += "<div class='row'>";
+			html += "<div class='col-xs-12'>";
+				html += _displayCarousel()
+			html += "</div>";
+		html += "</div>";
+
+		html += "<div class='row'>";
+			// categories
+			html += "<div class='col-xs-3'>{0}</div>".format( _displayCategories() )
+			// row
+			html += "<div class='col-xs-9'>{0}</div>".format(_displayItems() );
+		html += "</div>";
+		$(".altui-mainpanel").html(html);
 	},
 	
 	pagePlugins: function ()
@@ -12853,6 +12960,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.on ("click", "#menu_device", UIManager.pageDevices )
 				.on ("click", "#menu_scene", UIManager.pageScenes )
 				.on ("click", "#altui-scene-triggers", UIManager.pageTriggers )
+				.on ("click", "#altui-app-store", UIManager.pageAppStore )
 				.on ("click", "#menu_plugins", UIManager.pagePlugins )
 				.on ("click", "#menu_workflow", UIManager.pageWorkflows )
 				.on ("click", "#altui-pages-see", UIManager.pageUsePages )
@@ -13072,6 +13180,7 @@ $(document).ready(function() {
 		body+="			<ul class='dropdown-menu' role='menu'>";
 		body+="				<li><a id='menu_room' href='#'  >"+_T("Rooms")+"</a></li>";
 		body+="				<li><a id='menu_plugins' href='#'  >"+_T("Plugins")+"</a></li>";
+		body+="				<li><a id='altui-app-store' href='#' >"+_T("App Store")+"</a></li>";
 		body+="				<li><a id='menu_workflow' href='#'  >"+_T("Workflows")+"</a></li>";
 		body+="			<li class='divider'></li>";
 		body+="				<li class='dropdown-header'>Tables</li>";
