@@ -712,6 +712,9 @@ var MultiBox = ( function( window, undefined ) {
 		var elems = altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPDeletePlugin(pluginid,cbfunc);
 	};
+	function _updatePluginFromStore(plugin, cbfunc) {
+		return _controllers[0].controller.getUPnPHelper().UPnPUpdatePlugin2(plugin,cbfunc);
+	};
 	function _updatePlugin( altuiid, pluginid, cbfunc) {
 		var elems = altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPUpdatePlugin(pluginid,cbfunc);
@@ -935,6 +938,7 @@ var MultiBox = ( function( window, undefined ) {
 	// Plugins
 	getPlugins			: _getPlugins,			//( func , endfunc ) 
 	deletePlugin		: _deletePlugin,		//(id,function(result)
+	updatePluginFromStore : _updatePluginFromStore,
 	updatePlugin		: _updatePlugin,		//(id,function(result)
 	updatePluginVersion	: _updatePluginVersion,	//(id,ver,function(result)
 	modifyPlugin		: _modifyPlugin,

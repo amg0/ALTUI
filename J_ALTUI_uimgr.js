@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1714 $";
+var ALTUI_revision = "$Revision: 1716 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9326,9 +9326,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var _counts=[];
 		var installglyph = glyphTemplate.format( "retweet", _T("Install"), "" );
 	
-		function _appStoreReturn() {
-		};
-		
 		function _computeCounts() {
 			$.each(arr,function(k,v) { _counts[v]=0 } );
 			$.each(_plugins_data,function(idx,plugin) {
@@ -9460,9 +9457,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.on("click",".altui-store-install-btn",function() {
 				var id = $(this).closest(".altui-pluginbox").data("pluginid");
 				var that = this;
-				MultiBox.updatePlugin("0-0",id,function(result) {
-					$(that).text(_T("Success")).removeClass("btn-info").addClass("btn-success disabled");
-				});
+				for (var i=0; i<_plugins_data.length; i++) {
+					if (_plugins_data[i].id == id ) {
+						MultiBox.updatePluginFromStore(_plugins_data[i],function(result) {
+							$(that).text(_T("Success")).removeClass("btn-info").addClass("btn-success disabled");
+						});
+					}
+				}
 			});
 		})
 	},

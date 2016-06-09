@@ -75,9 +75,12 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		var url = _getUrlHead()+'?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum={0}&Version={1}'.format(pluginid ,version);
 		return _proxify(url);
 	}		
-	function _buildUPnPUpdatePlugin( pluginid )
+	function _buildUPnPUpdatePlugin( pluginid , plugin )
 	{
 		var url = _getUrlHead()+'?id=update_plugin&Plugin='+pluginid;
+		if (plugin!=undefined) {
+			url += ("&metadata="+ encodeURIComponent( JSON.stringify(plugin)) );
+		}
 		return _proxify(url);
 	}		
 	function _buildUPnPActionUrl(deviceID,service,action,params)
@@ -253,6 +256,11 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	function _UPnPUpdatePluginVersion( pluginid, version, cbfunc )
 	{
 		return _exec( _buildUPnPUpdatePluginVersion( pluginid,version), cbfunc );
+	};
+	
+	function _UPnPUpdatePlugin2( plugin, cbfunc) 
+	{
+		return _exec( _buildUPnPUpdatePlugin( plugin.id, plugin ), cbfunc );
 	};
 	
 	function _UPnPUpdatePlugin( pluginid, cbfunc )
@@ -611,6 +619,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		UPnPGetFile		: _UPnPGetFile,
 		UPnPUpdatePluginVersion : _UPnPUpdatePluginVersion,
 		UPnPUpdatePlugin: _UPnPUpdatePlugin,
+		UPnPUpdatePlugin2: _UPnPUpdatePlugin2,
 		UPnPDeletePlugin: _UPnPDeletePlugin,
 		UPnPRunLua 		: _UPnPRunLua,
 		UPnPGetJobStatus: _UPnPGetJobStatus,
