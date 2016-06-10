@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1716 $";
+var ALTUI_revision = "$Revision: 1717 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9320,7 +9320,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageAppStore: function(params)
 	{
 		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
-		var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec';
+		var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec';
+		// var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec'; ALTUI TEST
 		var _plugins_data = null;
 		var arr = ["abc","def","ghi","jkl","mno","pqr","stu","vwx","yz "];
 		var _counts=[];
@@ -9395,7 +9396,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						html += "<div class='panel-body'>"
 							html += ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
 							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title)
-							html += "<div class='altui-plugin-version'><small>{0}.{1}</small></div>".format(plugin.VersionMajor,plugin.VersionMinor)
+							html += "<div class='altui-plugin-version'><small>{0}.{1}</small></div>".format(plugin.VersionMajor || 0 ,plugin.VersionMinor || 0 )
 							html += "<button class='altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Install"))
 						html += "</div>"
 					html += "</div>"
