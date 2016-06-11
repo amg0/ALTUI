@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1717 $";
+var ALTUI_revision = "$Revision: 1720 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -282,7 +282,7 @@ var styles ="						\
 	.altui-store-install-btn { float: left; }		\
 	.altui-plugin-category-btn {  }					\
 	.altui-plugin-publish-btn { width: 100%;  }		\
-	.altui-pluginbox { height: 110px; }				\
+	.altui-pluginbox {  }				\
 	.altui-plugin-title { height: 21px;  overflow:hidden; }		\
 	.altui-plugin-version { font-size:1em; float:right; }		\
 	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }		\
@@ -9325,7 +9325,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var _plugins_data = null;
 		var arr = ["abc","def","ghi","jkl","mno","pqr","stu","vwx","yz "];
 		var _counts=[];
-		var installglyph = glyphTemplate.format( "retweet", _T("Install"), "" );
+		var installglyph = glyphTemplate.format( "cloud-download", _T("Install"), "" );
 	
 		function _computeCounts() {
 			$.each(arr,function(k,v) { _counts[v]=0 } );
@@ -9341,7 +9341,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			
 			html += "<button id='*' type='button' class='altui-plugin-category-btn btn btn-default'>{0}</button>".format(_T("All"))
 				$.each(arr, function(i,entry) {
-					html += "<button id='{0}' type='button' class='altui-plugin-category-btn btn btn-default'>{0} <span class='badge'>{1}</span></button>"
+					html += "<button id='{0}' type='button' class='altui-plugin-category-btn btn btn-default'>{0} <span class='hidden-xs badge'>{1}</span></button>"
 					.format(entry,_counts[entry] || 0 )
 				});
 			html += "</div>"
@@ -9391,13 +9391,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		function _displayOnePlugin(plugin) {
 			var html = "";
-				html += "<div class='altui-pluginbox col-xs-4' data-pluginid='{0}'>".format(plugin.id)
+				html += "<div class='col-xs-6 col-sm-4 col-md-3 col-lg-2 altui-pluginbox' data-pluginid='{0}'>".format(plugin.id)
 					html += "<div class='panel panel-default'>"
 						html += "<div class='panel-body'>"
 							html += ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
 							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title)
 							html += "<div class='altui-plugin-version'><small>{0}.{1}</small></div>".format(plugin.VersionMajor || 0 ,plugin.VersionMinor || 0 )
-							html += "<button class='altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Install"))
+							html += "<button class='altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"))
+							html += "<button class='altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"))
 						html += "</div>"
 					html += "</div>"
 				html += "</div>"
@@ -9455,7 +9456,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.on("click",".altui-plugin-publish-btn",function() {
 				window.open( publish_url, '_blank');
 			})
-			.on("click",".altui-store-install-btn",function() {
+			.on("click",".altui-store-mcvinstall-btn",function() {
 				var id = $(this).closest(".altui-pluginbox").data("pluginid");
 				var that = this;
 				for (var i=0; i<_plugins_data.length; i++) {
@@ -9463,6 +9464,25 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						MultiBox.updatePluginFromStore(_plugins_data[i],function(result) {
 							$(that).text(_T("Success")).removeClass("btn-info").addClass("btn-success disabled");
 						});
+					}
+				}
+			})
+			.on("click",".altui-store-install-btn",function() {
+				var id = $(this).closest(".altui-pluginbox").data("pluginid");
+				var altuiapp_device = MultiBox.getDeviceByType(0,"urn:schemas-upnp-org:device:altuiApps:1")
+				if (altuiapp_device != null) {
+				var that = this;
+					for (var i=0; i<_plugins_data.length; i++) {
+						if (_plugins_data[i].id == id ) {
+							MultiBox.runAction(altuiapp_device, "urn:schemas-upnp-org:service:altuiApps:1", "update_plugin", 
+								{ 
+									metadata: JSON.stringify(_plugins_data[i])
+								},function(result) {
+									$(that).text(_T("Success")).removeClass("btn-info").addClass("btn-success disabled");
+									alert(result);
+								} 
+							);
+						}
 					}
 				}
 			});
