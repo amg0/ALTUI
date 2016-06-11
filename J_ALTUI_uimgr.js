@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1720 $";
+var ALTUI_revision = "$Revision: 1722 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -279,7 +279,7 @@ var styles ="						\
 	}							\
 	.altui-store-categories { width: 100%; overflow: hidden; }					\
 	.altui-features-box { height:200px; width: 100%; background:lightgrey; }	\
-	.altui-store-install-btn { float: left; }		\
+	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }		\
 	.altui-plugin-category-btn {  }					\
 	.altui-plugin-publish-btn { width: 100%;  }		\
 	.altui-pluginbox {  }				\
@@ -9397,8 +9397,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							html += ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
 							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title)
 							html += "<div class='altui-plugin-version'><small>{0}.{1}</small></div>".format(plugin.VersionMajor || 0 ,plugin.VersionMinor || 0 )
-							html += "<button class='altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"))
-							html += "<button class='altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"))
+							html += "<button class='pull-left altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"))
+							html += "<button class='pull-left altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"))
 						html += "</div>"
 					html += "</div>"
 				html += "</div>"
@@ -9468,10 +9468,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				}
 			})
 			.on("click",".altui-store-install-btn",function() {
-				var id = $(this).closest(".altui-pluginbox").data("pluginid");
 				var altuiapp_device = MultiBox.getDeviceByType(0,"urn:schemas-upnp-org:device:altuiApps:1")
 				if (altuiapp_device != null) {
-				var that = this;
+					var id = $(this).closest(".altui-pluginbox").data("pluginid");
+					var that = this;
 					for (var i=0; i<_plugins_data.length; i++) {
 						if (_plugins_data[i].id == id ) {
 							MultiBox.runAction(altuiapp_device, "urn:schemas-upnp-org:service:altuiApps:1", "update_plugin", 
@@ -9484,6 +9484,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							);
 						}
 					}
+				} else {
+					$(this).text(_T("Failed")).removeClass("btn-info").addClass("btn-danger disabled");
 				}
 			});
 		})
@@ -13313,7 +13315,7 @@ $(document).ready(function() {
 		body+="			<li><a id='altui-license-page' href='#'>"+_T("License Fees")+"</a></li>";
 		body+="			<li><a id='altui-credits' href='#'>"+_T("Credits")+"</a></li>";
 		body+="			<li><a id='altui-evolutions' href='#'>"+_T("Evolutions")+"</a></li>";
-		body+="			<li><a id='altui-support' href='http://forum.micasaverde.com/index.php?board=78.0'>"+_T("Support")+"</a></li>";
+		body+="			<li><a id='altui-support' target='_blank' href='http://forum.micasaverde.com/index.php?board=78.0'>"+_T("Support")+"</a></li>";
 		body+="		  </ul>";
 		body+="		</li>";
 		body+="	  </ul>";
