@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1722 $";
+var ALTUI_revision = "$Revision: 1724 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6790,6 +6790,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{ id:34, title:_T('License'), onclick:'UIManager.pageLicense()', parent:0 },
 			{ id:35, title:_T('Evolutions'), onclick:'UIManager.pageEvolutions()', parent:0 },		
 			{ id:36, title:_T('App Store'), onclick:'UIManager.pageAppStore()', parent:0 },
+			{ id:37, title:_T('Publish App'), onclick:'UIManager.pageAppPublish()', parent:36 },
 		];
 
 		function _parentsOf(child) {
@@ -9317,9 +9318,61 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		_refresh();
 	},
 	
+	pageAppPublish: function(params)
+	{
+		function _getDeviceCode() {
+			var url = "data_request?id=lr_ALTUI_Handler&command=get_device_code";
+			return $.ajax({
+				url:url,
+				type: "GET",
+				data: {
+					client_id: "115256773336-e8qdncs5ac5cfmodhltsh2cgvk6jdr65.apps.googleusercontent.com",
+					scope: "email profile"
+				}
+			});
+		}
+		function _getAuthToken() {
+			var url = "data_request?id=lr_ALTUI_Handler&command=get_auth_token";
+			return $.ajax({
+				url:url,
+				type: "GET",
+			});
+		}
+		function _tryAuthToken( n ) {
+			_getAuthToken() 
+				.done( function(data, textStatus, jqXHR) {	
+					data = JSON.parse(data)
+					console.log(data)
+					if (data.access_token != undefined ) {
+						console.log("access token granted ", data)
+						alert('sucess');
+					} else  if ( n<10 ) {
+						setTimeout( function() { _tryAuthToken(n+1)  } , 2000 )
+					} else {
+						alert('fail');
+					}
+				})				
+				.fail( function(jqXHR, textStatus, errorThrown) {			
+					alert('fail');
+				})
+		}
+		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
+		UIManager.clearPage(_T('Publish App'),_T("Publish Application"),UIManager.oneColumnLayout);
+		_getDeviceCode()
+			.done( function(data, textStatus, jqXHR) {		
+				data = JSON.parse(data);
+				$(".altui-mainpanel").append(
+					"<div>Please go to this page <a href='{1}' target='_blank'>{1}</a>and enter this code : {0}</div>".format(data.user_code,data.verification_url)
+				);
+				_tryAuthToken( 0 )
+			})
+			.fail( function(jqXHR, textStatus, errorThrown) {			
+				alert('fail');
+			})
+	},
+	
 	pageAppStore: function(params)
 	{
-		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
 		var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec';
 		// var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec'; ALTUI TEST
 		var _plugins_data = null;
@@ -9341,7 +9394,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			
 			html += "<button id='*' type='button' class='altui-plugin-category-btn btn btn-default'>{0}</button>".format(_T("All"))
 				$.each(arr, function(i,entry) {
-					html += "<button id='{0}' type='button' class='altui-plugin-category-btn btn btn-default'>{0} <span class='hidden-xs badge'>{1}</span></button>"
+					html += "<button id='{0}' type='button' class='altui-plugin-category-btn btn btn-default'>{0} <span class='pull-right hidden-xs badge'>{1}</span></button>"
 					.format(entry,_counts[entry] || 0 )
 				});
 			html += "</div>"
@@ -9454,7 +9507,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$(".altui-mainpanel").html(_displayStore( filter ));
 			})
 			.on("click",".altui-plugin-publish-btn",function() {
-				window.open( publish_url, '_blank');
+				UIManager.pageAppPublish();
 			})
 			.on("click",".altui-store-mcvinstall-btn",function() {
 				var id = $(this).closest(".altui-pluginbox").data("pluginid");
