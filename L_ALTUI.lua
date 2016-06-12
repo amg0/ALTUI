@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.57"
+local version = "v1.57b"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -1893,7 +1893,7 @@ function myALTUI_LuaRunHandler(lul_request, lul_parameters, lul_outputformat)
 	return res, "text/plain"
 end
 
-function _helperGoogleAuthCallback(url,lul,device)
+function _helperGoogleAuthCallback(url,lul_device)
 	debug(string.format("ALTUI: _helperGoogleAuthCallback (%s)",url))
 	local data = ""
 	local response_body = {}
@@ -1910,11 +1910,11 @@ function _helperGoogleAuthCallback(url,lul,device)
 			-- redirect
 			debug( string.format("ALTUI: GoogleAuthCallback 302, headers= %s", json.encode(headers) ))
 			local url = headers["location"]
-			return _helperGoogleAuthCallback(url,lul,device)
+			return _helperGoogleAuthCallback(url,lul_device)
 		end
 		-- normally
 		-- {"access_token":"ya29.Ci_-AuoRcj7luXViyJZL7AGDH5kXY9UdKBYxtSXT9SgZOKuubPHx5EWhQduxwfZxbg","token_type":"Bearer","expires_in":3600,"refresh_token":"1/vK4ZH9fqxH_dJ3azlkHcGqX6Ghnbpp3iOZwkpqLtxUk","id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjVjMzEwYWY5Y2E1MjNkOTFkZjQ0ZjU1ZTgyYjI3YjcwMGI4N2U2ZWMifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoiOExFbTRBUlMtOGFkMmNMVkZWOGdsUSIsImF1ZCI6IjExNTI1Njc3MzMzNi1lOHFkbmNzNWFjNWNmbW9kaGx0c2gyY2d2azZqZHI2NS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODcxMDUwOTAwNjczODcyOTA4NCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiIxMTUyNTY3NzMzMzYtZThxZG5jczVhYzVjZm1vZGhsdHNoMmNndms2amRyNjUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6ImFsZXhpcy5tZXJtZXRAZ21haWwuY29tIiwiaWF0IjoxNDY1NjgyNjU5LCJleHAiOjE0NjU2ODYyNTksIm5hbWUiOiJBbGV4aXMgTWVybWV0IiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tQ2N6U1NtemtEUk0vQUFBQUFBQUFBQUkvQUFBQUFBQUFOOXMvT3pCaHl1TjhGa0Evczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkFsZXhpcyIsImZhbWlseV9uYW1lIjoiTWVybWV0IiwibG9jYWxlIjoiZnIifQ.IKlNBp-DP9Vmf-SQmD_Z_APADXUk23JTtv0CnN7C5f6q4UfAAsQ7UBcPAOkOsifbd_YGOmu5yG-j4iSyvGgG90dr5oYdzyNRt9Bzdp7HyXcMqPztWP7rfI5nm7ru3pvL7AgTsOqoEMt7LMPesWIF_EGBs-NyFrFfh8tRPQEGjyt1ojKZGHMhUgCK8zXCSfY4-VGqsS88h5cNNKNpaXOGDeHh3zrXM6ZBfnA_tK9UltRaItrU_J-Dw-rkoH6FWB4UwMD6ciIqq5ZZKAefTeCTiv9D2SLNx2s7esSHC0uZDV6-ynhyt0TZHwUky1QyZ5xLyEKPofbrDiqUQi8M8B7aIA"}
-		
+		setVariableIfChanged(ALTUI_SERVICE, "GoogleAuthToken", content or "", tonumber(lul_device))
 		return content
 	else
 		debug( string.format("ALTUI: GoogleAuthCallback failed to call %s",url))
@@ -1926,7 +1926,7 @@ function GoogleAuthCallback(lul_device)
 	debug("ALTUI: GoogleAuthCallback")
 	local device_code = getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
 	local url = string.format("https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?code=%s",device_code)
-	return _helperGoogleAuthCallback(url,lul,device)
+	return _helperGoogleAuthCallback(url,lul_device)
 
 	-- local response,content = luup.inet.wget( url )
 	-- if (response==0) then
@@ -2110,8 +2110,8 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 					local completestring = table.concat(response_body)
 					debug(string.format("ALTUI: Succeed to POST to https://accounts.google.com/o/oauth2/device/code , result=%s",completestring))
 					local obj = json.decode(completestring)
-					setVariableIfChanged(ALTUI_SERVICE, "GoogleDeviceCode", obj.device_code, tonumber(lul_device))
-					setVariableIfChanged(ALTUI_SERVICE, "GoogleUserCode", obj.user_code, tonumber(lul_device))					
+					setVariableIfChanged(ALTUI_SERVICE, "GoogleDeviceCode", obj.device_code, tonumber(deviceID))
+					setVariableIfChanged(ALTUI_SERVICE, "GoogleUserCode", obj.user_code, tonumber(deviceID))					
 					return completestring, "text/plain"
 				else
 					debug(string.format("ALTUI: Failed to POST to https://accounts.google.com/o/oauth2/device/code"))
@@ -2119,7 +2119,37 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 			end,
 		["get_auth_token"] = 
 			function(params)
-				return GoogleAuthCallback( lul_device), "text/plain"
+				return GoogleAuthCallback( deviceID), "text/plain"
+			end,
+		["update_plugin"] =
+			function(params)
+				local plugin = lul_parameters["plugin"]
+				local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(deviceID),"")
+				local access_token = (json.decode(str)).access_token
+				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=update&access_token="..access_token
+				local data = "contents="..plugin
+				local response_body = {}
+				local commonheaders = {
+						["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8",
+						["Content-Length"] = data:len(),
+						["User-agent"] = "Find iPhone/1.3 MeKit (iPad: iPhone OS/4.2.1)",
+						["Connection"]= "keep-alive"
+					}
+				local response, status, headers = https.request{
+					method="POST",
+					url=url,
+					headers = commonheaders,
+					source = ltn12.source.string(data),
+					sink = ltn12.sink.table(response_body)
+				}
+				if (response==1) then
+					local completestring = table.concat(response_body)
+					debug(string.format("ALTUI: Succeed to POST to ".. url ..", result=%s",completestring))
+					return completestring, "text/plain"
+				else
+					debug(string.format("ALTUI: Failed to POST to https://accounts.google.com/o/oauth2/device/code"))
+				end				
+				return "error", "text/plain"
 			end,
 		["save_data"] = 
 			function(params)

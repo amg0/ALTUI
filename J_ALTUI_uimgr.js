@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1724 $";
+var ALTUI_revision = "$Revision: 1726 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2437,6 +2437,10 @@ var UIManager  = ( function( window, undefined ) {
 	// meaning we lose functionality
 	var _forbiddenScripts=["shared.js","interface.js"];
 	var _safeScripts=["J_PLC.js","J_VeraAlerts.js"];
+
+	// App Store URLs
+	var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec';
+	// var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec'; ALTUI TEST
 
 	// in English, we will apply the _T() later, at display time
 	var _checkOptions = [
@@ -9320,6 +9324,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageAppPublish: function(params)
 	{
+		var _plugins_data="";
+		
+		function _updatePlugin( plugin ) {
+			var url = "data_request?id=lr_ALTUI_Handler&command=update_plugin";
+			return $.ajax({
+				url:url,
+				type: "GET",
+				data: {
+					plugin: JSON.stringify(plugin),
+				}
+			});
+		}
 		function _getDeviceCode() {
 			var url = "data_request?id=lr_ALTUI_Handler&command=get_device_code";
 			return $.ajax({
@@ -9338,14 +9354,183 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				type: "GET",
 			});
 		}
+		function _getPluginList() {
+			// TODO : change to take the authorized version to restrict list to only what the user is supposed to see
+			return $.ajax({
+				url:getlist_url,
+				dataType: "jsonp",
+				// data: $.extend( { }, params ),
+				cache:false
+			}).done( function (data, textStatus, jqXHR) {
+				// var _plugins_data= [{"Version":"7388","AllowMultiple":"1","Title":"Virtual ON/OFF Switches","Icon":"plugins/icons/1408.png","Instructions":"http://forum.micasaverde.com/","Hidden":"0","AutoUpdate":"1","VersionMajor":"1","VersionMinor":"32","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"1","id":1408,"TargetVersion":"0","timestamp":1347116315,"Files":[{"SourceName":"I_VSwitch.xml","SourcePath":null,"DestName":"I_VSwitch.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"D_VSwitch.xml","SourcePath":null,"DestName":"D_VSwitch.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"S_VSwitch.xml","SourcePath":null,"DestName":"S_VSwitch.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"},{"SourceName":"D_VSwitch.json","SourcePath":null,"DestName":"D_VSwitch.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"iconVSwitch_100.png","SourcePath":null,"DestName":"iconVSwitch_100.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"iconVSwitch_0.png","SourcePath":null,"DestName":"iconVSwitch_0.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"}],"Devices":[{"DeviceFileName":"D_VSwitch.xml","DeviceType":"urn:schemas-upnp-org:device:VSwitch:1","ImplFile":"","Invisible":"0","CategoryNum":null}],"altuiid":"0-0"},{"Version":"25742","AllowMultiple":"0","Title":"Wunderground Weather Plugin","Icon":"plugins/icons/45.png","Instructions":"http://code.mios.com/trac/mios_weather","Hidden":"0","AutoUpdate":"1","VersionMajor":"1","VersionMinor":"58","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"1","id":45,"timestamp":1439229749,"Files":[{"SourceName":"D_Weather.xml","SourcePath":null,"DestName":"D_Weather.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"D_Weather.json","SourcePath":null,"DestName":"D_Weather.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"S_Weather.xml","SourcePath":null,"DestName":"S_Weather.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"},{"SourceName":"I_WUIWeather.xml","SourcePath":null,"DestName":"I_WUIWeather.xml","DestPath":"","Compress":"1","Encrypt":"1","Role":"I"}],"Devices":[{"DeviceFileName":"D_Weather.xml","DeviceType":"urn:demo-micasaverde-com:device:weather:1","ImplFile":"I_WUIWeather.xml","Invisible":"0","CategoryNum":null}],"altuiid":"0-1"},{"Version":"11066","AllowMultiple":"0","Title":"Foscam IP Camera","Icon":"plugins/icons/1978.png","Instructions":"http://code.mios.com/trac/mios_foscam-camera","Hidden":"0","AutoUpdate":"1","VersionMajor":"2","VersionMinor":"6","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"1","id":1978,"timestamp":1438418219,"Files":[{"SourceName":"I_FoscamPTZ.xml","SourcePath":null,"DestName":"I_FoscamPTZ.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"}],"altuiid":"0-2"},{"Version":"25988","AllowMultiple":"1","Title":"Day or Night","Icon":"plugins/icons/3166.png","Instructions":"http://RTS-Services.com/Vera/Plugin/DayTime","Hidden":"0","AutoUpdate":"1","VersionMajor":"3","VersionMinor":"5","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"1","id":3166,"timestamp":1426948769,"Files":[{"SourceName":"D_DayTime.xml","SourcePath":null,"DestName":"D_DayTime.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"D_DayTime.json","SourcePath":null,"DestName":"D_DayTime.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"I_DayTime.xml","SourcePath":null,"DestName":"I_DayTime.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"J_DayTime.js","SourcePath":null,"DestName":"J_DayTime.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"DayTime.png","SourcePath":null,"DestName":"DayTime.png","DestPath":"","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"DayTime_0.png","SourcePath":null,"DestName":"DayTime_0.png","DestPath":"","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"DayTime_100.png","SourcePath":null,"DestName":"DayTime_100.png","DestPath":"","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"dn-install.sh","SourcePath":null,"DestName":"dn-install.sh","DestPath":"","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"J_DayTime-UI5.js","SourcePath":null,"DestName":"J_DayTime-UI5.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_DayTime-UI6.js","SourcePath":null,"DestName":"J_DayTime-UI6.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_DayTime-UI7.js","SourcePath":null,"DestName":"D_DayTime-UI7.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"}],"Devices":[{"DeviceFileName":"D_DayTime.xml","DeviceType":"urn:schemas-rts-services-com:device:DayTime:1","ImplFile":"I_DayTime.xml","Invisible":"0","CategoryNum":null}],"altuiid":"0-3"},{"SupportedPlatforms":{},"MinimumVersion":{},"DevStatus":{},"Version":25106,"AllowMultiple":"1","Title":"Samsung TV Remote","Icon":"plugins/icons/2248.png","Instructions":"http://www.antor.fr/apps/samsung-tv-remote/","Hidden":"0","VersionMajor":"0","VersionMinor":"5","Approved":"1","id":2248,"TargetVersion":"25106","timestamp":1418491117,"AutoUpdate":1,"Files":[{"SourceName":"D_STVR1.json","SourcePath":{},"DestName":"D_STVR1.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_STVR1.xml","SourcePath":{},"DestName":"D_STVR1.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"I_STVR1.xml","SourcePath":{},"DestName":"I_STVR1.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"S_STVR1.xml","SourcePath":{},"DestName":"S_STVR1.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"}],"Devices":[{"DeviceFileName":"D_STVR1.xml","DeviceType":"urn:antor-fr:device:SamsungTVRemote:1","ImplFile":"I_STVR1.xml","Invisible":"0","CategoryNum":"7"}],"altuiid":"0-4"},{"Version":31718,"AllowMultiple":"1","Title":"IPhone Locator Plugin","Icon":"plugins/icons/4686.png","Instructions":"http://forum.micasaverde.com/index.php/topic,16907.0.html","Hidden":"0","AutoUpdate":"1","Files":[{"SourceName":"L_IPhone.lua","SourcePath":null,"DestName":"L_IPhone.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"J_IPhone.js","SourcePath":null,"DestName":"J_IPhone.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"S_IPhone.xml","SourcePath":null,"DestName":"S_IPhone.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"},{"SourceName":"D_IPhone.json","SourcePath":null,"DestName":"D_IPhone.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_IPhone.xml","SourcePath":null,"DestName":"D_IPhone.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"I_IPhone.xml","SourcePath":null,"DestName":"I_IPhone.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"iconIPhone_0.png","SourcePath":null,"DestName":"iconIPhone_0.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"iconIPhone_25.png","SourcePath":null,"DestName":"iconIPhone_25.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"iconIPhone_75.png","SourcePath":null,"DestName":"iconIPhone_75.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"iconIPhone_100.png","SourcePath":null,"DestName":"iconIPhone_100.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"L_IPhoneJson.lua","SourcePath":null,"DestName":"L_IPhoneJson.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"iconIPhone.png","SourcePath":null,"DestName":"iconIPhone.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"iconIPhone_50.png","SourcePath":null,"DestName":"iconIPhone_50.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"L_IPhoneEnc.lua","SourcePath":null,"DestName":"L_IPhoneEnc.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"newbutton_bg.png","SourcePath":null,"DestName":"newbutton_bg.png","DestPath":"/../../www/cmh/skins/default/images/cpanel/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"D_IPhone_UI7.json","SourcePath":null,"DestName":"D_IPhone_UI7.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"}],"Devices":[{"DeviceFileName":"D_IPhone.xml","DeviceType":"urn:schemas-upnp-org:device:IPhoneLocator:1","ImplFile":"I_IPhone.xml","Invisible":"0","CategoryNum":"1"}],"VersionMajor":"2","VersionMinor":"39","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"0","id":4686,"TargetVersion":"31718","timestamp":1465293084,"altuiid":"0-5"},{"Version":28622,"AllowMultiple":"1","Title":"IPX800","Icon":"plugins/icons/7426.png","Instructions":"http://forum.micasaverde.com/index.php/topic,28342.0.html","Hidden":"0","AutoUpdate":"1","VersionMajor":"0","VersionMinor":"51","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"0","id":7426,"TargetVersion":"28622","timestamp":1439995091,"Files":[{"SourceName":"L_IPX800.lua","SourcePath":null,"DestName":"L_IPX800.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"L"},{"SourceName":"I_IPX800.xml","SourcePath":null,"DestName":"I_IPX800.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"J_IPX800.js","SourcePath":null,"DestName":"J_IPX800.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_IPX800.json","SourcePath":null,"DestName":"D_IPX800.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_IPX800.xml","SourcePath":null,"DestName":"D_IPX800.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"S_IPX800.xml","SourcePath":null,"DestName":"S_IPX800.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"},{"SourceName":"xpath.lua","SourcePath":null,"DestName":"xpath.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"L"},{"SourceName":"iconIPX800.png","SourcePath":null,"DestName":"iconIPX800.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"iconIPX800_0.png","SourcePath":null,"DestName":"iconIPX800_0.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"iconIPX800_100.png","SourcePath":null,"DestName":"iconIPX800_100.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"L_IPX800json.lua","SourcePath":null,"DestName":"L_IPX800json.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"L"},{"SourceName":"D_IPX800_UI7.json","SourcePath":null,"DestName":"D_IPX800_UI7.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"}],"Devices":[{"DeviceFileName":"D_IPX800.xml","DeviceType":"urn:schemas-upnp-org:device:IPX800:1","ImplFile":"I_IPX800.xml","Invisible":"0","CategoryNum":"1"}],"Lua":[{"FileName":"L_IPX800.lua"},{"FileName":"xpath.lua"},{"FileName":"L_IPX800json.lua"}],"altuiid":"0-6"},{"Version":"25502","AllowMultiple":"0","Title":"Freebox Revolution","Icon":"plugins/icons/8108.png","Instructions":"http://code.mios.com/trac/mios_freebox-revolution","Hidden":"0","AutoUpdate":"1","VersionMajor":"1","VersionMinor":"0","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"1","id":8108,"timestamp":1420482583,"Files":[{"SourceName":"D_Freebox.json","SourcePath":null,"DestName":"D_Freebox.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_Freebox.xml","SourcePath":null,"DestName":"D_Freebox.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"I_Freebox.xml","SourcePath":null,"DestName":"I_Freebox.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"J_Freebox.js","SourcePath":null,"DestName":"J_Freebox.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"L_FreeboxTTS.lua","SourcePath":null,"DestName":"L_FreeboxTTS.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"S_Freebox.xml","SourcePath":null,"DestName":"S_Freebox.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"},{"SourceName":"L_Freebox.lua","SourcePath":null,"DestName":"L_Freebox.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"L_FreeboxJSON.lua","SourcePath":null,"DestName":"L_FreeboxJSON.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"L_FreeboxSha1.lua","SourcePath":null,"DestName":"L_FreeboxSha1.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"}],"Devices":[{"DeviceFileName":"D_Freebox.xml","DeviceType":"urn:freebox-fr:device:Freebox:1","ImplFile":"I_Freebox.xml","Invisible":"0","CategoryNum":"1"}],"altuiid":"0-7"},{"Version":"27131","AllowMultiple":"0","Title":"HouseModes Plugin","Icon":"plugins/icons/7246.png","Instructions":"http://code.mios.com/trac/mios_house_modes_plugin","Hidden":"0","AutoUpdate":"1","VersionMajor":"1","VersionMinor":"60","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"1","id":7246,"timestamp":1432297111,"Files":[{"SourceName":"D_HouseModes.json","SourcePath":null,"DestName":"D_HouseModes.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_HouseModes.xml","SourcePath":null,"DestName":"D_HouseModes.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"I_HouseModes.xml","SourcePath":null,"DestName":"I_HouseModes.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"L_HouseModes.lua","SourcePath":null,"DestName":"L_HouseModes.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"S_HouseModes.xml","SourcePath":null,"DestName":"S_HouseModes.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"}],"Devices":[{"DeviceFileName":"D_HouseModes.xml","DeviceType":"urn:schemas-micasaverde-com:device:HouseModes:1","ImplFile":"I_HouseModes.xml","Invisible":"0","CategoryNum":"1"}],"altuiid":"0-8"},{"Version":31646,"AllowMultiple":"1","Title":"Canal Plus Satellite Decoder","Icon":"plugins/icons/7466.png","Instructions":"http://forum.micasaverde.com/index.php/topic,28633.0.html","Hidden":"0","AutoUpdate":"1","VersionMajor":"2","VersionMinor":"36","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"0","id":7466,"TargetVersion":"31646","timestamp":1464543817,"Files":[{"SourceName":"iconCPLUS_100.png","SourcePath":null,"DestName":"iconCPLUS_100.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"iconCPLUS_0.png","SourcePath":null,"DestName":"iconCPLUS_0.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"S_CPLUS.xml","SourcePath":null,"DestName":"S_CPLUS.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"},{"SourceName":"iconCPLUS.png","SourcePath":null,"DestName":"iconCPLUS.png","DestPath":"/../../www/cmh/skins/default/icons/","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"L_CPLUS.lua","SourcePath":null,"DestName":"L_CPLUS.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"L"},{"SourceName":"L_CPLUSjson.lua","SourcePath":null,"DestName":"L_CPLUSjson.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"L"},{"SourceName":"I_CPLUS.xml","SourcePath":null,"DestName":"I_CPLUS.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"J_CPLUS.js","SourcePath":null,"DestName":"J_CPLUS.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_CPLUS.xml","SourcePath":null,"DestName":"D_CPLUS.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"D_CPLUS.json","SourcePath":null,"DestName":"D_CPLUS.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_CPLUS_UI7.json","SourcePath":null,"DestName":"D_CPLUS_UI7.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"}],"Devices":[{"DeviceFileName":"D_CPLUS.xml","DeviceType":"urn:schemas-upnp-org:device:cplus:1","ImplFile":"I_CPLUS.xml","Invisible":"0","CategoryNum":"3"}],"Lua":[{"FileName":"L_CPLUS.lua"},{"FileName":"L_CPLUSjson.lua"}],"altuiid":"0-9"},{"Version":"28712","AllowMultiple":"1","Title":"RGB Controller","Icon":"plugins/icons/6686.png","Instructions":"http://forum.micasaverde.com/index.php/topic,32613.0.html","Hidden":"0","AutoUpdate":"1","VersionMajor":"1","VersionMinor":"33","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"1","id":6686,"timestamp":1442568459,"Files":[{"SourceName":"D_RGBController1.xml","SourcePath":null,"DestName":"D_RGBController1.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"D_RGBController1.json","SourcePath":null,"DestName":"D_RGBController1.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"I_RGBController1.xml","SourcePath":null,"DestName":"I_RGBController1.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"S_RGBController1.xml","SourcePath":null,"DestName":"S_RGBController1.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"},{"SourceName":"J_RGBController1.js","SourcePath":null,"DestName":"J_RGBController1.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"L_RGBController1.lua","SourcePath":null,"DestName":"L_RGBController1.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"D_RGBController1_UI7.json","SourcePath":null,"DestName":"D_RGBController1_UI7.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"}],"Devices":[{"DeviceFileName":"D_RGBController1.xml","DeviceType":"urn:schemas-upnp-org:device:RGBController:1","ImplFile":"I_RGBController1.xml","Invisible":"0","CategoryNum":null}],"altuiid":"0-10"},{"Version":31706,"AllowMultiple":"0","Title":"Alternate UI","Icon":"plugins/icons/8246.png","Instructions":"http://forum.micasaverde.com/index.php/board,78.0.html","Hidden":"0","AutoUpdate":"1","Files":[{"SourceName":"iconALTUI.png","SourcePath":null,"DestName":"iconALTUI.png","DestPath":"","Compress":"0","Encrypt":"0","Role":"M"},{"SourceName":"I_ALTUI.xml","SourcePath":null,"DestName":"I_ALTUI.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"I"},{"SourceName":"S_ALTUI.xml","SourcePath":null,"DestName":"S_ALTUI.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"S"},{"SourceName":"L_ALTUIjson.lua","SourcePath":null,"DestName":"L_ALTUIjson.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"D_ALTUI.xml","SourcePath":null,"DestName":"D_ALTUI.xml","DestPath":"","Compress":"1","Encrypt":"0","Role":"D"},{"SourceName":"L_ALTUI.lua","SourcePath":null,"DestName":"L_ALTUI.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"D_ALTUI.json","SourcePath":null,"DestName":"D_ALTUI.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"D_ALTUI_UI7.json","SourcePath":null,"DestName":"D_ALTUI_UI7.json","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_verabox.js","SourcePath":null,"DestName":"J_ALTUI_verabox.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_utils.js","SourcePath":null,"DestName":"J_ALTUI_utils.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_plugins.js","SourcePath":null,"DestName":"J_ALTUI_plugins.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_uimgr.js","SourcePath":null,"DestName":"J_ALTUI_uimgr.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_jquery.ui.touch-punch.min.js","SourcePath":null,"DestName":"J_ALTUI_jquery.ui.touch-punch.min.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_iphone.js","SourcePath":null,"DestName":"J_ALTUI_iphone.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI.js","SourcePath":null,"DestName":"J_ALTUI.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_loc_fr.js","SourcePath":null,"DestName":"J_ALTUI_loc_fr.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_loc_it.js","SourcePath":null,"DestName":"J_ALTUI_loc_it.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_multibox.js","SourcePath":null,"DestName":"J_ALTUI_multibox.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_b_blockly_compressed.js","SourcePath":null,"DestName":"J_ALTUI_b_blockly_compressed.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_b_fr.js","SourcePath":null,"DestName":"J_ALTUI_b_fr.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_b_it.js","SourcePath":null,"DestName":"J_ALTUI_b_it.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_b_blocks_compressed.js","SourcePath":null,"DestName":"J_ALTUI_b_blocks_compressed.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_b_en.js","SourcePath":null,"DestName":"J_ALTUI_b_en.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_b_javascript_compressed.js","SourcePath":null,"DestName":"J_ALTUI_b_javascript_compressed.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_b_lua_compressed.js","SourcePath":null,"DestName":"J_ALTUI_b_lua_compressed.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"L_ALTUI_LuaRunHandler.lua","SourcePath":null,"DestName":"L_ALTUI_LuaRunHandler.lua","DestPath":"","Compress":"1","Encrypt":"0","Role":"M"},{"SourceName":"J_ALTUI_api.js","SourcePath":null,"DestName":"J_ALTUI_api.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_upnp.js","SourcePath":null,"DestName":"J_ALTUI_upnp.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"},{"SourceName":"J_ALTUI_loc_es.js","SourcePath":null,"DestName":"J_ALTUI_loc_es.js","DestPath":"","Compress":"1","Encrypt":"0","Role":"J"}],"Devices":[{"DeviceFileName":"D_ALTUI.xml","DeviceType":"urn:schemas-upnp-org:device:altui:1","ImplFile":"I_ALTUI.xml","Invisible":"0","CategoryNum":"1"}],"Lua":[{"FileName":"L_ALTUI.lua"},{"FileName":"L_ALTUIjson.lua"},{"FileName":"L_ALTUI_LuaRunHandler.lua"}],"VersionMajor":"1","VersionMinor":"57","SupportedPlatforms":null,"MinimumVersion":null,"DevStatus":null,"Approved":"0","id":8246,"TargetVersion":"31706","timestamp":1465232963,"altuiid":"0-11"}];
+				_plugins_data= JSON.parse(data);
+			})
+		}
+		function _drawVeraRepository(model) {
+			model = $.extend({version:''},model)
+			var formfields=[];
+			$.each( model , function(k,v) {
+				if (k!="type")
+					formfields.push( {
+							id:"altui-form-Vera-"+k,
+							label:_T(k),
+							type:'input',
+							value:v,
+							opt:{required:''}
+							})
+			})
+			return HTMLUtils.drawFormFields( formfields );
+		}
+		function _getVeraRepository() {
+			model = {version:""}
+			$.each( model , function(k,v) {
+				model[k] = $("#altui-form-Vera-"+k).val();
+			})
+			model.type = "Vera"
+			return model;
+		}
+		function _drawGitHubRepository(model) {
+			/*
+			"backup":"plugins\/backup\/DataYours\/",
+			"default":"development",
+			"downloads":"plugins\/downloads\/DataYours\/",
+			"pattern":"[DILS]_Data%w+%.%w+",
+			"source":"akbooer\/Datayours",
+			"type":"GitHub"
+			*/
+			model = $.extend({backup:'', default:'', downloads:"",pattern:"",source:""},model)
+			var formfields=[];
+			$.each( model , function(k,v) {
+				if (k!="type")
+					formfields.push( {
+							id:"altui-form-GitHub-"+k,
+							label:_T(k),
+							type:'input',
+							value:v,
+							opt:{required:''}
+							})
+			})
+			return HTMLUtils.drawFormFields( formfields );
+		}
+		function _getGitHubRepository() {
+			model = {backup:'', default:'', downloads:"",pattern:"",source:""}
+			$.each( model , function(k,v) {
+				model[k] = $("#altui-form-GitHub-"+k).val();
+			});
+			model.type = "GitHub"
+			return model;
+		}
+		
+		function _drawPluginSelect(array,selected) {
+			var index=-1;
+			if (selected != undefined ) { 
+				$.each(array, function(i,e) {
+					if ( (e.id==selected.id) && (e.VersionMajor == selected.VersionMajor) && (e.VersionMinor == selected.VersionMinor))
+						index=i;
+				});
+			}
+			return HTMLUtils.drawFormFields([
+			{ 
+				type:'select',
+				id:'altui-select-plugin' , 
+				label:_T("Select an App"),
+				options: $.map( array, function(elem,idx) { return { 
+					value:idx , 
+					text:"{0} - {1}.{2}".format(elem.Title,elem.VersionMajor,elem.VersionMinor)
+					} 
+				}),
+				selected_idx:index
+			}
+			])
+		}
+		
+		function _drawPublishForm( model ) {
+			if (model==undefined)
+				model = _plugins_data[0];
+			model = $.extend( { id:0, Title:"", VersionMajor:"", VersionMinor:"", Icon:""} , model );
+			
+			var html="";
+			html += "<div id='altui-plugin-div' class='col-xs-12' data-pluginid='{0}'>".format(model.id);
+			$(".altui-plugin-select").html ( _drawPluginSelect(_plugins_data,model)  );
+			html += HTMLUtils.drawForm( 'altui-publish-form', _T("Publish an App"),
+				[
+					{ id:"altui-form-Title", label:_T("App Title"), type:"input", value: model.Title, opt:{required:''} },
+					{ id:"altui-form-VersionMajor", label:_T("VersionMajor"), type:"input", value: model.VersionMajor, opt:{required:''} },
+					{ id:"altui-form-VersionMinor", label:_T("VersionMinor"), type:"input", value: model.VersionMinor, opt:{required:''} },
+					{ id:"altui-form-Icon", label:_T("Icon"), type:"input", value: model.Icon, opt:{required:''} },
+					{ id:"altui-form-Repository", label:_T("Repository"), type:"accordeon", value: [
+						{id:'GitHub', title:_T("GitHub"), html: "" },
+						{id:'Vera', title:_T("Vera Store"), html: "" }
+					]},
+					{ id:"altui-btn-bar", type:"buttonbar", value:[
+						{ id:"altui-btn-close", label:_T("Close"), type:"button",  },
+						{ id:"altui-btn-submit", label:_T("Submit"), type:"submit",  },
+					]}
+				]
+			);
+			html += "</div>"
+			$('#altui-plugin-div').replaceWith( html ) 
+			if ($.isArray(model.Repository)== false) {
+				model.Repository=[ model.Repository ]
+			}
+			$.each( model.Repository, function(i,repo) {
+				if (repo.type == "GitHub") {
+					$("#collapseGitHub .panel-body").html( _drawGitHubRepository(repo) )
+				} else {
+					$("#collapseVera .panel-body").html(_drawVeraRepository(repo))
+				}
+			});
+		}
+		function _getPluginFromForm() {
+			var selected = $("#altui-select-plugin").val();
+			var plugin= $.extend( _plugins_data[ selected ], {
+				Title:$("#altui-form-Title").val(),
+				VersionMajor:$("#altui-form-VersionMajor").val(),
+				VersionMinor:$("#altui-form-VersionMinor").val(),
+				Icon:$("#altui-form-Icon").val(),
+			});
+			plugin.Repository=[];
+			var repo = _getGitHubRepository();
+			if (  isNullOrEmpty(repo.source)!=true )
+				plugin.Repository.push(repo);
+
+			var repo2 = _getVeraRepository();
+			if (  isNullOrEmpty(repo.version)!=true )
+				plugin.Repository.push(repo);
+			return plugin;
+		}
+		function _runActions() {
+			$(".altui-mainpanel")
+				.off("change")
+				.on("change","#altui-select-plugin", function() {
+					var selected = $(this).val();
+					var model = _plugins_data[ selected ];
+					_drawPublishForm(model);
+				})
+				.off("click")
+				.on("click","#altui-btn-close", function() {
+					_.defer(  UIManager.pageAppStore)
+				})
+				.on("click","#altui-btn-submit", function(e) {
+					e.stopPropagation();
+					var plugin = _getPluginFromForm();
+					_updatePlugin( plugin ) .done( function(data) {
+						alert(data);
+					})
+					return false;
+				})
+		}
 		function _tryAuthToken( n ) {
 			_getAuthToken() 
 				.done( function(data, textStatus, jqXHR) {	
 					data = JSON.parse(data)
-					console.log(data)
 					if (data.access_token != undefined ) {
-						console.log("access token granted ", data)
-						alert('sucess');
+						// console.log("access token granted ", data)
+						_getPluginList()
+						.done( function() {
+							_drawPublishForm()
+							_runActions()
+						});
 					} else  if ( n<10 ) {
 						setTimeout( function() { _tryAuthToken(n+1)  } , 2000 )
 					} else {
@@ -9358,11 +9543,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
 		UIManager.clearPage(_T('Publish App'),_T("Publish Application"),UIManager.oneColumnLayout);
+		
 		_getDeviceCode()
 			.done( function(data, textStatus, jqXHR) {		
 				data = JSON.parse(data);
 				$(".altui-mainpanel").append(
-					"<div>Please go to this page <a href='{1}' target='_blank'>{1}</a>and enter this code : {0}</div>".format(data.user_code,data.verification_url)
+					"<div class='altui-plugin-select col-xs-12'>Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : {0}</div><div id='altui-plugin-div'></div>".format(data.user_code,data.verification_url)
 				);
 				_tryAuthToken( 0 )
 			})
@@ -9373,8 +9559,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageAppStore: function(params)
 	{
-		var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec';
-		// var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec'; ALTUI TEST
 		var _plugins_data = null;
 		var arr = ["abc","def","ghi","jkl","mno","pqr","stu","vwx","yz "];
 		var _counts=[];
@@ -9450,8 +9634,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							html += ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
 							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title)
 							html += "<div class='altui-plugin-version'><small>{0}.{1}</small></div>".format(plugin.VersionMajor || 0 ,plugin.VersionMinor || 0 )
-							html += "<button class='pull-left altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"))
-							html += "<button class='pull-left altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"))
+							if ($.isArray(plugin.Repository) == false) {
+								plugin.Repository = [plugin.Repository]
+							}
+							$.each(plugin.Repository,function(i,repo) {
+								if (repo.type=="GitHub")
+									html += "<button class='pull-left altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"))
+								if (repo.type=="Vera")
+									html += "<button class='pull-left altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"))
+							});
 						html += "</div>"
 					html += "</div>"
 				html += "</div>"
@@ -9514,8 +9705,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var that = this;
 				for (var i=0; i<_plugins_data.length; i++) {
 					if (_plugins_data[i].id == id ) {
-						MultiBox.updatePluginFromStore(_plugins_data[i],function(result) {
-							$(that).text(_T("Success")).removeClass("btn-info").addClass("btn-success disabled");
+						// search version info
+						$.each(plugin.Repository, function(i,repo) {
+							if (repo.type == "Vera") {
+								MultiBox.updatePluginVersion("0-0", plugin.id, repo.version, function(result) {
+									$(that).text(_T("Success")).removeClass("btn-info").addClass("btn-success disabled");
+								})
+								return false;
+							}
 						});
 					}
 				}

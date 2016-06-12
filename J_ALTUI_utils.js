@@ -1497,6 +1497,14 @@ var HTMLUtils = (function() {
 		$.each(model, function(idx,line) {
 			html += "<div class='form-group'>"
 			switch(line.type) {
+				case "select": 
+					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
+					html += "<select class='form-control' id='{0}'>".format(line.id)
+					$.each( line.options, function(i,opt) {
+						html += "<option {2} value='{0}'>{1}</option>".format(opt.value, opt.text,(i==line.selected_idx) ? 'selected':'')	
+					});
+					html += "</select>"
+					break;
 				case "p":
 				case "span":
 				case "pre":
@@ -1530,6 +1538,9 @@ var HTMLUtils = (function() {
 				case "accordeon":
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
 					html += HTMLUtils.createAccordeon(line.id,line.value);
+					break;
+				default:
+					html += "<span class='text-danger'>Not Implemented:{0}</span>".format(line.type)
 					break;
 			}
 			html += "</div>"
