@@ -1893,6 +1893,41 @@ function myALTUI_LuaRunHandler(lul_request, lul_parameters, lul_outputformat)
 	return res, "text/plain"
 end
 
+function _helperGoogleScriptPostCallback(url,plugin)
+	debug(string.format("ALTUI: _helperGoogleScriptPostCallback (%s)",url))
+	-- local data = "contents="..plugin
+	local data = plugin
+	local response_body = {}
+	local commonheaders = {
+			["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8",
+			["Content-Length"] = data:len(),
+			["User-agent"] = "Find iPhone/1.3 MeKit (iPad: iPhone OS/4.2.1)",
+			["Connection"]= "keep-alive"
+		}
+	local response, status, headers = https.request{
+		method="POST",
+		url=url,
+		headers = commonheaders,
+		source = ltn12.source.string(data),
+		sink = ltn12.sink.table(response_body)
+	}
+	if (response==1) then
+		local completestring = table.concat(response_body)
+		debug(string.format("ALTUI: Succeed to POST to ".. url ..", result=%s",completestring))
+		if (status==302) then
+			-- redirect
+			debug( string.format("ALTUI: _helperGoogleScriptPostCallback 302, headers= %s", json.encode(headers) ))
+			local url = headers["location"]
+			local httpcode,data = luup.inet.wget(url,10)
+			return data
+		end
+		return completestring
+	else
+		debug(string.format("ALTUI: Failed to POST to https://accounts.google.com/o/oauth2/device/code"))
+	end				
+	return "error"
+end
+
 function _helperGoogleAuthCallback(url,lul_device)
 	debug(string.format("ALTUI: _helperGoogleAuthCallback (%s)",url))
 	local data = ""
@@ -2124,32 +2159,11 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 		["update_plugin"] =
 			function(params)
 				local plugin = lul_parameters["plugin"]
+				plugin = modurl.unescape( plugin)
 				local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(deviceID),"")
 				local access_token = (json.decode(str)).access_token
 				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=update&access_token="..access_token
-				local data = "contents="..plugin
-				local response_body = {}
-				local commonheaders = {
-						["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8",
-						["Content-Length"] = data:len(),
-						["User-agent"] = "Find iPhone/1.3 MeKit (iPad: iPhone OS/4.2.1)",
-						["Connection"]= "keep-alive"
-					}
-				local response, status, headers = https.request{
-					method="POST",
-					url=url,
-					headers = commonheaders,
-					source = ltn12.source.string(data),
-					sink = ltn12.sink.table(response_body)
-				}
-				if (response==1) then
-					local completestring = table.concat(response_body)
-					debug(string.format("ALTUI: Succeed to POST to ".. url ..", result=%s",completestring))
-					return completestring, "text/plain"
-				else
-					debug(string.format("ALTUI: Failed to POST to https://accounts.google.com/o/oauth2/device/code"))
-				end				
-				return "error", "text/plain"
+				return _helperGoogleScriptPostCallback(url,plugin), "text/plain"				
 			end,
 		["save_data"] = 
 			function(params)
