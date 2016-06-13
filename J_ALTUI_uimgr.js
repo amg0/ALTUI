@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1734 $";
+var ALTUI_revision = "$Revision: 1735 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9329,7 +9329,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var _plugins_data="";
 		
 		function _updatePlugin( plugin ) {
-			var url = "data_request?id=lr_ALTUI_Handler&command=update_plugin";
+			var cmd = (plugin.id && (plugin.id>0)) ? 'update' : 'create'
+			var url = "data_request?id=lr_ALTUI_Handler&command={0}_plugin".format(cmd);
 			return $.ajax({
 				url:url+"&plugin="+encodeURIComponent(JSON.stringify(plugin)),
 				type: "GET"
@@ -9431,25 +9432,29 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						index=i;
 				});
 			}
+			var options =[];
+			options.push( {value:-1, text:_T("Create")} )
+			$.each( array, function(idx,elem) {
+				options.push({ 
+					value:idx , 
+					text:"{0} - {1}.{2}".format(elem.Title,elem.VersionMajor,elem.VersionMinor)
+					})
+			});
 			return HTMLUtils.drawFormFields([
 			{ 
 				type:'select',
 				id:'altui-select-plugin' , 
 				label:_T("Select an App"),
-				options: $.map( array, function(elem,idx) { return { 
-					value:idx , 
-					text:"{0} - {1}.{2}".format(elem.Title,elem.VersionMajor,elem.VersionMinor)
-					} 
-				}),
-				selected_idx:index
+				options: options,
+				selected_idx:index+1	// +1 because of the "Create" entry
 			}
 			])
 		}
 		
 		function _drawPublishForm( model ) {
 			if (model==undefined)
-				model = _plugins_data[0];
-			model = $.extend( { id:0, Title:"", VersionMajor:"", VersionMinor:"", Icon:""} , model );
+				model = {};
+			model = $.extend( { id:0, Title:"", VersionMajor:"", VersionMinor:"", Icon:"", Repository:[] } , model );
 			
 			var html="";
 			html += "<div id='altui-plugin-div' class='col-xs-12' data-pluginid='{0}'>".format(model.id);
@@ -9461,8 +9466,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					{ id:"altui-form-VersionMinor", label:_T("VersionMinor"), type:"input", value: model.VersionMinor, opt:{required:''} },
 					{ id:"altui-form-Icon", label:_T("Icon"), type:"input", value: model.Icon, opt:{required:''} },
 					{ id:"altui-form-Repository", label:_T("Repository"), type:"accordeon", value: [
-						{id:'GitHub', title:_T("GitHub"), html: "" },
-						{id:'Vera', title:_T("Vera Store"), html: "" }
+						{id:'GitHub', title:_T("GitHub"), html: _drawGitHubRepository() },
+						{id:'Vera', title:_T("Vera Store"), html: _drawVeraRepository()  }
 					]},
 					{ id:"altui-btn-bar", type:"buttonbar", value:[
 						{ id:"altui-btn-close", label:_T("Close"), type:"button",  },
@@ -9497,8 +9502,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				plugin.Repository.push(repo);
 
 			var repo2 = _getVeraRepository();
-			if (  isNullOrEmpty(repo.version)!=true )
-				plugin.Repository.push(repo);
+			if (  isNullOrEmpty(repo2.version)!=true )
+				plugin.Repository.push(repo2);
 			return plugin;
 		}
 		function _runActions() {
@@ -9506,8 +9511,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.off("change")
 				.on("change","#altui-select-plugin", function() {
 					var selected = $(this).val();
-					var model = _plugins_data[ selected ];
-					_drawPublishForm(model);
+					_drawPublishForm( (selected >=0) ? _plugins_data[ selected ] : null );
 				})
 				.off("click")
 				.on("click","#altui-btn-close", function() {

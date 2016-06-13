@@ -2174,6 +2174,15 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=update&access_token="..access_token
 				return _helperGoogleScript(url,"POST",plugin), "text/plain"				
 			end,
+		["create_plugin"] =
+			function(params)
+				local plugin = lul_parameters["plugin"]
+				plugin = modurl.unescape( plugin)
+				local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(deviceID),"")
+				local access_token = (json.decode(str)).access_token or ""
+				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=create&access_token="..access_token
+				return _helperGoogleScript(url,"POST",plugin), "text/plain"				
+			end,
 		["get_authorized_plugins"] =
 			function(params)
 				local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(deviceID),"")

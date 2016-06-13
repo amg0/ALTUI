@@ -1455,7 +1455,7 @@ var HTMLUtils = (function() {
 			html += "            </div>";
 			html += "            <div id='collapse"+panel.id+"' class='panel-collapse collapse {0}'>".format(bFirst ? 'in':'');
 			html += "                <div class='panel-body'>";
-			html += 					panel.html || _T('Empty');
+			html += 					panel.html || _T(' ');
 			html += "                </div>";
 			html += "            </div>";
 			html += "        </div>";
