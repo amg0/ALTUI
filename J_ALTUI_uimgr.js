@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1726 $";
+var ALTUI_revision = "$Revision: 1729 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -282,9 +282,10 @@ var styles ="						\
 	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }		\
 	.altui-plugin-category-btn {  }					\
 	.altui-plugin-publish-btn { width: 100%;  }		\
-	.altui-pluginbox {  }				\
+	.altui-pluginbox  { padding:4px; }				\
+	.altui-pluginbox .panel-body { padding-left:2px; padding-right:2px; padding-top:4px; padding-bottom:4px;}				\
 	.altui-plugin-title { height: 21px;  overflow:hidden; }		\
-	.altui-plugin-version { font-size:1em; float:right; }		\
+	.altui-plugin-version { font-size:1em;  }		\
 	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }		\
 	.altui-ace-editor .ui-resizable-helper { border: 2px dotted #00F; }		\
 	.altui-ace-editor .ui-resizable-handle { background-color: white; }		\
@@ -9610,7 +9611,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += "      <div class='altui-features-box'></div>"
 					html += "      <div class='carousel-caption'>"
 					html += ( plugin.Icon.startsWith('https') ? "<img src='{0}'></img>"  : "<img class='pull-left' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
-					html += "      	<h3>{0}</h3>".format(plugin.Title)
+					html += "      	<h3>{0}</h3><p>{1}</p>".format(plugin.Title,plugin.Description || "")
 					html += "      </div>"
 					html += "    </div>"
 				bFirst = false;
@@ -9631,9 +9632,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "<div class='col-xs-6 col-sm-4 col-md-3 col-lg-2 altui-pluginbox' data-pluginid='{0}'>".format(plugin.id)
 					html += "<div class='panel panel-default'>"
 						html += "<div class='panel-body'>"
+							html += "<div class='altui-plugin-version pull-right'><small>{0}.{1}</small></div>".format(plugin.VersionMajor || 0 ,plugin.VersionMinor || 0 )
 							html += ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
 							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title)
-							html += "<div class='altui-plugin-version'><small>{0}.{1}</small></div>".format(plugin.VersionMajor || 0 ,plugin.VersionMinor || 0 )
 							if ($.isArray(plugin.Repository) == false) {
 								plugin.Repository = [plugin.Repository]
 							}
