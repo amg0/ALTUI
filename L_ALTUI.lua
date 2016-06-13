@@ -1570,17 +1570,18 @@ local htmlLocalScripts = [[
 ]]
     -- <script src="@localcdn@/d3.min.js"></script> 	
 
+-- <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.4.1.js" ></script> 
 local htmlScripts = [[
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" ></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" ></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script> 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.min.js" ></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.1/spectrum.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.shapes.devs.min.js"></script>
 	<script type="text/javascript"  
 	  src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
@@ -1893,10 +1894,9 @@ function myALTUI_LuaRunHandler(lul_request, lul_parameters, lul_outputformat)
 	return res, "text/plain"
 end
 
-function _helperGoogleScriptPostCallback(url,plugin)
-	debug(string.format("ALTUI: _helperGoogleScriptPostCallback (%s)",url))
+local function _helperGoogleScript(url,method,data)
+	debug(string.format("ALTUI: _helperGoogleScript (%s,%s)",method,url))
 	-- local data = "contents="..plugin
-	local data = plugin
 	local response_body = {}
 	local commonheaders = {
 			["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8",
@@ -1905,7 +1905,7 @@ function _helperGoogleScriptPostCallback(url,plugin)
 			["Connection"]= "keep-alive"
 		}
 	local response, status, headers = https.request{
-		method="POST",
+		method=method,
 		url=url,
 		headers = commonheaders,
 		source = ltn12.source.string(data),
@@ -1913,22 +1913,22 @@ function _helperGoogleScriptPostCallback(url,plugin)
 	}
 	if (response==1) then
 		local completestring = table.concat(response_body)
-		debug(string.format("ALTUI: Succeed to POST to ".. url ..", result=%s",completestring))
+		debug(string.format("ALTUI: Succeed to %s to %s  result=%s",method,url,completestring))
 		if (status==302) then
 			-- redirect
-			debug( string.format("ALTUI: _helperGoogleScriptPostCallback 302, headers= %s", json.encode(headers) ))
+			debug( string.format("ALTUI: _helperGoogleScript 302, headers= %s", json.encode(headers) ))
 			local url = headers["location"]
-			local httpcode,data = luup.inet.wget(url,10)
+			local httpcode,data = luup.inet.wget(url,15)
 			return data
 		end
 		return completestring
 	else
-		debug(string.format("ALTUI: Failed to POST to https://accounts.google.com/o/oauth2/device/code"))
+		debug(string.format("ALTUI: Failed to POST to %s",url))
 	end				
 	return "error"
 end
 
-function _helperGoogleAuthCallback(url,lul_device)
+local function _helperGoogleAuthCallback(url,lul_device)
 	debug(string.format("ALTUI: _helperGoogleAuthCallback (%s)",url))
 	local data = ""
 	local response_body = {}
@@ -1943,13 +1943,20 @@ function _helperGoogleAuthCallback(url,lul_device)
 		debug( string.format("ALTUI: GoogleAuthCallback %s returned %s ", url , content ))
 		if (status==302) then
 			-- redirect
-			debug( string.format("ALTUI: GoogleAuthCallback 302, headers= %s", json.encode(headers) ))
+			debug( string.format("ALTUI: got 302, headers= %s", json.encode(headers) ))
 			local url = headers["location"]
 			return _helperGoogleAuthCallback(url,lul_device)
 		end
 		-- normally
 		-- {"access_token":"ya29.Ci_-AuoRcj7luXViyJZL7AGDH5kXY9UdKBYxtSXT9SgZOKuubPHx5EWhQduxwfZxbg","token_type":"Bearer","expires_in":3600,"refresh_token":"1/vK4ZH9fqxH_dJ3azlkHcGqX6Ghnbpp3iOZwkpqLtxUk","id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjVjMzEwYWY5Y2E1MjNkOTFkZjQ0ZjU1ZTgyYjI3YjcwMGI4N2U2ZWMifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoiOExFbTRBUlMtOGFkMmNMVkZWOGdsUSIsImF1ZCI6IjExNTI1Njc3MzMzNi1lOHFkbmNzNWFjNWNmbW9kaGx0c2gyY2d2azZqZHI2NS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODcxMDUwOTAwNjczODcyOTA4NCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiIxMTUyNTY3NzMzMzYtZThxZG5jczVhYzVjZm1vZGhsdHNoMmNndms2amRyNjUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6ImFsZXhpcy5tZXJtZXRAZ21haWwuY29tIiwiaWF0IjoxNDY1NjgyNjU5LCJleHAiOjE0NjU2ODYyNTksIm5hbWUiOiJBbGV4aXMgTWVybWV0IiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tQ2N6U1NtemtEUk0vQUFBQUFBQUFBQUkvQUFBQUFBQUFOOXMvT3pCaHl1TjhGa0Evczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkFsZXhpcyIsImZhbWlseV9uYW1lIjoiTWVybWV0IiwibG9jYWxlIjoiZnIifQ.IKlNBp-DP9Vmf-SQmD_Z_APADXUk23JTtv0CnN7C5f6q4UfAAsQ7UBcPAOkOsifbd_YGOmu5yG-j4iSyvGgG90dr5oYdzyNRt9Bzdp7HyXcMqPztWP7rfI5nm7ru3pvL7AgTsOqoEMt7LMPesWIF_EGBs-NyFrFfh8tRPQEGjyt1ojKZGHMhUgCK8zXCSfY4-VGqsS88h5cNNKNpaXOGDeHh3zrXM6ZBfnA_tK9UltRaItrU_J-Dw-rkoH6FWB4UwMD6ciIqq5ZZKAefTeCTiv9D2SLNx2s7esSHC0uZDV6-ynhyt0TZHwUky1QyZ5xLyEKPofbrDiqUQi8M8B7aIA"}
-		setVariableIfChanged(ALTUI_SERVICE, "GoogleAuthToken", content or "", tonumber(lul_device))
+		local obj = json.decode(content)
+		if (obj.error ~= nil ) then
+			luup.variable_set(ALTUI_SERVICE, "GoogleLastError", content or "" , tonumber(lul_device))
+			-- setVariableIfChanged(ALTUI_SERVICE, "GoogleAuthToken", "", tonumber(lul_device))
+		else
+			luup.variable_set(ALTUI_SERVICE, "GoogleLastError", "" , tonumber(lul_device))
+			luup.variable_set(ALTUI_SERVICE, "GoogleAuthToken", content or "", tonumber(lul_device))
+		end
 		return content
 	else
 		debug( string.format("ALTUI: GoogleAuthCallback failed to call %s",url))
@@ -1957,20 +1964,18 @@ function _helperGoogleAuthCallback(url,lul_device)
 	return ""
 end
 
-function GoogleAuthCallback(lul_device)
-	debug("ALTUI: GoogleAuthCallback")
-	local device_code = getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
-	local url = string.format("https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?code=%s",device_code)
+local function GoogleAuthCallback(command,lul_device)
+	debug("ALTUI: GoogleAuthCallback : "..command)
+	local url = ""
+	if (command=="access") then
+		local device_code = getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
+		url = string.format("https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?code=%s",device_code)
+	elseif (command=="refresh") then
+		local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(lul_device),"")
+		local refresh_token = (json.decode(str)).refresh_token or ""
+		url = string.format("https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?refresh_token=%s",refresh_token)
+	end
 	return _helperGoogleAuthCallback(url,lul_device)
-
-	-- local response,content = luup.inet.wget( url )
-	-- if (response==0) then
-		-- debug( string.format("ALTUI: GoogleAuthCallback %s returned %s ", url , content ))
-		-- return content
-	-- else
-		-- debug( string.format("ALTUI: GoogleAuthCallback failed to call %s",url))
-	-- end
-	-- return ""
 end
 
 function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
@@ -2154,16 +2159,27 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 			end,
 		["get_auth_token"] = 
 			function(params)
-				return GoogleAuthCallback( deviceID), "text/plain"
+				return GoogleAuthCallback( "access", deviceID), "text/plain"
+			end,
+		["refresh_auth_token"] = 
+			function(params)
+				return GoogleAuthCallback( "refresh", deviceID), "text/plain"
 			end,
 		["update_plugin"] =
 			function(params)
 				local plugin = lul_parameters["plugin"]
 				plugin = modurl.unescape( plugin)
 				local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(deviceID),"")
-				local access_token = (json.decode(str)).access_token
+				local access_token = (json.decode(str)).access_token or ""
 				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=update&access_token="..access_token
-				return _helperGoogleScriptPostCallback(url,plugin), "text/plain"				
+				return _helperGoogleScript(url,"POST",plugin), "text/plain"				
+			end,
+		["get_authorized_plugins"] =
+			function(params)
+				local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(deviceID),"")
+				local access_token = (json.decode(str)).access_token or ""
+				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=list&access_token="..access_token
+				return _helperGoogleScript(url,"GET",""), "text/plain"				
 			end,
 		["save_data"] = 
 			function(params)
@@ -3537,6 +3553,9 @@ function startupDeferred(lul_device)
 	local worfklowmode = getSetVariable(ALTUI_SERVICE, "EnableWorkflows", lul_device, "0")
 	local worfklowactivestates = getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "")
 	local workflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
+	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
+	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
+	-- getSetVariable(ALTUI_SERVICE, "GoogleUserCode", lul_device, "")
 
 	local timers = getSetVariable(ALTUI_SERVICE, "Timers", lul_device, "")
 	
