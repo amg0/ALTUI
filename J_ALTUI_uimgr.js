@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1740 $";
+var ALTUI_revision = "$Revision: 1741 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -284,7 +284,7 @@ var styles ="						\
 	.altui-plugin-publish-btn { width: 100%;  }		\
 	.altui-pluginbox  { padding:4px; }				\
 	.altui-pluginbox .panel-body { padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;}	\
-	.form-control.altui-version-selector { padding:0px; border:0px; }				\
+	.form-control.altui-version-selector { padding:0px; border:0px; background:darkgrey; }				\
 	.altui-plugin-title { height: 21px;  overflow:hidden; }		\
 	.altui-plugin-version { font-size:1em;  }		\
 	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }		\
