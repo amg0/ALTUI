@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1739 $";
+var ALTUI_revision = "$Revision: 1740 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9329,14 +9329,20 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		var _plugins_data="";
 		
-		function _updatePlugin( plugin ) {
-			var cmd = ""
-			if (plugin.id && ( plugin.id.toString().length>0)) {
-				cmd = 'update'
-			} else {
-				cmd = 'create'
-				plugin.id = joint.util.uuid();
+		function _updatePlugin( plugin , cmd ) {
+			if (cmd==undefined)
+				cmd="update"
+			if (cmd=="create") {
+				if ( isNullOrEmpty(plugin.id) )
+					plugin.id = joint.util.uuid();
 			}
+			// var cmd = ""
+			// if (plugin.id && ( plugin.id.toString().length>0)) {
+				// cmd = 'update'
+			// } else {
+				// cmd = 'create'
+				// plugin.id = joint.util.uuid();
+			// }
 			var url = "data_request?id=lr_ALTUI_Handler&command={0}_plugin".format(cmd);
 			return $.ajax({
 				url:url+"&plugin="+encodeURIComponent(JSON.stringify(plugin)),
@@ -9385,6 +9391,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							id:"altui-form-Vera-"+k,
 							label:_T(k),
 							type:'input',
+							inputtype:"number",
 							value:v,
 							opt:{required:''}
 							})
@@ -9468,19 +9475,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$(".altui-plugin-select").html ( _drawPluginSelect(_plugins_data,model)  );
 			html += HTMLUtils.drawForm( 'altui-publish-form', _T("Publish an App"),
 				[
-					{ id:"altui-form-id", label:_T("App ID"), type:"input", value: model.id, opt:{required:''} },
-					{ id:"altui-form-Title", label:_T("App Title"), type:"input", value: model.Title, opt:{required:''} },
-					{ id:"altui-form-VersionMajor", label:_T("VersionMajor"), type:"input", value: model.VersionMajor, opt:{required:''} },
-					{ id:"altui-form-VersionMinor", label:_T("VersionMinor"), type:"input", value: model.VersionMinor, opt:{required:''} },
-					{ id:"altui-form-Description", label:_T("Description"), type:"input", value: model.Description, opt:{required:''} },
-					{ id:"altui-form-Icon", label:_T("Icon"), type:"input", value: model.Icon, opt:{required:''} },
-					{ id:"altui-form-Repository", label:_T("Repository"), type:"accordeon", value: [
+					{ id:"altui-form-Repository", label:_T("Application"), type:"accordeon", value: [
+						{id:'Head', title:_T("Application"), html: HTMLUtils.drawFormFields([
+							{ id:"altui-form-id", label:_T("App ID"), type:"input", value: model.id, opt:{required:''} },
+							{ id:"altui-form-Title", label:_T("App Title"), type:"input", value: model.Title, opt:{required:''} },
+							{ id:"altui-form-VersionMajor", label:_T("VersionMajor"), type:"input", inputtype:"number", value: model.VersionMajor, opt:{required:''} },
+							{ id:"altui-form-VersionMinor", label:_T("VersionMinor"), type:"input", inputtype:"number", value: model.VersionMinor, opt:{required:''} },
+							{ id:"altui-form-Description", label:_T("Description"), type:"input", value: model.Description, opt:{required:''} },
+							{ id:"altui-form-Icon", label:_T("Icon"), type:"input", value: model.Icon, opt:{required:''} },
+						])},
 						{id:'GitHub', title:_T("GitHub"), html: _drawGitHubRepository() },
 						{id:'Vera', title:_T("Vera Store"), html: _drawVeraRepository()  }
 					]},
 					{ id:"altui-btn-bar", type:"buttonbar", value:[
 						{ id:"altui-btn-close", label:_T("Close"), type:"button",  },
-						{ id:"altui-btn-submit", label:_T("Submit"), type:"submit",  },
+						{ id:"altui-btn-create", label:_T("Create"), type:"button",  },
+						{ id:"altui-btn-submit", label:_T("Modify"), type:"submit",  },
 					]}
 				]
 			);
@@ -9528,11 +9538,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.on("click","#altui-btn-close", function() {
 					_.defer(  UIManager.pageAppStore)
 				})
+				.on("click","#altui-btn-create", function() {
+					var plugin = _getPluginFromForm();
+					_updatePlugin( plugin ,"create" ) .done( function(data) {
+						PageMessage.message( data, "success");
+					})
+				})
 				.on("click","#altui-btn-submit", function(e) {
 					e.stopPropagation();
 					var plugin = _getPluginFromForm();
 					_updatePlugin( plugin ) .done( function(data) {
-						alert(data);
+						PageMessage.message( data, "success");
 					})
 					return false;
 				})
@@ -9563,6 +9579,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		
 		function _displayPublishPage() {
+			$(".altui-plugin-select").html(_T("Contacting Server..."))
 			_getPluginList().done( function(data) {
 				
 					try { _plugins_data= JSON.parse(data); } 
@@ -9580,7 +9597,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									// if refresh failed, try the whole process from the start
 									_getDeviceCode().done( function(data, textStatus, jqXHR) {		
 											data = JSON.parse(data);
-											$(".altui-plugin-select").html("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : {0}".format(data.user_code,data.verification_url))
+											$(".altui-plugin-select").html(_T("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : {0}").format(data.user_code,data.verification_url))
 											_tryAuthToken( 0 )
 										})
 										.fail( function(jqXHR, textStatus, errorThrown) {			
@@ -9636,12 +9653,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return html;
 		}
 		function _displayCarousel( ) {
+			var nMax = 15;
 			function getRandomInt(min, max) {
 				return Math.floor(Math.random() * (max+1 - min)) + min;
 			}
 			var pluginIDs = Object.keys(_plugins_data);
 			var bFirst = true;
-			var nentries = Math.min(5,pluginIDs.length);
+			var nentries = Math.min(nMax,pluginIDs.length);
 			var html = "";
 			html += "<div id='carousel-example-generic' class='carousel slide altui-store-carousel' data-ride='carousel'>"
 			html += "  <!-- Indicators -->"
@@ -9655,7 +9673,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			bFirst = true;
 			html += "  <div class='carousel-inner'>"
 			for (i=0; i<nentries ; i++) {
-				var index = (nentries <=5) ? i : getRandomInt(0,_plugins_data.length);
+				var index = (nentries <=nMax) ? i : getRandomInt(0,_plugins_data.length);
 				var plugin = _plugins_data[pluginIDs[index]].Versions[0];
 					html += "    <div class='item {0}'>".format( (bFirst) ? 'active':'')
 					html += "      <div class='altui-features-box'></div>"
