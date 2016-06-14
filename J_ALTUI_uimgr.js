@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1741 $";
+var ALTUI_revision = "$Revision: 1743 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9406,6 +9406,35 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			model.type = "Vera"
 			return model;
 		}
+		function _drawGitHubDevice(model) {
+			/*
+			"[{
+			  ""DeviceFileName"":""D_AltAppStore.xml"",
+			  ""DeviceType"":""urn:schemas-upnp-org:device:AltAppStore:1"",
+			  ""ImplFile"":""I_AltAppStore.xml"",
+			  ""Invisible"":""0""
+			}]"
+			*/
+				model = $.extend({DeviceFileName:'', DeviceType:'', ImplFile:"",Invisible:"0"},model)
+				var formfields=[];
+				$.each( model , function(k,v) {
+					formfields.push( {
+							id:"altui-form-GHDevice-"+k,
+							label:_T(k),
+							type:'input',
+							value:v,
+							opt:{required:''}
+					})
+				})
+				return HTMLUtils.drawFormFields( formfields );
+		}
+		function _getGitHubDevice() {
+			model = {DeviceFileName:'', DeviceType:'', ImplFile:"",Invisible:"0"}
+			$.each( model , function(k,v) {
+				model[k] = $("#altui-form-GHDevice-"+k).val();
+			})
+			return model;
+		}
 		function _drawGitHubRepository(model) {
 			/*
 			"backup":"plugins\/backup\/DataYours\/",
@@ -9430,6 +9459,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return HTMLUtils.drawFormFields( formfields );
 		}
 		function _getGitHubRepository() {
+			/*
+"[{
+  ""DeviceFileName"":""D_AltAppStore.xml"",
+  ""DeviceType"":""urn:schemas-upnp-org:device:AltAppStore:1"",
+  ""ImplFile"":""I_AltAppStore.xml"",
+  ""Invisible"":""0""
+}]"
+			*/
 			model = {backup:'', default:'', downloads:"",pattern:"",source:""}
 			$.each( model , function(k,v) {
 				model[k] = $("#altui-form-GitHub-"+k).val();
@@ -9484,6 +9521,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							{ id:"altui-form-Description", label:_T("Description"), type:"input", value: model.Description, opt:{required:''} },
 							{ id:"altui-form-Icon", label:_T("Icon"), type:"input", value: model.Icon, opt:{required:''} },
 						])},
+						{id:'Device', title:_T("Device"), html: _drawGitHubDevice( (model.Devices) ?  model.Devices[0] : {} ) },
 						{id:'GitHub', title:_T("GitHub"), html: _drawGitHubRepository() },
 						{id:'Vera', title:_T("Vera Store"), html: _drawVeraRepository()  }
 					]},
@@ -9517,6 +9555,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				Description:$("#altui-form-Description").val(),
 				Icon:$("#altui-form-Icon").val(),
 			});
+
+			plugin.Devices=[];
+			var devices = _getGitHubDevice()
+			if (  isNullOrEmpty(devices.DeviceType)!=true )		
+				plugin.Devices.push(devices);
+
 			plugin.Repository=[];
 			var repo = _getGitHubRepository();
 			if (  isNullOrEmpty(repo.source)!=true )

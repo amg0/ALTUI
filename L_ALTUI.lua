@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.57b"
+local version = "v1.58"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
