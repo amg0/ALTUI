@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1743 $";
+var ALTUI_revision = "$Revision: 1744 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -278,7 +278,7 @@ var styles ="						\
 		z-index: -1;			\
 	}							\
 	.altui-store-categories { width: 100%; overflow: hidden; }					\
-	.altui-features-box { height:200px; width: 100%; background:lightgrey; }	\
+	.altui-features-box { height:200px; width: 100%; background:grey; opacity:0.4; }	\
 	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }		\
 	.altui-plugin-category-btn {  }					\
 	.altui-plugin-publish-btn { width: 100%;  }		\
@@ -9778,18 +9778,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "</div>"
 				return html;
 		}
-		function _displayPlugins( filter ) {
+		function _displayPlugins( filterbtn,filtername ) {
 			var html = "";
 			html += "<div class='altui-store-items row'>";
 				$.each(_plugins_data,function(idx,plugin) {
-				var title = plugin.Versions[0].Title
-				if ( (filter==undefined) || (filter=='*') || (filter.indexOf(title.toLowerCase().charAt(0)) !=-1) )
+				var title = plugin.Versions[0].Title.toLowerCase()
+				if ( 
+					( (filterbtn==undefined) || (filterbtn=='*') || (filterbtn.indexOf(title.charAt(0)) !=-1) ) 
+					&&
+					( (filtername==undefined) || (title.indexOf(filtername.toLowerCase()) !=-1)  ) 
+					)
 					html += _displayOnePlugin(plugin)
 				});
 			html += "</div>";
 			return html;
 		}
-		function _displayStore( filter ) {
+		function _displayStore( filterbtn, filtername) {
 			var html = "";
 			_computeCounts();
 			// carousel
@@ -9799,11 +9803,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "</div>";
 			html += "</div>";
 
+
 			html += "<div class='row'>";
 				// categories
 				html += "<div class='col-xs-2'>{0}</div>".format( _displayCategories() )
 				// plugins
-				html += "<div class='col-xs-10'>{0}</div>".format(_displayPlugins( filter ) );
+				html += "<div class='col-xs-10'>"
+					html += "<div class='row'>";
+						html += "<div class='col-xs-12'>";
+							html+="<div id='altui-plugin-name-filter' class='input-group'>";
+								html+="<span class='input-group-addon' id='altui-plugin-search-btn'>"+searchGlyph+"</span>";
+								html+="<input id='altui-plugin-name-filter-input' type='text' class='form-control' placeholder='Plugin Name' aria-describedby='name' value='{0}'>".format(filtername || "");
+							html += "</div>";
+						html+="</div>";
+					html += "</div>";
+					html += _displayPlugins( filterbtn, filtername )
+				html += "</div>"
 			html += "</div>";
 			return html;
 		}
@@ -9837,6 +9852,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			
 			// interactivity
 			$(".altui-mainpanel").off()
+			.on("change","#altui-plugin-name-filter-input",function() {
+				var filter = $(this).val();
+				$(".altui-mainpanel").html(_displayStore( null, filter ));
+			})
 			.on ('change',".altui-version-selector",function() {
 				var dom = $(this).closest(".altui-pluginbox")
 				var vernum= $(this).val();
