@@ -414,7 +414,18 @@ Localization.init( {
 	"Prevent drag and drop of favorites to reorder them":"Prevent drag and drop of favorites to reorder them",
 	"Lock favorites position":"Lock favorites position",
 	"LockFavoritePosition:Prevent drag and drop of favorites to reorder them":"LockFavoritePosition:Prevent drag and drop of favorites to reorder them",
-	"Top":"Top","Page Up":"Page Up","Page Down":"Page Down","Bottom":"Bottom"
+	"Top":"Top","Page Up":"Page Up","Page Down":"Page Down","Bottom":"Bottom",
+	"App Store":"App Store","Publish App":"Publish App","Install":"Install","Application Store":"Application Store",
+	"Publish":"Publish","ALT":"ALT","Vera":"Vera","Publish Application":"Publish Application",
+	"Contacting Server...":"Contacting Server...",
+	"Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : {0}":"Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : {0}",
+	"Select an App":"Select an App","Publish an App":"Publish an App",
+	"Application":"Application","App ID":"App ID","App Title":"App Title",
+	"VersionMajor":"VersionMajor","VersionMinor":"VersionMinor","Description":"Description",
+	"Icon":"Icon","DeviceFileName":"DeviceFileName","DeviceType":"DeviceType","ImplFile":"ImplFile",
+	"GitHub":"GitHub","backup":"backup","default":"default","downloads":"downloads",
+	"pattern":"pattern","source":"source","Vera Store":"Vera Store","version":"version","Modify":"Modify"
+	
 	});
 
 // override rules with localized version

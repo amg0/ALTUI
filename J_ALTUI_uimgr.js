@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1744 $";
+var ALTUI_revision = "$Revision: 1746 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9902,7 +9902,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 					$.each(_plugins_data[pluginid].Versions, function(idx,version) {
 						if (vernum == "{0}.{1}".format(version.VersionMajor, version.VersionMinor)) {
-							MultiBox.runAction(altuiapp_device, "urn:schemas-upnp-org:serviceId:AltAppStore1", "update_plugin", 
+							MultiBox.runAction(altuiapp_device, "urn:upnp-org:serviceId:AltAppStore1", "update_plugin", 
 								{ 
 									metadata: JSON.stringify(version)
 								},function(result) {

@@ -422,7 +422,17 @@ Localization.init( {
 	"Top":"Haut",
 	"Page Up":"Page Préc",
 	"Page Down":"Page Suiv",
-	"Bottom":"Bas"
+	"Bottom":"Bas",
+	"App Store":"App Store","Publish App":"Publier Application","Install":"Installer","Application Store":"Catalogue d'Application",
+	"Publish":"Publier","ALT":"ALT","Vera":"Vera","Publish Application":"Publier Application",
+	"Contacting Server...":"Connection en cours au Server...",
+	"Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : {0}":"Aller sur cette page <a href='{1}' target='_blank'>{1}</a> et entrer ce code : {0}",
+	"Select an App":"Selectioner une Application","Publish an App":"Publier une Application",
+	"Application":"Application","App ID":"App ID","App Title":"Titre Application",
+	"VersionMajor":"VersionMajor","VersionMinor":"VersionMinor","Description":"Description",
+	"Icon":"Icon","DeviceFileName":"DeviceFileName","DeviceType":"DeviceType","ImplFile":"ImplFile",
+	"GitHub":"GitHub","backup":"backup","default":"default","downloads":"downloads",
+	"pattern":"pattern","source":"source","Vera Store":"Vera Store","version":"version","Modify":"Modifier"
 });
 
 // override rules with localized version
