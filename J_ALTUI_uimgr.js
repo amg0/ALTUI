@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1747 $";
+var ALTUI_revision = "$Revision: 1748 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2441,8 +2441,8 @@ var UIManager  = ( function( window, undefined ) {
 	var _safeScripts=["J_PLC.js","J_VeraAlerts.js"];
 
 	// App Store URLs
-	var getlist_url = 'https://script.google.com/macros/s/AKfycbz0YqgQ-gxY3YjrxuaLeQKDrLdTT7Ibbs6GAiv8wss/dev?page=1&reviews=true';	// vosmont test
-	// var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // PROD
+	// var getlist_url = 'https://script.google.com/macros/s/AKfycbz0YqgQ-gxY3YjrxuaLeQKDrLdTT7Ibbs6GAiv8wss/dev?page=1&reviews=true';	// DEV
+	var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // PROD
 	// var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec'; ALTUI TEST
 
 	// in English, we will apply the _T() later, at display time
@@ -9915,20 +9915,27 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var altuiapp_device = MultiBox.getDeviceByType(0,"urn:schemas-upnp-org:device:AltAppStore:1")
 				if (altuiapp_device != null) {
 					var pluginid = $(this).closest(".altui-pluginbox").data("pluginid");
+					var plugin = UIManager._findPlugin(_plugins_data.plugins,pluginid)
 					var vernum= $(this).closest(".altui-pluginbox").find(".altui-version-selector").val();
+					var versionid = UIManager._findVersionId(plugin,vernum)
+					var repositories = UIManager._findRepositories(plugin,versionid)
 
-					$.each(_plugins_data[pluginid].Versions, function(idx,version) {
-						if (vernum == "{0}.{1}".format(version.VersionMajor, version.VersionMinor)) {
+					$.each( repositories, function( i, repo ) {
+						if (repo.type == "GitHub") {
 							MultiBox.runAction(altuiapp_device, "urn:upnp-org:serviceId:AltAppStore1", "update_plugin", 
 								{ 
-									metadata: JSON.stringify(version)
+									metadata: JSON.stringify({
+										repository: repo,
+										versionid: versionid
+									})
 								},function(result) {
 									$(that).text(_T("Success")).removeClass("btn-info").addClass("btn-success disabled");
 									alert(result);
 								} 
 							);
+							return false;
 						}
-					})
+					});
 				} else {
 					$(that).text(_T("Failure")).removeClass("btn-info").addClass("btn-danger disabled");
 				}
