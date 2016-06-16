@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1751 $";
+var ALTUI_revision = "$Revision: 1753 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -287,6 +287,7 @@ var styles ="						\
 	.form-control.altui-version-selector { padding:0px; border:0px; background:darkgrey; }				\
 	.altui-plugin-title { height: 21px;  overflow:hidden; }		\
 	.altui-plugin-version { font-size:1em;  }		\
+	.altui-plugin-version .input-sm { height: 20px;  line-height: 20px; }		\
 	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }		\
 	.altui-ace-editor .ui-resizable-helper { border: 2px dotted #00F; }		\
 	.altui-ace-editor .ui-resizable-handle { background-color: white; }		\
@@ -9447,7 +9448,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _getVeraRepository() {
 			model = {type:"Vera", }
 			$.each( model , function(k,v) {
-				model[k] = $("#altui-form-Vera-"+k).val();
+				if (k!="type")
+					model[k] = $("#altui-form-Vera-"+k).val();
 			})
 			//TODO get back version parameters
 			return model;
@@ -9512,7 +9514,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var verproperties = $.extend( { release:'' } , (vid) ? repo.versions[vid] : {} );
 			$.each(verproperties, function(k,v) {
 				formfields.push( {
-						id:"altui-form-Vera-Version-"+k,
+						id:"altui-form-GitHub-Version-"+k,
 						label:_T(k),
 						type:'input',
 						// inputtype:"number",
@@ -9525,7 +9527,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _getGitHubRepository() {
 			model = {type:"GitHub", backup:'', downloads:"",pattern:"",source:"", folders:[]}
 			$.each( model , function(k,v) {
-				model[k] = $("#altui-form-GitHub-"+k).val();
+				if (k=="type")
+					return true;
+				if (k!="folders")
+					model[k] = $("#altui-form-GitHub-"+k).val();
+				else
+					model[k] = $("#altui-form-GitHub-"+k).val().split(",");
 			});
 			return model;
 		}
@@ -9604,7 +9611,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "</div>"
 				html += "<div class='row'>"
 					html += "<div class='col-xs-12'>"
-						var verparts = (vkey || "").split(".");
+						var verparts = (vkey || "").split(/\.(.+)?/)
 						html += HTMLUtils.drawForm( 'altui-publish-form', _T("Edit Application Properties"),
 							[
 								{ id:"altui-form-Repository", label:_T("Application"), type:"accordeon", value: [
@@ -9637,28 +9644,72 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		function _getPluginFromForm() {
 			var selected = $("#altui-select-plugin").val();
-			var plugin= $.extend( _plugins_data[ selected ], {
+			var vkey= $("#altui-select-version").val();
+			var plugin = UIManager._findPlugin(_plugins_data, selected);
+			var vid = UIManager._findVersionId( plugin, vkey );
+			plugin= $.extend( true, plugin, {
 				id:$("#altui-form-id").val(),
 				Title:$("#altui-form-Title").val(),
-				VersionMajor:$("#altui-form-VersionMajor").val(),
-				VersionMinor:$("#altui-form-VersionMinor").val(),
 				Description:$("#altui-form-Description").val(),
+				Instructions:$("#altui-form-Instructions").val(),
 				Icon:$("#altui-form-Icon").val(),
+				// Versions:{},
+				// Devices:[],
+				// Repositories:[]
 			});
-
+			plugin.Versions[ vid ] = {
+				major:$("#altui-form-Major").val(),
+				minor:$("#altui-form-Minor").val()
+			}
 			plugin.Devices=[];
 			var devices = _getGitHubDevice()
 			if (  isNullOrEmpty(devices.DeviceType)!=true )		
 				plugin.Devices.push(devices);
 
-			plugin.Repository=[];
 			var repo = _getGitHubRepository();
-			if (  isNullOrEmpty(repo.source)!=true )
-				plugin.Repository.push(repo);
+			repo.versions = {}
+			repo.versions[vid] = { release: $("#altui-form-GitHub-Version-release").val() }
+			if ( plugin.Repositories.filter( function(r) {return r.type=="GitHub" }).length ==0)
+				plugin.Repositories.push(repo);
+			
+			for ( var i =0 ; i<plugin.Repositories.length ; i++) {
+				if (plugin.Repositories[i].type == "GitHub") {
+					// not null, so add or update
+					if (  isNullOrEmpty(repo.source)==true ) {
+						// null , so delete repo i
+						if ( Object.keys(plugin.Repositories[i].versions).length==0 )
+							plugin.Repositories.splice(i,1)
+					} else {
+						if (  isNullOrEmpty(repo.versions[vid].release)==true ) {
+							delete plugin.Repositories[i].versions[vid]
+							if ( Object.keys(plugin.Repositories[i].versions).length==0 )
+								plugin.Repositories.splice(i,1)
+						} else {
+							plugin.Repositories[i] = $.extend(true, plugin.Repositories[i], repo )
+						}
+					}
+				}
+			}
 
 			var repo2 = _getVeraRepository();
-			if (  isNullOrEmpty(repo2.version)!=true )
-				plugin.Repository.push(repo2);
+			repo2.versions = {}
+			repo2.versions[vid] = { release: $("#altui-form-Vera-Version-release").val() }
+			if ( plugin.Repositories.filter( function(r) {return r.type=="Vera" }).length ==0)
+				plugin.Repositories.push(repo2);
+			
+			for ( var i =0 ; i<plugin.Repositories.length ; i++) {
+				if (plugin.Repositories[i].type == "Vera") {
+					// not null, so add or update
+					if (  isNullOrEmpty(repo2.versions[vid].release )!=true ) {
+						plugin.Repositories[i] = $.extend(true, plugin.Repositories[i], repo2 )
+					} else {
+						// null , so delete version from repo
+						delete plugin.Repositories[i].versions[vid]
+						if ( Object.keys(plugin.Repositories[i].versions).length==0 )
+							plugin.Repositories.splice(i,1)
+					}
+				}
+			}
 			return plugin;
 		}
 		function _runActions() {
@@ -9991,6 +10042,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							MultiBox.runAction(altuiapp_device, "urn:upnp-org:serviceId:AltAppStore1", "update_plugin", 
 								{ 
 									metadata: JSON.stringify({
+										plugin: {
+											id: plugin.id,
+											Title: plugin.Title,
+											Description: plugin.Description,
+											Icon: plugin.Icon,
+											Instructions: plugin.Instructions,
+											AllowMultiple: plugin.AllowMultiple,
+											AutoUpdate: plugin.AutoUpdate
+										},
 										repository: repo,
 										devices: plugin.Devices,
 										versionid: versionid
