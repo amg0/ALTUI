@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1753 $";
+var ALTUI_revision = "$Revision: 1754 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9336,12 +9336,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	_findVersionId: function (plugin,vkey){
 		var result = null
-		$.each( plugin.Versions, function(k,v) {
-			if (vkey == '{0}.{1}'.format(v.major,v.minor)) {
-				result= k;
-				return false;
-			}
-		});
+		if (plugin!=null)
+			$.each( plugin.Versions, function(k,v) {
+				if (vkey == '{0}.{1}'.format(v.major,v.minor)) {
+					result= k;
+					return false;
+				}
+			});
 		return result;
 	},
 	_findRepositories : function (plugin,versionid) {
@@ -9618,11 +9619,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									{id:'Head', title:_T("Application"), html: HTMLUtils.drawFormFields([
 										{ id:"altui-form-id", label:_T("App ID"), type:"input", value: model.id, opt:{required:''} },
 										{ id:"altui-form-Title", label:_T("App Title"), type:"input", value: model.Title, opt:{required:''} },
+										{ id:"altui-form-Major", label:_T("Version Major"), type:"input",  value: verparts[0] || "", opt:{required:''} },
+										{ id:"altui-form-Minor", label:_T("Version Minor"), type:"input", value: verparts[1] || "", opt:{required:''} },
 										{ id:"altui-form-Description", label:_T("Description"), type:"input", value: model.Description, opt:{required:''} },
 										{ id:"altui-form-Instructions", label:_T("Instructions"), type:"input", value: model.Instructions, },
+										{ id:"altui-form-AllowMultiple", label:_T("AllowMultiple"), type:"input", inputtype:"number", value: model.AllowMultiple, opt:{required:''} },
+										{ id:"altui-form-AutoUpdate", label:_T("AutoUpdate"), type:"input", inputtype:"number", value: model.AutoUpdate, opt:{required:''} },
 										{ id:"altui-form-Icon", label:_T("Icon"), type:"input", value: model.Icon, opt:{required:''} },
-										{ id:"altui-form-Major", label:_T("Version Major"), type:"input", value: verparts[0] || "", opt:{required:''} },
-										{ id:"altui-form-Minor", label:_T("Version Minor"), type:"input", value: verparts[1] || "", opt:{required:''} },
 									])},
 									{id:'Device', title:_T("Device"), html: _drawGitHubDevice( (model.Devices) ?  model.Devices[0] : {} ) },
 									{id:'GitHub', title:_T("GitHub"), html: _drawGitHubRepository(model , vkey) },
@@ -9653,11 +9656,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				Description:$("#altui-form-Description").val(),
 				Instructions:$("#altui-form-Instructions").val(),
 				Icon:$("#altui-form-Icon").val(),
-				// Versions:{},
-				// Devices:[],
-				// Repositories:[]
+				AllowMultiple:$("#altui-form-AllowMultiple").val(),
+				AutoUpdate:$("#altui-form-AutoUpdate").val(),
+				Versions:{},
+				Devices:[],
+				Repositories:[]
 			});
-			plugin.Versions[ vid ] = {
+			plugin.Versions[ vid || 1 ] = {
 				major:$("#altui-form-Major").val(),
 				minor:$("#altui-form-Minor").val()
 			}
@@ -9668,7 +9673,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 			var repo = _getGitHubRepository();
 			repo.versions = {}
-			repo.versions[vid] = { release: $("#altui-form-GitHub-Version-release").val() }
+			repo.versions[vid || 1 ] = { release: $("#altui-form-GitHub-Version-release").val() }
 			if ( plugin.Repositories.filter( function(r) {return r.type=="GitHub" }).length ==0)
 				plugin.Repositories.push(repo);
 			
@@ -9680,8 +9685,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						if ( Object.keys(plugin.Repositories[i].versions).length==0 )
 							plugin.Repositories.splice(i,1)
 					} else {
-						if (  isNullOrEmpty(repo.versions[vid].release)==true ) {
-							delete plugin.Repositories[i].versions[vid]
+						if (  isNullOrEmpty(repo.versions[vid || 1 ].release)==true ) {
+							delete plugin.Repositories[i].versions[vid || 1 ]
 							if ( Object.keys(plugin.Repositories[i].versions).length==0 )
 								plugin.Repositories.splice(i,1)
 						} else {
@@ -9693,18 +9698,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 			var repo2 = _getVeraRepository();
 			repo2.versions = {}
-			repo2.versions[vid] = { release: $("#altui-form-Vera-Version-release").val() }
+			repo2.versions[vid || 1 ] = { release: $("#altui-form-Vera-Version-release").val() }
 			if ( plugin.Repositories.filter( function(r) {return r.type=="Vera" }).length ==0)
 				plugin.Repositories.push(repo2);
 			
 			for ( var i =0 ; i<plugin.Repositories.length ; i++) {
 				if (plugin.Repositories[i].type == "Vera") {
 					// not null, so add or update
-					if (  isNullOrEmpty(repo2.versions[vid].release )!=true ) {
+					if (  isNullOrEmpty(repo2.versions[vid || 1 ].release )!=true ) {
 						plugin.Repositories[i] = $.extend(true, plugin.Repositories[i], repo2 )
 					} else {
 						// null , so delete version from repo
-						delete plugin.Repositories[i].versions[vid]
+						delete plugin.Repositories[i].versions[vid || 1 ]
 						if ( Object.keys(plugin.Repositories[i].versions).length==0 )
 							plugin.Repositories.splice(i,1)
 					}
