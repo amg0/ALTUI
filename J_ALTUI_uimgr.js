@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1749 $";
+var ALTUI_revision = "$Revision: 1751 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9333,10 +9333,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		return null;
 	},
-	_findVersionId: function (plugin,vernum){
+	_findVersionId: function (plugin,vkey){
 		var result = null
 		$.each( plugin.Versions, function(k,v) {
-			if (vernum == '{0}.{1}'.format(v.major,v.minor)) {
+			if (vkey == '{0}.{1}'.format(v.major,v.minor)) {
 				result= k;
 				return false;
 			}
@@ -9346,11 +9346,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	_findRepositories : function (plugin,versionid) {
 		var result = [];
 		var repos = plugin.Repositories
-		for( var i=0; i<repos.length; i++) {
-			if (repos[i].versions[versionid]!=undefined) {
-				result.push( repos[i] )
+		if (versionid)
+			for( var i=0; i<repos.length; i++) {
+				if (repos[i].versions[versionid]!=undefined) {
+					result.push( repos[i] )
+				}
 			}
-		}
 		return result;
 	},
 	
@@ -9412,14 +9413,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		}
 		function _drawVeraRepository(model,vkey) {
-			var repositories = UIManager._findRepositories(model, vkey).filter( function(repo) { return repo.type=="Vera" });
+			var vid = UIManager._findVersionId(model,vkey);
+			var repositories = UIManager._findRepositories(model, vid).filter( function(repo) { return repo.type=="Vera" });
 			var repo =  (repositories.length>0) ? repositories[0] : { }
-			
-			repo = $.extend({type:"Vera"},repo)
+			repo = $.extend({type:"Vera" , versions:{} },repo)
 
 			var formfields=[];
 			$.each( repo , function(k,v) {
-				if (k!="type")
+				if ((k!="type") && (k!="versions")){
 					formfields.push( {
 							id:"altui-form-Vera-"+k,
 							label:_T(k),
@@ -9428,7 +9429,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							value:v,
 							opt:{required:''}
 							})
+				}
 			})
+			var verproperties = $.extend( { release:'' } , (vid) ? repo.versions[vid] : {} );
+			$.each(verproperties, function(k,v) {
+				formfields.push( {
+						id:"altui-form-Vera-Version-"+k,
+						label:_T(k),
+						type:'input',
+						inputtype:"number",
+						value:v,
+						opt:{required:''}
+						})			
+			});
 			return HTMLUtils.drawFormFields( formfields );
 		}
 		function _getVeraRepository() {
@@ -9436,6 +9449,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$.each( model , function(k,v) {
 				model[k] = $("#altui-form-Vera-"+k).val();
 			})
+			//TODO get back version parameters
 			return model;
 		}
 		function _drawGitHubDevice(model) {
@@ -9476,13 +9490,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			"source":"akbooer\/Datayours",
 			"type":"GitHub"
 			*/
-			var repositories = UIManager._findRepositories(model, vkey).filter( function(repo) { return repo.type=="GitHub" });
-			var repo =  (repositories.length>0) ? repositories[0] : { }
-			
-			repo = $.extend({type:"GitHub", backup:'', downloads:"",pattern:"",source:""},repo)
+			var vid = UIManager._findVersionId(model,vkey);
+			var repositories = UIManager._findRepositories(model, vid).filter( function(repo) { return repo.type=="GitHub" });
+			var repo =  (repositories.length>0) ? repositories[0] : {}
+			repo = $.extend({type:"GitHub", backup:'', downloads:"",pattern:"",source:"",folders:[], versions:{} },repo)
 			var formfields=[];
 			$.each( repo , function(k,v) {
-				if (k!="type")
+				if (k=="folders") {
+					v = v.join(",")
+				} 
+				if ((k!="type") && (k!="versions")){
 					formfields.push( {
 							id:"altui-form-GitHub-"+k,
 							label:_T(k),
@@ -9490,34 +9507,38 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							value:v,
 							opt:{required:''}
 							})
+				}
 			})
+			var verproperties = $.extend( { release:'' } , (vid) ? repo.versions[vid] : {} );
+			$.each(verproperties, function(k,v) {
+				formfields.push( {
+						id:"altui-form-Vera-Version-"+k,
+						label:_T(k),
+						type:'input',
+						// inputtype:"number",
+						value:v,
+						opt:{required:''}
+						})			
+			});
 			return HTMLUtils.drawFormFields( formfields );
 		}
 		function _getGitHubRepository() {
-			/*
-"[{
-  ""DeviceFileName"":""D_AltAppStore.xml"",
-  ""DeviceType"":""urn:schemas-upnp-org:device:AltAppStore:1"",
-  ""ImplFile"":""I_AltAppStore.xml"",
-  ""Invisible"":""0""
-}]"
-			*/
-			model = {type:"GitHub", backup:'', downloads:"",pattern:"",source:""}
+			model = {type:"GitHub", backup:'', downloads:"",pattern:"",source:"", folders:[]}
 			$.each( model , function(k,v) {
 				model[k] = $("#altui-form-GitHub-"+k).val();
 			});
 			return model;
 		}
 		
-		function _drawVersionSelect(array,plugin,selected) {
+		function _drawVersionSelect(array,plugin,vkey) {
 			if (plugin == undefined)
 				return "";
 
 			var index=-1;
 			var options = $.map(plugin.Versions, function(v,i) {
 				var key = "{0}.{1}".format(v.major, v.minor);
-				if (key==selected)
-					index=key
+				if (key==vkey)
+					index= parseInt(i)-1
 				return { value: key, text: key }
 			});
 			return HTMLUtils.drawFormFields([
@@ -9558,14 +9579,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			])
 		}
 		
-		function _drawPublishForm2( model , vkey ) {
+		function _drawPublishForm( model , vkey ) {
 			model = $.extend( { id:0, Title:"",  Description:"", Icon:"", Instructions:"", Devices:[], Versions:{}, Repositories:[] } , model );
 			var html="";
 			html += "<div id='altui-plugin-div' class='col-xs-12' data-pluginid='{0}'>".format(model.id);
 				html += "<div class='row'>"
 					html += "<div class='col-xs-6'>"
 						html += "<div class='altui-select-app'>"
-						html += _drawPluginSelect( _plugins_data, model )
+						html += _drawPluginSelect( _plugins_data, model  )
 						html += "</div>"
 					html += "</div>"
 					html += "<div class='col-xs-6'>"
@@ -9583,8 +9604,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "</div>"
 				html += "<div class='row'>"
 					html += "<div class='col-xs-12'>"
-						if (model && vkey) {							
-						html += HTMLUtils.drawForm( 'altui-publish-form', _T("xxx"),
+						var verparts = (vkey || "").split(".");
+						html += HTMLUtils.drawForm( 'altui-publish-form', _T("Edit Application Properties"),
 							[
 								{ id:"altui-form-Repository", label:_T("Application"), type:"accordeon", value: [
 									{id:'Head', title:_T("Application"), html: HTMLUtils.drawFormFields([
@@ -9593,6 +9614,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 										{ id:"altui-form-Description", label:_T("Description"), type:"input", value: model.Description, opt:{required:''} },
 										{ id:"altui-form-Instructions", label:_T("Instructions"), type:"input", value: model.Instructions, },
 										{ id:"altui-form-Icon", label:_T("Icon"), type:"input", value: model.Icon, opt:{required:''} },
+										{ id:"altui-form-Major", label:_T("Version Major"), type:"input", value: verparts[0] || "", opt:{required:''} },
+										{ id:"altui-form-Minor", label:_T("Version Minor"), type:"input", value: verparts[1] || "", opt:{required:''} },
 									])},
 									{id:'Device', title:_T("Device"), html: _drawGitHubDevice( (model.Devices) ?  model.Devices[0] : {} ) },
 									{id:'GitHub', title:_T("GitHub"), html: _drawGitHubRepository(model , vkey) },
@@ -9605,56 +9628,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								]}
 							]
 						);
-					}
 					html += "</div>"
 				html += "</div>"
 			html += "</div>"
+			$(".altui-plugin-msg").html("");
 			$('#altui-plugin-div').replaceWith( html ) 
 		}
 		
-		// function _drawPublishForm( model ) {
-			// if (model==undefined)
-				// model = {};
-			// model = $.extend( { id:0, Title:"", VersionMajor:"", VersionMinor:"", Description:"", Icon:"", Repository:[] } , model );
-			
-			// var html="";
-			// html += "<div id='altui-plugin-div' class='col-xs-12' data-pluginid='{0}'>".format(model.id);
-			// $(".altui-plugin-select").html ( _drawPluginSelect(_plugins_data,model)  );
-			// html += HTMLUtils.drawForm( 'altui-publish-form', _T("Publish an App"),
-				// [
-					// { id:"altui-form-Repository", label:_T("Application"), type:"accordeon", value: [
-						// {id:'Head', title:_T("Application"), html: HTMLUtils.drawFormFields([
-							// { id:"altui-form-id", label:_T("App ID"), type:"input", value: model.id, opt:{required:''} },
-							// { id:"altui-form-Title", label:_T("App Title"), type:"input", value: model.Title, opt:{required:''} },
-							// { id:"altui-form-VersionMajor", label:_T("VersionMajor"), type:"input", inputtype:"number", value: model.VersionMajor, opt:{required:''} },
-							// { id:"altui-form-VersionMinor", label:_T("VersionMinor"), type:"input", inputtype:"number", value: model.VersionMinor, opt:{required:''} },
-							// { id:"altui-form-Description", label:_T("Description"), type:"input", value: model.Description, opt:{required:''} },
-							// { id:"altui-form-Icon", label:_T("Icon"), type:"input", value: model.Icon, opt:{required:''} },
-						// ])},
-						// {id:'Device', title:_T("Device"), html: _drawGitHubDevice( (model.Devices) ?  model.Devices[0] : {} ) },
-						// {id:'GitHub', title:_T("GitHub"), html: _drawGitHubRepository() },
-						// {id:'Vera', title:_T("Vera Store"), html: _drawVeraRepository()  }
-					// ]},
-					// { id:"altui-btn-bar", type:"buttonbar", value:[
-						// { id:"altui-btn-close", label:_T("Close"), type:"button",  },
-						// { id:"altui-btn-create", label:_T("Create"), type:"button",  },
-						// { id:"altui-btn-submit", label:_T("Modify"), type:"submit",  },
-					// ]}
-				// ]
-			// );
-			// html += "</div>"
-			// $('#altui-plugin-div').replaceWith( html ) 
-			// if ($.isArray(model.Repository)== false) {
-				// model.Repository=[ model.Repository ]
-			// }
-			// $.each( model.Repository, function(i,repo) {
-				// if (repo.type == "GitHub") {
-					// $("#collapseGitHub .panel-body").html( _drawGitHubRepository(repo) )
-				// } else {
-					// $("#collapseVera .panel-body").html(_drawVeraRepository(repo))
-				// }
-			// });
-		// }
 		function _getPluginFromForm() {
 			var selected = $("#altui-select-plugin").val();
 			var plugin= $.extend( _plugins_data[ selected ], {
@@ -9686,11 +9666,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.off("change")
 				.on("change","#altui-select-plugin", function() {
 					var selected = $(this).val();
-					_drawPublishForm2(  UIManager._findPlugin(_plugins_data, selected ) );
+					_drawPublishForm(  UIManager._findPlugin(_plugins_data, selected ) );
 				})
 				.on("change","#altui-select-version", function() {
+					var selected = $("#altui-select-plugin").val();
 					var vkey = $(this).val();
-					_drawPublishForm2(  UIManager._findPlugin(_plugins_data, selected ) , vkey);
+					_drawPublishForm(  UIManager._findPlugin(_plugins_data, selected ) , vkey);
 				})
 				.off("click")
 				.on("click","#altui-btn-close", function() {
@@ -9737,7 +9718,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		
 		function _displayPublishPage() {
-			$(".altui-plugin-select").html(_T("Contacting Server..."))
+			$(".altui-plugin-msg").html(_T("Contacting Server..."))
 			_getPluginList().done( function(data) {
 				
 					try { _plugins_data= JSON.parse(data); } 
@@ -9755,7 +9736,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									// if refresh failed, try the whole process from the start
 									_getDeviceCode().done( function(data, textStatus, jqXHR) {		
 											data = JSON.parse(data);
-											$(".altui-plugin-select").html(_T("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : {0}").format(data.user_code,data.verification_url))
+											$(".altui-plugin-msg").html(_T("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : {0}").format(data.user_code,data.verification_url))
 											_tryAuthToken( 0 )
 										})
 										.fail( function(jqXHR, textStatus, errorThrown) {			
@@ -9763,21 +9744,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 										})
 								} else {
 									// retry from the begining
-									$(".altui-mainpanel").append("<p>{0}</p>".format(_T("Token Refreshed")))
+									$(".altui-plugin-msg").append("<p>{0}</p>".format(_T("Token Refreshed")))
 									_displayPublishPage();
 								}
 							});
 					} else {
 						// got proper list of plugins
 						_plugins_data = _plugins_data.data
-						_drawPublishForm2()
+						_drawPublishForm()
 						_runActions()
 					}
 			});			
 		}
 		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
 		UIManager.clearPage(_T('Publish App'),_T("Publish Application"),UIManager.oneColumnLayout);
-		$(".altui-mainpanel").append("<div class='altui-plugin-select col-xs-12'></div><div id='altui-plugin-div'></div>");
+		$(".altui-mainpanel").append("<div class='altui-plugin-msg col-xs-12'></div><div id='altui-plugin-div'></div>");
 		_displayPublishPage();
 	},
 	
@@ -9838,7 +9819,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += "      <div class='altui-features-box'></div>"
 					html += "      <div class='carousel-caption'>"
 					html += ( plugin.Icon.startsWith('https') ? "<img src='{0}'></img>"  : "<img class='pull-left' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
-					html += "      	<h3>{0}</h3><p>{1}</p>".format(plugin.Title,plugin.Description || "")
+					html += "      	<h3>{0}</h3><p>{1}</p>".format(plugin.Title.htmlEncode(),plugin.Description.htmlEncode() || "")
 					html += "      </div>"
 					html += "    </div>"
 				bFirst = false;
@@ -9884,7 +9865,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						html += "<div class='panel-body'>"
 							html += "<div class='altui-plugin-version pull-right'>{0}</div>".format(_drawVersionSelect(plugin))
 							html += ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
-							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title)
+							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title.htmlEncode())
 							// if ($.isArray(plugin.Repository) == false) {
 								// plugin.Repository = [plugin.Repository]
 							// }
@@ -10011,6 +9992,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								{ 
 									metadata: JSON.stringify({
 										repository: repo,
+										devices: plugin.Devices,
 										versionid: versionid
 									})
 								},function(result) {
