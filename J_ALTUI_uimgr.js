@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1762 $";
+var ALTUI_revision = "$Revision: 1763 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10079,7 +10079,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 										},
 										repository: repo,							// [{"type":"GitHub","source":"amg0/IPhoneLocator","pattern":"IPhone","versions":{"2":{"release":"master"}}},{"type":"Vera","versions":{"1":{"release":"31718"}}}]
 										devices: plugin.Devices,					// [{  "DeviceFileName":"D_Netatmo.xml",  "DeviceType":"urn:akbooer-com:device:Netatmo:1",  "ImplFile":"I_Netatmo.xml",  "Invisible":"0"}]
-										version: plugin.Versions[ versionid ]		//  {"major":15,"minor":"0130"}
+										version: plugin.Versions[ versionid ]	,	//  {"major":15,"minor":"0130"}
+										versionid: versionid
 									})
 								},function(result) {
 									$(that).text(_T("Success")).removeClass("btn-info").addClass("btn-success disabled");
