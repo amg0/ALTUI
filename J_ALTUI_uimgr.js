@@ -277,6 +277,7 @@ var styles ="						\
 		height:100%;			\
 		z-index: -1;			\
 	}							\
+	.altui-store-carousel { margin-bottom:10px; }					\
 	.altui-store-categories { width: 100%; overflow: hidden; }					\
 	.altui-features-box { height:200px; width: 100%; background:grey; opacity:0.4; }	\
 	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }		\
@@ -9591,7 +9592,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		
 		function _drawPublishForm( model , vkey ) {
-			model = $.extend( { id:0, Title:"",  Description:"", Icon:"", Instructions:"", Devices:[], Versions:{}, Repositories:[] } , model );
+			model = $.extend( { id:0, Title:"",  Description:"", Icon:"", Instructions:"", AllowMultiple:0, AutoUpdate:0, Devices:[], Versions:{}, Repositories:[] } , model );
 			var html="";
 			html += "<div id='altui-plugin-div' class='col-xs-12' data-pluginid='{0}'>".format(model.id);
 				html += "<div class='row'>"
