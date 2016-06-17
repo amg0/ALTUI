@@ -1450,7 +1450,7 @@ var HTMLUtils = (function() {
 				html += xsbuttonTemplate.format(button.id, button.class, button.label, button.title);
 			}
 			html += "                <h4 class='panel-title'>";
-			html += "                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse"+panel.id+"'>"+panel.title+"</a><span class='altui-hint' id='altui-hint-"+panel.id+"'></span><span id='trigger' class='caret'></span>";
+			html += "                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse"+panel.id+"'>"+panel.title+"</a><span class='altui-hint' id='altui-hint-"+panel.id+"'></span><span id='altui-caret' class='caret'></span>";
 			html += "                </h4>";
 			html += "            </div>";
 			html += "            <div id='collapse"+panel.id+"' class='panel-collapse collapse {0}'>".format(bFirst ? 'in':'');
@@ -1548,11 +1548,11 @@ var HTMLUtils = (function() {
 		return html;
 	};
 	
-	function _drawForm( htmlid, title, model ) {
+	function _drawForm( htmlid, title, model, extraattrs ) {
 		var html ="";
 		if (isNullOrEmpty(title) == false)
 			html += "<h3>{0}</h3>".format(title);
-		html += "<form id='{0}' name='{0}'>".format(htmlid)
+		html += "<form id='{0}' name='{0}' {1}>".format(htmlid,extraattrs ? extraattrs : '' )
 		html += _drawFormFields(model);
 		html += "</form>"
 		return html;

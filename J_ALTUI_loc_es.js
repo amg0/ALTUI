@@ -422,8 +422,16 @@ Localization.init( {
 	"VersionMajor":"VersionMajor","VersionMinor":"VersionMinor","Description":"Description",
 	"Icon":"Icon","DeviceFileName":"DeviceFileName","DeviceType":"DeviceType","ImplFile":"ImplFile",
 	"GitHub":"GitHub","backup":"backup","default":"default","downloads":"downloads",
-	"pattern":"pattern","source":"source","Vera Store":"Vera Store","version":"version","Modify":"Modify"
-
+	"pattern":"pattern","source":"source","Vera Store":"Vera Store","version":"version","Modify":"Modify",
+		"Refreshing Token...":"Refreshing Token...","Authenticating client device...":"Authenticating client device...",
+	"Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : <mark>{0}</mark> <div class='altui-plugin-msg2'></div>":"Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : <mark>{0}</mark> <div class='altui-plugin-msg2'></div>",
+	"{0} Tentative #{1}/10":"{0} Tentative #{1}/10",
+	"Failure after 10 tentatives, try again...":"Failure after 10 tentatives, try again...",
+	"Select a Version":"Select a Version","Edit Application Properties":"Edit Application Properties",
+	"Instructions":"Instructions","AllowMultiple":"AllowMultiple","AutoUpdate":"AutoUpdate",
+	"Version Major":"Version Major","Version Minor":"Version Minor",
+	"folders":"folders",
+	"release":"release"	
 });
 
 // override rules with localized version
