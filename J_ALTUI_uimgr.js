@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1763 $";
+var ALTUI_revision = "$Revision: 1765 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -283,7 +283,7 @@ var styles ="						\
 	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }		\
 	.altui-plugin-category-btn {  }					\
 	.altui-plugin-publish-btn { width: 100%;  }		\
-	.altui-pluginbox  { padding:4px; }				\
+	.altui-pluginbox , #altui-plugin-name-filter { padding:4px; }				\
 	.altui-pluginbox .panel-body { padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;}	\
 	.form-control.altui-version-selector { padding:0px; border:0px; background:darkgrey; }				\
 	.altui-plugin-title { height: 21px;  overflow:hidden; }		\
@@ -8125,7 +8125,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									html += "<blockquote class='altui-workflow-transitiondetails'>";
 										html += "<li class='altui-transition-subtitle'>When</li>";
 										html += "<ul>";
-											if (link.schedule)
+											if (link.schedule && (link.schedule.length>0) )
 												html += "<li>Schedule: {0}</li>".format(UIManager.displayTimers( [ link.schedule ] , { only_text:true, add_button:false, add_json:false }));
 											if (link.timer)
 												html += "<li>Timer: '{0}' expiration {1}s</li>".format(link.timer.name,link.timer.duration);
@@ -8834,7 +8834,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		workflow = WorkflowManager.getWorkflow(altuiid);
 		if (workflow==null) return;
-		WorkflowManager.sanitizeWorkflow(workflow.altuiid);
 		
 		UIManager.clearPage(_T('Workflow'),_T("Workflow Editor"),UIManager.oneColumnLayout);
 		$("#altui-pagetitle").css("display","inline").after("<div class='altui-workflow-toolbar'></div>");
@@ -8843,7 +8842,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 
 		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow ) );	
-		_showSaveNeeded(false);
+		
+		var bSanitized = WorkflowManager.sanitizeWorkflow(workflow.altuiid);
+		if ( bSanitized == true) {
+			PageMessage.message( "Workflow had to be adjusted to your vera, save is needed", "info");
+		} 
 
 		$(".altui-mainpanel").append("<div class='col-xs-12'><div id='altui-workflow-canvas'></div></div>");
 		//
@@ -9170,7 +9173,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					rect: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue'},
 				});
 			})
-			_showSaveNeeded(false);
+			_showSaveNeeded(bSanitized);
 		}
 		else {
 			Start();
@@ -9980,12 +9983,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// plugins
 				html += "<div class='col-xs-10'>"
 					html += "<div class='row'>";
-						html += "<div class='col-xs-12'>";
-							html+="<div id='altui-plugin-name-filter' class='input-group'>";
-								html+="<span class='input-group-addon' id='altui-plugin-search-btn'>"+searchGlyph+"</span>";
-								html+="<input id='altui-plugin-name-filter-input' type='text' class='form-control' placeholder='Plugin Name' aria-describedby='name' value='{0}'>".format(filtername || "");
-							html += "</div>";
-						html+="</div>";
+						html+="<div id='altui-plugin-name-filter' class='col-xs-12 input-group'>";
+							html+="<span class='input-group-addon' id='altui-plugin-search-btn'>"+searchGlyph+"</span>";
+							html+="<input id='altui-plugin-name-filter-input' type='text' class='form-control' placeholder='Plugin Name' aria-describedby='name' value='{0}'>".format(filtername || "");
+						html += "</div>";
 					html += "</div>";
 					html += _displayPlugins( filterbtn, filtername )
 				html += "</div>"

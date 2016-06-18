@@ -196,6 +196,9 @@ function get_trigger_info(sceneID,triggerIndex){
 }
 
 function cloneObject(obj) {
+	if (obj==null)
+		return null;
+	
     if (Object.prototype.toString.call(obj) === '[object Array]') {
         var out = [], i = 0, len = obj.length;
         for ( ; i < len; i++ ) {
