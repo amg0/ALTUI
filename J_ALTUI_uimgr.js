@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1767 $";
+var ALTUI_revision = "$Revision: 1768 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -281,9 +281,10 @@ var styles ="						\
 	.altui-store-categories { width: 100%; overflow: hidden; }					\
 	.altui-features-box { height:200px; width: 100%; background:grey; opacity:0.4; }	\
 	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }		\
+	.altui-plugin-pageswitch {  font-size: 20px; }					\
 	.altui-plugin-category-btn {  }					\
 	.altui-plugin-publish-btn { width: 100%;  }		\
-	.altui-pluginbox , #altui-plugin-name-filter { padding:4px; }				\
+	.altui-pluginbox , .altui-pageswitchbox, #altui-plugin-name-filter { padding:4px; }				\
 	.altui-pluginbox .panel-body { padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;}	\
 	.form-control.altui-version-selector { padding:0px; border:0px; background:darkgrey; }				\
 	.altui-plugin-title { height: 21px;  overflow:hidden; }		\
@@ -9840,10 +9841,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageAppStore: function(params)
 	{
-		var _plugins_data = null;
+		var nMaxPerPage = 20;
+		var nPage = 1;
 		var arr = ["abc","def","ghi","jkl","mno","pqr","stu","vwx","yz "];
-		var _counts=[];
 		var installglyph = glyphTemplate.format( "cloud-download", _T("Install"), "" );
+		var pageGlyphs = {
+			"forward" : glyphTemplate.format( "forward", _T("Next Page"), "" ),
+			"backward" : glyphTemplate.format( "backward", _T("Prev Page"), "" ),
+			"spinner" : glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" )
+		};
+		var _plugins_data = null;
+		var _counts=[];
 	
 		function _getPlugins( params ) {
 			return $.ajax({
@@ -9960,21 +9968,38 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "</div>"
 				return html;
 		}
-		
+		function _displayPageSwitch(direction) {
+			var html = "";
+				html += "<div id='{0}' class='col-xs-6 altui-pageswitchbox' >"
+					html += "<div class='panel panel-default'>"
+						html += "<div class='panel-body'>"
+							html += "<div class='altui-plugin-pageswitch' data-direction='{1}'>{0}</div>".format(pageGlyphs[direction],direction)
+							html += "<div class='altui-plugin-title'>{0}</div>".format(direction)
+						html += "</div>"
+					html += "</div>"
+				html += "</div>"
+				return html;
+		}
 		function _displayPlugins( filterbtn,filtername ) {
-			var spinner = glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" )
-			$(".altui-store-items").html("<div class='col-xs-12'><div class='jumbotron'><p>{0}</p></div></div>".format(spinner));
+			$(".altui-store-items").html("<div class='col-xs-12'><div class='jumbotron'><p>{0}</p></div></div>".format(pageGlyphs["spinner"]));
 
 			// get the detailled data	
-			var params = { versions:true }
+			var params = { 
+				versions:true ,
+				page: nPage,
+				per_page: nMaxPerPage
+			}
+			
 			if (filtername)
 				params.filter_Title=filtername+"*"
+			
 			if (filterbtn) {
 				var str =[]
 				for ( var i=0; i<filterbtn.length; i++) 
 					str.push(filterbtn[i]+"*")
 				params.filter_Title=str.join(",")
 			}
+			
 			_getPlugins(params)
 			.done( function (data, textStatus, jqXHR) {
 				
@@ -9999,6 +10024,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					// )
 					html += _displayOnePlugin(plugin)
 				});
+				
+				if (_plugins_data.details.pagination.page>1)
+					html +=_displayPageSwitch("backward")
+				if (_plugins_data.details.pagination.page<_plugins_data.details.pagination.nbPage)
+					html +=_displayPageSwitch("forward")
+				
 				$(".altui-store-items").html(html);
 			});
 		}
@@ -10069,6 +10100,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var versionid = UIManager._findVersionId(plugin,vernum)
 				// var repositories = UIManager._findRepositories(plugin,versionid)
 				$(installbuttons).replaceWith( _displayInstallButtons(plugin,versionid) );
+			})
+			.on("click",".altui-plugin-pageswitch",function() {
+				var direction = $(this).data("direction")
+				if (direction=="forward")
+					nPage++;
+				else
+					nPage--;
+				_displayPlugins();				
 			})
 			.on("click",".altui-plugin-category-btn",function() {
 				var filter = $(this).prop("id");
