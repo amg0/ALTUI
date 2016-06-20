@@ -2241,15 +2241,16 @@ var WorkflowManager = (function() {
 				for (var i = 0 ; i<graph.cells.length ; i++ ) {
 					var cell = graph.cells[i];
 					if (cell.type=="link") {
-					var conditions = cell.prop.conditions;
-						for (var j=conditions.length-1; j>=0; j--) {
-							var cond = conditions[j]
-							var device = MultiBox.getDeviceByAltuiID(cond.device);
-							if (device==null) {
-								conditions.splice(j,1)
-								bSaveNeeded=true;
+						var conditions = cell.prop.conditions;
+						if (conditions)
+							for (var j=conditions.length-1; j>=0; j--) {
+								var cond = conditions[j]
+								var device = MultiBox.getDeviceByAltuiID(cond.device);
+								if (device==null) {
+									conditions.splice(j,1)
+									bSaveNeeded=true;
+								}
 							}
-						}
 						if (cell.prop.schedule && (cell.prop.schedule.length==0)) {
 							cell.prop.schedule =null;
 							bSaveNeeded=true;
@@ -2257,23 +2258,25 @@ var WorkflowManager = (function() {
 					} else {	 // type is dev.Models
 						$.each(['onEnter','onExit'], function(k,type) {
 							var actions = cell.prop[type];
-							for (var j=actions.length-1; j>=0; j--) {
-								var device = MultiBox.getDeviceByAltuiID(actions[j].device)
-								if (device==null) {
-									actions.splice(j,1)
-									bSaveNeeded=true;
+							if (actions)
+								for (var j=actions.length-1; j>=0; j--) {
+									var device = MultiBox.getDeviceByAltuiID(actions[j].device)
+									if (device==null) {
+										actions.splice(j,1)
+										bSaveNeeded=true;
+									}
 								}
-							}
 						})
 						$.each(['onEnterScenes','onExitScenes'], function(k,type) {
 							var scenes = cell.prop[type];
-							for (var j=scenes.length-1; j>=0; j--) {
-								var scene = MultiBox.getSceneByAltuiID(scenes[j].altuiid)
-								if (scene==null) {
-									scenes.splice(j,1)
-									bSaveNeeded=true;
+							if (scenes)
+								for (var j=scenes.length-1; j>=0; j--) {
+									var scene = MultiBox.getSceneByAltuiID(scenes[j].altuiid)
+									if (scene==null) {
+										scenes.splice(j,1)
+										bSaveNeeded=true;
+									}
 								}
-							}
 						})
 						var conditions = cell.prop.conditions;
 						if (conditions)  // only start state has conditions
