@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1771 $";
+var ALTUI_revision = "$Revision: 1775 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -282,7 +282,7 @@ var styles ="						\
 	.altui-features-box { height:200px; width: 100%; background:grey; opacity:0.4; }	\
 	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }		\
 	.altui-plugin-pageswitch {  font-size: 20px; }					\
-	.altui-plugin-category-btn {  }					\
+	button.altui-plugin-category-btn {  padding-left:4px; padding-right:4px; }					\
 	.altui-plugin-publish-btn { width: 100%;  }		\
 	.altui-pluginbox , .altui-pageswitchbox, #altui-plugin-name-filter { padding:4px; }				\
 	.altui-pluginbox .panel-body { padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;}	\
@@ -2619,7 +2619,7 @@ var UIManager  = ( function( window, undefined ) {
 					return "<button type='button' class='{1} btn btn-default' aria-label='Run Scene' onclick='{3}' style='{5}'>{4}{2}</button>".format(
 							scene ? scene.altuiid : NULL_DEVICE,
 							'altui-widget-runscene-button',
-							runGlyph.replace('glyphicon','pull-right glyphicon'),
+							(widget.properties.glyph.length>0) ? glyphTemplate.format( widget.properties.glyph, _T("Run Scene") , "pull-right") : '',
 							(bEdit==true)?'':'MultiBox.runSceneByAltuiID("{0}")'.format(scene ? scene.altuiid : NULL_DEVICE),
 							widget.properties.label,
 							"height: 100%; width: 100%;"
@@ -2627,7 +2627,8 @@ var UIManager  = ( function( window, undefined ) {
 				},
 				properties: {
 					sceneid:NULL_SCENE,
-					label:''
+					label:'',
+					glyph:'play'
 				} 
 			},
 			{ 	id:60, 
@@ -2640,10 +2641,10 @@ var UIManager  = ( function( window, undefined ) {
 					var device = MultiBox.getDeviceByAltuiID(widget.properties.deviceid);
 					if (device==null)
 						return "";
-					return "<button type='button' class='{1} btn btn-default' aria-label='Run Scene' onclick='{3}' style='{5}' >{4}{2}</button>".format(
+					return "<button type='button' class='{1} btn btn-default' aria-label='Run Action' onclick='{3}' style='{5}' >{4}{2}</button>".format(
 						device ? device.altuiid : NULL_DEVICE,
 						'altui-widget-upnpaction-button',
-						runGlyph.replace('glyphicon','pull-right glyphicon'),
+						(widget.properties.glyph.length>0) ? glyphTemplate.format( widget.properties.glyph, _T("Execute Action") , "pull-right") : '',
 						(bEdit==true)?'':'MultiBox.runActionByAltuiID("{0}", "{1}", "{2}", {3} )'.format(
 							device ? device.altuiid : NULL_DEVICE,
 							widget.properties.service,
@@ -2659,7 +2660,8 @@ var UIManager  = ( function( window, undefined ) {
 					label:'',
 					service:'',
 					action:'',
-					params:{}
+					params:{},
+					glyph:'play'
 				} 
 			},
 			{ 	id:65, 
@@ -5993,6 +5995,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var dialog = DialogManager.createPropertyDialog('Run Scene Properties');
 		DialogManager.dlgAddScenes( dialog , widget, function() {
 			DialogManager.dlgAddLine(dialog, "Label", _T("Button Label"), widget.properties.label, "");
+			DialogManager.dlgAddLine(dialog, "Glyph", _T("Button Glyph or empty"), widget.properties.glyph, "");
 			// run the show
 			$('div#dialogModal').modal();
 		});
@@ -6004,6 +6007,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$('div#dialogModal button.btn-primary').off('click');
 			real_widget.properties.sceneid = $('#altui-widget-sceneid').val();
 			real_widget.properties.label = $("#altui-widget-Label").val();
+			real_widget.properties.glyph = $("#altui-widget-Glyph").val();
 			$('div#dialogModal').modal('hide');
 			_showSavePageNeeded(true);
 			_replaceWidget(real_widget);
@@ -6018,6 +6022,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		DialogManager.dlgAddDevices( dialog , '', widget.properties.deviceid, function() {
 			DialogManager.dlgAddActions("altui-widget-action",dialog, widget, widget.properties, _T('Action'), function() {
 				DialogManager.dlgAddLine(dialog, "Label", _T("Button Label"), widget.properties.label, "");
+				DialogManager.dlgAddLine(dialog, "Glyph", _T("Button Glyph or empty"), widget.properties.glyph, "");
 				// run the show
 				$('div#dialogModal').modal();
 			});
@@ -6032,6 +6037,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			real_widget.properties.service = widget.properties.service;
 			real_widget.properties.action = widget.properties.action;
 			real_widget.properties.label = $("#altui-widget-Label").val();
+			real_widget.properties.glyph = $("#altui-widget-Glyph").val();
 
 			// read params
 			real_widget.properties.params={};
@@ -9934,10 +9940,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		function _drawVersionSelect(pluginapp) {
 			var html = "<select class='input-sm form-control altui-version-selector'>"
-			$.each(pluginapp.Versions, function(key,version) {
-				var label = (version.major||'0') +'.'+ (version.minor||'0')
-				html += "<option value='{0}'>{0}</option>".format(label)
-			})
+			var arr = $.map( Object.keys(pluginapp.Versions), function(key,i) { 
+					var v = pluginapp.Versions[key]
+					var str = "{0}.{1}".format(v.major||'0',v.minor||'0')
+					return { id:i+1, label: str, major:parseInt(v.major), minor:parseFloat(v.minor) } 
+			} );
+			$.each(arr.sort( function(a,b) { 
+					// reverse order
+					if (b.major>a.major)
+						return -1
+					if (b.major<a.major)
+						return 1
+					return b.minor-a.minor
+				}), 
+				function(key,version) {
+					html += "<option value='{0}'>{0}</option>".format(version.label)
+				})
 			html +="</select>"
 			return html;
 		}
