@@ -783,6 +783,28 @@ var DialogManager = ( function() {
 		propertyline += "</div>";
 		$(dialog).find(".row-fluid").append(propertyline);
 	};	
+	function _dlgAddSelectGlyph(dialog, name, label, value, lines, htmloptions) {
+		var optstr = HTMLUtils.optionsToString(htmloptions);
+		value = (value==undefined) ? '' : value ;
+		var propertyline = "";
+		propertyline += "<div class='form-group'>";
+		propertyline += "	<label for='altui-widget-"+name+"' title='"+name+"'>"+label+"</label>";
+			propertyline += "<div class='input-group'>"
+			propertyline += "<span class='input-group-addon glyphicon glyphicon-"+value+"'></span>"
+			propertyline += "	<select id='altui-widget-"+name+"' class='form-control' "+optstr+">";
+			$.each(lines, function(idx,line){
+				propertyline += "<option value='{0}' {2}>{1}</option>".format(line.value, line.text, (value==line.value)?'selected':'');
+			})
+			propertyline += "</select>";
+			propertyline += "</div>";
+		propertyline += "</div>";
+		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog)
+			.off("change","select#altui-widget-"+name)
+			.on('change', "select#altui-widget-"+name,function(ui,event) {
+				$(this).prev("span.input-group-addon").attr("class","input-group-addon glyphicon glyphicon-"+$(this).val())
+			})
+	}
 
 	function _dlgAddTimeInterval(dialog, name, label, value, lines)
 	{
@@ -1187,6 +1209,7 @@ var DialogManager = ( function() {
 		dlgAddUrl:_dlgAddUrl,
 		dlgAddBlockly: _dlgAddBlockly,	//(dialog, name, label, value )
 		dlgAddSelect: _dlgAddSelect,
+		dlgAddSelectGlyph: _dlgAddSelectGlyph,
 		dlgAddVariables:_dlgAddVariables,
 		pickDevice : _pickDevice,					//(devices,devideid,name) 
 		dlgAddDevices:_dlgAddDevices,
