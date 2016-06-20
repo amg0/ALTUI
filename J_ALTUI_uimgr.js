@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1768 $";
+var ALTUI_revision = "$Revision: 1769 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9850,6 +9850,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			"backward" : glyphTemplate.format( "backward", _T("Prev Page"), "" ),
 			"spinner" : glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" )
 		};
+		var pluginsFilter = {
+			filterbtn:null,
+			filtername:null
+		}
 		var _plugins_data = null;
 		var _counts=[];
 	
@@ -9970,19 +9974,20 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		function _displayPageSwitch(direction) {
 			var html = "";
-				html += "<div id='{0}' class='col-xs-6 altui-pageswitchbox' >"
-					html += "<div class='panel panel-default'>"
-						html += "<div class='panel-body'>"
-							html += "<div class='altui-plugin-pageswitch' data-direction='{1}'>{0}</div>".format(pageGlyphs[direction],direction)
-							html += "<div class='altui-plugin-title'>{0}</div>".format(direction)
-						html += "</div>"
-					html += "</div>"
+				html += "<div class='altui-pageswitchbox col-xs-2'>"
+				// buttonTemplate 		= "<button id='{0}' type='button' class='{1} btn btn-{3}' aria-label='tbd' title='{4}'>{2}</button>"
+				html += buttonTemplate.format(direction,'altui-plugin-pageswitch',pageGlyphs[direction]+" "+direction,'default',direction)
+							// html += "<div class='altui-plugin-pageswitch' data-direction='{1}'>{0}</div>".format(pageGlyphs[direction],direction)
+							// html += "<div class='altui-plugin-title'>{0}</div>".format(direction)
 				html += "</div>"
 				return html;
 		}
-		function _displayPlugins( filterbtn,filtername ) {
+		function _displayPlugins( filter ) {
+			filter = $.extend({},filter)
 			$(".altui-store-items").html("<div class='col-xs-12'><div class='jumbotron'><p>{0}</p></div></div>".format(pageGlyphs["spinner"]));
-
+			$(".altui-store-paging").html( "" );
+			var filterbtn = filter.filterbtn
+			var filtername = filter.filtername
 			// get the detailled data	
 			var params = { 
 				versions:true ,
@@ -10016,24 +10021,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
  				// display
 				var html = "";
 				$.each(_plugins_data.details.plugins,function(idx,plugin) {
-				// var title = plugin.Title.toLowerCase()
-				// if ( 
-					// ( (filterbtn==undefined) || (filterbtn=='*') || (filterbtn.indexOf(title.charAt(0)) !=-1) ) 
-					// &&
-					// ( (filtername==undefined) || (title.indexOf(filtername.toLowerCase()) !=-1)  ) 
-					// )
 					html += _displayOnePlugin(plugin)
 				});
 				
+				$(".altui-store-items").html(html);
+				
+				html ="";
 				if (_plugins_data.details.pagination.page>1)
 					html +=_displayPageSwitch("backward")
 				if (_plugins_data.details.pagination.page<_plugins_data.details.pagination.nbPage)
 					html +=_displayPageSwitch("forward")
 				
-				$(".altui-store-items").html(html);
+				$(".altui-store-paging").html( html );
 			});
 		}
-		function _displayStore( filterbtn, filtername) {
+		function _displayStore(  ) {
 			var html = "";
 			_computeCounts();
 			// carousel
@@ -10052,11 +10054,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += "<div class='row'>";
 						html+="<div id='altui-plugin-name-filter' class='col-xs-12 input-group'>";
 							html+="<span class='input-group-addon' id='altui-plugin-search-btn'>"+searchGlyph+"</span>";
-							html+="<input id='altui-plugin-name-filter-input' type='text' class='form-control' placeholder='Plugin Name' aria-describedby='name' value='{0}'>".format(filtername || "");
+							html+="<input id='altui-plugin-name-filter-input' type='text' class='form-control' placeholder='Plugin Name' aria-describedby='name' value=''>";
 						html += "</div>";
 					html += "</div>";
 				html += "<div class='altui-store-items row'>";
-						// html += _displayPlugins( filterbtn, filtername )
+				html += "</div>";
+				html += "<div class='altui-store-paging row'>";
 				html += "</div>";
 				html += "</div>"
 			html += "</div>";
@@ -10077,19 +10080,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			_plugins_data.plugins.sort( function(a,b) {return a.Title.localeCompare(b.Title); } )
 
 			$(".altui-mainpanel").html(_displayStore());
-			_displayPlugins();			
+			pluginsFilter = { }
+			_displayPlugins( pluginsFilter );			
 			$('#altui-plugin-name-filter-input').autocomplete({
 				source: $.map(_plugins_data.plugins, function(p) { return p.Title } ),
 				select: function( event, ui ) {
-					var filter = $(this).val();
-					_displayPlugins(null, ui.item.value);					
+					pluginsFilter = { filtername:ui.item.value }
+					_displayPlugins( pluginsFilter );			
 				}
 			});
 			// interactivity
 			$(".altui-mainpanel").off()
 			.on("change","#altui-plugin-name-filter-input",function() {
 				var filter = $(this).val();
-				_displayPlugins(null, filter);
+				pluginsFilter = { filtername:filter}
+				_displayPlugins( pluginsFilter );
 			})
 			.on ('change',".altui-version-selector",function() {
 				var dom = $(this).closest(".altui-pluginbox")
@@ -10102,16 +10107,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$(installbuttons).replaceWith( _displayInstallButtons(plugin,versionid) );
 			})
 			.on("click",".altui-plugin-pageswitch",function() {
-				var direction = $(this).data("direction")
+				var direction = $(this).prop("id")
 				if (direction=="forward")
 					nPage++;
 				else
 					nPage--;
-				_displayPlugins();				
+				_displayPlugins( pluginsFilter );
 			})
 			.on("click",".altui-plugin-category-btn",function() {
 				var filter = $(this).prop("id");
-				_displayPlugins(filter);
+				pluginsFilter = { filterbtn:filter }
+				_displayPlugins( pluginsFilter );
 			})
 			.on("click",".altui-plugin-publish-btn",function() {
 				UIManager.pageAppPublish();

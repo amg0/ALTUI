@@ -2236,47 +2236,12 @@ var WorkflowManager = (function() {
 		var idx = _findWorkflowIdxByAltuiid(altuiid);
 		if (_workflows[idx] !=null) {
 			var workflow = _workflows[idx];
-			var graph = JSON.parse(workflow.graph_json)
-			for (var i = 0 ; i<graph.cells.length ; i++ ) {
-				var cell = graph.cells[i];
-				if (cell.type=="link") {
-				var conditions = cell.prop.conditions;
-					for (var j=conditions.length-1; j>=0; j--) {
-						var cond = conditions[j]
-						var device = MultiBox.getDeviceByAltuiID(cond.device);
-						if (device==null) {
-							conditions.splice(j,1)
-							bSaveNeeded=true;
-						}
-					}
-					if (cell.prop.schedule && (cell.prop.schedule.length==0)) {
-						cell.prop.schedule =null;
-						bSaveNeeded=true;
-					}
-				} else {	 // type is dev.Models
-					$.each(['onEnter','onExit'], function(k,type) {
-						var actions = cell.prop[type];
-						for (var j=actions.length-1; j>=0; j--) {
-							var device = MultiBox.getDeviceByAltuiID(actions[j].device)
-							if (device==null) {
-								actions.splice(j,1)
-								bSaveNeeded=true;
-							}
-						}
-					})
-					$.each(['onEnterScenes','onExitScenes'], function(k,type) {
-						var scenes = cell.prop[type];
-						for (var j=scenes.length-1; j>=0; j--) {
-							var scene = MultiBox.getSceneByAltuiID(scenes[j].altuiid)
-							if (scene==null) {
-								scenes.splice(j,1)
-								bSaveNeeded=true;
-							}
-						}
-					})
+			if (workflow.graph_json) {
+				var graph = JSON.parse(workflow.graph_json)
+				for (var i = 0 ; i<graph.cells.length ; i++ ) {
+					var cell = graph.cells[i];
+					if (cell.type=="link") {
 					var conditions = cell.prop.conditions;
-					if (conditions)  // only start state has conditions
-					{
 						for (var j=conditions.length-1; j>=0; j--) {
 							var cond = conditions[j]
 							var device = MultiBox.getDeviceByAltuiID(cond.device);
@@ -2285,9 +2250,47 @@ var WorkflowManager = (function() {
 								bSaveNeeded=true;
 							}
 						}
+						if (cell.prop.schedule && (cell.prop.schedule.length==0)) {
+							cell.prop.schedule =null;
+							bSaveNeeded=true;
+						}
+					} else {	 // type is dev.Models
+						$.each(['onEnter','onExit'], function(k,type) {
+							var actions = cell.prop[type];
+							for (var j=actions.length-1; j>=0; j--) {
+								var device = MultiBox.getDeviceByAltuiID(actions[j].device)
+								if (device==null) {
+									actions.splice(j,1)
+									bSaveNeeded=true;
+								}
+							}
+						})
+						$.each(['onEnterScenes','onExitScenes'], function(k,type) {
+							var scenes = cell.prop[type];
+							for (var j=scenes.length-1; j>=0; j--) {
+								var scene = MultiBox.getSceneByAltuiID(scenes[j].altuiid)
+								if (scene==null) {
+									scenes.splice(j,1)
+									bSaveNeeded=true;
+								}
+							}
+						})
+						var conditions = cell.prop.conditions;
+						if (conditions)  // only start state has conditions
+						{
+							for (var j=conditions.length-1; j>=0; j--) {
+								var cond = conditions[j]
+								var device = MultiBox.getDeviceByAltuiID(cond.device);
+								if (device==null) {
+									conditions.splice(j,1)
+									bSaveNeeded=true;
+								}
+							}
+						}
 					}
 				}
 			}
+
 			if (bSaveNeeded) {
 				workflow.graph_json = JSON.stringify(graph)
 			}
