@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1777 $";
+var ALTUI_revision = "$Revision: 1778 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10218,22 +10218,25 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "</div> <!-- Carousel -->"
 			return html;
 		}
-		function _drawVersionSelect(pluginapp) {
-			var html = "<select class='input-sm form-control altui-version-selector'>"
+		function _orderVersions(pluginapp) {
 			var arr = $.map( Object.keys(pluginapp.Versions), function(key,i) { 
 					var v = pluginapp.Versions[key]
 					var str = "{0}.{1}".format(v.major||'0',v.minor||'0')
 					return { id:i+1, label: str, major:parseInt(v.major), minor:parseFloat(v.minor) } 
 			} );
-			$.each(arr.sort( function(a,b) { 
+			return arr.sort( function(a,b) { 
 					// reverse order
 					if (b.major>a.major)
 						return -1
 					if (b.major<a.major)
 						return 1
 					return b.minor-a.minor
-				}), 
-				function(key,version) {
+				});
+		}
+		function _drawVersionSelect(pluginapp,arr) {
+			var html = "<select class='input-sm form-control altui-version-selector'>"
+			// var arr = _orderVersions(pluginapp);
+			$.each(arr, function(key,version) {
 					html += "<option value='{0}'>{0}</option>".format(version.label)
 				})
 			html +="</select>"
@@ -10253,12 +10256,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return html;
 		}
 		function _displayOnePlugin(plugin) {
-			var firstversionid = Object.keys( plugin.Versions )[0];
+			var arr = _orderVersions(plugin);
+			var firstversionid = arr[0].id;
 			var html = "";
 				html += "<div id='{0}' class='col-xs-6 col-sm-4 col-md-3 col-lg-2 altui-pluginbox' data-pluginid='{0}'>".format(plugin.id)
 					html += "<div class='panel panel-default'>"
 						html += "<div class='panel-body'>"
-							html += "<div class='altui-plugin-version pull-right'>{0}</div>".format(_drawVersionSelect(plugin))
+							html += "<div class='altui-plugin-version pull-right'>{0}</div>".format(_drawVersionSelect(plugin,arr))
 							html += ( plugin.Icon.startsWith('https') ? "<img {1} class='altui-plugin-icon' src='{0}'></img>"  : "<img {1} class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon,"onerror='this.src=defaultIconSrc'");
 							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title.htmlEncode())
 							// if ($.isArray(plugin.Repository) == false) {
@@ -10268,7 +10272,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						html += "</div>"
 					html += "</div>"
 				html += "</div>"
-				return html;
+			return html;
 		}
 		function _displayPageSwitch(direction) {
 			var html = "";
@@ -10424,7 +10428,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var that = this;
 				// search version info
 				var pluginid = $(this).closest(".altui-pluginbox").data("pluginid");
-				var plugin = UIManager._findPlugin(_plugins_data.plugins,pluginid)
+				var plugin = UIManager._findPlugin(_plugins_data.details.plugins,pluginid)
 				var vernum= $(this).closest(".altui-pluginbox").find(".altui-version-selector").val();
 				var versionid = UIManager._findVersionId(plugin,vernum)
 				var repositories = UIManager._findRepositories(plugin,versionid)
@@ -10443,7 +10447,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var altuiapp_device = MultiBox.getDeviceByType(0,"urn:schemas-upnp-org:device:AltAppStore:1")
 				if (altuiapp_device != null) {
 					var pluginid = $(this).closest(".altui-pluginbox").data("pluginid");
-					var plugin = UIManager._findPlugin(_plugins_data.plugins,pluginid)
+					var plugin = UIManager._findPlugin(_plugins_data.details.plugins,pluginid)
 					var vernum= $(this).closest(".altui-pluginbox").find(".altui-version-selector").val();
 					var versionid = UIManager._findVersionId(plugin,vernum)
 					var repositories = UIManager._findRepositories(plugin,versionid)
