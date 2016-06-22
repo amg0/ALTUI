@@ -70,6 +70,13 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		var url = _getUrlHead().replace("data_request","luvd/")+file;
 		return _proxify(url);
 	}
+	
+	function _buildUPnPDeletePlugin( pluginid  )
+	{
+		var url = _getUrlHead()+'?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=DeletePlugin&PluginNum={0}'.format(pluginid);
+		return _proxify(url);
+	}
+
 	function _buildUPnPUpdatePluginVersion( pluginid ,version )
 	{
 		var url = _getUrlHead()+'?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum={0}&Version={1}'.format(pluginid ,version);
@@ -215,7 +222,8 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	function _UPnPDeletePlugin( pluginid, cbfunc )
 	{
 		AltuiDebug.debug("_UPnPDeletePlugin( {0} )".format( pluginid));
-		
+		return _exec( _buildUPnPDeletePlugin( pluginid ), cbfunc );
+/*
 		var xml = "";
 		xml +="<s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/' s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'>";
 		xml +="   <s:Body>";
@@ -251,6 +259,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 			if ($.isFunction( cbfunc ))
 				cbfunc(null);
 		});
+*/
 	};
 
 	function _UPnPUpdatePluginVersion( pluginid, version, cbfunc )
