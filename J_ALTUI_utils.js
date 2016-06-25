@@ -347,35 +347,44 @@ var LuaEditor = (function () {
 			DialogManager.dlgAddDialogButton(dialog, true, _T("Save Changes"),'altui-luacode-save','',{ 'data-dismiss':'modal'});
 
 			// ACE
-			var editor = ace.edit( "altui-editor-text" );
-			editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
-			var lang = 
-			editor.getSession().setMode( "ace/mode/"+options.language);
-			editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
+			var editor = null;
+			if (options.language != 'raw') {
+				editor = ace.edit( "altui-editor-text" );
+				editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
+				editor.getSession().setMode( "ace/mode/"+options.language);
+				editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
+			} else {
+				var str = $("#altui-editor-text").text();
+				$("#altui-editor-text").html("");
+				$("#altui-editor-text").append("<textarea class='altui-editor-area'>{0}</textarea>".format(str.htmlEncode()))
+			}
 			// resize
 			dialog.modal()
 				.on('shown.bs.modal', function () {
 					var widthparent = $("div#altui-editor-text").closest(".form-group").innerWidth();
-					$("div#altui-editor-text").resizable({
-						// containment: "parent",
-						maxWidth:widthparent,
-						stop: function( event, ui ) {
-							editor.resize();
-						}
-					});
+					if (editor) {
+						$("div#altui-editor-text").resizable({
+							// containment: "parent",
+							maxWidth:widthparent,
+							stop: function( event, ui ) {
+								if (editor)
+									editor.resize();
+							}
+						});
+					}
 					if (options && $.isFunction(options.onDisplay)) {
 						(options.onDisplay)(editor);
 					}
 				})
 				.on("click touchend",".altui-luacode-test",function(){ 
-					var lua = editor.getValue();
+					var lua = (editor) ? editor.getValue() : $("#altui-editor-text textarea").text();
 					MultiBox.runLua(0,lua, function(result) {
 						alert(JSON.stringify(result));
 					});
 				})
 				.on("click touchend",".altui-luacode-save",function(){ 
 					// Save Callback
-					var code = editor.getValue();
+					var code = (editor) ? editor.getValue() : $("#altui-editor-text textarea").val();
 					onSaveCB(code);
 				});
 

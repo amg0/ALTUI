@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1778 $";
+var ALTUI_revision = "$Revision: 1780 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -560,6 +560,7 @@ var styles ="						\
 	.altui-ace-editor .ui-resizable-handle { background-color: white; }		\
 	#altui-editor-text .ui-resizable-helper { border: 2px dotted #00F; }	\
 	#altui-editor-text .ui-resizable-handle { background-color: white; }	\
+	.altui-editor-area { width:100%; height:100% }	\
 	.altui-variable-title {	\
 	}					\
 	.altui-variable-buttons {	\
@@ -2709,8 +2710,8 @@ var UIManager  = ( function( window, undefined ) {
 	var _safeScripts=["J_PLC.js","J_VeraAlerts.js"];
 
 	// App Store URLs
-	// var getlist_url = 'https://script.google.com/macros/s/AKfycbz0YqgQ-gxY3YjrxuaLeQKDrLdTT7Ibbs6GAiv8wss/dev?page=1&reviews=true';	// DEV
 	var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // PROD
+	// var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // DEV
 	// var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec'; ALTUI TEST
 
 	// in English, we will apply the _T() later, at display time
@@ -9428,16 +9429,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					});
 				})
 				_showSaveNeeded(true);
-			},"json",{
+			},"raw",{
 					title: _T("Workflow Editor"),
-					language:"json",
+					language:"raw",
 					buttons:[ {id:'altui-copy-clipboard', label:_T("Copy")} ] , 
 					onDisplay:function(editor) {
 						$("#altui-copy-clipboard").off()
 						.on('click',function(e) {
-							editor.selectAll();
+							var alltext = ""
+							if (editor) {
+								editor.selectAll();
+								alltext = editor.getCopyText()
+							} else {
+								alltext = $("#altui-editor-text textarea").text();
+							}
 							$(this).after("<pre id='toto'></pre>")
-							$("#toto").text( editor.getCopyText() )
+							$("#toto").text( alltext  )
 							Altui_SelectText('toto')
 							document.execCommand('copy');
 							$("#toto").remove()
@@ -10147,7 +10154,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return $.ajax({
 				url:getlist_url,
 				dataType: "jsonp",
-				data: $.extend( {}, params ),
+				data: $.extend( { }, params ),
 				cache:false
 			})			
 		}
@@ -10293,6 +10300,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// get the detailled data	
 			var params = { 
 				versions:true ,
+				// reviews:true,
 				page: nPage,
 				per_page: nMaxPerPage
 			}
