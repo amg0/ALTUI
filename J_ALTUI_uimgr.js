@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1787 $";
+var ALTUI_revision = "$Revision: 1788 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6993,6 +6993,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html += "</form>";
 		return html;
 	};
+	
 
 	var bUIReady = false;
 	var bEngineReady = false;
@@ -9681,31 +9682,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		}
 		
-		function _getDeviceCode() {
-			var url = "data_request?id=lr_ALTUI_Handler&command=get_device_code";
-			return $.ajax({
-				url:url,
-				type: "GET",
-				data: {
-					client_id: "115256773336-e8qdncs5ac5cfmodhltsh2cgvk6jdr65.apps.googleusercontent.com",
-					scope: "email profile"
-				}
-			});
-		}
-		function _getAuthToken() {
-			var url = "data_request?id=lr_ALTUI_Handler&command=get_auth_token";
-			return $.ajax({
-				url:url,
-				type: "GET",
-			});
-		}
-		function _refreshAuthToken() {
-			var url = "data_request?id=lr_ALTUI_Handler&command=refresh_auth_token";
-			return $.ajax({
-				url:url,
-				type: "GET",
-			});
-		}
 		function _getPluginList() {
 			// TODO : change to take the authorized version to restrict list to only what the user is supposed to see
 			var url = "data_request?id=lr_ALTUI_Handler&command=get_authorized_plugins";
@@ -10057,74 +10033,25 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				})
 			
 		}
-		
-		function _tryAuthToken( n , interval ) {
-			$(".altui-plugin-msg2").html(_T("{0} Tentative #{1}/10").format(glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" ),n))
-			_getAuthToken() 
-				.done( function(data, textStatus, jqXHR) {	
-					data = JSON.parse(data)
-					if (data.access_token != undefined ) {
-						_getPluginList()
-						.done( function(data) {
-							_displayPublishPage();
-						});
-					} else  if ( n<10 ) {
-						setTimeout( function() { _tryAuthToken(n+1,interval)  } , interval*1000 )
-					} else {
-						$(".altui-plugin-msg").html(_T("Failure after 10 tentatives, try again..."))
-						$(".altui-plugin-msg2").html()
-					}
-				})				
-				.fail( function(jqXHR, textStatus, errorThrown) {			
-					alert('fail');
-				})
-		}
-		
+
 		function _displayPublishPage() {
-			$(".altui-plugin-msg").html(_T("Contacting Server..."))
-			_getPluginList().done( function(data) {
+			// prepare the callbacks
+			function onMessage(str) {
+				$(".altui-plugin-msg").html(str)
+			}
+			function onData(data) {
+				// got proper list of plugins
+				_plugins_data = data.data
+				_drawPublishForm()
+				_runActions()
+			}
+			function onFailure(jqx) {
 				
-					if ( typeof data === "string" ) {
-						try {_plugins_data= JSON.parse( data ) }
-						catch(e) {_plugins_data={result:false}} 
-					} else {
-						_plugins_data = data;
-					}
-
-					if (_plugins_data.result==false) {
-					
-						// if access was not granted, try to refresh the token					
-						$(".altui-plugin-msg").html(_T("Refreshing Token..."))
-						_refreshAuthToken() .done( function(data) {
-							
-								var tokens;
-								try { tokens = JSON.parse(data) } 
-								catch (e) { tokens = {result:false} }
-								if (tokens.result == false) {
-
-									// if refresh failed, try the whole process from the start
-									$(".altui-plugin-msg").html(_T("Authenticating client device..."))
-									_getDeviceCode().done( function(data, textStatus, jqXHR) {		
-											data = JSON.parse(data);
-											$(".altui-plugin-msg").html(_T("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : <mark>{0}</mark> <div class='altui-plugin-msg2'></div>").format(data.user_code,data.verification_url))
-											setTimeout( function() { _tryAuthToken( 0 , data.interval )  } , data.interval*1000 ) 
-										})
-										.fail( function(jqXHR, textStatus, errorThrown) {			
-											alert('fail');
-										})
-								} else {
-									// retry from the begining
-									$(".altui-plugin-msg").append("<p>{0}</p>".format(_T("Token Refreshed")))
-									_displayPublishPage();
-								}
-							});
-					} else {
-						// got proper list of plugins
-						_plugins_data = _plugins_data.data
-						_drawPublishForm()
-						_runActions()
-					}
-			});			
+			}
+			
+			// make the protected call
+			$(".altui-plugin-msg").html(_T("Contacting Server..."))
+			OAuth.Call( _getPluginList , null, onMessage , onData , onFailure);
 		}
 		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
 		UIManager.clearPage(_T('Publish App'),_T("Publish Application"),UIManager.oneColumnLayout);
@@ -10457,33 +10384,49 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									""		// size
 								));
 				var choices = $.map( [ "1-poor","2-below avg","3-average","4-above avg","5-excellent" ] , function(e,i) {return { value:i+1,text:_T(e) } } );
+				DialogManager.dlgAddHtml(dialog, "<div class='altui-plugin-review-tbl'></div>")
 				DialogManager.dlgAddSelect(dialog, "Rating", _T("Rating"), 3, choices, null)
 				DialogManager.dlgAddLine( dialog , "Comment", _T("Comment"), "", "", null ); 
 				DialogManager.dlgAddLine( dialog , "UserName", _T("User Name"), MultiBox.getMainUser().Name, "", null ); 
 				DialogManager.dlgAddDialogButton($('div#dialogModal'), true, _T("Save Changes"));		
 				$('div#dialogModal').modal();
-				_getReviews( pluginid ).done( function(data) {
+				
+				function onMessage(str) {
+					$(".altui-plugin-review-tbl").html(str)
+				}
+				function onFailure(textStatus) {
+				}
+				function onData(data) {
 					data = $.map(data.reviews, function(e,i) {
 						return {User:e.user_name, Rate:e.rate, Comment:e.comment}
 					})
-					var html = HTMLUtils.array2Table(data,'',null,_T("Reviews"),"","altui-reviews-text")
-					$(".altui-reviews-graph").after("<div>{0}</div>".format(html))
-				});
+					if (data.length>0) {
+						var html = HTMLUtils.array2Table(data,'',null,_T("Reviews"),"","altui-reviews-text")
+						$(".altui-plugin-review-tbl").html("<div>{0}</div>".format(html))
+					}
+				}
+				OAuth.Call( _getReviews , pluginid, onMessage , onData , onFailure);
+				
 				$('div#dialogs')
 					.off('submit',"div#dialogModal")
 					.on( 'submit',"div#dialogModal", function() {
-						_updatePluginReview( {
-							plugin_id : pluginid, 
-							comment : $("#altui-widget-Comment").val(),
-							rate : $("#altui-widget-Rating").val(),
-							user_name : $("#altui-widget-UserName").val()
-							})
-						.done( function (data, textStatus, jqXHR) {
-							PageMessage.message( _T("Success")+":"+data, "success");
-						})
-						.always( function() {
-							$('div#dialogModal').modal('hide');
-						})
+						OAuth.Call ( 
+							_updatePluginReview , 
+							{
+								plugin_id : pluginid, 
+								comment : $("#altui-widget-Comment").val(),
+								rate : $("#altui-widget-Rating").val(),
+								user_name : $("#altui-widget-UserName").val()
+							}, 
+							onMessage, 
+							function(data) {
+								$('div#dialogModal').modal('hide');
+								PageMessage.message( _T("Success")+":"+data, "success");
+							},
+							function (textStatus) {
+								onMessage(textStatus)
+							}
+						);
 					})
 			})
 			.on("click",".altui-plugin-pageswitch",function() {

@@ -2668,6 +2668,113 @@ var WorkflowManager = (function() {
 	}
 })();
 
+var OAuth = (function() {
+	function _getDeviceCode() {
+		var url = "data_request?id=lr_ALTUI_Handler&command=get_device_code";
+		return $.ajax({
+			url:url,
+			type: "GET",
+			data: {
+				client_id: "115256773336-e8qdncs5ac5cfmodhltsh2cgvk6jdr65.apps.googleusercontent.com",
+				scope: "email profile"
+			}
+		});
+	};
+	
+	function _getAuthToken() {
+		var url = "data_request?id=lr_ALTUI_Handler&command=get_auth_token";
+		return $.ajax({
+			url:url,
+			type: "GET",
+		});
+	};
+	
+	function _refreshAuthToken() {
+		var url = "data_request?id=lr_ALTUI_Handler&command=refresh_auth_token";
+		return $.ajax({
+			url:url,
+			type: "GET",
+		});
+	};
+	
+	function _OAuthCall( execFunc , param, notifCB , dataCB , failureCB ) {
+		function _tryAuthToken(n, interval) {
+			(notifCB)(_T("{0} Tentative #{1}/10").format(glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" ),n))
+			_getAuthToken() 
+				.done( function(data, textStatus, jqXHR) {	
+					data = JSON.parse(data)
+					if (data.access_token != undefined ) {
+						(execFunc)(param).done( function(data) {
+							var result = null;
+							if ( typeof data === "string" ) {
+								try {result = JSON.parse( data ) }
+								catch(e) {result={result:false}} 
+							} else {
+								result = data;
+							}
+							(dataCB)( result );
+						});
+					} else  if ( n<10 ) {
+						setTimeout( function() { _tryAuthToken(n+1,interval)  } , interval*1000 )
+					} else {
+						(failureCB)("") 
+						(notifCB)(_T("Failure after 10 tentatives, try again..."))
+					}
+				})				
+				.fail( function(jqXHR, textStatus, errorThrown) {			
+					(failureCB)(textStatus) 
+				})
+		}
+		
+		(execFunc)(param)
+		.done( function(data) {
+			var result = null;
+			if ( typeof data === "string" ) {
+				try {result = JSON.parse( data ) }
+				catch(e) {result={result:false}} 
+			} else {
+				result = data;
+			}
+			if (result.result==false) {
+				(notifCB)( _T("Refreshing Token...") )
+				_refreshAuthToken() .done( function(data) {
+					var tokens;
+					try { tokens = JSON.parse(data) } 
+					catch (e) { tokens = {result:false} }
+					if (tokens.result == false) {
+						// if refresh failed, try the whole process from the start
+						(notifCB)(_T("Authenticating client device..."))
+						_getDeviceCode().done( function(data, textStatus, jqXHR) {		
+								data = JSON.parse(data);
+								(notifCB)( _T("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : <mark>{0}</mark>").format(data.user_code,data.verification_url) )
+								setTimeout( function() { _tryAuthToken( 0 , data.interval )  } , data.interval*1000 ) 
+							})
+							.fail( function(jqXHR, textStatus, errorThrown) {			
+								(notifCB)( _T("General Failure") )
+								(failureCB)(textStatus) 
+							})
+					} else {
+						// retry from the begining
+						(notifCB)( _T("Token Refreshed") )
+						_OAuthCall( execFunc , param, notifCB , dataCB )
+					}							
+				})
+			} else {
+					// got proper list of plugins
+				(dataCB)(result)
+			}
+		})
+		.fail( function(jqXHR, textStatus, errorThrown) {			
+			(failureCB)(textStatus) 
+		})
+	}
+		
+	return {
+		Call : _OAuthCall		// execFunc , param, notifCB , dataCB, failureCB
+	}
+})();
+
+		
 var BlocklyArea = (function(htmlid){
 	var _htmlid = htmlid;
 	var _blocklyDiv = null;
