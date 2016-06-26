@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1780 $";
+var ALTUI_revision = "$Revision: 1783 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2710,8 +2710,8 @@ var UIManager  = ( function( window, undefined ) {
 	var _safeScripts=["J_PLC.js","J_VeraAlerts.js"];
 
 	// App Store URLs
-	var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // PROD
-	// var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // DEV
+	// var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // PROD
+	var getlist_url = 'https://script.google.com/macros/s/AKfycbz0YqgQ-gxY3YjrxuaLeQKDrLdTT7Ibbs6GAiv8wss/dev'; // DEV
 	// var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec'; ALTUI TEST
 
 	// in English, we will apply the _T() later, at display time
@@ -9119,7 +9119,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		workflow = WorkflowManager.getWorkflow(altuiid);
 		if (workflow==null) return;
 		
-		UIManager.clearPage(_T('Workflow'),_T("Workflow Editor"),UIManager.oneColumnLayout);
+		UIManager.clearPage(_T('Workflow'),_T("Workflow Editor")+ (": <span class='text-info'>{0}</span> <small>({1})</small>").format(workflow.name,workflow.altuiid),UIManager.oneColumnLayout);
 		$("#altui-pagetitle").css("display","inline").after("<div class='altui-workflow-toolbar'></div>");
 		if (MultiBox.isWorkflowEnabled() == false) {
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
@@ -10262,6 +10262,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "</div>"
 			return html;
 		}
+		function _displayPluginReviews(plugin) {
+			var reviews = $.extend({average_rating:0,nb:0},plugin.reviews)
+			var html ="";
+			var stars = "";
+			for( var i=1 ; i<= Math.round(reviews.average_rating); i++) {
+				stars += glyphTemplate.format("star",reviews.average_rating,"text-warning")
+			}
+			for( var i=1+Math.round(reviews.average_rating); i<=5; i++) {
+				stars += glyphTemplate.format("star-empty",reviews.average_rating,"")
+			}
+			html +="<div class='altui-plugin-reviews'>{0} <span class='badge'>{1}</span></div>".format(stars, reviews.nb)
+			return html;
+		}
 		function _displayOnePlugin(plugin) {
 			var arr = _orderVersions(plugin);
 			var firstversionid = arr[0].id;
@@ -10275,6 +10288,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							// if ($.isArray(plugin.Repository) == false) {
 								// plugin.Repository = [plugin.Repository]
 							// }
+							html += _displayPluginReviews(plugin);
 							html += _displayInstallButtons(plugin , firstversionid)
 						html += "</div>"
 					html += "</div>"
@@ -10300,7 +10314,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// get the detailled data	
 			var params = { 
 				versions:true ,
-				// reviews:true,
+				reviews:true,
 				page: nPage,
 				per_page: nMaxPerPage
 			}
@@ -10415,6 +10429,27 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var versionid = UIManager._findVersionId(plugin,vernum)
 				// var repositories = UIManager._findRepositories(plugin,versionid)
 				$(installbuttons).replaceWith( _displayInstallButtons(plugin,versionid) );
+			})
+			.on("click",".altui-plugin-reviews",function() {
+				var pluginid= $(this).closest(".altui-pluginbox").data("pluginid");
+				var plugin = UIManager._findPlugin(_plugins_data.details.plugins,pluginid)
+				var dialog = DialogManager.registerDialog('dialogModal',
+									defaultDialogModalTemplate.format( 'dialogModal',
+									_T('Plugin Rating for {0}'.format(plugin.Title)),	// title
+									_displayPluginReviews(plugin) ,						// body 
+									""		// size
+								));
+				var choices = $.map( [ "1-poor","2-below avg","3-average","4-above avg","5-excellent" ] , function(e,i) {return { value:i+1,text:_T(e) } } );
+				DialogManager.dlgAddSelect(dialog, "Rating", _T("Rating"), 3, choices, null)
+				DialogManager.dlgAddLine( dialog , "Comment", _T("Comment"), "", "", null ); 
+				DialogManager.dlgAddLine( dialog , "UserName", _T("User Name"), MultiBox.getMainUser().Name, "", null ); 
+				DialogManager.dlgAddDialogButton($('div#dialogModal'), true, _T("Save Changes"));		
+				$('div#dialogModal').modal();
+				$('div#dialogs')
+					.off('submit',"div#dialogModal")
+					.on( 'submit',"div#dialogModal", function() {
+						$('div#dialogModal').modal('hide');
+					})
 			})
 			.on("click",".altui-plugin-pageswitch",function() {
 				var direction = $(this).prop("id")
