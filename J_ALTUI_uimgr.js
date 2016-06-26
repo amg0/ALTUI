@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1783 $";
+var ALTUI_revision = "$Revision: 1786 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2710,9 +2710,8 @@ var UIManager  = ( function( window, undefined ) {
 	var _safeScripts=["J_PLC.js","J_VeraAlerts.js"];
 
 	// App Store URLs
-	// var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // PROD
-	var getlist_url = 'https://script.google.com/macros/s/AKfycbz0YqgQ-gxY3YjrxuaLeQKDrLdTT7Ibbs6GAiv8wss/dev'; // DEV
-	// var getlist_url = 'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec'; ALTUI TEST
+	var getlist_url = 'https://script.google.com/macros/s/AKfycbwaJ9s6TyXJimpx09VBkFInO_rTjSfKXdPhZS_1FWdBL8AOmo4/exec'; // PROD
+	// var getlist_url = 'https://script.google.com/macros/s/AKfycbz0YqgQ-gxY3YjrxuaLeQKDrLdTT7Ibbs6GAiv8wss/dev'; // DEV
 
 	// in English, we will apply the _T() later, at display time
 	var _checkOptions = [
@@ -9681,6 +9680,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				type: "GET"
 			});
 		}
+		
 		function _getDeviceCode() {
 			var url = "data_request?id=lr_ALTUI_Handler&command=get_device_code";
 			return $.ajax({
@@ -10159,6 +10159,25 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			})			
 		}
 		
+		function _submitPluginReview( data ) {
+			return $.ajax({
+				url:getlist_url,
+				dataType: "jsonp",
+				data: $.extend( { }, params ),
+				cache:false
+			})			
+		}
+		
+		function _updatePluginReview( data  ) {
+			var url = "data_request?id=lr_ALTUI_Handler&command=update_plugin_review";
+			return $.ajax({
+				url:url,
+				type: "GET",
+				data:data,
+				cache:false
+			});
+		}
+
 		function _computeCounts() {
 			$.each(arr,function(k,v) { _counts[v]=0 } );
 			$.each(_plugins_data.plugins,function(idx,plugin) {
@@ -10448,7 +10467,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$('div#dialogs')
 					.off('submit',"div#dialogModal")
 					.on( 'submit',"div#dialogModal", function() {
-						$('div#dialogModal').modal('hide');
+						_updatePluginReview( {
+							plugin_id : pluginid, 
+							comment : $("#altui-widget-Comment").val(),
+							rate : $("#altui-widget-Rating").val(),
+							user_name : $("#altui-widget-UserName").val()
+							})
+						.done( function (data, textStatus, jqXHR) {
+							alert(data)
+						})
+						.allways( function() {
+							$('div#dialogModal').modal('hide');
+						})
 					})
 			})
 			.on("click",".altui-plugin-pageswitch",function() {

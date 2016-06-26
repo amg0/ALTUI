@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.58"
+local version = "v1.58b"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -1895,7 +1895,7 @@ function myALTUI_LuaRunHandler(lul_request, lul_parameters, lul_outputformat)
 end
 
 local function _helperGoogleScript(url,method,data)
-	debug(string.format("ALTUI: _helperGoogleScript (%s,%s)",method,url))
+	debug(string.format("ALTUI: _helperGoogleScript (%s,%s)  data:%s",method,url,data))
 	-- local data = "contents="..plugin
 	local response_body = {}
 	local commonheaders = {
@@ -2173,7 +2173,10 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local plugin = lul_parameters["plugin"]
 				plugin = modurl.unescape( plugin)
 				local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(deviceID),"")
-				local access_token = (json.decode(str)).access_token or ""
+				local access_token=""
+				if (str~="") then
+					access_token = (json.decode(str)).access_token or ""
+				end
 				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=update&access_token="..access_token
 				return _helperGoogleScript(url,"POST",plugin), "text/plain"				
 			end,
@@ -2188,6 +2191,26 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				end
 				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=create&access_token="..access_token
 				return _helperGoogleScript(url,"POST",plugin), "text/plain"				
+			end,
+		["update_plugin_review"] =
+			function(params)
+				local data = {
+					["plugin_id"]= lul_parameters["plugin_id"],
+					["comment"]= modurl.unescape( lul_parameters["comment"] or "" ),
+					["rate"]= lul_parameters["rate"],
+					["user_name"]= modurl.unescape( lul_parameters["user_name"] or "")
+				}
+				data = json.encode(data)
+				local str = getSetVariable(ALTUI_SERVICE, "GoogleAuthToken",  tonumber(deviceID),"")
+				local access_token=""
+				if (str~="") then
+					access_token = (json.decode(str)).access_token or ""
+				end
+				-- PROD
+				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=set_review&access_token="..access_token
+				-- DEV 
+				-- local url = "https://script.google.com/macros/s/AKfycbxFIcNe0GuscRhsqKfC8dDSjBuguXed-WFN-crInGI4/dev?command=set_review&access_token="..access_token
+				return _helperGoogleScript(url,"POST",data), "text/plain"				
 			end,
 		["get_authorized_plugins"] =
 			function(params)
