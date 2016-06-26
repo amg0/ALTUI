@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.58b"
+local version = "v1.59"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -2196,7 +2196,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 			function(params)
 				local data = {
 					["plugin_id"]= lul_parameters["plugin_id"],
-					["comment"]= modurl.unescape( lul_parameters["comment"] or "" ),
+					["comment"]= modurl.unescape(( lul_parameters["comment"] or "" ):gsub("+", " ")),  --  + seems not to be decoded by url module
 					["rate"]= lul_parameters["rate"],
 					["user_name"]= modurl.unescape( lul_parameters["user_name"] or "")
 				}
@@ -2207,7 +2207,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 					access_token = (json.decode(str)).access_token or ""
 				end
 				-- PROD
-				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=set_review&access_token="..access_token
+				local url = "https://script.google.com/macros/s/AKfycbz1A9_ONPBBsJuIk5zyLl9VrmOejiSkcAT6R_MBB3ItSJ-eVrr6/exec?command=put_review&access_token="..access_token
 				-- DEV 
 				-- local url = "https://script.google.com/macros/s/AKfycbxFIcNe0GuscRhsqKfC8dDSjBuguXed-WFN-crInGI4/dev?command=set_review&access_token="..access_token
 				return _helperGoogleScript(url,"POST",data), "text/plain"				

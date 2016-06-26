@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1786 $";
+var ALTUI_revision = "$Revision: 1787 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10158,16 +10158,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				cache:false
 			})			
 		}
-		
-		function _submitPluginReview( data ) {
+		function _getReviews( pluginid ) {
 			return $.ajax({
 				url:getlist_url,
 				dataType: "jsonp",
-				data: $.extend( { }, params ),
+				data: { command:'get_reviews' , id: pluginid  },
 				cache:false
 			})			
 		}
-		
 		function _updatePluginReview( data  ) {
 			var url = "data_request?id=lr_ALTUI_Handler&command=update_plugin_review";
 			return $.ajax({
@@ -10281,7 +10279,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "</div>"
 			return html;
 		}
-		function _displayPluginReviews(plugin) {
+		function _displayPluginReviews(cls,plugin) {
 			var reviews = $.extend({average_rating:0,nb:0},plugin.reviews)
 			var html ="";
 			var stars = "";
@@ -10291,7 +10289,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			for( var i=1+Math.round(reviews.average_rating); i<=5; i++) {
 				stars += glyphTemplate.format("star-empty",reviews.average_rating,"")
 			}
-			html +="<div class='altui-plugin-reviews'>{0} <span class='badge'>{1}</span></div>".format(stars, reviews.nb)
+			html +="<div class='{2}'>{0} <span class='badge'>{1}</span></div>".format(stars, reviews.nb,cls)
 			return html;
 		}
 		function _displayOnePlugin(plugin) {
@@ -10307,7 +10305,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							// if ($.isArray(plugin.Repository) == false) {
 								// plugin.Repository = [plugin.Repository]
 							// }
-							html += _displayPluginReviews(plugin);
+							html += _displayPluginReviews('altui-plugin-reviews',plugin);
 							html += _displayInstallButtons(plugin , firstversionid)
 						html += "</div>"
 					html += "</div>"
@@ -10455,7 +10453,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var dialog = DialogManager.registerDialog('dialogModal',
 									defaultDialogModalTemplate.format( 'dialogModal',
 									_T('Plugin Rating for {0}'.format(plugin.Title)),	// title
-									_displayPluginReviews(plugin) ,						// body 
+									_displayPluginReviews("altui-reviews-graph",plugin) ,						// body 
 									""		// size
 								));
 				var choices = $.map( [ "1-poor","2-below avg","3-average","4-above avg","5-excellent" ] , function(e,i) {return { value:i+1,text:_T(e) } } );
@@ -10464,6 +10462,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				DialogManager.dlgAddLine( dialog , "UserName", _T("User Name"), MultiBox.getMainUser().Name, "", null ); 
 				DialogManager.dlgAddDialogButton($('div#dialogModal'), true, _T("Save Changes"));		
 				$('div#dialogModal').modal();
+				_getReviews( pluginid ).done( function(data) {
+					data = $.map(data.reviews, function(e,i) {
+						return {User:e.user_name, Rate:e.rate, Comment:e.comment}
+					})
+					var html = HTMLUtils.array2Table(data,'',null,_T("Reviews"),"","altui-reviews-text")
+					$(".altui-reviews-graph").after("<div>{0}</div>".format(html))
+				});
 				$('div#dialogs')
 					.off('submit',"div#dialogModal")
 					.on( 'submit',"div#dialogModal", function() {
@@ -10474,9 +10479,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							user_name : $("#altui-widget-UserName").val()
 							})
 						.done( function (data, textStatus, jqXHR) {
-							alert(data)
+							PageMessage.message( _T("Success")+":"+data, "success");
 						})
-						.allways( function() {
+						.always( function() {
 							$('div#dialogModal').modal('hide');
 						})
 					})
