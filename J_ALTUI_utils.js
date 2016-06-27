@@ -2735,7 +2735,8 @@ var OAuth = (function() {
 			} else {
 				result = data;
 			}
-			if (result.result==false) {
+			//{"error":{"code":400,"message":"Token has been revoked. - invalid_grant","step":"Get access token from refresh token"}}
+			if ((result.result==false) || (result.error && result.error.code==400)){
 				(notifCB)( _T("Refreshing Token...") )
 				_refreshAuthToken() .done( function(data) {
 					var tokens;
