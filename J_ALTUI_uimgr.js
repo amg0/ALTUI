@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1788 $";
+var ALTUI_revision = "$Revision: 1791 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6030,22 +6030,37 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	function _setTitle(title) {
 		$("title").text(title);
 	};
+	
 	function _setTheme(themecss) {
-		if (isNullOrEmpty(themecss)) {
-			themecss = g_ALTUI.g_OrgTheme;
-			$("link[href='"+g_ALTUI.g_CustomTheme+"']").attr('href',themecss);
-			g_ALTUI.g_CustomTheme = themecss;
-			MyLocalStorage.setSettings("Theme",null);
-		} else {
-			var link = $("link[href='{0}']".format(g_ALTUI.g_CustomTheme));
-			if (link.length>0) {
-				$(link).attr('href',themecss);					
-			} else {
-				// if (themecss && (themecss.trim()!="") )
-				$("title").after("<link rel='stylesheet' href='"+themecss+"'>");			
+		if (themecss==null) {
+			$("link.altui-theme").remove();
+			g_ALTUI.g_CustomTheme = "";
+			MyLocalStorage.setSettings("Theme","");
+		} else {			
+			var org_theme = g_ALTUI.g_OrgTheme;
+			console.log("org theme ='%s'",org_theme)
+			if (isNullOrEmpty(themecss)) {
+				themecss = trim(MyLocalStorage.getSettings("Theme"));
+				console.log("org theme null, taking LocalStorage value ='%s'",themecss)
+				if (isNullOrEmpty(themecss)) {
+					themecss = g_ALTUI.g_OrgTheme;
+					console.log("LocalStorage theme null, taking g_OrgTheme %s",themecss)
+				}
 			}
+			
+			console.log("saving LocalStorage value '%s'",themecss)
 			g_ALTUI.g_CustomTheme = themecss;
 			MyLocalStorage.setSettings("Theme",themecss);
+
+			var link = $("link.altui-theme");
+			if (link.length==0) {
+				console.log("Adding new <link>",themecss)
+				$("title").after("<link class='altui-theme' rel='stylesheet' href='"+themecss+"'>");			
+				link = $("link.altui-theme");
+			} else {
+				console.log("Updating <link>",themecss)
+				$(link).attr('href',themecss);					
+			}
 		}
 	};
 
@@ -13137,6 +13152,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-ctrl-heal", glyph:"glyphicon-heart-empty", label:_T("ZWave Heal")},
 			{id:"altui-ctrl-inclusion", glyph:"glyphicon-plus", label:_T("ZWave Inclusion")},
 			{id:"altui-ctrl-exclusion", glyph:"glyphicon-minus", label:_T("ZWave Exclusion")},
+			{id:"altui-ctrl-support", glyph:"glyphicon-envelope", label:_T("Support Ticket")},
 		];
 
 		function _displayControllerInfo(box_info) {
@@ -13178,6 +13194,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$(".altui-mainpanel").append( html );
 		
 		// interactivity
+		$("#altui-ctrl-support").click(function() {
+			window.open( "http://support.getvera.com/customer/portal/emails/new", '_blank');
+		})
 		$("#altui-ctrl-backup").click(function() {
 			var panel = $(this).closest('.altui-controller-panel');
 			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
@@ -14345,12 +14364,7 @@ $(function() {
 		body+="</div> <!-- /container -->";
 		body+="<div id='altui-background'></div>";
 		$("#wrap").prepend(body);
-				
-		// client side override of theme if defined
-		var clientsideThemecss= MyLocalStorage.getSettings("Theme");
-		if (clientsideThemecss != null)
-			g_ALTUI.g_CustomTheme = clientsideThemecss;
-		
+						
 		ALTUI_Templates = ALTUI_Templates_Factory();
 		
 		UIManager.initEngine(styles.format(window.location.hostname), g_ALTUI.g_DeviceTypes, g_ALTUI.g_CustomTheme, g_ALTUI.g_Options, function() {

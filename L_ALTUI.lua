@@ -2106,7 +2106,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				variables["devicetypes"] = json.encode(tbl)
 				-- variables["custompages"] = "["..table.concat(result_tbl, ",").."]"
 				-- variables["workflows"] = json.encode(Workflows)
-				variables["ThemeCSS"] = luup.variable_get(ALTUI_SERVICE, "ThemeCSS", deviceID) or ""
+				variables["ThemeCSS"] = (luup.variable_get(ALTUI_SERVICE, "ThemeCSS", deviceID) or ""):trim()
 				variables["ServerOptions"] = serverOptions
 				variables["style"] = htmlStyle
 				variables["mydeviceid"] = deviceID
