@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1792 $";
+var ALTUI_revision = "$Revision: 1795 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5058,7 +5058,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 			if (scenes) {
 				$.each(scenes, function(idx,scene) {
-					var selectedusers = (scene.triggers[0].users || "").toString().split(",");
+					var selectedusers = [];
+					if (scene.triggers && scene.triggers.length>0) {
+						selectedusers = (scene.triggers[0].users || "").toString().split(",");
+					}
 					var names=[];
 					$.each(users, function(idx,user){
 						var inarray  = $.inArray(user.id.toString(),selectedusers);
@@ -6038,28 +6041,31 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			MyLocalStorage.setSettings("Theme","");
 		} else {			
 			var org_theme = g_ALTUI.g_OrgTheme;
-			console.log("org theme ='%s'",org_theme)
+			// console.log("org theme ='%s'",org_theme)
 			if (isNullOrEmpty(themecss)) {
 				themecss = trim(MyLocalStorage.getSettings("Theme"));
-				console.log("org theme null, taking LocalStorage value ='%s'",themecss)
+				// console.log("org theme null, taking LocalStorage value ='%s'",themecss)
 				if (isNullOrEmpty(themecss)) {
 					themecss = g_ALTUI.g_OrgTheme;
-					console.log("LocalStorage theme null, taking g_OrgTheme %s",themecss)
+					// console.log("LocalStorage theme null, taking g_OrgTheme %s",themecss)
 				}
 			}
 			
-			console.log("saving LocalStorage value '%s'",themecss)
+			// console.log("saving LocalStorage value '%s'",themecss)
 			g_ALTUI.g_CustomTheme = themecss;
 			MyLocalStorage.setSettings("Theme",themecss);
 
 			var link = $("link.altui-theme");
 			if (link.length==0) {
-				console.log("Adding new <link>",themecss)
+				// console.log("Adding new <link>",themecss)
+				// alert('insert '+themecss)
 				$("title").after("<link class='altui-theme' rel='stylesheet' href='"+themecss+"'>");			
 				link = $("link.altui-theme");
 			} else {
-				console.log("Updating <link>",themecss)
-				$(link).attr('href',themecss);					
+				// console.log("Updating <link>",themecss)
+				// alert('update '+themecss)
+				if ( $(link).attr('href') != themecss )
+					$(link).attr('href',themecss);					
 			}
 		}
 	};
@@ -13829,6 +13835,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			window.open(href, '_blank');
 			return false;
 		}).on('click','#altui-theme-reset',function(e) {
+			// UIManager.setTheme("https://drive.google.com/uc?id=0B6TVdm2A9rnNakxEdDdYVWVxMnM&authuser=0&export=download");
 			UIManager.setTheme(null);
 		});
 	},	

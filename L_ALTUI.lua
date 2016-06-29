@@ -1610,6 +1610,7 @@ local htmlLocalCSSlinks = [[
 	<link rel="stylesheet" href="@localcdn@/jquery.bootgrid.min.css">
     <link rel="stylesheet" type="text/css" href="@localcdn@/spectrum.min.css">
     <link rel="stylesheet" type="text/css" href="@localcdn@/joint.css">
+	<link class="altui-theme" rel="stylesheet" href="@ThemeCSS@">	
 ]]
 
 local htmlCSSlinks = [[
@@ -1618,6 +1619,7 @@ local htmlCSSlinks = [[
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.1/spectrum.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.css">
+	<link class="altui-theme" rel="stylesheet" href="@ThemeCSS@">	
 ]]
 
 local htmlLayout = [[
