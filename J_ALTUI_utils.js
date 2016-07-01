@@ -2698,6 +2698,9 @@ var OAuth = (function() {
 	};
 	
 	function _OAuthCall( execFunc , param, notifCB , dataCB , failureCB ) {
+		var notifCB = notifCB;
+		var dataCB = dataCB;
+		var failureCB = failureCB;
 		function _tryAuthToken(n, interval) {
 			(notifCB)(2,_T("{0} Tentative #{1}/10").format(glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" ),n))
 			_getAuthToken() 
@@ -2717,8 +2720,8 @@ var OAuth = (function() {
 					} else  if ( n<10 ) {
 						setTimeout( function() { _tryAuthToken(n+1,interval)  } , interval*1000 )
 					} else {
-						(failureCB)("") 
-						(notifCB)(1,_T("Failure after 10 tentatives, try again..."))
+						(notifCB)(1,_T("Failure after 10 tentatives, try again..."));
+						(failureCB)("");
 					}
 				})				
 				.fail( function(jqXHR, textStatus, errorThrown) {			
