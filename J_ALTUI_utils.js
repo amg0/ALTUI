@@ -2757,7 +2757,7 @@ var OAuth = (function() {
 					} else {
 						// retry from the begining
 						(notifCB)( 1,_T("Token Refreshed") )
-						_OAuthCall( execFunc , param, notifCB , dataCB )
+						_OAuthCall( execFunc , param, notifCB , dataCB, failureCB )
 					}							
 				})
 			} else {
