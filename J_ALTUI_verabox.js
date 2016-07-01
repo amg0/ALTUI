@@ -708,6 +708,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 
 	function _setAttr(deviceid, attribute, value,cbfunc) {
+		if ( isNullOrEmpty(value) )
+			value = " "
+
 		if (_isUI5() == true) {
 			return _upnpHelper.UPnPSetAttr(deviceid, attribute, value,cbfunc);
 		} else {
