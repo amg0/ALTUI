@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1797 $";
+var ALTUI_revision = "$Revision: 1798 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10072,8 +10072,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		function _displayPublishPage() {
 			// prepare the callbacks
-			function onMessage(str) {
-				$(".altui-plugin-msg").html(str)
+			function onMessage(line,str) {
+				if (line==1)
+					$(".altui-plugin-msg").html(str)
+				else if (line==2)
+					$(".altui-plugin-msg2").html(str)
 			}
 			function onData(data) {
 				// got proper list of plugins
@@ -10091,7 +10094,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
 		UIManager.clearPage(_T('Publish App'),_T("Publish Application"),UIManager.oneColumnLayout);
-		$(".altui-mainpanel").append("<div class='altui-plugin-msg col-xs-12'></div><div id='altui-plugin-div'></div>");
+		$(".altui-mainpanel").append("<div class='altui-plugin-msg col-xs-12'></div><div class='altui-plugin-msg2 col-xs-12'></div><div id='altui-plugin-div'></div>");
 		_displayPublishPage();
 	},
 	
@@ -10427,7 +10430,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				DialogManager.dlgAddDialogButton($('div#dialogModal'), true, _T("Save Changes"));		
 				$('div#dialogModal').modal();
 				
-				function onMessage(str) {
+				function onMessage(line,str) {
+					// whatever line
 					$(".altui-plugin-review-tbl").html(str)
 				}
 				function onFailure(textStatus) {

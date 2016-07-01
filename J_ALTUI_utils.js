@@ -2699,7 +2699,7 @@ var OAuth = (function() {
 	
 	function _OAuthCall( execFunc , param, notifCB , dataCB , failureCB ) {
 		function _tryAuthToken(n, interval) {
-			(notifCB)(_T("{0} Tentative #{1}/10").format(glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" ),n))
+			(notifCB)(2,_T("{0} Tentative #{1}/10").format(glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" ),n))
 			_getAuthToken() 
 				.done( function(data, textStatus, jqXHR) {	
 					data = JSON.parse(data)
@@ -2718,7 +2718,7 @@ var OAuth = (function() {
 						setTimeout( function() { _tryAuthToken(n+1,interval)  } , interval*1000 )
 					} else {
 						(failureCB)("") 
-						(notifCB)(_T("Failure after 10 tentatives, try again..."))
+						(notifCB)(1,_T("Failure after 10 tentatives, try again..."))
 					}
 				})				
 				.fail( function(jqXHR, textStatus, errorThrown) {			
@@ -2737,26 +2737,26 @@ var OAuth = (function() {
 			}
 			//{"error":{"code":400,"message":"Token has been revoked. - invalid_grant","step":"Get access token from refresh token"}}
 			if ((result.result==false) || (result.error && result.error.code==400)){
-				(notifCB)( _T("Refreshing Token...") )
+				(notifCB)(1, _T("Refreshing Token...") )
 				_refreshAuthToken() .done( function(data) {
 					var tokens;
 					try { tokens = JSON.parse(data) } 
 					catch (e) { tokens = {result:false} }
 					if (tokens.result == false) {
 						// if refresh failed, try the whole process from the start
-						(notifCB)(_T("Authenticating client device..."))
+						(notifCB)(1,_T("Authenticating client device..."))
 						_getDeviceCode().done( function(data, textStatus, jqXHR) {		
 								data = JSON.parse(data);
-								(notifCB)( _T("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : <mark>{0}</mark>").format(data.user_code,data.verification_url) )
+								(notifCB)( 1,_T("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : <mark>{0}</mark>").format(data.user_code,data.verification_url) )
 								setTimeout( function() { _tryAuthToken( 0 , data.interval )  } , data.interval*1000 ) 
 							})
 							.fail( function(jqXHR, textStatus, errorThrown) {			
-								(notifCB)( _T("General Failure") )
+								(notifCB)( 1,_T("General Failure") )
 								(failureCB)(textStatus) 
 							})
 					} else {
 						// retry from the begining
-						(notifCB)( _T("Token Refreshed") )
+						(notifCB)( 1,_T("Token Refreshed") )
 						_OAuthCall( execFunc , param, notifCB , dataCB )
 					}							
 				})
