@@ -16,6 +16,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		var style="";
 		style += ".altui-iphone 	{	font-size: 16px;	}";
 		style += ".altui-canalplus 	{	font-size: 12px;	}";
+		style += ".altui-razb 		{	font-size: 12px;	}";
 		style += "#altui-cplus-keytbl td {text-align:center;     vertical-align:middle;}";
 		style += ".altui-cplus-button { width: 70px; font-size:12px;}";
 		style += ".altui-ipx  { margin-top: 10px; }";	
@@ -42,7 +43,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
 		html += "<script type='text/javascript'>";
-		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:altui1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
 		return html;
 	};
@@ -123,6 +124,19 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		return html;
 	};
 	
+	function _drawRAZB(device) {
+		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:razb1', 'Debug' ); 
+		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:razb1', 'Version' ); 
+		var html ="";
+		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
+		html += "<div class='altui-'> </div>";
+		html += "<div class='altui-razb'>{0}</div>".format(version);
+		html += "<script type='text/javascript'>";
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:razb1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	}
+	
 	// return the html string inside the .panel-body of the .altui-device#id panel
 	function _drawIPhone( device) {
 		var dist = parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' )); 
@@ -164,19 +178,19 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		html +="<div class=''>";
 		html += "<table id='altui-cplus-keytbl'>";
 		html += "<tbody>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='1'>1</button></td><td><button class='altui-cplus-button btn btn-default' id='2'>2</button></td><td><button class='altui-cplus-button btn btn-default' id='3'>3</button></td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='4'>4</button></td><td><button class='altui-cplus-button btn btn-default' id='5'>5</button></td><td><button class='altui-cplus-button btn btn-default' id='6'>6</button></td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='7'>7</button></td><td><button class='altui-cplus-button btn btn-default' id='8'>8</button></td><td><button class='altui-cplus-button btn btn-default' id='9'>9</button></td></tr>";
-html+="<tr><td colspan='3'><button class='altui-cplus-button btn btn-default' id='0'>0</button></td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Rewind'>Rewind</button></td><td><button class='altui-cplus-button btn btn-default' id='Play'>Play</button></td><td><button class='altui-cplus-button btn btn-default' id='Forward'>Forward</button></td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Stop'>Stop</button></td><td><button class='altui-cplus-button btn btn-default' id='Pause'>Pause</button></td><td><button class='altui-cplus-button btn btn-default' id='Rec'>Rec</button></td></tr>";
-html+="<tr><td colspan='3'>-</td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Menu'>Menu</button></td><td><button class='altui-cplus-button btn btn-default' id='Haut'>Haut</button></td><td><button class='altui-cplus-button btn btn-default' id='Guide'>Guide</button></td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Gauche'>Gauche</button></td><td><button class='altui-cplus-button btn btn-default' id='Ok'>Ok</button></td><td><button class='altui-cplus-button btn btn-default' id='Droite'>Droite</button></td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Retour'>Retour</button></td><td><button class='altui-cplus-button btn btn-default' id='Bas'>Bas</button></td><td><button class='altui-cplus-button btn btn-default' id='Sortie'>Sortie</button></td></tr>";
-html+="<tr><td colspan='3'>-</td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='VOL+'>VOL+</button></td><td><button class='altui-cplus-button btn btn-default' id='Mute'>Mute</button></td><td><button class='altui-cplus-button btn btn-default' id='P+'>P+</button></td></tr>";
-html+="<tr><td><button class='altui-cplus-button btn btn-default' id='VOL-'>VOL-</button></td><td><button class='altui-cplus-button btn btn-default' id='Info'>Info</button></td><td><button class='altui-cplus-button btn btn-default' id='P-'>P-</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='1'>1</button></td><td><button class='altui-cplus-button btn btn-default' id='2'>2</button></td><td><button class='altui-cplus-button btn btn-default' id='3'>3</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='4'>4</button></td><td><button class='altui-cplus-button btn btn-default' id='5'>5</button></td><td><button class='altui-cplus-button btn btn-default' id='6'>6</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='7'>7</button></td><td><button class='altui-cplus-button btn btn-default' id='8'>8</button></td><td><button class='altui-cplus-button btn btn-default' id='9'>9</button></td></tr>";
+		html+="<tr><td colspan='3'><button class='altui-cplus-button btn btn-default' id='0'>0</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Rewind'>Rewind</button></td><td><button class='altui-cplus-button btn btn-default' id='Play'>Play</button></td><td><button class='altui-cplus-button btn btn-default' id='Forward'>Forward</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Stop'>Stop</button></td><td><button class='altui-cplus-button btn btn-default' id='Pause'>Pause</button></td><td><button class='altui-cplus-button btn btn-default' id='Rec'>Rec</button></td></tr>";
+		html+="<tr><td colspan='3'>-</td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Menu'>Menu</button></td><td><button class='altui-cplus-button btn btn-default' id='Haut'>Haut</button></td><td><button class='altui-cplus-button btn btn-default' id='Guide'>Guide</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Gauche'>Gauche</button></td><td><button class='altui-cplus-button btn btn-default' id='Ok'>Ok</button></td><td><button class='altui-cplus-button btn btn-default' id='Droite'>Droite</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Retour'>Retour</button></td><td><button class='altui-cplus-button btn btn-default' id='Bas'>Bas</button></td><td><button class='altui-cplus-button btn btn-default' id='Sortie'>Sortie</button></td></tr>";
+		html+="<tr><td colspan='3'>-</td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='VOL+'>VOL+</button></td><td><button class='altui-cplus-button btn btn-default' id='Mute'>Mute</button></td><td><button class='altui-cplus-button btn btn-default' id='P+'>P+</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='VOL-'>VOL-</button></td><td><button class='altui-cplus-button btn btn-default' id='Info'>Info</button></td><td><button class='altui-cplus-button btn btn-default' id='P-'>P-</button></td></tr>";
 		html += "</tbody>";
 		html += "</table>";
 		html +="</div>";
@@ -201,16 +215,17 @@ html+="<tr><td><button class='altui-cplus-button btn btn-default' id='VOL-'>VOL-
 	getStyle 	: _getStyle,
 	drawIPhone 	: _drawIPhone,
 	drawIPX		: _drawIPX,
-	drawAltUI 	: _drawAltUI,
+	drawRAZB	: _drawRAZB,
+	drawAltUI : _drawAltUI,
 	drawAltUIControlPanel:_drawAltUIControlPanel,
 	drawAltUIFavorite:_drawAltUIFavorite,
 	drawCanalplus : _drawCanalplus,
 	drawCanaplusControlPanel : _drawCanaplusControlPanel,
 	
 	// drawControlPanel : _drawControlPanel,
-	toggleDebug : function (devid,htmlid) {
-		ALTUI_PluginDisplays.toggleButton(devid, htmlid, 'urn:upnp-org:serviceId:altui1', 'Debug', function(id,newval) {
-			MultiBox.runActionByAltuiID ( devid, 'urn:upnp-org:serviceId:altui1', 'SetDebug', {newDebugMode:newval} );
+	toggleDebug : function (service,devid,htmlid) {
+		ALTUI_PluginDisplays.toggleButton(devid, htmlid, service, 'Debug', function(id,newval) {
+			MultiBox.runActionByAltuiID ( devid, service, 'SetDebug', {newDebugMode:newval} );
 		});
 	},
 	toggleMute : function (devid,htmlid) {
