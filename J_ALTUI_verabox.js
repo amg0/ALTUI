@@ -42,6 +42,8 @@ var UserDataHelper = (function(user_data) {
 				if (parent) {
 					if (parent.device_type == "urn:schemas-micasaverde-com:device:ZWaveNetwork:1")
 						return true;
+					if (parent.device_type == "urn:schemas-upnp-org:device:razb:1")
+						return true;
 				}
 			}
 			return false;
