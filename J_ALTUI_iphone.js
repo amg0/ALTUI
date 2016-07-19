@@ -137,6 +137,14 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		return html;
 	}
 	
+	// draw icon of unknown device based on zway icons...
+	// cf doc in function device_icon(nodeId)  in z-way-demo.js 
+	function _drawRAZBUNKIcon(device) {
+		var html ="";
+		var newsrc = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:razbunk1', 'IconCode' ); 
+		return "<img class='altui-device-icon pull-left img-rounded' src='"+newsrc+"' alt='' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+	};
+
 	// return the html string inside the .panel-body of the .altui-device#id panel
 	function _drawIPhone( device) {
 		var dist = parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' )); 
@@ -216,6 +224,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	drawIPhone 	: _drawIPhone,
 	drawIPX		: _drawIPX,
 	drawRAZB	: _drawRAZB,
+	drawRAZBUNKIcon : _drawRAZBUNKIcon,
 	drawAltUI : _drawAltUI,
 	drawAltUIControlPanel:_drawAltUIControlPanel,
 	drawAltUIFavorite:_drawAltUIFavorite,

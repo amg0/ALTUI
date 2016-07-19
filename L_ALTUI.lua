@@ -2687,6 +2687,10 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_iphone.js",
 		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawRAZB",
 	}
+	tbl["urn:schemas-upnp-org:device:razb:unk:1"]= {
+		["ScriptFile"]="J_ALTUI_iphone.js",
+		["DeviceIconFunc"]="ALTUI_PluginDisplays.drawRAZBUNKIcon",
+	}	
 	tbl["urn:schemas-futzle-com:device:holidayvirtualswitch:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawVacation",
