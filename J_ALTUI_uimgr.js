@@ -10055,14 +10055,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				})
 				.on("click","#altui-btn-create", function() {
 					var plugin = _getPluginFromForm();
-					_updatePlugin( plugin ,"create" ) .done( function(data) {
-						PageMessage.message( data, "success");
-					})
+					if ( $('#altui-publish-form').validator('validate').has('.has-error').length == 0)
+					{
+						_updatePlugin( plugin ,"create" ) .done( function(data) {
+							PageMessage.message( data, "success");
+						})
+					}
 				})
 				.on("submit","#altui-publish-form", function(e) {
 				// .on("click","#altui-btn-submit", function(e) {
 					e.stopPropagation();
 					var plugin = _getPluginFromForm();
+					if ( isNullOrEmpty(plugin.Title) )
+						return;
 					_updatePlugin( plugin ) .done( function(data) {
 						PageMessage.message( data, "success");
 					})
