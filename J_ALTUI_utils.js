@@ -3222,6 +3222,8 @@ var FileDB = ( function (window, undefined) {
 	var _dbFile = null;
 	
 	function _getFileContent( controllerid, name, cbfunc ) {
+		if (isNullOrEmpty(name))
+			return
 		AltuiDebug.debug("_getFileContent( {0},{1} )".format(controllerid,name));
 		if (_dbFile == null) {
 			_dbFile = MyLocalStorage.get("FileDB");

@@ -910,7 +910,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			// update upnp information
 			$.each(_user_data.devices || [], function(idx,device) {
 				var dt = device.device_type;
-				if (dt!=undefined)
+				var df = device.device_file;
+				if (dt && (dt!="") && df && (df!="") )
 					MultiBox.updateDeviceTypeUPnpDB( _uniqID, dt, device.device_file);	// pass device file so UPNP data can be read
 				if (device!=null) {	
 					device.dirty=true; 

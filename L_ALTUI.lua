@@ -1592,6 +1592,12 @@ local htmlScripts = [[
 	<script src="J_ALTUI_upnp.js" ></script>
 	<script src="J_ALTUI_verabox.js" ></script> 
 	<script src="J_ALTUI_multibox.js" ></script> 
+
+	<script src="J_ALTUI_b_blockly_compressed.js" ></script> 
+	<script src="J_ALTUI_b_blocks_compressed.js" ></script> 
+	<script src="J_ALTUI_b_javascript_compressed.js" ></script> 
+	<script src="J_ALTUI_b_lua_compressed.js" ></script> 
+	
 	<script src="J_ALTUI_uimgr.js" defer ></script> 
 ]]
     -- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script> 	
@@ -2059,12 +2065,12 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				--------------------------------
 				-- preload scripts of ALTUI
 				--------------------------------
-				for k,v in pairs({"J_ALTUI_b_blockly_compressed.js","J_ALTUI_b_blocks_compressed.js","J_ALTUI_b_"..lang..".js","J_ALTUI_b_javascript_compressed.js","J_ALTUI_b_lua_compressed.js"}) do
-					scripts[idx] = v
-					loaded[scripts[idx]]=true
-					idx = idx+1
-				end							
-							
+				-- for k,v in pairs({"J_ALTUI_b_blockly_compressed.js","J_ALTUI_b_blocks_compressed.js","J_ALTUI_b_"..lang..".js","J_ALTUI_b_javascript_compressed.js","J_ALTUI_b_lua_compressed.js"}) do
+					-- scripts[idx] = v
+					-- loaded[scripts[idx]]=true
+					-- idx = idx+1
+				-- end							
+				
 				local optional_scripts=""
 				for i = 1,#scripts do
 					local str = getScriptContent(scripts[i])
