@@ -3139,17 +3139,19 @@ var IconDB = ( function (window, undefined) {
 		// do not load http based sources from the VERA itself
 		if (name.startsWith("http"))
 			return name;
-		
+		else if (name.startsWith("data:")) {
+			_dbIcon[name] = name;
+			return name;			
+		}
+
 		// if undefined and not yet started to fetch, then go fetch it
 		if (_dbIcon[name]==undefined) {
 			_dbIcon[name]="pending"
 			MultiBox.getIcon(controllerid,  name, function(data) {
-				
 				// store in cache and call callback
 				_dbIcon[name]=data;
 				if ($.isFunction(cbfunc))
-					cbfunc(data);
-				
+					cbfunc(data);				
 			});
 		}
 		
