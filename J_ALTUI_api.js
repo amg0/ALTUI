@@ -443,12 +443,12 @@ var Interface = function (undefined) {
 						break;
 				}
 				console.log("showMessagePopup: dialog title = ",label);
-				if ("confirm" == options.category) {
+				if ("undefined" != typeof options && "confirm" == options.category) {
 					displayConfirmationPopup = !0;
 					label = "Confirmation Required";
 					AltuiDebug.debug("showMessagePopup: CONFIRMATION dialog title = ",label);
 				}
-				if (options.title) {
+				if ("undefined" != typeof options && options.title) {
 					label = options.title;
 					AltuiDebug.debug("showMessagePopup: dialog options.title = ",label);
 				}
