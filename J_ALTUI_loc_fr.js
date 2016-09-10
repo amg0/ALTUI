@@ -441,7 +441,11 @@ Localization.init( {
 	"Instructions":"Instructions","AllowMultiple":"AllowMultiple","AutoUpdate":"AutoUpdate",
 	"Version Major":"Version Majeur","Version Minor":"Version Mineur",
 	"folders":"repertoires",
-	"release":"nom de release"	
+	"release":"nom de release",
+	"Duration (sec or min-max)":"Durée (sec ou min-max)",
+	"Invalid Transition":"Transition Invalide",
+	"Transition appears to be empty, you need at least a condition , a schedule or a timer":"La transition est vide, vous devez avoir au moins une condition ou un schedule ou un timer",
+	"warning":"attention"
 });
 
 // override rules with localized version

@@ -433,7 +433,11 @@ Localization.init( {
 	"Instructions":"Instructions","AllowMultiple":"AllowMultiple","AutoUpdate":"AutoUpdate",
 	"Version Major":"Version Major","Version Minor":"Version Minor",
 	"folders":"folders",
-	"release":"release"	
+	"release":"release",
+	"Duration (sec or min-max)":"Duration (sec or min-max)",
+	"Invalid Transition":"Invalid Transition",
+	"Transition appears to be empty, you need at least a condition , a schedule or a timer":"Transition appears to be empty, you need at least a condition , a schedule or a timer",
+	"warning":"warning"
 	});
 
 // override rules with localized version
