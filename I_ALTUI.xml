@@ -8,51 +8,58 @@
     <action>
 	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 	 <name>SetDebug</name>
-	  <run>
+	  <job>
 			setDebugMode(lul_device,lul_settings.newDebugMode)
-	  </run>
+			return 4,0
+	  </job>
 	</action>
     <action>
 	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 	 <name>EnableWorkflows</name>
-	  <run>
+	  <job>
 			enableWorkflows(lul_device,lul_settings.newWorkflowMode)
-	  </run>
+			return 4,0
+	  </job>
 	</action>
     <action>
 	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 	 <name>ResetWorkflow</name>
-	  <run>
+	  <job>
 			resetWorkflow(lul_device,lul_settings.workflowAltuiid)
-	  </run>
+			return 4,0
+	  </job>
 	</action>
     <action>
 	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 	 <name>TriggerTransition</name>
-	  <run>
+	  <job>
 			triggerTransition(lul_device,lul_settings.workflowAltuiid,lul_settings.transitionId)
-	  </run>
+			return 4,0
+	  </job>
 	</action>
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>RegisterPlugin</name>
-		<run>
+		<job>
 			UPNPregisterPlugin(lul_device,lul_settings.newDeviceType,lul_settings.newScriptFile,lul_settings.newDeviceDrawFunc,lul_settings.newStyleFunc,lul_settings.newDeviceIconFunc,lul_settings.newControlPanelFunc,lul_settings.newFavoriteFunc)
-		</run>    
+			return 4,0
+		</job>    
 	</action>
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>RegisterDataProvider</name>
-		<run>
+		<job>
 			UPNPregisterDataProvider(lul_device, lul_settings.newName, lul_settings.newUrl, lul_settings.newJsonParameters)
-		</run>    
+			return 4,0
+		</job>    
 	</action>
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>Reset</name>
-		<run>
+		<job>
 			resetDevice(lul_device,true)
-		</run>    
+			return 4,0
+		</job>    
 	</action>
 </actionList>
 </implementation>
