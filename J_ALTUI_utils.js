@@ -1497,7 +1497,19 @@ var HTMLUtils = (function() {
 		html += "</div>";
 		return html
 	};	
-	
+	function _drawButtonGroup(htmlid,model) {
+		var html="";
+		html += "<div class='btn-group {0}' role='group' aria-label='...'>".format(model.cls ||'');
+		$.each(model.buttons, function(i,btn) {
+				var label = (btn.img) ? "<img class='{2}' src='{0}' alt='{1}'></img>".format(btn.img,btn.label||'',btn.imgcls||'' ) : (btn.label||'')
+				html += "<button id='{1}' type='button' class='btn btn-default {0}'>{2}</button>".format(btn.cls||'',btn.id||'',label)
+		})
+		// <button type='button' class='btn btn-default'>Left</button>
+		// <button type='button' class='btn btn-default'>Middle</button>
+		// <button type='button' class='btn btn-default'>Right</button>
+		html += "</div>";
+		return html;
+	};
 	function _drawToolbar(htmlid,tools) {
 		var toolbarHtml="<div>";	
 		var preareas=[];
@@ -1661,6 +1673,7 @@ var HTMLUtils = (function() {
 		optionsToString : _optionsToString,
 		array2Table 	: _array2Table,			// (arr,idcolumn,viscols)
 		createAccordeon : _createAccordeon,		// (panels)
+		drawButtonGroup : _drawButtonGroup,
 		drawToolbar 	: _drawToolbar,
 		drawFormFields	: _drawFormFields,		
 		drawForm		: _drawForm,

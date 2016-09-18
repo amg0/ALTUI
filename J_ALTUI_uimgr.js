@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1822 $";
+var ALTUI_revision = "$Revision: 1827 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4145,6 +4145,7 @@ var UIManager  = ( function( window, undefined ) {
 				//
 				var _devicetypesDB = MultiBox.getALTUITypesDB();	// master controller / Plugin information
 				var devicetype = device.device_type;
+				var devicejson = device.device_json || ""
 				if (device.device_type.startsWith('urn:schemas-dcineco-com:device:MSwitch')) {
 					// replace MSwitchxxxxx by MSwitch
 					var elems = device.device_type.split(':');
@@ -4153,12 +4154,18 @@ var UIManager  = ( function( window, undefined ) {
 				} 
 				
 				var devicebodyHtml = "";
-				if (_devicetypesDB[ devicetype ]!=null && _devicetypesDB[ devicetype ].DeviceDrawFunc!=null) {
-					devicebodyHtml+= Altui_ExecuteFunctionByName(_devicetypesDB[ devicetype ].DeviceDrawFunc, window, device);
-				}
-				else {
+				var bFound = false
+				$.each( [ devicetype+","+devicejson, devicetype], function(i,_devtype) {
+					if (_devicetypesDB[ _devtype ]!=null && _devicetypesDB[ _devtype ].DeviceDrawFunc!=null) {
+						devicebodyHtml+= Altui_ExecuteFunctionByName(_devicetypesDB[ _devtype ].DeviceDrawFunc, window, device);
+						bFound = true;
+						return false;
+					}
+				})
+				if (bFound==false) {
 					devicebodyHtml+= _defaultDeviceDraw(device);
 				}
+
 				// $("div.altui-device#"+id+" div.panel-body" ).append(deviceHtml);
 				deviceHtml = ALTUI_Templates.devicecontainerTemplate.format(
 					id,
@@ -8933,7 +8940,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						{id:'Schedules', title:_T("Schedules"), html: _displaySchedule( 'altui-schedule', Model.prop.schedule ) },
 						{id:'Timers', title:_T("Timers"), html:HTMLUtils.drawFormFields( [
 							{ id:"altui-timername", label:_T("Timer Name"), type:"input", value: Model.prop.timer, opt:null },
-							{ id:"altui-duration", label:_T("Duration (sec or min-max)"), type:"input",  pattern:"(\\d+(\\-\\d+)?)$", value: Model.prop.duration, opt:null },
+							{ id:"altui-duration", label:_T("Duration (sec or min-max)"), type:"input",  pattern:"(\\d+(\-\\d+)?)$", value: Model.prop.duration, opt:null },
 						])},
 					]},
 					{ id:"altui-btn-bar", type:"buttonbar", value:[
@@ -8989,7 +8996,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					return false;
 				}
 				// if it is empty and it is not the start state
-				if ( (Model.prop.stateinfo.bStart!=true) && (Model.prop.conditions.length==0) && (isNullOrEmpty(Model.prop.duration)) && (isNullOrEmpty(Model.prop.schedule))) {
+				if ( Model.prop.stateinfo && (Model.prop.stateinfo.bStart!=true) && (Model.prop.conditions.length==0) && (isNullOrEmpty(Model.prop.duration)) && (isNullOrEmpty(Model.prop.schedule))) {
 					DialogManager.warningDialog(_T("Invalid Transition"),_T("Transition appears to be empty, you need at least a condition , a schedule or a timer"));
 					return false;
 				}

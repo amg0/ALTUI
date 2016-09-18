@@ -41,6 +41,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-heater-container select.input-sm { height:22px; padding:0;}"; 
 		style += ".altui-cyan { color:cyan;}";
 		style += ".altui-dimmable  {font-size: 14px; padding-left:16px;}";
+		style += ".altui-dimmable-qubino-btngrp  { display:inline; left:5px;}";
+		style += ".altui-dimmable-qubino-btn  { padding: 3px 0px 0px 0px; height:25px;}";
+		style += ".altui-dimmable-qubino-btn-img  { width:100%; height:100% }";
 		style += ".altui-dimmable-slider { margin-left: 60px; margin-right: 70px; margin-top:5px;}";	
 		style += ".altui-colorpicker { margin-top: 2px; width:30px; margin-right: 15px; }";	
 		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";	
@@ -676,6 +679,45 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		});
 		return html;
 	};
+	
+	var QuibinoLevels = [
+		{cmd:"stop",value:0},
+		{cmd:"frost",value:11},
+		{cmd:"eco",value:21},
+		{cmd:"confort2",value:31},
+		{cmd:"confort1",value:41},
+		{cmd:"confort",value:51}
+	];
+	function _onclickQubinoBtn( e ) {
+		
+	};
+	
+	function _drawDimmableQubinoFlushPilotWire(device) {
+		var controller = MultiBox.controllerOf(device.altuiid).controller;
+		var iconpath = MultiBox.getIconPath(controller,"../../other/");
+		var status = parseInt(MultiBox.getStatus(device,"urn:upnp-org:serviceId:Dimming1","LoadLevelStatus"));
+		var currentLevel = Math.floor( Math.max((status-1),0) /10 )
+		var model= {
+			cls:"altui-dimmable-qubino-btngrp",
+			buttons: []
+		};
+		$.each(QuibinoLevels , function(i,level) {
+			var extracls = "altui-dimmable-qubino-btn";
+			if (i == currentLevel)
+				extracls += " btn-success"
+			model.buttons.push( 				
+				{cls:extracls, id:"qubflw_"+device.altuiid+"_"+level.cmd+"_"+level.value , img:iconpath+"qubino-"+level.cmd+"-icon.png", label:level.cmd, imgcls:'altui-dimmable-qubino-btn-img'}
+			);
+		});
+		var html = HTMLUtils.drawButtonGroup(device.altuiid,model)
+		$(".altui-mainpanel")
+			.off('click','.altui-dimmable-qubino-btn')
+			.on('click','.altui-dimmable-qubino-btn', function(e) {
+				var ids = $(this).prop('id').split("_");
+				MultiBox.runActionByAltuiID ( ids[1], "urn:upnp-org:serviceId:Dimming1", 'SetLoadLevelTarget', {newLoadlevelTarget:ids[3]} );
+			});
+		return html;
+	};
 	function _drawDimmableRGB(device) {
 		var html = "";
 		html += _drawDimmable(device,true);
@@ -1199,6 +1241,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawDoorLock   : _drawDoorLock,
 	drawPLEG 	   : _drawPLEG,
 	drawDimmable   : _drawDimmable,
+	drawDimmableQubinoFlushPilotWire : _drawDimmableQubinoFlushPilotWire,
+	onclickQubinoBtn : _onclickQubinoBtn,
 	onColorPicker  : _onColorPicker,
 	drawDimmableRGB   : _drawDimmableRGB,
 	drawKeypad		: _drawKeypad,
