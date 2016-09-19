@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.61"
+local version = "v1.61c"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -33,13 +33,13 @@ local lzw = compress.new "LZW2"
 local tmpprefix = "/tmp/altui_"		-- prefix for tmp files
 local hostname = ""
 
-local DataProviders={}					-- DataProviders database
+local DataProviders={}				-- DataProviders database
 local DataProvidersCallbacks={}		-- map names to functions in the local context, only for embedded providers registered within this module in LUA
 local remoteWatches={}
 local registeredWatches = {}
-local WorkflowsActiveState = {}	-- hash indexed by workflow altuiid
-local WorkflowsVariableBag = {}	-- hash indexed by workflow altuiid
-local Workflows = {}					-- Workflow database made from the persistent description
+local WorkflowsActiveState = {}		-- hash indexed by workflow altuiid
+local WorkflowsVariableBag = {}		-- hash indexed by workflow altuiid
+local Workflows = {}				-- Workflow database made from the persistent description
 local ForcedValidLinks = {}			-- array of 'id' = true for links which must be considered as true
 -- local strWorkflowDescription = ""
 local strWorkflowTransitionTemplate = "Wkflow - Workflow: %s, Valid Transition found:%s, Active State:%s=>%s"	-- needed for ALTUI grep & history log feature
@@ -883,7 +883,8 @@ local function resetWorkflow(lul_device,workflowAltuiid)
 			-- Arm timers and exec Workflows with a delay
 			local startstate = stateFromID(Workflows[workflow_idx]["graph_json"].cells,startid)
 			armLinkTimersAndWatches(lul_device,workflow_idx,startstate)
-			luup.call_delay("executeWorkflows", 2, lul_device)
+			executeWorkflows(lul_device , nil , workflow_idx )
+			-- luup.call_delay("executeWorkflows", 2, lul_device)
 		end
 	else
 		warning(string.format("Invalid Workflow altuiid:%s",workflowAltuiid))
@@ -897,8 +898,10 @@ local function triggerTransition(lul_device,workflowAltuiid,transitionId)
 	
 	-- schedule execution
 	if (WFLOW_MODE == true) then
+		local workflow_idx = findWorkflowIdx(workflowAltuiid)
+		executeWorkflows(lul_device , nil , workflow_idx )
 		-- exec Workflows with a delay
-		luup.call_delay("executeWorkflows", 1, lul_device)
+		-- luup.call_delay("executeWorkflows", 1, lul_device)
 	end
 end
 
@@ -1069,8 +1072,9 @@ local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate)
 		executeStateScenes(lul_device,workflow_idx,newstate,"onEnterScenes")
 		armLinkTimersAndWatches(lul_device,workflow_idx,newstate)
 
+		executeWorkflows(lul_device , nil , workflow_idx )
 		-- let some time pass up so that actions can be executed, then re-evaluate the workflow
-		luup.call_delay("executeWorkflows", 4, lul_device)
+		-- luup.call_delay("executeWorkflows", 4, lul_device)
 	end
 end
 
@@ -1087,18 +1091,44 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 		error(string.format("Wkflow - null start state, cannot evaluate workflow. delete this workflow"))
 		return false
 	end
-	if (oldstate ==nil ) then
+	if (oldstate == nil ) then
 		oldstate = start
 	end
-	debug(string.format("Wkflow - active state:%s, %s",stateid,oldstate.attrs[".label"].text))
+	debug(string.format("Wkflow - active state:%s, %s", stateid,oldstate.attrs[".label"].text))
+
+	local evalstartcond = evaluateStateTransition(lul_device,start,workflow_idx,watchevent)
+	local blocked = Workflows[workflow_idx].blocked or Workflows[workflow_idx].paused	-- blocked by start conditions or by user request
+	debug(string.format("Wkflow - blocked:%s, paused:%s", tostring(Workflows[workflow_idx].blocked or ''), tostring(Workflows[workflow_idx].paused or '')))
 	
-	if ( (Workflows[workflow_idx].paused==true) or (evaluateStateTransition(lul_device,start,workflow_idx,watchevent)) ) then
-		--- reset workflow to START state
-		log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Reset to Start", oldstate.attrs[".label"].text, start.attrs[".label"].text));
-		nextWorkflowState( lul_device, workflow_idx, oldstate, start)
-		return true
+	if (blocked==true) then
+		if (evalstartcond==true) then
+			-- remains as it is
+			log(string.format("Wkflow - Workflow: %s, is blocked in start state , ID:%s", Workflows[workflow_idx].altuiid,start.id))
+			return false
+		else
+			-- TODO restart the workflow so it could progress
+			Workflows[workflow_idx].blocked = false
+			armLinkTimersAndWatches(lul_device,workflow_idx,start)
+		end
+	else
+		if (evalstartcond==true) then
+			--- reset workflow to START state
+			Workflows[workflow_idx].blocked = true
+			log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Reset to Start", oldstate.attrs[".label"].text, start.attrs[".label"].text))
+			if (oldstate.id == start.id) then
+				--- if already in START state
+				log(string.format("Wkflow - Workflow: %s, already in start state , ID:%s", Workflows[workflow_idx].altuiid,start.id))
+			else
+				nextWorkflowState( lul_device, workflow_idx, oldstate, start)
+			end
+			return true
+		end
+		-- falls back to the normal processing
 	end
-	
+
+	--
+	-- not blocked ,  and normal processing required
+	--
 	local transitions = getStateTransitions(lul_device, stateid, cells )
 	for k,link in pairs(transitions) do 
 		if (evaluateStateTransition(lul_device,link,workflow_idx,watchevent)) then
@@ -1127,8 +1157,9 @@ function workflowTimerCB(lul_data)
 		local lul_device,workflow_idx,timerstateid,targetstateid,linkid = parts[1],tonumber(parts[2]),parts[3],parts[4],parts[5]
 
 		-- is workflow paused ?
-		if (Workflows[workflow_idx].paused == true) then
-			warning(string.format("Wkflow - %s paused, ignoring timer",Workflows[workflow_idx].name))
+		local start = findStartState(workflow_idx) 
+		if ( (Workflows[workflow_idx].paused==true) or (Workflows[workflow_idx].blocked==true) or (evaluateStateTransition(lul_device,start,workflow_idx,nil)) ) then
+			info(string.format("Wkflow - %s paused or blocked in start state or start conditions evaluates to true => ignoring timer",Workflows[workflow_idx].name))
 			return
 		end
 		
@@ -1153,14 +1184,16 @@ function workflowTimerCB(lul_data)
 end
 
 -- not local as used in luup.call_delay
-function executeWorkflows(lul_device , watchevent )
+function executeWorkflows(lul_device , watchevent , workflow_idx )
 	if (WFLOW_MODE==true) then
 		debug(string.format("Wkflow - executeWorkflows(%s , %s)",lul_device,json.encode(watchevent)))
 
-		if (watchevent~=nil) then
+		if (workflow_idx~=nil) then
+			evalWorkflowState( lul_device, workflow_idx, watchevent )
+		elseif (watchevent~=nil) then
 			debug(string.format("Wkflow - executeWorkflows limited to specific workflows"))
 			for k,v in pairs(watchevent.watch['Expressions']['workflow']) do
-				local workflow_idx = findWorkflowIdx(v.WorkflowAltuiID)
+				workflow_idx = findWorkflowIdx(v.WorkflowAltuiID)
 				evalWorkflowState( lul_device, workflow_idx, watchevent )
 			end
 		else
