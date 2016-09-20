@@ -1013,7 +1013,7 @@ var api = {
 	},
 	getSysinfo: function () {
 		// should return sysInfo object
-		return jQuery.parseJSON(_JSAPI_ctx.sysinfoJson);
+		return JSON.parse(_JSAPI_ctx.sysinfoJson);
 	},
 	getDataRequestURL: function() {
 		return window.location.pathname;	//"http://192.168.1.16/port_3480/data_request"

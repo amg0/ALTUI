@@ -99,21 +99,21 @@ end
 ------------------------------------------------
 -- Debug --
 ------------------------------------------------
-local function log(text, level)
+function log(text, level)
 	luup.log(string.format("%s: %s", MSG_CLASS, text), (level or 50))
 end
 
-local function debug(text)
+function debug(text)
 	if (DEBUG_MODE) then
 		log("debug: " .. text)
 	end
 end
 
-local function warning(stuff)
+function warning(stuff)
 	log("warning: " .. stuff, 2)
 end
 
-local function error(stuff)
+function error(stuff)
 	log("error: " .. stuff, 1)
 end
 
@@ -206,10 +206,10 @@ end
 
 local function setVariableIfChanged(serviceId, name, value, deviceId)
 	debug(string.format("setVariableIfChanged(%s,%s,%s,%s)",serviceId, name, value, deviceId))
-	local curValue = luup.variable_get(serviceId, name, deviceId) or ""
+	local curValue = luup.variable_get(serviceId, name, tonumber(deviceId)) or ""
 	value = value or ""
 	if (tostring(curValue)~=tostring(value)) then
-		luup.variable_set(serviceId, name, value, deviceId)
+		luup.variable_set(serviceId, name, value, tonumber(deviceId))
 	end
 end
 
@@ -730,6 +730,13 @@ local function getStateTransitions(lul_device, stateid, cells )
 	return result
 end
 
+local function setWorkflowActiveState(lul_device,workflow_idx,newstate)
+	debug(string.format("Wkflow - setWorkflowActiveState: '%s', %s, %s",Workflows[workflow_idx].altuiid , newstate.attrs[".label"].text, newstate.id))
+	Workflows[workflow_idx]["graph_json"].active_state = newstate.id
+	WorkflowsActiveState[ Workflows[workflow_idx].altuiid ] = newstate.id
+	luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), tonumber(lul_device))
+end
+
 local function armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
 	local name = ""
 	-- Check name for Link or for START state
@@ -819,9 +826,8 @@ local function initWorkflows(lul_device)
 			last_known_active = Workflows[k]["graph_json"].active_state
 			if ( (last_known_active == nil) or ( isValidState(Workflows[k],last_known_active)==false ) ) then
 				-- if no active state or state is unknown, start from START
-				local state = findStartStateID(k)
-				Workflows[k]["graph_json"].active_state = state
-				WorkflowsActiveState[ Workflows[k].altuiid ] = state
+				local state = findStartState(k)
+				setWorkflowActiveState(lul_device,k,state)
 			else
 				WorkflowsActiveState[ Workflows[k].altuiid ]= last_known_active
 			end
@@ -869,10 +875,8 @@ local function resetWorkflow(lul_device,workflowAltuiid)
 		cancelWorkflowTimers(lul_device,workflow_idx)
 		
 		-- reset active state for this workflow
-		local startid = findStartStateID(workflow_idx)
-		WorkflowsActiveState[workflowAltuiid] = startid
-		Workflows[workflow_idx]["graph_json"].active_state = startid
-		luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), lul_device)
+		local start = findStartState(workflow_idx)
+		setWorkflowActiveState(lul_device,workflow_idx,start)
 		
 		-- reset workflow variables
 		WorkflowsVariableBag[workflowAltuiid] = {}
@@ -1048,9 +1052,10 @@ local function executeStateActions(lul_device,workflow_idx,state,label)
 	end
 end
 
-local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate)
+local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate,comment)
 	if (WFLOW_MODE==true) and (newstate.id ~= oldstate.id ) then
-		debug(string.format("Wkflow - Workflow:'%s' nextWorkflowState(%s, %s ==> %s) ", Workflows[workflow_idx].name,Workflows[workflow_idx].altuiid, oldstate.attrs[".label"].text,newstate.attrs[".label"].text))
+		log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, comment or "", oldstate.attrs[".label"].text, newstate.attrs[".label"].text));
+		-- debug(string.format("Wkflow - Workflow:'%s' nextWorkflowState(%s, %s ==> %s) ", Workflows[workflow_idx].name,Workflows[workflow_idx].altuiid, oldstate.attrs[".label"].text,newstate.attrs[".label"].text))
 		
 		-- cancel timers originated from that state
 		cancelStateTimers(lul_device,workflow_idx,oldstate.id)
@@ -1061,11 +1066,8 @@ local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate)
 		executeStateScenes(lul_device,workflow_idx,oldstate,"onExitScenes")
 
 		-- change active state
-		Workflows[workflow_idx]["graph_json"].active_state = newstate.id
-		WorkflowsActiveState[ Workflows[workflow_idx].altuiid ] = newstate.id
-		luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), tonumber(lul_device))
-		debug(string.format("Wkflow - setting new active state: %s, %s",newstate.id, newstate.attrs[".label"].text))
-
+		setWorkflowActiveState(lul_device,workflow_idx,newstate)
+		
 		-- execute onEnter of new state
 		executeStateLua(lul_device,workflow_idx,newstate,"onEnterLua")
 		executeStateActions(lul_device,workflow_idx,newstate,"onEnter")
@@ -1104,22 +1106,28 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 		if (evalstartcond==true) then
 			-- remains as it is
 			log(string.format("Wkflow - Workflow: %s, is blocked in start state , ID:%s", Workflows[workflow_idx].altuiid,start.id))
-			return false
+			return false	-- do not evaluate outgoing transitions
 		else
 			-- TODO restart the workflow so it could progress
-			Workflows[workflow_idx].blocked = false
-			armLinkTimersAndWatches(lul_device,workflow_idx,start)
+			if (Workflows[workflow_idx].paused == true) then
+				-- if paused manually, do not rearm
+				nextWorkflowState( lul_device, workflow_idx, oldstate, start,"Reset to Start")
+				return false 	-- do not evaluate outgoing transitions
+			else
+				Workflows[workflow_idx].blocked = false
+				armLinkTimersAndWatches(lul_device,workflow_idx,start)
+			end
 		end
 	else
 		if (evalstartcond==true) then
 			--- reset workflow to START state
 			Workflows[workflow_idx].blocked = true
-			log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Reset to Start", oldstate.attrs[".label"].text, start.attrs[".label"].text))
 			if (oldstate.id == start.id) then
 				--- if already in START state
 				log(string.format("Wkflow - Workflow: %s, already in start state , ID:%s", Workflows[workflow_idx].altuiid,start.id))
 			else
-				nextWorkflowState( lul_device, workflow_idx, oldstate, start)
+				-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Reset to Start", oldstate.attrs[".label"].text, start.attrs[".label"].text))
+				nextWorkflowState( lul_device, workflow_idx, oldstate, start,"Reset to Start")
 			end
 			return true
 		end
@@ -1141,8 +1149,8 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 				cancelTimer( table.concat(tbl, "#") )
 			end
 		
-			log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, link.labels[1].attrs.text.text, oldstate.attrs[".label"].text, targetstate.attrs[".label"].text));
-			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate )
+			-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, link.labels[1].attrs.text.text, oldstate.attrs[".label"].text, targetstate.attrs[".label"].text));
+			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate , link.labels[1].attrs.text.text)
 			return true;	-- todo
 		end
 	end
@@ -1159,7 +1167,7 @@ function workflowTimerCB(lul_data)
 		-- is workflow paused ?
 		local start = findStartState(workflow_idx) 
 		if ( (Workflows[workflow_idx].paused==true) or (Workflows[workflow_idx].blocked==true) or (evaluateStateTransition(lul_device,start,workflow_idx,nil)) ) then
-			info(string.format("Wkflow - %s paused or blocked in start state or start conditions evaluates to true => ignoring timer",Workflows[workflow_idx].name))
+			log(string.format("Wkflow - %s paused or blocked in start state or start conditions evaluates to true => ignoring timer",Workflows[workflow_idx].name))
 			return
 		end
 		
@@ -1175,8 +1183,8 @@ function workflowTimerCB(lul_data)
 			local oldstate = stateFromID(cells,active_state)
 			local targetstate = stateFromID(cells,targetstateid)
 			debug(string.format("Wkflow - link prop:%s",json.encode(link.prop)))
-			log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Timer:"..getStateName(link), oldstate.attrs[".label"].text, targetstate.attrs[".label"].text));
-			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate )
+			-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Timer:"..getStateName(link), oldstate.attrs[".label"].text, targetstate.attrs[".label"].text));
+			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate,"Timer:"..getStateName(link) )
 		else
 			warning(string.format("Wkflow - Timer - Timer ignored, active state is different from the timer state"))
 		end
@@ -1609,7 +1617,7 @@ local htmlScripts = [[
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script> 
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js" ></script> 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.min.js" ></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
@@ -1653,7 +1661,7 @@ local htmlLocalCSSlinks = [[
 ]]
 
 local htmlCSSlinks = [[
-	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="@localbootstrap@">
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.1/spectrum.min.css">
