@@ -12,7 +12,8 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.62"
+local version = "v1.63"
+local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
@@ -880,7 +881,7 @@ local function resetWorkflow(lul_device,workflowAltuiid)
 		
 		-- reset workflow variables
 		WorkflowsVariableBag[workflowAltuiid] = {}
-		setVariableIfChanged(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), tonumber(lul_device))
+		setVariableIfChanged(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 
 		-- schedule execution
 		if (WFLOW_MODE == true) then
@@ -1021,7 +1022,7 @@ local function executeStateLua(lul_device,workflow_idx,state,label)
 			-- results = func(lul_device, lul_service, lul_variable,expr)
 			if (status==true) then
 				WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ] = env.Bag
-				setVariableIfChanged(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), tonumber(lul_device))
+				setVariableIfChanged(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 				debug(string.format("Wkflow - Lua code res:%s, Bag=%s",tostring(res),json.encode(WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ])))
 			else
 				error(string.format("Wkflow - Lua code Exception occured, Err Msg: %s",res))
@@ -1612,18 +1613,22 @@ local htmlLocalScripts = [[
     -- <script src="@localcdn@/d3.min.js"></script> 	
 
 -- <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.4.1.js" ></script> 
+-- SW compat matrix
+-- jquery 1.9 jointjs 0.9.7 backbone 1.2.1 spectrum 1.8.0
+-- jquery 2.2.4 jointjs 1.0.1 backbone 1.3.3 spectrum 1.8.0
+
 local htmlScripts = [[
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js" ></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/@swversion@/jquery.min.js" ></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.1/backbone-min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js" ></script> 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.min.js" ></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.min.js" ></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.shapes.devs.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.shapes.devs.min.js"></script>
 	<script type="text/javascript"  
 	  src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>
@@ -1664,8 +1669,8 @@ local htmlCSSlinks = [[
 	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="@localbootstrap@">
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.1/spectrum.min.css">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.css">
 	<link class="altui-theme" rel="stylesheet" href="@ThemeCSS@">	
 ]]
 
@@ -2001,7 +2006,6 @@ local function _helperGoogleAuthCallback(url,lul_device)
 		local obj = json.decode(content)
 		if ( (obj==nil) or (obj.error ~= nil) ) then
 			luup.variable_set(ALTUI_SERVICE, "GoogleLastError", content or "" , tonumber(lul_device))
-			-- setVariableIfChanged(ALTUI_SERVICE, "GoogleAuthToken", "", tonumber(lul_device))
 		else
 			luup.variable_set(ALTUI_SERVICE, "GoogleLastError", "" , tonumber(lul_device))
 			luup.variable_set(ALTUI_SERVICE, "GoogleAuthToken", content or "", tonumber(lul_device))
@@ -2142,6 +2146,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				-- custompages = string.gsub(custompages,"\"","\\x22")
 				local serverOptions= getSetVariable(ALTUI_SERVICE, "ServerOptions", deviceID, "")	
 				local localcdn = getSetVariable(ALTUI_SERVICE, "LocalCDN", deviceID, "")
+				local swversion = getSetVariable(ALTUI_SERVICE, "SWVersion", deviceID, SWVERSION)
 				local favicon = getSetVariable(ALTUI_SERVICE, "FavIcon", deviceID, "/favicon.ico")
 				local localbootstrap = getSetVariable(ALTUI_SERVICE, "LocalBootstrap", deviceID, "")
 				if (localbootstrap == "") then	
@@ -2150,6 +2155,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local variables={}
 				variables["hostname"] = hostname
 				variables["localcdn"] = localcdn
+				variables["swversion"] = swversion
 				variables["favicon"] = favicon
 				variables["localbootstrap"] = localbootstrap
 				variables["devicetypes"] = json.encode(tbl)
@@ -2168,7 +2174,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 					variables["mandatory_scripts"] = htmlLocalScripts:template(variables)
 				else
 					variables["csslinks"] = htmlCSSlinks:template(variables)
-					variables["mandatory_scripts"] = htmlScripts
+					variables["mandatory_scripts"] = htmlScripts:template(variables)
 				end
 				-- " becomes \x22
 				variables["optional_scripts"] = optional_scripts
@@ -2202,8 +2208,8 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 					local completestring = table.concat(response_body)
 					debug(string.format("ALTUI: Succeed to POST to https://accounts.google.com/o/oauth2/device/code , result=%s",completestring))
 					local obj = json.decode(completestring)
-					setVariableIfChanged(ALTUI_SERVICE, "GoogleDeviceCode", obj.device_code, tonumber(deviceID))
-					setVariableIfChanged(ALTUI_SERVICE, "GoogleUserCode", obj.user_code, tonumber(deviceID))					
+					setVariableIfChanged(ALTUI_SERVICE, "GoogleDeviceCode", obj.device_code, deviceID)
+					setVariableIfChanged(ALTUI_SERVICE, "GoogleUserCode", obj.user_code, deviceID)					
 					return completestring, "text/plain"
 				else
 					debug(string.format("ALTUI: Failed to POST to https://accounts.google.com/o/oauth2/device/code"))
@@ -3700,6 +3706,7 @@ function startupDeferred(lul_device)
 		-- force the default in case of upgrade
 		if ( (newmajor>major) or ( (newmajor==major) and (newminor>minor) ) ) then
 			log ("Version upgrade => Reseting Plugin config to default")
+			setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
 			setVariableIfChanged(ALTUI_SERVICE, "PluginConfig", defconfigjson, lul_device)		
 			if (newmajor<1) or ((newmajor == 1) and (newminor <= 1)) then
 				setVariableIfChanged(ALTUI_SERVICE, "ServerOptions", "[]", lul_device)

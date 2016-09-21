@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1834 $";
+var ALTUI_revision = "$Revision: 1838 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3175,7 +3175,7 @@ var UIManager  = ( function( window, undefined ) {
 	function _loadD3Script( drawfunc ) {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var localcdn = ( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalCDN" ).trim() || "");
-		var scriptname = (localcdn=="") ? "//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" : (localcdn+"/d3.min.js");	//supports https
+		var scriptname = (localcdn=="") ? "//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" : (localcdn+"/d3.min.js");	//supports https
 		var len = $('script[src="'+scriptname+'"]').length;
 		if (len==0) {				// not loaded yet
 			UIManager.loadScript(scriptname,function() {
@@ -9517,6 +9517,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			Start();
 			var m2 = Node("S1",50,50);
 			var m3 = m2.clone().translate(300, 0).attr('.label/text', 'S2').addTo(graph);
+// var m1 = new joint.shapes.devs.Model({
+    // position: { x: 50, y: 50 },
+    // size: { width: 90, height: 90 },
+    // inPorts: ['in1','in2'],
+    // outPorts: ['out'],
+    // attrs: {
+        // '.label': { text: 'Model', 'ref-x': .4, 'ref-y': .2 },
+        // rect: { fill: '#2ECC71' },
+        // '.inPorts circle': { fill: '#16A085' },
+        // '.outPorts circle': { fill: '#E74C3C' }
+    // }
+// });
+// graph.addCell(m1);
 		}
 		
 		// size the paper properly and make the canvas resizable
