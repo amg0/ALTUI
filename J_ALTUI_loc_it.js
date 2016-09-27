@@ -437,7 +437,8 @@ Localization.init( {
 	"Duration (sec or min-max)":"Duration (sec or min-max)",
 	"Invalid Transition":"Invalid Transition",
 	"Transition appears to be empty, you need at least a condition , a schedule or a timer":"Transition appears to be empty, you need at least a condition , a schedule or a timer",
-	"warning":"warning"
+	"warning":"warning",
+	"Saving workflows":"Saving workflows"
 	});
 
 // override rules with localized version

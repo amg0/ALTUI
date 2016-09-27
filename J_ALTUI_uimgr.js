@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1838 $";
+var ALTUI_revision = "$Revision: 1847 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9115,42 +9115,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _getSaveNeeded() {
 			return bSaveNeeded
 		}
-		function Start() {
-			var m1 = new joint.shapes.devs.Model({
-				position: { x: 30, y: 30 },
-				size: { width: 90, height: 90 },
-				outPorts: ['out'],
-				attrs: {
-					'.label': { text: 'Start', 'ref-x': .4, 'ref-y': .2 },
-					rect: { fill: '#2ECC71' },
-					'.inPorts circle': { fill: '#16A085', magnet: 'passive', type: 'input' },
-					'.outPorts circle': { fill: '#E74C3C', type: 'output' }
-				},
-				// custom attributes
-				prop: WorkflowManager.getNodeProperties( {
-					stateinfo : {bStart:true},
-				}),
-			}).addTo(graph);
-			return m1;
-		}
-		function Node(label,x,y) {
-			var m1 = new joint.shapes.devs.Model({
-				position: { x: x, y: y },
-				size: { width: 90, height: 90 },
-				inPorts: ['in1','in2','in3'],
-				outPorts: ['out1','out2','out3'],
-				attrs: {
-					'.port-body': { r: 7 },
-					'.label': { text: label, 'ref-x': .5, 'ref-y': .2 },
-					rect: { fill: 'lightblue' },
-					'.inPorts circle': { fill: '#16A085', magnet: 'passive', type: 'input' },
-					'.outPorts circle': { fill: '#E74C3C', type: 'output' }
-				},
-				// custom attributes
-				prop:WorkflowManager.getNodeProperties( {} ),
-			}).addTo(graph);					
-			return m1;
-		}
 		function isStartNode(node) {
 			var model = node.attributes;
 			return model.prop && model.prop.stateinfo && model.prop.stateinfo.bStart && (model.prop.stateinfo.bStart==true)
@@ -9189,25 +9153,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			width: $('#altui-workflow-canvas').parent().innerWidth()-30, height: 600, gridSize: 1,
 			model: graph,
 			// interactive: { labelMove: true },
-			defaultLink: new joint.dia.Link({
-				smooth: true,
-				attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' } },
-				labels: [
-					{ position: 0.4, attrs: { text: { text: 'label' } } }
-				],
-				// custom attributes
-				prop:WorkflowManager.getLinkProperties( {} ),
-			}),	
+			defaultLink: WorkflowManager.Link(null, null, '??', null),	
 			validateConnection: function(cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
-				// Prevent linking from input ports.
-				if (magnetS && magnetS.getAttribute('type') === 'input') return false;
+				// Prevent linking to links
+				if (cellViewT.model.isLink()) return false;
 				// Prevent linking from output ports to input ports within one element.
 				if (cellViewS === cellViewT) return false;
-				// Prevent linking to input ports.
-				return magnetT && magnetT.getAttribute('type') === 'input';
+				// Prevent linking to start
+				if (cellViewT.model.attributes.prop.stateinfo.bStart==true) return false;
+				return magnetT != null
+				//return magnetT && magnetT.getAttribute('type') === 'input';
 			},
 			// Enable link snapping within 75px lookup radius
-			snapLinks: { radius: 75 },
+			// snapLinks: { radius: 75 },
 			// Enable marking available cells & magnets
 			markAvailable: true,
 			// prevent dropping link on the paper
@@ -9284,7 +9242,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				//
 				if (isStartNode(cell)) {
 					var Model = {
-						name: cellView.model.attr(".label/text"),
+						name: "Start",
 						prop: WorkflowManager.getLinkProperties( cellView.model.attributes.prop ),
 					}
 					onPropertyLink(workflow,Model,function(Model){
@@ -9299,12 +9257,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					});
 				} else {
 					var Model = {
-						name: cellView.model.attr(".label/text"),
+						name: cell.attr('text/text'),
 						prop: WorkflowManager.getNodeProperties( cellView.model.attributes.prop ),
 					}
 					onPropertyState(workflow,Model,function(Model){
 						if (Model) {
-							cellView.model.attr(".label/text",Model.name);
+							// cellView.model.attr(".label/text",Model.name);
+							cell.attr('text/text',Model.name)
 							cellView.model.attributes.prop = Model.prop;
 							_saveGraph();
 						}
@@ -9364,15 +9323,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 		
 		paper.on('cell:pointermove', function(event, x, y) {
-			if (event.model.isLink()) {
-				var clickPoint  = { x: event._dx, y: event._dy },
-					length1     = event.sourcePoint.distance(clickPoint),
-					length2     = event.targetPoint.distance(clickPoint),
-					lengthTotal = length1 + length2, //event.sourcePoint.manhattanDistance(event.targetPoint),
-					position    = _.round( length1 / lengthTotal, 2);
+			// if (event.model.isLink()) {
+				// var clickPoint  = { x: event._dx, y: event._dy },
+					// length1     = event.sourcePoint.distance(clickPoint),
+					// length2     = event.targetPoint.distance(clickPoint),
+					// lengthTotal = length1 + length2, //event.sourcePoint.manhattanDistance(event.targetPoint),
+					// position    = _.round( length1 / lengthTotal, 2);
 
-				event.model.label(0, { position: position });
-			}
+				// event.model.label(0, { position: position });
+			// }
 		});
 		paper.on('cell:pointerdblclick', function(cellView, evt, x, y) { 
 			handleDblClick(cellView, evt, x, y);
@@ -9387,7 +9346,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 		graph.on('change:position change:position change:source change:target change:vertices', function(cell) { 
 			paper.fitToContent({ padding:2 })
-			_.defer(_saveGraph);
+			// _.defer(_saveGraph);
 			_showSaveNeeded();
 		});
 		graph.on('remove',function(cell)	{
@@ -9416,7 +9375,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 		$("#altui-workflow-newstate").click(function() {
 			//var elements = workflow.graph.getElements();
-			Node("New",0,0);
+			WorkflowManager.Node("New",0,0).addTo(graph);
 			_showSaveNeeded();
 			_saveGraph();
 		});
@@ -9441,7 +9400,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// remove any active state fill color before saving
 			$.each( graph.getElements() , function(idx,cell) {
 				cell.attr({
-					rect: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue' },
+					circle: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue' },
 				});	
 			});
 			if (AltuiDebug.IsDebug()) {
@@ -9473,7 +9432,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				graph.fromJSON( JSON.parse(newwkflow.graph_json) )
 				$.each( graph.getElements() , function(idx,cell) {
 					cell.attr({
-						rect: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue'},
+						circle: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue'},
 					});
 				})
 				_showSaveNeeded(true);
@@ -9508,33 +9467,27 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			graph.fromJSON( JSON.parse(workflow.graph_json) )
 			$.each( graph.getElements() , function(idx,cell) {
 				cell.attr({
-					rect: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue'},
+					circle: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue'},
 				});
 			})
+			
+			// strange bug, arrows head are not visible without a first change or a reload of the graph
+			graph.fromJSON( graph.toJSON() )
 			_showSaveNeeded(bSanitized);
 		}
 		else {
-			Start();
-			var m2 = Node("S1",50,50);
-			var m3 = m2.clone().translate(300, 0).attr('.label/text', 'S2').addTo(graph);
-// var m1 = new joint.shapes.devs.Model({
-    // position: { x: 50, y: 50 },
-    // size: { width: 90, height: 90 },
-    // inPorts: ['in1','in2'],
-    // outPorts: ['out'],
-    // attrs: {
-        // '.label': { text: 'Model', 'ref-x': .4, 'ref-y': .2 },
-        // rect: { fill: '#2ECC71' },
-        // '.inPorts circle': { fill: '#16A085' },
-        // '.outPorts circle': { fill: '#E74C3C' }
-    // }
-// });
-// graph.addCell(m1);
+			var s = WorkflowManager.Start();
+			var m2 = WorkflowManager.Node("S1",100,200);
+			var m3 = WorkflowManager.Node("S2",100,100);
+			s.addTo(graph)
+			m2.addTo(graph)
+			m3.addTo(graph)
+			WorkflowManager.Link(s,m2,'test').addTo(graph);
 		}
 		
 		// size the paper properly and make the canvas resizable
 		// paper.fitToContent({ padding:2 });
-		paper.scaleContentToFit({ padding:2 });
+		paper.scaleContentToFit({ padding:5, preserveAspectRatio:true });
 		//
 		// refresh the graph
 		//
@@ -9550,13 +9503,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var cell = graph.getCell( data.states[workflow.altuiid] );
 					if (previous_active !=null) {
 						previous_active.attr({
-							rect: { fill: isStartNode(previous_active) ? '#2ECC71' : 'lightblue'},
+							circle: { fill: isStartNode(previous_active) ? '#2ECC71' : 'lightblue'},
 						});
 					}
 					if (cell) {
 						previous_active = cell;
 						cell.attr({
-							rect: { fill: '#F78181' },
+							circle: { fill: '#F78181' },
 						});
 					}
 				}
@@ -9661,27 +9614,40 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			})				
 		
 		// now do the refresh loop 
-		function _refresh() {
-			MultiBox.getWorkflowStatus( function(data) {
-				if (!data) {
-					HTMLUtils.startTimer('altui-workflow-page-timer',5000,_refresh,null)
-					return;
-				}  	
-				$(".altui-workflow").each( function(idx, obj) {
-					var altuiid = $(obj).data("altuiid");
-					var activestate = data.states[altuiid];
+		MultiBox.getWorkflowStatus( function(data) {
+			if (data) {
+				var StateToName={}
+				// prepare necessary data
+				$.each(data.states, function(altuiid,state) {
 					var workflow = WorkflowManager.getWorkflow( altuiid );
 					if (workflow.graph_json) {
-						var arr = JSON.parse(workflow.graph_json).cells.filter( function(e) {return e.id == activestate} )
-						if (arr.length>0) {
-							$(obj).find(".altui-active-state-name").text( arr[0].attrs[".label"].text )
-						}
-					}
+						var arr = JSON.parse(workflow.graph_json).cells
+						$.each(arr, function(i,cell) {
+							if (cell.type != "fsa.Arrow") {
+								StateToName[cell.id] = ( cell.attrs.text ? cell.attrs.text.text : 'Start' )
+							}
+						});
+					}					
 				});
-				HTMLUtils.startTimer('altui-workflow-page-timer',3000,_refresh,null)
-			});
-		}
-		_refresh();
+				// then program regular refresh
+				function _refresh() {
+					MultiBox.getWorkflowStatus( function(data) {
+						if (!data) {
+							HTMLUtils.startTimer('altui-workflow-page-timer',5000,_refresh,null)
+							return;
+						}  	
+						$(".altui-workflow").each( function(idx, obj) {
+							var altuiid = $(obj).data("altuiid");
+							var activestate = data.states[altuiid];
+							var name = StateToName[activestate]
+							$(obj).find(".altui-active-state-name").text( name )
+						});
+						HTMLUtils.startTimer('altui-workflow-page-timer',3000,_refresh,null)
+					});
+				}
+				_refresh();
+			}
+		});
 	},
 
 	_findPlugin: function (plugins,pluginid){

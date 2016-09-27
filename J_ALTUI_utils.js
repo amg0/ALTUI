@@ -2171,11 +2171,11 @@ var WorkflowLink = function(graph,cell) {
 		return null;
 	};
 	return {
-		get id()				{ return _cell.id },
-		get name() 		{ return _cell.labels[0].attrs.text.text; },
+		get id()			{ return _cell.id },
+		get name() 			{ return _cell.labels[0].attrs.text.text; },
 		get conditions() 	{ return _cell.prop.conditions || [] },
-		get schedule() 	{ return _cell.prop.schedule  },
-		get timer() 			{ return (_cell.prop.timer!="") ? { name: _cell.prop.timer , duration: _cell.prop.duration } : null },
+		get schedule() 		{ return _cell.prop.schedule  },
+		get timer() 		{ return (_cell.prop.timer!="") ? { name: _cell.prop.timer , duration: _cell.prop.duration } : null },
 		get source()		{ return new WorkflowState(graph,_stateFromID(_cell.source.id)) },
 		get target()		{ return new WorkflowState(graph,_stateFromID(_cell.target.id)) },
 	}
@@ -2186,9 +2186,11 @@ var WorkflowState = function(graph,cell) {
 	var _graph = graph;
 	return {
 		isStart: function() { return _cell.prop.stateinfo ? _cell.prop.stateinfo.bStart : false },
-		get name() { return _cell.attrs[".label"].text; },
+		get name() { 
+			return _cell.attrs.text ? _cell.attrs.text.text : 'Start'
+			},
 		get transitions() { 
-			return $.map( $.grep(_graph.cells, function(e) { return (e.type == "link") && (e.source.id == _cell.id) }) , function(l) {
+			return $.map( $.grep(_graph.cells, function(e) { return (e.type == "fsa.Arrow") && (e.source.id == _cell.id) }) , function(l) {
 				return new WorkflowLink(_graph,l)
 			});
 		},
@@ -2214,14 +2216,14 @@ var Workflow = function (altuiid) {
 		get states() { 
 			if (_graph==null)
 				return []
-			return $.map( $.grep(_graph.cells, function(e) { return e.type != "link" }) , function(s) {
+			return $.map( $.grep(_graph.cells, function(e) { return e.type != "fsa.Arrow" }) , function(s) {
 				return new WorkflowState(_graph,s);
 			})
 		},
 		get transitions() { 
 			if (_graph==null)
 				return []
-			return $.map( $.grep(_graph.cells, function(e) { return e.type == "link" }) , function(s) {
+			return $.map( $.grep(_graph.cells, function(e) { return e.type == "fsa.Arrow" }) , function(s) {
 				return new WorkflowLink(_graph,s);
 			})			
 		}
@@ -2276,6 +2278,51 @@ var WorkflowManager = (function() {
 		})
 	};
 	
+	function _upgradeWorkflowToFsa(workflow) {
+		var bSaveNeeded = false
+		var graph2 =  new joint.dia.Graph();
+		var mapIDtoID = {}
+		if (workflow.graph_json) {
+			var graph = JSON.parse(workflow.graph_json)
+			for (var i = 0 ; i<graph.cells.length ; i++ ) {
+				var cell = graph.cells[i];
+				switch( cell.type ) {
+					case "devs.Model":
+						var node = (cell.prop.stateinfo.bStart == true ) 
+											? WorkflowManager.Start()
+											: WorkflowManager.Node( cell.attrs[".label"].text, cell.position.x, cell.position.y )
+						mapIDtoID[ cell.id ] = node;
+						node.prop(  {prop: cell.prop}  )
+						// node.prop = cloneObject( cell.prop );
+						node.addTo(graph2);
+						bSaveNeeded=true
+						break;
+					default:
+						break;
+				}
+			}
+			for (var i = 0 ; i<graph.cells.length ; i++ ) {
+				var cell = graph.cells[i];
+				switch( cell.type ) {
+					case "link":
+						var link = WorkflowManager.Link(mapIDtoID[cell.source.id], mapIDtoID[cell.target.id], cell.labels[0].attrs.text.text, [])
+						mapIDtoID[ cell.id ] = link;
+						link.prop( {prop: cell.prop} )
+						// link.prop = cloneObject( cell.prop );
+						link.addTo(graph2);
+						bSaveNeeded=true
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		if (bSaveNeeded==true) {
+				workflow.graph_json = JSON.stringify(graph2)
+		}
+		return bSaveNeeded;
+	}
+	
 	function _sanitizeWorkflow(altuiid) {
 		var bSaveNeeded = false;
 		var idx = _findWorkflowIdxByAltuiid(altuiid);
@@ -2283,9 +2330,10 @@ var WorkflowManager = (function() {
 			var workflow = _workflows[idx];
 			if (workflow.graph_json) {
 				var graph = JSON.parse(workflow.graph_json)
+				
 				for (var i = 0 ; i<graph.cells.length ; i++ ) {
 					var cell = graph.cells[i];
-					if (cell.type=="link") {
+					if ( (cell.type=="link") || (cell.type=="fsa.Arrow") ) {
 						var conditions = cell.prop.conditions;
 						if (conditions)
 							for (var j=conditions.length-1; j>=0; j--) {
@@ -2335,13 +2383,13 @@ var WorkflowManager = (function() {
 								}
 							}
 						}
-					}
+					}					
 				}
 			}
-
 			if (bSaveNeeded) {
 				workflow.graph_json = JSON.stringify(graph)
 			}
+			bSaveNeeded = _upgradeWorkflowToFsa(workflow);
 		}
 		return bSaveNeeded
 	};
@@ -2487,10 +2535,10 @@ var WorkflowManager = (function() {
 	function _getWorkflowStats(altuiid) {
 		var workflow = _getWorkflow(altuiid)
 		var graph = JSON.parse(workflow.graph_json);
-		var states = $.map($.grep(graph.cells, function(e) { return e.type != "link" }),function(e) {
-			return e.attrs[".label"].text;
+		var states = $.map($.grep(graph.cells, function(e) { return e.type != "fsa.Arrow" }),function(e) {
+			return (e.attrs.text) ? e.attrs.text.text : 'Start' //e.attr('text/text'); // e.attrs[".label"].text;
 		});
-		var links = $.map($.grep(graph.cells, function(e) { return e.type == "link" }),function(e) {
+		var links = $.map($.grep(graph.cells, function(e) { return e.type == "fsa.Arrow" }),function(e) {
 			return e.labels[0].attrs.text.text;
 		});
 		if (workflow) {
@@ -2609,7 +2657,7 @@ var WorkflowManager = (function() {
 			return;
 		
 		var graph = JSON.parse(workflow.graph_json);
-		var links = (graph==null) ? [] : $.grep(graph.cells, function(e) { return e.type == "link" });
+		var links = (graph==null) ? [] : $.grep(graph.cells, function(e) { return e.type == "fsa.Arrow" });
 		var maplinks = {}
 		// for all link conditions which contains a schedule
 		// find the corresponding scene, if found edit , otherwise create
@@ -2656,8 +2704,57 @@ var WorkflowManager = (function() {
 		}		
 		return false;
 	};
+	function _Start() {
+		var m1 = new joint.shapes.fsa.StartState({
+			position: { x: 5, y: 5 },
+			attrs: {
+				'circle': { magnet: true , fill: '#2ECC71' }
+			},
+			// custom attributes
+			prop: WorkflowManager.getNodeProperties( {
+				stateinfo : {bStart:true},
+			}),
+		});
+		m1.attr( {
+				circle: { magnet: true , fill: '#2ECC71' }
+			}
+		);
+		return m1;
+	}
+	function _Node(label,x,y) {
+		var m1 = new joint.shapes.fsa.State({
+			position: { x: x, y: y },
+			size: { width: 60, height: 60 },
+			attrs: { 
+				text : { text: label , 'font-weight': '200' , 'font-size':'.8em'},
+				'circle': { magnet: true }
+			},
+			// custom attributes
+			prop:WorkflowManager.getNodeProperties( {} ),
+		})
+		return m1;
+	}
+	function _Link(source, target, label, vertices) {
+		var opt = {
+				labels: [{ position: 0.5, attrs: { text: { text: label || '' , 'font-weight': '200', 'font-size':'0.8em' } } }],
+				prop:WorkflowManager.getLinkProperties( {} ),
+				vertices: vertices || []
+		};
+		if (source) {
+			opt.source = { id: source.id }
+		}
+		if (target) {
+			opt.target = { id: target.id }
+		}
+		var cell = new joint.shapes.fsa.Arrow( opt );
+		return cell;
+	}
+
 	return {
 		init: _init,
+		Start: _Start,
+		Node: _Node,
+		Link: _Link,
 		saveNeeded : function() 	{ return _saveNeeded; },
 		getNodeProperties: function( obj )	{ return $.extend(true,{},_def_nodeprops, obj) },	// insure the defaults evolves
 		getLinkProperties: function( obj )	{ return $.extend(true,{},_def_linkprops, obj) },

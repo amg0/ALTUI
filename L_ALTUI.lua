@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.63"
+local version = "v1.64"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
@@ -631,13 +631,17 @@ end
 -- Workflows
 ------------------------------------------------
 
-local function getStateName(link)
+local function getCellName(link)
 	local name = ""
 	-- Check name for Link or for START state
 	if (link.labels ~=nil ) then
 		name = link.labels[1].attrs.text.text
 	else
-		name = link.attrs[".label"].text
+		if (link.attrs.text ~= nil) then
+			name = link.attrs.text.text 
+		else
+			name = 'Start'
+		end
 	end
 	return name
 end
@@ -701,7 +705,7 @@ end
 
 local function stateFromID(cells,stateID)
 	for k,cell in pairs(cells) do
-		if (cell.type~="link" and cell.id==stateID) then
+		if (cell.type~="link" and cell.type~="fsa.Arrow" and cell.id==stateID) then
 			return cell
 		end
 	end
@@ -712,7 +716,7 @@ local function isValidState(workflow,stateID)
 end
 local function linkFromID(cells,stateID)
 	for k,cell in pairs(cells) do
-		if (cell.type=="link" and cell.id==stateID) then
+		if ( (cell.type=="fsa.Arrow" or cell.type=="link") and cell.id==stateID) then
 			return cell
 		end
 	end
@@ -723,7 +727,7 @@ local function getStateTransitions(lul_device, stateid, cells )
 	debug(string.format("Wkflow - getStateTransitions(%s)",lul_device))
 	local result = {}
 	for k,cell in pairs(cells) do 
-		if (cell.type=="link" and cell.source.id==stateid ) then
+		if ((cell.type=="fsa.Arrow" or cell.type=="link") and cell.source.id==stateid ) then
 			table.insert(  result , cell )
 		end
 	end
@@ -732,20 +736,20 @@ local function getStateTransitions(lul_device, stateid, cells )
 end
 
 local function setWorkflowActiveState(lul_device,workflow_idx,newstate)
-	debug(string.format("Wkflow - setWorkflowActiveState: '%s', %s, %s",Workflows[workflow_idx].altuiid , newstate.attrs[".label"].text, newstate.id))
-	Workflows[workflow_idx]["graph_json"].active_state = newstate.id
-	WorkflowsActiveState[ Workflows[workflow_idx].altuiid ] = newstate.id
-	luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), tonumber(lul_device))
+	if (newstate ~= nil) then
+		debug(string.format("Wkflow - setWorkflowActiveState: '%s', %s, %s",Workflows[workflow_idx].altuiid , getCellName(newstate), newstate.id))
+		Workflows[workflow_idx]["graph_json"].active_state = newstate.id
+		WorkflowsActiveState[ Workflows[workflow_idx].altuiid ] = newstate.id
+		luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), tonumber(lul_device))
+	else
+		error(string.format("Wkflow - setWorkflowActiveState: '%s', %s, %s",Workflows[workflow_idx].altuiid , "null", "null"))
+	end
 end
 
 local function armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
 	local name = ""
 	-- Check name for Link or for START state
-	if (curstate.labels ~=nil ) then
-		name = curstate.labels[1].attrs.text.text
-	else
-		name = curstate.attrs[".label"].text
-	end
+	name = getCellName(curstate)
 	
 	debug(string.format("Wkflow - armLinkTimersAndWatches(%s, %s, %s ) ",lul_device, Workflows[workflow_idx].name, name))
 	local cells = Workflows[workflow_idx]["graph_json"].cells 
@@ -877,6 +881,7 @@ local function resetWorkflow(lul_device,workflowAltuiid)
 		
 		-- reset active state for this workflow
 		local start = findStartState(workflow_idx)
+		log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Reset to Start", "*", "Start"));
 		setWorkflowActiveState(lul_device,workflow_idx,start)
 		
 		-- reset workflow variables
@@ -886,7 +891,7 @@ local function resetWorkflow(lul_device,workflowAltuiid)
 		-- schedule execution
 		if (WFLOW_MODE == true) then
 			-- Arm timers and exec Workflows with a delay
-			local startstate = stateFromID(Workflows[workflow_idx]["graph_json"].cells,startid)
+			local startstate = stateFromID(Workflows[workflow_idx]["graph_json"].cells,start.id)
 			armLinkTimersAndWatches(lul_device,workflow_idx,startstate)
 			executeWorkflows(lul_device , nil , workflow_idx )
 			-- luup.call_delay("executeWorkflows", 2, lul_device)
@@ -941,7 +946,7 @@ local function enableWorkflows(lul_device,newWorkflowMode)
 end
 
 local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent)
-	local name = getStateName(link)
+	local name = getCellName(link)
 	debug(string.format("Wkflow - evaluateStateTransition(%s,%s,%s)",lul_device,name,workflow_idx))
 	debug(string.format("Wkflow - link props:%s",json.encode(link.prop)))
 
@@ -1007,7 +1012,7 @@ end
 -- ],
 
 local function executeStateLua(lul_device,workflow_idx,state,label)
-	debug(string.format("Wkflow - Workflow:'%s' executeStateLua(%s, %s, %s) ",Workflows[workflow_idx].name, state.attrs[".label"].text,label,label))
+	debug(string.format("Wkflow - Workflow:'%s' executeStateLua(%s, %s) ",Workflows[workflow_idx].name, getCellName(state),label))
 	local  lua = state.prop[label] or ""
 	if (lua:len()>0) then
 		debug(string.format("Wkflow - %s Lua code=%s",label,lua))
@@ -1032,7 +1037,7 @@ local function executeStateLua(lul_device,workflow_idx,state,label)
 end
 
 local function executeStateScenes(lul_device,workflow_idx,state,label)
-	debug(string.format("Wkflow - Workflow:'%s' executeStateScenes(%s, %s) ",Workflows[workflow_idx].name, state.attrs[".label"].text,label))
+	debug(string.format("Wkflow - Workflow:'%s' executeStateScenes(%s, %s) ",Workflows[workflow_idx].name, getCellName(state),label))
 	debug(string.format("state.prop %s",json.encode(state.prop)))
 	for k,scene in pairs( state.prop[label] or {} ) do
 		local parts = scene.altuiid:split("-")
@@ -1044,7 +1049,7 @@ local function executeStateScenes(lul_device,workflow_idx,state,label)
 end
 
 local function executeStateActions(lul_device,workflow_idx,state,label)
-	debug(string.format("Wkflow - Workflow:'%s' executeStateActions(%s, %s) ", Workflows[workflow_idx].name, state.attrs[".label"].text,label))
+	debug(string.format("Wkflow - Workflow:'%s' executeStateActions(%s, %s) ", Workflows[workflow_idx].name, getCellName(state),label))
 	debug(string.format("state.prop %s",json.encode(state.prop)))
 	for k,action in pairs( state.prop[label] or {} ) do
 		local parts = action.device:split("-")
@@ -1055,8 +1060,8 @@ end
 
 local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate,comment)
 	if (WFLOW_MODE==true) and (newstate.id ~= oldstate.id ) then
-		log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, comment or "", oldstate.attrs[".label"].text, newstate.attrs[".label"].text));
-		-- debug(string.format("Wkflow - Workflow:'%s' nextWorkflowState(%s, %s ==> %s) ", Workflows[workflow_idx].name,Workflows[workflow_idx].altuiid, oldstate.attrs[".label"].text,newstate.attrs[".label"].text))
+		log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, comment or "", getCellName(oldstate), getCellName(newstate)));
+		-- debug(string.format("Wkflow - Workflow:'%s' nextWorkflowState(%s, %s ==> %s) ", Workflows[workflow_idx].name,Workflows[workflow_idx].altuiid, oldstate.attrs.text.text,newstate.attrs.text.text))
 		
 		-- cancel timers originated from that state
 		cancelStateTimers(lul_device,workflow_idx,oldstate.id)
@@ -1097,7 +1102,7 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 	if (oldstate == nil ) then
 		oldstate = start
 	end
-	debug(string.format("Wkflow - active state:%s, %s", stateid,oldstate.attrs[".label"].text))
+	debug(string.format("Wkflow - active state:%s, %s", stateid,getCellName(oldstate)))
 
 	local evalstartcond = evaluateStateTransition(lul_device,start,workflow_idx,watchevent)
 	local blocked = Workflows[workflow_idx].blocked or Workflows[workflow_idx].paused	-- blocked by start conditions or by user request
@@ -1127,7 +1132,7 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 				--- if already in START state
 				log(string.format("Wkflow - Workflow: %s, already in start state , ID:%s", Workflows[workflow_idx].altuiid,start.id))
 			else
-				-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Reset to Start", oldstate.attrs[".label"].text, start.attrs[".label"].text))
+				-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Reset to Start", oldstate.attrs.text.text, start.attrs.text.text))
 				nextWorkflowState( lul_device, workflow_idx, oldstate, start,"Reset to Start")
 			end
 			return true
@@ -1150,8 +1155,8 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 				cancelTimer( table.concat(tbl, "#") )
 			end
 		
-			-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, link.labels[1].attrs.text.text, oldstate.attrs[".label"].text, targetstate.attrs[".label"].text));
-			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate , link.labels[1].attrs.text.text)
+			-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, link.labels[1].attrs.text.text, oldstate.attrs.text.text, targetstate.attrs.text.text));
+			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate , getCellName(link))
 			return true;	-- todo
 		end
 	end
@@ -1184,8 +1189,8 @@ function workflowTimerCB(lul_data)
 			local oldstate = stateFromID(cells,active_state)
 			local targetstate = stateFromID(cells,targetstateid)
 			debug(string.format("Wkflow - link prop:%s",json.encode(link.prop)))
-			-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Timer:"..getStateName(link), oldstate.attrs[".label"].text, targetstate.attrs[".label"].text));
-			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate,"Timer:"..getStateName(link) )
+			-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, "Timer:"..getCellName(link), oldstate.attrs.text.text, targetstate.attrs.text.text));
+			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate,"Timer:"..getCellName(link) )
 		else
 			warning(string.format("Wkflow - Timer - Timer ignored, active state is different from the timer state"))
 		end
@@ -1625,7 +1630,8 @@ local htmlScripts = [[
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js" ></script> 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.min.js" ></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.shapes.devs.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.shapes.fsa.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.shapes.devs.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
@@ -1669,8 +1675,8 @@ local htmlCSSlinks = [[
 	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="@localbootstrap@">
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
 	<link class="altui-theme" rel="stylesheet" href="@ThemeCSS@">	
 ]]
 
