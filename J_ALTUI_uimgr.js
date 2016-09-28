@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1847 $";
+var ALTUI_revision = "$Revision: 1848 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5459,7 +5459,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// prepare data 
 				footerMap.luaversion = _version;
 				footerMap.jsrevision = m[1];
-				var info = MultiBox.getBoxInfo();
+				var info = MultiBox.getBoxInfo(0);
 				var infotbl=[];
 				for( var key in info) { infotbl.push( info[key] || "") };
 				footerMap.boxinfo = infotbl.join(", ").replace('\n','');
@@ -8511,7 +8511,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-workflow-export", glyph:"glyphicon-floppy-save", label:_T("Import/Export")},
 			{id:"altui-workflow-zoomin", glyph:"glyphicon-plus" },
 			{id:"altui-workflow-zoomout", glyph:"glyphicon-minus" },
-			{id:"altui-workflow-rotate", glyph:"glyphicon-repeat" },
+			// {id:"altui-workflow-rotate", glyph:"glyphicon-repeat" },
 		];
 		var selected = [];
 		var graph = new joint.dia.Graph();
@@ -9175,6 +9175,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// cf http://stackoverflow.com/questions/35443524/jointjs-why-pointerclick-event-doesnt-work-only-pointerdown-gets-fired
 			clickThreshold: 1,
 		});
+		/*
 		function _rotateCell(cell) {
 			var angle = cell.attributes.angle;
 			angle = (angle + 90) % 360;
@@ -9210,6 +9211,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				'.label' : { transform:labelXform }
 			})
 		};
+		*/
+		
 		//
 		// Callbacks / Interactivity
 		//
@@ -9363,16 +9366,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			paper.scale(0.80*scale.sx, 0.80*scale.sy)
 			paper.fitToContent({ padding:2 })
 		});
-		$('#altui-workflow-rotate').click(function() {
-			if (selected.length>0) {
-				$.each(selected, function(k,s) {
-					var cell = graph.getCell( s );
-					_rotateCell(cell);
-				});
-				_showSaveNeeded();
-				_saveGraph();
-			}
-		});
+		// $('#altui-workflow-rotate').click(function() {
+			// if (selected.length>0) {
+				// $.each(selected, function(k,s) {
+					// var cell = graph.getCell( s );
+					// _rotateCell(cell);
+				// });
+				// _showSaveNeeded();
+				// _saveGraph();
+			// }
+		// });
 		$("#altui-workflow-newstate").click(function() {
 			//var elements = workflow.graph.getElements();
 			WorkflowManager.Node("New",0,0).addTo(graph);

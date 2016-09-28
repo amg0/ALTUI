@@ -925,7 +925,6 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			}
 			
 			_upnpHelper.setOpenLuup( _isOpenLuup(_user_data) );
-			
 		}
 	};
 

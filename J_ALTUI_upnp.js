@@ -16,8 +16,8 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	var _bIsOpenLuup = false;
 	var _ipaddr = (ip_addr.trim()) || '';
 	var _veraidx = veraidx || 0;
-	var _proxyresultarea = "altuictrl"+_veraidx;
 	var _urlhead = (_ipaddr=='') ? window.location.pathname : ("http://{0}/port_3480/data_request".format(_ipaddr));
+	// var _proxyresultarea = "altuictrl"+_veraidx;
 	// var _proxyhead = "/port_3480/data_request?id=action&output_format=json&DeviceNum={0}&serviceId=urn:upnp-org:serviceId:altui1&resultName={1}&action=ProxyGet&newUrl=".format(g_ALTUI.g_MyDeviceID,_proxyresultarea);
 	var _proxyhead = "?id=lr_ALTUI_Handler&command=proxyget&resultName=none&newUrl=";
 
@@ -192,6 +192,33 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	
 	function _UPnPSet( deviceID, service, varName, varValue )
 	{
+		var versioninfo = $.map( MultiBox.getBoxInfo(0).BuildVersion.match(/\*(\d+)\.(\d+)\.(\d+)\\*/), 
+		function(e,i) {
+			return parseInt(e)
+		});
+		if (( _veraidx==0) && (_bIsOpenLuup!=true) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2139 )) {
+				//  use POST instead of GET if possible
+				var url = _getUrlHead()+'?'
+                var data = {
+                    id: "variableset",
+                    DeviceNum: deviceID,
+                    Variable: varName,
+                    Value: varValue.toString(),
+                    serviceId: service,
+                    rand: Math.random()
+                };
+                return $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data
+                })
+				.done(function(data, textStatus, jqXHR) {
+					// alert('saved');
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					// alert("Error Saving:" + Variable + " Error:" + errorThrown);
+				})
+		}
 		return _exec( _buildVariableSetUrl( deviceID, service, varName, varValue) );
 	};
 

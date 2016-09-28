@@ -870,8 +870,8 @@ var MultiBox = ( function( window, undefined ) {
 	getDeviceStaticData		: _getDeviceStaticData,		//(device)
 	// Access & Modes
 	isRemoteAccess	: function() 	{ 	return window.location.href.indexOf("mios.com")!=-1; /*return true;*/ },
-	getBoxInfo		: function() 	{	return _controllers[0].controller.getBoxInfo(); },
-	getBoxFullInfo	: function() 	{	return _controllers[0].controller.getBoxFullInfo(); },
+	getBoxInfo		: function( ctrlid ) 	{	return _controllers[ctrlid || 0].controller.getBoxInfo(); },
+	getBoxFullInfo	: function( ctrlid ) 	{	return _controllers[ctrlid || 0].controller.getBoxFullInfo(); },
 	getHouseMode	: function(cb) 	{	return _controllers[0].controller.getHouseMode(cb); },		// (cbfunc)
 	setHouseMode	: _setHouseMode,		// (newmode,cbfunc)
 	getHouseModeSwitchDelay : _getHouseModeSwitchDelay,
