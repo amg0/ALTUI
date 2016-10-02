@@ -2727,7 +2727,7 @@ var WorkflowManager = (function() {
 	function _Node(label,x,y) {
 		var m1 = new joint.shapes.fsa.State({
 			position: { x: x, y: y },
-			size: { width: 70, height: 70 },
+			size: { width: 65, height: 65 },
 			attrs: { 
 				text : { text: label , 'font-weight': '200' , 'font-size':'.8em'},
 				'circle': { magnet: true, 'stroke-width': 2 }
