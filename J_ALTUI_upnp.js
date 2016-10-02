@@ -196,7 +196,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		function(e,i) {
 			return parseInt(e)
 		});
-		if (( _veraidx==0) && (_bIsOpenLuup!=true) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2139 )) {
+		if (( _veraidx==0) && (_bIsOpenLuup!=true) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 )) {
 				//  use POST instead of GET if possible
 				var url = _getUrlHead()+'?'
                 var data = {

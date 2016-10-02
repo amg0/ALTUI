@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.64"
+local version = "v1.65"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
@@ -968,29 +968,59 @@ local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent
 	if (tablelength(link.prop.conditions)>0) then
 		-- conditions
 		for k,cond in pairs(link.prop.conditions) do
+			local bMatchingWatch = false
 			local parts = cond.device:split("-");
 			local devid = tonumber(parts[2]);
 			local new,old,lastupdate = nil,nil,nil
-			
+
+			if (watchevent~=nil) and (watchevent.device == cond.device) and (watchevent.service == cond.service) and (watchevent.variable == cond.variable) then
+				bMatchingWatch = true
+				-- if (watchevent.watch['Expressions']['results'] == nil) or (watchevent.watch['Expressions']['results'][cond.luaexpr] == nil)  then
+					-- debug(string.format("Wkflow - watchevent value initialized"))
+					-- watchevent.watch['Expressions']['results']= {
+						-- [cond.luaexpr] = {
+							-- OldEval='',
+							-- LastEval=''
+						-- }
+					-- }
+					-- debug(string.format("Wkflow - watchevent value expr:%s old:%s new:%s",cond.luaexpr,tostring(watchevent.watch['Expressions']['results'][cond.luaexpr]["OldEval"]),tostring(watchevent.watch['Expressions']['results'][cond.luaexpr]["LastEval"])))
+				-- end
+			end
+
 			if (cond.triggeronly == true) then
 				-- do not accept transition which are not coming from a trigger if the trigger only flag is set
-				debug(string.format("Wkflow - Condition is TriggerOnly and watchevent:%s",json.encode(watchevent or {})))
-				if (watchevent == nil) or (watchevent.device ~= cond.device) or (watchevent.service ~= cond.service) or(watchevent.variable ~= cond.variable) then
-					debug(string.format("Wkflow - Trigger does not match condition:%s",json.encode(cond)))
+				debug(string.format("Wkflow - Condition %s is TriggerOnly and watchevent:%s",cond.luaexpr,json.encode(watchevent or {})))
+				if (bMatchingWatch==false) then
+					debug(string.format("Wkflow - ignore transition as the Watch trigger does not match this trigger transition condition:%s",json.encode(cond)))
 					return false
 				end
+				
 				-- must be the same device service variable, otherwise, reject
 				new,old,lastupdate = watchevent.watch["LastNew"],watchevent.watch["LastOld"],watchevent.watch["LastUpdate"]
 			else
 				-- evaluate in real time
-				debug("Wkflow - Condition is evaluated in real time - no TriggerOnly")
+				debug(string.format("Wkflow - Condition %s is evaluated in real time - no TriggerOnly",cond.luaexpr))
 				new,old,lastupdate = luup.variable_get(cond.service, cond.variable, devid ) , "" , os.time()
 			end
+			
 			local results = _evaluateUserExpression(lul_device,devid, cond.service, cond.variable,old,new,lastupdate,cond.luaexpr,workflow_idx) 	
+			-- if (bMatchingWatch==true) then
+				-- watchevent.watch['Expressions']['results'][cond.luaexpr]["LastEval"] = results[1]
+				-- debug(string.format("Wkflow - setting watch results to %s",json.encode(watchevent.watch['Expressions']['results'][cond.luaexpr])))
+			-- end
+			
 			local res,delay = results[1], results[2] or nil
 			if (  res ~= true) then
 				return false
-			end			
+			end
+			
+			-- if (cond.triggeronly == true) then
+				-- debug(string.format("Wkflow - watchevent for workflow was:%s",json.encode(watchevent.watch['Expressions']['results'])))
+				-- if (watchevent.watch['Expressions']['results'][cond.luaexpr]["LastEval"] == watchevent.watch['Expressions']['results'][cond.luaexpr]["OldEval"]) then
+					-- debug("Wkflow - Watch expression value is the same as before, ignoring the trigger & return false")
+					-- return false
+				-- end
+			-- end
 		end
 		return true	-- logical AND of all expressions
 	end
@@ -3177,8 +3207,8 @@ function evaluateExpression(watch,lul_device, lul_service, lul_variable,expr,old
 	return res
 end
 
-function _internalVariableWatchCallback(lul_device, lul_service, lul_variable, lul_value_old, lul_value_new)
-	debug(string.format("_internalVariableWatchCallback(%s,%s,%s,old:'%s',new:'%s') - (Wkflow)",lul_device, lul_service, lul_variable, lul_value_old, lul_value_new))
+function _internalVariableWatchCB(lul_device, lul_service, lul_variable, lul_value_old, lul_value_new)
+	debug(string.format("_internalVariableWatchCB(%s,%s,%s,old:'%s',new:'%s') - (Wkflow)",lul_device, lul_service, lul_variable, lul_value_old, lul_value_new))
 	local watch = findWatch( lul_device, lul_service, lul_variable )
 	if (watch==nil) or (watch['Expressions']==nil )then
 		warning(string.format("ignoring unexpected watch callback, variableWatchCallback(%s,%s,%s,old:'%s',new:'%s')",lul_device, lul_service, lul_variable, lul_value_old, lul_value_new))
@@ -3192,6 +3222,8 @@ function _internalVariableWatchCallback(lul_device, lul_service, lul_variable, l
 			if (k=="workflow") then
 				local watchevent = { device=lul_device, service=lul_service, variable=lul_variable, watch=watch }
 				executeWorkflows( findALTUIDevice() , watchevent)
+				-- watchevent.watch['Expressions']['results']["LastEval"] 
+	 -- elseif (k~="results") then
 			else
 				-- watch['Expressions'][k] is a table of object 		{ ["LastEval"] = nil, ["SceneID"] = scene }
 				-- v is an object
@@ -3211,12 +3243,12 @@ end
 
 function variableWatchCallbackFromRemote(ctrlid, lul_device, lul_service, lul_variable, lul_value_old, lul_value_new)
 	lul_device = tostring(ctrlid).."-"..lul_device
-	_internalVariableWatchCallback(lul_device, lul_service, lul_variable, lul_value_old, lul_value_new)
+	_internalVariableWatchCB(lul_device, lul_service, lul_variable, lul_value_old, lul_value_new)
 end
 
 function variableWatchCallback(lul_device, lul_service, lul_variable, lul_value_old, lul_value_new)
 	lul_device = "0-"..lul_device
-	_internalVariableWatchCallback(lul_device, lul_service, lul_variable, lul_value_old, lul_value_new)
+	_internalVariableWatchCB(lul_device, lul_service, lul_variable, lul_value_old, lul_value_new)
 end
 
 function addWatch( lul_device, service, variable, deviceid, sceneid, expression, xml, provider, providerparams )

@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1848 $";
+var ALTUI_revision = "$Revision: 1851 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8384,7 +8384,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var device = MultiBox.getDeviceByAltuiID(cond.device);
 				if (!device)	return;
 				html += "<li class='altui-action-details'> ";
-				html += "{5} device:'<strong>{0}</strong>' ({1}) when {2}-{3} <span class='text-muted'>({4})</span>".format( 
+				html += "{5} device:'<strong>{0}</strong>' ({1}) when {2}-{3} <span class='text-info'>({4})</span>".format( 
 					device.name, 
 					cond.device, cond.service, cond.variable, cond.luaexpr,
 					cond.triggeronly ? "<mark><span class='glyphicon glyphicon-flash' aria-hidden='true'></span></mark> <span class='text-danger'>Trigger</span>, " : ''
@@ -14146,6 +14146,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.on( "click", "#altui-theme-selector", UIManager.pageThemes )
 				.on( "click", "#altui-localize", UIManager.pageLocalization  )
 				.on( "click", "#altui-debugtools", UIManager.pageDebug  )
+				// .on( "click", "#altui-test", function() {
+					// $.ajax( {
+						// url:"http://192.168.1.16/port_3480/data_request",
+						// type:"POST",
+						// data: {
+							// id:'lr_ALTUI_Handler',
+							// command:'getWorkflowsStatus',
+              // end: true
+						// }
+					// })
+					// .done(function(data, textStatus, jqXHR) {
+						// alert('done')
+					// })
+					// .fail(function(jqXHR, textStatus, errorThrown) {
+						// alert('fail')
+					// });
+				// })
 				.on( "click", "#altui-debug-btn", function() {
 					$(".altui-debug-div").toggle();
 					$("#altui-debug-btn span.caret").toggleClass( "caret-reversed" );
@@ -14389,6 +14406,7 @@ $(function() {
 		body+="			<li><a id='altui-credits' href='#'>"+_T("Credits")+"</a></li>";
 		body+="			<li><a id='altui-evolutions' href='#'>"+_T("Evolutions")+"</a></li>";
 		body+="			<li><a id='altui-support' target='_blank' href='http://forum.micasaverde.com/index.php?board=78.0'>"+_T("Support")+"</a></li>";
+		// body+="			<li><a id='altui-test' href='#'>"+_T("Test")+"</a></li>";
 		body+="		  </ul>";
 		body+="		</li>";
 		body+="	  </ul>";

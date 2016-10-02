@@ -2736,7 +2736,7 @@ var WorkflowManager = (function() {
 	}
 	function _Link(source, target, label, vertices) {
 		var opt = {
-				labels: [{ position: 0.5, attrs: { text: { text: label || '' , 'font-weight': '200', 'font-size':'0.8em' } } }],
+				labels: [{ position: 0.4, attrs: { text: { text: label || '' , 'font-weight': '200', 'font-size':'0.8em' } } }],
 				prop:WorkflowManager.getLinkProperties( {} ),
 				vertices: vertices || []
 		};
