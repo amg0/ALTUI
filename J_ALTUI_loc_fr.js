@@ -446,7 +446,8 @@ Localization.init( {
 	"Invalid Transition":"Transition Invalide",
 	"Transition appears to be empty, you need at least a condition , a schedule or a timer":"La transition est vide, vous devez avoir au moins une condition ou un schedule ou un timer",
 	"warning":"attention",
-	"Saving workflows":"Sauvegarde des workflows"
+	"Saving workflows":"Sauvegarde des workflows",
+	"Smooth Link":"Courbe de lien lissée"
 });
 
 // override rules with localized version

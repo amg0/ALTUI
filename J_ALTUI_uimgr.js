@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1851 $";
+var ALTUI_revision = "$Revision: 1853 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8935,6 +8935,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += HTMLUtils.drawForm( 'altui-link-form', _T("Link Properties"),
 				[
 					{ id:"altui-form-LinkName", label:_T("Link Name"), type:"input", value: Model.name, opt:{required:''} },
+					{ id:"altui-LinkSmooth", label:_T("Smooth Link"), type:"input", inputtype:"checkbox", value: Model.prop.smooth  },
 					{ id:"altui-form-Conditions", label:_T("Link Conditions"), type:"accordeon", value: [
 						{id:'Conditions', title:_T("Conditions"), html:_displayConditions( 'altui-conditions',Model.prop.conditions )+BlocklyArea.createBlocklyArea() },
 						{id:'Schedules', title:_T("Schedules"), html: _displaySchedule( 'altui-schedule', Model.prop.schedule ) },
@@ -8987,8 +8988,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.off()
 			.on( 'submit', function(e) {
 				e.preventDefault();
+				Model.name = $("#altui-form-LinkName").val()
 				Model.prop.timer = $("#altui-timername").val();
 				Model.prop.duration = $("#altui-duration").val();
+				Model.prop.smooth = $("#altui-LinkSmooth").is(':checked');
 				// Model.prop.schedule already set
 				
 				if ( isNullOrEmpty(Model.prop.duration) != isNullOrEmpty(Model.prop.timer)) {
@@ -9001,10 +9004,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					return false;
 				}
 				if ($.isFunction(callback))
-					(callback)({
-						name:$("#altui-form-LinkName").val(),
-						prop: Model.prop,
-					});
+					(callback)(Model);
 				return false;
 			})
 			.on( 'click','#altui-btn-close',function() {
@@ -9232,6 +9232,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					if (Model) {
 						cellView.model.label(0,{ position: 0.5, attrs: { text: { text: Model.name } }});
 						cellView.model.attributes.prop = Model.prop;
+						cellView.model.attributes.smooth = Model.prop.smooth;
 						// update the graph
 						_saveGraph();
 					}
@@ -9247,6 +9248,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var Model = {
 						name: "Start",
 						prop: WorkflowManager.getLinkProperties( cellView.model.attributes.prop ),
+						smooth:false
 					}
 					onPropertyLink(workflow,Model,function(Model){
 						if (Model) {

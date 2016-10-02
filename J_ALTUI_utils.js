@@ -1569,15 +1569,17 @@ var HTMLUtils = (function() {
 					});
 					break;
 				case "input":
-					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
+					html += "<label for='{0}'>{1}".format(line.id,line.label);
 					var type = (line.inputtype!=undefined) ? "type='{0}'".format(line.inputtype) : "";
 					var pattern = (line.pattern != undefined ) ? "pattern='{0}'".format(line.pattern) : "";
-					html +="<input id='{0}' class='form-control' value='{1}' {2} {3} {4}></input>".format(
+					var checked = ((line.inputtype=="checkbox") && (line.value==true))? "checked" : "";
+					html +="<input id='{0}' class='form-control' value='{1}' {2} {3} {4} {5}></input></label>".format(
 						line.id,
 						line.value,
 						HTMLUtils.optionsToString(line.opt),
 						type,
-						pattern);
+						pattern,
+						checked);
 					break;
 				case "accordeon":
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
@@ -2250,7 +2252,8 @@ var WorkflowManager = (function() {
 	var _def_linkprops = {
 		conditions: [],			// table of device,service,variable, expression with new
 		schedule: null,			// schedule ( timer of scene )
-		timer: "",				// timer name
+		timer: "",					// timer name
+		smooth: true,				// smooth link
 		duration: ""				// duration ms
 	};
 		
@@ -2724,10 +2727,10 @@ var WorkflowManager = (function() {
 	function _Node(label,x,y) {
 		var m1 = new joint.shapes.fsa.State({
 			position: { x: x, y: y },
-			size: { width: 60, height: 60 },
+			size: { width: 70, height: 70 },
 			attrs: { 
 				text : { text: label , 'font-weight': '200' , 'font-size':'.8em'},
-				'circle': { magnet: true }
+				'circle': { magnet: true, 'stroke-width': 2 }
 			},
 			// custom attributes
 			prop:WorkflowManager.getNodeProperties( {} ),
