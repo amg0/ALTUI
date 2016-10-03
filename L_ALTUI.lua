@@ -12,7 +12,7 @@ local devicetype = "urn:schemas-upnp-org:device:altui:1"
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.65"
+local version = "v1.66"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
@@ -1786,6 +1786,7 @@ local htmlLayout = [[
 			 g_jspath : '',
 			 g_CustomTheme : '@ThemeCSS@',
 			 g_Options : '@ServerOptions@',
+			 g_CtrlOptions : '@ctrloptions@',
 			 g_DeviceTypes :  JSON.parse('@devicetypes@'),
 			 //g_CustomPages : @custompages@,
 			 //g_Workflows : @workflows@
@@ -2203,6 +2204,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				variables["mydeviceid"] = deviceID
 				variables["svnVersion"] = luup.attr_get("SvnVersion",0)
 				variables["extracontroller"] = getSetVariable(ALTUI_SERVICE, "ExtraController", deviceID, "")
+				variables["ctrloptions"] = getSetVariable(ALTUI_SERVICE, "CtrlOptions", deviceID, "")
 				-- variables["firstuserdata"] = "{}"
 				variables["firstuserdata"] = getFirstUserData()	-- ( json.encode( getFirstUserData() )	-- :gsub("'", "\'") )
 				if (localcdn ~= "") then
@@ -3699,6 +3701,7 @@ function startupDeferred(lul_device)
 	local worfklowmode = getSetVariable(ALTUI_SERVICE, "EnableWorkflows", lul_device, "0")
 	local worfklowactivestates = getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "")
 	local workflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
+	local ctrlOptions = getSetVariable(ALTUI_SERVICE, "CtrlOptions", lul_device, "1500,60")
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleUserCode", lul_device, "")

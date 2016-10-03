@@ -13,7 +13,10 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	//---------------------------------------------------------
 	// private functions
 	//---------------------------------------------------------	
-	var _bIsOpenLuup = false;
+	var _cfg = {
+		isOpenLuup: false,
+		candoPost: false
+	};
 	var _ipaddr = (ip_addr.trim()) || '';
 	var _veraidx = veraidx || 0;
 	var _urlhead = (_ipaddr=='') ? window.location.pathname : ("http://{0}/port_3480/data_request".format(_ipaddr));
@@ -109,7 +112,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	function _buildHAGSoapUrl()
 	{
 		var url ='';
-		if (_bIsOpenLuup==true)
+		if (_cfg.isOpenLuup==true)
 			url = _getUrlHead().replace('/data_request','/upnp/control/hag');
 		else
 			url = _getUrlHead().replace('/port_3480/data_request','/port_49451/upnp/control/hag');
@@ -192,11 +195,8 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	
 	function _UPnPSet( deviceID, service, varName, varValue )
 	{
-		var versioninfo = $.map( MultiBox.getBoxInfo(0).BuildVersion.match(/\*(\d+)\.(\d+)\.(\d+)\\*/), 
-		function(e,i) {
-			return parseInt(e)
-		});
-		if (( _veraidx==0) && (_bIsOpenLuup!=true) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 )) {
+		if ((_cfg.candoPost==true) && (_cfg.isOpenLuup==false) ) {
+		// if (( _veraidx==0) && (_cfg.isOpenLuup!=true) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 )) {
 				//  use POST instead of GET if possible
 				var url = _getUrlHead()+'?'
                 var data = {
@@ -205,13 +205,13 @@ var UPnPHelper = (function(ip_addr,veraidx) {
                     Variable: varName,
                     Value: varValue.toString(),
                     serviceId: service,
-                    rand: Math.random()
+                    dummy: 'x'	// bug in VERA which destroys the last argument
                 };
-                return $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: data
-                })
+				return $.ajax({
+						type: "POST",
+						url: url,
+						data: data
+				})
 				.done(function(data, textStatus, jqXHR) {
 					// alert('saved');
 				})
@@ -641,7 +641,9 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		//---------------------------------------------------------
 		// Public  functions
 		//---------------------------------------------------------
-		setOpenLuup	: function(b) 		{ _bIsOpenLuup = b; },
+		setConfig	: function(cfg) 		{ 
+			_cfg = $.extend( _cfg,cfg ) ;
+		},
 		getIpAddr		: function () 		{ return _ipaddr; },
 		reloadEngine	: _reloadEngine,
 		getUrlHead		: _getUrlHead,

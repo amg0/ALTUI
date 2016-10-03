@@ -234,6 +234,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
   //---------------------------------------------------------
   // private functions
   //---------------------------------------------------------
+	var ctrlOptions = g_ALTUI.g_CtrlOptions.split(",");
+	var LU_STATUS_MINDELAY=  parseInt(ctrlOptions[0]) || 1500;
+	var LU_STATUS_TIMEOUT= parseInt(ctrlOptions[1]) || 60;
+
 	var _uniqID = uniq_id;								// assigned by Multibox, unique, can be used for Settings & other things
 	var _hagdevice = { id: 0, altuiid:"{0}-0".format(_uniqID) };							// special device for HAG, service=S_HomeAutomationGateway1.xml
 	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id);			// for common UPNP ajax
@@ -762,8 +766,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 
 	function _refreshEngine() {
-		var jqxhr = _httpGet("?id=lu_status2&output_format=json&DataVersion="+_status_data_DataVersion+"&Timeout={0}&MinimumDelay=1500".format(
-				(_uniqID==0 ? 60 : 5 )			// cannot afford to wait 60 sec in the Lua handler for Proxied units
+		var jqxhr = _httpGet("?id=lu_status2&output_format=json&DataVersion="+_status_data_DataVersion+"&Timeout={0}&MinimumDelay={1}".format(
+				(_uniqID==0 ? LU_STATUS_TIMEOUT : 5 ),			// cannot afford to wait 60 sec in the Lua handler for Proxied units
+				LU_STATUS_MINDELAY
 			),
 			{beforeSend: function(xhr) { xhr.overrideMimeType('text/plain'); }},
 			function(data, textStatus, jqXHR)
@@ -924,7 +929,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);				
 			}
 			
-			_upnpHelper.setOpenLuup( _isOpenLuup(_user_data) );
+			_upnpHelper.setConfig( {
+				isOpenLuup: _isOpenLuup(_user_data),
+				candoPost: _candoPost(_user_data)
+			});
 		}
 	};
 
@@ -1007,6 +1015,17 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		
 		var bi = _getBoxInfo()
 		return (bi.BuildVersion==undefined) || (bi.BuildVersion.startsWith("*1.5."));
+	};
+	function _candoPost(user_data) {
+		if (_user_data.BuildVersion == undefined)
+			return false;
+		var versioninfo = $.map( _user_data.BuildVersion.match(/\*(\d+)\.(\d+)\.(\d+)\\*/), 
+			function(e,i) {
+				return parseInt(e)
+			}
+		);
+		// if (( _veraidx==0) && (_cfg.isOpenLuup!=true) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 )) {
+		return ( _uniqID==0) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 );
 	};
 	function _isOpenLuup(user_data) {
 		if ( (user_data.BuildVersion==undefined) || (user_data.BuildVersion.startsWith("*1.5")==true) )
@@ -1808,10 +1827,6 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		return null;  
 	};
 
-			// if (bFirst)
-				// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
-			// EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
-			
 	function _refreshEngine() {
 		// start the polling loop to get user_data
 		var jqxhr = $.ajax( {
