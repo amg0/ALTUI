@@ -1657,7 +1657,7 @@ local htmlScripts = [[
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" ></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js" ></script> 
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script> 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.min.js" ></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.shapes.fsa.min.js"></script>
@@ -1702,7 +1702,7 @@ local htmlLocalCSSlinks = [[
 ]]
 
 local htmlCSSlinks = [[
-	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="@localbootstrap@">
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.1/joint.css">
