@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1853 $";
+var ALTUI_revision = "$Revision: 1859 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5471,7 +5471,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 				var footerTemplate =  MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "FooterBranding" )
-					|| "<p>${appname} ${luaversion}.${jsrevision}, ${copyright} 2015 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></p><span>${paypal}</span>";
+					|| "<p>${appname} ${luaversion}.${jsrevision}, ${copyright} 2016 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></p><span>${paypal}</span>";
 				var tmpl = _.template(footerTemplate.trim());
 				var footerstr =tmpl( footerMap )
 				
@@ -6122,7 +6122,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	};
 	
 	// one page if specified, all pages otherwise
-	var _widgetOnCanvasDraggableOptions = function(page) {
+	var _widgetOnCanvasDraggableOptions = function() {
 		return {
 			grid: [ 5,5 ],
 			cancel: false,	// prevent draggable to be cancelled on disabled buttons
@@ -6137,6 +6137,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			},
 			drag: function(event, ui) {
 				// take all selected elements except me and fix their position to make them move.
+				var page = PageManager.getPageFromName( _getActivePageName() );
 				var canvas = $( _getPageSelector( page ) );
 				var selected = canvas.find(".altui-widget.ui-selected").not("#"+ui.helper.prop('id'));
 				selected.each( function(index,elem) {
@@ -6150,6 +6151,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// console.log( "selected:"+selected.length+", "+JSON.stringify(startpos) + ":" + JSON.stringify(ui.position) );
 			},
 			stop: function(event, ui) {
+				var page = PageManager.getPageFromName( _getActivePageName() );
 				var canvas = $( _getPageSelector( page ) );
 				startpos = null;
 				var selected = canvas.find(".altui-widget.ui-selected").not("#"+ui.helper.prop('id'));
@@ -6189,7 +6191,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var selector = _getWidgetSelector(page,widget);
 		$(selector).draggable("disable");
 		_replaceElementKeepAttributes( selector, html );
-		$(selector).draggable(_widgetOnCanvasDraggableOptions(page));
+		$(selector).draggable(_widgetOnCanvasDraggableOptions());
 		if ($.isFunction( tool.onWidgetResize) ) {
 			$(selector).resizable( _widgetOnCanvasResizableOptions(tool) );
 		}
@@ -6996,8 +6998,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	function _updateDynamicDisplayTools( bEdit )
 	{
+		var pagename = _getActivePageName();
+		var page = PageManager.getPageFromName( pagename );
 		// var pagename = _getActivePageName();
-		PageManager.forEachPage( function( idx, page) {
+		// PageManager.forEachPage( function( idx, page) {
 			$.each(tools, function(idx,tool) {
 				if ($.isFunction( tool.onWidgetDisplay) )
 				{
@@ -7008,7 +7012,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					})
 				}
 			});	
-		});
+		// });
 	};
 	
 	function _createControllerSelect(htmlid) {
@@ -10947,7 +10951,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						var html = _getWidgetHtml( widget , true, page );		// edit mode
 						var obj = $(html)
 							.appendTo(parent)
-							.draggable( _widgetOnCanvasDraggableOptions(page) );
+							.draggable( _widgetOnCanvasDraggableOptions() );
 						if ($.isFunction( tool.onWidgetResize) ) 
 						{	
 							obj.resizable(
