@@ -9,12 +9,13 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
+local version = "v1.67"
+local SWVERSION = "2.2.4"
+local UI7_JSON_FILE= "D_ALTUI_UI7.json"
+local NMAX_IN_VAR	= 4000 
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
-local version = "v1.66"
-local SWVERSION = "2.2.4"
-local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local json = require("dkjson")
 if (type(json) == "string") then
 	luup.log("ALTUI warning dkjson missing, falling back to L_ALTUIjson", 2)
@@ -270,15 +271,14 @@ local function getDataFor( deviceID,name,prefix )
 end
 
 local function setDataFor( deviceID,name,prefix,data )
-	local nmax = 2000
 	local npage = 0
 	local name = prefix..name
 	name = name:gsub(" ", "+")	-- spaces are replaced by '+'
 	local length = data:len()
 	
 	-- save by chunks
-	for start = 1,length,nmax  do
-		luup.variable_set(ALTUI_SERVICE, name.."_"..npage, data:sub(start,start+nmax-1), deviceID)
+	for start = 1,length,NMAX_IN_VAR  do
+		luup.variable_set(ALTUI_SERVICE, name.."_"..npage, data:sub(start,start+NMAX_IN_VAR-1), deviceID)
 		npage = npage+1
 	end
 
@@ -2781,6 +2781,10 @@ local function getDefaultConfig()
 	tbl["urn:schemas-upnp-org:device:razb:1"]= {
 		["ScriptFile"]="J_ALTUI_iphone.js",
 		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawRAZB",
+	}
+	tbl["urn:schemas-upnp-org:device:ksenia:1"]= {
+		["ScriptFile"]="J_ALTUI_iphone.js",
+		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawKSENIA",
 	}
 	tbl["urn:schemas-upnp-org:device:razb:unk:1"]= {
 		["ScriptFile"]="J_ALTUI_iphone.js",

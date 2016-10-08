@@ -137,6 +137,19 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		return html;
 	}
 	
+	function _drawKSENIA(device) {
+		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:ksenia1', 'Debug' ); 
+		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:ksenia1', 'Version' ); 
+		var html ="";
+		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
+		html += "<div class='altui-'> </div>";
+		html += "<div class='altui-razb'>{0}</div>".format(version);
+		html += "<script type='text/javascript'>";
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:ksenia1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	}
+		
 	// draw icon of unknown device based on zway icons...
 	// cf doc in function device_icon(nodeId)  in z-way-demo.js 
 	function _drawRAZBUNKIcon(device) {
@@ -223,6 +236,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	getStyle 	: _getStyle,
 	drawIPhone 	: _drawIPhone,
 	drawIPX		: _drawIPX,
+	drawKSENIA	: _drawKSENIA,
 	drawRAZB	: _drawRAZB,
 	drawRAZBUNKIcon : _drawRAZBUNKIcon,
 	drawAltUI : _drawAltUI,

@@ -1308,7 +1308,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return batteryLevel; // Math.floor((Math.random() * 100) + 1);
 	};
 	
-	function _clearData(handle, key, name, npage, cbfunc) {
+	function _clearData(doPost, handle, key, name, npage, cbfunc) {
 		if (_uniqID!=0)	// only supported on master controller
 			return;
 			
@@ -1317,13 +1317,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		var url = "data_request?id=lr_ALTUI_Handler&command=clear_data";//&pages="+encodeURIComponent(JSON.stringify(pages));
 		var jqxhr = $.ajax( {
 			url: url,
-			type: "GET",
+			type: (doPost==true) ? "POST" : "GET",
 			//dataType: "text",
 			data: {
 				prefix: key,
 				name: name,
 				npage: npage,
-				handle: handle
+				handle: handle,
+				dummy:'x'
 			}
 		})
 		.done(function(data) {
@@ -1340,7 +1341,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		});
 	};
 	
-	function _saveDataChunk(handle, key, name, npage, data, cbfunc) {
+	function _saveDataChunk(doPost, handle, key, name, npage, data, cbfunc) {
 		if (_uniqID!=0)	// only supported on master controller
 			return;
 
@@ -1349,14 +1350,15 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		var url = "data_request?id=lr_ALTUI_Handler&command=save_data";//&pages="+encodeURIComponent(JSON.stringify(pages));
 		var jqxhr = $.ajax( {
 			url: url,
-			type: "GET",
+			type: (doPost==true) ? "POST" : "GET",
 			//dataType: "text",
 			data: {
 				prefix: key,
 				name: name,
 				npage: npage,
 				handle: handle,
-				data: encodeURIComponent(data)
+				data: (doPost==true) ? data : encodeURIComponent(data),
+				dummy:'x'
 			}
 		})
 		.done(function(data, textStatus, jqXHR) {
@@ -1382,14 +1384,17 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		}	
 		AltuiDebug.debug("_saveData( {0}, {1} chars )".format(name,data.length));
 
+		var bPost = _candoPost(_user_data)
+		
 		// we need a workaround to pass data via a POST but for now, all we have is a Get
 		// we know that 5400 char is ok, above it fails
 		var context = {
+			doPost: bPost,
 			key: key,
 			name: name,
 			data: data,
 			handle: "",
-			maxchar: 2000,
+			maxchar: (bPost==true) ? 100000 : 2000,
 			done: 0,
 			npage: 0
 		};
@@ -1406,7 +1411,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				data = context.data;
 				var part = data.substring( context.done, context.done+len);
 				// console.log("doPart() %o from:%d len:%d",context,context.done,len)
-				_saveDataChunk(context.handle, context.key, context.name, context.npage, part,  function(data) {
+				_saveDataChunk(context.doPost, context.handle, context.key, context.name, context.npage, part,  function(data) {
 					if ((data=="") || (data=="-1") || (data=="handler failed"))
 						cbfunc("");	// error
 					else {
@@ -1421,7 +1426,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			else {
 				// console.log("doPart() - clearData %o",context)
 				// no more data to send but we need to clean up Vera to remove extra variable
-				_clearData(context.handle, context.key, context.name, context.npage, function(data) {
+				_clearData(context.doPost, context.handle, context.key, context.name, context.npage, function(data) {
 					// now it is finished
 					cbfunc("ok");
 				});

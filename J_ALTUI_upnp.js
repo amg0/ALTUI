@@ -575,9 +575,12 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 
 		// build state map with unique ID for states
 		var states_arr = target.devices["devices_"+device.id].states;	
+		var n=0;
 		$.each(device.states, function(idx,state) {
-			state.id = idx;
-			states_arr.push(state)
+			if ( state.value.toString()!="") {
+				state.id = n++;
+				states_arr.push(state)
+			}
 		});
 
 		// console.log("modified device:",target)
