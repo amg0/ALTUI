@@ -1569,11 +1569,11 @@ var HTMLUtils = (function() {
 					});
 					break;
 				case "input":
-					html += "<label for='{0}'>{1}".format(line.id,line.label);
+					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
 					var type = (line.inputtype!=undefined) ? "type='{0}'".format(line.inputtype) : "";
 					var pattern = (line.pattern != undefined ) ? "pattern='{0}'".format(line.pattern) : "";
 					var checked = ((line.inputtype=="checkbox") && (line.value==true))? "checked" : "";
-					html +="<input id='{0}' class='form-control' value='{1}' {2} {3} {4} {5}></input></label>".format(
+					html +="<input id='{0}' class='form-control' value='{1}' {2} {3} {4} {5}></input>".format(
 						line.id,
 						line.value,
 						HTMLUtils.optionsToString(line.opt),
