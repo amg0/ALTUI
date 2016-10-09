@@ -1775,10 +1775,12 @@ local htmlLayout = [[
 	@optional_scripts@
 	<script type='text/javascript' defer >
 	<!--
-		google.setOnLoadCallback(drawVisualization);
-		function drawVisualization() {
-			//console.log('google loaded');
-		};
+		if (google) {
+			google.setOnLoadCallback(drawVisualization);
+			function drawVisualization() {
+				//console.log('google loaded');
+			};
+		}
 		var g_ALTUI = {
 			 g_MyDeviceID : @mydeviceid@,
 			 g_ExtraController : '@extracontroller@',
