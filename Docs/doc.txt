@@ -189,7 +189,8 @@ Another warning : not properly following the version updates of the css or js fi
 You will find here below a working example of a localCDN setup:
 1- on vera, create a /www/localcdn folder
 2- copy and mirror http://code.mios.com/svn/mios_alternate_ui/localcdn/ folders and file found here.  that means you should have on your VERA a /www/localcdn/root with css and js files inside and a /www/localcdn/fonts folder with some font files inside
-3- set your ALTUI device variable "LocalCDN" to be "/localcdn/root"
+3- set your ALTUI device variable "LocalCDN" to be "../localcdn/root"
+4- if you have a ThemeCSS,  set it to "../localcdn/root/xxx.min.css" for instance
 
 you should now be all set, do not forget to refresh your browser cache
 
