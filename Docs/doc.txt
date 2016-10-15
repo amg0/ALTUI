@@ -5,7 +5,7 @@ This plugin offers an alternative user interface for your VERA(s) controllers th
 It works as a simple plugin and you just need your browser. it supports UI5 and UI7 veras and can aggregate in the same screen the devices from multiple seperate VERA boxes.
 It is not just a re skin of UI5/7, and will offer a number of additional feature
 
-[b]LATEST VERSION[/b] : [glow=red,2,300]v 1.42.1590 April 27 2016[/glow] : 
+[b]LATEST VERSION[/b] : [glow=red,2,300]v 1.67 October 2016[/glow] : 
 
 [b]Extra features not present in UI5 UI7[/b]:
 [list]
@@ -49,7 +49,7 @@ It is not just a re skin of UI5/7, and will offer a number of additional feature
 [li]Display of manually installed plugin[/li]
 [li]Camera: live video feed in local mode, images in remote mode[/li]
 [li]Debug tool screen enabling to get all device information, to get one device / all variable info, to search all devices for a given variable name (pattern matching), or to call a javascript piece of code, including the ALTUI object apis[/li]
-[li]Scene trigger can be a [b]device variable watch[/b] without any line of LUA code. supports conditional expression and with an optional Stable since x Sec choice[/li]
+[li]Scene trigger can be a [b]device variable watch[/b] without any line of Lua code. supports conditional expression and with an optional Stable since x Sec choice[/li]
 [li]Blockly editor for watch expressions[/li]
 [li]Easy built in theme switcher for chosing predefined bootswatch themes[/li]
 [li]Colored syntax Lua editor[/li]
@@ -139,8 +139,9 @@ ellipsis glyph , signifying "default drawing"[/li]
 [li][b]lang[/b]=xx for language ( fr,en,it )[/li]
 [li][b]home[/b]=xx where xx is one of pageHome, pageUsePages, pageDevices, pageScenes to force a start page[/li]
 [li][b]layout[/b]=lean for pageUsePages in case you do not want to see Menu & Message area[/li]
+[li][b]nPage[/b]=Index of the page to show ( starting from 0 )[/li]
 [/list]
-example : http://192.168.1.16/port_3480/data_request?id=lr_ALTUI_Handler&command=home&lang=en&home=pageUsePages&layout=lean [/li]
+example : http://192.168.1.16/port_3480/data_request?id=lr_ALTUI_Handler&command=home&lang=en&home=pageUsePages&layout=lean&nPage=0 [/li]
 [li]UI7 remote access: https://vera-ui.strongcubedfitness.com/Veralogin.php [/li]
 [li]UI5 remote access : method explained here => http://forum.micasaverde.com/index.php/topic,30310.msg225132.html#msg225132
 [/li]
@@ -155,7 +156,7 @@ example : http://192.168.1.16/port_3480/data_request?id=lr_ALTUI_Handler&command
 [list]
 [li]official version : by the store or the UI7 "Apps' menu.[/li]
 [li]latest version : accept the autoupdate dialog box proposal , or install by opening this link in your browser  
-[url=http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31370]http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31370[/url]
+[url=http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31412]http://<yourip>:3480/data_request?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=31412[/url]
 ignore error messages displayed by this page and wait until your unit reloads...[/li]
 [/list]
 
@@ -165,7 +166,7 @@ ignore error messages displayed by this page and wait until your unit reloads...
 [li][b]RemoteAccess [/b]: remote access url for MMS login[/li]
 [li][b]ThemeCSS [/b]: a full url to download a CSS skin for ALTUI[/li]
 [li][b]UI7Check [/b]: true if running on UI7[/li]
-[li][b]Version [/b]: the LUA plugin version[/li]
+[li][b]Version [/b]: the Lua plugin version[/li]
 [li][b]LocalCDN [/b]: a full path name from VERA root '/' where the necessary files for ALTUI are stored. can be left empty and ALTUI will get files from the internet but this option enables an internet free operation of ALTUI[/li]
 [li][b]ExtraController [/b]: a optional , comma seperated list of additional VERA controllers to use. the main controller must not be listed and this variable can be left emtpy if you use only one VERA with ALTUI[/li]
 [li][b]Debug [/b]: 1 for extra debugging logs[/li]
@@ -178,13 +179,25 @@ ALTUI scene editor will take care of editing this [b]VariablesToWatch[/b] variab
 [/li]
 [/list]
 
+[b]LocalCDN[/b]
+LocalCDN is for advanced user only. it enables internet less working mode for ALTUI but warning some features are not supported in that mode:
+- weather widget
+- google gauge
+
+Another warning : not properly following the version updates of the css or js files of the various libraries ( when ALTUI updates its versions levels ) will likely result in malfunctions very difficult to find. 
+
+You will find here below a working example of a localCDN setup:
+1- on vera, create a /www/localcdn folder
+2- copy and mirror http://code.mios.com/svn/mios_alternate_ui/localcdn/ folders and file found here.  that means you should have on your VERA a /www/localcdn/root with css and js files inside and a /www/localcdn/fonts folder with some font files inside
+3- set your ALTUI device variable "LocalCDN" to be "/localcdn/root"
+
+you should now be all set, do not forget to refresh your browser cache
+
 [b]UPNP ACTIONS[/b]
 [list]
 [li]registerPlugin(newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc,newFavoriteFunc)[/li]
 [li]RegisterDataProvider(newName, newUrl, newJsonParameters)[/li]
 [/list]
-
-
 
 [b]Some DOCs in French[/b]
 [list]
