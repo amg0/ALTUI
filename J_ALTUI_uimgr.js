@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1868 $";
+var ALTUI_revision = "$Revision: 1874 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5024,10 +5024,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							);
 							break;
 						case "triggerworkflow":
-							html +="<li>Workflow #{0} <span class='text-info'>'{1}'</span> in state <span class='text-info'>'{2}'</span> {3} (<small class='text-muted'>{4}</small>)  {5}</li>".format(
+							html +="<li>Workflow #{0} <span class='text-info'>'{1}'</span> in state <span class='text-info'>'{2}'</span> when:<span class='text-info'>{3}</span> {4} (<small class='text-muted'>{5}</small>)  {6}</li>".format(
 								obj.workflow.altuiid,
 								obj.workflow.name,
 								obj.state,
+								obj.transition || "", 
 								obj.cond.variable,
 								obj.cond.luaexpr,
 								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-default btn-sm altui-wflow-goto",searchGlyph,_T("See"))
@@ -5036,7 +5037,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					}
 				});
 			else
-				html += "<li>{0}</li>".format(_T("Not used in scenes"));
+				html += "<li>{0}</li>".format(_T("Not used in scenes or workflows"));
 			html += "</ul>";
 			// html +=  "<span><pre>{0}</pre></span>".format( JSON.stringify(usedin_objects) );
 			html += "</div>";

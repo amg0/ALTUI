@@ -233,7 +233,7 @@ Localization.init( {
 	"Button Label":"Étiquette Bouton",
 	"Color":"Couleur",
 	"Ran Scene #{0} successfully":"Exécution avec succès de la Scène #{0}",
-	"Not used in scenes":"Pas d'utilisation dans les scènes",
+	"Not used in scenes or workflows":"Pas d'utilisation dans les scènes ou workflows",
 	"Controller {0} did not respond":"Le Contrôleur {0} ne répond pas",
 	"Option":"Option",
 	"Debug":"Debug",

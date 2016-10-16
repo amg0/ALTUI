@@ -1607,6 +1607,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 						usedin_objects.push({type:'triggerworkflow', workflow: workflow, state:state.name, cond:cond });
 					}
 				})
+				$.each(state.transitions, function(t,transition) {
+					$.each(transition.conditions, function(c,cond) {
+						if (cond.device == (altuiid+device.id) ) {
+							usedin_objects.push({type:'triggerworkflow', workflow: workflow, state:state.name, transition:transition.name, cond:cond });
+						}
+						// console.log(condition)
+					});
+				});
 			})
 		})
 		return usedin_objects;

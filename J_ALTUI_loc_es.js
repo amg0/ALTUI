@@ -229,7 +229,7 @@ Localization.init( {
 	"Scene History":"Historia de Escena",
 	"Button Label":"Etiqueta de Boton","Color":"Color",
 	"Ran Scene #{0} successfully":"Escena #{0} ejecutada exitosamente",
-	"Not used in scenes":"No usadoen escenas",
+	"Not used in scenes or workflows":"No usadoen escenas or workflows",
 	"Controller {0} did not respond":"Controlador {0} no respondio",
 	"Option":"Opcion",
 	"Debug":"Depuracion",
