@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1880 $";
+var ALTUI_revision = "$Revision: 1881 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6026,7 +6026,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	function _initACEandJoint() {
 		// $("title").before("<link rel='stylesheet' type='text/css' href='//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.css'>");
 		$.when( HtmlResourcesDB.loadResourcesAsync([ 
-				"https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js",
+				"https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js",
 				"https://cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.shapes.devs.min.js"
 				// "http://www.jointjs.com/js/vendor/lodash/lodash.min.js",
 				// "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js",
