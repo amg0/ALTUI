@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1881 $";
+var ALTUI_revision = "$Revision: 1883 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2724,6 +2724,7 @@ var UIManager  = ( function( window, undefined ) {
 		{ id:'UseUI7Heater', type:'checkbox', label:"Use new UI7 behavior for Heater devices", _default:0, help:'technical option to trigger the UI7 behavior for heater'},
 		{ id:'ShowAllRows', type:'checkbox', label:"Show all rows in grid tables", _default:0, help:'allways show all the lines in the grid tables, or have a row count selector instead'},
 		{ id:'LockFavoritePosition', type:'checkbox', label:"Lock favorites position", _default:0, help:'Prevent drag and drop of favorites to reorder them'},
+		{ id:'TopStats', type:'checkbox', label:"Show OS Statistics", _default:0, help:'Show OS statistics in the footer'},
 		{ id:'Menu2ColumnLimit', type:'number', label:"2-columns Menu's limit", _default:15, min:2, max:30, help:'if a menu has more entries than this number then show the menu entries in 2 columns'  },
 		{ id:'TempUnitOverride', type:'select', label:"Weather Temp Unit (UI5)", _default:'c', choices:'c|f', help:'Unit for temperature'  }
 	];
@@ -5439,7 +5440,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$("body").css("margin-bottom",$("footer").outerHeight(true));
 		}		
 	};
-	function _refreshFooter( bManual) {
+	
+	function _refreshTopStats(data) {
+		MultiBox.osCommand( parseInt($("#altui-controller-select").val()), "top -n 1", true, function(res) {
+			var lines = res.result.split("\n")
+			var html = "<div>{0}</div><div>{1}</div><div>{2}</div>".format(lines[0].substring(6),lines[1],lines[2])
+			$("#altui-osstats").html( html );
+		});
+	};
+
+	function _refreshFooter( bManual ) {
 		// refresh footer if needed
 		if ( ($("small#altui-footer span.bg-danger").length == 1)  || (bManual==true) ){
 			var footerMap={
@@ -5473,7 +5483,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 				var footerTemplate =  MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "FooterBranding" )
-					|| "<p>${appname} ${luaversion}.${jsrevision}, ${copyright} 2016 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></p><span>${paypal}</span>";
+					|| "<p>${appname} ${luaversion}.${jsrevision}, ${copyright} 2016 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></p><span>${paypal}</span><span id='altui-osstats'></span>";
 				var tmpl = _.template(footerTemplate.trim());
 				var footerstr =tmpl( footerMap )
 				
@@ -5496,7 +5506,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					dataType: "jsonp",
 					data: $.extend( { command:'registration' /*prefix:'UIManager.googleScript'*/ }, footerMap),
 					cache:false
-				}).done( function (data, textStatus, jqXHR) {
+				})
+				.done( function (data, textStatus, jqXHR) {
 					// cancel timer if it exists
 					if (timer) clearTimeout( timer );
 					// display and update immediately
@@ -5505,12 +5516,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					if ((bManual==true) && (bUpgrade==false)) {
 						DialogManager.infoDialog(_T("Check for Updates"),_T("You already have the latest version"));
 					}
+				})
+				.always( function() {
+					if (MyLocalStorage.getSettings('TopStats')==1) {
+						setInterval(_refreshTopStats,3000)
+					}
 				});
 			}
 		}
 		_refreshFooterSize();
 	};
-	
 	function _drawRoomFilterButtonAsync( selectedrooms ) {
 		var dfd = $.Deferred();
 		var toolbarHtml="";
