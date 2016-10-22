@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1879 $";
+var ALTUI_revision = "$Revision: 1880 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5368,6 +5368,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$("footer #registration").html("<span class='text-success'>, {0} / {1}</span>".format(_T("Registered Version"),(res.license.date!=null) ? res.license.date : ''));
 			$("footer #altui-license-page").remove();
 			ALTUI_registered = true;
+			// ALTUI_registered = false;
 		} else 
 		{
 			ALTUI_registered = false;
@@ -9544,32 +9545,32 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							circle: { fill: '#F78181' },
 						});
 					}
-					// Link Timers
-					var linkWithTimer={};
-					$.each(data.timers, function(i,timer) {
-						// local lul_device,workflow_idx,timerstateid,targetstateid,linkid = parts[1],tonumber(parts[2]),parts[3],parts[4],parts[5]
-						var parts = timer.data.split("#");
-						if (data.states[workflow.altuiid] == parts[2]) {
-							var link = graph.getCell( parts[4] )
-							if (link) {	// the user may have deleted it
-								var remaining_sec= Math.floor(timer.expireson - Date.now()/1000);
-								linkWithTimer[parts[4]] = { 
-									remaining_sec: remaining_sec,
-									text : "{0} @{1}s".format( link.attributes.prop.timer , remaining_sec )
-									}
+					// Link Timers -- only if registered
+						var linkWithTimer={};
+						$.each(data.timers, function(i,timer) {
+							// local lul_device,workflow_idx,timerstateid,targetstateid,linkid = parts[1],tonumber(parts[2]),parts[3],parts[4],parts[5]
+							var parts = timer.data.split("#");
+							if (data.states[workflow.altuiid] == parts[2]) {
+								var link = graph.getCell( parts[4] )
+								if (link) {	// the user may have deleted it
+									var remaining_sec= Math.floor(timer.expireson - Date.now()/1000);
+									linkWithTimer[parts[4]] = { 
+										remaining_sec: remaining_sec,
+										text : "{0} @{1}s".format( link.attributes.prop.timer , remaining_sec )
+										}
+								}
 							}
-						}
-					});
-					$.each( graph.getLinks(), function( i, link ) {
-						if (linkWithTimer[link.id]) {
-							WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,linkWithTimer[link.id].remaining_sec);		
-							HTMLUtils.startTimer('altui-workflow-local-timer',1000,_refreshLocalTimer,link)
-						} else {
-							if (link.attributes.prop.timer) {
-								WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,null);
+						});
+						$.each( graph.getLinks(), function( i, link ) {
+							if (linkWithTimer[link.id]) {
+								WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,linkWithTimer[link.id].remaining_sec);		
+								HTMLUtils.startTimer('altui-workflow-local-timer',1000,_refreshLocalTimer,link)
+							} else {
+								if (link.attributes.prop.timer) {
+									WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,null);
+								}
 							}
-						}
-					});
+						});
 				}
 				// workflows Bag
 				var arr=[];

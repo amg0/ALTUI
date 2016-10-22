@@ -2773,14 +2773,16 @@ var WorkflowManager = (function() {
 			if (val==null) {
 				view.model.label(1,{ attrs: { text: { text: '' } }})
 			} else {
-				var txt = ''
-				if ( val <60 ) 
-					txt = val.toString()
-				else {
-					var date = new Date(null); date.setSeconds(val); 
-					txt = date.toISOString().substr(11, 8)
-				}
-				view.model.label(1,{ attrs: { text: { text: txt } }})
+					var txt = ''
+					if ( val <60 ) 
+						txt = val.toString()
+					else {
+						var date = new Date(null); date.setSeconds(val); 
+						txt = date.toISOString().substr(11, 8)
+					}
+					if (ALTUI_registered!=true) 
+						txt=''
+					view.model.label(1,{ attrs: { text: { text: txt } }})
 			}
 		}
 	}
