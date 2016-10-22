@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1874 $";
+var ALTUI_revision = "$Revision: 1879 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9126,6 +9126,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var model = node.attributes;
 			return model.prop && model.prop.stateinfo && model.prop.stateinfo.bStart && (model.prop.stateinfo.bStart==true)
 		}
+
 		// function onDeleteLink(cell) {
 			// if the Link has a schedule, we need to kill it
 			// if (cell.attributes.prop.schedule) {
@@ -9504,13 +9505,32 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// refresh the graph
 		//
 		var previous_active = null;
-		function _refresh(id,data) {
+		function _refreshLocalTimer(id,link) {
+				if (link.attributes.labels.length<2)	// old links without 2 labels
+					return;
+				var txt = link.attributes.labels[1].attrs.text.text;
+				var val = 0
+				if (txt.indexOf(':')!=-1) {
+					var date = new Date("1970-01-01T{0}Z".format(txt))
+					val = date.getTime()/1000
+				} else {
+					val = parseInt(txt)
+				}
+				if (val>0) {
+					val--;
+					WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,val);
+					HTMLUtils.startTimer('altui-workflow-local-timer',1000,_refreshLocalTimer,link)			
+				}
+		}
+		function _refreshFromRemote(id,data) {
+			HTMLUtils.stopTimer('altui-workflow-local-timer')
 			if (id!='altui-workflow-timer')	return;
 			MultiBox.getWorkflowStatus( function(data) {
 				if (!data) {
-					HTMLUtils.startTimer('altui-workflow-timer',5000,_refresh,null);
+					HTMLUtils.startTimer('altui-workflow-timer',5000,_refreshFromRemote,null);
 					return;
 				}  	
+				// workflows states
 				if ( data.states[workflow.altuiid] && graph) {
 					var cell = graph.getCell( data.states[workflow.altuiid] );
 					if (previous_active !=null) {
@@ -9524,7 +9544,34 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							circle: { fill: '#F78181' },
 						});
 					}
+					// Link Timers
+					var linkWithTimer={};
+					$.each(data.timers, function(i,timer) {
+						// local lul_device,workflow_idx,timerstateid,targetstateid,linkid = parts[1],tonumber(parts[2]),parts[3],parts[4],parts[5]
+						var parts = timer.data.split("#");
+						if (data.states[workflow.altuiid] == parts[2]) {
+							var link = graph.getCell( parts[4] )
+							if (link) {	// the user may have deleted it
+								var remaining_sec= Math.floor(timer.expireson - Date.now()/1000);
+								linkWithTimer[parts[4]] = { 
+									remaining_sec: remaining_sec,
+									text : "{0} @{1}s".format( link.attributes.prop.timer , remaining_sec )
+									}
+							}
+						}
+					});
+					$.each( graph.getLinks(), function( i, link ) {
+						if (linkWithTimer[link.id]) {
+							WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,linkWithTimer[link.id].remaining_sec);		
+							HTMLUtils.startTimer('altui-workflow-local-timer',1000,_refreshLocalTimer,link)
+						} else {
+							if (link.attributes.prop.timer) {
+								WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,null);
+							}
+						}
+					});
 				}
+				// workflows Bag
 				var arr=[];
 				$.each(data.bags[workflow.altuiid], function(key,val) {
 					arr.push({ 'variable':key, 'value':val});
@@ -9533,11 +9580,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				MultiBox.getWorkflowHistory( workflow.altuiid, function(lines) {
 					if ($("#altui-workflow-history-text").length>0)
 						$("#altui-workflow-history-text").html( HTMLUtils.array2Table(lines.reverse().slice(0,20),null,[],_T("History")) )
-					HTMLUtils.startTimer('altui-workflow-timer',3000,_refresh,null)
+					HTMLUtils.startTimer('altui-workflow-timer',3000,_refreshFromRemote,null)
 				});
 			})
 		}
-		_refresh('altui-workflow-timer',null);
+		_refreshFromRemote('altui-workflow-timer',null);
 	},
 	
 	pageWorkflows: function () 

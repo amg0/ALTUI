@@ -2256,6 +2256,14 @@ var WorkflowManager = (function() {
 		smooth: true,				// smooth link
 		duration: ""				// duration ms
 	};
+
+	var _def_TimerLabelAttrs = { 
+		position: 0.8, 
+		attrs: { 
+			rect:{ fill:'white'}, 
+			text: { text: '' , 'font-weight': '100', 'font-size':'0.6em', 'fill':'red' } 
+		} 
+	}
 		
 	var _workflows = null;
 	var _saveNeeded = false;
@@ -2307,6 +2315,7 @@ var WorkflowManager = (function() {
 			for (var i = 0 ; i<graph.cells.length ; i++ ) {
 				var cell = graph.cells[i];
 				switch( cell.type ) {
+
 					case "link":
 						var link = WorkflowManager.Link(mapIDtoID[cell.source.id], mapIDtoID[cell.target.id], cell.labels[0].attrs.text.text, [])
 						mapIDtoID[ cell.id ] = link;
@@ -2349,6 +2358,10 @@ var WorkflowManager = (function() {
 							}
 						if (cell.prop.schedule && (cell.prop.schedule.length==0)) {
 							cell.prop.schedule =null;
+							bSaveNeeded=true;
+						}
+						if (cell.prop.timer && cell.prop.duration && (cell.labels.length<2)) {
+							cell.labels.push( _def_TimerLabelAttrs )
 							bSaveNeeded=true;
 						}
 					} else {	 // type is dev.Models
@@ -2739,7 +2752,10 @@ var WorkflowManager = (function() {
 	}
 	function _Link(source, target, label, vertices) {
 		var opt = {
-				labels: [{ position: 0.4, attrs: { text: { text: label || '' , 'font-weight': '200', 'font-size':'0.8em' } } }],
+				labels: [
+					{ position: 0.4, attrs: { text: { text: label || '' , 'font-weight': '200', 'font-size':'0.8em' } } },
+					_def_TimerLabelAttrs
+				],
 				prop:WorkflowManager.getLinkProperties( {} ),
 				vertices: vertices || []
 		};
@@ -2752,12 +2768,28 @@ var WorkflowManager = (function() {
 		var cell = new joint.shapes.fsa.Arrow( opt );
 		return cell;
 	}
-
+	function _updateLinkTimerLabel(view,link,val) {
+		if (link.attributes.labels.length>=2) {
+			if (val==null) {
+				view.model.label(1,{ attrs: { text: { text: '' } }})
+			} else {
+				var txt = ''
+				if ( val <60 ) 
+					txt = val.toString()
+				else {
+					var date = new Date(null); date.setSeconds(val); 
+					txt = date.toISOString().substr(11, 8)
+				}
+				view.model.label(1,{ attrs: { text: { text: txt } }})
+			}
+		}
+	}
 	return {
 		init: _init,
 		Start: _Start,
 		Node: _Node,
 		Link: _Link,
+		updateLinkTimerLabel: _updateLinkTimerLabel,
 		saveNeeded : function() 	{ return _saveNeeded; },
 		getNodeProperties: function( obj )	{ return $.extend(true,{},_def_nodeprops, obj) },	// insure the defaults evolves
 		getLinkProperties: function( obj )	{ return $.extend(true,{},_def_linkprops, obj) },

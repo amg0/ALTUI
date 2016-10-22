@@ -6,10 +6,10 @@
 -- // This program is distributed in the hope that it will be useful,
 -- // but WITHOUT ANY WARRANTY; without even the implied warranty of
 -- // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE . 
-local MSG_CLASS = "ALTUI"
+local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.67"
+local version = "v1.68"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -2423,7 +2423,8 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 			end,
 		["getWorkflowsStatus"] = 
 			function(params)	-- return the data providers database in JSON
-				return  json.encode( {states=WorkflowsActiveState,bags=WorkflowsVariableBag} ), "application/json"
+				local timers = getSetVariable(ALTUI_SERVICE, "Timers", deviceID, "")
+				return  json.encode( {states=WorkflowsActiveState,bags=WorkflowsVariableBag,timers=json.decode(timers)} ), "application/json"
 			end,
 		["getWorkflowsBag"] = 
 			function(params)	-- return the data providers database in JSON
