@@ -103,7 +103,10 @@ var Localization = ( function (undefined) {
 		setTitle : _setTitle,	// (str)
 		forceOption : _forceOption,	// (name, value)
 		setBrandingCallback : function(cb) { _brandingCallback =  $.isFunction(cb) ? cb : null  },	// func
-		doBranding : function() { if ($.isFunction(_brandingCallback)) { (_brandingCallback)() } } 
+		setRegistration : function(b) { ALTUI_registered = b;	},
+		doBranding : function() { 
+			if ($.isFunction(_brandingCallback)) { (_brandingCallback)() } 
+		} 
 	}
 })();
 

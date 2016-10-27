@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1883 $";
+var ALTUI_revision = "$Revision: 1886 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5487,41 +5487,50 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var tmpl = _.template(footerTemplate.trim());
 				var footerstr =tmpl( footerMap )
 				
-				// if not confirmed back in 10 sec, consider the user as non registered
-				var timer = setTimeout( function() { 
-					_unregisteredFooter(footerstr);
-					UIManager.googleScript('{"license":{"name":"'+footerMap.curusername+'","valid":false,"date":""},"update":{"valid":false,"forced":false,"newVersion":0,"newTrac":0,"newFeatures":[]}}');
-				}, 10000 );
-				
-				// prepare extra info, remove undeeded info
-				footerMap.footerstr = footerstr.replace("<span>"+footerMap.paypal+"</span>",'').replace("<span id='registration'></span>",'')
-				delete footerMap.paypal
+				// if the footer template do not include the #registration SPAN do not check it
+				if ((ALTUI_registered==true) || (footerTemplate.indexOf("<span id='registration'>")==-1)) {
+					// Footer does not have the registration tag
+					$("small#altui-footer").html( footerstr );
+					ALTUI_registered = true;
+				} else {
+					// Footer is standard , process the registration check with Google
+					
+					// if not confirmed back in 10 sec, consider the user as non registered
+					var timer = setTimeout( function() { 
+						_unregisteredFooter(footerstr);
+						UIManager.googleScript('{"license":{"name":"'+footerMap.curusername+'","valid":false,"date":""},"update":{"valid":false,"forced":false,"newVersion":0,"newTrac":0,"newFeatures":[]}}');
+					}, 10000 );
+					
+					// prepare extra info, remove undeeded info
+					footerMap.footerstr = footerstr.replace("<span>"+footerMap.paypal+"</span>",'').replace("<span id='registration'></span>",'')
+					delete footerMap.paypal
 
-				// JSONP call that will trigger a response with a call to UIManager.googleScript
-				ALTUI_registered = false;
-				$.ajax({
-					// crossDomain :true,
-					// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
-					url:'https://script.google.com/macros/s/AKfycbwWlgs1x0u1OpKKvaVFywb7XY_FfZ2dGcasvnD576RUbBP1OQc/exec',	// prod
-					dataType: "jsonp",
-					data: $.extend( { command:'registration' /*prefix:'UIManager.googleScript'*/ }, footerMap),
-					cache:false
-				})
-				.done( function (data, textStatus, jqXHR) {
-					// cancel timer if it exists
-					if (timer) clearTimeout( timer );
-					// display and update immediately
-					_unregisteredFooter(footerstr);
-					var bUpgrade = UIManager.googleScript(data);
-					if ((bManual==true) && (bUpgrade==false)) {
-						DialogManager.infoDialog(_T("Check for Updates"),_T("You already have the latest version"));
-					}
-				})
-				.always( function() {
-					if (MyLocalStorage.getSettings('TopStats')==1) {
-						setInterval(_refreshTopStats,3000)
-					}
-				});
+					// JSONP call that will trigger a response with a call to UIManager.googleScript
+					ALTUI_registered = false;
+					$.ajax({
+						// crossDomain :true,
+						// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
+						url:'https://script.google.com/macros/s/AKfycbwWlgs1x0u1OpKKvaVFywb7XY_FfZ2dGcasvnD576RUbBP1OQc/exec',	// prod
+						dataType: "jsonp",
+						data: $.extend( { command:'registration' /*prefix:'UIManager.googleScript'*/ }, footerMap),
+						cache:false
+					})
+					.done( function (data, textStatus, jqXHR) {
+						// cancel timer if it exists
+						if (timer) clearTimeout( timer );
+						// display and update immediately
+						_unregisteredFooter(footerstr);
+						var bUpgrade = UIManager.googleScript(data);
+						if ((bManual==true) && (bUpgrade==false)) {
+							DialogManager.infoDialog(_T("Check for Updates"),_T("You already have the latest version"));
+						}
+					})
+					.always( function() {
+						if (MyLocalStorage.getSettings('TopStats')==1) {
+							setInterval(_refreshTopStats,3000)
+						}
+					});
+				}
 			}
 		}
 		_refreshFooterSize();
@@ -7516,15 +7525,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					},
 				});
 				// install click handler for buttons
-				$(".altui-mainpanel")
-					.off("click","span.altui-room-name")
-					.on("click","span.altui-room-name",function(event) {
+				$("table#table")
+					.off("click",".altui-room-name")
+					.on("click",".altui-room-name",function(event) {
+						var width = $(this).width();
 						var id = $(this).prop('id');
 						var room = MultiBox.getRoomByAltuiID(id);
-						$(this).replaceWith("<input class='altui-room-name form-control' id='{0}' value='{1}'></input>".format(room.altuiid, room.name.escapeXml()));
+						$(this).replaceWith("<input class='altui-room-name-inp form-control input-sm' id='{0}' value='{1}'></input>".format(room.altuiid, room.name.escapeXml()));
+						$("input#{0}".format(room.altuiid)).width(width);
 					})
-					.off("focusout","input.altui-room-name")
-					.on("focusout","input.altui-room-name",function(event) {
+					.off("focusout",".altui-room-name-inp")
+					.on("focusout",".altui-room-name-inp",function(event) {
 						var id = $(this).prop('id');
 						var room = MultiBox.getRoomByAltuiID(id);
 						var value = $(this).val();

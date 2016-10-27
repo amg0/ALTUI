@@ -25,4 +25,5 @@ Localization.setBrandingCallback( function() {
 	$("#altui-theme-selector").remove();
 	$("#altui-support").attr('href','http://www.google.com');
 	$("#altui-support").parent().after('<li><a id="altui-ctrlable" href="http://ctrlable.com/">ctrlable.com</a></li>');
+	Localization.setRegistration(true);
 });
