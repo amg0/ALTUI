@@ -50,7 +50,7 @@ Status Code:200 OK
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1887 $";
+var ALTUI_revision = "$Revision: 1893 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3160,6 +3160,12 @@ var UIManager  = ( function( window, undefined ) {
 		container.appendChild(script);
 	};
 	
+	function _loadCSS(cls,csslink, cbfunc) {
+		var ncls = cls.replace(/\./g,"_")
+		$("title").after("<link class='"+ncls+"' rel='stylesheet' href='"+csslink+"'>");			
+		$("link."+ncls).on("load",cbfunc)
+	}
+	
 	function _loadScript(scriptLocationAndName, cbfunc) {
 		var head = document.getElementsByTagName('head')[0];
 		var script = document.createElement('script');
@@ -3173,18 +3179,36 @@ var UIManager  = ( function( window, undefined ) {
 		head.appendChild(script);
 	};
 	
-	function _loadD3Script( drawfunc ) {
+	function _loadCssIfNeeded( scriptname, path, drawfunc ) {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var localcdn = ( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalCDN" ).trim() || "");
-		var scriptname = (localcdn=="") ? "//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js" : (localcdn+"/d3.min.js");	//supports https
-		var len = $('script[src="'+scriptname+'"]').length;
+		var fullscriptname = (localcdn=="") ? (path+scriptname) : (localcdn+"/"+scriptname);	//supports https
+		var len = $('link.'+scriptname.replace(/\./g,"_")).length;
 		if (len==0) {				// not loaded yet
-			UIManager.loadScript(scriptname,function() {
+			UIManager.loadCSS(scriptname,fullscriptname,function() {
 				(drawfunc)();
 			});
 			return;
 		}
 		(drawfunc)();
+	};
+	
+	function _loadScriptIfNeeded( scriptname, path, drawfunc ) {
+		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
+		var localcdn = ( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalCDN" ).trim() || "");
+		var fullscriptname = (localcdn=="") ? (path+scriptname) : (localcdn+"/"+scriptname);	//supports https
+		var len = $('script[src="'+fullscriptname+'"]').length;
+		if (len==0) {				// not loaded yet
+			UIManager.loadScript(fullscriptname,function() {
+				(drawfunc)();
+			});
+			return;
+		}
+		(drawfunc)();
+	};
+	
+	function _loadD3Script( drawfunc ) {
+		_loadScriptIfNeeded('d3.min.js','//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/',drawfunc);
 	};
 
 	// func is the function to call, if it contains module.funcname it is a UI7 style. otherwise it is assumed UI5 style
@@ -6047,6 +6071,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			})
 		}
 	}
+	/*
 	function _initACEandJoint() {
 		// $("title").before("<link rel='stylesheet' type='text/css' href='//cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.css'>");
 		$.when( HtmlResourcesDB.loadResourcesAsync([ 
@@ -6058,7 +6083,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.done(function(){
 			})
 	};
-	
+	*/
 	function _initMultiSelect() {
 		$("title").before("<style type='text/css'>{0}</style>".format(bootstrap_multiselect_css));
 	};
@@ -7071,7 +7096,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	initEngine 		: _initEngine, 
 	initLocalizedGlobals : _initLocalizedGlobals,
 	forceOptions 	: _forceOptions,	// (name,value)
-	loadScript 		: _loadScript,	//(scriptLocationAndName) 
+	loadCSS : _loadCSS,							// (cssLocationAndName)
+	loadScript 		: _loadScript,		//(scriptLocationAndName) 
 	loadD3Script	: _loadD3Script,
 	clearScripts	: _clearScripts,
 	setTheme		: _setTheme,	//(themecss)
@@ -7149,6 +7175,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{ id:35, title:_T('Evolutions'), onclick:'UIManager.pageEvolutions()', parent:0 },		
 			{ id:36, title:_T('App Store'), onclick:'UIManager.pageAppStore()', parent:0 },
 			{ id:37, title:_T('Publish App'), onclick:'UIManager.pageAppPublish()', parent:36 },
+			{ id:38, title:_T('Timeline'), onclick:'UIManager.pageTimeline()', parent:0 },
 		];
 
 		function _parentsOf(child) {
@@ -10631,6 +10658,144 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				}
 			});
 		})
+	},
+
+	pageTimeline: function ()
+	{
+		/**
+     * Move the timeline a given percentage to left or right
+     * @param {Number} percentage   For example 0.1 (left) or -0.1 (right)
+     */
+    function move (percentage) {
+				var timeline = $('#visualization').data('timeline');
+        var range = timeline.getWindow();
+        var interval = range.end - range.start;
+
+        timeline.setWindow({
+            start: range.start.valueOf() - interval * percentage,
+            end:   range.end.valueOf()   - interval * percentage
+        });
+    }
+
+    /**
+     * Zoom the timeline a given percentage in or out
+     * @param {Number} percentage   For example 0.1 (zoom out) or -0.1 (zoom in)
+     */
+    function zoom (percentage) {
+				var timeline = $('#visualization').data('timeline');
+        var range = timeline.getWindow();
+        var interval = range.end - range.start;
+
+        timeline.setWindow({
+            start: range.start.valueOf() - interval * percentage,
+            end:   range.end.valueOf()   + interval * percentage
+        });
+    }
+		function customOrder(a, b) {
+			// order by id
+			return a.id - b.id;
+		}
+	
+		// https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css
+		UIManager.clearPage(_T('Timeline'),_T("Timeline"),UIManager.oneColumnLayout);
+		if (ALTUI_registered==true) {
+			_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/', function() {
+				_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/',function() {
+					var html = "<div class='col-xs-12' id='visualization'>"
+						html += HTMLUtils.drawButtonGroup('altui-timeline-toolbar', {
+											buttons:[
+												{id:'zoomIn', label:'Zoom In'},
+												{id:'zoomOut', label:'Zoom Out'},
+												{id:'moveLeft', label:'Move left'},
+												{id:'moveRight', label:'Move right'},
+											]
+										});
+					html +="</div>";
+			
+					$(".altui-mainpanel").append(html)
+					$("#zoomIn").click(function () { zoom(-0.2); });
+					$("#zoomOut").click(function () { zoom(0.2); });
+					$("#moveRight").click(function () { move(-0.2); });
+					$("#moveLeft").click(function () { move(0.2); });
+					// create a data set with groups
+					var names = ['Scene', 'Devices'];
+					var groups = new vis.DataSet();
+					for (var g = 0; g < names.length; g++) {
+						groups.add({id: g, content: names[g]});
+					}
+					
+					// Create a DataSet (allows two way data-binding)
+					var items = new vis.DataSet();
+					var id=0;
+					MultiBox.getScenes(
+						function(idx,scene) {
+							if (scene.last_run != undefined) {
+								items.add({
+									id: id++,
+									group:0,	//scenes
+									start: new Date(scene.last_run*1000),
+									content: 'scene {0} ({1})'.format(scene.name,scene.altuiid)
+								})
+							}
+							var nextrun = _findSceneNextRun(scene);
+							if (nextrun>0) {
+								items.add({
+									id: id++,
+									group:0,	//scenes
+									start: new Date(nextrun*1000),
+									content: 'scene {0} ({1})'.format(scene.name,scene.altuiid)
+								})
+							}
+						}, 
+						null, 
+						function(allscenes) {
+							MultiBox.getDevices(
+								function(idx,device) {
+									var lasttrip = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","LastTrip")
+									if (lasttrip) {
+										items.add({
+											id: id++,
+											group:1,	//devices
+											start: new Date(lasttrip*1000),
+											content: 'device {0} ({1})'.format(device.name,device.altuiid)
+										})
+									}
+								},
+								null,
+								function(alldevices) {
+									// Configuration for the Timeline
+									var options = {
+										groupOrder: 'content',
+										orientation: 'both',
+										order: customOrder
+									};
+									// Create a Timeline
+									var container = document.getElementById('visualization');
+									var timeline = new vis.Timeline(container);
+									timeline.setOptions(options);
+									timeline.setGroups(groups);
+									timeline.setItems(items);
+									$('#visualization').data('timeline',timeline);
+									_.defer( function() {
+										var timeline = $('#visualization').data('timeline');
+										var today = new Date();
+										var yesterday = new Date();
+										yesterday.setDate(today.getDate() - 1);
+										today.setDate(today.getDate() + 1);
+										timeline.setWindow(
+											yesterday,
+											today
+										)
+									});
+								}
+							)
+						}
+					);
+				});
+			});
+		} else {
+			$(".altui-mainpanel").append("<span>This feature is only available to registered users</span>")
+		}
 	},
 	
 	pagePlugins: function ()
@@ -14205,6 +14370,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.on ("click", "#altui-scene-triggers", UIManager.pageTriggers )
 				.on ("click", "#altui-app-store", UIManager.pageAppStore )
 				.on ("click", "#menu_plugins", UIManager.pagePlugins )
+				.on ("click", "#menu_timeline", UIManager.pageTimeline )
 				.on ("click", "#menu_workflow", UIManager.pageWorkflows )
 				.on ("click", "#altui-pages-see", UIManager.pageUsePages )
 				.on ("click", "#altui-pages-edit", UIManager.pageEditPages )
@@ -14441,6 +14607,7 @@ $(function() {
 		body+="			<ul class='dropdown-menu' role='menu'>";
 		body+="				<li><a id='menu_room' href='#'  >"+_T("Rooms")+"</a></li>";
 		body+="				<li><a id='menu_plugins' href='#'  >"+_T("Plugins")+"</a></li>";
+		body+="				<li><a id='menu_timeline' href='#'  >"+_T("Timeline")+"</a></li>";
 		body+="				<li><a id='altui-app-store' href='#' >"+_T("App Store")+"</a></li>";
 		body+="				<li><a id='menu_workflow' href='#'  >"+_T("Workflows")+"</a></li>";
 		body+="			<li class='divider'></li>";
