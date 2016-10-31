@@ -10627,9 +10627,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								)
 							}
 							timeline.on("rangechanged",function(properties) {
-								if (properties.byUser==true) {
 									MyLocalStorage.setSettings("TimelineRange",properties)
-								}
 							})
 						});	
 						EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function( event,device) {
