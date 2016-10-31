@@ -32,25 +32,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-/*
-// NOTE FORCE A DEVICE RECONFIGURATION
-Request URL:http://192.168.1.16/port_49451/upnp/control/dev_196
-Request Method:POST
-Status Code:200 OK
-<?xml version="1.0"?>
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-<s:Body>
-    <u:Reconfigure xmlns:u="urn:schemas-micasaverde-com:service:HaDevice:1"/>
-</s:Body>
-</s:Envelope>
-*/
 //
 // Blakc iphone6 //drive.google.com/uc?id=0B6TVdm2A9rnNakxEdDdYVWVxMnM&authuser=0&export=download
 // Black : //docs.google.com/uc?authuser=0&id=0B6TVdm2A9rnNLWlIeEZDN1ZGU0k&export=download    
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1893 $";
+var ALTUI_revision = "$Revision: 1896 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1093,133 +1081,6 @@ var styles ="						\
 		animation: blinker 2s linear infinite;	\
 	} \
 ";		
-var HouseModeEditor = (function() {
-	function _displayModes2(htmlid,cls,modes) {
-		var tmpl = "<button type='button' class='btn btn-default altui-housemode2'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>"
-		var html ="<div class='housemode2'>";
-				$.each(_HouseModes, function(idx,mode) {
-					var select = ($.inArray( mode.id.toString(), modes) == -1) ? "housemode2_unselected" : "housemode2_selected";
-					html += "<div id='altui-mode{3}' class='altui-housemode2 pull-left {1} {2}'><div class='altui-housemode2-content'><small class='text-muted'>{0}</small><div class='housemode-countdown'></div></div></div>".format( mode.text, mode.cls, select, mode.id);
-				});
-		html+="</div>";
-		return html;
-	};
-	function _displayModes(htmlid,cls,modes) {
-		var html ="";
-		html += "<div class='btn-group {1}' id='{0}'>".format(htmlid,cls);
-		$.each(_HouseModes, function(idx,mode) {
-			var select = ($.inArray( mode.id.toString(), modes) == -1) ? "preset_unselected" : "preset_selected";
-			html += (houseModeButtonTemplate.format(mode.id, mode.text, mode.cls, select));
-		});
-		html+="</div>";
-		return html;
-	};
-	function _runActions( domroot, onclickCB ) {
-		$(domroot)
-			.off("click",".altui-housemode")
-			.on("click",".altui-housemode",function(){ 
-				var div = $(this).find("div.housemode");
-				if (div.hasClass("preset_selected"))
-					div.removeClass("preset_selected").addClass("preset_unselected");
-				else
-					div.removeClass("preset_unselected").addClass("preset_selected");
-				if ($.isFunction(onclickCB))
-					(onclickCB)($(this) )		// showsaveneeded() for instance
-			})
-	};
-	function _getSelectedLabels() {
-		var html = $.map( $("div.housemode.preset_selected") , function(elem,idx) {	
-			var id = parseInt( $(elem).prop('id').substring("altui-mode".length) ) - 1;
-			return _HouseModes[ id ].text;
-		}).join(",");		
-		return html;
-	};
-	function _getSelectedModes() {
-		var selectedmode = $(".altui-housemode div.preset_selected");
-		if (selectedmode.length==0)
-			return "0";
-		return $.map( selectedmode, function(elem,idx) {
-					return $(elem).prop('id').substring("altui-mode".length);
-				}).join(",");
-	};
-	return {
-		displayModes : _displayModes,
-		displayModes2 : _displayModes2,
-		runActions : _runActions,					// ( domroot, onclickCB ) 
-		getSelectedLabels : _getSelectedLabels,
-		getSelectedModes : _getSelectedModes
-	}
-})();
-		
-var ALTUI_Templates = null;
-var ALTUI_Templates_Factory= function() {
-	var _dropdownTemplate =  "";		
-	_dropdownTemplate +=  "<div class='btn-group pull-right'>";
-	_dropdownTemplate += "<button class='btn btn-default btn-xs dropdown-toggle altui-device-command' type='button' data-toggle='dropdown' aria-expanded='false'>"; 
-	_dropdownTemplate += "<span class='caret'></span>";
-	_dropdownTemplate += "</button>";
-	_dropdownTemplate += "<ul class='dropdown-menu' role='menu'>";
-	_dropdownTemplate += "<li><a id='{0}' class='altui-device-variables' href='#' role='menuitem'>Variables</a></li>";
-	_dropdownTemplate += "<li><a id='{0}' class='altui-device-actions' href='#' role='menuitem'>Actions</a></li>";
-	_dropdownTemplate += "<li><a id='{0}' class='altui-device-controlpanelitem' href='#' role='menuitem'>Control Panel</a></li>";
-	_dropdownTemplate += "<li><a id='{0}' class='altui-device-hideshowtoggle' href='#' role='menuitem'>{1}</a></li>";
-	_dropdownTemplate += "</ul></div>";
-	_dropdownTemplate += "<div class='pull-right text-muted'><small>#{0} </small></div>";
-	
-	var _batteryHtmlTemplate="";
-	_batteryHtmlTemplate+="<div class='altui-battery progress pull-right' style='width: 35px; height: 15px;'>";
-	_batteryHtmlTemplate+="  <div class='progress-bar {1}' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='min-width: 1em; width: {0}%;'>";
-	_batteryHtmlTemplate+="    {0}%";
-	_batteryHtmlTemplate+="  </div>";
-	_batteryHtmlTemplate+="</div>";
-	
-	var _devicecontainerTemplate	= "<div class='panel panel-{4} altui-device' data-altuiid='{5}' id='{0}'>"
-	_devicecontainerTemplate	+=		"<div class='panel-heading altui-device-heading'>{6} {7}<div class='panel-title altui-device-title' data-toggle='tooltip' data-placement='left' title='{2}'>{1}</div></div>";
-	_devicecontainerTemplate	+=  	"<div class='panel-body altui-device-body'>";
-	_devicecontainerTemplate	+= 	  	"{8}{3}";
-	_devicecontainerTemplate	+= 	  "</div>";
-	_devicecontainerTemplate	+= 	  "</div>";
-	
-	var _deviceEmptyContainerTemplate="<div class=' {2} '>";
-		_deviceEmptyContainerTemplate	+= 		"<div class='panel panel-default altui-device' data-altuiid='{1}' id='{0}'>"
-		_deviceEmptyContainerTemplate	+= 	  	"</div>";
-		_deviceEmptyContainerTemplate	+= 	"</div>";		
-		
-	// 0: variable , 1: value , 2: service , 3: id, 4: push btn color class, 5: watch provider name
-	var _deviceVariableLineTemplate = "  <tr>";
-		// deviceVariableLineTemplate += "         <th scope='row'>1</th>";
-		_deviceVariableLineTemplate += "         <td class='altui-variable-title'><span title='{2}'>{0}</span></td>";
-		_deviceVariableLineTemplate += 	("<td class='altui-variable-buttons'>"+
-			smallbuttonTemplate.format( '{3}', 'altui-variable-history', glyphTemplate.format( "calendar", _T("History"), "" ),_T('History'))+
-			smallbuttonTemplate.format( '{3}', 'altui-variable-push {4}', glyphTemplate.format( "signal", _T("Push to {5}"), "" ),_T("Push to {5}"))+
-			smallbuttonTemplate.format( '{3}', 'altui-variable-delete', deleteGlyph,_T('Delete'))+
-			"</td>");
-		_deviceVariableLineTemplate += "         <td id='{3}' class='altui-variable-value' >{1}</td>";
-		_deviceVariableLineTemplate += "     </tr>";
-
-	// 0:bootgrid classes 1:altuiid 2:htmlid 3: name 4:right header buttons 5:panel body 6:left header buttons
-	var _workflowContainerTemplate=		"<div class='{0} '>";
-		_workflowContainerTemplate	+= 		"<div class='panel panel-default altui-workflow' data-altuiid='{1}' id='{2}'>"
-		_workflowContainerTemplate	+= 		"<div class='panel-heading'>{6} <span class='altui-workflow-title-name'>{3}</span>{4}<small class='text-muted pull-right'> #{1} </small>"
-		_workflowContainerTemplate	+= 	  	"</div>";
-		_workflowContainerTemplate	+= 		"<div class='panel-body'>{5}"
-		_workflowContainerTemplate	+= 	  	"<div class='altui-active-state-name'></div>";
-		_workflowContainerTemplate	+= 	  	"</div>";
-		_workflowContainerTemplate	+= 	  	"</div>";
-		_workflowContainerTemplate	+= 	"</div>";		
-		
-	return {
-		deviceVariableLineTemplate : _deviceVariableLineTemplate,
-		dropdownTemplate : _dropdownTemplate,
-		batteryHtmlTemplate : _batteryHtmlTemplate,
-		devicecontainerTemplate : _devicecontainerTemplate,
-		deviceEmptyContainerTemplate : _deviceEmptyContainerTemplate,
-		workflowContainerTemplate: _workflowContainerTemplate,
-	};
-};
-
-
-
 //=====================================================================		
 // Scene Editor
 //=====================================================================		
@@ -3162,10 +3023,14 @@ var UIManager  = ( function( window, undefined ) {
 	
 	function _loadCSS(cls,csslink, cbfunc) {
 		var ncls = cls.replace(/\./g,"_")
-		$("title").after("<link class='"+ncls+"' rel='stylesheet' href='"+csslink+"'>");			
+		$("title").before("<link class='"+ncls+"' rel='stylesheet' href='"+csslink+"'>");			
 		$("link."+ncls).on("load",cbfunc)
 	}
 	
+	function _loadCSSText(csstext) {
+		$("title").before("<style type='text/css'>{0}</style>".format(csstext));			
+	}
+
 	function _loadScript(scriptLocationAndName, cbfunc) {
 		var head = document.getElementsByTagName('head')[0];
 		var script = document.createElement('script');
@@ -7253,7 +7118,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	clearPage : function(breadcrumb,title,layout)
 	{
 		var layoutfunc = layout || UIManager.twoColumnLayout;
-		
+		EventBus.unregisterEventHandler("on_ui_deviceStatusChanged");
 		UIManager.stoprefreshModes();
 		HTMLUtils.stopAllTimers();
 		$(".navbar-collapse").collapse('hide');
@@ -7612,6 +7477,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var category = MultiBox.getCategoryTitle( device.category_num );
 
 		UIManager.clearPage(_T('Control Panel'),"{0} {1} <small>#{2}</small>".format( device.name , category ,altuiid),UIManager.oneColumnLayout);
+		EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
 		
 		var html = "<div class='form-inline col-xs-12'>";
 		html += "<button type='button' class='btn btn-default' id='altui-toggle-attributes' >"+_T("Attributes")+"<span class='caret'></span></button>";
@@ -10659,9 +10525,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		})
 	},
-
+	
 	pageTimeline: function ()
 	{
+		var items = null;			// Create a DataSet (allows two way data-binding)
+		var groups = null;			// create a data set with groups
+		var id = 0;
+		
 		/**
      * Move the timeline a given percentage to left or right
      * @param {Number} percentage   For example 0.1 (left) or -0.1 (right)
@@ -10696,11 +10566,89 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return a.id - b.id;
 		}
 	
+		function timelineAddDevice(device,bAddAllways) {
+			var lasttrip = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","LastTrip")
+			var tripped = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","Tripped")
+			// var lastuntrip = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","LastUntrip")
+			// if (lastuntrip)
+					// lastuntrip = lasttrip+5000
+			// var end = ( lastuntrip && (lastuntrip>lasttrip)) ? new Date(lastuntrip*1000) : null
+			if (lasttrip && ((bAddAllways==true) || (tripped=="1")) ) {
+				items.update({
+					id: 'DLT-{0}-{1}'.format(device.altuiid,lasttrip),
+					group:1,	//security
+					start: new Date(lasttrip*1000),
+					// end:end,
+					content: 'device {0} ({1})'.format(device.name,device.altuiid)
+				})
+			}
+		}
+		
+		function updateTimeline(groups,items) {
+			// Create a Timeline
+			var timeline = $('#visualization').data('timeline')
+			
+			if (timeline==null) {
+				// Configuration for the Timeline
+				var options = {
+					groupOrder: 'content',
+					orientation: {axis: 'both', item:'top'},
+					order: customOrder,
+					dataAttributes: ['id']
+				};
+				var container = document.getElementById('visualization');
+				var timeline = new vis.Timeline(container);
+				$('#visualization').data('timeline',timeline);
+				timeline.setOptions(options);
+				timeline.setGroups(groups);
+				timeline.setItems(items);		
+				_.defer( function() {
+					var timeline = $('#visualization').data('timeline');
+					var props = MyLocalStorage.getSettings("TimelineRange");
+					if (props!=null) {
+						console.log(props)	
+						var range = new Date(props.end)-new Date(props.start);
+						var today = Date.now();
+						var yesterday = new Date(today-range/2);
+						today = new Date(today+range/2)
+						timeline.setWindow(
+							yesterday,
+							today
+						)
+					} else {
+						var today = new Date();
+						var yesterday = new Date();
+						yesterday.setDate(today.getDate() - 1);
+						today.setDate(today.getDate() + 1);
+						timeline.setWindow(
+							yesterday,
+							today
+						)
+					}
+					timeline.on("rangechanged",function(properties) {
+						if (properties.byUser==true) {
+							MyLocalStorage.setSettings("TimelineRange",properties)
+						}
+					})
+				});	
+				EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function( event,device) {
+					timelineAddDevice(device)
+				});
+			}
+		}
+		
 		// https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css
 		UIManager.clearPage(_T('Timeline'),_T("Timeline"),UIManager.oneColumnLayout);
 		if (ALTUI_registered==true) {
 			_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/', function() {
 				_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/',function() {
+					_loadCSSText("div.vis-label , div.vis-text { color: "+getCSS('color','text-primary')+" !important;	}")
+					items = new vis.DataSet();			// Create a DataSet (allows two way data-binding)
+					groups = new vis.DataSet();			// create a data set with groups
+					var names = ['Scene', 'Security'];		
+					for (var g = 0; g < names.length; g++) {
+						groups.add({id: g, content: names[g]});
+					}
 					var html = "<div class='col-xs-12' id='visualization'>"
 						html += HTMLUtils.drawButtonGroup('altui-timeline-toolbar', {
 											buttons:[
@@ -10717,21 +10665,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					$("#zoomOut").click(function () { zoom(0.2); });
 					$("#moveRight").click(function () { move(-0.2); });
 					$("#moveLeft").click(function () { move(0.2); });
-					// create a data set with groups
-					var names = ['Scene', 'Devices'];
-					var groups = new vis.DataSet();
-					for (var g = 0; g < names.length; g++) {
-						groups.add({id: g, content: names[g]});
-					}
 					
-					// Create a DataSet (allows two way data-binding)
-					var items = new vis.DataSet();
-					var id=0;
 					MultiBox.getScenes(
 						function(idx,scene) {
 							if (scene.last_run != undefined) {
-								items.add({
-									id: id++,
+								items.update({
+									id: 'SLR-'+scene.altuiid,
 									group:0,	//scenes
 									start: new Date(scene.last_run*1000),
 									content: 'scene {0} ({1})'.format(scene.name,scene.altuiid)
@@ -10739,8 +10678,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							}
 							var nextrun = _findSceneNextRun(scene);
 							if (nextrun>0) {
-								items.add({
-									id: id++,
+								items.update({
+									id: 'SNR-'+scene.altuiid,
 									group:0,	//scenes
 									start: new Date(nextrun*1000),
 									content: 'scene {0} ({1})'.format(scene.name,scene.altuiid)
@@ -10751,42 +10690,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						function(allscenes) {
 							MultiBox.getDevices(
 								function(idx,device) {
-									var lasttrip = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","LastTrip")
-									if (lasttrip) {
-										items.add({
-											id: id++,
-											group:1,	//devices
-											start: new Date(lasttrip*1000),
-											content: 'device {0} ({1})'.format(device.name,device.altuiid)
-										})
-									}
+									timelineAddDevice(device,true)
 								},
 								null,
 								function(alldevices) {
-									// Configuration for the Timeline
-									var options = {
-										groupOrder: 'content',
-										orientation: 'both',
-										order: customOrder
-									};
-									// Create a Timeline
-									var container = document.getElementById('visualization');
-									var timeline = new vis.Timeline(container);
-									timeline.setOptions(options);
-									timeline.setGroups(groups);
-									timeline.setItems(items);
-									$('#visualization').data('timeline',timeline);
-									_.defer( function() {
-										var timeline = $('#visualization').data('timeline');
-										var today = new Date();
-										var yesterday = new Date();
-										yesterday.setDate(today.getDate() - 1);
-										today.setDate(today.getDate() + 1);
-										timeline.setWindow(
-											yesterday,
-											today
-										)
-									});
+									updateTimeline(groups,items)
 								}
 							)
 						}
@@ -14724,8 +14632,6 @@ $(function() {
 
 	EventBus.registerEventHandler("on_ui_initFinished",UIManager,UIManager.signal);
 	EventBus.registerEventHandler("on_ui_userDataLoaded",UIManager,UIManager.signal);
-	EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
-
 
 	// Initialize Speech Engine and add English rules.
 	// localized rules are overriden later

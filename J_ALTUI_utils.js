@@ -45,8 +45,9 @@ function Altui_LoadStyle(styleFunctionName) {
 	
 	var title = document.getElementsByTagName('title')[0];
 	var style = document.createElement('style');
-	style.type = 'text/css';
-	var css = Altui_ExecuteFunctionByName(styleFunctionName, window);
+	style.type = 'text/css';	
+	// var css = $.isFunction(styleFunctionNameOrCss) ?  Altui_ExecuteFunctionByName(styleFunctionName, window) : styleFunctionNameOrCss;
+	var css =  Altui_ExecuteFunctionByName(styleFunctionName, window) 
 	style.appendChild(document.createTextNode(css));
 	title.parentNode.insertBefore(style,title);	
 };
@@ -60,6 +61,72 @@ function Altui_ExecuteFunctionByName(functionName, context , device, extraparam)
 	return context[func].call(context, device, extraparam);
 };
 	
+var ALTUI_Templates = null;
+var ALTUI_Templates_Factory= function() {
+	var _dropdownTemplate =  "";		
+	_dropdownTemplate +=  "<div class='btn-group pull-right'>";
+	_dropdownTemplate += "<button class='btn btn-default btn-xs dropdown-toggle altui-device-command' type='button' data-toggle='dropdown' aria-expanded='false'>"; 
+	_dropdownTemplate += "<span class='caret'></span>";
+	_dropdownTemplate += "</button>";
+	_dropdownTemplate += "<ul class='dropdown-menu' role='menu'>";
+	_dropdownTemplate += "<li><a id='{0}' class='altui-device-variables' href='#' role='menuitem'>Variables</a></li>";
+	_dropdownTemplate += "<li><a id='{0}' class='altui-device-actions' href='#' role='menuitem'>Actions</a></li>";
+	_dropdownTemplate += "<li><a id='{0}' class='altui-device-controlpanelitem' href='#' role='menuitem'>Control Panel</a></li>";
+	_dropdownTemplate += "<li><a id='{0}' class='altui-device-hideshowtoggle' href='#' role='menuitem'>{1}</a></li>";
+	_dropdownTemplate += "</ul></div>";
+	_dropdownTemplate += "<div class='pull-right text-muted'><small>#{0} </small></div>";
+	
+	var _batteryHtmlTemplate="";
+	_batteryHtmlTemplate+="<div class='altui-battery progress pull-right' style='width: 35px; height: 15px;'>";
+	_batteryHtmlTemplate+="  <div class='progress-bar {1}' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='min-width: 1em; width: {0}%;'>";
+	_batteryHtmlTemplate+="    {0}%";
+	_batteryHtmlTemplate+="  </div>";
+	_batteryHtmlTemplate+="</div>";
+	
+	var _devicecontainerTemplate	= "<div class='panel panel-{4} altui-device' data-altuiid='{5}' id='{0}'>"
+	_devicecontainerTemplate	+=		"<div class='panel-heading altui-device-heading'>{6} {7}<div class='panel-title altui-device-title' data-toggle='tooltip' data-placement='left' title='{2}'>{1}</div></div>";
+	_devicecontainerTemplate	+=  	"<div class='panel-body altui-device-body'>";
+	_devicecontainerTemplate	+= 	  	"{8}{3}";
+	_devicecontainerTemplate	+= 	  "</div>";
+	_devicecontainerTemplate	+= 	  "</div>";
+	
+	var _deviceEmptyContainerTemplate="<div class=' {2} '>";
+		_deviceEmptyContainerTemplate	+= 		"<div class='panel panel-default altui-device' data-altuiid='{1}' id='{0}'>"
+		_deviceEmptyContainerTemplate	+= 	  	"</div>";
+		_deviceEmptyContainerTemplate	+= 	"</div>";		
+		
+	// 0: variable , 1: value , 2: service , 3: id, 4: push btn color class, 5: watch provider name
+	var _deviceVariableLineTemplate = "  <tr>";
+		// deviceVariableLineTemplate += "         <th scope='row'>1</th>";
+		_deviceVariableLineTemplate += "         <td class='altui-variable-title'><span title='{2}'>{0}</span></td>";
+		_deviceVariableLineTemplate += 	("<td class='altui-variable-buttons'>"+
+			smallbuttonTemplate.format( '{3}', 'altui-variable-history', glyphTemplate.format( "calendar", _T("History"), "" ),_T('History'))+
+			smallbuttonTemplate.format( '{3}', 'altui-variable-push {4}', glyphTemplate.format( "signal", _T("Push to {5}"), "" ),_T("Push to {5}"))+
+			smallbuttonTemplate.format( '{3}', 'altui-variable-delete', deleteGlyph,_T('Delete'))+
+			"</td>");
+		_deviceVariableLineTemplate += "         <td id='{3}' class='altui-variable-value' >{1}</td>";
+		_deviceVariableLineTemplate += "     </tr>";
+
+	// 0:bootgrid classes 1:altuiid 2:htmlid 3: name 4:right header buttons 5:panel body 6:left header buttons
+	var _workflowContainerTemplate=		"<div class='{0} '>";
+		_workflowContainerTemplate	+= 		"<div class='panel panel-default altui-workflow' data-altuiid='{1}' id='{2}'>"
+		_workflowContainerTemplate	+= 		"<div class='panel-heading'>{6} <span class='altui-workflow-title-name'>{3}</span>{4}<small class='text-muted pull-right'> #{1} </small>"
+		_workflowContainerTemplate	+= 	  	"</div>";
+		_workflowContainerTemplate	+= 		"<div class='panel-body'>{5}"
+		_workflowContainerTemplate	+= 	  	"<div class='altui-active-state-name'></div>";
+		_workflowContainerTemplate	+= 	  	"</div>";
+		_workflowContainerTemplate	+= 	  	"</div>";
+		_workflowContainerTemplate	+= 	"</div>";		
+		
+	return {
+		deviceVariableLineTemplate : _deviceVariableLineTemplate,
+		dropdownTemplate : _dropdownTemplate,
+		batteryHtmlTemplate : _batteryHtmlTemplate,
+		devicecontainerTemplate : _devicecontainerTemplate,
+		deviceEmptyContainerTemplate : _deviceEmptyContainerTemplate,
+		workflowContainerTemplate: _workflowContainerTemplate,
+	};
+};
 
 var Localization = ( function (undefined) {
 	var _brandingCallback = null;
@@ -111,6 +178,64 @@ var Localization = ( function (undefined) {
 })();
 
 var _T = Localization._T;
+
+var HouseModeEditor = (function() {
+	function _displayModes2(htmlid,cls,modes) {
+		var tmpl = "<button type='button' class='btn btn-default altui-housemode2'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>"
+		var html ="<div class='housemode2'>";
+				$.each(_HouseModes, function(idx,mode) {
+					var select = ($.inArray( mode.id.toString(), modes) == -1) ? "housemode2_unselected" : "housemode2_selected";
+					html += "<div id='altui-mode{3}' class='altui-housemode2 pull-left {1} {2}'><div class='altui-housemode2-content'><small class='text-muted'>{0}</small><div class='housemode-countdown'></div></div></div>".format( mode.text, mode.cls, select, mode.id);
+				});
+		html+="</div>";
+		return html;
+	};
+	function _displayModes(htmlid,cls,modes) {
+		var html ="";
+		html += "<div class='btn-group {1}' id='{0}'>".format(htmlid,cls);
+		$.each(_HouseModes, function(idx,mode) {
+			var select = ($.inArray( mode.id.toString(), modes) == -1) ? "preset_unselected" : "preset_selected";
+			html += (houseModeButtonTemplate.format(mode.id, mode.text, mode.cls, select));
+		});
+		html+="</div>";
+		return html;
+	};
+	function _runActions( domroot, onclickCB ) {
+		$(domroot)
+			.off("click",".altui-housemode")
+			.on("click",".altui-housemode",function(){ 
+				var div = $(this).find("div.housemode");
+				if (div.hasClass("preset_selected"))
+					div.removeClass("preset_selected").addClass("preset_unselected");
+				else
+					div.removeClass("preset_unselected").addClass("preset_selected");
+				if ($.isFunction(onclickCB))
+					(onclickCB)($(this) )		// showsaveneeded() for instance
+			})
+	};
+	function _getSelectedLabels() {
+		var html = $.map( $("div.housemode.preset_selected") , function(elem,idx) {	
+			var id = parseInt( $(elem).prop('id').substring("altui-mode".length) ) - 1;
+			return _HouseModes[ id ].text;
+		}).join(",");		
+		return html;
+	};
+	function _getSelectedModes() {
+		var selectedmode = $(".altui-housemode div.preset_selected");
+		if (selectedmode.length==0)
+			return "0";
+		return $.map( selectedmode, function(elem,idx) {
+					return $(elem).prop('id').substring("altui-mode".length);
+				}).join(",");
+	};
+	return {
+		displayModes : _displayModes,
+		displayModes2 : _displayModes2,
+		runActions : _runActions,					// ( domroot, onclickCB ) 
+		getSelectedLabels : _getSelectedLabels,
+		getSelectedModes : _getSelectedModes
+	}
+})();
 
 var SpeechManager = (function() {
 	var recognition = null;
@@ -1902,6 +2027,27 @@ var EventBus = ( function (undefined) {
 			_subscriptions[eventname].push( {object: object , funcname: funcname} );
 	};
 	
+	// event/null/null or just first param, removes all the subscriptions for that event
+	function _unregisterEventHandler(eventname, object, funcname) {
+		if (_subscriptions[eventname] == undefined)
+			return;
+
+		if ((object==null) && (funcname==null)) {
+			_subscriptions[eventname] = null;
+			return;
+		}
+		
+		var iFound=-1;
+		$.each(_subscriptions[eventname], function (idx,sub) {
+			if ((sub.object==object) && (sub.funcname==funcname)) {
+				iFound = idx;
+				return false;
+			}
+		});
+		if (iFound!=-1) {
+				_subscriptions[eventname].splice(iFound , 1);
+		}
+	};
 	function _waitForAll(event, eventtbl, object, funcname ) {
 		var _state = {};
 		function _signal(eventname/*, args */) {
@@ -1945,6 +2091,7 @@ var EventBus = ( function (undefined) {
 	};
 	return {
 		registerEventHandler 	: _registerEventHandler,	//(eventname, object, funcname ) 
+		unregisterEventHandler 	: _unregisterEventHandler,	//(eventname, object, funcname ) 
 		waitForAll 				: _waitForAll,			//(events, object, funcname )
 		publishEvent 			: _publishEvent,			//(eventname, args)
 		
