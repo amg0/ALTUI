@@ -2991,6 +2991,7 @@ local function _loadDataProviders()
 	local str = luup.variable_get(ALTUI_SERVICE, "DataStorageProviders",  lul_device) or "{}"
 	DataProviders = json.decode(str)
 	for k,v in pairs (DataProviders) do
+		debug(string.format("_loadDataProvider() , DataStorageProviders:%s",json.encode(DataProviders)))
 		if (v["callback"] ~= nil) then
 			local callback_fn = table_search(_G,DataProviders[provider]["callback"],"",0)
 			if callback_fn ~= nil then
