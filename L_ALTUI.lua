@@ -3161,12 +3161,12 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 				else
 					debug(string.format("sendValueToStorage: Requires a callback "))
 					local callback_fn = DataProvidersCallbacks[DataProviders[provider]["callback"]]
-					if(callback_fn==nil)
+					if(callback_fn==nil)  then 
 						-- Assume that the callback function is valid
 						callback_fn = DataProviders[provider]["callback"];
 						warning(string.format("sendValueToStorage: using function name %s as callback for %s",callback_fn,provider))
 					end
-					if(callback_fn~=nil)
+					if(callback_fn~=nil)  then 
 						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
 					else
 						warning(string.format("sendValueToStorage: callback and url missing for provider:%s",provider))
@@ -3364,7 +3364,7 @@ function _delWatch(service, variable, deviceid, sceneid, expression, xml, provid
 			-- watch for scene
 			local n = tablelength(registeredWatches[devidstr][service][variable]['Expressions'][expression])
 			for i=n,1,-1 do
-				if (registeredWatches[devidstr][service][variable]['Expressions'][expression][i]["SceneID"] == sceneid) then
+				if (registeredWatches[devidstr][service][variable]['Expressions'][expression][i]["SceneID"] == sceneid) then 
 					table.remove(registeredWatches[devidstr][service][variable]['Expressions'][expression], i)
 					removed = removed +1
 				end
