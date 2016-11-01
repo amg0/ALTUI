@@ -3153,16 +3153,17 @@ local function table_search (tt, v,stack)
     
     for key, value in pairs (tt) do
       if key ~= v then
-	debug(string.format("table_search: new table found , key=%s",key))
+	--debug(string.format("table_search: new table found , key=%s",key))
         local r = table_search(value, v,stack .. key )
 	if r ~= nil then
 		return r
 	end
       elseif key == v then
 	debug(string.format("table_search: found value! key=%s",key))
+				
 	return value 
       else
-        debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
+        --debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
       end
     end
   end
@@ -3188,6 +3189,10 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 						-- Assume that the callback function is valid and try to get it from the global table
 						warning(string.format("sendValueToStorage: using function name %s as callback for %s",DataProviders[provider]["callback"],provider))
 						callback_fn = table_search(_G,DataProviders[provider]["callback"],"")
+						if callback_fn ~= nil then
+							-- save this to speed up execution next time
+							DataProvidersCallbacks[DataProviders[provider]["callback"]] = callback_fn
+						end
 					end
 					if(callback_fn~=nil) then 
 						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
