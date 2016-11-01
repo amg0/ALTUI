@@ -2990,6 +2990,14 @@ end
 local function _loadDataProviders()
 	local str = luup.variable_get(ALTUI_SERVICE, "DataStorageProviders",  lul_device) or "{}"
 	DataProviders = json.decode(str)
+	for k,v in pairs (DataProviders) do
+		if (v["callback"] ~= nil) 
+			local callback_fn = table_search(_G,DataProviders[provider]["callback"],"",0)
+			if callback_fn ~= nil then
+				DataProvidersCallbacks[DataProviders[provider]["callback"]] = callback_fn
+			end			
+		end
+	end
 end
 
 local function _saveDataProvider() 
@@ -3186,15 +3194,6 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 				else
 					debug(string.format("sendValueToStorage: Requires a callback "))
 					local callback_fn = DataProvidersCallbacks[DataProviders[provider]["callback"]]
-					if(callback_fn==nil) then 
-						-- Assume that the callback function is valid and try to get it from the global table
-						warning(string.format("sendValueToStorage: using function name %s as callback for %s",DataProviders[provider]["callback"],provider))
-						callback_fn = table_search(_G,DataProviders[provider]["callback"],"",0)
-						if callback_fn ~= nil then
-							-- save this to speed up execution next time
-							DataProvidersCallbacks[DataProviders[provider]["callback"]] = callback_fn
-						end
-					end
 					if(callback_fn~=nil) then 
 						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
 					else
