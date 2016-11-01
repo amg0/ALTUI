@@ -3170,6 +3170,11 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
 					else
 						warning(string.format("sendValueToStorage: callback and url missing for provider:%s",provider))
+						for n,v in pairs(_G) do
+								debug(n,v)
+								end
+						end						
+						
 					end
 				end
 			else
