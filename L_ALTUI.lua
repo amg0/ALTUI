@@ -3159,8 +3159,8 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 						warning(string.format("sendValuetoUrlStorage() failed"))
 					end
 				else
-					debug(string.format("sendValueToStorage: Requires a callback ")
-					local callback_fn = DataProvidersCallbacks[DataProviders[provider]["callback"]];
+					debug(string.format("sendValueToStorage: Requires a callback "))
+					local callback_fn = DataProvidersCallbacks[DataProviders[provider]["callback"]]
 					if(callback_fn==nil)
 						-- Assume that the callback function is valid
 						callback_fn = DataProviders[provider]["callback"];
