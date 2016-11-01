@@ -3147,14 +3147,19 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 	return results
 end
 local function table_search (tt, v,stack)
+	local key, value
+	debug(string.format("table_search(v=%s,stack%s)",v,stack))
   if type(tt) == "table" then
+    
     for key, value in pairs (tt) do
-      if v ~= key then
+      if key ~= v then
+	debug(string.format("table_search: new table found , key=%s",key))
         local r = table_search(value, v,stack .. key )
 	if r ~= nil then
 		return r
 	end
-      elseif v == key then
+      elseif key == v then
+	debug(string.format("table_search: found value! key=%s",key))
 	return value 
       else
         debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
