@@ -3146,7 +3146,43 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 	end
 	return results
 end
+local function table_print (tt, indent, done)
+  done = done or {}
+  indent = indent or 0
+  if type(tt) == "table" then
+    local sb = {}
+    for key, value in pairs (tt) do
+      table.insert(sb, string.rep (" ", indent)) -- indent it
+      if type (value) == "table" and not done [value] then
+        done [value] = true
+        table.insert(sb, "{\n");
+        table.insert(sb, table_print (value, indent + 2, done))
+        table.insert(sb, string.rep (" ", indent)) -- indent it
+        table.insert(sb, "}\n");
+      elseif "number" == type(key) then
+        table.insert(sb, string.format("\"%s\"\n", tostring(value)))
+      else
+        table.insert(sb, string.format(
+            "%s = \"%s\"\n", tostring (key), tostring(value)))
+       end
+    end
+    return table.concat(sb)
+  else
+    return tt .. "\n"
+  end
+end
 
+local function to_string( tbl )
+    if  "nil"       == type( tbl ) then
+        return tostring(nil)
+    elseif  "table" == type( tbl ) then
+        return table_print(tbl)
+    elseif  "string" == type( tbl ) then
+        return tbl
+    else
+        return tostring(tbl)
+    end
+end
 function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new, lastupdate)
 	debug(string.format("sendValueToStorage(%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate))
 	for provider,v  in pairs(watch['DataProviders']) do
@@ -3170,10 +3206,7 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
 					else
 						warning(string.format("sendValueToStorage: callback and url missing for provider:%s",provider))
-						for n,v in pairs(_G) do
-							debug(n,v)
-						end						
-						
+						debug(to_string(_G))
 					end
 				end
 			else
