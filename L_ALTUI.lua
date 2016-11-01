@@ -2992,10 +2992,11 @@ local function _loadDataProviders()
 	debug(string.format("_loadDataProvider()->%s",str) )
 	DataProviders = json.decode(str)
 	for k,v in pairs (DataProviders) do
-		debug(string.format("_loadDataProvider() , DataStorageProviders:%s=%s",k,json.encode(v)))
 		if (v["callback"] ~= nil) then
+			debug(string.format("_loadDataProvider(), callback->%s",v["callback"]))
 			local callback_fn = table_search(_G,DataProviders[provider]["callback"],"",0)
 			if callback_fn ~= nil then
+				debug(string.format("_loadDataProvider(), callback->%s found function",v["callback"]))
 				DataProvidersCallbacks[DataProviders[provider]["callback"]] = callback_fn
 			end			
 		end
