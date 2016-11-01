@@ -2989,6 +2989,7 @@ end
 
 local function _loadDataProviders()
 	local str = luup.variable_get(ALTUI_SERVICE, "DataStorageProviders",  lul_device) or "{}"
+	debug(string.format("_loadDataProvider()->%s",str) )
 	DataProviders = json.decode(str)
 	for k,v in pairs (DataProviders) do
 		debug(string.format("_loadDataProvider() , DataStorageProviders:%s",json.encode(DataProviders)))
