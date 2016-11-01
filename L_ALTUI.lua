@@ -3148,7 +3148,7 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 end
 local function table_search (tt, v,stack,level)
 	local key, value
-	if level > 5
+	if level > 5 then
 		return nil
 	end
 	debug(string.format("table_search(v=%s,stack%s)",v,stack))
