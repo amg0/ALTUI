@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1897 $";
+var ALTUI_revision = "$Revision: 1899 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10575,7 +10575,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// var end = ( lastuntrip && (lastuntrip>lasttrip)) ? new Date(lastuntrip*1000) : null
 			if (lasttrip && ((bAddAllways==true) || (tripped=="1")) ) {
 				items.update({
-					id: 'DLT-{0}-{1}'.format(device.altuiid,lasttrip),
+					id: 'DLT_{0}_{1}'.format(device.altuiid,lasttrip),
 					group:1,	//security
 					start: new Date(lasttrip*1000),
 					// end:end,
@@ -10646,7 +10646,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				_loadCSSText("div.vis-label , div.vis-text { color: "+getCSS('color','text-primary')+" !important;	}")
 				items = new vis.DataSet();			// Create a DataSet (allows two way data-binding)
 				groups = new vis.DataSet();			// create a data set with groups
-				var names = ['Scene', 'Security'];		
+				var names = ['Scene', 'Security', 'Triggers'];		
 				for (var g = 0; g < names.length; g++) {
 					groups.add({id: g, content: names[g]});
 				}
@@ -10671,7 +10671,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					function(idx,scene) {
 						if (scene.last_run != undefined) {
 							items.update({
-								id: 'SLR-'+scene.altuiid,
+								id: 'SLR_'+scene.altuiid,
 								group:0,	//scenes
 								start: new Date(scene.last_run*1000),
 								content: 'scene {0} ({1})'.format(scene.name,scene.altuiid)
@@ -10680,12 +10680,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						var nextrun = _findSceneNextRun(scene);
 						if (nextrun>0) {
 							items.update({
-								id: 'SNR-'+scene.altuiid,
+								id: 'SNR_'+scene.altuiid,
 								group:0,	//scenes
 								start: new Date(nextrun*1000),
 								content: 'scene {0} ({1})'.format(scene.name,scene.altuiid)
 							})
 						}
+						$.each(scene.triggers || [] , function(idx,trigger) {
+							if (trigger.last_run) {
+								items.update({
+									id: 'STLR_{0}_{1}'.format(scene.altuiid,idx),
+									group:2,	//triggers
+									start: new Date(trigger.last_run*1000),
+									content: 'Trigger {0} ({1})'.format(trigger.name||'',scene.altuiid)
+								})							
+							}
+						});
 					}, 
 					null, 
 					function(allscenes) {
@@ -11385,6 +11395,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			["ACE editor","https://ace.c9.io/","ACE code editor"],		
 			["JointJS","http://www.jointjs.com/","JointJS graphic library"],		
 			["JustGage","http://justgage.com/","justGage vectorial gage"],		
+			["Vis js","http://visjs.org/docs/timeline/","Visual timeline"],		
 			["amg0","http://forum.micasaverde.com/","reachable as amg0 on this forum "]
 		];
 		
