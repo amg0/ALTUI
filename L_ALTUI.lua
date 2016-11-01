@@ -3151,26 +3151,24 @@ local function table_search (tt, v,stack,level)
 	if level > 5 then
 		return nil
 	end
-	debug(string.format("table_search(v=%s,stack%s)",v,stack))
-  if type(tt) == "table" then
-    
-    for key, value in pairs (tt) do
-      if key ~= v then
-	--debug(string.format("table_search: new table found , key=%s",key))
-        local r = table_search(value, v,stack .. key,level+1 )
-	if r ~= nil then
-		return r
+	--debug(string.format("table_search(v=%s,stack%s)",v,stack))
+	if type(tt) == "table" then
+		for key, value in pairs (tt) do
+			if key ~= v then
+				--debug(string.format("table_search: new table found , key=%s",key))
+				local r = table_search(value, v,stack .. key,level+1 )
+				if r ~= nil then
+					return r
+				end
+			elseif key == v then
+				--debug(string.format("table_search: found value! key=%s",key))
+				return value 
+			else
+			--debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
+			end
+		end
 	end
-      elseif key == v then
-	debug(string.format("table_search: found value! key=%s",key))
-				
-	return value 
-      else
-        --debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
-      end
-    end
-  end
-  return nil
+	return nil
 end
 
 
