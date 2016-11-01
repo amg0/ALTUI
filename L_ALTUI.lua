@@ -3159,7 +3159,7 @@ local function table_search (tt, v,stack,level)
 	if level > 5 then
 		return nil
 	end
-	--debug(string.format("table_search(v=%s,stack%s)",v,stack))
+	debug(string.format("table_search(v=%s,stack%s)",v,stack))
 	if type(tt) == "table" then
 		for key, value in pairs (tt) do
 			if key ~= v then
