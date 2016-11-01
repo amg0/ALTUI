@@ -3146,21 +3146,18 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 	end
 	return results
 end
-local function table_search (tt, v)
-	return table_search (tt, v,"")
-end
 local function table_search (tt, v,stack)
   if type(tt) == "table" then
     for key, value in pairs (tt) do
-      if type (value) == "table" then
-        local r = table_search(value, v,stack .. key ))
+      if v ~= key then
+        local r = table_search(value, v,stack .. key )
 	if r ~= nil then
 		return r
 	end
       elseif v == key then
 	return value 
       else
-        debug(string.format("Searching for value %s, Ignoring value %s/%s"),v,stack,key)
+        debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
       end
     end
   end
@@ -3185,7 +3182,7 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 					if(callback_fn==nil) then 
 						-- Assume that the callback function is valid and try to get it from the global table
 						warning(string.format("sendValueToStorage: using function name %s as callback for %s",DataProviders[provider]["callback"],provider))
-						callback_fn = table_search(_G,DataProviders[provider]["callback"])
+						callback_fn = table_search(_G,DataProviders[provider]["callback"],"")
 					end
 					if(callback_fn~=nil) then 
 						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
