@@ -2986,7 +2986,30 @@ local function sendValueToStorage_thingspeak(watch_description,lul_device, lul_s
 	end
 	return 0
 end
-
+local function table_search (tt, v,stack,level)
+	local key, value
+	if level > 5 then
+		return nil
+	end
+	debug(string.format("table_search(v=%s,stack%s)",v,stack))
+	if type(tt) == "table" then
+		for key, value in pairs (tt) do
+			if key ~= v then
+				--debug(string.format("table_search: new table found , key=%s",key))
+				local r = table_search(value, v,stack.."-"..key,level+1 )
+				if r ~= nil then
+					return r
+				end
+			elseif key == v then
+				debug(string.format("table_search: found value! key=%s",key))
+				return value 
+			else
+			--debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
+			end
+		end
+	end
+	return nil
+end
 local function _loadDataProviders()
 	local str = luup.variable_get(ALTUI_SERVICE, "DataStorageProviders",  lul_device) or "{}"
 	debug(string.format("_loadDataProvider()->%s",str) )
@@ -3156,30 +3179,6 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 		end
 	end
 	return results
-end
-local function table_search (tt, v,stack,level)
-	local key, value
-	if level > 5 then
-		return nil
-	end
-	debug(string.format("table_search(v=%s,stack%s)",v,stack))
-	if type(tt) == "table" then
-		for key, value in pairs (tt) do
-			if key ~= v then
-				--debug(string.format("table_search: new table found , key=%s",key))
-				local r = table_search(value, v,stack.."-"..key,level+1 )
-				if r ~= nil then
-					return r
-				end
-			elseif key == v then
-				debug(string.format("table_search: found value! key=%s",key))
-				return value 
-			else
-			--debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
-			end
-		end
-	end
-	return nil
 end
 
 
