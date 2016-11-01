@@ -3146,6 +3146,31 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 	end
 	return results
 end
+local function table_search (tt, v,stack,level)
+	local key, value
+	if level > 5 then
+		return nil
+	end
+	--debug(string.format("table_search(v=%s,stack%s)",v,stack))
+	if type(tt) == "table" then
+		for key, value in pairs (tt) do
+			if key ~= v then
+				--debug(string.format("table_search: new table found , key=%s",key))
+				local r = table_search(value, v,stack.."-"..key,level+1 )
+				if r ~= nil then
+					return r
+				end
+			elseif key == v then
+				debug(string.format("table_search: found value! key=%s",key))
+				return value 
+			else
+			--debug(string.format("Searching for value %s, Ignoring value %s/%s",v,stack,key))
+			end
+		end
+	end
+	return nil
+end
+
 
 function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new, lastupdate)
 	debug(string.format("sendValueToStorage(%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate))
@@ -3159,7 +3184,22 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 						warning(string.format("sendValuetoUrlStorage() failed"))
 					end
 				else
-					(DataProvidersCallbacks[DataProviders[provider]["callback"]])(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
+					debug(string.format("sendValueToStorage: Requires a callback "))
+					local callback_fn = DataProvidersCallbacks[DataProviders[provider]["callback"]]
+					if(callback_fn==nil) then 
+						-- Assume that the callback function is valid and try to get it from the global table
+						warning(string.format("sendValueToStorage: using function name %s as callback for %s",DataProviders[provider]["callback"],provider))
+						callback_fn = table_search(_G,DataProviders[provider]["callback"],"",0)
+						if callback_fn ~= nil then
+							-- save this to speed up execution next time
+							DataProvidersCallbacks[DataProviders[provider]["callback"]] = callback_fn
+						end
+					end
+					if(callback_fn~=nil) then 
+						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
+					else
+						warning(string.format("sendValueToStorage: callback and url missing for provider:%s",provider))
+					end
 				end
 			else
 				warning(string.format("sendValueToStorage - unknown provider:%s",provider))
@@ -3353,7 +3393,7 @@ function _delWatch(service, variable, deviceid, sceneid, expression, xml, provid
 			-- watch for scene
 			local n = tablelength(registeredWatches[devidstr][service][variable]['Expressions'][expression])
 			for i=n,1,-1 do
-				if (registeredWatches[devidstr][service][variable]['Expressions'][expression][i]["SceneID"] == sceneid) then
+				if (registeredWatches[devidstr][service][variable]['Expressions'][expression][i]["SceneID"] == sceneid) then 
 					table.remove(registeredWatches[devidstr][service][variable]['Expressions'][expression], i)
 					removed = removed +1
 				end
