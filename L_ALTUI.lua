@@ -3163,7 +3163,8 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 					local callback_fn = DataProvidersCallbacks[DataProviders[provider]["callback"]]
 					if(callback_fn==nil) then 
 						-- Assume that the callback function is valid
-						callback_fn = DataProviders[provider]["callback"]
+						callback_fn = _G[DataProviders[provider]["callback"]]
+						
 						warning(string.format("sendValueToStorage: using function name %s as callback for %s",callback_fn,provider))
 					end
 					if(callback_fn~=nil) then 
