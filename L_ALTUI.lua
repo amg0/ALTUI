@@ -3159,15 +3159,17 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 						warning(string.format("sendValuetoUrlStorage() failed"))
 					end
 				else
+					debug(string.format("sendValueToStorage: Requires a callback ")
 					local callback_fn = DataProvidersCallbacks[DataProviders[provider]["callback"]];
 					if(callback_fn==nil)
 						-- Assume that the callback function is valid
 						callback_fn = DataProviders[provider]["callback"];
+						warning(string.format("sendValueToStorage: using function name %s as callback for %s",callback_fn,provider))
 					end
 					if(callback_fn~=nil)
 						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
 					else
-						warning(string.format("sendValueToStorage - callback and url missing for provider:%s",provider))
+						warning(string.format("sendValueToStorage: callback and url missing for provider:%s",provider))
 					end
 				end
 			else
