@@ -2994,10 +2994,10 @@ local function _loadDataProviders()
 	for k,v in pairs (DataProviders) do
 		if (v["callback"] ~= nil) then
 			debug(string.format("_loadDataProvider(), callback->%s",v["callback"]))
-			local callback_fn = table_search(_G,DataProviders[provider]["callback"],"",0)
+			local callback_fn = table_search(_G,v["callback"],"",0)
 			if callback_fn ~= nil then
 				debug(string.format("_loadDataProvider(), callback->%s found function",v["callback"]))
-				DataProvidersCallbacks[DataProviders[provider]["callback"]] = callback_fn
+				DataProvidersCallbacks[v["callback"]] = callback_fn
 			end			
 		end
 	end
