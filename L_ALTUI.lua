@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.69"
+local version = "v1.69b"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -2473,6 +2473,10 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 					lul_parameters["provider"],  providerparams )
 					--lul_parameters["channelid"], lul_parameters["readkey"], lul_parameters["writekey"], lul_parameters["field"], lul_parameters["graphicurl"]
 				return res, "text/plain"
+			end,
+		["getWatchDB"] = 
+			function(params)	-- primary controller beeing called to set a watch
+				return json.encode(registeredWatches), "application/json"
 			end,
 		["addRemoteWatch"] = 
 			function(params)	-- primary controller calling the secondary one to set a watch

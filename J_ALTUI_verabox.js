@@ -1553,6 +1553,51 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	function _setWatchLineParams(watch) {
 		return "{0}#{1}#{2}#{3}#{4}#{5}".format( watch.service, watch.variable, watch.deviceid, watch.sceneid, watch.luaexpr, watch.xml || "");
 	};
+	function _getWatchesHistory(cbfunc) {
+		if (_uniqID!=0)	// only supported on master controller
+			return null;
+			
+		var dfd = $.Deferred();
+		var bPost = _candoPost(_user_data);
+		var result = "";
+		var url = "data_request?id=lr_ALTUI_Handler&command=getWatchDB";
+		var jqxhr = $.ajax( {
+			url: url,
+			type: (bPost==true) ? "POST" : "GET",
+			//dataType: "text",
+			data: {
+				dummy:'x'
+			}
+		})
+		.done(function(data) {
+			var result=[];
+			$.each(data, function(devid,devvalue) {
+				$.each( devvalue , function (service, servvalue) {
+					$.each( servvalue, function( variable, varvalue) {
+						if (varvalue.LastUpdate) {
+							result.push({
+								altuiid: devid,
+								service: service,
+								variable: variable,
+								lastUpdate: varvalue.LastUpdate
+							})
+						}
+					});
+				});
+			});
+			if ( $.isFunction( cbfunc ) )  {
+				cbfunc(result);			
+			}
+			dfd.resolve(result)
+		})
+		.fail(function(jqXHR, textStatus) {
+			if ( $.isFunction( cbfunc ) )  {
+				cbfunc("");			
+			}
+			dfd.resolve("")
+		})
+		return dfd.promise()
+	};
 	function _getWatches(whichwatches , filterfunc) {
 		if ((whichwatches!="VariablesToWatch") && (whichwatches!="VariablesToSend")) 
 			return null;
@@ -1738,6 +1783,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	addWatch		: _addWatch,				// ( lul_device, service, variable, deviceid, sceneid, expression, xml, provider, params)
 	delWatch		: _delWatch,				// ( lul_device, service, variable, deviceid, sceneid, expression, xml, provider, params)
 	getWatches		: _getWatches,				// (whichwatches,filterfunc)
+	getWatchesHistory	: _getWatchesHistory,	// (cbfunc)
 	isDeviceZwave	: function(device) { return UserDataHelper(_user_data).isDeviceZwave(device) },
 	isDeviceZigbee	: function(device) { return UserDataHelper(_user_data).isDeviceZigbee(device) },
 	isDeviceBT		: function(device) { return UserDataHelper(_user_data).isDeviceBT(device) },

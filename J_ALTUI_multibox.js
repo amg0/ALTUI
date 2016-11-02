@@ -478,6 +478,9 @@ var MultiBox = ( function( window, undefined ) {
 			return null;
 		return _controllers['0'].controller.getWatches( whichwatches,filterfunc );
 	};
+	function _getWatchesHistory(cbfunc) {
+		return _controllers['0'].controller.getWatchesHistory( cbfunc );
+	};
 	function _getStatesByAltuiID(altuiid) {
 		var elems = altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getStates( elems[1]  );
@@ -911,6 +914,7 @@ var MultiBox = ( function( window, undefined ) {
 	addWatch				: _addWatch,				// (  service, variable, deviceid, sceneid, expression, xml, provider, params)
 	delWatch				: _delWatch,				// (  service, variable, deviceid, sceneid, expression, xml, provider, params )getWatches(whichwatches)
 	getWatches				: _getWatches,				// (whichwatches,filterfunc)
+	getWatchesHistory		: _getWatchesHistory,		// (cbfunc)
 	evaluateConditions 		: _evaluateConditions,		// ( device,devsubcat,conditions ) evaluate a device condition table ( AND between conditions )
 	getStates				: _getStates,				// ( device )
 	getStatesByAltuiID		: _getStatesByAltuiID,		// (altuiid)
