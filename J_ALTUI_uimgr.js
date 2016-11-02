@@ -10711,7 +10711,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							}
 						});
 					}, 
-					null, 
+					function(scene) { return (scene.paused!=1) }, 
 					function(allscenes) {
 						MultiBox.getDevices(
 							function(idx,device) {
