@@ -451,7 +451,8 @@ Localization.init( {
 	"Show OS statistics in the footer":"Montre les statistiques OS en pied de page",
 	"Show OS Statistics":"Montre les statistiques OS",
 	"TopStats:Show OS statistics in the footer":"TopStats:Montre les statistiques OS en pied de page",
-	"Errors Warnings":"Errors Warnings"
+	"Errors Warnings":"Errors Warnings",
+	"Next Page":"Page Suivante","Prev Page":"Page Précédente"
 });
 
 // override rules with localized version

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1902 $";
+var ALTUI_revision = "$Revision: 1903 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -543,6 +543,7 @@ var styles ="						\
 	.altui-plugin-title { height: 21px;  overflow:hidden; }		\
 	.altui-plugin-version { font-size:1em;  }		\
 	.altui-plugin-version .input-sm { height: 20px;  line-height: 20px; }		\
+	a.altui-goto-scene, a.altui-goto-device { color:black; cursor:pointer; }	\
 	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }		\
 	.altui-ace-editor .ui-resizable-helper { border: 2px dotted #00F; }		\
 	.altui-ace-editor .ui-resizable-handle { background-color: white; }		\
@@ -10531,7 +10532,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var items = null;			// Create a DataSet (allows two way data-binding)
 		var groups = null;			// create a data set with groups
 		var id = 0;
-		
+		var _toolsTimeline = [
+			{id:"altui-zoomIn", glyph:"glyphicon-zoom-in", label:_T("Zoom In")},
+			{id:"altui-zoomOut", glyph:"glyphicon-zoom-out", label:_T("Zoom Out")},
+			{id:"altui-moveLeft", glyph:"glyphicon-backward", label:_T("Move Left")},
+			{id:"altui-moveRight", glyph:"glyphicon-forward", label:_T("Move Right")}
+		];
 		/**
      * Move the timeline a given percentage to left or right
      * @param {Number} percentage   For example 0.1 (left) or -0.1 (right)
@@ -10579,7 +10585,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					group:1,	//security
 					start: new Date(lasttrip*1000),
 					// end:end,
-					content: '<span title="{2}">{0} ({1})</span>'.format(device.name,device.altuiid,HTMLUtils.enhanceValue(lasttrip))
+					content: '<span title="{2}">{0} (<a class="altui-goto-device" data-altuiid="{1}">{1}</a>)</span>'.format(device.name,device.altuiid,HTMLUtils.enhanceValue(lasttrip))
 				})
 			}
 		}
@@ -10593,8 +10599,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						group:3,	//security
 						start: new Date(item.lastUpdate*1000),
 						// end:end,
-						content: '<span title="{2}">{0}:{1}({2})</span>'.format(device.name,item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate))
+						content: '<span title="{3}">{0}:{1}(<a class="altui-goto-device" data-altuiid="{2}">{2}</a>)</span>'.format(device.name,item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate))
 					})
+					//altui-goto-device
 				})
 			});
 		}
@@ -10622,7 +10629,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							var timeline = $('#visualization').data('timeline');
 							var props = MyLocalStorage.getSettings("TimelineRange");
 							if (props!=null) {
-								console.log(props)	
 								var range = new Date(props.end)-new Date(props.start);
 								var today = Date.now();
 								var yesterday = new Date(today-range/2);
@@ -10642,7 +10648,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								)
 							}
 							timeline.on("rangechanged",function(properties) {
-									MyLocalStorage.setSettings("TimelineRange",properties)
+								MyLocalStorage.setSettings("TimelineRange",properties)
 							})
 						});	
 						EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function( event,device) {
@@ -10666,21 +10672,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					groups.add({id: g, content: names[g]});
 				}
 				var html = "<div class='col-xs-12' id='visualization'>"
-					html += HTMLUtils.drawButtonGroup('altui-timeline-toolbar', {
-										buttons:[
-											{id:'zoomIn', label:'Zoom In'},
-											{id:'zoomOut', label:'Zoom Out'},
-											{id:'moveLeft', label:'Move left'},
-											{id:'moveRight', label:'Move right'},
-										]
-									});
+					html += HTMLUtils.drawToolbar( 'altui-timeline-toolbar', _toolsTimeline )
 				html +="</div>";
 		
 				$(".altui-mainpanel").append(html)
-				$("#zoomIn").click(function () { zoom(-0.2); });
-				$("#zoomOut").click(function () { zoom(0.2); });
-				$("#moveRight").click(function () { move(-0.2); });
-				$("#moveLeft").click(function () { move(0.2); });
+				$("#altui-zoomIn").click(function () { zoom(-0.2); });
+				$("#altui-zoomOut").click(function () { zoom(0.2); });
+				$("#altui-moveRight").click(function () { move(-0.2); });
+				$("#altui-moveLeft").click(function () { move(0.2); });
 				
 				MultiBox.getScenes(
 					function(idx,scene) {
@@ -10689,7 +10688,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								id: 'SLR_'+scene.altuiid,
 								group:0,	//scenes
 								start: new Date(scene.last_run*1000),
-								content: '<span title="{2}">{0} ({1})</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(scene.last_run))
+								content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(scene.last_run))
 							})
 						}
 						var nextrun = _findSceneNextRun(scene);
@@ -10698,7 +10697,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								id: 'SNR_'+scene.altuiid,
 								group:0,	//scenes
 								start: new Date(nextrun*1000),
-								content: '<span title="{2}">{0} ({1})</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(nextrun))
+								content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(nextrun))
 							})
 						}
 						$.each(scene.triggers || [] , function(idx,trigger) {
@@ -10707,7 +10706,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									id: 'STLR_{0}_{1}'.format(scene.altuiid,idx),
 									group:2,	//triggers
 									start: new Date(trigger.last_run*1000),
-									content: '<span title="{2}">{0}:{1} ({2})</span>'.format(scene.name,trigger.name||'',scene.altuiid,HTMLUtils.enhanceValue(trigger.last_run))
+									content: '<span title="{2}">{0}:{1} (<a class="altui-goto-scene" data-altuiid="{2}">{2}</a>)</span>'.format(scene.name,trigger.name||'',scene.altuiid,HTMLUtils.enhanceValue(trigger.last_run))
 								})							
 							}
 						});
@@ -10727,6 +10726,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					}
 				);
 			});
+		});
+		
+		// set interactivity callbacks
+		$(".altui-mainpanel")
+		.off("click",".altui-goto-scene")
+		.off("click",".altui-goto-device")
+		.on("click",".altui-goto-scene",function (e) {
+			e.stopPropagation();
+			UIManager.pageSceneEdit( $(this).data("altuiid") )
+		})
+		.on("click",".altui-goto-device",function (e) {
+			e.stopPropagation();
+			UIManager.pageControlPanel( $(this).data("altuiid") )
 		});
 	},
 	
@@ -14540,8 +14552,8 @@ $(function() {
 		body+="			<ul class='dropdown-menu' role='menu'>";
 		body+="				<li><a id='menu_room' href='#'  >"+_T("Rooms")+"</a></li>";
 		body+="				<li><a id='menu_plugins' href='#'  >"+_T("Plugins")+"</a></li>";
-		body+="				<li><a id='menu_timeline' href='#'  >"+_T("Timeline")+"</a></li>";
 		body+="				<li><a id='altui-app-store' href='#' >"+_T("App Store")+"</a></li>";
+		body+="				<li><a id='menu_timeline' href='#'  >"+_T("Timeline")+"</a></li>";
 		body+="				<li><a id='menu_workflow' href='#'  >"+_T("Workflows")+"</a></li>";
 		body+="			<li class='divider'></li>";
 		body+="				<li class='dropdown-header'>Tables</li>";
