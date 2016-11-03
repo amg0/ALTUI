@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1900 $";
+var ALTUI_revision = "$Revision: 1902 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10587,12 +10587,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function updateWatches() {
 			MultiBox.getWatchesHistory(function(data) {
 				$.each(data, function(idx,item) {
+					var device = MultiBox.getDeviceByAltuiID(item.altuiid)
 					items.update({
 						id: 'WLU_{0}_{1}'.format(item.altuiid,item.lastUpdate),
 						group:3,	//security
 						start: new Date(item.lastUpdate*1000),
 						// end:end,
-						content: '<span title="{2}">{0} ({1})</span>'.format(item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate))
+						content: '<span title="{2}">{0}:{1}({2})</span>'.format(device.name,item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate))
 					})
 				})
 			});
@@ -10706,7 +10707,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									id: 'STLR_{0}_{1}'.format(scene.altuiid,idx),
 									group:2,	//triggers
 									start: new Date(trigger.last_run*1000),
-									content: '<span title="{2}">{0} ({1})</span>'.format(trigger.name||'',scene.altuiid,HTMLUtils.enhanceValue(trigger.last_run))
+									content: '<span title="{2}">{0}:{1} ({2})</span>'.format(scene.name,trigger.name||'',scene.altuiid,HTMLUtils.enhanceValue(trigger.last_run))
 								})							
 							}
 						});
