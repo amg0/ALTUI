@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1904 $";
+var ALTUI_revision = "$Revision: 1905 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2576,7 +2576,7 @@ var UIManager  = ( function( window, undefined ) {
 	// var getlist_url = 'https://script.google.com/macros/s/AKfycbz0YqgQ-gxY3YjrxuaLeQKDrLdTT7Ibbs6GAiv8wss/dev'; // DEV
 
 	// in English, we will apply the _T() later, at display time
-	var _checkOptions = [
+	var _userOptions = [
 		{ id:'ShowVideoThumbnail', type:'checkbox', label:"Show Video Thumbnail in Local mode", _default:1, help:'In Local access mode, show camera in video stream mode' },
 		{ id:'FixedLeftButtonBar', type:'checkbox', label:"Left Buttons are fixed on the page", _default:1, help:'choose whether or not the selection Buttons on the left are scrolling with the page' },
 		{ id:'ShowWeather', type:'checkbox', label:"Show Weather on home page", _default:1, help:'display or not the weather widget on home page' },
@@ -5895,7 +5895,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// var key_vals=elem.split('=');
 			// defaults[ key_vals[0] ] =  key_vals[1];
 		// });
-		$.each( $.merge( $.merge( [], _checkOptions ), _editorOptions ) , function(idx,opt) {
+		$.each( $.merge( $.merge( [], _userOptions ), _editorOptions ) , function(idx,opt) {
 			if (MyLocalStorage.getSettings(opt.id) == null)
 				if (defaults[opt.id] != undefined )
 					MyLocalStorage.setSettings(opt.id, atob(defaults[opt.id]) );
@@ -5904,7 +5904,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 	};
 	function _forceOptions(name,value) {
-		$.each( _checkOptions, function(idx,opt) {
+		$.each( _userOptions, function(idx,opt) {
 			if (opt.id == name ) {
 				MyLocalStorage.setSettings(opt.id, value);
 				opt.hidden = true;
@@ -14128,7 +14128,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html +="  <div class='panel-heading'>"+_T("Options")+"</div>";
 		html +="  <div class='panel-body'>";
 		html += "  <div class='row'>";
-			$.each(_checkOptions, function(id,check) {
+			$.each(_userOptions, function(id,check) {
 				if (check.hidden!=true) {
 					html += "<div class='col-sm-6'>";
 					html += _displayOption(id,check);
