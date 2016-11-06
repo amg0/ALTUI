@@ -1647,12 +1647,22 @@ var HTMLUtils = (function() {
 				collapsecss="data-toggle='collapse' data-target='{0}'".format(tool.collapsetarget);
 				preareas.push(tool.collapsetarget)
 			}
-			toolbarHtml+="  <button type='button' class='btn btn-default'  {1} id='{0}' >".format(tool.id,collapsecss);
-			var glyph = "<span class='glyphicon {0}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}'></span>".format(tool.glyph,tool.label || '');
-			toolbarHtml += glyph;
-			if (tool.label)
-				toolbarHtml+=("&nbsp;" + tool.label);
-			toolbarHtml+="  </button>";			
+			var tooltype = tool.type || 'button'
+			switch( tooltype ) {
+				case 'select':
+					toolbarHtml+='<select id="{0}" multiple="multiple">'.format(tool.id);
+					toolbarHtml+='</select>'
+					break;
+				case 'button':
+				default:
+					toolbarHtml+="  <button type='button' class='btn btn-default'  {1} id='{0}' >".format(tool.id,collapsecss);
+					var glyph = "<span class='glyphicon {0}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}'></span>".format(tool.glyph,tool.label || '');
+					toolbarHtml += glyph;
+					if (tool.label)
+						toolbarHtml+=("&nbsp;" + tool.label);
+					toolbarHtml+="  </button>";			
+					break;
+			}
 		});
 		toolbarHtml+="</div>";			
 		toolbarHtml+="<div>";	

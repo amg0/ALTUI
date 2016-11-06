@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1905 $";
+var ALTUI_revision = "$Revision: 1907 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -543,7 +543,7 @@ var styles ="						\
 	.altui-plugin-title { height: 21px;  overflow:hidden; }		\
 	.altui-plugin-version { font-size:1em;  }		\
 	.altui-plugin-version .input-sm { height: 20px;  line-height: 20px; }		\
-	a.altui-goto-scene, a.altui-goto-device { color:black; cursor:pointer; }	\
+	a.altui-goto-scene, a.altui-goto-device, a.altui-goto-workflow { color:black; cursor:pointer; }	\
 	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }		\
 	.altui-ace-editor .ui-resizable-helper { border: 2px dotted #00F; }		\
 	.altui-ace-editor .ui-resizable-handle { background-color: white; }		\
@@ -9503,6 +9503,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$("#altui-workflow-bag-text").html( HTMLUtils.array2Table(arr,null,[],_T("Variables Bag"),"","") )
 				MultiBox.getWorkflowHistory( workflow.altuiid, function(lines) {
 					if ($("#altui-workflow-history-text").length>0)
+						$.each(lines, function(i,line) { delete line.altuiid });
 						$("#altui-workflow-history-text").html( HTMLUtils.array2Table(lines.reverse().slice(0,20),null,[],_T("History")) )
 					HTMLUtils.startTimer('altui-workflow-timer',3000,_refreshFromRemote,null)
 				});
@@ -10529,15 +10530,27 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageTimeline: function ()
 	{
-		var items = null;			// Create a DataSet (allows two way data-binding)
-		var groups = null;			// create a data set with groups
+		var workflows = null;			// Create a DataSet (allows two way data-binding)
+		var groups = null;				// create a data set with groups
+		var groupsview = null;		// create a data view with groups
+		var items = null;
+		var itemsview = null;			// create a data view with items
 		var id = 0;
+		var filters = {
+			scenes: 	{ name:'Scenes' , bEnabled:true , update: updateScenes }, 
+			triggers: { name:'Triggers', bEnabled:true }, 
+			security: { name:'Security', bEnabled:true, update: updateDevices }, 
+			watches: 	{ name:'Watches' , bEnabled:true, update: updateWatches }, 
+			workflows:{ name:'Workflows', bEnabled:true, update: updateWorkflows }, 
+		}
 		var _toolsTimeline = [
 			{id:"altui-zoomIn", glyph:"glyphicon-zoom-in", label:_T("Zoom In")},
 			{id:"altui-zoomOut", glyph:"glyphicon-zoom-out", label:_T("Zoom Out")},
 			{id:"altui-moveLeft", glyph:"glyphicon-backward", label:_T("Move Left")},
-			{id:"altui-moveRight", glyph:"glyphicon-forward", label:_T("Move Right")}
+			{id:"altui-moveRight", glyph:"glyphicon-forward", label:_T("Move Right")},
+			{id:"altui-timeline-filter", type:"select", multiple:"true" },
 		];
+		
 		/**
      * Move the timeline a given percentage to left or right
      * @param {Number} percentage   For example 0.1 (left) or -0.1 (right)
@@ -10582,12 +10595,39 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			if (lasttrip && ((bAddAllways==true) || (tripped=="1")) ) {
 				items.update({
 					id: 'DLT_{0}_{1}'.format(device.altuiid,lasttrip),
-					group:1,	//security
+					group:'security',	//security
 					start: new Date(lasttrip*1000),
 					// end:end,
 					content: '<span title="{2}">{0} (<a class="altui-goto-device" data-altuiid="{1}">{1}</a>)</span>'.format(device.name,device.altuiid,HTMLUtils.enhanceValue(lasttrip))
 				})
 			}
+		}
+		
+		function updateDevices() {
+			MultiBox.getDevices(
+				function(idx,device) {
+					timelineAddDevice(device,true)
+				},
+				null,
+				function(alldevices) {
+					// updateWatches()
+					// updateWorkflows()
+					// updateTimeline(groups,items)
+				}
+			)			
+		}
+		
+		function updateWorkflows() {
+				MultiBox.getWorkflowHistory( null, function(lines) {
+					$.each(lines.slice(1,100),function(i,line) {
+						items.update({
+							id: 'WFT_{0}_{1}'.format(line.altuiid,line.date),
+							group:'workflows',	// workflow,
+							start: new Date(line.date),
+							content:'<span title="{2}">{0} (<a class="altui-goto-workflow" data-altuiid="{1}">{1}</a>)</span>'.format(line.firing_link,line.altuiid,HTMLUtils.enhanceValue(line.date))
+						})
+					});
+				})
 		}
 		
 		function updateWatches() {
@@ -10596,16 +10636,52 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var device = MultiBox.getDeviceByAltuiID(item.altuiid)
 					items.update({
 						id: 'WLU_{0}_{1}'.format(item.altuiid,item.lastUpdate),
-						group:3,	//security
+						group:'watches',	//watch
 						start: new Date(item.lastUpdate*1000),
 						// end:end,
 						content: '<span title="{3}">{0}:{1}(<a class="altui-goto-device" data-altuiid="{2}">{2}</a>)</span>'.format(device.name,item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate))
 					})
-					//altui-goto-device
 				})
 			});
 		}
 		
+		function updateScenes() {
+			MultiBox.getScenes(
+				function(idx,scene) {
+					if (scene.last_run != undefined) {
+						items.update({
+							id: 'SLR_'+scene.altuiid,
+							group:'scenes',	//scenes
+							start: new Date(scene.last_run*1000),
+							content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(scene.last_run))
+						})
+					}
+					var nextrun = _findSceneNextRun(scene);
+					if (nextrun>0) {
+						items.update({
+							id: 'SNR_'+scene.altuiid,
+							group:'scenes',	//scenes
+							start: new Date(nextrun*1000),
+							content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(nextrun))
+						})
+					}
+					$.each(scene.triggers || [] , function(idx,trigger) {
+						if (trigger.last_run) {
+							items.update({
+								id: 'STLR_{0}_{1}'.format(scene.altuiid,idx),
+								group:'triggers',	//triggers
+								start: new Date(trigger.last_run*1000),
+								content: '<span title="{2}">{0}:{1} (<a class="altui-goto-scene" data-altuiid="{2}">{2}</a>)</span>'.format(scene.name,trigger.name||'',scene.altuiid,HTMLUtils.enhanceValue(trigger.last_run))
+							})							
+						}
+					});
+				}, 
+				function(scene) { return (scene.paused!=1) }, 
+				function(allscenes) {
+				}
+			);
+		}
+			
 		function updateTimeline(groups,items) {
 			// Create a Timeline
 			var timeline = $('#visualization').data('timeline')
@@ -10623,40 +10699,48 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$('#visualization').data('timeline',timeline);
 				timeline.setOptions(options);
 				timeline.setGroups(groups);
-				if (ALTUI_registered==true) {
-						timeline.setItems(items);		
-						_.defer( function() {
-							var timeline = $('#visualization').data('timeline');
-							var props = MyLocalStorage.getSettings("TimelineRange");
-							if (props!=null) {
-								var range = new Date(props.end)-new Date(props.start);
-								var today = Date.now();
-								var yesterday = new Date(today-range/2);
-								today = new Date(today+range/2)
-								timeline.setWindow(
-									yesterday,
-									today
-								)
-							} else {
-								var today = new Date();
-								var yesterday = new Date();
-								yesterday.setDate(today.getDate() - 1);
-								today.setDate(today.getDate() + 1);
-								timeline.setWindow(
-									yesterday,
-									today
-								)
-							}
-							timeline.on("rangechanged",function(properties) {
-								MyLocalStorage.setSettings("TimelineRange",properties)
-							})
-						});	
-						EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function( event,device) {
-							timelineAddDevice(device)
+				timeline.setItems(items);		
+			}
+			if (ALTUI_registered==true) {
+					_.defer( function() {
+						var timeline = $('#visualization').data('timeline');
+						var props = MyLocalStorage.getSettings("TimelineRange");
+						if (props!=null) {
+							var range = new Date(props.end)-new Date(props.start);
+							var today = Date.now();
+							var yesterday = new Date(today-range/2);
+							today = new Date(today+range/2)
+							timeline.setWindow(
+								yesterday,
+								today
+							)
+						} else {
+							var today = new Date();
+							var yesterday = new Date();
+							yesterday.setDate(today.getDate() - 1);
+							today.setDate(today.getDate() + 1);
+							timeline.setWindow(
+								yesterday,
+								today
+							)
+						}
+						timeline.on("rangechanged",function(properties) {
+							MyLocalStorage.setSettings("TimelineRange",properties)
+						})
+					});	
+					// EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function( event,device) {
+						// timelineAddDevice(device)
+					// });
+					function _refreshItems(id,data) {
+						$.each(filters, function(k,v) {
+								if (v.update)
+									(v.update)();
 						});
-				} else {
-					$(".altui-mainpanel").append("<span>This feature is only available to registered users</span>")
-				}
+						HTMLUtils.startTimer('altui-timeline-update-timer',10000,_refreshItems,null)
+					}
+					_refreshItems('altui-timeline-update-timer',null)
+			} else {
+				$(".altui-mainpanel").append("<span>This feature is only available to registered users</span>")
 			}
 		}
 		
@@ -10666,11 +10750,20 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/',function() {
 				_loadCSSText("div.vis-label , div.vis-text { color: "+getCSS('color','text-primary')+" !important;	}")
 				items = new vis.DataSet();			// Create a DataSet (allows two way data-binding)
+				// itemsview = new vis.DataView( items , {
+					// filter: function(item) {
+						// return filters[ item.group ].bEnabled==true;
+					// }
+				// });
 				groups = new vis.DataSet();			// create a data set with groups
-				var names = ['Scene', 'Security', 'Triggers', 'Watches'];		
-				for (var g = 0; g < names.length; g++) {
-					groups.add({id: g, content: names[g]});
-				}
+				groupsview = new vis.DataView( groups, {
+					filter: function(item) {
+						return filters[ item.id ].bEnabled==true;
+					}
+				});
+				$.each(filters, function(k,v) {
+						groups.add({id: k, content: v.name});
+				});
 				var html = "<div class='col-xs-12' id='visualization'>"
 					html += HTMLUtils.drawToolbar( 'altui-timeline-toolbar', _toolsTimeline )
 				html +="</div>";
@@ -10680,51 +10773,35 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$("#altui-zoomOut").click(function () { zoom(0.2); });
 				$("#altui-moveRight").click(function () { move(-0.2); });
 				$("#altui-moveLeft").click(function () { move(0.2); });
-				
-				MultiBox.getScenes(
-					function(idx,scene) {
-						if (scene.last_run != undefined) {
-							items.update({
-								id: 'SLR_'+scene.altuiid,
-								group:0,	//scenes
-								start: new Date(scene.last_run*1000),
-								content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(scene.last_run))
-							})
+				$.each(filters, function(k,v) {
+					$("#altui-timeline-filter").append( '<option value="{0}" {2}>{1}</option>'.format( 
+						k,
+						v.name, 
+						(v.bEnabled==true) ? 'selected':'' ) )
+				});
+				$("#altui-timeline-filter").multiselect({
+						disableIfEmpty: true,
+						enableHTML : true,
+						includeSelectAllOption: true,
+						maxHeight: 300,
+						buttonClass: 'btn btn-default',
+						onChange: function(element, checked) {
+							// Get selected options.
+							var toShow = $.map($('#altui-timeline-filter :selected'),function(e)  { return e.value; }) 	
+							$.each(filters, function(k,v) {
+								filters[k].bEnabled = ( $.inArray(k,toShow) != -1)
+							});
+							groupsview.refresh()
+						},
+						onSelectAll: function() {
+							this.onChange();
+						},
+						onDropdownShown: function(event) {
+						},
+						onDropdownHidden: function(event) {
 						}
-						var nextrun = _findSceneNextRun(scene);
-						if (nextrun>0) {
-							items.update({
-								id: 'SNR_'+scene.altuiid,
-								group:0,	//scenes
-								start: new Date(nextrun*1000),
-								content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(nextrun))
-							})
-						}
-						$.each(scene.triggers || [] , function(idx,trigger) {
-							if (trigger.last_run) {
-								items.update({
-									id: 'STLR_{0}_{1}'.format(scene.altuiid,idx),
-									group:2,	//triggers
-									start: new Date(trigger.last_run*1000),
-									content: '<span title="{2}">{0}:{1} (<a class="altui-goto-scene" data-altuiid="{2}">{2}</a>)</span>'.format(scene.name,trigger.name||'',scene.altuiid,HTMLUtils.enhanceValue(trigger.last_run))
-								})							
-							}
-						});
-					}, 
-					function(scene) { return (scene.paused!=1) }, 
-					function(allscenes) {
-						MultiBox.getDevices(
-							function(idx,device) {
-								timelineAddDevice(device,true)
-							},
-							null,
-							function(alldevices) {
-								updateWatches()
-								updateTimeline(groups,items)
-							}
-						)
-					}
-				);
+				});
+				updateTimeline(groupsview,items)
 			});
 		});
 		
@@ -10732,6 +10809,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$(".altui-mainpanel")
 		.off("click",".altui-goto-scene")
 		.off("click",".altui-goto-device")
+		.off("click",".altui-goto-workflow")
 		.on("click",".altui-goto-scene",function (e) {
 			e.stopPropagation();
 			UIManager.pageSceneEdit( $(this).data("altuiid") )
@@ -10739,6 +10817,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		.on("click",".altui-goto-device",function (e) {
 			e.stopPropagation();
 			UIManager.pageControlPanel( $(this).data("altuiid") )
+		})
+		.on("click",".altui-goto-workflow",function(e) {
+			e.stopPropagation();
+			UIManager.pageWorkflow( $(this).data("altuiid") )
 		});
 	},
 	

@@ -583,11 +583,12 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		// var cmd = "tail -n 2000 /var/log/cmh/LuaUPnP.log | grep '[0123456789]: ALTUI: Wkflow - nextWorkflowState(.*, {0},.*==>'".format(altuiid);
 		// Wkflow - Workflow:'Workflow 0-2' nextWorkflowState(0-2, Thingspeak ==> Idle, Timer:Retour)
 		
-		var cmd = "cat /var/log/cmh/LuaUPnP.log | grep '[0123456789]: ALTUI: Wkflow - Workflow: {0}, Valid Transition found'".format(altuiid);
+		var str = (altuiid) ? altuiid : "[0123456789]{1,}-[0123456789]{1,}"
+		var cmd = "cat /var/log/cmh/LuaUPnP.log | grep -E '[0123456789]: ALTUI: Wkflow - Workflow: {0}, Valid Transition found'".format(str);
 		return _osCommand(cmd,true,function(str) {
 			if (str.success==true) {
 				var lines = [];
-				var re = /\d*\t(\d*\/\d*\/\d*\s\d*:\d*:\d*.\d*).*Wkflow - Workflow: .*Valid Transition found:(.*), Active State:(.*)=>(.*) /g; 
+				var re = /\d*\t(\d*\/\d*\/\d*\s\d*:\d*:\d*.\d*).*Wkflow - Workflow: (.*), Valid Transition found:(.*), Active State:(.*)=>(.*) /g; 
 				var m;
 				while ((m = re.exec(str.result)) !== null) {
 					if (m.index === re.lastIndex) {
@@ -597,9 +598,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					// eg m[0] etc.
 					lines.push({
 						date:m[1], 
-						firing_link:m[2],
-						old_state:m[3], 
-						new_state:m[4]
+						altuiid:m[2],
+						firing_link:m[3],
+						old_state:m[4], 
+						new_state:m[5]
 						});
 				}
 				if ($.isFunction(cbfunc)) {
