@@ -588,7 +588,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return _osCommand(cmd,true,function(str) {
 			if (str.success==true) {
 				var lines = [];
-				var re = /\d*\t(\d*\/\d*\/\d*\s\d*:\d*:\d*.\d*).*Wkflow - Workflow: (.*), Valid Transition found:(.*), Active State:(.*)=>(.*) /g; 
+				var re = /\d*\t(\d*)\/(\d*)\/(\d*)\s(\d*):(\d*):(\d*).(\d*).*Wkflow - Workflow: (.*), Valid Transition found:(.*), Active State:(.*)=>(.*) /g; 
 				var m;
 				while ((m = re.exec(str.result)) !== null) {
 					if (m.index === re.lastIndex) {
@@ -597,11 +597,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					// View your result using the m-variable.
 					// eg m[0] etc.
 					lines.push({
-						date:m[1], 
-						altuiid:m[2],
-						firing_link:m[3],
-						old_state:m[4], 
-						new_state:m[5]
+						date:new Date(2000+parseInt(m[3]),parseInt(m[1])-1,m[2],m[4],m[5],m[6],m[7]), 
+						altuiid:m[8],
+						firing_link:m[9],
+						old_state:m[10], 
+						new_state:m[11]
 						});
 				}
 				if ($.isFunction(cbfunc)) {

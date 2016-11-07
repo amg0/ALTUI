@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1908 $";
+var ALTUI_revision = "$Revision: 1909 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10626,9 +10626,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				MultiBox.getWorkflowHistory( null, function(lines) {
 					$.each(lines.slice(1,100),function(i,line) {
 						items.update({
-							id: 'WFT_{0}_{1}'.format(line.altuiid,line.date),
+							id: 'WFT_{0}_{1}'.format(line.altuiid,line.date.getTime()),
 							group:'workflows',	// workflow,
-							start: new Date(line.date),
+							start: line.date,
 							content:'<span title="{2}">{0} (<a class="altui-goto-workflow" data-altuiid="{1}">{1}</a>)</span>'.format(line.firing_link,line.altuiid,HTMLUtils.enhanceValue(line.date))
 						})
 					});
