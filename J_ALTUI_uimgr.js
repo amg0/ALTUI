@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1910 $";
+var ALTUI_revision = "$Revision: 1911 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10548,7 +10548,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-zoomOut", glyph:"glyphicon-zoom-out", label:_T("Zoom Out")},
 			{id:"altui-moveLeft", glyph:"glyphicon-backward", label:_T("Move Left")},
 			{id:"altui-moveRight", glyph:"glyphicon-forward", label:_T("Move Right")},
-			{id:"altui-moveNow", glyph:"glyphicon-time", label:_T("Move Now")},
+			{id:"altui-moveNow", glyph:"glyphicon-time", label:_T("Track Now")},
 			{id:"altui-timeline-filter", type:"select", multiple:"true" },
 		];
 		
@@ -10741,6 +10741,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								if (v.update)
 									(v.update)();
 						});
+						if ( $("#altui-moveNow").hasClass("active") ) {
+							move(0); 
+						}
 						HTMLUtils.startTimer('altui-timeline-update-timer',10000,_refreshItems,null)
 					}
 					_refreshItems('altui-timeline-update-timer',null)
@@ -10778,7 +10781,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$("#altui-zoomOut").click(function () { zoom(0.2); });
 				$("#altui-moveRight").click(function () { move(-0.2); });
 				$("#altui-moveLeft").click(function () { move(0.2); });
-				$("#altui-moveNow").click(function () { move(0); });
+				$("#altui-moveNow").click(function () { 
+					$(this).toggleClass("active");
+					move(0); 
+				});
 				
 				$.each(filters, function(k,v) {
 					$("#altui-timeline-filter").append( '<option value="{0}" {2}>{1}</option>'.format( 
