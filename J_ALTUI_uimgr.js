@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1911 $";
+var ALTUI_revision = "$Revision: 1913 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10530,11 +10530,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageTimeline: function ()
 	{
+		var removeGlyph = "<small>{0}</small>".format( glyphTemplate.format( "remove", _T("Remove"), "altui-timeline-blacklist" ) );
 		var workflows = null;			// Create a DataSet (allows two way data-binding)
 		var groups = null;				// create a data set with groups
 		var groupsview = null;		// create a data view with groups
 		var items = null;
 		var itemsview = null;			// create a data view with items
+		var _blacklist = [];
 		var id = 0;
 		var filters = {
 			scenes: 	{ name:'Scenes' , bEnabled:true , update: updateScenes }, 
@@ -10576,7 +10578,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
      * @param {Number} percentage   For example 0.1 (zoom out) or -0.1 (zoom in)
      */
     function zoom (percentage) {
-				var timeline = $('#visualization').data('timeline');
+		var timeline = $('#visualization').data('timeline');
         var range = timeline.getWindow();
         var interval = range.end - range.start;
 
@@ -10598,13 +10600,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					// lastuntrip = lasttrip+5000
 			// var end = ( lastuntrip && (lastuntrip>lasttrip)) ? new Date(lastuntrip*1000) : null
 			if (lasttrip && ((bAddAllways==true) || (tripped=="1")) ) {
-				items.update({
-					id: 'DLT_{0}_{1}'.format(device.altuiid,lasttrip),
-					group:'security',	//security
-					start: new Date(lasttrip*1000),
-					// end:end,
-					content: '<span title="{2}">{0} (<a class="altui-goto-device" data-altuiid="{1}">{1}</a>)</span>'.format(device.name,device.altuiid,HTMLUtils.enhanceValue(lasttrip))
-				})
+				if (!is_blacklisted("DLT_"+device.altuiid)) {
+					items.update({
+						id: 'DLT_{0}_{1}'.format(device.altuiid,lasttrip),
+						group:'security',	//security
+						start: new Date(lasttrip*1000),
+						// end:end,
+						content: '<span title="{2}">{0} (<a class="altui-goto-device" data-altuiid="{1}">{1}</a>)</span>{3}'.format(device.name,device.altuiid,HTMLUtils.enhanceValue(lasttrip),removeGlyph)
+					})
+				}
 			}
 		}
 		
@@ -10624,13 +10628,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		function updateWorkflows() {
 				MultiBox.getWorkflowHistory( null, function(lines) {
-					$.each(lines.slice(1,100),function(i,line) {
-						items.update({
-							id: 'WFT_{0}_{1}'.format(line.altuiid,line.date.getTime()),
-							group:'workflows',	// workflow,
-							start: line.date,
-							content:'<span title="{2}">{0} (<a class="altui-goto-workflow" data-altuiid="{1}">{1}</a>)</span>'.format(line.firing_link,line.altuiid,HTMLUtils.enhanceValue(line.date))
-						})
+					$.each(lines.slice(-100),function(i,line) {
+						if (!is_blacklisted("WFT_"+line.altuiid)) {
+							items.update({
+								id: 'WFT_{0}_{1}'.format(line.altuiid,line.date.getTime()),
+								group:'workflows',	// workflow,
+								start: line.date,
+								content:'<span title="{2}">{0} (<a class="altui-goto-workflow" data-altuiid="{1}">{1}</a>)</span>{3}'.format(line.firing_link,line.altuiid,HTMLUtils.enhanceValue(line.date),removeGlyph)
+							})
+						}
 					});
 				})
 		}
@@ -10639,13 +10645,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			MultiBox.getWatchesHistory(function(data) {
 				$.each(data, function(idx,item) {
 					var device = MultiBox.getDeviceByAltuiID(item.altuiid)
-					items.update({
-						id: 'WLU_{0}_{1}'.format(item.altuiid,item.lastUpdate),
-						group:'watches',	//watch
-						start: new Date(item.lastUpdate*1000),
-						// end:end,
-						content: '<span title="{3}">{0}:{1}(<a class="altui-goto-device" data-altuiid="{2}">{2}</a>)</span>'.format(device.name,item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate))
-					})
+					if (!is_blacklisted("WLU_"+item.altuiid)) {
+						items.update({
+							id: 'WLU_{0}_{1}'.format(item.altuiid,item.lastUpdate),
+							group:'watches',	//watch
+							start: new Date(item.lastUpdate*1000),
+							// end:end,
+							content: '<span title="{3}">{0}:{1}(<a class="altui-goto-device" data-altuiid="{2}">{2}</a>)</span>{4}'.format(device.name,item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate),removeGlyph)
+						})
+					}
 				})
 			});
 		}
@@ -10654,30 +10662,33 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			MultiBox.getScenes(
 				function(idx,scene) {
 					if (scene.last_run != undefined) {
-						items.update({
-							id: 'SLR_'+scene.altuiid,
-							group:'scenes',	//scenes
-							start: new Date(scene.last_run*1000),
-							content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(scene.last_run))
-						})
+						if (!is_blacklisted('SLR_'+scene.altuiid))
+							items.update({
+								id: 'SLR_'+scene.altuiid,
+								group:'scenes',	//scenes
+								start: new Date(scene.last_run*1000),
+								content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>{3}'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(scene.last_run),removeGlyph)
+							})
 					}
 					var nextrun = _findSceneNextRun(scene);
 					if (nextrun>0) {
-						items.update({
-							id: 'SNR_'+scene.altuiid,
-							group:'scenes',	//scenes
-							start: new Date(nextrun*1000),
-							content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(nextrun))
-						})
+						if (!is_blacklisted('SNR_'+scene.altuiid))
+							items.update({
+								id: 'SNR_'+scene.altuiid,
+								group:'scenes',	//scenes
+								start: new Date(nextrun*1000),
+								content: '<span title="{2}">{0} (<a class="altui-goto-scene" data-altuiid="{1}">{1}</a>)</span>{3}'.format(scene.name,scene.altuiid,HTMLUtils.enhanceValue(nextrun),removeGlyph)
+							})
 					}
 					$.each(scene.triggers || [] , function(idx,trigger) {
 						if (trigger.last_run) {
-							items.update({
-								id: 'STLR_{0}_{1}'.format(scene.altuiid,idx),
-								group:'triggers',	//triggers
-								start: new Date(trigger.last_run*1000),
-								content: '<span title="{2}">{0}:{1} (<a class="altui-goto-scene" data-altuiid="{2}">{2}</a>)</span>'.format(scene.name,trigger.name||'',scene.altuiid,HTMLUtils.enhanceValue(trigger.last_run))
-							})							
+							if (!is_blacklisted('STLR_'+scene.altuiid))
+								items.update({
+									id: 'STLR_{0}_{1}'.format(scene.altuiid,idx),
+									group:'triggers',	//triggers
+									start: new Date(trigger.last_run*1000),
+									content: '<span title="{3}">{0}:{1} (<a class="altui-goto-scene" data-altuiid="{2}">{2}</a>)</span>{4}'.format(scene.name,trigger.name||'',scene.altuiid,HTMLUtils.enhanceValue(trigger.last_run),removeGlyph)
+								})							
 						}
 					});
 				}, 
@@ -10686,7 +10697,25 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				}
 			);
 		}
-			
+		
+		function is_blacklisted(id) {
+			return ($.inArray(id,_blacklist) != -1)
+		}
+		
+		function blacklist(id) {
+			var parts = id.split("_")
+			var ids = items.getIds( {  
+				filter: function (item) {
+					var itemparts = item.id.split("_")
+					return (itemparts[0] == parts[0]) && (itemparts[1] == parts[1]);
+				}
+			})
+			_blacklist.push(parts[0]+'_'+parts[1])
+			$.each(ids, function(idx,id) {
+				items.remove(id)
+			});
+		}
+		
 		function updateTimeline(groups,items) {
 			// Create a Timeline
 			var timeline = $('#visualization').data('timeline')
@@ -10785,7 +10814,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					$(this).toggleClass("active");
 					move(0); 
 				});
-				
+
 				$.each(filters, function(k,v) {
 					$("#altui-timeline-filter").append( '<option value="{0}" {2}>{1}</option>'.format( 
 						k,
@@ -10823,6 +10852,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		.off("click",".altui-goto-scene")
 		.off("click",".altui-goto-device")
 		.off("click",".altui-goto-workflow")
+		.off("click",".altui-timeline-blacklist")
 		.on("click",".altui-goto-scene",function (e) {
 			e.stopPropagation();
 			UIManager.pageSceneEdit( $(this).data("altuiid") )
@@ -10834,7 +10864,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		.on("click",".altui-goto-workflow",function(e) {
 			e.stopPropagation();
 			UIManager.pageWorkflow( $(this).data("altuiid") )
-		});
+		})
+		.on("click",".altui-timeline-blacklist",function() {
+			var that = $(this)
+			blacklist($(this).closest(".vis-item").data('id'))
+			// $.each([".altui-goto-scene",".altui-goto-device",".altui-goto-workflow"],function(i,cls) {
+				// var col = that.closest(".vis-item-content").find(cls)
+				// if (col.length>0) {
+					// blacklist(cls,col.data("altuiid"))
+				// }
+			// });
+		})
 	},
 	
 	pagePlugins: function ()
