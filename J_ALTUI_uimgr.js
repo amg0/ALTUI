@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1913 $";
+var ALTUI_revision = "$Revision: 1914 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2651,6 +2651,7 @@ var UIManager  = ( function( window, undefined ) {
 				cls:'altui-widget-variable', 
 				html: _toolHtml(infoGlyph,_T("Variable")),
 				property: _onPropertyVariable, 
+				onWidgetResize: _onResizeStub,
 				widgetdisplay: function(widget,bEdit)	{ 
 					var device = MultiBox.getDeviceByAltuiID(widget.properties.deviceid);
 					if (device==null)
