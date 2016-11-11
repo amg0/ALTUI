@@ -3511,12 +3511,21 @@ function fixVariableWatchesDeviceID( lul_device )
 				local parts = v2:split('#')
 				local deviceid = parts[3]
 				if (string.find(deviceid,"-") == nil) then
-					parts[3] = "0-"..deviceid
+					deviceid = "0-"..deviceid
+					parts[3] = deviceid
+				end
+				if (string.starts(deviceid,"0-") ==true) then
+					-- make sure the device id exists
+					local veraid = deviceid:split("-")[2]
+					if ( luup.devices[ tonumber(veraid) ] == nil ) then
+						warning(string.format("Inexistant device %s in watch %s. Deleting watch",veraid,v2))
+						parts={}
+					end
 				end
 				watches[k2] = table.concat(parts,"#")
 			end
 		end
-		luup.variable_set(ALTUI_SERVICE, k, table.concat(watches,";"), lul_device)
+		luup.variable_set(ALTUI_SERVICE, k, table.concat(watches,";"):gsub("^;", ""):gsub(";;", ";"), lul_device)
 	end
 end
 
