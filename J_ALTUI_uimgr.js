@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1914 $";
+var ALTUI_revision = "$Revision: 1917 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -11723,7 +11723,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{label:_T("Free Space"), command:'df -h' },
 			{label:_T("Plugin Files"), command:'ls -l /etc/cmh-ludl' },
 			{label:_T("Log Sizes"), command:'ls -l /var/log/cmh' },
-			{label:_T("Errors Warnings"), command:"cat /var/log/cmh/LuaUPnP.log | grep 'warning:\|error:'" },
+			{label:_T("Errors Warnings"), command:"cat /var/log/cmh/LuaUPnP.log | grep -i -E 'warning\|error\|failed'" },
 			{label:_T("Search Logs"), command:"cat /var/log/cmh/LuaUPnP.log | grep '{0}'" },
 			{label:_T("Tail Logs"), command:"tail -n 50 /var/log/cmh/LuaUPnP.log" },
 			{label:_T("Find Json"), command:"find / -name *json*.lua" }

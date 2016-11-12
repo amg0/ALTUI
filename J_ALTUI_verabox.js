@@ -166,7 +166,7 @@ var UserDataHelper = (function(user_data) {
 				});
 				return bfound;
 			}
-			if (dt.Services) {
+			if (dt && dt.Services) {
 				var todo = dt.Services.length;
 				if (todo==0)
 					cbfunc(dt.Services);
