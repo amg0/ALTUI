@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.71"
+local version = "v1.72"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -1788,6 +1788,8 @@ local htmlLayout = [[
 			 g_FirstUserData : @firstuserdata@,
 			 g_jspath : '',
 			 g_CustomTheme : '@ThemeCSS@',
+			 g_CustomBackground : '@BackgroundImg@',
+			 g_CustomImagePath : '@ImagePath@',
 			 g_Options : '@ServerOptions@',
 			 g_CtrlOptions : '@ctrloptions@',
 			 g_DeviceTypes :  JSON.parse('@devicetypes@'),
@@ -2202,6 +2204,8 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				-- variables["custompages"] = "["..table.concat(result_tbl, ",").."]"
 				-- variables["workflows"] = json.encode(Workflows)
 				variables["ThemeCSS"] = (luup.variable_get(ALTUI_SERVICE, "ThemeCSS", deviceID) or ""):trim()
+				variables["BackgroundImg"] = (luup.variable_get(ALTUI_SERVICE, "BackgroundImg", deviceID) or ""):trim()
+				variables["ImagePath"] = (luup.variable_get(ALTUI_SERVICE, "ImagePath", deviceID) or ""):trim()
 				variables["ServerOptions"] = serverOptions
 				variables["style"] = htmlStyle
 				variables["mydeviceid"] = deviceID
@@ -3757,6 +3761,8 @@ function startupDeferred(lul_device)
 	local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://vera-ui.strongcubedfitness.com/Veralogin.php")
 	local localurl = getSetVariableIfEmpty(ALTUI_SERVICE,"LocalHome", lul_device, "")
 	local css = getSetVariable(ALTUI_SERVICE,"ThemeCSS", lul_device, "")
+	local imgpath = getSetVariable(ALTUI_SERVICE,"ImagePath", lul_device, "")
+	local background = getSetVariable(ALTUI_SERVICE,"BackgroundImg", lul_device, "")
 	local extraController= getSetVariable(ALTUI_SERVICE, "ExtraController", lul_device, "")
 	local serverOptions= getSetVariable(ALTUI_SERVICE, "ServerOptions", lul_device, "")	
 	local localcdn = getSetVariable(ALTUI_SERVICE, "LocalCDN", lul_device, "")

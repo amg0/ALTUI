@@ -107,6 +107,8 @@ function altui_Settings(deviceID) {
 	var ipaddr = findDeviceIP(deviceID);
 	var config = get_device_state(deviceID,  altui_Svs, 'PluginConfig',1);
 	var themecss = get_device_state(deviceID,  altui_Svs, 'ThemeCSS',1);
+	var background = get_device_state(deviceID,  altui_Svs, 'BackgroundImg',1);
+	var imgpath = get_device_state(deviceID,  altui_Svs, 'ImagePath',1);
 	var localhome = get_device_state(deviceID,  altui_Svs, 'LocalHome',1);
 	var localcdn = get_device_state(deviceID,  altui_Svs, 'LocalCDN',1);
 	var localbootstrap = get_device_state(deviceID,  altui_Svs, 'LocalBootstrap',1);
@@ -133,6 +135,8 @@ function altui_Settings(deviceID) {
 	var htmlRemote= '<button class="btn btn-default btn-sm" id="altui-open-remote">Remote</button>';
 	var htmlConfig = '<textarea id="altui-config" rows="6" cols="70"></textarea>';
 	var htmlTheme = '<input id="altui-theme" class="altui-ui-input form-control" placeholder="Url to download a theme css"></input>';
+	var htmlBackground = '<input id="altui-background-js" class="altui-ui-input form-control" placeholder="Url to download a background image"></input>';
+	var htmlImagePath = '<input id="altui-imgpath" class="altui-ui-input form-control" placeholder="Relative Url to MyHome Images"></input>';
 	var htmlHome = '<input id="altui-home" class="altui-ui-input form-control" placeholder="options, see below"></input>';
 	var htmlCDN = '<input id="altui-cdn" class="altui-ui-input form-control" placeholder="optional localcdn pathname, uses internet otherwise"></input>';
 	var htmlBootstrap = '<input id="altui-localbootstrap" class="altui-ui-input form-control" placeholder="optional local bootstrap relative url, use internet otherwise"></input>';
@@ -145,12 +149,14 @@ function altui_Settings(deviceID) {
 		'<div class="pane" id="pane"> '+ 
 		'<table class="altui_table" id="altui_table">'+
 		'<tr><td>Open</td><td> <div class="btn-group">'+htmlOpenLocal+htmlRemote+'</div> </td></tr>' +
-		'<tr><td>Theme</td><td> '+htmlTheme+' </td></tr>' +
+		'<tr><td>Extra Controllers</td><td> '+htmlCTRL+' </td></tr>' +
 		'<tr><td>Home Page Url Parameters</td><td> '+htmlHome+' </td></tr>' +
 		'<tr><td>url options</td><td><ul><li><b>home</b>=(pageHome , pageRooms , pageDevices , pageScenes , pageSceneEdit , pagePlugins , pageUsePages , pageEditPages , pageCredits , pageLuaTest , pageLuaStart , pageOptions , pageEditor , pageZwave , pageLocalization , pagePower , pageChildren , pageRoutes , pageQuality , pageTblDevices , pageOsCommand)</li><li><b>lang</b>=(en , fr , it)</li><li><b>Layout</b>=lean</li><li><b>nPage</b>=nnn</li></ul></td></tr>' +
 		'<tr><td>Local CDN ?</td><td> '+htmlCDN+' </td></tr>' +
+		'<tr><td>MyHome Image Path</td><td> '+htmlImagePath+' </td></tr>' +		
+		'<tr><td>Background Image</td><td> '+htmlBackground+' </td></tr>' +
+		'<tr><td>Theme</td><td> '+htmlTheme+' </td></tr>' +
 		'<tr><td>Local Bootstrap ?</td><td> '+htmlBootstrap+' </td></tr>' +
-		'<tr><td>Extra Controllers</td><td> '+htmlCTRL+' </td></tr>' +
 		'<tr><td>Config</td><td> '+htmlConfig+' </td></tr>' +
 		'<tr><td>Actions</td><td> '+htmlViewJson+htmlSetConfig+htmlResetConfig+' </td></tr>' +
 		'</table>'+
@@ -159,6 +165,8 @@ function altui_Settings(deviceID) {
 	//html = html + '<button id="button_save" type="button">Save</button>'
 	set_panel_html(html);
 	jQuery( "#altui-theme" ).val(themecss);
+	jQuery( "#altui-background-js" ).val(background);	
+	jQuery( "#altui-imgpath" ).val(imgpath);	
 	jQuery( "#altui-home" ).val(localhome);
 	jQuery( "#altui-cdn" ).val(localcdn);
 	jQuery( "#altui-localbootstrap" ).val(localbootstrap);
@@ -170,6 +178,14 @@ function altui_Settings(deviceID) {
 	jQuery( "#altui-theme" ).text( themecss ).change( function() {
 		var themecss = jQuery(this).val()+' ';
 		saveVar(deviceID,  altui_Svs, "ThemeCSS", themecss, true);
+	});
+	jQuery( "#altui-background-js" ).text( background ).change( function() {
+		var background = jQuery(this).val()+' ';
+		saveVar(deviceID,  altui_Svs, "BackgroundImg", background, true);
+	});
+	jQuery( "#altui-imgpath" ).text( imgpath ).change( function() {
+		var imgpath = jQuery(this).val()+' ';
+		saveVar(deviceID,  altui_Svs, "ImagePath", imgpath, true);
 	});
 	jQuery( "#altui-home" ).change( function() {
 		var home = jQuery(this).val()+' ';

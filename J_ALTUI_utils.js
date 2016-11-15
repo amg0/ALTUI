@@ -1420,6 +1420,34 @@ if (typeof String.prototype.toHHMMSS != 'function') {
 	}
 };
 
+if (typeof String.prototype.withoutAccent != 'function') {
+	String.prototype.withoutAccent = ( function() {
+		var diacritics = [
+			{char: 'A', base: /[\300-\306]/g},
+			{char: 'a', base: /[\340-\346]/g},
+			{char: 'E', base: /[\310-\313]/g},
+			{char: 'e', base: /[\350-\353]/g},
+			{char: 'I', base: /[\314-\317]/g},
+			{char: 'i', base: /[\354-\357]/g},
+			{char: 'O', base: /[\322-\330]/g},
+			{char: 'o', base: /[\362-\370]/g},
+			{char: 'U', base: /[\331-\334]/g},
+			{char: 'u', base: /[\371-\374]/g},
+			{char: 'N', base: /[\321]/g},
+			{char: 'n', base: /[\361]/g},
+			{char: 'C', base: /[\307]/g},
+			{char: 'c', base: /[\347]/g}
+		];
+    return function() {
+				var content = this;
+				diacritics.forEach(function(letter){
+					content = content.replace(letter.base, letter.char);
+				});
+				return content
+    }
+	})();
+}
+
 if (typeof String.prototype.escapeQuotes != 'function') {
   // see below for better implementation!
   String.prototype.escapeQuotes = function (){
@@ -1655,7 +1683,7 @@ var HTMLUtils = (function() {
 					break;
 				case 'button':
 				default:
-					toolbarHtml+="  <button type='button' class='btn btn-default'  {1} id='{0}' >".format(tool.id,collapsecss);
+					toolbarHtml+="  <button type='button' class='btn btn-default {3}' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
 					var glyph = "<span class='glyphicon {0}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}'></span>".format(tool.glyph,tool.label || '');
 					toolbarHtml += glyph;
 					if (tool.label)

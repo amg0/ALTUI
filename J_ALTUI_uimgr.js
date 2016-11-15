@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1917 $";
+var ALTUI_revision = "$Revision: 1920 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -510,7 +510,44 @@ var styles ="						\
 	.blocklyTreeLabel {			\
 		color: black;			\
 	}							\
-	.altui-theme-label{			\
+	.altui-myhome-panel { \
+		background-color:  transparent;	\
+		border-color: transparent;	\
+	} \
+	.altui-myhome-room {			\
+		padding: 0px;	\
+	}	\
+	.altui-myhome-roomtext {			\
+		font-size: 21px;		\
+		font-weight: bold;	\
+		position: absolute;	\
+		top:10px;			\
+		left:20px;			\
+	}	\
+	.altui-myhome-room-toolbar {		\
+		position:absolute;	\
+		bottom: 20px;	\
+		right: 15px;	\
+	}	\
+	.altui-myhome-room-toolbar button {	\
+		background-color: rgba(255,255,255,0.5);	\
+	}	\
+	.altui-myhome-transparent {	\
+		opacity: 0.6;	\
+	}		\
+	.altui-myhome-roomimg:hover {			\
+		opacity: 1;	\
+	}	\
+	.altui-myhome-roomimg:not(:hover) {			\
+		opacity: 0.6;	\
+	}	\
+	.altui-myhome-roomimg {			\
+		height:200px;	\
+		width:100%;		\
+		background-size: 100% 100%; \
+		background-repeat: no-repeat;	\
+	}	\
+	.altui-theme-label {			\
 		font-size: 12px;		\
 	}							\
 	.altui-theme-thumbnail{		\
@@ -523,7 +560,7 @@ var styles ="						\
 		border-color: green;		\
 	}							\
 	#altui-background {			\
-		position:fixed;			\
+		position:absolute;			\
 		top:0;					\
 		left:0;					\
 		width:100%;				\
@@ -676,6 +713,9 @@ var styles ="						\
 		font-size:12px;					\
 		font-family:Arial;				\
 	}									\
+	body.withBackground .altui-device , body.withBackground .altui-scene , body.withBackground .altui-workflow , body.withBackground .altui-pluginbox-panel , body.withBackground footer p {		\
+		background-color: rgba(255,255,255,0.5)		\
+	}	\
 	.altui-device-title {		\
 		overflow: hidden;		\
 		height: 28px;			\
@@ -7043,6 +7083,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{ id:36, title:_T('App Store'), onclick:'UIManager.pageAppStore()', parent:0 },
 			{ id:37, title:_T('Publish App'), onclick:'UIManager.pageAppPublish()', parent:36 },
 			{ id:38, title:_T('Timeline'), onclick:'UIManager.pageTimeline()', parent:0 },
+			{ id:39, title:_T('My Home'), onclick:'UIManager.pageMyHome()', parent:0 },
 		];
 
 		function _parentsOf(child) {
@@ -7080,6 +7121,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		body+="	<div class='altui-layout row'>";
 		body+="		<div class='col-xs-12 altui-mainpanel'>";
 		body+="		</div>";
+		body+="	</div>";
+		return body;
+	},
+	fullColumnLayout: function(title)
+	{
+		var body="";
+		body+="	<div class='altui-layout row'>";
 		body+="	</div>";
 		return body;
 	},
@@ -7566,6 +7614,106 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// this.src = defaultIconSrc
 		// $(this).attr('src',defaultIconSrc);
 		$("div.altui-device[data-altuiid="+altuiid+"] img").attr('src',defaultIconSrc);
+	},
+	
+	pageMyHome: function ( )
+	{
+		//{1} : 192.168.1.16/localcdn
+		var template = 	"<div class='col-xs-12 col-sm-6 col-md-4 col-lg-3'>"+
+							"<div class='altui-myhome-panel panel panel-default'>"+
+								"<div class='altui-myhome-room panel-body' data-altuiid='${altuiid}'>"+
+										"<div class='altui-myhome-roomimg altui-myhome-transparent' style='background-image: url({1}/${file}.jpg),url(data:image/png;base64,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)'></div>"+
+										"{0}"+
+								"</div>"+
+							"</div>"+
+						"</div>";
+						
+		var room_toolbar = [
+			{cls:"altui-myhome-scene", glyph:"glyphicon-play", title:_T("Scene")},
+			{cls:"altui-myhome-onoffdevice", glyph:"glyphicon-off", title:_T("Device")},
+			{cls:"altui-myhome-sensor", glyph:"glyphicon-flash", title:_T("Sensors")},
+		];
+		var scene_toolbar = [
+			{cls:"altui-myhome-runscene", glyph:"glyphicon-play", title:_T("Run")},
+		];
+		var model = {
+			room:  { data:null, overlay:"<div class='altui-myhome-roomtext' title='${altuiid}'>${name}</div>"+HTMLUtils.drawToolbar( 'altui-myhome-room-toolbar', room_toolbar ) },
+			scene: { data:null, overlay:"<div class='altui-myhome-roomtext' title='${altuiid}'>${name}</div>"+HTMLUtils.drawToolbar( 'altui-myhome-room-toolbar', scene_toolbar ) },
+		};
+		
+		UIManager.clearPage(_T('My Home'),_T('My Home'),UIManager.fullColumnLayout);
+		$(".altui-layout").append("<div class='altui-mainpanel'></div>")
+		
+		function _overlayRoomTmpl() {
+			return "<div class='altui-myhome-roomtext'>${name}</div>"
+		}
+		
+		function _drawBoxes( model, data) {
+			$(".altui-mainpanel").html("")
+			// prepare the template
+			var tmpl = _.template( template.format(model.overlay, g_ALTUI.g_CustomImagePath) )
+			
+			// display the items
+			var html = "";
+			$.each(data, function(idx,item) {
+				html += tmpl(item)
+			});
+			$(".altui-mainpanel").append( html );
+		}
+		
+		function _initInteractivity() {
+			// interactivity
+			$(".altui-mainpanel")
+				.off('mouseenter',".altui-myhome-room")
+				.on('mouseenter',".altui-myhome-room",function() {
+					$(this).find(".altui-myhome-roomimg").removeClass("altui-myhome-transparent")
+				})
+				.off('mouseleave',".altui-myhome-room")
+				.on('mouseleave',".altui-myhome-room",function() {
+					$(this).find(".altui-myhome-roomimg").addClass("altui-myhome-transparent")
+				});
+				
+			$(".altui-mainpanel")
+				.off('click', ".altui-myhome-scene")
+				.on('click', ".altui-myhome-scene", function() {
+				var room_altuiid = $(this).closest(".altui-myhome-room").data("altuiid")
+				var room = MultiBox.getRoomByAltuiID( room_altuiid )
+				var scenes = $.map( $.grep( MultiBox.getScenesSync() , function(scene) {
+										return (scene.room == room.id)
+									}),
+									function(item) {
+										return {
+											name : item.name,
+											altuiid : item.altuiid,
+											file : 'S_'+item.altuiid
+										}
+									} );
+				_drawBoxes(model.scene, scenes)
+			});
+			
+			$(".altui-mainpanel")
+				.off('click', ".altui-myhome-runscene")
+				.on('click', ".altui-myhome-runscene", function() {
+				var scene_altuiid = $(this).closest(".altui-myhome-room").data("altuiid")
+				MultiBox.runSceneByAltuiID(scene_altuiid)
+			})
+		}
+
+		var todisplay=[]
+		MultiBox.getRooms(
+			function(idx,item) {
+				todisplay.push({
+					altuiid: item.altuiid,
+					name: item.name,
+					file: 'R_'+item.name.withoutAccent().replace(' ','_')
+				})
+			},
+			null,
+			function(list) {
+				_drawBoxes(model.room, todisplay)
+				_initInteractivity()
+			}
+		)
 	},
 	
 	pageDevices : function ( filter )
@@ -10082,6 +10230,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageAppStore: function(params)
 	{
+		var defaultPlugin = {
+			id:0,
+			Title:'',
+			Description:'',
+			Icon:'',
+			Versions:{},
+			Repositories:[],
+			Devices:[],
+		};
 		var nMaxPerPage = 20;
 		var nPage = 1;
 		var arr = ["abc","def","ghi","jkl","mno","pqr","stu","vwx","yz "];
@@ -10169,7 +10326,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "  <div class='carousel-inner'>"
 			for (i=0; i<nentries ; i++) {
 				var index = (nentries <=nMax) ? i : getRandomInt(0,_plugins_data.plugins.length);
-				var plugin = _plugins_data.plugins[index.toString()];
+				var plugin = $.extend( {}, defaultPlugin, _plugins_data.plugins[index.toString()] );
 					html += "    <div class='item {0}'>".format( (bFirst) ? 'active':'')
 					html += "      <div class='altui-features-box'></div>"
 					html += "      <div class='carousel-caption'>"
@@ -10245,10 +10402,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var firstversionid = arr[0].id;
 			var html = "";
 				html += "<div id='{0}' class='col-xs-6 col-sm-4 col-md-3 col-lg-2 altui-pluginbox' data-pluginid='{0}'>".format(plugin.id)
-					html += "<div class='panel panel-default'>"
+					html += "<div class='panel panel-default altui-pluginbox-panel'>"
 						html += "<div class='panel-body'>"
 							html += "<div class='altui-plugin-version pull-right'>{0}</div>".format(_drawVersionSelect(plugin,arr))
-							html += ( plugin.Icon.startsWith('https') ? "<img {1} class='altui-plugin-icon' src='{0}'></img>"  : "<img {1} class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon,"onerror='this.src=defaultIconSrc'");
+							html += ( plugin.Icon && plugin.Icon.startsWith('https') ? "<img {1} class='altui-plugin-icon' src='{0}'></img>"  : "<img {1} class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon,"onerror='this.src=defaultIconSrc'");
 							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title.htmlEncode())
 							// if ($.isArray(plugin.Repository) == false) {
 								// plugin.Repository = [plugin.Repository]
@@ -10932,6 +11089,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		var pluginTemplate = "<tr data-altuiid='{9}'><td>{6}</td><td>{0}<div><small>{9}</small></div></td><td>{1}.{2}</td><td>{10}</td><td>{7}</td><td>{3} {4}</td><td>{5}</td><td>{8}</td></tr>";
 		function drawPlugin(idx, plugin) {
+			plugin = $.extend( {}, defaultPlugin, plugin );
 			var iconTemplate = ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
 			var filebutton = _getFileButton(plugin);
 			var helpbutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-question-sign',  glyphTemplate.format("question-sign","Help",""), "Help");
@@ -14446,6 +14604,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.on ("click touchend", ".imgLogo", UIManager.pageHome )
 				// .on ("click", ".altui-savechanges-button", MultiBox.saveChangeCaches )
 				.on ("click", "#menu_room", UIManager.pageRooms )
+				.on ("click", "#menu_myhome", UIManager.pageMyHome )
 				.on ("click", "#menu_device", UIManager.pageDevices )
 				.on ("click", "#menu_scene", UIManager.pageScenes )
 				.on ("click", "#altui-scene-triggers", UIManager.pageTriggers )
@@ -14681,6 +14840,7 @@ $(function() {
 		body+="	<div id='navbar' class='navbar-collapse collapse'>";
 		body+="	  <ul class='nav navbar-nav'>";
 		body+="		<li class='active'><div class='imgLogo'></div></li>";
+		body+="		<li><a id='menu_myhome' href='#'  >"+_T("My Home")+"</a></li>";
 		body+="		<li><a id='menu_device' href='#'  >"+_T("Devices")+"</a></li>";
 		body+="		<li><a id='menu_scene' href='#'  >"+_T("Scenes")+"</a></li>";
 		body+="		<li class='dropdown'>";
@@ -14753,6 +14913,17 @@ $(function() {
 		$("#wrap").prepend(body);
 						
 		ALTUI_Templates = ALTUI_Templates_Factory();
+		if (g_ALTUI.g_CustomBackground.length>0) {
+			$("div#altui-background").css({
+				'background-image':'url("{0}")'.format(g_ALTUI.g_CustomBackground),
+				// 'background-color': 'lightblue',
+				'background-position': 'left top',
+				'background-size': 'cover',
+				'background-repeat': 'no-repeat',
+				'background-attachment': 'fixed',
+			})
+			$("body").addClass('withBackground')
+		}
 		
 		UIManager.initEngine(styles.format(window.location.hostname), g_ALTUI.g_DeviceTypes, g_ALTUI.g_CustomTheme, g_ALTUI.g_Options, function() {
 			MultiBox.initEngine(g_ALTUI.g_ExtraController,g_ALTUI.g_FirstUserData,g_ALTUI.g_DeviceTypes.info["controllerType"]);
