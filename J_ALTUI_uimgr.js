@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1928 $";
+var ALTUI_revision = "$Revision: 1929 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4445,6 +4445,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					max: gageCfg.max,
 					relativeGaugeSize: true,
 					formatNumber: true,
+					minLabelMinFontSize:17,
+					maxLabelMinFontSize:17,
 					decimals:1,
 					valueFontColor: valueFontColor
 				  });
@@ -6372,6 +6374,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					max: gageCfg.max,
 					relativeGaugeSize: true,
 					formatNumber: true,
+					minLabelMinFontSize:17,
+					maxLabelMinFontSize:17,
 					decimals:1,
 					valueFontColor: valueFontColor
 					});
@@ -6397,6 +6401,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					</div>\
 				</div>".format(model.title);
 			}
+			if (ALTUI_registered!=true) {
+				data = data.slice(0,5)
+				$(".altui-mainpanel").append( "<div class='col-xs-12'>Note: MyHome page is limited to 5 items per page for non registered users</div>"  )
+			}
+			
 			$.each(data, function(idx,item) {
 				html += tmpl(item)
 			});
@@ -6411,6 +6420,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					}
 				}				)
 			window.scrollTo(0, 0);
+			// $(".altui-myhome-transparent:first").removeClass("altui-myhome-transparent")
 		}
 		
 		function _initInteractivity() {
