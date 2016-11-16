@@ -444,7 +444,8 @@ Localization.init( {
 	"Show OS Statistics":"Show OS Statistics",
 	"TopStats:Show OS statistics in the footer":"TopStats:Show OS statistics in the footer",
 	"Next Page":"Next Page","Prev Page":"Prev Page",
-	"Zoom In":"Zoom In","Zoom Out":"Zoom Out","Move Left":"Move Left","Move Right":"Move Right","Track Now":"Track Now"
+	"Zoom In":"Zoom In","Zoom Out":"Zoom Out","Move Left":"Move Left","Move Right":"Move Right","Track Now":"Track Now",
+	"My Home":"My Home"
 	});
 
 // override rules with localized version

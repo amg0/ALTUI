@@ -453,7 +453,8 @@ Localization.init( {
 	"TopStats:Show OS statistics in the footer":"TopStats:Montre les statistiques OS en pied de page",
 	"Errors Warnings":"Errors Warnings",
 	"Next Page":"Page Suivante","Prev Page":"Page Précédente",
-	"Zoom In":"Zoom +","Zoom Out":"Zoom -","Move Left":"A Gauche","Move Right":"A Droite","Track Now":"Suivre"
+	"Zoom In":"Zoom +","Zoom Out":"Zoom -","Move Left":"A Gauche","Move Right":"A Droite","Track Now":"Suivre",
+	"My Home":"Ma Maison"
 });
 
 // override rules with localized version
