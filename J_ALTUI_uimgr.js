@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1930 $";
+var ALTUI_revision = "$Revision: 1933 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -557,7 +557,7 @@ var styles ="						\
 	}	\
 	.altui-myhome-device-content, .altui-myhome-scene-content {	\
 		cursor: pointer;	\
-		font-size: 40px;	\
+		font-size: 30px;	\
 		text-align: center;	\
 		height: 100px;			\
 		width: 100px;			\
@@ -4174,7 +4174,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html += "<div class='{1}' data-altuiid='{0}'>".format(device.altuiid,cls);
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' )); 
 		if (isNaN(watts)==false) 
-			html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format(watts);
+			html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
 		switch(device.device_type) {
 			case "urn:schemas-micasaverde-com:device:Sonos:1":
 				var src = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:AVTransport', 'CurrentAlbumArt');
@@ -4230,6 +4230,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				break;
 			case "urn:schemas-micasaverde-com:device:PowerMeter:1":
 				var watts = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' );  
+				watts = Math.round(parseFloat(watts)*10)/10
 				html += "<span>{0}</span> <span class='altui-favorites-smalltext'>W</span>".format(watts || "-");				
 				break;
 			default:
@@ -6337,7 +6338,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var room_altuiid = $(this).data("altuiid") || $(this).closest(".altui-myhome-room").data("altuiid")
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
 			var devices = $.map( $.grep(MultiBox.getDevicesSync(),function(device) {
-					return (device.room == room.id )
+					return (device.room == room.id ) && (device.invisible != true )
 				}),
 				function(device) {
 					return {

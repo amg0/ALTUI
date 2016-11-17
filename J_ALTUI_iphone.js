@@ -176,7 +176,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 
 	// return the html string inside the .panel-body of the .altui-device#id panel
 	function _drawIPhone( device) {
-		var dist = parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' )); 
+		var dist = Math.round( parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' ) * 100) )/100; 
 		var unit = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Unit' ); 
 		var mute = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Muted' ); 
 		
@@ -191,7 +191,15 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		
 		return html;
 	};
-	
+	function _drawIPhoneFavorite( device) {
+		var html = UIManager.deviceIcon(device)
+					.replace('altui-device-icon','altui-device-icon altui-favorite-icon')
+					.replace('pull-left','')
+		var dist = Math.round( parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' ) * 100) )/100; 
+		var unit = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Unit' ); 
+		html+=("<div class='altui-iphone' >{0} {1}</div>".format(dist,unit))
+		return html;
+	};
 	function _drawCanalplus( device) {
 		var channel = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:cplus1', 'CurrentChannel' ).split(','); 
 		var present = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:cplus1', 'Present' );
@@ -251,6 +259,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	//---------------------------------------------------------
 	getStyle 	: _getStyle,
 	drawIPhone 	: _drawIPhone,
+	drawIPhoneFavorite : _drawIPhoneFavorite,
 	drawIPX		: _drawIPX,
 	drawKSENIA	: _drawKSENIA,
 	drawRAZB	: _drawRAZB,

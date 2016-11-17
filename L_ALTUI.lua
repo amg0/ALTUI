@@ -2814,6 +2814,7 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_iphone.js",
 		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawIPhone",
 		["StyleFunc"]="ALTUI_IPhoneLocator.getStyle",
+		["FavoriteFunc"]="ALTUI_IPhoneLocator.drawIPhoneFavorite",
 		-- ["ControlPanelFunc"]="ALTUI_IPhoneLocator.drawControlPanel",
 	}
 	tbl["urn:schemas-upnp-org:device:IPX800:1"]= {
