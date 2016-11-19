@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1936 $";
+var ALTUI_revision = "$Revision: 1937 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6327,7 +6327,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
 			// var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
 			var rname = room.name
-			var scenes = $.map( $.grep( MultiBox.getScenesSync() , function(scene) {
+			var scenes = $.map( $.grep( MultiBox.getScenesSync().sort(altuiSortByName) , function(scene) {
 									var scenecontroller = MultiBox.controllerOf(scene.altuiid).controller;
 									return (rname == _findRoomNameOf(scene))
 								}),
@@ -6349,7 +6349,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
 			var rname = room.name
 			// var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
-			var devices = $.map( $.grep(MultiBox.getDevicesSync(),function(device) {
+			var devices = $.map( $.grep(MultiBox.getDevicesSync().sort(altuiSortByName),function(device) {
 					var devicecontroller = MultiBox.controllerOf(device.altuiid).controller;
 					return (rname == _findRoomNameOf(device)) && (device.invisible != true )
 				}),
@@ -6473,19 +6473,26 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		})
 		
 		var todisplay=[]
+		var rooms={}
 		MultiBox.getRooms(
-			function(idx,item) {
-				todisplay.push({
-					altuiid: item.altuiid,
-					name: item.name,
-					file: 'R_'+item.altuiid //item.name.withoutAccent().replace(' ','_')
-				})
-			},
+			null,
 			null,
 			function(list) {
-				pagemodel.room.title="";
-				_drawBoxes(pagemodel.room, todisplay)
-				_initInteractivity()
+				if (list) {
+					$.each(list.sort(altuiSortByName), function(idx,item) {
+						if (rooms[item.name]==undefined) {
+							rooms[item.name]=item.altuiid
+							todisplay.push({
+								altuiid: item.altuiid,
+								name: item.name,
+								file: 'R_'+item.altuiid //item.name.withoutAccent().replace(' ','_')
+							})
+						}
+					})
+					pagemodel.room.title="";
+					_drawBoxes(pagemodel.room, todisplay)
+					_initInteractivity()
+				}
 			}
 		)
 		
