@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1933 $";
+var ALTUI_revision = "$Revision: 1935 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6318,8 +6318,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			e.stopPropagation();
 			var room_altuiid = $(this).data("altuiid") || $(this).closest(".altui-myhome-room").data("altuiid")
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
+			var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
 			var scenes = $.map( $.grep( MultiBox.getScenesSync() , function(scene) {
-									return (scene.room == room.id)
+									var scenecontroller = MultiBox.controllerOf(scene.altuiid).controller;
+									return (scenecontroller==rcontroller) && (scene.room == room.id)
 								}),
 								function(item) {
 									return {
@@ -6337,8 +6339,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			e.stopPropagation();
 			var room_altuiid = $(this).data("altuiid") || $(this).closest(".altui-myhome-room").data("altuiid")
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
+			var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
 			var devices = $.map( $.grep(MultiBox.getDevicesSync(),function(device) {
-					return (device.room == room.id ) && (device.invisible != true )
+					var devicecontroller = MultiBox.controllerOf(device.altuiid).controller;
+					return (devicecontroller==rcontroller) && (device.room == room.id ) && (device.invisible != true )
 				}),
 				function(device) {
 					return {
@@ -9128,7 +9132,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var html = "<select class='input-sm form-control altui-version-selector'>"
 			// var arr = _orderVersions(pluginapp);
 			$.each(arr, function(key,version) {
-					html += "<option value='{0}'>{0}</option>".format(version.label)
+					html += "<option value='{0}'>{1}</option>".format(version.label,version.label.substring(0,15))
 				})
 			html +="</select>"
 			return html;
