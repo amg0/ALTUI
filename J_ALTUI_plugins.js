@@ -1160,7 +1160,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		for (var line=0; line<2 ; line++) {
 			html += "<div class='row'>";
 			for (var col=0; col<4; col ++) {
-				var name = names[btnid] ? names[btnid] : ("Btn_"+btnid);
+				var name = names[btnid] ? names[btnid] : ("Btn_"+(btnid+1));
 				var status = parseInt(MultiBox.getStatus(device,"urn:dcineco-com:serviceId:MSwitch1","Status"+(btnid+1)));
 
 				html += "<div class='col-xs-3'>";
