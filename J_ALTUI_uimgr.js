@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1935 $";
+var ALTUI_revision = "$Revision: 1936 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6314,14 +6314,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return "<div class='altui-myhome-roomtext'>${name}</div>"
 		}
 		
+		function  _findRoomNameOf(obj) {
+			var fullid = MultiBox.controllerOf(obj.altuiid)
+			var roomtofind_altuiid = fullid.controller+"-"+obj.room;
+			var room = MultiBox.getRoomByAltuiID(roomtofind_altuiid)
+			return (room && room.name) ? room.name : null
+		};
+		
 		function _onclickSceneBtn(e) {
 			e.stopPropagation();
 			var room_altuiid = $(this).data("altuiid") || $(this).closest(".altui-myhome-room").data("altuiid")
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
-			var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
+			// var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
+			var rname = room.name
 			var scenes = $.map( $.grep( MultiBox.getScenesSync() , function(scene) {
 									var scenecontroller = MultiBox.controllerOf(scene.altuiid).controller;
-									return (scenecontroller==rcontroller) && (scene.room == room.id)
+									return (rname == _findRoomNameOf(scene))
 								}),
 								function(item) {
 									return {
@@ -6339,10 +6347,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			e.stopPropagation();
 			var room_altuiid = $(this).data("altuiid") || $(this).closest(".altui-myhome-room").data("altuiid")
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
-			var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
+			var rname = room.name
+			// var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
 			var devices = $.map( $.grep(MultiBox.getDevicesSync(),function(device) {
 					var devicecontroller = MultiBox.controllerOf(device.altuiid).controller;
-					return (devicecontroller==rcontroller) && (device.room == room.id ) && (device.invisible != true )
+					return (rname == _findRoomNameOf(device)) && (device.invisible != true )
 				}),
 				function(device) {
 					return {
