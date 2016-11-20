@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1941 $";
+var ALTUI_revision = "$Revision: 1942 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4749,7 +4749,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	var startpos = null;
 	var _widgetOnCanvasResizableOptions = function(tool) {
 		return {
-			aspectRatio: tool.aspectRatio ||false,		// no aspect ratio by default
+			aspectRatio: tool.aspectRatio || false,		// no aspect ratio by default
 			grid: [ 5,5 ],
 			containment: "parent",
 			// resize: function( event, ui ) {
@@ -4875,10 +4875,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// buttons
 		$('div#dialogModal form').off('submit');
 		$('div#dialogModal form').on( 'submit', function() {
-			real_widget.properties.url = $('#altui-widget-imgsource').val();
+			var newurl = $('#altui-widget-imgsource').val();
+			if (newurl != real_widget.properties.url) {
+				real_widget.properties.url = $('#altui-widget-imgsource').val();
+				_showSavePageNeeded(true);
+				var obj = $( _getWidgetSelector(page,real_widget) )
+				obj.resizable( "option", "aspectRatio", false );
+				obj.css( { width:'auto', height:'auto' } );
+				obj.find("img").attr("src",real_widget.properties.url);
+				obj.resizable( "option", "aspectRatio", true );
+			}
 			$('div#dialogModal').modal('hide');
-			_showSavePageNeeded(true);
-			$( _getWidgetSelector(page,real_widget) ).find("img").attr("src",real_widget.properties.url);
 		});
 		
 		$('div#dialogModal').modal();
@@ -9171,7 +9178,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var html = "<select class='input-sm form-control altui-version-selector'>"
 			// var arr = _orderVersions(pluginapp);
 			$.each(arr, function(key,version) {
-					html += "<option value='{0}'>{1}</option>".format(version.label,version.label.substring(0,15))
+					html += "<option value='{0}'>{1}</option>".format(version.label,version.label.substring(0,13))
 				})
 			html +="</select>"
 			return html;
