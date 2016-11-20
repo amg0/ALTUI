@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1940 $";
+var ALTUI_revision = "$Revision: 1941 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6278,6 +6278,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageMyHome: function ( )
 	{
 		//{1} : 192.168.1.16/localcdn
+		var timer = null;
 		var template = 	"<div class='col-xs-12 col-sm-6 col-md-4 col-lg-3'>"+
 							"<div class='altui-myhome-panel panel panel-default'>"+
 								"<div class='altui-myhome-room panel-body' data-altuiid='${altuiid}'>"+
@@ -6406,6 +6407,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		
 		function _drawBoxes( model, data ) {
+			if (timer) {
+				clearTimeout(timer)
+				timer=null;
+			}
 			// clear all
 			$(".altui-mainpanel").html("")
 			
@@ -6421,10 +6426,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						<div class='panel-body'><span class='altui-myhome-title'>{0}</span></div>\
 					</div>\
 				</div>".format(model.title);
-			}
-			if (ALTUI_registered!=true) {
-				data = data.slice(0,5)
-				$(".altui-mainpanel").append( "<div class='col-xs-12'>Note: MyHome page is limited to 5 items per page for non registered users</div>"  )
 			}
 			
 			$.each(data, function(idx,item) {
@@ -6446,6 +6447,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				});
 				
 			window.scrollTo(0, 0);
+			if (timer==null) {
+				timer = setTimeout(function() {
+					if (ALTUI_registered!=true) {
+						var items = $(".altui-myhome-panel:gt(5)");
+						items.remove();
+						$(".altui-mainpanel").prepend( "<div class='col-xs-12'><p class='bg-danger'>{0}</p></div>".format(_T("Note: MyHome page is limited to 5 items per page for non registered users") )) 
+					}
+					timer=null;
+				}, 5000 );
+			}
 			// $(".altui-myhome-transparent:first").removeClass("altui-myhome-transparent")
 		}
 		
