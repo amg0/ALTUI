@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1939 $";
+var ALTUI_revision = "$Revision: 1940 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -510,6 +510,9 @@ var styles ="						\
 	.blocklyTreeLabel {			\
 		color: black;			\
 	}							\
+	.altui-myhome-title{ \
+		cursor: pointer;	\
+	}	\
 	.altui-myhome-panel { \
 		background-color:  transparent;	\
 		border-color: transparent;	\
@@ -6415,7 +6418,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html+="\
 				<div class='col-xs-12'>\
 					<div class='panel panel-default altui-myhome-transparent'>\
-						<div class='panel-body'>{0}</div>\
+						<div class='panel-body'><span class='altui-myhome-title'>{0}</span></div>\
 					</div>\
 				</div>".format(model.title);
 			}
@@ -6436,7 +6439,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						// e.stopPropagation();
 						model.onclick.apply(this,[e]);
 					}
-				}				)
+				})
+				.off('click', ".altui-myhome-title")
+				.on('click', ".altui-myhome-title",function(e) {
+					UIManager.pageMyHome();
+				});
+				
 			window.scrollTo(0, 0);
 			// $(".altui-myhome-transparent:first").removeClass("altui-myhome-transparent")
 		}
