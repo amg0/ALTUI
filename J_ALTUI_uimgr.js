@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1942 $";
+var ALTUI_revision = "$Revision: 1944 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -559,6 +559,7 @@ var styles ="						\
 		background-repeat: no-repeat;	\
 	}	\
 	.altui-myhome-device-content, .altui-myhome-scene-content {	\
+		display: flex;\
 		cursor: pointer;	\
 		font-size: 30px;	\
 		text-align: center;	\
@@ -572,12 +573,22 @@ var styles ="						\
 		border-radius: 27px;	\
 		background-color: rgba(255,255,255,0.4) \
 	}\
+	.altui-myhome-device-content > div, .altui-myhome-scene-content > div{	\
+		margin:auto;\
+	}\
+	.altui-myhome-device-content img.altui-favorite-icon {\
+		width:auto;	\
+		height:auto;	\
+	}\
 	.altui-myhome-device-content:hover, .altui-myhome-scene-content:hover {	\
 		background-color: rgba(255,255,255,0.7);	\
 	} \
 	.altui-myhome-device-content .altui-favorites-watts  { 	\
 		right:20px;				\
 	}							\
+	.altui-myhome-device-content .altui-favorites-smalltext { \
+		font-size:0.4em;	\
+	} \
 	.altui-myhome-scene-content {	\
 		font-size: 75px;	\
 	}	\
@@ -4178,7 +4189,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	function _drawFavoriteDevice(device,cls) {
 		var html="";
 		cls = cls || 'altui-favorites-device-content'
-		html += "<div class='{1}' data-altuiid='{0}'>".format(device.altuiid,cls);
+		html += "<div class='{1}' data-altuiid='{0}'><div>".format(device.altuiid,cls);
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' )); 
 		if (isNaN(watts)==false) 
 			html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
@@ -4250,7 +4261,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += _drawDefaultFavoriteDevice(device);
 				break;
 		}
-		html += "</div>";
+		html += "</div></div>";
 		return html;
 	};
 	
