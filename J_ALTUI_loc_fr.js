@@ -454,7 +454,11 @@ Localization.init( {
 	"Errors Warnings":"Errors Warnings",
 	"Next Page":"Page Suivante","Prev Page":"Page Précédente",
 	"Zoom In":"Zoom +","Zoom Out":"Zoom -","Move Left":"A Gauche","Move Right":"A Droite","Track Now":"Suivre",
-	"My Home":"Ma Maison"
+	"My Home":"Ma Maison",
+	"Sensors":"Détecteurs",
+	"Covers":"Volets",
+	"Note: MyHome page is limited to 5 items per page for non registered users":"Note: la page MyHome page est limitée à 5 items par page pour les utilisateurs non enregistrés"
+
 });
 
 // override rules with localized version

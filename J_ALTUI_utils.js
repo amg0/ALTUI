@@ -1684,7 +1684,7 @@ var HTMLUtils = (function() {
 				case 'button':
 				default:
 					toolbarHtml+="  <button type='button' class='btn btn-default {3}' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
-					var glyph = "<span class='glyphicon {0}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}'></span>".format(tool.glyph,tool.label || '');
+					var glyph = "<span class='glyphicon {0}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}'></span>".format(tool.glyph,tool.label || tool.title || '');
 					toolbarHtml += glyph;
 					if (tool.label)
 						toolbarHtml+=("&nbsp;" + tool.label);

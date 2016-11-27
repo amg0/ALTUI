@@ -445,7 +445,10 @@ Localization.init( {
 	"TopStats:Show OS statistics in the footer":"TopStats:Show OS statistics in the footer",
 	"Next Page":"Next Page","Prev Page":"Prev Page",
 	"Zoom In":"Zoom In","Zoom Out":"Zoom Out","Move Left":"Move Left","Move Right":"Move Right","Track Now":"Track Now",
-	"My Home":"My Home"
+	"My Home":"My Home",
+	"Sensors":"Sensors",
+	"Covers":"Covers",
+	"Note: MyHome page is limited to 5 items per page for non registered users":"Note: MyHome page is limited to 5 items per page for non registered users"
 	});
 
 // override rules with localized version
