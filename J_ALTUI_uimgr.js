@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1947 $";
+var ALTUI_revision = "$Revision: 1948 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -534,14 +534,18 @@ var styles ="						\
 		bottom: 20px;	\
 		right: 15px;	\
 	}	\
+	.altui-myhome-room-toolbar button.btn-default {	\
+		background-image: none;	\
+	}	\
 	.altui-myhome-room-toolbar button {	\
-    background-color: transparent;	\
-    border: none;	\
-    height: 65px;	\
-    width: 65px;	\
-    color: white;	\
-    font-size: 25px; \
-		}	\
+		background-color: transparent;	\
+		border: none;	\
+		padding: 10px;	\
+		height: 50px;	\
+		width: 50px;	\
+		color: white;	\
+		font-size: 25px; \
+	}	\
 	.altui-myhome-room-toolbar button:hover {	\
 		background-color: rgba(255,255,255,0.7);	\
 	}	\
