@@ -4407,7 +4407,7 @@ var SceneEditor = function (scene) {
 			// html +="<form class='col-sm-11' role='form' action='javascript:void(0);'>";
 			html +="  <div class='form-group'>";
 			html += ("    <label for='altui-luascene'>Lua scene code:</label>");
-			html +="    <div id='altui-luascene'>"+lua+"</div>";
+			html +="    <div id='altui-luascene'>"+lua.htmlEncode()+"</div>";
 			html +="  </div>";
 			// html +="</form>";
 			return html;
