@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1948 $";
+var ALTUI_revision = "$Revision: 1950 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10452,7 +10452,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "	<option value='12 months'>12 months €20,00 EUR</option>";
 			html += "	<option value='24 months'>24 months €36,00 EUR</option>";
 			html += "</select> </td></tr>";
-			html += "<tr><td><input type='hidden' name='on1' value='Footer username'>Footer username</td></tr><tr><td><input class='form-control'type='text' name='os1' maxlength='200' value='"+MultiBox.getMainUser().Name+"'></td></tr>";
+			html += "<tr><td><input type='hidden' name='on1' value='Footer username'>Footer username</td></tr><tr><td><input readonly class='form-control'type='text' name='os1' maxlength='200' value='"+MultiBox.getMainUser().Name+"'></td></tr>";
 			html += "</table>";
 			html += "<input type='hidden' name='currency_code' value='EUR'>";
 			html += "<input type='hidden' name='option_select0' value='6 months'>";
