@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1950 $";
+var ALTUI_revision = "$Revision: 1951 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10451,6 +10451,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "	<option value='6 months'>6 months €12,00 EUR</option>";
 			html += "	<option value='12 months'>12 months €20,00 EUR</option>";
 			html += "	<option value='24 months'>24 months €36,00 EUR</option>";
+			html += "	<option value='36 months'>36 months €50,00 EUR</option>";
 			html += "</select> </td></tr>";
 			html += "<tr><td><input type='hidden' name='on1' value='Footer username'>Footer username</td></tr><tr><td><input readonly class='form-control'type='text' name='os1' maxlength='200' value='"+MultiBox.getMainUser().Name+"'></td></tr>";
 			html += "</table>";
@@ -10461,9 +10462,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "<input type='hidden' name='option_amount1' value='20.00'>";
 			html += "<input type='hidden' name='option_select2' value='24 months'>";
 			html += "<input type='hidden' name='option_amount2' value='36.00'>";
+			html += "<input type='hidden' name='option_select3' value='36 months'>";
+			html += "<input type='hidden' name='option_amount3' value='50.00'>";
 			html += "<input type='hidden' name='option_index' value='0'>";
 			html += "<hr>"
-			html += "<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG_global.gif' border='0' name='submit' alt='PayPal – The safer, easier way to pay online.'>";
+			html += "<input type='image' src='https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG_global.gif' border='0' name='submit' alt='PayPal – The safer, easier way to pay online!'>";
 			html += "<img alt='' border='0' src='https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif' width='1' height='1'>";
 			html += "</form>"
 		} else {

@@ -11,6 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 
 var ALTUI_NEW_SCENE_ID = -1;
+var ALTUI_NEW_SCENE_ALTUIID = "0--1"
 
 var UserDataHelper = (function(user_data) { 
 	var _user_data = user_data;

@@ -446,7 +446,8 @@ Localization.init( {
 	"My Home":"My Home",
 	"Sensors":"Sensors",
 	"Covers":"Covers",
-	"Note: MyHome page is limited to 5 items per page for non registered users":"Note: MyHome page is limited to 5 items per page for non registered users"
+	"Note: MyHome page is limited to 5 items per page for non registered users":"Note: MyHome page is limited to 5 items per page for non registered users",
+	"Save the scene at least once before creating device watches":"Save the scene at least once before creating device watches"
 });
 
 // override rules with localized version

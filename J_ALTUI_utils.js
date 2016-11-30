@@ -1626,10 +1626,10 @@ var HTMLUtils = (function() {
 	// {id:'Lua', title:_T("Lua"), html:_displayLua()},
 	// {id:'Actions', title:_T("Actions"), html:_displayActions()},
 	// ];
-	function _createAccordeon(cls,panels,button) {
+	function _createAccordeon(cls,panels,button,id) {
 		var bFirst = true;
 		var html="";
-		html += "<div class='{0}'>".format(cls);
+		html += "<div class='{0}' id='{1}'>".format(cls,id||'');
 		html += "    <div class='panel-group' id='accordion'>";
 		$.each( panels, function (idx,panel){
 			html += "        <div class='panel panel-default' id='"+panel.id+"'>";
@@ -4416,7 +4416,7 @@ var SceneEditor = function (scene) {
 		var jsonbutton = {id:'', class:'altui-toggle-json pull-right', label:'json', title:'json' };
 		var htmlSceneEditButton = "  <button type='submit' class='btn btn-default altui-scene-editbutton'>"+_T("Submit")+"</button>";
 		var html="";
-		html += HTMLUtils.createAccordeon('altui-scene-editor',panels,jsonbutton );
+		html += HTMLUtils.createAccordeon('altui-scene-editor',panels,jsonbutton,scene.altuiid );
 		html += BlocklyArea.createBlocklyArea();
 		html += htmlSceneEditButton;
 		return html;
@@ -4735,7 +4735,11 @@ var SceneEditor = function (scene) {
 				_editWatch( idx, $(this) );
 			})
 			.on("click",".altui-addwatch",function(){ 
-				_editWatch( -1 , $(this) );
+				if ($(this).closest(".altui-scene-editor").prop('id') != ALTUI_NEW_SCENE_ALTUIID) {
+					_editWatch( -1 , $(this) );
+				} else {
+					DialogManager.warningDialog(_T("Scene"),_T("Save the scene at least once before creating device watches"));					
+				}
 			})
 			.on("click",".altui-pausescene",function(){ 
 				scene.paused = (scene.paused==1) ? 0 : 1;

@@ -457,8 +457,8 @@ Localization.init( {
 	"My Home":"Ma Maison",
 	"Sensors":"Détecteurs",
 	"Covers":"Volets",
-	"Note: MyHome page is limited to 5 items per page for non registered users":"Note: la page MyHome page est limitée à 5 items par page pour les utilisateurs non enregistrés"
-
+	"Note: MyHome page is limited to 5 items per page for non registered users":"Note: la page MyHome page est limitée à 5 items par page pour les utilisateurs non enregistrés",
+	"Save the scene at least once before creating device watches":"Sauver la scène une première fois avant de créer une variable suivie"
 });
 
 // override rules with localized version
