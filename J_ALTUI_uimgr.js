@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1953 $";
+var ALTUI_revision = "$Revision: 1954 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6363,19 +6363,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		function _countDevices() {
 			var deviceCounts = {}
-			$.each(MultiBox.getRoomsSync(), function(idx,room) {
+			var rooms = MultiBox.getRoomsSync();
+			rooms.push({ id:-1, altuiid:'0--1', name: " "+_T("No Room")});
+			$.each(rooms, function(idx,room) {
 				if (deviceCounts[room.name]==undefined)
 						deviceCounts[room.name] = {
 							nTotal: 0,
 							nCovers: 0,
 							nSensors: 0,
 							nScenes: MultiBox.getScenesSync().filter( function(scene) { 
-								return room.name == _findRoomNameOf(scene)
+								return (room.name == _findRoomNameOf(scene)) || ( (room.id==-1) && (scene.room==0) )
 							}).length
 						}
 				
 				var devices = MultiBox.getDevicesSync().filter( function(device) { 
-					return room.name == _findRoomNameOf(device)
+					return (room.name == _findRoomNameOf(device)) || ( (room.id==-1) && (device.room==0) )
 				});
 				for (var i=0;i<devices.length;i++){
 					deviceCounts[room.name].nTotal++;
@@ -6393,10 +6395,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var room_altuiid = $(this).data("altuiid") || $(this).closest(".altui-myhome-room").data("altuiid")
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
 			// var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
-			var rname = room.name
+			var rname = room ? room.name : ""
 			var scenes = $.map( $.grep( MultiBox.getScenesSync().sort(altuiSortByName) , function(scene) {
 									var scenecontroller = MultiBox.controllerOf(scene.altuiid).controller;
-									return (rname == _findRoomNameOf(scene))
+									return (rname == _findRoomNameOf(scene)) || ((rname=="") && (scene.room==0))
 								}),
 								function(item) {
 									return {
@@ -6406,7 +6408,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 										file : 'S_'+item.altuiid
 									}
 								} );
-			pagemodel.scene.title = room.name
+			pagemodel.scene.title = rname
 			_drawBoxes(pagemodel.scene, scenes)
 		}
 
@@ -6414,11 +6416,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			e.stopPropagation();
 			var room_altuiid = $(this).data("altuiid") || $(this).closest(".altui-myhome-room").data("altuiid")
 			var room = MultiBox.getRoomByAltuiID( room_altuiid )
-			var rname = room.name
+			var rname = room ? room.name : ""
 			// var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
 			var devices = $.map( $.grep(MultiBox.getDevicesSync().sort(altuiSortByName),function(device) {
 					var devicecontroller = MultiBox.controllerOf(device.altuiid).controller;
-					return (rname == _findRoomNameOf(device)) && (device.invisible != true ) 
+					return ( (rname == _findRoomNameOf(device)) || ((rname=="") && (device.room==0)) )
+					&& (device.invisible != true ) 
 					&& ( (filter_arr==null) || ($.inArray(device.device_type, filter_arr)!=-1)) 
 					&& ( (excl_filter_arr==null) || ($.inArray(device.device_type, excl_filter_arr)==-1) ) 
 				}),
@@ -6430,7 +6433,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						file : 'D_'+device.altuiid
 					}
 				});
-			pagemodel.device.title = room.name
+			pagemodel.device.title = rname
 			_drawBoxes(pagemodel.device, devices);
 			
 			var ws = MultiBox.getWeatherSettings();
@@ -6480,14 +6483,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			
 			// display the items
 			var html = "";
-			if (model.title) {
-				html+="\
-				<div class='col-xs-12'>\
-					<div class='panel panel-default altui-myhome-transparent'>\
-						<div class='panel-body'><a class='altui-myhome-title' href='#' onclick='return false;'>{1}</a> / {0}</div>\
-					</div>\
-				</div>".format(model.title,_T("Rooms"));
-			}
+			html+="\
+			<div class='col-xs-12'>\
+				<div class='panel panel-default altui-myhome-transparent'>\
+					<div class='panel-body'><a class='altui-myhome-title' href='#' onclick='return false;'>{1}</a> / {0}</div>\
+				</div>\
+			</div>".format(model.title || '' ,_T("Rooms"));
 			
 			$.each(data, function(idx,item) {
 				html += tmpl(item)
@@ -6578,6 +6579,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			null,
 			null,
 			function(list) {
+				list.push({
+					id:-1,
+					altuiid:'0--1',
+					name: " "+_T("No Room")
+				})
 				if (list) {
 					var countDevices = _countDevices();
 					$.each(list.sort(altuiSortByName), function(idx,item) {
