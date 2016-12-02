@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1952 $";
+var ALTUI_revision = "$Revision: 1953 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6513,7 +6513,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					if (ALTUI_registered!=true) {
 						var items = $(".altui-myhome-panel:gt(5)");
 						items.remove();
-						$(".altui-mainpanel").prepend( "<div class='col-xs-12'><p class='bg-danger'>{0}</p></div>".format(_T("Note: MyHome page is limited to 5 items per page for non registered users") )) 
+						if ($("div.alert").length==0) {
+							$(".altui-mainpanel").prepend( "<div class='alert alert-warning alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button><p class='bg-danger'>{0}</p></div>".format(_T("Note: MyHome page is limited to 5 items per page for non registered users") )) 
+						}
 					}
 					timer=null;
 				}, 5000 );
