@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.73"
+local version = "v1.73b"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -3755,9 +3755,10 @@ function startupDeferred(lul_device)
 	
 	local debugmode = getSetVariable(ALTUI_SERVICE, "Debug", lul_device, "0")
 	local oldversion = getSetVariable(ALTUI_SERVICE, "Version", lul_device, version)
+	local url_req = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home"
+	local localurl = getSetVariableIfEmpty(ALTUI_SERVICE,"LocalHome", lul_device, url_req)
 	local present = getSetVariable(ALTUI_SERVICE,"Present", lul_device, 0)
 	local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://vera-ui.strongcubedfitness.com/Veralogin.php")
-	local localurl = getSetVariableIfEmpty(ALTUI_SERVICE,"LocalHome", lul_device, "")
 	local css = getSetVariable(ALTUI_SERVICE,"ThemeCSS", lul_device, "")
 	local imgpath = getSetVariable(ALTUI_SERVICE,"ImagePath", lul_device, "")
 	local background = getSetVariable(ALTUI_SERVICE,"BackgroundImg", lul_device, "")
@@ -3769,6 +3770,8 @@ function startupDeferred(lul_device)
 	local worfklowactivestates = getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "")
 	local workflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
 	local ctrlOptions = getSetVariable(ALTUI_SERVICE, "CtrlOptions", lul_device, "1500,60")
+	
+	
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleUserCode", lul_device, "")
