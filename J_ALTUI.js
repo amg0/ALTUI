@@ -130,7 +130,7 @@ function altui_buildUrlOptions(deviceID) {
 		inits[splits[0]]=splits[1]
 	});
 	
-	return "<div id='altui_urloptions'>"+_buildSelect("home",home,inits.home)
+	return "<div class='form-inline' id='altui_urloptions'>"+_buildSelect("home",home,inits.home)
 	+_buildSelect("lang",lang,inits.lang)
 	+_buildSelect("layout",layout,inits.layout)
 	+'<label for="altui_nPage">Page Number:</label><input class="form-control" type="number" id="altui_nPage" min="0" max="15" value="{0}"></input>'.format(inits.nPage||"")
