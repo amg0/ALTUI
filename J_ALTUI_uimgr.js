@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1954 $";
+var ALTUI_revision = "$Revision: 1957 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2952,7 +2952,8 @@ var UIManager  = ( function( window, undefined ) {
 	function  _deviceDrawControlPanelTab( device, tab, domparent ) {
 		var devid = device.altuiid;
 		function _prepareSceneGroupOffset( tab, control ) {
-			var offset={top:0, left:0 };
+			var h = $("#cpanel_after_init_container").height() || 0;
+			var offset={top:h, left:0 };
 			// var ctrlgroupid = control.ControlGroup;
 			// var ctrlgroup = null;
 			// $.each(tab.ControlGroup, function(i,grp) {
@@ -3080,9 +3081,8 @@ var UIManager  = ( function( window, undefined ) {
 							obj.height(control.Display.Height);	
 						if (control.Display.Width)
 							obj.width(control.Display.Width);
-						if (control.Display.Top)
-							obj.css( { top: control.Display.Top } );
-						obj.css( { left: paddingleft+ (control.Display.Left || 0) } );
+						obj.css( { top: paddingtop + (control.Display.Top || 0) } );
+						obj.css( { left: paddingleft + (control.Display.Left || 0) } );
 					}
 					$("div#altui-device-msb-"+uniqid).off('click touchend');
 					$("div#altui-device-msb-"+uniqid).on('click touchend',function() {
@@ -3112,7 +3112,7 @@ var UIManager  = ( function( window, undefined ) {
 							.appendTo( $(domparent) );
 						
 						control.Display.Width = Math.max( control.Display.Width || 10 , $(button).outerWidth() );
-						if ((control.Display.Top && control.Display.Left) /*|| (groupoffset.top && groupoffset.left)*/){
+						if ((control.Display.Top!=undefined && control.Display.Left!=undefined) /*|| (groupoffset.top && groupoffset.left)*/){
 							button.css({
 									top: paddingtop + (control.Display.Top  || 0), 
 									left: paddingleft  + (control.Display.Left  || 0), 
@@ -3124,6 +3124,8 @@ var UIManager  = ( function( window, undefined ) {
 						}
 						else {
 							button.css({
+									top: paddingtop ,
+									left: paddingleft , 
 									"min-width": control.Display.Width+"px",	// forcing bootstrap
 									"max-width": control.Display.Width+"px",	// forcing bootstrap
 									"margin-top": "5px",	
@@ -3164,8 +3166,8 @@ var UIManager  = ( function( window, undefined ) {
 						.html( val+symbol )
 						.appendTo( $(domparent) )
 						.css({
-							top: control.Display.Top, 
-							left: control.Display.Left, 
+							top: paddingtop + control.Display.Top, 
+							left:  paddingleft + control.Display.Left, 
 							position:'absolute'})
 						// .width(control.Display.Width)
 						.height(30 /*control.Display.Height*/ );		
@@ -3173,8 +3175,8 @@ var UIManager  = ( function( window, undefined ) {
 					var obj = $("<div id='altui-slider-horizontal-"+uniqid+"'></div>")
 						.appendTo( $(domparent) )
 						.css({
-							top: control.Display.Top+30, 
-							left: control.Display.Left, 
+							top: paddingtop + control.Display.Top+30, 
+							left: paddingleft + control.Display.Left, 
 							position:'absolute'})
 						.width(control.Display.Width)
 						// .height(control.Display.Height );
@@ -3214,8 +3216,8 @@ var UIManager  = ( function( window, undefined ) {
 						$("<div id='"+htmlid+"' class='"+color+"'>"+val+"</div>")
 							.appendTo( $(domparent) )
 							.css({
-								top: control.Display.Top, 
-								left: control.Display.Left, 
+								top: paddingtop + control.Display.Top, 
+								left: paddingleft + control.Display.Left, 
 								position:'absolute'})
 							// .width(control.Display.Width)
 							.height(20 /*control.Display.Height*/ )		// height given by class on UI5
@@ -3223,8 +3225,8 @@ var UIManager  = ( function( window, undefined ) {
 						$("<input required id='"+htmlid+"' type='number' step='"+1/10+"' value='' />")
 							.appendTo( $(domparent) )
 							.css({
-								top: control.Display.Top, 
-								left: control.Display.Left, 
+								top: paddingtop + control.Display.Top, 
+								left: paddingleft + control.Display.Left, 
 								position:'absolute'})
 							// .width(control.Display.Width)
 							.height(25 /*control.Display.Height*/ )		// height given by class on UI5
@@ -3249,8 +3251,8 @@ var UIManager  = ( function( window, undefined ) {
 					$("<div id='altui-slider-vertical-"+uniqid+"'></div>")
 						.appendTo( $(domparent) )
 						.css({
-							top: control.Display.Top+30, 
-							left: control.Display.Left, 
+							top: paddingtop + control.Display.Top+30, 
+							left: paddingleft + control.Display.Left, 
 							position:'absolute'})
 						// .width(control.Display.Width)
 						.height(65 /*control.Display.Height*/ )		// height given by class on UI5
@@ -3281,8 +3283,8 @@ var UIManager  = ( function( window, undefined ) {
 						var img = $("<img></img>")
 							.appendTo($(domparent))
 							.css({
-								top: control.Display.Top, 
-								left: control.Display.Left, 
+								top: paddingtop + (control.Display.Top || 0), 
+								left: paddingleft + (control.Display.Left || 0), 
 								position:'absolute'})
 							// .attr('src',control.Display.url+device.id+"'&t="+ new Date().getTime())
 							.attr('src',control.Display.url+device.id)
@@ -3308,8 +3310,8 @@ var UIManager  = ( function( window, undefined ) {
 						var div = $("<div></div>")
 							.appendTo($(domparent))
 							.css({
-								top: control.Display.Top, 
-								left: control.Display.Left, 
+								top: paddingtop + control.Display.Top, 
+								left: paddingleft + control.Display.Left, 
 								"background-image": streamurl,
 								"background-size": "contain",
 								"background-repeat": "no-repeat",
@@ -3330,6 +3332,32 @@ var UIManager  = ( function( window, undefined ) {
 
 		$(domparent).css({position: 'relative'});
 		if (tab.TabType=="flash") {
+			if (tab.AfterInit && tab.AfterInit.Function) {
+				$(domparent).prepend('<div id="cpanel_after_init_container" class="col-xs-12"><div>')
+						
+				var script = tab.AfterInit.ScriptName;
+				// only if script is not forbidden
+				if ( $.inArray( script, _forbiddenScripts) == -1) {
+					var func = tab.AfterInit.Function;
+					
+					set_JSAPI_context( {
+						set_panel_html_callback: function(html) {
+							$(domparent).find('#cpanel_after_init_container').html(html);
+						},
+						deviceid: device.id,
+						altuiid: device.altuiid,
+						controllerid: MultiBox.controllerOf(device.altuiid).controller,
+					});
+
+					try {
+						// this will call the set_panel_html_callback() callback
+						var result = eval( func+"("+device.id+")" );	// we need the real VERA box ID here
+					}
+					catch(err) {
+						set_panel_html("an error occurred while displaying the javascript tab. devid: "+devid+" err:"+err.message+" <pre>stack:"+err.stack+"</pre>");
+					}		
+				}
+			}
 			$.each( tab.Control, function (idx,control) {
 				var offset = _prepareSceneGroupOffset( tab, control );
 				_displayControl( domparent, device, control, idx, offset );
@@ -3338,6 +3366,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		// fix height because absolute positioning removes element from the DOM calculations
 		_fixHeight( domparent );
+
 	};
 	
 	function _deviceDrawControlPanelOneTabContent(device, parent, tabidx ) {
@@ -3898,10 +3927,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var scripts = {};
 			if (ui_static_data.Tabs != undefined) 
 				$.each( ui_static_data.Tabs, function( idx,tab) {
+					var script = null, func = null;
 					if (tab.TabType=="javascript" && ( $.inArray( tab.ScriptName, _forbiddenScripts) == -1))
 					{
-						var script = tab.ScriptName;
-						var func = tab.Function;
+						script = tab.ScriptName;
+						func = tab.Function;
+					} else if (tab.TabType=="flash" && tab.AfterInit && ( $.inArray( tab.AfterInit.ScriptName, _forbiddenScripts) == -1)) {
+						script = tab.AfterInit.ScriptName;
+						func = tab.AfterInit.Function;						
+					}
+					if ( script && func ) {
 						if (scripts[script] == undefined)
 							scripts[script]=[];
 						scripts[script].push( func );
@@ -3940,7 +3975,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								// do not touch _safeScripts contents
 								if ( $.inArray( scriptname, _safeScripts) == -1) {
 									data = _fixScriptPostLoad( scriptname , data, ui7style );
-									data = "//# sourceURL="+scriptname+"\n"+data;
+									// commeting out as it creates a one line offset in debugger, but could be needed for some scripts...
+									// data = "//# sourceURL="+scriptname+"\n"+data;
 								}
 								
 								$('script[data-src="'+scriptname+'"]').text(data);
