@@ -888,6 +888,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					scene.altuiid = "{0}-{1}".format(_uniqID,scene.id);
 					scene.favorite=Favorites.get('scene',scene.altuiid);
 					scene.active = _sceneActiveStatus[ scene.id ];
+					if (scene.encoded_lua==1) {
+						scene.lua = atob(scene.lua);
+						delete scene.encoded_lua;
+					}
 					// jsonp.ud.scenes.push(scene);
 				});
 			if (data.rooms)
@@ -1036,7 +1040,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return (user_data.SvnVersion==undefined)
 	}
 	function _getLuaStartup() {
-		return _user_data.StartupCode || "";
+		if (_user_data.encoded_lua==1) {
+			_user_data.StartupCode = atob(_user_data.StartupCode)
+			// delete _user_data.encoded_lua
+		}
+		return _user_data.StartupCode || ""
 	};
 	
 	function _createDevice( param , cbfunc ) {
@@ -1214,6 +1222,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 	function _setStartupCode(newlua) 
 	{
+		if (_user_data.encoded_lua==1) {
+			newlua = btoa(newlua)
+		}
 		return (newlua != undefined) ? _upnpHelper.ModifyUserData( { "StartupCode":newlua } ) : null;
 	};
 
