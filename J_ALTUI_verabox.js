@@ -889,7 +889,13 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					scene.favorite=Favorites.get('scene',scene.altuiid);
 					scene.active = _sceneActiveStatus[ scene.id ];
 					if (scene.encoded_lua==1) {
-						scene.lua = atob(scene.lua);
+						try {
+							scene.lua = atob(scene.lua);
+						}
+						catch (e){
+							// do not decode 
+							AltuiDebug.warning("The scene {0} has the encoded_lua flag but the scene.lua fails to decode. {1}".format(scene.id, scene.lua))
+						}
 						delete scene.encoded_lua;
 					}
 					// jsonp.ud.scenes.push(scene);
@@ -1041,8 +1047,13 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	}
 	function _getLuaStartup() {
 		if (_user_data.encoded_lua==1) {
-			_user_data.StartupCode = atob(_user_data.StartupCode)
-			// delete _user_data.encoded_lua
+			try {
+				_user_data.StartupCode = atob(_user_data.StartupCode)
+			}
+			catch (e) {
+				// do not decode 
+				AltuiDebug.warning("The StartupCode has the encoded_lua flag but fails to decode properly. {0}".format(_user_data.StartupCode))
+			}
 		}
 		return _user_data.StartupCode || ""
 	};

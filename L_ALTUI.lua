@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.74"
+local version = "v1.75"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -1665,7 +1665,7 @@ local htmlScripts = [[
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.2/joint.shapes.devs.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
 	<script type="text/javascript"  
 	  src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>

@@ -13,7 +13,7 @@
 //-------------------------------------------------------------
 var altui_Svs = 'urn:upnp-org:serviceId:altui1';
 var ip_address = data_request_url;
-// var altui_api = (typeof api === 'undefined') ? null :  api;
+var altui_api = (typeof api === 'undefined') ? null :  api;
 
 //-------------------------------------------------------------
 // Utilities Javascript
@@ -296,8 +296,10 @@ function altui_Settings(deviceID) {
 function altui_AfterInit(deviceID) {
 	var i=0;
 	var htmlOpenLocal= '<h3>ALTUI Home Page</h3><button class="btn btn-default btn-sm" id="altui-open-local">Open</button><h3>Settings</h3>';
-	//altui_api.setCpanelContent("<div>"+htmlOpenLocal+"</div>");	
-	set_panel_html("<div>"+htmlOpenLocal+"</div>")
+	if (altui_api)
+		altui_api.setCpanelContent("<div>"+htmlOpenLocal+"</div>");	
+	else
+		set_panel_html("<div>"+htmlOpenLocal+"</div>")
 	jQuery( "#altui-open-local" ).click(function() { return altui_onOpenLocalButton(deviceID) });	
 }
 
