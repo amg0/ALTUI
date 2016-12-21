@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1970 $";
+var ALTUI_revision = "$Revision: 1971 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7348,6 +7348,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		// Deep copy so we can edit it
 		var newid = MultiBox.getNewSceneID( MultiBox.controllerOf(altuiid).controller );
+		var roomname = MyLocalStorage.getSettings("SceneRoomFilter") || "0";
+		var room = 0
+		if ((roomname[0]!="-") && (roomname!="0")) {
+			var tbl = $.grep(MultiBox.getRoomsSync(), function(r) { return r.name==roomname } );
+			room  = (tbl.length>0) ? tbl[0].id : 0
+		}
 		var orgscene = (altuiid!=NULL_SCENE) ? MultiBox.getSceneByAltuiID( altuiid ) : { 
 				name:"New Scene",
 				id: newid.id,
@@ -7356,7 +7362,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				groups: [{"delay":0,"actions":[]}],
 				timers: [],
 				lua:"",
-				room:0
+				room:room
 		};
 		var scene = jQuery.extend(true, {timers:[], triggers:[], groups:[] }, orgscene, newscene_template );
 
