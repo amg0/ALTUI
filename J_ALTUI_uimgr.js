@@ -51,6 +51,7 @@ var wattTemplate = "<span class='altui-watts '>{0} <small>Watts</small></span>";
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
 var houseModeButtonTemplate = "  <button type='button' class='btn btn-default altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";							
 var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-default'>{2}</button>";
+
 var deleteGlyph = "<span class='glyphicon glyphicon-trash text-danger' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Delete'></span>";
 var copyGlyph = "<span class='glyphicon glyphicon-copy' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Copy'></span>";
 var glyphTemplate = "<span class='glyphicon glyphicon-{0} {2}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}' ></span>";
@@ -5798,7 +5799,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	// breadcumb
 	breadCrumb: function( title , param ) {
-		var tbl = [
+		var ALTUI_pages = [
 			{ id:0, title:_T('Home'), onclick:'UIManager.pageHome()', 		parent:-1},
 			{ id:1, title:_T('Rooms'), onclick:'UIManager.pageRooms()', 	parent:0 },
 			{ id:2, title:_T('Devices'), onclick:'UIManager.pageDevices()', parent:0 },
@@ -5841,9 +5842,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		function _parentsOf(child) {
 			var html = "";
-			$.each(tbl, function( idx,line) {
+			$.each(ALTUI_pages, function( idx,line) {
 				if (child.parent==line.id) {
-					var thisline = "<li><a href='javascript:void(0);' onclick='"+line.onclick+";return false;' >"+line.title+"</a></li>";
+					var onclick_prop = $.isFunction(line.onclick) ? '' : "onclick='{0};return false;'".format(line.onclick)
+					var thisline = "<li><a class='altui-breadcrumd-item' id='{0}' href='javascript:void(0);' {1} >{2}</a></li>".format(line.id,onclick_prop,line.title);
 					var parentlines = (line.parent==-1) ? '' :  _parentsOf(line);
 					html = parentlines + thisline;
 					return false;
@@ -5854,10 +5856,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		var html="";
 		html+="<ol class='breadcrumb altui-breadcrumb'>";
-		// html+="<li><a href='javascript:void(0);' onclick='UIManager.pageHome();return false;' >Home</a></li>";
-		// html+="<li><a href='javascript:void(0);' onclick='UIManager.pageDevices();return false;' >Device</a></li>";
-		// html+="<li class='active'>Data</li>";
-		$.each(tbl, function( idx,line) {
+		$.each(ALTUI_pages, function( idx,line) {
 			if (line.title==title) {
 				html += _parentsOf(line);
 				html += "<li class='active'>{0}</li>".format(line.title);
@@ -5918,9 +5917,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		return body;
 	},
 	
-	clearPage : function(breadcrumb,title,layout)
+	clearPage : function(breadcrumb,title,layout,args)
 	{
 		var layoutfunc = layout || UIManager.twoColumnLayout;
+		
+		HistoryManager.pushState( breadcrumb, arguments.callee.caller.name, args ? args : arguments.callee.caller.arguments);
 		EventBus.unregisterEventHandler("on_ui_deviceStatusChanged");
 		UIManager.stoprefreshModes();
 		HTMLUtils.stopAllTimers();
@@ -5932,16 +5933,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		PageMessage.init();
 		$("#altui-toggle-messages").before ( UIManager.breadCrumb( breadcrumb ) );
 
-
 		// elements outside of the layout
 		$("#dialogs").off().empty();
 		$(".altui-scripts").remove();
 		
 		// remove Blockly				
-		// $(".blocklyWidgetDiv").remove();
-		// $(".blocklyTooltipDiv").remove();
 		$(".blocklyToolboxDiv").remove();
 		$("body").append("<div class='altui-scripts'></div>");
+		
+		// install breadCrumb callbacks
+		$(".altui-breadcrumd-item").off().on('click',function(e) {
+			var id = $(this).prop('id');
+		});
 	},
 	
 	//window.open("data_request?id=lr_ALTUI_Handler&command=home","_self");
@@ -6657,12 +6660,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		)
 		
 	},
-	
+
 	pageDevices : function ( filter )
 	{
 		var _domMainPanel = null;
 		var _roomID2Name = {};
 		var _deviceID2RoomName = {};
+		if (filter && (filter.cancelable !=undefined) ) {
+			// this is a event, so direct callback from an onClickAllDevices
+			filter = null;
+		}
 		var _deviceDisplayFilter = $.extend( {
 			filterformvisible 	: false,
 			room			: MyLocalStorage.getSettings("DeviceRoomFilter") || -1,
@@ -6674,11 +6681,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			bt_device		: (MyLocalStorage.getSettings("ShowBTDevice")==true),
 			category		: MyLocalStorage.getSettings("CategoryFilter") || 0,
 			filtername		: MyLocalStorage.getSettings("DeviceFilterName") || "",
-			isRoomFilterValid 		: function() {
-				return ($.isArray(this.room)) ? (this.room.length>0) : (this.room!=-1);
-			},
-			isCategoryFilterValid 	: function() {return this.category!=0},
 		}, filter );
+		var isCategoryFilterValid = (function() { return this.category!=0}).bind(_deviceDisplayFilter);
+		var isRoomFilterValid 		= (function() {
+			return ($.isArray(this.room)) ? (this.room.length>0) : (this.room!=-1);
+		}).bind(_deviceDisplayFilter);
 		
 		// filter function
 		function deviceFilter(device) {
@@ -6838,7 +6845,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						MyLocalStorage.setSettings("DeviceRoomFilter",_deviceDisplayFilter.room);
 						if ( MyLocalStorage.getSettings('SyncLastRoom')==1 )
 							MyLocalStorage.setSettings("SceneRoomFilter",_deviceDisplayFilter.room);
-						$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",_deviceDisplayFilter.isRoomFilterValid());
+						$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid());
 						_drawDevices(deviceFilter,false);	// do not redraw toolbar
 					};
 					function _onChangeCategoryFilter() {
@@ -6847,7 +6854,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						if (_deviceDisplayFilter.category.length==0)
 							_deviceDisplayFilter.category=0;
 						MyLocalStorage.setSettings("CategoryFilter",_deviceDisplayFilter.category);
-						$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",_deviceDisplayFilter.isCategoryFilterValid());
+						$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid());
 						_drawDevices(deviceFilter,false);	// do not redraw toolbar
 					};
 					// Display
@@ -6961,8 +6968,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						_onClickRoomButton( $(this).prop('id') , $(this).data('altuiid') );
 					});
 
-					$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",_deviceDisplayFilter.isRoomFilterValid());
-					$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",_deviceDisplayFilter.isCategoryFilterValid());
+					$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid());
+					$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid());
 					dfd.resolve();
 				});
 			});
@@ -6990,11 +6997,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			MyLocalStorage.setSettings("DeviceRoomFilter",_deviceDisplayFilter.room);
 			if ( MyLocalStorage.getSettings('SyncLastRoom')==1 )
 				MyLocalStorage.setSettings("SceneRoomFilter",_deviceDisplayFilter.room);
+			
+		HistoryManager.pushState(_T('Devices'),"pageDevices",[_deviceDisplayFilter]);
 			_drawDevices(deviceFilter);
 		};
 		
 		// Page Preparation
-		UIManager.clearPage(_T('Devices'),_T("Devices"));
+		UIManager.clearPage(_T('Devices'),_T("Devices"),UIManager.twoColumnLayout);
 		$("#altui-pagetitle").css("display","inline").after("<div class='altui-device-toolbar'></div>");
 		
 		// Dialogs
@@ -13588,23 +13597,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.on( "click", "#altui-theme-selector", UIManager.pageThemes )
 				.on( "click", "#altui-localize", UIManager.pageLocalization  )
 				.on( "click", "#altui-debugtools", UIManager.pageDebug  )
-				// .on( "click", "#altui-test", function() {
-					// $.ajax( {
-						// url:"http://192.168.1.16/port_3480/data_request",
-						// type:"POST",
-						// data: {
-							// id:'lr_ALTUI_Handler',
-							// command:'getWorkflowsStatus',
-              // end: true
-						// }
-					// })
-					// .done(function(data, textStatus, jqXHR) {
-						// alert('done')
-					// })
-					// .fail(function(jqXHR, textStatus, errorThrown) {
-						// alert('fail')
-					// });
-				// })
+
 				.on( "click", "#altui-debug-btn", function() {
 					$(".altui-debug-div").toggle();
 					$("#altui-debug-btn span.caret").toggleClass( "caret-reversed" );
@@ -13644,7 +13637,36 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
   };	// end of return
 })( window );
 
-	
+var HistoryManager = ( function(win) {
+	var _nopush = false;
+	var _history = win.history
+	win.onpopstate = function(event) {
+		console.log("POP history location: " + document.location + ", state: " + JSON.stringify(event.state))
+	  // alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+		if (event.state!=null) {
+			var caller = event.state.caller;
+			var args = event.state.args;
+			_nopush = true;
+			window["UIManager"][caller].apply( UIManager, args)
+			// window["UIManager"][caller]();	// call function by its name
+		}
+	};
+	return {
+		pushState: function( id, caller, args ) {
+			var state = {
+				caller: caller,
+				args: $.grep(args || [], function(arg) {
+					return (arg==null) || (arg.cancelable==undefined)	// prevent event object from being part of argument array
+				})
+			};
+			console.log("PUSH history %s , nopush=%s",JSON.stringify(state),_nopush);
+			if (_nopush==false)
+				(_history).pushState( state , id, null);
+			_nopush=false;
+		}
+	}
+})( window )
+
 // $(document).ready(function() {
 $(function() {
 
@@ -13963,3 +13985,4 @@ $(function() {
 		}
 	}
 });
+
