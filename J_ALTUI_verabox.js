@@ -1604,7 +1604,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 								altuiid: devid,
 								service: service,
 								variable: variable,
-								lastUpdate: varvalue.LastUpdate
+								lastUpdate: varvalue.LastUpdate,
+								lastNew: varvalue.LastNew
 							})
 						}
 					});
