@@ -3882,11 +3882,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$(".altui-device-controlpanel-container")
 			.on('click',".altui-wflow-goto",function(){
 				var altuiid = $(this).prop("id");
-				UIManager.pageWorkflow(altuiid);
+				UIControler.changePage("Workflow",[altuiid])
 			})
 			.on('click',".altui-scene-goto",function(){
 				var altuiid = $(this).prop("id");
-				UIManager.pageSceneEdit(altuiid);
+				UIControler.changePage('Scene Edit',[altuiid])
 			})
 			.on('click',".altui-device-deltrigger",function(){
 				var altuiid = $(this).prop("id");
@@ -3920,7 +3920,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					};
 
 					// clear page
-					UIManager.pageSceneEdit(NULL_SCENE,scenetemplate);
+					UIControler.changePage('Scene Edit',[NULL_SCENE,scenetemplate])
 				});		
 			});
 			
@@ -4350,7 +4350,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						break;
 					case "urn:schemas-upnp-org:device:cplus:1":;
 					default:
-						UIManager.pageControlPanel(altuiid);
+						UIControler.changePage('Control Panel',[altuiid])
 						break;
 				}	
 			});
@@ -5799,69 +5799,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	// breadcumb
 	breadCrumb: function( title , param ) {
-		var ALTUI_pages = [
-			{ id:0, title:_T('Home'), onclick:'UIManager.pageHome()', 		parent:-1},
-			{ id:1, title:_T('Rooms'), onclick:'UIManager.pageRooms()', 	parent:0 },
-			{ id:2, title:_T('Devices'), onclick:'UIManager.pageDevices()', parent:0 },
-			{ id:5, title:_T('Control Panel'), onclick:'UIManager.pagexxx()', parent:2 },
-			{ id:6, title:_T('Scenes'), onclick:'UIManager.pageScenes()', 	parent:0 },
-			{ id:7, title:_T('Scene Edit'), onclick:'UIManager.pageSceneEdit()', parent:6 },
-			{ id:8, title:_T('Plugins'), onclick:'UIManager.pagePlugins()', parent:0 },
-			{ id:9, title:_T('Custom Pages'), onclick:'UIManager.pageUsePages()', parent:0 },
-			{ id:10, title:_T('Edit Pages'), onclick:'UIManager.pageEditPages()', parent:0 },
-			{ id:11, title:_T('Credits'), onclick:'UIManager.pageCredits()', parent:0 },
-			{ id:12, title:_T('LuaTest'), onclick:'UIManager.pageLuaTest()', parent:0 },
-			{ id:13, title:_T('LuaStart'), onclick:'UIManager.pageLuaStart()', parent:0 },
-			{ id:14, title:_T('Options'), onclick:'UIManager.pageOptions()', parent:0 },
-			{ id:15, title:_T('Editor'), onclick:'UIManager.pageEditor()', parent:8 },
-			{ id:16, title:_T('ZWave'), onclick:'UIManager.pageZwave()', parent:0 },
-			{ id:17, title:_T('Localize'), onclick:'UIManager.pageLocalization()', parent:0 },
-			{ id:18, title:_T('Debug'), onclick:'UIManager.pageDebug()', parent:0 },
-			{ id:19, title:_T('Power'), onclick:'UIManager.pagePower()', parent:0 },
-			{ id:20, title:_T('Parent/Child'), onclick:'UIManager.pageChildren()', parent:0 },
-			{ id:21, title:_T('zWaveRoutes'), onclick:'UIManager.pageRoutes()', parent:0 },
-			{ id:22, title:_T('Quality'), onclick:'UIManager.pageQuality()', parent:0 },
-			{ id:23, title:_T('TblDevices'), onclick:'UIManager.pageTblDevices()', parent:0 },
-			{ id:24, title:_T('OsCommand'), onclick:'UIManager.pageOsCommand()', parent:0 },
-			{ id:25, title:_T('Triggers'), onclick:'UIManager.pageTriggers()', 	parent:6 },
-			{ id:26, title:_T('Themes'), onclick:'UIManager.pageThemes()', parent:0 },
-			{ id:27, title:_T('TblScenes'), onclick:'UIManager.pageTblScenes()', parent:0 },
-			{ id:28, title:_T('TblControllers'), onclick:'UIManager.pageTblControllers()', parent:0 },
-			{ id:29, title:_T('TblWatches'), onclick:'UIManager.pageTblWatches()', parent:0 },
-			{ id:30, title:_T('WatchDisplay'), onclick:'UIManager.pageWatchDisplay()', parent:0 },
-			{ id:31, title:_T('Workflow Pages'), onclick:'UIManager.pageWorkflows()', parent:0 },
-			{ id:32, title:_T('Workflow'), onclick:'UIManager.pageWorkflow()', parent:31 },
-			{ id:33, title:_T('Workflow Report'), onclick:'UIManager.pageWorkflowReport()', parent:31 },
-			{ id:34, title:_T('License'), onclick:'UIManager.pageLicense()', parent:0 },
-			{ id:35, title:_T('Evolutions'), onclick:'UIManager.pageEvolutions()', parent:0 },		
-			{ id:36, title:_T('App Store'), onclick:'UIManager.pageAppStore()', parent:0 },
-			{ id:37, title:_T('Publish App'), onclick:'UIManager.pageAppPublish()', parent:36 },
-			{ id:38, title:_T('Timeline'), onclick:'UIManager.pageTimeline()', parent:0 },
-			{ id:39, title:_T('My Home'), onclick:'UIManager.pageMyHome()', parent:0 },
-		];
-
-		function _parentsOf(child) {
-			var html = "";
-			$.each(ALTUI_pages, function( idx,line) {
-				if (child.parent==line.id) {
-					var onclick_prop = $.isFunction(line.onclick) ? '' : "onclick='{0};return false;'".format(line.onclick)
-					var thisline = "<li><a class='altui-breadcrumd-item' id='{0}' href='javascript:void(0);' {1} >{2}</a></li>".format(line.id,onclick_prop,line.title);
-					var parentlines = (line.parent==-1) ? '' :  _parentsOf(line);
-					html = parentlines + thisline;
-					return false;
-				}
-			});
-			return html;
+		function _parentsOf(page) {
+			if (page==null)
+				return ''
+			
+			var onclick_prop = (page.htmlid) ? ("onclick='UIControler.onClickHtml(\"{0}\");return false;'".format(page.htmlid)) : ''
+			var thisline = "<li><a class='altui-breadcrumd-item' id='{0}' href='javascript:void(0);' {1} >{2}</a></li>".format(page.id,onclick_prop,_T(page.title));
+			var parent = UIControler.getParentPage(page);
+			return ( (parent) ? _parentsOf(parent) : '' ) + thisline 
 		};
 		
-		var html="";
-		html+="<ol class='breadcrumb altui-breadcrumb'>";
-		$.each(ALTUI_pages, function( idx,line) {
-			if (line.title==title) {
-				html += _parentsOf(line);
-				html += "<li class='active'>{0}</li>".format(line.title);
-			}
-		});
+		var html="<ol class='breadcrumb altui-breadcrumb'>";
+		var page = UIControler.getPage(title);
+		var parent = UIControler.getParentPage(page);
+		if (page) {
+			html += _parentsOf(parent);
+			html += "<li class='active'>{0}</li>".format(_T(page.title) );
+		}
 		html+="</ol>";
 		return html;
 	},
@@ -5950,7 +5904,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	//window.open("data_request?id=lr_ALTUI_Handler&command=home","_self");
 	pageHome : function()
 	{
-		UIManager.clearPage(_T('Home'),_T("Welcome to ALTUI"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Home',_T("Welcome to ALTUI"),UIManager.oneColumnLayout);
 		$("#altui-pagetitle").remove();
 		//if ( MyLocalStorage.getSettings('ShowWeather')==1 )
 		if(0)
@@ -6088,7 +6042,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return Html;
 		};
 		
-		UIManager.clearPage(_T('Rooms'),_T("Rooms"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Rooms',_T("Rooms"),UIManager.oneColumnLayout);
 		var formHtml="";
 		formHtml+=" <div class='form-group '>";
 		formHtml+=" <div class='input-group '>";
@@ -6216,7 +6170,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$("button.altui-viewroom").click( function(event) {
 					var id = $(this).prop('id');
 					var room = MultiBox.getRoomByAltuiID(id);
-					UIManager.pageDevices({ room:[room.name] });
+					UIControler.changePage('Devices',[{ room:[room.name] }])
 				});
 				$("button.altui-delroom").click( function(event) {
 					var id = $(this).prop('id');
@@ -6251,7 +6205,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// var controllerid = MultiBox.controllerOf(altuiid).controller;
 		var category = MultiBox.getCategoryTitle( device.category_num );
 
-		UIManager.clearPage(_T('Control Panel'),"{0} {1} <small>#{2}</small>".format( device.name , category ,altuiid),UIManager.oneColumnLayout);
+		UIManager.clearPage('Control Panel',"{0} {1} <small>#{2}</small>".format( device.name , category ,altuiid),UIManager.oneColumnLayout);
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
 		
 		var html = "<div class='form-inline col-xs-12'>";
@@ -6389,7 +6343,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 		};
 		
-		UIManager.clearPage(_T('My Home'),_T('My Home'),UIManager.fullColumnLayout);
+		UIManager.clearPage('My Home',_T('My Home'),UIManager.fullColumnLayout);
 		$(".altui-layout").append("<div class='altui-mainpanel'></div>")
 		
 		function _overlayRoomTmpl() {
@@ -6547,7 +6501,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				})
 				.off('click', ".altui-myhome-title")
 				.on('click', ".altui-myhome-title",function(e) {
-					UIManager.pageMyHome();
+					UIControler.changePage('My Home')
 				});
 				
 			window.scrollTo(0, 0);
@@ -7003,7 +6957,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		};
 		
 		// Page Preparation
-		UIManager.clearPage(_T('Devices'),_T("Devices"),UIManager.twoColumnLayout);
+		UIManager.clearPage('Devices',_T("Devices"),UIManager.twoColumnLayout);
 		$("#altui-pagetitle").css("display","inline").after("<div class='altui-device-toolbar'></div>");
 		
 		// Dialogs
@@ -7056,7 +7010,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// .off("click",".altui-device-controlpanelitem")
 			.on("click",".altui-device-controlpanelitem",function(){ 
 				var altuiid = $(this).parents(".altui-device").data('altuiid');
-				UIManager.pageControlPanel(altuiid);
+				UIControler.changePage('Control Panel',[altuiid])
 			})
 			.on("click",".altui-device-hideshowtoggle",function(){ 
 				var altuiid = $(this).parents(".altui-device").data('altuiid');
@@ -7075,7 +7029,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// .off("click",".altui-device-icon")
 			.on("click",".altui-device-icon",function(){ 
 				var altuiid = $(this).parents(".altui-device").data('altuiid');
-				UIManager.pageControlPanel(altuiid);
+				UIControler.changePage('Control Panel',[altuiid])
 			});
 	},
 
@@ -7153,7 +7107,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$(".altui-scene-toolbar").replaceWith( "<div class='altui-scene-toolbar'>"+toolbarHtml+"</div>" );
 						
 				$("#altui-scene-create").click( function() {
-					UIManager.pageSceneEdit(NULL_SCENE);
+					UIControler.changePage('Scene Edit',[NULL_SCENE])
 				});
 
 				// multiselect
@@ -7218,7 +7172,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// .off("click",".altui-editscene")
 				.on("click",".altui-editscene",function() {
 					var altuiid = $(this).closest(".altui-scene").data('altuiid');
-					UIManager.pageSceneEdit( altuiid );
+					UIControler.changePage('Scene Edit',[altuiid])
 				})
 				.on("click",".altui-clonescene",function() {
 					var altuiid = $(this).closest(".altui-scene").data('altuiid');
@@ -7247,10 +7201,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								if ( (data!=null) && (data!="ERROR") ) {
 									PageMessage.message(_T("Cloned Scene {0} successfully").format(scene.name), "success");
 									_.delay(function() {
-												// clone watches
-												UIManager.pageScenes();
-												
-												// try to find the new scene by its name
+												// try to find the new scene by its name to clone watches
 												var scenes = MultiBox.getScenesSync();
 												$.each(scenes, function(idx,sc) {
 													if (sc.name == clone.name) {
@@ -7261,6 +7212,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 														});
 													}
 												});
+												UIControler.changePage('Scenes');
 											},2500);
 								}
 								else {
@@ -7336,7 +7288,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			MultiBox.getScenes( sceneDraw , filterfunc, afterSceneListDraw )
 		}
 		
-		UIManager.clearPage(_T('Scenes'),_T("Scenes"));
+		UIManager.clearPage('Scenes',_T("Scenes"));
 		$("#altui-pagetitle").css("display","inline").after("<div class='altui-scene-toolbar'></div>");
 		
 		// on the left, get the rooms
@@ -7376,7 +7328,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var scene = jQuery.extend(true, {timers:[], triggers:[], groups:[] }, orgscene, newscene_template );
 
 		// clear page
-		UIManager.clearPage(_T('Scene Edit'),altuiid!=NULL_SCENE ? "Edit Scene #"+scene.altuiid : "Create Scene",UIManager.oneColumnLayout);
+		UIManager.clearPage('Scene Edit',altuiid!=NULL_SCENE ? "Edit Scene #"+scene.altuiid : "Create Scene",UIManager.oneColumnLayout);
 
 		var editor = SceneEditor( scene );
 		var html = "<div class='col-xs-12'>" ;
@@ -7508,7 +7460,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		if (workflow==null)
 			return;
 
-		UIManager.clearPage(_T('Workflow Report'),_T("Workflow Report"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Workflow Report',_T("Workflow Report"),UIManager.oneColumnLayout);
 		var html = "";
 		html += "<div class='col-xs-12'><div id='altui-workflow-report'>";
 		html += HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow )
@@ -7524,7 +7476,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		// interactivity
 		$("#altui-workflow-edit").click( function() {
-			_.defer(UIManager.pageWorkflow,workflow.altuiid)
+			_.defer(UIControler.changePage,"Workflow",[altuiid])
 		})
 	},
 	
@@ -8169,7 +8121,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		workflow = WorkflowManager.getWorkflow(altuiid);
 		if (workflow==null) return;
 		
-		UIManager.clearPage(_T('Workflow'),_T("Workflow Editor")+ (": <span class='text-info'>{0}</span> <small>({1})</small>").format(workflow.name,workflow.altuiid),UIManager.oneColumnLayout);
+		UIManager.clearPage('Workflow',_T("Workflow Editor")+ (": <span class='text-info'>{0}</span> <small>({1})</small>").format(workflow.name,workflow.altuiid),UIManager.oneColumnLayout);
 		$("#altui-pagetitle").css("display","inline").after("<div class='altui-workflow-toolbar'></div>");
 		if (MultiBox.isWorkflowEnabled() == false) {
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
@@ -8274,8 +8226,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						// update the graph
 						_saveGraph();
 					}
-					UIManager.pageWorkflow(workflow.altuiid);
-					_showSaveNeeded( (Model) ? true : bSave );
+					_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])
+					_.defer(_showSaveNeeded, (Model) ? true : bSave );
 				});
 			} else {
 				//
@@ -8295,8 +8247,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							cellView.model.attributes.prop = Model.prop;
 							_saveGraph();
 						}
-						UIManager.pageWorkflow(workflow.altuiid);
-						_showSaveNeeded( (Model) ? true : bSave );
+						_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])
+						_.defer(_showSaveNeeded, (Model) ? true : bSave );
 					});
 				} else {
 					var Model = {
@@ -8310,8 +8262,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							cellView.model.attributes.prop = Model.prop;
 							_saveGraph();
 						}
-						UIManager.pageWorkflow(workflow.altuiid);
-						_showSaveNeeded( (Model) ? true : bSave );
+						_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])
+						_.defer(_showSaveNeeded, (Model) ? true : bSave );
 					});				
 				}
 			}
@@ -8463,7 +8415,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$(this).toggleClass("active");
 		});		
 		$("#altui-workflow-report").click( function() {
-			UIManager.pageWorkflowReport(workflow.altuiid);
+			UIControler.changePage('Workflow Report',[workflow.altuiid])
 		});
 		$("#altui-workflow-export").click( function() {
 			// recup current one ( not necessarly yet saved, so get it from graph )
@@ -8645,7 +8597,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$(".altui-mainpanel").html(html);
 		}
 		
-		UIManager.clearPage(_T('Workflow Pages'),_T("Workflow Pages"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Workflow Pages',_T("Workflow Pages"),UIManager.oneColumnLayout);
 		$("#altui-pagetitle").css("display","inline").after("<div class='altui-workflow-toolbar'></div>");
 		
 		if (MultiBox.isWorkflowEnabled() == false) {
@@ -8685,7 +8637,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			})
 			.on('click',".altui-editworkflow",function() {
 				var altuiid = $(this).prop('id');
-				UIManager.pageWorkflow(altuiid);
+				UIControler.changePage("Workflow",[altuiid])
 			})
 			.on('click',".altui-workflow-title-name",function(event) {
 				if ( $(this).find("input").length>=1 )
@@ -9180,7 +9132,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			OAuth.Call( _getPluginList , null, onMessage , onData , onFailure);
 		}
 		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
-		UIManager.clearPage(_T('Publish App'),_T("Publish Application"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Publish App',_T("Publish Application"),UIManager.oneColumnLayout);
 		$(".altui-mainpanel").append("<div class='altui-plugin-msg col-xs-12'></div><div class='altui-plugin-msg2 col-xs-12'></div><div id='altui-plugin-div'></div>");
 		_displayPublishPage();
 	},
@@ -9469,7 +9421,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return html;
 		}
 
-		UIManager.clearPage(_T('App Store'),_T("Application Store"),UIManager.appStoreLayout);
+		UIManager.clearPage('App Store',_T("Application Store"),UIManager.appStoreLayout);
 		$("#altui-pagemessage").remove();
 
 		_getPlugins({ versions:false })
@@ -9579,7 +9531,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				_displayPlugins( pluginsFilter );
 			})
 			.on("click",".altui-plugin-publish-btn",function() {
-				UIManager.pageAppPublish();
+				UIControler.changePage('Publish App')
 			})
 			.on("click",".altui-store-mcvinstall-btn",function() {
 				var that = this;
@@ -9897,7 +9849,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		
 		// https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css
-		UIManager.clearPage(_T('Timeline'),_T("Timeline"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Timeline',_T("Timeline"),UIManager.oneColumnLayout);
 		_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/', function() {
 			_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/',function() {
 				_loadCSSText("div.vis-label , div.vis-text { color: "+getCSS('color','text-primary')+" !important;	}")
@@ -9970,25 +9922,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		.off("click",".altui-timeline-blacklist")
 		.on("click",".altui-goto-scene",function (e) {
 			e.stopPropagation();
-			UIManager.pageSceneEdit( $(this).data("altuiid") )
+			UIControler.changePage('Scene Edit',[ $(this).data("altuiid")])
 		})
 		.on("click",".altui-goto-device",function (e) {
 			e.stopPropagation();
-			UIManager.pageControlPanel( $(this).data("altuiid") )
+			UIControler.changePage('Control Panel',[$(this).data("altuiid")])
 		})
 		.on("click",".altui-goto-workflow",function(e) {
 			e.stopPropagation();
-			UIManager.pageWorkflow( $(this).data("altuiid") )
+			_.defer(UIControler.changePage,"Workflow",[$(this).data("altuiid") ])
 		})
 		.on("click",".altui-timeline-blacklist",function() {
 			var that = $(this)
 			blacklist($(this).closest(".vis-item").data('id'))
-			// $.each([".altui-goto-scene",".altui-goto-device",".altui-goto-workflow"],function(i,cls) {
-				// var col = that.closest(".vis-item-content").find(cls)
-				// if (col.length>0) {
-					// blacklist(cls,col.data("altuiid"))
-				// }
-			// });
 		})
 	},
 	
@@ -10003,7 +9949,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return 0;
 		};
 		
-		UIManager.clearPage(_T('Plugins'),_T("Plugins"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Plugins',_T("Plugins"),UIManager.oneColumnLayout);
 
 		function _getScriptFileList(controller,devicetype) {
 			var dtdb = MultiBox.getDeviceTypesDB(controller);
@@ -10159,9 +10105,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var name = $(this).text();
 				FileDB.getFileContent(info.controller,name , function( txt ) {
 					var url = MultiBox.getFileUrl(info.controller,name);
-					UIManager.pageEditor(name,txt,"Download",function(txt) {
+					UIControler.changePage('Editor',[name,txt,"Download",function(txt) {
 						$(".altui-mainpanel a[download]")[0].click();
-					});
+					}])
 					$(".altui-mainpanel").prepend("<div class='hidden' >Download: <a href='"+url+"' download>"+name+"</a></div>");
 				});
 			});
@@ -10207,7 +10153,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		// var pages = g_ALTUI.g_CustomPages;
 		// PageManager.init(g_ALTUI.g_CustomPages);
-		UIManager.clearPage(_T('Custom Pages'),"",UIManager.oneColumnLayout);
+		UIManager.clearPage('Custom Pages',"",UIManager.oneColumnLayout);
 		
 		// lean layout if requested
 		if ( getQueryStringValue("Layout") == 'lean') {
@@ -10413,7 +10359,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		};
 		
 		// draw page & toolbox
-		UIManager.clearPage(_T('Edit Pages'),_T("Custom Pages Editor"),UIManager.twoColumnLayout);
+		UIManager.clearPage('Edit Pages',_T("Custom Pages Editor"),UIManager.twoColumnLayout);
 		PageMessage.message(_T("Drag and Drop to add/move/delete controls. use Ctrl+Click or lasso to select multiple controls"),"info");
 
 		// Get and draw the HTML areas
@@ -10523,7 +10469,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageWip: function ()
 	{
-		UIManager.clearPage(_T('Wip'),_T("Work In Progress"));
+		UIManager.clearPage('Wip',_T("Work In Progress"));
 		$(".altui-mainpanel").append("<h3>Sorry this is not yet implemented</h3>");
 	},
 
@@ -10583,7 +10529,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageLicense: function ()
 	{
-		UIManager.clearPage(_T('License'),_T("License Fees"),UIManager.twoColumnLayout);
+		UIManager.clearPage('License',_T("License Fees"),UIManager.twoColumnLayout);
 		$("#altui-pagemessage").remove();
 		var html = "";
 		html +="<span class='col-xs-12'>{0}</span>".format(
@@ -10617,7 +10563,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 	pageEvolutions: function() {
 
-		UIManager.clearPage(_T('Evolutions'),_T("Evolutions"),UIManager.oneColumnLayout);		
+		UIManager.clearPage('Evolutions',_T("Evolutions"),UIManager.oneColumnLayout);		
 		
 		$.ajax({
 				// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
@@ -10656,7 +10602,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageCredits: function ()
 	{
-		UIManager.clearPage(_T('Credits'),_T("Credits"),UIManager.twoColumnLayout);
+		UIManager.clearPage('Credits',_T("Credits"),UIManager.twoColumnLayout);
 		$("#altui-pagemessage").remove();
 		var tbl = [
 			["GetVera","http://getvera.com/","the zWave Getaway and backend platform"],
@@ -10725,6 +10671,117 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	
 	pageEditorForm: function (domparent, htmlid, title,txt,outputarea,button,onClickCB) {
+		var supportedModes = {
+				ABAP:        "abap",
+				ActionScript:"as",
+				ADA:         "ada|adb",
+				Apache_Conf: "^htaccess|^htgroups|^htpasswd|^conf|htaccess|htgroups|htpasswd",
+				AsciiDoc:    "asciidoc",
+				Assembly_x86:"asm",
+				AutoHotKey:  "ahk",
+				BatchFile:   "bat|cmd",
+				C9Search:    "c9search_results",
+				C_Cpp:       "cpp|c|cc|cxx|h|hh|hpp",
+				Cirru:       "cirru|cr",
+				Clojure:     "clj|cljs",
+				Cobol:       "CBL|COB",
+				coffee:      "coffee|cf|cson|^Cakefile",
+				ColdFusion:  "cfm",
+				CSharp:      "cs",
+				CSS:         "css",
+				Curly:       "curly",
+				D:           "d|di",
+				Dart:        "dart",
+				Diff:        "diff|patch",
+				Dockerfile:  "^Dockerfile",
+				Dot:         "dot",
+				Erlang:      "erl|hrl",
+				EJS:         "ejs",
+				Forth:       "frt|fs|ldr",
+				FTL:         "ftl",
+				Gherkin:     "feature",
+				Gitignore:   "^.gitignore",
+				Glsl:        "glsl|frag|vert",
+				golang:      "go",
+				Groovy:      "groovy",
+				HAML:        "haml",
+				Handlebars:  "hbs|handlebars|tpl|mustache",
+				Haskell:     "hs",
+				haXe:        "hx",
+				HTML:        "html|htm|xhtml",
+				HTML_Ruby:   "erb|rhtml|html.erb",
+				INI:         "ini|conf|cfg|prefs",
+				Jack:        "jack",
+				Jade:        "jade",
+				Java:        "java",
+				JavaScript:  "js|jsm",
+				JSON:        "json",
+				JSONiq:      "jq",
+				JSP:         "jsp",
+				JSX:         "jsx",
+				Julia:       "jl",
+				LaTeX:       "tex|latex|ltx|bib",
+				LESS:        "less",
+				Liquid:      "liquid",
+				Lisp:        "lisp",
+				LiveScript:  "ls",
+				LogiQL:      "logic|lql",
+				LSL:         "lsl",
+				Lua:         "lua",
+				LuaPage:     "lp",
+				Lucene:      "lucene",
+				Makefile:    "^Makefile|^GNUmakefile|^makefile|^OCamlMakefile|make",
+				MATLAB:      "matlab",
+				Markdown:    "md|markdown",
+				MEL:         "mel",
+				MySQL:       "mysql",
+				MUSHCode:    "mc|mush",
+				Nix:         "nix",
+				ObjectiveC:  "m|mm",
+				OCaml:       "ml|mli",
+				Pascal:      "pas|p",
+				Perl:        "pl|pm",
+				pgSQL:       "pgsql",
+				PHP:         "php|phtml",
+				Powershell:  "ps1",
+				Prolog:      "plg|prolog",
+				Properties:  "properties",
+				Protobuf:    "proto",
+				Python:      "py",
+				R:           "r",
+				RDoc:        "Rd",
+				RHTML:       "Rhtml",
+				Ruby:        "rb|ru|gemspec|rake|^Guardfile|^Rakefile|^Gemfile",
+				Rust:        "rs",
+				SASS:        "sass",
+				SCAD:        "scad",
+				Scala:       "scala",
+				Smarty:      "smarty|tpl",
+				Scheme:      "scm|rkt",
+				SCSS:        "scss",
+				SH:          "sh|bash|^.bashrc",
+				SJS:         "sjs",
+				Space:       "space",
+				snippets:    "snippets",
+				Soy_Template:"soy",
+				SQL:         "sql",
+				Stylus:      "styl|stylus",
+				SVG:         "svg",
+				Tcl:         "tcl",
+				Tex:         "tex",
+				Text:        "txt",
+				Textile:     "textile",
+				Toml:        "toml",
+				Twig:        "twig",
+				Typescript:  "ts|typescript|str",
+				Vala:        "vala",
+				VBScript:    "vbs",
+				Velocity:    "vm",
+				Verilog:     "v|vh|sv|svh",
+				XML:         "xml|rdf|rss|wsdl|xslt|atom|mathml|mml|xul|xbl",
+				XQuery:      "xq",
+				YAML:        "yaml|yml"
+		};
 		var _tools= [
 			{id:'altui-copy-clipboard-'+htmlid,  glyph:"glyphicon-copy", label:_T("Copy")},
 			{id:'altui-top-'+htmlid, glyph:"glyphicon-fast-backward", label:_T("Top")},
@@ -10761,8 +10818,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var editor = ace.edit( "altui-editor-text" );
 		editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
 		editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
-		editor.getSession().setMode( "ace/mode/lua" );
-				
+		var extension = (title.indexOf(".")!=-1) ? ( title.split(".").pop() ) : ''
+		var matchmode = null;
+		$.each(supportedModes, function(mode,v) {
+				$.each(v.split("|"),function(k,tstext) {
+					var re = new RegExp(tstext,"gi")
+					if (re.test(extension)) {
+						// matches
+						matchmode = mode
+						return false;
+					}
+				});
+				return (matchmode==null)
+		});	
+		matchmode = (matchmode || "lua").toLowerCase()
+		editor.getSession().setMode( "ace/mode/"+matchmode );
 		// resize
 		$("div#altui-editor-text").resizable({
 			stop: function( event, ui ) {
@@ -10806,7 +10876,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageEditor: function (filename,txt,button,cbfunc)
 	{
-		UIManager.clearPage(_T('Editor'), filename,UIManager.oneColumnLayout);
+		UIManager.clearPage('Editor', filename,UIManager.oneColumnLayout);
 		$(".altui-mainpanel").append("<p> </p>");
 		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',filename,txt,null,button,function(newtxt) {
 			if ($.isFunction(cbfunc)) 
@@ -10816,7 +10886,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pageLuaTest: function ()
 	{
-		UIManager.clearPage(_T('LuaTest'),_T("Lua Code Test"),UIManager.oneColumnLayout);
+		UIManager.clearPage('LuaTest',_T("Lua Code Test"),UIManager.oneColumnLayout);
 		$(".altui-mainpanel").append("<div class='col-xs-12'><p>"+_T("This test code will succeed if it is syntactically correct. It must be the body of a function and can return something. The return object and console output will be displayed)")+"</p></div>");
 		var lastOne = MyLocalStorage.getSettings("LastOne_LuaTest") || "return true";
 		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Test Code"),lastOne,true,_T("Submit"),function(lua) {
@@ -10919,7 +10989,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return str;
 		};
 		
-		UIManager.clearPage(_T('OsCommand'),_T("OS Command"),UIManager.oneColumnLayout);
+		UIManager.clearPage('OsCommand',_T("OS Command"),UIManager.oneColumnLayout);
 		
 		var editButtonHtml = buttonTemplate.format( 'altui-editoscmd-0', 'altui-editoscmd', editGlyph,'default',"");
 
@@ -11049,7 +11119,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		}
 
-		UIManager.clearPage(_T('LuaStart'),_T("Lua Startup"),UIManager.oneColumnLayout);
+		UIManager.clearPage('LuaStart',_T("Lua Startup"),UIManager.oneColumnLayout);
 		
 		// DOES NOT WORK on other ctrl as the url gets too long
 		
@@ -11063,7 +11133,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	
 	pagePower: function() 
 	{
-		UIManager.clearPage(_T('Power'),_T("Power Chart"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Power',_T("Power Chart"),UIManager.oneColumnLayout);
 		
 		// prepare and load D3 then draw the chart
 		$(".altui-mainpanel")
@@ -11267,7 +11337,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			mesh:$.map( data.sort(function(a, b){return _countNeighbors(b)-_countNeighbors(a)}), function(d) { return d.altuiid; })
 		};
 
-		UIManager.clearPage(_T('ZWave'),_T("zWave Network"),UIManager.oneColumnLayout);
+		UIManager.clearPage('ZWave',_T("zWave Network"),UIManager.oneColumnLayout);
 		// $("div#dialogs").append(deviceModalTemplate.format( '', '', 0 ));
 		DialogManager.registerDialog('deviceModal',deviceModalTemplate.format( '', '', 0 ));
 		var html = "";
@@ -11717,7 +11787,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			_updateChartRoutes2(data);
 		};
 		
-		UIManager.clearPage(_T('Quality'),_T("Network Quality"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Quality',_T("Network Quality"),UIManager.oneColumnLayout);
 		
 		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select'));
 		$("#altui-controller-select").change(function() {
@@ -12001,7 +12071,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		
 		// prepare and load D3 then draw the chart
-		UIManager.clearPage(_T('Parent/Child'),_T("Parent/Child Network"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Parent/Child',_T("Parent/Child Network"),UIManager.oneColumnLayout);
 		PageMessage.message(_T("Drag and Drop to fix the position of a node. Simple Click to open or collapse a parent node, Shift Click to free a fixed node"),"info");
 		var html="";
 		$(".altui-mainpanel")
@@ -12301,7 +12371,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		};
 		
 		// prepare and load D3 then draw the chart
-		UIManager.clearPage(_T('zWaveRoutes'),_T("zWave Routes"),UIManager.oneColumnLayout);
+		UIManager.clearPage('zWaveRoutes',_T("zWave Routes"),UIManager.oneColumnLayout);
 		PageMessage.message(_T("Drag and Drop to fix the position of a node. Simple Click to open or collapse a parent node, Shift Click to free a fixed node"),"info");
 
 		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select'));
@@ -12392,7 +12462,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 	},
 	pageLocalization: function() {
-		UIManager.clearPage(_T('Localize'),_T("Localizations"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Localize',_T("Localizations"),UIManager.oneColumnLayout);
 		Localization.dump();
 	},
 	pageDebug: function() {
@@ -12476,7 +12546,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$("#altui-oscommand-result").text(JSON.stringify(devices,null,2));
 		};
 
-		UIManager.clearPage(_T('Debug'),_T("Debug Tools"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Debug',_T("Debug Tools"),UIManager.oneColumnLayout);
 		var html = "";
 		html += "<div class='col-xs-12'>";
 			html +="<div class='panel panel-default'>";
@@ -12512,7 +12582,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 	},
 	pageTblWatches:function() {
-		UIManager.clearPage(_T('TblWatches'),_T("Table Watches"),UIManager.oneColumnLayout);
+		UIManager.clearPage('TblWatches',_T("Table Watches"),UIManager.oneColumnLayout);
 		var watches = MultiBox.getWatches( 
 			"VariablesToWatch",	// watch type
 			null);		// no filter
@@ -12544,7 +12614,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					glyph:editGlyph,
 					onclick: function(grid,e,row,ident) {
 						var scene = MultiBox.getSceneByID(0,row.sceneid);
-						UIManager.pageSceneEdit( scene.altuiid );	
+						UIControler.changePage('Scene Edit',[scene.altuiid])
 					}
 				},
 				'altui-command-delete': {
@@ -12594,7 +12664,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				'altui-command-see': {
 					glyph:eyeOpenGlyph,
 					onclick: function(grid,e,row,ident) {
-						UIManager.pageWatchDisplay(e,ident);
+						UIControler.changePage('WatchDisplay',[e,ident])
 					}
 				},
 				'altui-command-edit': {
@@ -12648,7 +12718,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return html;
 		};
 		
-		UIManager.clearPage(_T('TblControllers'),_T("Table Controllers"),UIManager.oneColumnLayout);
+		UIManager.clearPage('TblControllers',_T("Table Controllers"),UIManager.oneColumnLayout);
 		var html="";
 		html+="<div>";
 		html+="  <ul class='nav nav-tabs' role='tablist'>";
@@ -12756,7 +12826,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 	},
 	pageTblScenes: function() {
-		UIManager.clearPage(_T('TblScenes'),_T("Table Scenes"),UIManager.oneColumnLayout);
+		UIManager.clearPage('TblScenes',_T("Table Scenes"),UIManager.oneColumnLayout);
 		MultiBox.getScenes(null, null, function (scenes) {
 			var model = {
 				domcontainer : $(".altui-mainpanel"),
@@ -12800,7 +12870,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					'altui-command-edit': {
 						glyph:editGlyph,
 						onclick: function(grid,e,row,ident) {
-							UIManager.pageSceneEdit(ident);
+							UIControler.changePage('Scene Edit',[ident])
 						}
 					},
 					'altui-command-delete': {
@@ -12823,7 +12893,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	// pageTriggers2: function()
 	// {
-		// UIManager.clearPage(_T('Triggers'),_T('Triggers'),UIManager.oneColumnLayout);
+		// UIManager.clearPage('Triggers'),_T('Triggers',UIManager.oneColumnLayout);
 		// $(".altui-mainpanel").empty();
 		// var bFirst=true;
 		// var bBody=false;
@@ -12886,7 +12956,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 	pageTriggers: function()
 	{
-		UIManager.clearPage(_T('Triggers'),_T('Triggers'),UIManager.oneColumnLayout);
+		UIManager.clearPage('Triggers',_T('Triggers'),UIManager.oneColumnLayout);
 		$(".altui-mainpanel").empty();
 		var arr = [];
 		MultiBox.getScenes( null , function(s) {return s.triggers!=null}, function(scenes) {
@@ -13095,7 +13165,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	
 	pageTblDevices : function() {
-		UIManager.clearPage(_T('TblDevices'),_T("Table Devices"),UIManager.oneColumnLayout);
+		UIManager.clearPage('TblDevices',_T("Table Devices"),UIManager.oneColumnLayout);
 
 		MultiBox.getDevices( 
 			null,	// per device callback not useful here
@@ -13125,7 +13195,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						'altui-command-edit': {
 							glyph:editGlyph,
 							onclick: function(grid,e,row,ident) {
-								UIManager.pageControlPanel(ident);	
+								UIControler.changePage('Control Panel',[ident])
 							}
 						},
 						'altui-command-delete': {
@@ -13234,7 +13304,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			
 		}
 
-		UIManager.clearPage(_T('WatchDisplay'),_T("Watch Display"),UIManager.oneColumnLayout);
+		UIManager.clearPage('WatchDisplay',_T("Watch Display"),UIManager.oneColumnLayout);
 		MultiBox.getDataProviders(function(providers) {
 			var model={
 				watches:[]
@@ -13262,7 +13332,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 	},
 	pageThemes: function() {
-		UIManager.clearPage(_T('Themes'),_T("Themes"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Themes',_T("Themes"),UIManager.oneColumnLayout);
 		PageMessage.message( "Select a theme by clicking on it and refresh your browser", "info");
 		var resetButton = buttonTemplate.format( "altui-theme-reset", 'btn-default', _T("Reset"),"default",_T('Reset Theme Override'));
 		var html = "";
@@ -13360,7 +13430,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			old_options = $.extend(true,old_options,tbl);
 			MultiBox.setStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "ServerOptions", JSON.stringify(old_options) );
 		};
-		UIManager.clearPage(_T('Options'),_T("Options"),UIManager.oneColumnLayout);
+		UIManager.clearPage('Options',_T("Options"),UIManager.oneColumnLayout);
 
 		var color = IconDB.isDB() ? "text-success" : "text-danger";
 		var okGlyph = glyphTemplate.format( "ok-sign", "OK" , color );
@@ -13481,38 +13551,38 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		$(".altui-save-IconDB").click( function() {
 			IconDB.saveDB();
-			UIManager.pageOptions();
+			UIControler.changePage('Options',[ ]);
 		});
 		$(".altui-clear-IconDB").click( function() {
 			IconDB.resetDB();
-			UIManager.pageOptions();
+			UIControler.changePage('Options',[ ]);
 		});
 		$(".altui-save-FileDB").click( function() {
 			FileDB.saveDB();
-			UIManager.pageOptions();
+			UIControler.changePage('Options',[ ]);
 		});
 		$(".altui-clear-FileDB").click( function() {
 			FileDB.resetDB();
-			UIManager.pageOptions();
+			UIControler.changePage('Options',[ ]);
 		});
 		$(".altui-save-userdata").click( function() {
 			MultiBox.saveEngine();
-			UIManager.pageOptions();
+			UIControler.changePage('Options',[ ]);
 		});
 		$(".altui-clear-userdata").click( function() {
 			MultiBox.clearEngine();
-			UIManager.pageOptions();
+			UIControler.changePage('Options',[ ]);
 		});
 		$(".altui-save-userpage").click( function() {
 			PageManager.savePages();
 		});
 		$(".altui-restore-userpage").click( function() {
 			PageManager.recoverFromStorage();
-			UIManager.pageOptions();
+			UIControler.changePage('Options',[ ]);
 		});
 		$(".altui-clear-userpage").click( function() {
 			PageManager.clearStorage();
-			UIManager.pageOptions();
+			UIControler.changePage('Options',[ ]);
 		});
 	},
 	reloadEngine: function() {
@@ -13560,44 +13630,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					if ($(this).data("toggle") != "dropdown")	// not for the More... button
 						$(".navbar-collapse").collapse('hide');
 				} )
-				.on ("click touchend", ".imgLogo", UIManager.pageHome )
-				// .on ("click", ".altui-savechanges-button", MultiBox.saveChangeCaches )
-				.on ("click", "#menu_room", UIManager.pageRooms )
-				.on ("click", "#menu_myhome", UIManager.pageMyHome )
-				.on ("click", "#menu_device", UIManager.pageDevices )
-				.on ("click", "#menu_scene", UIManager.pageScenes )
-				.on ("click", "#altui-scene-triggers", UIManager.pageTriggers )
-				.on ("click", "#altui-app-store", UIManager.pageAppStore )
-				.on ("click", "#menu_plugins", UIManager.pagePlugins )
-				.on ("click", "#menu_timeline", UIManager.pageTimeline )
-				.on ("click", "#menu_workflow", UIManager.pageWorkflows )
-				.on ("click", "#altui-pages-see", UIManager.pageUsePages )
-				.on ("click", "#altui-pages-edit", UIManager.pageEditPages )
+				.on ("click touchend", ".imgLogo", function() { UIControler.changePage('Home') })
 				.on( "click", "#altui-reload", UIManager.reloadEngine )
 				.on( "click", "#altui-reboot", UIManager.reboot )
 				.on( "click", "#altui-remoteaccess", UIManager.pageRemoteAccess )
-				.on( "click", "#altui-license-page", UIManager.pageLicense )
-				.on( "click", "#altui-credits", UIManager.pageCredits )
-				.on( "click", "#altui-evolutions", UIManager.pageEvolutions)
-				.on( "click", "#altui-oscommand", UIManager.pageOsCommand )
-				.on( "click", "#altui-luastart", UIManager.pageLuaStart )
-				.on( "click", "#altui-luatest", UIManager.pageLuaTest )
-				.on( "click", "#altui-zwavenetwork", UIManager.pageZwave )		
-				.on( "click", "#altui-childrennetwork", UIManager.pageChildren )		
-				.on( "click", "#altui-zwaveroutes", UIManager.pageRoutes )		
-				.on( "click", "#altui-quality", UIManager.pageQuality )		
-				.on( "click", "#altui-energy", UIManager.pagePower )	
-				.on( "click", "#altui-tbl-device", UIManager.pageTblDevices )
-				.on( "click", "#altui-tbl-scene", UIManager.pageTblScenes )
-				.on( "click", "#altui-tbl-watches", UIManager.pageTblWatches )				
-				.on( "click", "#altui-graph-watches", UIManager.pageWatchDisplay )				
-				.on( "click", "#altui-tbl-controllers", UIManager.pageTblControllers )				
-				.on( "click", "#altui-optimize", UIManager.pageOptions )
 				.on( "click", "#altui-checkupdate", UIManager.pageCheckUpdate)
-				.on( "click", "#altui-theme-selector", UIManager.pageThemes )
-				.on( "click", "#altui-localize", UIManager.pageLocalization  )
-				.on( "click", "#altui-debugtools", UIManager.pageDebug  )
-
 				.on( "click", "#altui-debug-btn", function() {
 					$(".altui-debug-div").toggle();
 					$("#altui-debug-btn span.caret").toggleClass( "caret-reversed" );
@@ -13612,6 +13649,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var device = MultiBox.getDeviceByAltuiID(altuiid);
 					UIManager.deviceDrawActions(device);
 				});
+				var pageIDs = UIControler.getPagesID().join(",");
+				$(document).on("click", pageIDs, function(e) { 
+					var id = $(this).prop('id')
+					UIControler.onClickHtml('#'+id);
+				})
 				AltuiDebug.debug("init done");
 				// console.log("start UIManager.run()");
 				_refreshFooter();
@@ -13641,7 +13683,7 @@ var HistoryManager = ( function(win) {
 	var _nopush = false;
 	var _history = win.history
 	win.onpopstate = function(event) {
-		console.log("POP history location: " + document.location + ", state: " + JSON.stringify(event.state))
+		// console.log("POP history location: " + document.location + ", state: " + JSON.stringify(event.state))
 	  // alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
 		if (event.state!=null) {
 			var caller = event.state.caller;
@@ -13656,10 +13698,12 @@ var HistoryManager = ( function(win) {
 			var state = {
 				caller: caller,
 				args: $.grep(args || [], function(arg) {
-					return (arg==null) || (arg.cancelable==undefined)	// prevent event object from being part of argument array
+					// prevent event object from being part of argument array
+					// prevent callback function also, that means some pages (few) will not support BACK feature
+					return (arg==null) || ((arg.cancelable==undefined)	&& ($.isFunction(arg)==false))
 				})
 			};
-			console.log("PUSH history %s , nopush=%s",JSON.stringify(state),_nopush);
+			// console.log("PUSH history %s , nopush=%s",JSON.stringify(state),_nopush);
 			if (_nopush==false)
 				(_history).pushState( state , id, null);
 			_nopush=false;
@@ -13986,3 +14030,94 @@ $(function() {
 	}
 });
 
+				
+var UIControler = (function(win) {
+	var _pages =  					{
+			'Home':   					{ id:0, title:'Home', 						htmlid:"#menu_home", onclick:UIManager.pageHome,	parent:-1},
+			'Rooms':  					{ id:1, title:'Rooms',						htmlid:"#menu_room", onclick:UIManager.pageRooms, 	parent:0 },
+			'Devices':					{	id:2, title:'Devices', 					htmlid:"#menu_device", onclick:UIManager.pageDevices, parent:0 },
+			'Control Panel':		{ id:5, title:'Control Panel', 			onclick:UIManager.pageControlPanel, parent:2 },
+			'Scenes':						{ id:6, title:'Scenes', 					htmlid:"#menu_scene", onclick:UIManager.pageScenes, 	parent:0 },
+			'Scene Edit':				{ id:7, title:'Scene Edit', 				onclick:UIManager.pageSceneEdit, parent:6 },
+			'Plugins':					{ id:8, title:'Plugins', 					htmlid:"#menu_plugins", onclick:UIManager.pagePlugins, parent:0 },
+			'Custom Pages':			{ id:9, title:'Custom Pages', 		htmlid:"#altui-pages-see", onclick:UIManager.pageUsePages, parent:0 },
+			'Edit Pages':				{ id:10, title:'Edit Pages', 			htmlid:"#altui-pages-edit", onclick:UIManager.pageEditPages, parent:0 },
+			'Credits':					{ id:11, title:'Credits', 				htmlid:"#altui-credits", onclick:UIManager.pageCredits, parent:0 },
+			'LuaTest':					{ id:12, title:'LuaTest', 				htmlid:"#altui-luatest", onclick:UIManager.pageLuaTest, parent:0 },
+			'LuaStart':					{ id:13, title:'LuaStart', 				htmlid:"#altui-luastart", onclick:UIManager.pageLuaStart, parent:0 },
+			'Options':					{ id:14, title:'Options', 				htmlid:"#altui-optimize", onclick:UIManager.pageOptions, parent:0 },
+			'Editor':						{ id:15, title:'Editor', 						onclick:UIManager.pageEditor, parent:8 },
+			'ZWave':						{ id:16, title:'ZWave', 					htmlid:"#altui-zwavenetwork", onclick:UIManager.pageZwave, parent:0 },
+			'Localize':					{ id:17, title:'Localize', 				htmlid:"#altui-localize", onclick:UIManager.pageLocalization, parent:0 },
+			'Debug':						{ id:18, title:'Debug', 					htmlid:"#altui-debugtools", onclick:UIManager.pageDebug, parent:0 },
+			'Power':						{ id:19, title:'Power', 					htmlid:"#altui-energy", onclick:UIManager.pagePower, parent:0 },
+			'Parent/Child':			{ id:20, title:'Parent/Child', 		htmlid:"#altui-childrennetwork", onclick:UIManager.pageChildren, parent:0 },
+			'zWaveRoutes':			{ id:21, title:'zWaveRoutes', 		htmlid:"#altui-zwaveroutes", onclick:UIManager.pageRoutes, parent:0 },
+			'Quality':					{ id:22, title:'Quality', 				htmlid:"#altui-quality", onclick:UIManager.pageQuality, parent:0 },
+			'TblDevices':				{ id:23, title:'TblDevices', 			htmlid:"#altui-tbl-device", onclick:UIManager.pageTblDevices, parent:0 },
+			'OsCommand':				{ id:24, title:'OsCommand', 			htmlid:"#altui-oscommand", onclick:UIManager.pageOsCommand, parent:0 },
+			'Triggers':					{ id:25, title:'Triggers', 				htmlid:"#altui-scene-triggers", onclick:UIManager.pageTriggers, 	parent:6 },
+			'Themes':						{ id:26, title:'Themes',					htmlid:"#altui-theme-selector", onclick:UIManager.pageThemes, parent:0 },
+			'TblScenes':				{ id:27, title:'TblScenes', 			htmlid:"#altui-tbl-scene", onclick:UIManager.pageTblScenes, parent:0 },
+			'TblControllers':		{ id:28, title:'TblControllers', 	htmlid:"#altui-tbl-controllers", onclick:UIManager.pageTblControllers, parent:0 },
+			'TblWatches':				{ id:29, title:'TblWatches', 			htmlid:"#altui-tbl-watches", onclick:UIManager.pageTblWatches, parent:0 },
+			'WatchDisplay':			{ id:30, title:'WatchDisplay', 		htmlid:"#altui-graph-watches", onclick:UIManager.pageWatchDisplay, parent:0 },
+			'Workflow Pages':		{ id:31, title:'Workflow Pages',	htmlid:"#menu_workflow", onclick:UIManager.pageWorkflows, parent:0 },
+			'Workflow':					{ id:32, title:'Workflow', 					onclick:UIManager.pageWorkflow, parent:31 },
+			'Workflow Report':	{ id:33, title:'Workflow Report', 	onclick:UIManager.pageWorkflowReport, parent:31 },
+			'License':					{ id:34, title:'License', 				htmlid:"#altui-license-page", onclick:UIManager.pageLicense, parent:0 },
+			'Evolutions':				{ id:35, title:'Evolutions', 			htmlid:"#altui-evolutions", onclick:UIManager.pageEvolutions, parent:0 },		
+			'App Store':				{ id:36, title:'App Store', 			htmlid:"#altui-app-store", onclick:UIManager.pageAppStore, parent:0 },
+			'Publish App':			{ id:37, title:'Publish App', 			onclick:UIManager.pageAppPublish, parent:36 },
+			'Timeline':					{ id:38, title:'Timeline', 				htmlid:"#menu_timeline", onclick:UIManager.pageTimeline, parent:0 },
+			'My Home':					{ id:39, title:'My Home', 				htmlid:"#menu_myhome", onclick:UIManager.pageMyHome, parent:0 },		
+	};
+	return {
+		getPage : function(title) {
+			var result = null;
+			$.each(_pages, function(k,p) {
+				if(p.title==title)
+				{
+					result = p;
+					return false;
+				}
+			});
+			return result;
+		},
+		getParentPage: function(page) {
+			if (page==undefined)
+				return null;
+			var parent = null;
+			$.each(_pages, function(k,p) {
+				if (p.id == page.parent) {
+					parent = p;
+					return false;
+				}
+			});
+			return parent
+		},
+		displayPage: function( code, args ) {
+			if (_pages[code])
+				(_pages[code].onclick).apply(UIManager,args)
+		},
+		changePage: function(code,args) {
+			// _.defer( UIControler.displayPage,code,args)
+			UIControler.displayPage(code,args);
+		},
+		getPagesID :function() {
+			var arr=[];
+			$.each(_pages, function(k,v) {
+				if (v.htmlid != undefined)
+					arr.push(v.htmlid)
+			});
+			return arr;
+		},
+		onClickHtml: function(id) {
+			$.each(_pages, function(key,val) {
+				if (val.htmlid == id ){
+					UIControler.changePage(key)
+				}
+			});
+		}
+	}	
+})(window);
