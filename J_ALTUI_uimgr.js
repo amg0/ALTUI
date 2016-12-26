@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1973 $";
+var ALTUI_revision = "$Revision: 1974 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -641,6 +641,8 @@ var styles ="						\
 	#altui-editor-text .ui-resizable-helper { border: 2px dotted #00F; }	\
 	#altui-editor-text .ui-resizable-handle { background-color: white; }	\
 	.altui-editor-area { width:100%; height:100% }	\
+	div.altui-timeline-item-tripped { background-color:#f2dede; } \
+	div.altui-timeline-item-untripped { background-color:#dff0d8; } \
 	.altui-variable-title {	\
 	}					\
 	.altui-variable-buttons {	\
@@ -8228,15 +8230,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 		
 		paper.on('cell:pointermove', function(event, x, y) {
-			// if (event.model.isLink()) {
-				// var clickPoint  = { x: event._dx, y: event._dy },
-					// length1     = event.sourcePoint.distance(clickPoint),
-					// length2     = event.targetPoint.distance(clickPoint),
-					// lengthTotal = length1 + length2, //event.sourcePoint.manhattanDistance(event.targetPoint),
-					// position    = _.round( length1 / lengthTotal, 2);
+			if (event.model.isLink()) {
+				var clickPoint  = { x: event._dx, y: event._dy },
+					length1     = event.sourcePoint.distance(clickPoint),
+					length2     = event.targetPoint.distance(clickPoint),
+					lengthTotal = length1 + length2, //event.sourcePoint.manhattanDistance(event.targetPoint),
+					position    = _.round( length1 / lengthTotal, 2);
 
-				// event.model.label(0, { position: position });
-			// }
+				event.model.label(0, { position: position });
+			}
 		});
 		paper.on('cell:pointerdblclick', function(cellView, evt, x, y) { 
 			handleDblClick(cellView, evt, x, y);
@@ -9578,12 +9580,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// var end = ( lastuntrip && (lastuntrip>lasttrip)) ? new Date(lastuntrip*1000) : null
 			if (lasttrip && ((bAddAllways==true) || (tripped=="1")) ) {
 				if (!is_blacklisted("DLT_"+device.altuiid)) {
+
 					items.update({
 						id: 'DLT_{0}_{1}'.format(device.altuiid,lasttrip),
 						group:'security',	//security
 						start: new Date(lasttrip*1000),
 						// end:end,
-						content: '<span title="{2}">{0} (<a class="altui-goto-device" data-altuiid="{1}">{1}</a>)</span>{3}'.format(device.name,device.altuiid,HTMLUtils.enhanceValue(lasttrip),removeGlyph)
+						content: '<span title="{2}">{0} (<a class="altui-goto-device" data-altuiid="{1}">{1}</a>)</span>{3}'.format(device.name,device.altuiid,HTMLUtils.enhanceValue(lasttrip),removeGlyph),
+						// className: (tripped=="1") ? "altui-timeline-item-tripped" : "altui-timeline-item-untripped"
 					})
 				}
 			}
@@ -9628,7 +9632,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							group:'watches',	//watch
 							start: new Date(item.lastUpdate*1000),
 							// end:end,
-							content: '<span title="{3}">{0}:{1}(<a class="altui-goto-device" data-altuiid="{2}">{2}</a>)</span>{4}'.format(device.name,item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate),removeGlyph)
+							content: '<span title="{3}">{0}:{1}(<a class="altui-goto-device" data-altuiid="{2}">{2}</a>):<small class="text-info">{4}</small></span>{5}'.format(device.name,item.variable,item.altuiid,HTMLUtils.enhanceValue(item.lastUpdate),item.lastNew,removeGlyph)
 						})
 					}
 				})
@@ -9760,8 +9764,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		
 		// https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css
 		UIManager.clearPage('Timeline',_T("Timeline"),UIManager.oneColumnLayout);
-		_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/', function() {
-			_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/',function() {
+		_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.17.0/', function() {
+			_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.17.0/',function() {
 				_loadCSSText("div.vis-label , div.vis-text { color: "+getCSS('color','text-primary')+" !important;	}")
 				items = new vis.DataSet();			// Create a DataSet (allows two way data-binding)
 				// itemsview = new vis.DataView( items , {
