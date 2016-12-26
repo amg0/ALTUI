@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1971 $";
+var ALTUI_revision = "$Revision: 1973 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1176,96 +1176,6 @@ var styles ="						\
 		animation: blinker 2s linear infinite;	\
 	} \
 ";		
-//=====================================================================		
-// Scene Editor
-//=====================================================================		
-//action "{"device":4,"service":"urn:upnp-org:serviceId:altui1","action":"SetDebug","arguments":[{"name":"newDebugMode","value":"1"}]}"
-//helper formatting functions
-function _displayDeviceName(controller,deviceid) {
-	var device = MultiBox.isAltuiid(deviceid) ? MultiBox.getDeviceByAltuiID(deviceid) : MultiBox.getDeviceByID(controller,deviceid);
-	return (device==null) ? 'invalid device' : (device.name + "<small class='text-muted'> (#"+device.altuiid+")</small>");
-};
-
-function _formatAction(controller,action) {
-	function _displayArguments(Thearguments) {
-		var html=[];
-		$.each(Thearguments, function(idx,arg) {
-			html.push("{0}: {1}".format( arg.name, arg.value));
-		});
-		return html.join(',');
-	};
-	return {
-		device:_displayDeviceName(controller,action.device),
-		action:action.action,
-		arguments:_displayArguments(action.arguments)
-	}
-};
-
-function _findEventFromTriggerTemplate(device,template)
-{
-	var static_data = MultiBox.getDeviceStaticData(device);
-	var event = null;
-	if (static_data)
-		$.each(static_data.eventList2, function( idx,e) {
-			if (e.id == template) {
-				event = e;
-				return false;
-			}
-		});
-	return event;
-};
-
-function _formatTrigger(controller,trigger)
-{
-	var line = {};
-	var deviceid = trigger.device;
-	var device = MultiBox.getDeviceByID(controller,deviceid);
-	var event = _findEventFromTriggerTemplate( device, trigger.template );
-	line.name = trigger.name;
-	line.device = device.name + "<small class='text-muted'> (#"+device.altuiid+")</small>";
-	line.descr = event.label.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>");
-	line.condition = "";
-	line.lastrun = trigger.last_run ? _toIso(new Date(trigger.last_run*1000)," ") : "";
-	
-	if (trigger.arguments && event.argumentList)  {
-		$.each(trigger.arguments, function( idx,argument) {
-			var id = argument.id;
-			var eventargtemplate = null;
-			$.each(event.argumentList, function(idx,eventarg) {
-				if (eventarg.id==id)
-				{
-					var value = (argument.value !=undefined) ? argument.value : eventarg.defaultValue;
-					if (eventarg.allowedValueList) {
-						$.each(eventarg.allowedValueList,function(j,possiblevalue) {
-							$.each(possiblevalue,function(k,v) {
-								if (k != "HumanFriendlyText") {
-									if  ( (v == value) && (possiblevalue.HumanFriendlyText!=undefined) ) {
-										value = possiblevalue.HumanFriendlyText.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>").replace("_ARGUMENT_VALUE_",value)
-									}
-								}
-							});
-						});
-					} else if (eventarg.HumanFriendlyText && eventarg.HumanFriendlyText.text)
-						line.descr = eventarg.HumanFriendlyText.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>").replace("_ARGUMENT_VALUE_",value)
-					line.condition +="{0} {1} {2}".format(
-						eventarg.name,
-						eventarg.comparisson,
-						value );	
-					return false;	// we had a match
-				}				
-			});
-		});
-	} else {
-		var lines = [];
-		if (event.serviceStateTable)
-			$.each(event.serviceStateTable, function(key,serviceState){
-				lines.push("{0} {1} {2}".format( key, serviceState.comparisson, serviceState.value));					
-			});
-		line.condition += lines.join(" AND ");
-	}
-
-	return line;
-};
 
 var UIManager  = ( function( window, undefined ) {  
 	// there scripts cannot be loaded by ALTUI and cannot be executed, so if a device uses them, we do not load/use it
@@ -13679,38 +13589,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
   };	// end of return
 })( window );
 
-var HistoryManager = ( function(win) {
-	var _nopush = false;
-	var _history = win.history
-	win.onpopstate = function(event) {
-		// console.log("POP history location: " + document.location + ", state: " + JSON.stringify(event.state))
-	  // alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
-		if (event.state!=null) {
-			var caller = event.state.caller;
-			var args = event.state.args;
-			_nopush = true;
-			window["UIManager"][caller].apply( UIManager, args)
-			// window["UIManager"][caller]();	// call function by its name
-		}
-	};
-	return {
-		pushState: function( id, caller, args ) {
-			var state = {
-				caller: caller,
-				args: $.grep(args || [], function(arg) {
-					// prevent event object from being part of argument array
-					// prevent callback function also, that means some pages (few) will not support BACK feature
-					return (arg==null) || ((arg.cancelable==undefined)	&& ($.isFunction(arg)==false))
-				})
-			};
-			// console.log("PUSH history %s , nopush=%s",JSON.stringify(state),_nopush);
-			if (_nopush==false)
-				(_history).pushState( state , id, null);
-			_nopush=false;
-		}
-	}
-})( window )
-
 // $(document).ready(function() {
 $(function() {
 
@@ -14030,7 +13908,6 @@ $(function() {
 	}
 });
 
-				
 var UIControler = (function(win) {
 	var _pages =  					{
 			'Home':   					{ id:0, title:'Home', 						htmlid:"#menu_home", onclick:UIManager.pageHome,	parent:-1},

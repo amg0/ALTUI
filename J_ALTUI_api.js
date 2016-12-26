@@ -1373,7 +1373,7 @@ var api = {
 		return API_VERSION;
 	},
 	requiresVersion: function (minVersion, opt_fnFailure) {
-console.log("minVersion:",minVersion,"API Version:",this.API_VERSION);
+		// console.log("minVersion:",minVersion,"API Version:",this.API_VERSION);
 		if (parseInt(this.API_VERSION) < parseInt(minVersion)) {
 			if ('function' == typeof opt_fnFailure) {
 				return opt_fnFailure(this.API_VERSION);
