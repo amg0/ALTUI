@@ -5103,21 +5103,41 @@ var PageMessage = (function(window, undefined ) {
 				
 var HistoryManager = ( function(win) {
 	var _nopush = false;
-	var _history = win.history
+	var _history = []
 	win.onpopstate = function(event) {
 		// console.log("POP history location: " + document.location + ", state: " + JSON.stringify(event.state))
 	  // alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+
 		if (event.state!=null) {
-			var caller = event.state.caller;
-			var args = event.state.args;
-			_nopush = true;
-			window["UIManager"][caller].apply( UIManager, args)
-			// window["UIManager"][caller]();	// call function by its name
+			var idx = parseInt(event.state);
+			// browser removed latest history entry, so we align our internal history stack
+			while (_history.length>idx)
+				_history.pop();
+			if ( idx == _history.length ) {
+				var state = _history.pop();
+				// console.log("After POP history length ",_history.length)
+				var caller = state.caller;
+				var args = state.args;
+				var method = state.method || null;
+				var context = state.context || null;
+				_nopush = true;
+				if ( (context!=null) && ($.isFunction(method)==true) ) {
+					method.apply(context, args )
+				} else {
+					window["UIManager"][caller].apply( UIManager, args)
+					// window["UIManager"][caller]();	// call function by its name
+				}
+			} else 
+			{
+				AltuiDebug.warning("inconsistent History state stack");
+			}
 		}
 	};
 	return {
-		pushState: function( id, caller, args ) {
+		pushState: function( id, caller, args, method, context ) {
 			var state = {
+				context:context,
+				method:method,
 				caller: caller,
 				args: $.grep(args || [], function(arg) {
 					// prevent event object from being part of argument array
@@ -5125,9 +5145,12 @@ var HistoryManager = ( function(win) {
 					return (arg==null) || ((arg.cancelable==undefined)	&& ($.isFunction(arg)==false))
 				})
 			};
-			// console.log("PUSH history %s , nopush=%s",JSON.stringify(state),_nopush);
-			if (_nopush==false)
-				(_history).pushState( state , id, null);
+			_history.push(state);
+			// console.log("After PUSH history length ",_history.length)
+
+			if (_nopush==false) {
+				win.history.pushState( _history.length , id, null);				
+			}
 			_nopush=false;
 		}
 	}

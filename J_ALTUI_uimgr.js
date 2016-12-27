@@ -5783,11 +5783,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		return body;
 	},
 	
-	clearPage : function(breadcrumb,title,layout,args)
+	clearPage : function(breadcrumb,title,layout,args,method,context_obj)
 	{
 		var layoutfunc = layout || UIManager.twoColumnLayout;
 		
-		HistoryManager.pushState( breadcrumb, arguments.callee.caller.name, args ? args : arguments.callee.caller.arguments);
+		// if it is a UIManager function
+		if (arguments.callee.caller && $.isFunction(window["UIManager"][arguments.callee.caller.name]) )
+			HistoryManager.pushState( breadcrumb, arguments.callee.caller.name, args ? args : arguments.callee.caller.arguments);
+		else
+			HistoryManager.pushState( breadcrumb, null, args, method,context_obj);
+			
 		EventBus.unregisterEventHandler("on_ui_deviceStatusChanged");
 		UIManager.stoprefreshModes();
 		HTMLUtils.stopAllTimers();
