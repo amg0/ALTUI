@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1976 $";
+var ALTUI_revision = "$Revision: 1977 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -688,7 +688,6 @@ var styles ="						\
 		height:100%;\
 	}					\
 	#altui-toggle-messages { \
-		margin-bottom: 2px;				\
 	} \
 	div#altui-pagemessage-panel {	\
 		max-height:100px;	\
@@ -5721,7 +5720,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return ( (parent) ? _parentsOf(parent) : '' ) + thisline 
 		};
 		
-		var html="<ol class='breadcrumb altui-breadcrumb'>";
+		var html = "";
+		//html += buttonTemplate.format( -1, 'altui-back',glyphTemplate.format( "backward", _T("Back"), "" ),'default',_T("Back")),
+		html +="<ol class='breadcrumb altui-breadcrumb'>";
+		html += "<li><a class='altui-back' href='javascript:void(0);'>{0}</a></li>".format(glyphTemplate.format( "backward", _T("Back"), "" ));
 		var page = UIControler.getPage(title);
 		var parent = UIControler.getParentPage(page);
 		if (page) {
@@ -5816,6 +5818,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$(".altui-breadcrumd-item").off().on('click',function(e) {
 			var id = $(this).prop('id');
 		});
+		$(".altui-back").off().on('click',function(e) {
+			window.history.go(-1)
+		});
+		
 	},
 	
 	//window.open("data_request?id=lr_ALTUI_Handler&command=home","_self");
@@ -6399,9 +6405,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html+="\
 			<div class='col-xs-12'>\
 				<div class='panel panel-default altui-myhome-transparent'>\
-					<div class='panel-body'><a class='altui-myhome-title' href='#' onclick='return false;'>{1}</a> / {0}</div>\
+					<div class='panel-body'>\
+						<a class='altui-back' href='#' onclick='return false;'>{0}</a> /\
+						<a class='altui-myhome-title' href='#' onclick='return false;'>{1}</a> / {2}\
+					</div>\
 				</div>\
-			</div>".format(model.title || '' ,_T("Rooms"));
+			</div>".format(glyphTemplate.format( "backward", _T("Back"), "" ),model.title || '' ,_T("Rooms"));
 			
 			$.each(data, function(idx,item) {
 				html += tmpl(item)
@@ -6419,6 +6428,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.off('click', ".altui-myhome-title")
 				.on('click', ".altui-myhome-title",function(e) {
 					UIControler.changePage('My Home')
+				})
+				.off('click', ".altui-back")
+				.on('click', ".altui-back",function(e) {
+					window.history.go(-1)
 				});
 				
 			window.scrollTo(0, 0);
