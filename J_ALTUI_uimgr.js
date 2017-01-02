@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1980 $";
+var ALTUI_revision = "$Revision: 1981 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6335,7 +6335,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				});
 			pagemodel.device.title = rname
 			_drawBoxes(pagemodel.device, devices);
-			
+			_initInteractivity();
+
 			var ws = MultiBox.getWeatherSettings();
 			if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
 				ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride'); 
@@ -6491,6 +6492,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								} );
 			pagemodel.scene.title = rname
 			_drawBoxes(pagemodel.scene, scenes)
+			_initInteractivity()
 		}
 
 		function _display_rooms() {
