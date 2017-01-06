@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1981 $";
+var ALTUI_revision = "$Revision: 1982 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5728,13 +5728,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var parent = UIControler.getParentPage(page);
 		if (page) {
 			html += _parentsOf(parent);
-			html += "<li class='active'>{0}</li>".format(_T(page.title) );
+			html += "<li class='active'>{0}<span class='altui-page-title'>{1}</span></li>".format(_T(page.title), title ? (": "+title) : '' );
 		}
 		html+="</ol>";
-		if(title) {
-			html += "<p>{0}</p>".format(title)
-		}
+		// if(title) {
+			// html += "<h4 class='altui-page-title'>{0}</h4>".format(title)
+		// }
 		return html;
+	},
+	setCrumbTitle: function(title) {
+		$(".altui-page-title").text(title ? (": "+title) : '')
 	},
 	
 	// pages
@@ -10111,11 +10114,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		nPage = nPage || (parseInt(getQueryStringValue("nPage") || -1)) ;	// either passed in , or from query string, or defaults to -1
 		UIManager.clearPage('Custom Pages',"",UIManager.oneColumnLayout);
+
+		var page = PageManager.getPageByIdx(nPage);
+		if (page)
+				UIManager.setCrumbTitle(page.name);
 		
 		// lean layout if requested
 		if ( getQueryStringValue("Layout") == 'lean') {
 			$("#altui-pagemessage").remove();
 			$(".navbar-fixed-top").remove();
+			$("ul.nav-tabs").remove();
 			$(".container-fluid").css("margin-top","-60px");
 			$(".container-fluid").find(".col-xs-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
 		}
@@ -10123,20 +10131,24 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var pageTabs = _createPageTabsHtml( false, nPage ) ;
 		var Html = "<div class='tab-content altui-page-contents'>";
 		PageManager.forEachPage( function( idx, page) {
-				// if ( (nPage==-1) || (nPage==idx) ) {
-					Html += _getPageHtml(page,false)	;// no edit mode
-				// }
+				Html += _getPageHtml(page,false)	;// no edit mode
 		});
 		Html += "</div>";
 		
 		$(".altui-mainpanel").html( "<div class='col-xs-12'>"+pageTabs + Html +"</div>");
 		$('#altui-page-tabs li:eq({0}) a'.format((nPage==-1) ? 0 : nPage)).tab('show');
+
+		// lean layout if requested
+		if ( getQueryStringValue("Layout") == 'lean') {
+			$("ul.nav-tabs").remove();
+		}
 		_updateDynamicDisplayTools( false );
 		$('a[data-toggle="tab"]').off('shown.bs.tab').on('shown.bs.tab', function (e) {
 			// $(e.target) = newly activated tab. its parent is the LI, parent of parent is collection of LIs
 			// nPage is the index
 			var nPage = $(e.target).parent().parent().children().index( $(e.target).parent() )
-			
+			var page = PageManager.getPageByIdx(nPage);
+			UIManager.setCrumbTitle(page.name);
 			// now artificially pushing a UIController state to be able to go back
 			HistoryManager.pushState( 'Custom Pages', "", [nPage], UIManager.pageUsePages,UIManager);
 		})
@@ -13929,6 +13941,7 @@ $(function() {
 	SpeechManager.init(language);
 	
 	AltuiDebug.debug("language:"+language);
+
 	if ((language.substring(0, 2) == 'en')) {
 		AltuiDebug.debug("Locale file not needed");
 		_onInitLocalization();

@@ -2355,6 +2355,10 @@ var PageManager = (function() {
 			});
 		return result;
 	};
+	function _getPageByIdx(idx) {
+		var i = Math.max(idx,0)	// in case it is -1
+		return ( _pages ? _pages[i] : null )
+	};
 	function _getPages() {
 		return _pages;
 	};
@@ -2431,6 +2435,7 @@ var PageManager = (function() {
 		clearStorage : _clearStorage,
 		forEachPage: _forEachPage,
 		getPageFromName: _getPageFromName,
+		getPageByIdx: _getPageByIdx,
 		getPages: _getPages,
 		savePages: _savePages,
 		addPage: _addPage,
