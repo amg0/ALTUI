@@ -5554,9 +5554,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var actions = "";
 		var lines = new Array();
 		PageManager.forEachPage( function( idx, page) {
-			if ((idxPage==-1) || (idx==idxPage)) {
+			// if ((idxPage==-1) || (idx==idxPage)) {
 				lines.push( "<li id='altui-page-{1}' role='presentation' ><a href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,page.name.replace(' ','_')) ); // no white space in ID
-			}
+			// }
 		});
 		
 		if (bEditMode==true) {
@@ -5573,7 +5573,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			actions+="<li><a id='altui-page-action-save' href='#'>"+_T("Save All Pages")+"</a></li>";
 		}
 		return "<ul class='nav nav-tabs {2}' id='altui-page-tabs' role='tablist'>{0}{1}</ul>".format(
-			lines.join(''),actions, (idxPage==-1) ? '' : "hidden");
+			lines.join(''),actions, /*(idxPage==-1) ? '' : "hidden"*/ '');
 	};
 
 	function _getWidgetHtml( widget , bEditMode, page )
@@ -10107,10 +10107,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		MultiBox.getPlugins( drawPlugin , endDrawPlugin);
 	},
 	
-	pageUsePages: function ()
+	pageUsePages: function ( nPage )
 	{
-		// var pages = g_ALTUI.g_CustomPages;
-		// PageManager.init(g_ALTUI.g_CustomPages);
+		nPage = nPage || (parseInt(getQueryStringValue("nPage") || -1)) ;	// either passed in , or from query string, or defaults to -1
 		UIManager.clearPage('Custom Pages',"",UIManager.oneColumnLayout);
 		
 		// lean layout if requested
@@ -10121,21 +10120,26 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$(".container-fluid").find(".col-xs-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
 		}
 
-		// $("#altui-pagetitle").text("Your Custom Pages");
-
-		var nPage = parseInt(getQueryStringValue("nPage") || -1) ;
 		var pageTabs = _createPageTabsHtml( false, nPage ) ;
 		var Html = "<div class='tab-content altui-page-contents'>";
 		PageManager.forEachPage( function( idx, page) {
-				if ( (nPage==-1) || (nPage==idx) ) {
+				// if ( (nPage==-1) || (nPage==idx) ) {
 					Html += _getPageHtml(page,false)	;// no edit mode
-				}
+				// }
 		});
 		Html += "</div>";
 		
 		$(".altui-mainpanel").html( "<div class='col-xs-12'>"+pageTabs + Html +"</div>");
-		$('#altui-page-tabs a:first').tab('show');
+		$('#altui-page-tabs li:eq({0}) a'.format((nPage==-1) ? 0 : nPage)).tab('show');
 		_updateDynamicDisplayTools( false );
+		$('a[data-toggle="tab"]').off('shown.bs.tab').on('shown.bs.tab', function (e) {
+			// $(e.target) = newly activated tab. its parent is the LI, parent of parent is collection of LIs
+			// nPage is the index
+			var nPage = $(e.target).parent().parent().children().index( $(e.target).parent() )
+			
+			// now artificially pushing a UIController state to be able to go back
+			HistoryManager.pushState( 'Custom Pages', "", [nPage], UIManager.pageUsePages,UIManager);
+		})
 	},
 	
 	pageEditPages: function ()

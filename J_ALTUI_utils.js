@@ -5102,34 +5102,30 @@ var PageMessage = (function(window, undefined ) {
 
 				
 var HistoryManager = ( function(win) {
-	var _nopush = false;
 	var _history = []
 	win.onpopstate = function(event) {
 		// console.log("POP history location: " + document.location + ", state: " + JSON.stringify(event.state))
-	  // alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
 
 		if (event.state!=null) {
 			var idx = parseInt(event.state);
 			// browser removed latest history entry, so we align our internal history stack
-			while (_history.length>idx)
-				_history.pop();
-			if ( idx == _history.length ) {
+			if (_history.length>1) {
+				_history.pop();				// remove current element as the user just dropped it
 				var state = _history.pop();
 				// console.log("After POP history length ",_history.length)
 				var caller = state.caller;
 				var args = state.args;
 				var method = state.method || null;
 				var context = state.context || null;
-				_nopush = true;
 				if ( (context!=null) && ($.isFunction(method)==true) ) {
 					method.apply(context, args )
 				} else {
 					window["UIManager"][caller].apply( UIManager, args)
-					// window["UIManager"][caller]();	// call function by its name
 				}
 			} else 
 			{
-				AltuiDebug.warning("inconsistent History state stack");
+				// AltuiDebug.warning("inconsistent History or empty state stack");
+				window.history.go( -window.history.length );
 			}
 		}
 	};
@@ -5146,12 +5142,7 @@ var HistoryManager = ( function(win) {
 				})
 			};
 			_history.push(state);
-			// console.log("After PUSH history length ",_history.length)
-
-			if (_nopush==false) {
-				win.history.pushState( _history.length , id, null);				
-			}
-			_nopush=false;
+			win.history.pushState( _history.length , id, null);				
 		}
 	}
 })( window )
