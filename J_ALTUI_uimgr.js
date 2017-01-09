@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1983 $";
+var ALTUI_revision = "$Revision: 1984 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5834,6 +5834,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageDefault : function() {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var defurl = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalHome" );
+		if (defurl=="")
+			defurl = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home"
 		window.open(defurl,"_self");
 	},
 	
@@ -9587,38 +9589,38 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		];
 		
 		/**
-     * Move the timeline a given percentage to left or right
-     * @param {Number} percentage   For example 0.1 (left) or -0.1 (right)
-     */
-    function move (percentage) {
-				var timeline = $('#visualization').data('timeline');
-				if (percentage==0) {
-						timeline.moveTo( new Date() )
-				} else {
-					var range = timeline.getWindow();
-					var interval = range.end - range.start;
+		 * Move the timeline a given percentage to left or right
+		 * @param {Number} percentage   For example 0.1 (left) or -0.1 (right)
+		 */
+		function move (percentage) {
+					var timeline = $('#visualization').data('timeline');
+					if (percentage==0) {
+							timeline.moveTo( new Date() )
+					} else {
+						var range = timeline.getWindow();
+						var interval = range.end - range.start;
 
-					timeline.setWindow({
-							start: range.start.valueOf() - interval * percentage,
-							end:   range.end.valueOf()   - interval * percentage
-					});
-				}
-    }
+						timeline.setWindow({
+								start: range.start.valueOf() - interval * percentage,
+								end:   range.end.valueOf()   - interval * percentage
+						});
+					}
+		}
 
-    /**
-     * Zoom the timeline a given percentage in or out
-     * @param {Number} percentage   For example 0.1 (zoom out) or -0.1 (zoom in)
-     */
-    function zoom (percentage) {
-		var timeline = $('#visualization').data('timeline');
-        var range = timeline.getWindow();
-        var interval = range.end - range.start;
+		/**
+		 * Zoom the timeline a given percentage in or out
+		 * @param {Number} percentage   For example 0.1 (zoom out) or -0.1 (zoom in)
+		 */
+		function zoom (percentage) {
+			var timeline = $('#visualization').data('timeline');
+			var range = timeline.getWindow();
+			var interval = range.end - range.start;
 
-        timeline.setWindow({
-            start: range.start.valueOf() - interval * percentage,
-            end:   range.end.valueOf()   + interval * percentage
-        });
-    }
+			timeline.setWindow({
+				start: range.start.valueOf() - interval * percentage,
+				end:   range.end.valueOf()   + interval * percentage
+			});
+		}
 		function customOrder(a, b) {
 			// order by id
 			return a.id - b.id;
@@ -9770,10 +9772,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				timeline.setItems(items);		
 			}
 			if (ALTUI_registered==true) {
-					_.defer( function() {
-						var timeline = $('#visualization').data('timeline');
-						var props = MyLocalStorage.getSettings("TimelineRange");
-						if (props!=null) {
+					var timeline = $('#visualization').data('timeline');
+					var props = MyLocalStorage.getSettings("TimelineRange");
+					if (props!=null) {
+						setTimeout( function() {
 							var range = new Date(props.end)-new Date(props.start);
 							var today = Date.now();
 							var yesterday = new Date(today-range/2);
@@ -9782,20 +9784,20 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								yesterday,
 								today
 							)
-						} else {
-							var today = new Date();
-							var yesterday = new Date();
-							yesterday.setDate(today.getDate() - 1);
-							today.setDate(today.getDate() + 1);
-							timeline.setWindow(
-								yesterday,
-								today
-							)
-						}
-						timeline.on("rangechanged",function(properties) {
-							MyLocalStorage.setSettings("TimelineRange",properties)
-						})
-					});	
+						},500);
+					} else {
+						var today = new Date();
+						var yesterday = new Date();
+						yesterday.setDate(today.getDate() - 1);
+						today.setDate(today.getDate() + 1);
+						timeline.setWindow(
+							yesterday,
+							today
+						)
+					}
+					timeline.on("rangechanged",function(properties) {
+						MyLocalStorage.setSettings("TimelineRange",properties)
+					})
 					// EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function( event,device) {
 						// timelineAddDevice(device)
 					// });
