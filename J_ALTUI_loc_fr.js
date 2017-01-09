@@ -458,7 +458,11 @@ Localization.init( {
 	"Sensors":"Détecteurs",
 	"Covers":"Volets",
 	"Note: MyHome page is limited to 5 items per page for non registered users":"Note: la page MyHome page est limitée à 5 items par page pour les utilisateurs non enregistrés",
-	"Save the scene at least once before creating device watches":"Sauver la scène une première fois avant de créer une variable suivie"
+	"Save the scene at least once before creating device watches":"Sauver la scène une première fois avant de créer une variable suivie",
+	"Back":"Retour",
+	"display or not the House mode widget on home page":"Controle l affichage du widget des modes Maison sur la page principale",
+	"Show House Mode on home page":"Gadget des modes Maison sur la page principale",
+	"ShowHouseMode:display or not the House mode widget on home page":"ShowHouseMode:Controle l affichage du widget des modes Maison sur la page principale"
 });
 
 // override rules with localized version

@@ -449,8 +449,12 @@ Localization.init( {
 	"Sensors":"Sensors",
 	"Covers":"Covers",
 	"Note: MyHome page is limited to 5 items per page for non registered users":"Note: MyHome page is limited to 5 items per page for non registered users",
-	"Save the scene at least once before creating device watches":"Save the scene at least once before creating device watches"
-	});
+	"Save the scene at least once before creating device watches":"Save the scene at least once before creating device watches",
+	"Back":"Back",
+	"display or not the House mode widget on home page":"display or not the House mode widget on home page",
+	"Show House Mode on home page":"Show House Mode on home page",
+	"ShowHouseMode:display or not the House mode widget on home page":"ShowHouseMode:display or not the House mode widget on home page"
+});
 
 // override rules with localized version
 SpeechManager.initRules([
