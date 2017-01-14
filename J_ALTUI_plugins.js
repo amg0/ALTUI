@@ -40,7 +40,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-heater-container { position:absolute; left:71px; right:16px; } .altui-heater-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-heater-container .col-xs-3 { padding-left:1px; padding-right:1px; text-align:center;}  .altui-heater-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
 		style += ".altui-heater-container select.input-sm { height:22px; padding:0;}"; 
 		style += ".altui-cyan { color:cyan;}";
-		style += ".altui-countdown-btngrp  { margin-top:13px;}";
+		style += ".altui-countdown-btngrp,.altui-countdown-btngrp-mute  { margin-top:13px;}";
 		style += ".altui-dimmable  {font-size: 14px; padding-left:16px;}";
 		style += ".altui-dimmable-qubino-btngrp  { display:inline; left:5px;}";
 		style += ".altui-dimmable-qubino-btn  { padding: 3px 0px 0px 0px; height:25px;}";
@@ -1094,8 +1094,15 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	var CD_restart = glyphTemplate.format( "fast-backward", _T("Restart") , "");
 	var CD_cancel = glyphTemplate.format( "stop", _T("Cancel") , "");
 	var CD_force = glyphTemplate.format( "bell", _T("Force") , "");
-	
+	var CD_mute = glyphTemplate.format( "ban-circle", _T("Muted") , "");
+	var CD_unmute = glyphTemplate.format( "bullhorn", _T("Unmuted") , "");
 	function _drawCountDown( device) {
+		var model2 = {
+			cls:'pull-right altui-countdown-btngrp-mute',
+			buttons: [
+				{ id:'Mute-'+device.altuiid,label:CD_mute, cls:'btn-sm' },
+			]
+		}
 		var model = {
 			cls:'pull-right altui-countdown-btngrp',
 			buttons: [
@@ -1108,6 +1115,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html ="";
 		var remaining = parseInt(MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CountdownTimer1', 'Remaining' ));
 		var duration = parseInt(MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CountdownTimer1', 'Duration' ));
+		var muted = MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted");
+		model2.buttons[0].label=(muted=="1") ? CD_mute : CD_unmute
+
+		html += HTMLUtils.drawButtonGroup("altui-CntDown-Mute-{0}".format(device.altuiid), model2 );
 		html += HTMLUtils.drawButtonGroup("altui-CntDown-{0}".format(device.altuiid), model );
 		html+= "<div class='altui-countdown'>{0} / {1}</div>".format( remaining , duration );
 		
@@ -1117,7 +1128,17 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				var action = $(this).prop('id');
 				var altuiid = $(this).closest('.altui-device').data("altuiid")
 				MultiBox.runActionByAltuiID( altuiid, "urn:futzle-com:serviceId:CountdownTimer1", action )
+			})
+			.off('click','.altui-countdown-btngrp-mute button')
+			.on('click','.altui-countdown-btngrp-mute button',function(e) {
+				var altuiid = $(this).closest('.altui-device').data("altuiid")
+				var device = MultiBox.getDeviceByAltuiID(altuiid);
+				var muted = 1-parseInt(MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted"));
+				var label = (muted==1) ? CD_mute : CD_unmute;
+				$(this).html(label);
+				MultiBox.runAction(device,"urn:futzle-com:serviceId:CountdownTimer1","SetMute",{'newStatus':muted});
 			});
+
 		return html;
 	};
 
