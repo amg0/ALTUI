@@ -1089,18 +1089,20 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return html;
 	};
 	
+	// some static variables
+	var CD_start = glyphTemplate.format( "play", _T("Start") , "");
+	var CD_restart = glyphTemplate.format( "fast-backward", _T("Restart") , "");
+	var CD_cancel = glyphTemplate.format( "stop", _T("Cancel") , "");
+	var CD_force = glyphTemplate.format( "bell", _T("Force") , "");
+	
 	function _drawCountDown( device) {
-		var start = glyphTemplate.format( "play", _T("Start") , "");
-		var restart = glyphTemplate.format( "fast-backward", _T("Restart") , "");
-		var cancel = glyphTemplate.format( "stop", _T("Cancel") , "");
-		var force = glyphTemplate.format( "bell", _T("Force") , "");
 		var model = {
 			cls:'pull-right altui-countdown-btngrp',
 			buttons: [
-				{ id:'StartTimer', label:start, cls:'btn-sm' },
-				{ id:'RestartTimer',label:restart, cls:'btn-sm' },
-				{ id:'CancelTimer',label:cancel, cls:'btn-sm' },
-				{ id:'ForceComplete',label:force, cls:'btn-sm' },
+				{ id:'StartTimer', label:CD_start, cls:'btn-sm' },
+				{ id:'RestartTimer',label:CD_restart, cls:'btn-sm' },
+				{ id:'CancelTimer',label:CD_cancel, cls:'btn-sm' },
+				{ id:'ForceComplete',label:CD_force, cls:'btn-sm' },
 			]
 		}
 		var html ="";
