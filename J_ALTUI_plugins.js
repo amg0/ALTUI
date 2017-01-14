@@ -40,6 +40,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-heater-container { position:absolute; left:71px; right:16px; } .altui-heater-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-heater-container .col-xs-3 { padding-left:1px; padding-right:1px; text-align:center;}  .altui-heater-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
 		style += ".altui-heater-container select.input-sm { height:22px; padding:0;}"; 
 		style += ".altui-cyan { color:cyan;}";
+		style += ".altui-countdown-btngrp  { margin-top:13px;}";
 		style += ".altui-dimmable  {font-size: 14px; padding-left:16px;}";
 		style += ".altui-dimmable-qubino-btngrp  { display:inline; left:5px;}";
 		style += ".altui-dimmable-qubino-btn  { padding: 3px 0px 0px 0px; height:25px;}";
@@ -1089,10 +1090,32 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	};
 	
 	function _drawCountDown( device) {
+		var start = glyphTemplate.format( "play", _T("Start") , "");
+		var restart = glyphTemplate.format( "fast-backward", _T("Restart") , "");
+		var cancel = glyphTemplate.format( "stop", _T("Cancel") , "");
+		var force = glyphTemplate.format( "bell", _T("Force") , "");
+		var model = {
+			cls:'pull-right altui-countdown-btngrp',
+			buttons: [
+				{ id:'StartTimer', label:start, cls:'btn-sm' },
+				{ id:'RestartTimer',label:restart, cls:'btn-sm' },
+				{ id:'CancelTimer',label:cancel, cls:'btn-sm' },
+				{ id:'ForceComplete',label:force, cls:'btn-sm' },
+			]
+		}
 		var html ="";
 		var remaining = parseInt(MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CountdownTimer1', 'Remaining' ));
 		var duration = parseInt(MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CountdownTimer1', 'Duration' ));
+		html += HTMLUtils.drawButtonGroup("altui-CntDown-{0}".format(device.altuiid), model );
 		html+= "<div class='altui-countdown'>{0} / {1}</div>".format( remaining , duration );
+		
+		$(".altui-mainpanel")
+			.off('click','.altui-countdown-btngrp button')
+			.on('click','.altui-countdown-btngrp button', function(e) {
+				var action = $(this).prop('id');
+				var altuiid = $(this).closest('.altui-device').data("altuiid")
+				MultiBox.runActionByAltuiID( altuiid, "urn:futzle-com:serviceId:CountdownTimer1", action )
+			});
 		return html;
 	};
 
