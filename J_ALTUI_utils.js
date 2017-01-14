@@ -3065,8 +3065,8 @@ var WorkflowManager = (function() {
 						var date = new Date(null); date.setSeconds(val); 
 						txt = date.toISOString().substr(11, 8)
 					}
-					if (ALTUI_registered!=true) 
-						txt=''
+					// if (ALTUI_registered!=true) 
+						// txt=''
 					view.model.label(1,{ attrs: { text: { text: txt } }})
 			}
 		}
