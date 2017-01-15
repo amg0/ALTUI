@@ -41,6 +41,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-heater-container select.input-sm { height:22px; padding:0;}"; 
 		style += ".altui-cyan { color:cyan;}";
 		style += ".altui-countdown-btngrp,.altui-countdown-btngrp-mute  { margin-top:13px;}";
+		style += ".altui-countdown-btngrp-fav-mute { position:absolute; bottom:0px; right:0px; }";
 		style += ".altui-dimmable  {font-size: 14px; padding-left:16px;}";
 		style += ".altui-dimmable-qubino-btngrp  { display:inline; left:5px;}";
 		style += ".altui-dimmable-qubino-btn  { padding: 3px 0px 0px 0px; height:25px;}";
@@ -1141,7 +1142,33 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		return html;
 	};
-
+	
+	function _drawCountDownTile(device) {
+			var model2 = {
+				cls:'pull-right altui-countdown-btngrp-fav-mute',
+				buttons: [
+					{ id:'altui-CDMute-'+device.altuiid,label:CD_mute, cls:'btn-sm' },
+				]
+			}
+			var muted = MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted");
+			model2.buttons[0].label=(muted=="1") ? CD_mute : CD_unmute
+			var html =  UIManager.drawDefaultFavoriteDevice(device);
+			html += HTMLUtils.drawButtonGroup("altui-CntDown-Favorite-Mute-{0}".format(device.altuiid), model2 );
+			$(".altui-mainpanel")
+			.off('click','#altui-CDMute-'+device.altuiid)
+			.on('click','#altui-CDMute-'+device.altuiid, function(e) {
+				e.stopPropagation();
+				var altuiid = $(this).closest('.altui-favorites-device-content').data("altuiid")
+				var device = MultiBox.getDeviceByAltuiID(altuiid);
+				var muted = 1-parseInt(MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted"));
+				var label = (muted==1) ? CD_mute : CD_unmute;
+				$(this).html(label);
+				MultiBox.runAction(device,"urn:futzle-com:serviceId:CountdownTimer1","SetMute",{'newStatus':muted});
+				return false;
+			});
+			return html;
+	};
+	
 	function _drawVacation( device) {
 		var html ="";
 		var status = parseInt( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status') );
@@ -1314,6 +1341,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawPowerMeter  : _drawPowerMeter,
 	drawVacation    : _drawVacation,
 	drawCountDown    : _drawCountDown,
+	drawCountDownTile : _drawCountDownTile,
 	drawWeather     : _drawWeather,
 	drawWeatherIcon : _drawWeatherIcon,
 	drawInfoViewer  : _drawInfoViewer,
