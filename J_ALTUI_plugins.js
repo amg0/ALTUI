@@ -1097,13 +1097,24 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	var CD_force = glyphTemplate.format( "bell", _T("Force") , "");
 	var CD_mute = glyphTemplate.format( "ban-circle", _T("Muted") , "");
 	var CD_unmute = glyphTemplate.format( "bullhorn", _T("Unmuted") , "");
-	function _drawCountDown( device) {
+	
+	function _drawMuteButton(device,cls) {
 		var model2 = {
-			cls:'pull-right altui-countdown-btngrp-mute',
+			cls:'pull-right '+cls,
 			buttons: [
-				{ id:'Mute-'+device.altuiid,label:CD_mute, cls:'btn-sm' },
+				{ id:'altui-CDMute-'+device.altuiid,label:CD_mute, cls:'btn-sm' },
 			]
 		}
+		var muted = MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted");
+		model2.buttons[0].label=(muted=="1") ? CD_mute : CD_unmute
+		return HTMLUtils.drawButtonGroup("altui-CntDown-Mute-{0}".format(device.altuiid), model2 );
+	};
+	function _drawCountDownRemaining(device) {
+		var remaining = parseInt(MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CountdownTimer1', 'Remaining' ));
+		var duration = parseInt(MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CountdownTimer1', 'Duration' ));
+		return "<div class='altui-countdown'>{0} / {1}</div>".format( remaining , duration );
+	};
+	function _drawCountDown( device) {
 		var model = {
 			cls:'pull-right altui-countdown-btngrp',
 			buttons: [
@@ -1116,12 +1127,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html ="";
 		var remaining = parseInt(MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CountdownTimer1', 'Remaining' ));
 		var duration = parseInt(MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CountdownTimer1', 'Duration' ));
-		var muted = MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted");
-		model2.buttons[0].label=(muted=="1") ? CD_mute : CD_unmute
 
-		html += HTMLUtils.drawButtonGroup("altui-CntDown-Mute-{0}".format(device.altuiid), model2 );
+		html += _drawMuteButton(device,'altui-countdown-btngrp-mute');
 		html += HTMLUtils.drawButtonGroup("altui-CntDown-{0}".format(device.altuiid), model );
-		html+= "<div class='altui-countdown'>{0} / {1}</div>".format( remaining , duration );
+		html+= _drawCountDownRemaining(device);
 		
 		$(".altui-mainpanel")
 			.off('click','.altui-countdown-btngrp button')
@@ -1144,16 +1153,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	};
 	
 	function _drawCountDownTile(device) {
-			var model2 = {
-				cls:'pull-right altui-countdown-btngrp-fav-mute',
-				buttons: [
-					{ id:'altui-CDMute-'+device.altuiid,label:CD_mute, cls:'btn-sm' },
-				]
-			}
-			var muted = MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted");
-			model2.buttons[0].label=(muted=="1") ? CD_mute : CD_unmute
 			var html =  UIManager.drawDefaultFavoriteDevice(device);
-			html += HTMLUtils.drawButtonGroup("altui-CntDown-Favorite-Mute-{0}".format(device.altuiid), model2 );
+			html += _drawMuteButton(device,'altui-countdown-btngrp-fav-mute');
+			html+= _drawCountDownRemaining(device);
 			$(".altui-mainpanel")
 			.off('click','#altui-CDMute-'+device.altuiid)
 			.on('click','#altui-CDMute-'+device.altuiid, function(e) {
