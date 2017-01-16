@@ -1160,7 +1160,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			.off('click','#altui-CDMute-'+device.altuiid)
 			.on('click','#altui-CDMute-'+device.altuiid, function(e) {
 				e.stopPropagation();
-				var altuiid = $(this).closest('.altui-favorites-device-content').data("altuiid")
+				var altuiid = $(this).prop('id').substring("altui-CDMute-".length)
 				var device = MultiBox.getDeviceByAltuiID(altuiid);
 				var muted = 1-parseInt(MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted"));
 				var label = (muted==1) ? CD_mute : CD_unmute;
