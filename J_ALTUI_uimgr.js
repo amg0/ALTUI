@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1995 $";
+var ALTUI_revision = "$Revision: 1997 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3187,6 +3187,75 @@ var UIManager  = ( function( window, undefined ) {
 							MultiBox.runAction( device, control.Command.Service, control.Command.Action, params, null );
 						  } 
 						});
+					break;
+				};
+				case "image_player": {
+					var label = ""
+					switch( control.ControlCode ) {
+						case "camera_up":
+							label = glyphTemplate.format( "triangle-top", _T(control.Label.text) , 'text-default')
+							break;
+						case "camera_down":
+							label = glyphTemplate.format( "triangle-bottom", _T(control.Label.text) , 'text-default')
+							break;
+						case "camera_left":
+							label = glyphTemplate.format( "triangle-left", _T(control.Label.text) , 'text-default')
+							break;
+						case "camera_right":
+							label = glyphTemplate.format( "triangle-right", _T(control.Label.text) , 'text-default')
+							break;
+						case "camera_zoom_in":
+							label = glyphTemplate.format( "zoom-in", _T(control.Label.text) , 'text-default')
+							break;
+						case "camera_zoom_out":
+							label = glyphTemplate.format( "zoom-out", _T(control.Label.text) , 'text-default')
+							break;
+						default:
+							label = control.Label.text;
+					}
+
+					var button = $( "<button type='button' class='btn btn-xs btn-{1} altui-controlpanel-button'>{0}</button>".format(label, 'default'))
+						.appendTo( $(domparent) );
+					
+					// control.Display.Width = $(button).outerWidth();
+					control.Display.Width = Math.max( 20 , $(button).outerWidth() );
+					if ((control.Display.Top!=undefined && control.Display.Left!=undefined) /*|| (groupoffset.top && groupoffset.left)*/){
+						button.css({
+								top: paddingtop + (control.Display.Top  || 0), 
+								left: paddingleft  + (control.Display.Left  || 0), 
+								// "min-width": control.Display.Width+"px",	// forcing bootstrap
+								// "max-width": control.Display.Width+"px",	// forcing bootstrap
+								"z-index" : "10",
+								position:'absolute'
+								});
+					}
+					else {
+						button.css({
+								top: paddingtop ,
+								left: paddingleft , 
+								// "min-width": control.Display.Width+"px",	// forcing bootstrap
+								// "max-width": control.Display.Width+"px",	// forcing bootstrap
+								"margin-top": "5px",	
+								"margin-left": "10px",	
+								"margin-right": "10px",	
+								"margin-bottom": "5px",	
+								"z-index" : "10",
+								position:'relative'
+								})
+								.addClass('pull-left');
+					}
+					button.width(control.Display.Width)
+							.click( function() {
+								//"Command":{"Service":"urn:a-lurker-com:serviceId:InfoViewer1","Action":"SetParameters","Parameters":[{"Name":"newLuaPattern","ID":"thePattern"}]}}	
+								var parameters = {};
+								$.each(control.Command.Parameters || [], function(idx,param) {
+									if (param.Value )
+										parameters[ param.Name ] = param.Value;
+									if (param.ID)
+										parameters[ param.Name ] = $(domparent).find("#"+param.ID).val();
+								});
+								MultiBox.runAction( device, control.Command.Service, control.Command.Action, parameters, null );
+							});
 					break;
 				};
 				case "image": {

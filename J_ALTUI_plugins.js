@@ -1187,6 +1187,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html ="";
 		var condition = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'Condition');
 		var wind = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'WindCondition');
+		var ForecastConditionGroup = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'Forecastday1ConditionGroup');
+		if (ForecastConditionGroup!=null) {
+			var newsrc = (ForecastConditionGroup!=null) ? "http://icons.wxug.com/i/c/i/"+ForecastConditionGroup+".gif" : defaultIconSrc;
+			html += "<img class='altui-device-icon pull-right img-rounded' src='"+newsrc+"' alt='"+ForecastConditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+		}
 		html+= "<div class='altui-weather-text'>{0}</div>".format( condition );
 		html+= ("<div class='altui-weather-text'>"+_T("Wind")+": {0}</div>").format( wind );
 		return html;
