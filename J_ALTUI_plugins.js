@@ -39,6 +39,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-multiswitch-container { position:absolute; left:58px; right:16px; } .altui-multiswitch-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-multiswitch-container .col-xs-3 { padding-left:1px; padding-right:1px; }  .altui-multiswitch-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
 		style += ".altui-heater-container { position:absolute; left:71px; right:16px; } .altui-heater-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-heater-container .col-xs-3 { padding-left:1px; padding-right:1px; text-align:center;}  .altui-heater-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
 		style += ".altui-heater-container select.input-sm { height:22px; padding:0;}"; 
+		style += ".altui-weather1-day1 { position:absolute; bottom:0px; right:0px; transform: scale(0.5,0.5); }";
 		style += ".altui-cyan { color:cyan;}";
 		style += ".altui-countdown-btngrp,.altui-countdown-btngrp-mute  { margin-top:13px;}";
 		style += ".altui-countdown-btngrp-fav-mute { position:absolute; bottom:0px; right:0px; }";
@@ -1153,22 +1154,22 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	};
 	
 	function _drawCountDownTile(device) {
-			var html =  UIManager.drawDefaultFavoriteDevice(device);
-			html += _drawMuteButton(device,'altui-countdown-btngrp-fav-mute');
-			html+= _drawCountDownRemaining(device);
-			$(".altui-mainpanel")
-			.off('click','#altui-CDMute-'+device.altuiid)
-			.on('click','#altui-CDMute-'+device.altuiid, function(e) {
-				e.stopPropagation();
-				var altuiid = $(this).prop('id').substring("altui-CDMute-".length)
-				var device = MultiBox.getDeviceByAltuiID(altuiid);
-				var muted = 1-parseInt(MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted"));
-				var label = (muted==1) ? CD_mute : CD_unmute;
-				$(this).html(label);
-				MultiBox.runAction(device,"urn:futzle-com:serviceId:CountdownTimer1","SetMute",{'newStatus':muted});
-				return false;
-			});
-			return html;
+		var html =  UIManager.drawDefaultFavoriteDevice(device);
+		html += _drawMuteButton(device,'altui-countdown-btngrp-fav-mute');
+		html+= _drawCountDownRemaining(device);
+		$(".altui-mainpanel")
+		.off('click','#altui-CDMute-'+device.altuiid)
+		.on('click','#altui-CDMute-'+device.altuiid, function(e) {
+			e.stopPropagation();
+			var altuiid = $(this).prop('id').substring("altui-CDMute-".length)
+			var device = MultiBox.getDeviceByAltuiID(altuiid);
+			var muted = 1-parseInt(MultiBox.getStatus(device,"urn:futzle-com:serviceId:CountdownTimer1","Muted"));
+			var label = (muted==1) ? CD_mute : CD_unmute;
+			$(this).html(label);
+			MultiBox.runAction(device,"urn:futzle-com:serviceId:CountdownTimer1","SetMute",{'newStatus':muted});
+			return false;
+		});
+		return html;
 	};
 	
 	function _drawVacation( device) {
@@ -1202,6 +1203,16 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var conditionGroup = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'ConditionGroup');
 		var newsrc = (conditionGroup!=null) ? "http://icons.wxug.com/i/c/i/"+conditionGroup+".gif" : defaultIconSrc;
 		return "<img class='altui-device-icon pull-left img-rounded' src='"+newsrc+"' alt='"+conditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+	};
+	
+	function _drawWeatherFavorite(device) {
+		var html =  UIManager.drawDefaultFavoriteDevice(device);
+		var ForecastConditionGroup = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'Forecastday1ConditionGroup');
+		if (ForecastConditionGroup!=null) {
+			var newsrc = (ForecastConditionGroup!=null) ? "http://icons.wxug.com/i/c/i/"+ForecastConditionGroup+".gif" : defaultIconSrc;
+			html += "<img class='altui-device-icon altui-weather1-day1 img-rounded' src='"+newsrc+"' alt='"+ForecastConditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+		}
+		return html;
 	};
 	
 	function _drawDataMine( device) {
@@ -1351,6 +1362,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawCountDownTile : _drawCountDownTile,
 	drawWeather     : _drawWeather,
 	drawWeatherIcon : _drawWeatherIcon,
+	drawWeatherFavorite : _drawWeatherFavorite,
 	drawInfoViewer  : _drawInfoViewer,
 	drawDataMine 	: _drawDataMine,
 	drawMultiswitch : _drawMultiswitch,		// warning, hardcoded display direction from UIMANAGER on this one due to changing device type

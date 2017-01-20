@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.76"
+local version = "v1.77"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -622,7 +622,7 @@ function TimerManagerCallback(lul_data)
 			watchTimerCB(lul_data)
 		end
 	else
-		warning(string.format("Timer - Timer not found in Timer DB"))
+		warning(string.format("Timer - Timer not found in Timer DB, lul_data:"..lul_data.." Timers:"..json.encode(Timers)))
 	end
 end
 
@@ -1181,7 +1181,7 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 			
 			-- cancel link timer if needed as the link could have both conditions which fired TRUE and a timer
 			if (link.prop.timer ~= "") then
-				local tbl = {lul_device,workflow_idx,stateid,targetstate,link.id}
+				local tbl = {lul_device,workflow_idx,stateid,link.target.id,link.id}
 				cancelTimer( table.concat(tbl, "#") )
 			end
 		
@@ -2709,6 +2709,7 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawWeather",
 		["DeviceIconFunc"]="ALTUI_PluginDisplays.drawWeatherIcon",
+		["FavoriteFunc"]="ALTUI_PluginDisplays.drawWeatherFavorite",
 	}
 	tbl["urn:schemas-upnp-org:device:DimmableLight:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
