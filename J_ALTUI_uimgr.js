@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 1997 $";
+var ALTUI_revision = "$Revision: 1999 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -47,7 +47,7 @@ var _HouseModes = [];
 var deviceModalTemplate = "";
 var deviceActionModalTemplate = "";
 var defaultDialogModalTemplate = "";
-var wattTemplate = "<span class='altui-watts '>{0} <small>Watts</small></span>";
+
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
 var houseModeButtonTemplate = "  <button type='button' class='btn btn-default altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";							
 var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-default'>{2}</button>";
@@ -2358,14 +2358,17 @@ var UIManager  = ( function( window, undefined ) {
 	function _defaultDeviceDrawWatts( device ) {
 		var html ="";
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' )); 
+		var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' )); 
 
 		if (isNaN(watts)==false) 
-			html += wattTemplate.format(watts);
+			html += ALTUI_Templates.wattTemplate.format(watts,"Watts");
 		else {
 			watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'UserSuppliedWattage' )); 
 			if (isNaN(watts)==false) 
-				html += wattTemplate.format(watts);
+				html += ALTUI_Templates.wattTemplate.format(watts,"Watts");
 		}
+		if (isNaN(kwh)==false) 
+			html += ALTUI_Templates.wattTemplate.format(kwh,"KWH");
 		return html;
 	};
 	function _defaultDeviceDrawAltuiStrings(device) {

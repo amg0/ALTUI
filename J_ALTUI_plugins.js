@@ -25,6 +25,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _getStyle() {
 		var style="";
 		style += ".altui-watts, .altui-volts, .altui-countdown  {font-size: 16px;}";
+		style += ".altui-watts-unit {font-size: 12px;}";
 		style += ".altui-temperature  {font-size: 16px;}";
 		style += ".altui-temperature-heater  {font-size: 12px;}";
 		style += ".altui-temperature-minor  {font-size: 8px;}";
@@ -1062,7 +1063,6 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	
 	function _drawBinaryLight( device) {
 		var html ="";
-		html += UIManager.defaultDeviceDrawWatts( device);
 
 		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' )); 
 		// if ( ( ( device.Jobs != null ) && ( device.Jobs.length>0) ) || (device.status==1) || (device.status==5) ) {  
@@ -1071,6 +1071,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			status = -1;
 		}
 		html += _createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("OFF,ON") , "pull-right");
+		html += UIManager.defaultDeviceDrawWatts( device);
 		
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleOnOffButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
@@ -1080,14 +1081,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 	function _drawPowerMeter( device) {
 		var html ="";
-		var wattTemplate = "<div class='altui-watts '>{0} <small>Watts</small></div>";		
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' )); 
 		if (isNaN(watts)==false) 
-			html += wattTemplate.format(watts);
-		var voltTemplate = "<div class='altui-volts '>{0} <small>Volts</small></div>";
+			html += ALTUI_Templates.wattTemplate.format(watts,"Watts");
+
 		var volts = parseFloat(MultiBox.getStatus( device, 'urn:brultech-com:serviceId:PowerMeter1', 'Volts' ));
 		if (isNaN(volts)==false) 
-			html += voltTemplate .format(volts);
+			html += ALTUI_Templates.wattTemplate.format(volts,"Volts");
 		return html;
 	};
 	

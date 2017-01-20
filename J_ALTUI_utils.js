@@ -117,8 +117,10 @@ var ALTUI_Templates_Factory= function() {
 		_workflowContainerTemplate	+= 	  	"</div>";
 		_workflowContainerTemplate	+= 	  	"</div>";
 		_workflowContainerTemplate	+= 	"</div>";		
-		
+
+	var _wattTemplate="<div class='altui-watts '>{0} <span class='altui-watts-unit'>{1}</span></div>";
 	return {
+		wattTemplate : _wattTemplate,
 		deviceVariableLineTemplate : _deviceVariableLineTemplate,
 		dropdownTemplate : _dropdownTemplate,
 		batteryHtmlTemplate : _batteryHtmlTemplate,
