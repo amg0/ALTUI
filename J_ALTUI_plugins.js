@@ -1079,6 +1079,31 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return html;
 	};
 
+	function _drawSceneController(device) {
+		var html="";
+		var map = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SceneController1', 'SceneShortcuts' );
+		var last = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SceneController1', 'sl_CentralScene' );
+		if (map && last) {
+			$.each( map.split(",") , function(k,v) {
+				var parts  = v.split("=");
+				// found a match for last button id
+				if ((parts.length>0) && (parts[0]==last)) {
+					var scene_mode = parts[1].split("-");
+					// was it a scene or a mode ? 
+					if (scene_mode[0]!="0")  {
+						// scene
+						var controller = MultiBox.controllerOf(device.altuiid).controller;
+						var scene = MultiBox.getSceneByID(controller,scene_mode[0])
+						html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Scene"),scene.name)
+					}	
+					if (scene_mode[1]!="0") 	// mode
+						html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Mode"),_HouseModes[ parseInt(scene_mode[1])-1 ].text)
+				}
+			});
+		}
+		return html;
+	};
+	
 	function _drawPowerMeter( device) {
 		var html ="";
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' )); 
@@ -1321,6 +1346,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	createOnOffButton : _createOnOffButton,
 	drawBinaryLight : _drawBinaryLight,
 	drawBinLightControlPanel : _drawBinLightControlPanel,
+	drawSceneController: _drawSceneController,
 	drawTempSensor : _drawTempSensor,
 	drawHeater	   : _drawHeater,
 	drawZoneThermostat : _drawZoneThermostat,
