@@ -1631,15 +1631,19 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var variable = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", whichwatches ) || "";
 		var result=[];
-		$.each(variable.split(';'), function(i,line) {
-			var w = (linefunc)(line);
-			if ($.isFunction(filterfunc)) {
-				if ( (filterfunc)(w,i) )
-					result.push(w);
-			} else {
-				result.push(w);
-			}
-		});
+		if (isNullOrEmpty(variable)!=true) {
+			$.each(variable.split(';'), function(i,line) {
+				if (line!="") {
+					var w = (linefunc)(line);
+					if ($.isFunction(filterfunc)) {
+						if ( (filterfunc)(w,i) )
+							result.push(w);
+					} else {
+						result.push(w);
+					}
+				}
+			});
+		}
 		return result;
 	};
 	function _getDeviceDependants(device) {

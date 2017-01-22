@@ -3336,7 +3336,11 @@ function addWatch( lul_device, service, variable, deviceid, sceneid, expression,
 		end
 		if (bFound==false) then
 			debug(string.format("no, adding watchline %s",watchline))
-			variableWatch = watchline .. ";" .. variableWatch
+			if (variableWatch~="") then
+				variableWatch = watchline .. ";" .. variableWatch
+			else
+				variableWatch = watchline
+			end
 			luup.variable_set(ALTUI_SERVICE, "VariablesToWatch", variableWatch, lul_device)
 		else
 			debug(string.format("yes, found an existing watchline"))
