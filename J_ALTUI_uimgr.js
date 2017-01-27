@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2003 $";
+var ALTUI_revision = "$Revision: 2004 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4091,13 +4091,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				footerMap.boxinfo = infotbl.join(", ").replace('\n','');
 				var curuser = MultiBox.getMainUser();
 				footerMap.curusername = curuser ? curuser.Name : '';
+				
 				usdGlyph = glyphTemplate.format( "usd", _T("License") , 'text-warning');
 				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-default', "{0} {1}".format(usdGlyph,_T("License")),'default',_T("License"));
 
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 				var footerTemplate =  MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "FooterBranding" )
-					|| "<p>${appname} ${luaversion}.${jsrevision}, ${copyright} 2016 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></p><span>${paypal}</span><span id='altui-osstats'></span>";
+					|| "<p>${appname} ${luaversion}.${jsrevision}, ${copyright} 2017 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></p><span>${paypal}</span><span id='altui-osstats'></span>";
 				var tmpl = _.template(footerTemplate.trim());
 				var footerstr =tmpl( footerMap )
 				

@@ -1092,14 +1092,17 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				if ((parts.length>0) && (parts[0]==last)) {
 					var scene_mode = parts[1].split("-");
 					// was it a scene or a mode ? 
-					if (scene_mode[0]!="0")  {
-						// scene
-						var controller = MultiBox.controllerOf(device.altuiid).controller;
-						var scene = MultiBox.getSceneByID(controller,scene_mode[0])
-						html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Scene"),scene.name)
-					}	
-					if (scene_mode[1]!="0") 	// mode
-						html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Mode"),_HouseModes[ parseInt(scene_mode[1])-1 ].text)
+					if (scene_mode.length>1) {
+						if (scene_mode[0]!="0")  {
+							// scene
+							var controller = MultiBox.controllerOf(device.altuiid).controller;
+							var scene = MultiBox.getSceneByID(controller,scene_mode[0])
+							if (scene!=null)
+								html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Scene"),scene.name)
+						}	
+						if (scene_mode[1]!="0") 	// mode
+							html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Mode"),_HouseModes[ parseInt(scene_mode[1])-1 ].text)
+					}
 				}
 			});
 		}
