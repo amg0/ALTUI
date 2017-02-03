@@ -587,8 +587,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _drawDimmable( device, colorpicker ) {
 
 		var html = "";
-		if (colorpicker!=true)
-			html += UIManager.defaultDeviceDrawWatts(device);
+		// if (colorpicker!=true)
+			// html += UIManager.defaultDeviceDrawWatts(device);
 		// load level
 		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelTarget' )); 
 		if (isNaN(level)==true) 

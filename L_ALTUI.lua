@@ -604,7 +604,7 @@ function TimerManagerCallback(lul_data)
 		local now=os.time()
 		debug(string.format("Timer - now:%s timer.expireson:%s",tostring(now),tostring(timer.expireson)))
 		if (now < timer.expireson-1) then
-			warning(string.format("Timer - receiving timer callback is earlier by more than 1 sec than planned. ignoring..."))
+			warning(string.format("Timer - receiving timer callback is earlier by more than 1 sec than planned. ignoring...now:%s timer.expireson:%s",tostring(now),tostring(timer.expireson)))
 			return
 		end
 		local expireson = timer.expireson
