@@ -980,6 +980,30 @@ var DialogManager = ( function() {
 		propertyline += "</div>";
 		$(dialog).find(".row-fluid").append(propertyline);
 	};
+	function _dlgAddEditor(dialog,name,label,value,help,language)
+	{
+		var language = language || 'lua';
+		value = (value==undefined) ? '' : value.toString() ;
+		var propertyline = "";
+		propertyline += "<div class='form-group'>"
+		propertyline += "	<label for='altui-widget-"+name+"' title='"+(help || '')+"'>"+label+"</label>";
+		if (help)
+			propertyline += "<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-default btn-xs altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
+
+		propertyline += "<div class='row'><div class='col-sm-9 col-xs-12'>{0}</div><div class='col-sm-3 hidden-xs'><small>{1}</small></div></div>".format(
+			"<div class='form-control altui-dialog-ace' id='altui-editor-text-{1}'>{0}</div>".format(value.escapeXml(),name),
+			help || ''
+		)
+		propertyline += "</div>";
+		$(dialog).find(".row-fluid").append(propertyline);
+		
+		// init ACE editor
+		var editor = null;
+		editor = ace.edit( "altui-editor-text-"+name );
+		editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
+		editor.getSession().setMode( "ace/mode/"+language);
+		editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
+	};
 	function _dlgAddUrl(dialog, name, label, value,help, options) {
 		var optstr = HTMLUtils.optionsToString($.extend( {type:'text'},options));
 		value = (value==undefined) ? '' : value ;
@@ -1437,6 +1461,7 @@ var DialogManager = ( function() {
 		dlgAddCheck:_dlgAddCheck,
 		dlgAddColorPicker : _dlgAddColorPicker,	//(dialog, name, label, help, value, options)
 		dlgAddLine:_dlgAddLine,
+		dlgAddEditor:_dlgAddEditor,
 		dlgAddUrl:_dlgAddUrl,
 		dlgAddBlockly: _dlgAddBlockly,	//(dialog, name, label, value )
 		dlgAddSelect: _dlgAddSelect,

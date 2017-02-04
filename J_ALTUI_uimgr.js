@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2005 $";
+var ALTUI_revision = "$Revision: 2007 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -872,6 +872,7 @@ var styles ="						\
 	div.altui-ace-editor, div#altui-editor-sample {		\
 		height:100px;				\
 	}								\
+	.altui-dialog-ace	{ height:4em; } \
 	div.altui-favorites-container	{		\
 		padding-left: 0px;		\
 		padding-right: 0px;		\
@@ -7418,9 +7419,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var device = MultiBox.getDeviceByAltuiID(cond.device);
 				if (!device)	return;
 				html += "<li class='altui-action-details'> ";
-				html += "{5} device:'<strong>{0}</strong>' ({1}) when {2}-{3} <span class='text-info'>({4})</span>".format( 
+				html += "{5} device:'<strong>{0}</strong>' ({1}) when {2}-{3} <br><span class='text-info'>{4}</span>".format( 
 					device.name, 
-					cond.device, cond.service, cond.variable, cond.luaexpr,
+					cond.device, cond.service, cond.variable, cond.luaexpr.replace('\n','<br>'),
 					cond.triggeronly ? "<mark><span class='glyphicon glyphicon-flash' aria-hidden='true'></span></mark> <span class='text-danger'>Trigger</span>, " : ''
 					);
 				html += "</li>";					
@@ -7904,9 +7905,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							}
 						}
 						DialogManager.dlgAddVariables(dialog, null, widget, function() {
-							DialogManager.dlgAddLine(dialog, "LuaExpression", _T("Lua Expression with new=newvalue and old=oldvalue"), 
+							var helptext = _T("Lua Expression with new being newvalue and old being oldvalue of type string. Ignore errors about undefined variables");
+							// DialogManager.dlgAddLine(dialog, "LuaExpression", helptext, 
+								// condition ? condition.luaexpr : "",
+								// _T("Expression with old new as variables and lua operators like <  >  <= >= == ~="), 
+								// {	placeholder:helptext, required:''}
+								// )
+							DialogManager.dlgAddEditor(
+								dialog,
+								"LuaExpression",
+								_T("Lua Expression"),
 								condition ? condition.luaexpr : "",
-								_T("Expression with old new as variables and lua operators like <  >  <= >= == ~="), {required:''})
+								_T("Expression with old new as variables and lua operators like <  >  <= >= == ~="),
+								"lua")
 							DialogManager.dlgAddCheck(dialog,'Trigger', condition ? condition.triggeronly : false, _T("Only when triggered"));
 							$('div#dialogModal').modal();
 							$('div#dialogs')
@@ -7921,13 +7932,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								})
 								.off('submit',"div#dialogModal")
 								.on( 'submit',"div#dialogModal", function() {
+									var editor = ace.edit( "altui-editor-text-LuaExpression" );
 									var altuiid = $("#altui-select-device").val();
 									var state = MultiBox.getStateByID( altuiid,$("#altui-select-variable").val() );
 									var condition={
 										device:altuiid,
 										service:state.service,
 										variable:state.variable,
-										luaexpr:$("#altui-widget-LuaExpression").val(),
+										luaexpr:editor.getValue(), /*$("#altui-widget-LuaExpression").val(),*/
 										triggeronly:$("#altui-widget-Trigger").prop('checked')
 									};
 									$('div#dialogModal').modal('hide');
@@ -7944,6 +7956,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$.each(conditions,function(idx,cond) {
 					var ui = cloneObject(cond);
 					ui.device = _displayDeviceName("",cond.device)
+					ui.luaexpr = ui.luaexpr.replace("\n","<br>")
 					ui.triggeronly = (cond.triggeronly ? "<mark><span class='glyphicon glyphicon-flash' aria-hidden='true'></span></mark>" : '' )
 					arr.push($.extend({},ui,{ "-":editButton.format(idx,htmlid)+blocklyButton.format(idx,htmlid)+delButton.format(idx,htmlid) }));
 				});
