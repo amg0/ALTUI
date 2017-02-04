@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2008 $";
+var ALTUI_revision = "$Revision: 2011 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7965,6 +7965,45 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				});
 				return HTMLUtils.array2Table(arr,null,['device','service','triggeronly','variable','luaexpr','-'],_T("All conditions must match ( logical AND ) for the transition to happen"),null,htmlid);
 			};
+			function PickWorkflowState( exclusion_altuiid, waitForState, callback ) {
+				var dialog = DialogManager.createPropertyDialog('Workflow');
+				DialogManager.dlgAddWorkflowStates(dialog,'altui-select-workflowstate', _T("States") , exclusion_altuiid, waitForState);
+				$('div#dialogModal').modal();
+				$('div#dialogs')
+					.off('click').on( 'click','.modal-footer .btn-default', function(e) {
+						e.stopPropagation();
+						$('div#dialogModal').modal('hide');
+						(callback)(null);
+						return false;
+					})
+					.off('submit',"div#dialogModal").on( 'submit',"div#dialogModal", function() {
+						$('div#dialogModal').modal('hide');
+						var val = $("#altui-select-workflowstate").val();
+						var ids = val.split("_");
+						var waitForState = {
+							altuiid: ids[0],
+							state: ids[1]
+						};
+						(callback)(waitForState);
+						return false;
+					});
+			};
+			
+			function _displayWorkflows( htmlid, waitFors ) {
+				var arr =[];
+				$.each(waitFors,function(idx,wait) {
+					var ui = {
+						name: WorkflowManager.getWorkflow( wait.altuiid ).name,
+						state: WorkflowManager.IDToName(wait.state)
+					}
+					arr.push($.extend({},ui,{ "-":editButton.format(idx,htmlid)+delButton.format(idx,htmlid) }));
+				});
+				arr.push({
+					'name':plusButton.format(htmlid+"-add"),
+				});
+				return HTMLUtils.array2Table(arr,null,['name','state','-'],_T("will trigger when one workflow enters any one of these states"),null,htmlid);
+			};
+			
 			function _displaySchedule(htmlid,schedule) {
 				var html = "<div id='{0}'>".format(htmlid);
 				if (schedule!=null)
@@ -7985,6 +8024,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					{ id:"altui-LinkSmooth", label:_T("Smooth Link"), type:"input", inputtype:"checkbox", value: Model.prop.smooth  },
 					{ id:"altui-form-Conditions", label:_T("Link Conditions"), type:"accordeon", value: [
 						{id:'Conditions', title:_T("Conditions"), html:_displayConditions( 'altui-conditions',Model.prop.conditions )+BlocklyArea.createBlocklyArea() },
+						{id:'Workflows', title:_T("Workflows"), html:_displayWorkflows( 'altui-workflows',Model.prop.workflows ) },
 						{id:'Schedules', title:_T("Schedules"), html: _displaySchedule( 'altui-schedule', Model.prop.schedule ) },
 						{id:'Timers', title:_T("Timers"), html:HTMLUtils.drawFormFields( [
 							{ id:"altui-timername", label:_T("Timer Name"), type:"input", value: Model.prop.timer, opt:null },
@@ -8117,6 +8157,32 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				cond = Model.prop.conditions[line]
 				cond.luaexpr = $(this).val();
 				$("#altui-conditions").html( _displayConditions( 'altui-conditions',Model.prop.conditions) );
+			})
+
+			//
+			// Workflows
+			//
+				.on('click','#altui-workflows-add', function(evt) {
+					PickWorkflowState(workflow.altuiid,null,function(waitForState) {
+						if (waitForState) {
+							Model.prop.workflows.push(waitForState);
+							$("#altui-workflows").html( _displayWorkflows( 'altui-workflows',Model.prop.workflows ) );
+						}
+					});
+				})
+			.on( 'click','.altui-delete-item-altui-workflows',function() {
+				var idx = $(this).prop('id');
+				Model.prop.workflows.splice(idx,1);
+				$("#altui-workflows").html( _displayWorkflows( 'altui-workflows',Model.prop.workflows ) );
+			})
+			.on( 'click','.altui-edit-item-altui-workflows',function() {
+				var idx = $(this).prop('id');
+				PickWorkflowState( workflow.altuiid,Model.prop.workflows[idx],function(waitForState) {
+					if (waitForState) {
+						Model.prop.workflows[idx] = cloneObject(waitForState);
+						$("#altui-workflows").html( _displayWorkflows( 'altui-workflows',Model.prop.workflows ) );
+					}
+				})
 			})
 			
 			//
@@ -8723,7 +8789,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// prepare necessary data
 				$.each(data.states, function(altuiid,state) {
 					var workflow = WorkflowManager.getWorkflow( altuiid );
-					if (workflow.graph_json) {
+					if (workflow && workflow.graph_json) {
 						var arr = JSON.parse(workflow.graph_json).cells
 						$.each(arr, function(i,cell) {
 							if (cell.type != "fsa.Arrow") {

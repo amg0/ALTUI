@@ -301,6 +301,7 @@ local function setDebugMode(lul_device,newDebugMode)
 	else
 		DEBUG_MODE=false
 	end
+	return true	-- success
 end
 
 local function getIP()
@@ -1651,7 +1652,7 @@ local htmlLocalScripts = [[
 -- <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.4.1.js" ></script> 
 -- SW compat matrix
 -- jquery 1.9 jointjs 0.9.7 backbone 1.2.1 spectrum 1.8.0
--- jquery 2.2.4 jointjs 1.0.2 backbone 1.3.3 spectrum 1.8.0
+-- jquery 2.2.4 jointjs 1.0.3 backbone 1.3.3 spectrum 1.8.0
 
 local htmlScripts = [[
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/@swversion@/jquery.min.js" ></script>
@@ -1660,9 +1661,9 @@ local htmlScripts = [[
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script> 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.2/joint.min.js" ></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.2/joint.shapes.fsa.min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.2/joint.shapes.devs.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.min.js" ></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.shapes.fsa.min.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.shapes.devs.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
@@ -1706,7 +1707,7 @@ local htmlCSSlinks = [[
 	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="@localbootstrap@">
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.2/joint.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
 	<link class="altui-theme" rel="stylesheet" href="@ThemeCSS@">	
 ]]

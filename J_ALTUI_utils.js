@@ -1249,6 +1249,30 @@ var DialogManager = ( function() {
 		);
 	};
 	
+	function _dlgAddWorkflowStates(dialog,name,label,exclusion_altuiid,waitforState) {
+		var name = name || 'altui-select-workflowstate';
+		var workflows = WorkflowManager.getWorkflows()
+		var propertyline = "";
+		propertyline += " <div class='form-group'>";
+		propertyline += "	<label  for='{0}' title='{0}'>{1}: </label>".format(name,label);
+
+		propertyline += "<select required id='"+name+"' class='form-control'>"
+		$.each(workflows, function(i,workflow) {
+			if ( (exclusion_altuiid==null) || (workflow.altuiid!=exclusion_altuiid)) {
+				propertyline += ("<optgroup label='"+workflow.name+"'>");
+				var wdescr = WorkflowManager.getWorkflowDescr(workflow.altuiid);
+				$.each(wdescr.states || [], function(i,state) {
+					if (state.isStart() == false) {
+						propertyline += "<option value='{0}_{1}' {3}>{2}</option>".format(workflow.altuiid,state.id,state.name, (waitforState && (waitforState.state == state.id)) ?  "selected" : "")
+					}
+				});
+				propertyline += "</optgroup>";
+			}
+		});
+		propertyline += "</select>"
+		$(dialog).find(".row-fluid").append(propertyline);
+	};
+	
 	function _dlgAddScenes(dialog, widget, cbfunc)
 	{
 		var select = $("<select id='altui-widget-sceneid' class='form-control'></select>");
@@ -1479,6 +1503,7 @@ var DialogManager = ( function() {
 		dlgAddDateTime:_dlgAddDateTime,
 		dlgAddTime:_dlgAddTime,
 		dlgAddHouseMode: _dlgAddHouseMode,		// (dialog, id, _housemodes)
+		dlgAddWorkflowStates : _dlgAddWorkflowStates,
 		getDialogActionValue: _getDialogActionValue
 	};
 })();
@@ -2563,6 +2588,7 @@ var WorkflowManager = (function() {
 	};
 	var _def_linkprops = {
 		conditions: [],			// table of device,service,variable, expression with new
+		workflows: [],			// table of workflows,state
 		schedule: null,			// schedule ( timer of scene )
 		timer: "",					// timer name
 		smooth: true,				// smooth link
@@ -2586,6 +2612,29 @@ var WorkflowManager = (function() {
 				return i;
 		return null;
 	};	
+		
+	function _IDToName(id) {
+		for( var idx=0; idx<_workflows.length; idx++) {
+			var workflow = _workflows[idx];
+			if (workflow.graph_json) {
+				var graph = JSON.parse(workflow.graph_json)
+				for (var i = 0 ; i<graph.cells.length ; i++ ) {
+					var cell = graph.cells[i];				
+					if (cell.id==id) {
+						switch( cell.type ) {
+							case "fsa.State":
+							case "devs.Model":
+								return cell.attrs.text ? cell.attrs.text.text : 'Start'
+							case "fsa.Arrow":
+							case "link":
+								return cell.labels[0].attrs.text.text; 
+						}
+					}
+				}
+			}
+		}
+		return null;
+	};
 	
 	function _init(workflows) {
 		_workflows = workflows;
@@ -2646,11 +2695,11 @@ var WorkflowManager = (function() {
 		}
 		return bSaveNeeded;
 	}
-	
+
 	function _sanitizeWorkflow(altuiid) {
 		var bSaveNeeded = false;
 		var idx = _findWorkflowIdxByAltuiid(altuiid);
-		if (_workflows[idx] !=null) {
+		if (idx!=null) {
 			var workflow = _workflows[idx];
 			if (workflow.graph_json) {
 				var graph = JSON.parse(workflow.graph_json)
@@ -2668,6 +2717,23 @@ var WorkflowManager = (function() {
 									bSaveNeeded=true;
 								}
 							}
+						if (cell.prop.workflows) {
+							for (var j=cell.prop.workflows.length-1; j>=0; j--) {
+								var waitfor = cell.prop.workflows[j];
+								var zz = _findWorkflowIdxByAltuiid(waitfor.altuiid)
+								if (zz ==null) {
+									cell.prop.workflows.splice(j,1)
+									bSaveNeeded=true;
+								} else {
+									// workflow exists but we need to find the state now.
+									var name = WorkflowManager.IDToName(waitfor.state)
+									if (name==null) {
+										cell.prop.workflows.splice(j,1)
+										bSaveNeeded=true;
+									}
+								}
+							}
+						}
 						if (cell.prop.schedule && (cell.prop.schedule.length==0)) {
 							cell.prop.schedule =null;
 							bSaveNeeded=true;
@@ -2717,7 +2783,8 @@ var WorkflowManager = (function() {
 			if (bSaveNeeded) {
 				workflow.graph_json = JSON.stringify(graph)
 			}
-			bSaveNeeded = _upgradeWorkflowToFsa(workflow);
+			var bSaveNeeded2 =_upgradeWorkflowToFsa(workflow);
+			bSaveNeeded = bSaveNeeded || bSaveNeeded2
 		}
 		return bSaveNeeded
 	};
@@ -3104,6 +3171,7 @@ var WorkflowManager = (function() {
 		Node: _Node,
 		Link: _Link,
 		updateLinkTimerLabel: _updateLinkTimerLabel,
+		IDToName: _IDToName,
 		saveNeeded : function() 	{ return _saveNeeded; },
 		getNodeProperties: function( obj )	{ return $.extend(true,{},_def_nodeprops, obj) },	// insure the defaults evolves
 		getLinkProperties: function( obj )	{ return $.extend(true,{},_def_linkprops, obj) },

@@ -8,10 +8,9 @@
     <action>
 	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 	 <name>SetDebug</name>
-	  <job>
-			setDebugMode(lul_device,lul_settings.newDebugMode)
-			return 4,0
-	  </job>
+	  <run>
+			return setDebugMode(lul_device,lul_settings.newDebugMode)
+	  </run>
 	</action>
     <action>
 	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
