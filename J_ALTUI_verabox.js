@@ -1037,8 +1037,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				return parseInt(e)
 			}
 		);
-		// if (( _veraidx==0) && (_cfg.isOpenLuup!=true) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 )) {
-		return ( _uniqID==0) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 );
+		return /*_isOpenLuup(user_data) || */ (( _uniqID==0) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 ));
 	};
 	function _isOpenLuup(user_data) {
 		if ( (user_data.BuildVersion==undefined) || (user_data.BuildVersion.startsWith("*1.5")==true) )

@@ -43,6 +43,8 @@ local WorkflowsActiveState = {}		-- hash indexed by workflow altuiid
 local WorkflowsVariableBag = {}		-- hash indexed by workflow altuiid
 local Workflows = {}				-- Workflow database made from the persistent description
 local ForcedValidLinks = {}			-- array of 'id' = true for links which must be considered as true
+local WorkflowTriggers = {}			-- array of workflow triggers ( waiting for a workflow to reach a state )
+
 -- local strWorkflowDescription = ""
 local strWorkflowTransitionTemplate = "Wkflow - Workflow: %s, Valid Transition found:%s, Active State:%s=>%s"	-- needed for ALTUI grep & history log feature
 local Timers = {}					-- to Persist timers accross VERA reboots
@@ -314,6 +316,43 @@ local function getIP()
 	local ip = mySocket:getsockname ()  
 	mySocket: close()  
 	return ip or "127.0.0.1" 
+end
+
+-- var waitForState = {
+	-- altuiid: ids[0],
+	-- state: ids[1]
+-- };
+local function addWorkflowTrigger( lul_device, altuiid, state, listener )
+	debug(string.format("addWorkflowTrigger(%s,%s,%s,%s)",lul_device, altuiid, state, listener ))
+	if ( findWorkflowTrigger( lul_device, altuiid, state, listener ) == nil ) then
+		if (WorkflowTriggers[altuiid] == nil) then
+			WorkflowTriggers[altuiid]={}
+		end
+		if (WorkflowTriggers[altuiid][state] == nil) then
+			WorkflowTriggers[altuiid][state]={}
+		end
+		table.insert( WorkflowTriggers[altuiid][state] , listener )
+	end
+end
+
+local function removeWorkflowTrigger( lul_device, altuiid, state, listener )
+	debug(string.format("removeWorkflowTrigger(%s,%s,%s,%s)",lul_device, altuiid, state, listener ))
+	local found = findWorkflowTrigger( lul_device, altuiid, state, listener )
+	if (found ~=nil) then
+		table.remove(WorkflowTriggers[altuiid][state],found)
+	end
+end
+
+local function findWorkflowTrigger( lul_device, altuiid, state, listener )
+	debug(string.format("findWorkflowTrigger(%s,%s,%s,%s)",lul_device, altuiid, state, listener ))
+	if (WorkflowTriggers[altuiid] ~= nil  and WorkflowTriggers[altuiid][state] ~= nil) then
+		for found,_listener in ipairs(WorkflowTriggers[altuiid][state]) do 
+			if (listener == _listener) then
+				return found
+			end
+		end
+	end
+	return nil
 end
 
 local function findWatch( devid, service, variable )
@@ -747,15 +786,16 @@ local function setWorkflowActiveState(lul_device,workflow_idx,newstate)
 	end
 end
 
-local function armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
+local function armLinkTransitions(lul_device,workflow_idx,curstate)
 	local name = ""
 	-- Check name for Link or for START state
 	name = getCellName(curstate)
 	
-	debug(string.format("Wkflow - armLinkTimersAndWatches(%s, %s, %s ) ",lul_device, Workflows[workflow_idx].name, name))
+	debug(string.format("Wkflow - armLinkTransitions(%s, %s, %s ) ",lul_device, Workflows[workflow_idx].name, name))
 	local cells = Workflows[workflow_idx]["graph_json"].cells 
 	local transitions = getStateTransitions(lul_device, curstate.id, cells )
 	for k,link in pairs(transitions) do 
+		-- Set Timers
 		if (link.prop.timer ~= "") then
 			link.prop.expired = false
 			local tbl = {lul_device,workflow_idx,curstate.id,link.target.id,link.id}
@@ -778,12 +818,21 @@ local function armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
 				setTimer( lul_device, "workflowTimerCB",randduration,table.concat(tbl, "#")  )
 			end
 		end
-		-- make sure we have a watch for all the conditions
+		
+		-- Set Watches, make sure we have a watch for all the conditions
 		for c,cond in pairs(link.prop.conditions) do
 			-- table.insert(WorkflowWatches,{ cond.device, cond.service, cond.variable, cond.luaexpr })
 			_addWatch( cond.service, cond.variable, cond.device, -2, "workflow", Workflows[workflow_idx].altuiid, "", "" )
 		end		
+		
+		-- Set Workflow State Waits
+		if (link.prop.workflows ~= nil) then
+			for w,waitfor in pairs(link.prop.workflows) do
+			end
+		end
+		-- TODO xxx
 	end
+
 	-- add start state conditions
 	local cell = findStartState(workflow_idx) 
 	if (cell ~= nil and cell.prop.conditions ~= nil) then
@@ -854,7 +903,7 @@ local function initWorkflows(lul_device)
 				curstate  = stateFromID(workflow["graph_json"].cells  , findStartStateID(workflow_idx) )
 			end
 			if (curstate ~= nil) then
-				armLinkTimersAndWatches(lul_device,workflow_idx,curstate)
+				armLinkTransitions(lul_device,workflow_idx,curstate)
 			else
 				error(string.format("Wflow - Cannot start to arm worklow %s as curtstate is null",workflow.altuiid))
 			end
@@ -893,7 +942,7 @@ local function resetWorkflow(lul_device,workflowAltuiid)
 		if (WFLOW_MODE == true) then
 			-- Arm timers and exec Workflows with a delay
 			local startstate = stateFromID(Workflows[workflow_idx]["graph_json"].cells,start.id)
-			armLinkTimersAndWatches(lul_device,workflow_idx,startstate)
+			armLinkTransitions(lul_device,workflow_idx,startstate)
 			executeWorkflows(lul_device , nil , workflow_idx )
 			-- luup.call_delay("executeWorkflows", 2, lul_device)
 		end
@@ -1109,7 +1158,7 @@ local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate,comm
 		executeStateLua(lul_device,workflow_idx,newstate,"onEnterLua")
 		executeStateActions(lul_device,workflow_idx,newstate,"onEnter")
 		executeStateScenes(lul_device,workflow_idx,newstate,"onEnterScenes")
-		armLinkTimersAndWatches(lul_device,workflow_idx,newstate)
+		armLinkTransitions(lul_device,workflow_idx,newstate)
 
 		executeWorkflows(lul_device , nil , workflow_idx )
 		-- let some time pass up so that actions can be executed, then re-evaluate the workflow
@@ -1152,7 +1201,7 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 				return false 	-- do not evaluate outgoing transitions
 			else
 				Workflows[workflow_idx].blocked = false
-				armLinkTimersAndWatches(lul_device,workflow_idx,start)
+				armLinkTransitions(lul_device,workflow_idx,start)
 			end
 		end
 	else
