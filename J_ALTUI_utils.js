@@ -2512,8 +2512,9 @@ var WorkflowLink = function(graph,cell) {
 	return {
 		get id()			{ return _cell.id },
 		get name() 			{ return _cell.labels[0].attrs.text.text; },
-		get conditions() 	{ return _cell.prop.conditions || [] },
-		get schedule() 		{ return _cell.prop.schedule  },
+		get conditions() { return _cell.prop.conditions || [] },
+		get waitFors() 	{ return _cell.prop.workflows || [] },
+		get schedule() 	{ return _cell.prop.schedule  },
 		get timer() 		{ return (_cell.prop.timer!="") ? { name: _cell.prop.timer , duration: _cell.prop.duration } : null },
 		get source()		{ return new WorkflowState(graph,_stateFromID(_cell.source.id)) },
 		get target()		{ return new WorkflowState(graph,_stateFromID(_cell.target.id)) },
@@ -2552,6 +2553,7 @@ var Workflow = function (altuiid) {
 		updateGraph: function() {
 			_workflow.graph_json = JSON.stringify(_graph)
 		},
+		get name() {		return _workflow.name },
 		get states() { 
 			if (_graph==null)
 				return []

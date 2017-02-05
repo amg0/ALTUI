@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2011 $";
+var ALTUI_revision = "$Revision: 2013 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7428,6 +7428,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 			return html;
 		}
+		function _displayWaitForState(arr) {
+			var html = "";
+			$.each(arr, function(k,wf) {
+				var workflow = WorkflowManager.getWorkflowDescr(wf.altuiid)
+				html += "<li>Workflow '{0}' reaches State:{1}</li>".format(workflow.name, WorkflowManager.IDToName(wf.state))
+			})			
+			return html;
+		}
+
 		function _displayWorkflowLua( lua ) {
 			var html="";
 			if (lua && (lua.length>0)) {
@@ -7481,6 +7490,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 											if (link.timer)
 												html += "<li>Timer: '{0}' expiration {1}s</li>".format(link.timer.name,link.timer.duration);
 											html += _displayConditions(link.conditions)
+											html += _displayWaitForState(link.waitFors)
 										html += "</ul>";
 										html += "<li class='altui-transition-subtitle'>Moves To</li>";
 										html += "<ul>";

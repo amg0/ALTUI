@@ -318,41 +318,68 @@ local function getIP()
 	return ip or "127.0.0.1" 
 end
 
+
+local function getStateTransitions(lul_device, stateid, cells )
+	debug(string.format("Wkflow - getStateTransitions(%s)",lul_device))
+	local result = {}
+	for k,cell in pairs(cells) do 
+		if ((cell.type=="fsa.Arrow" or cell.type=="link") and cell.source.id==stateid ) then
+			table.insert(  result , cell )
+		end
+	end
+	debug(string.format("Wkflow - getStateTransitions(%s) returns %d transitions",lul_device,#result))
+	return result
+end
+
 -- var waitForState = {
 	-- altuiid: ids[0],
 	-- state: ids[1]
 -- };
-local function addWorkflowTrigger( lul_device, altuiid, state, listener )
-	debug(string.format("addWorkflowTrigger(%s,%s,%s,%s)",lul_device, altuiid, state, listener ))
-	if ( findWorkflowTrigger( lul_device, altuiid, state, listener ) == nil ) then
-		if (WorkflowTriggers[altuiid] == nil) then
-			WorkflowTriggers[altuiid]={}
-		end
-		if (WorkflowTriggers[altuiid][state] == nil) then
-			WorkflowTriggers[altuiid][state]={}
-		end
-		table.insert( WorkflowTriggers[altuiid][state] , listener )
-	end
-end
 
-local function removeWorkflowTrigger( lul_device, altuiid, state, listener )
-	debug(string.format("removeWorkflowTrigger(%s,%s,%s,%s)",lul_device, altuiid, state, listener ))
-	local found = findWorkflowTrigger( lul_device, altuiid, state, listener )
-	if (found ~=nil) then
-		table.remove(WorkflowTriggers[altuiid][state],found)
-	end
-end
-
-local function findWorkflowTrigger( lul_device, altuiid, state, listener )
-	debug(string.format("findWorkflowTrigger(%s,%s,%s,%s)",lul_device, altuiid, state, listener ))
-	if (WorkflowTriggers[altuiid] ~= nil  and WorkflowTriggers[altuiid][state] ~= nil) then
-		for found,_listener in ipairs(WorkflowTriggers[altuiid][state]) do 
+local function findWorkflowTrigger( lul_device, altuiid, state, listener_altuiid, listener )
+	debug(string.format("findWorkflowTrigger(%s,%s,%s,%s,%s)",lul_device, altuiid, state, listener_altuiid, listener ))
+	if (WorkflowTriggers[listener_altuiid] ~= nil  and WorkflowTriggers[listener_altuiid][altuiid] ~= nil and WorkflowTriggers[listener_altuiid][altuiid][state]~= nil) then
+		for found,_listener in ipairs(WorkflowTriggers[listener_altuiid][altuiid][state]) do 
 			if (listener == _listener) then
 				return found
 			end
 		end
 	end
 	return nil
+end
+
+local function addWorkflowTrigger( lul_device, altuiid, state, listener_altuiid, listener )
+	debug(string.format("addWorkflowTrigger(%s,%s,%s,%s,%s)",lul_device, altuiid, state, listener_altuiid, listener ))
+	if ( findWorkflowTrigger( lul_device, altuiid, state, listener_altuiid, listener ) == nil ) then
+		if (WorkflowTriggers[listener_altuiid] == nil) then
+			WorkflowTriggers[listener_altuiid]={}
+		end
+		if (WorkflowTriggers[listener_altuiid][altuiid] == nil) then
+			WorkflowTriggers[listener_altuiid][altuiid]={}
+		end
+		if (WorkflowTriggers[listener_altuiid][altuiid][state] == nil) then
+			WorkflowTriggers[listener_altuiid][altuiid][state]={}
+		end
+		table.insert( WorkflowTriggers[listener_altuiid][altuiid][state] , listener )
+		debug(string.format("added transition workflow trigger for listener: %s, %s", listener_altuiid,listener ))
+		debug(string.format("WorkflowTriggers: %s", json.encode(WorkflowTriggers) ))
+	end
+end
+
+local function removeWorkflowTrigger( lul_device, listener_altuiid )
+	debug(string.format("removeWorkflowTrigger(%s,%s)",lul_device,  listener_altuiid ))
+	WorkflowTriggers[listener_altuiid]=nil
+end
+
+local function getWorkflowTriggeredBy( lul_device, altuiid, state )
+	debug(string.format("getWorkflowTriggeredBy(%s,%s,%s)",lul_device, altuiid, state ))
+	local result = {}
+	for listener_altuiid,wt in pairs(WorkflowTriggers) do
+		if (WorkflowTriggers[listener_altuiid] ~= nil  and WorkflowTriggers[listener_altuiid][altuiid] ~= nil and WorkflowTriggers[listener_altuiid][altuiid][state]~= nil) then
+			table.insert(result, { altuiid=listener_altuiid , links=WorkflowTriggers[listener_altuiid][altuiid][state] } )
+		end
+	end
+	return result
 end
 
 local function findWatch( devid, service, variable )
@@ -763,18 +790,6 @@ local function linkFromID(cells,stateID)
 	return nil
 end
 
-local function getStateTransitions(lul_device, stateid, cells )
-	debug(string.format("Wkflow - getStateTransitions(%s)",lul_device))
-	local result = {}
-	for k,cell in pairs(cells) do 
-		if ((cell.type=="fsa.Arrow" or cell.type=="link") and cell.source.id==stateid ) then
-			table.insert(  result , cell )
-		end
-	end
-	debug(string.format("Wkflow - getStateTransitions(%s) returns %d transitions",lul_device,#result))
-	return result
-end
-
 local function setWorkflowActiveState(lul_device,workflow_idx,newstate)
 	if (newstate ~= nil) then
 		debug(string.format("Wkflow - setWorkflowActiveState: '%s', %s, %s",Workflows[workflow_idx].altuiid , getCellName(newstate), newstate.id))
@@ -792,6 +807,7 @@ local function armLinkTransitions(lul_device,workflow_idx,curstate)
 	name = getCellName(curstate)
 	
 	debug(string.format("Wkflow - armLinkTransitions(%s, %s, %s ) ",lul_device, Workflows[workflow_idx].name, name))
+	local altuiid = Workflows[workflow_idx].altuiid
 	local cells = Workflows[workflow_idx]["graph_json"].cells 
 	local transitions = getStateTransitions(lul_device, curstate.id, cells )
 	for k,link in pairs(transitions) do 
@@ -822,12 +838,13 @@ local function armLinkTransitions(lul_device,workflow_idx,curstate)
 		-- Set Watches, make sure we have a watch for all the conditions
 		for c,cond in pairs(link.prop.conditions) do
 			-- table.insert(WorkflowWatches,{ cond.device, cond.service, cond.variable, cond.luaexpr })
-			_addWatch( cond.service, cond.variable, cond.device, -2, "workflow", Workflows[workflow_idx].altuiid, "", "" )
+			_addWatch( cond.service, cond.variable, cond.device, -2, "workflow", altuiid, "", "" )
 		end		
 		
 		-- Set Workflow State Waits
 		if (link.prop.workflows ~= nil) then
 			for w,waitfor in pairs(link.prop.workflows) do
+				addWorkflowTrigger( lul_device, waitfor.altuiid, waitfor.state, altuiid, link.id )
 			end
 		end
 		-- TODO xxx
@@ -1145,6 +1162,7 @@ local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate,comm
 		
 		-- cancel timers originated from that state
 		cancelStateTimers(lul_device,workflow_idx,oldstate.id)
+		removeWorkflowTrigger(lul_device,Workflows[workflow_idx].altuiid)
 		
 		-- execute onExit of old state
 		executeStateLua(lul_device,workflow_idx,oldstate,"onExitLua")
@@ -1160,6 +1178,14 @@ local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate,comm
 		executeStateScenes(lul_device,workflow_idx,newstate,"onEnterScenes")
 		armLinkTransitions(lul_device,workflow_idx,newstate)
 
+		-- execute all other workflows triggered by that new state
+		local to_launch = getWorkflowTriggeredBy( lul_device, Workflows[workflow_idx].altuiid, newstate.id )
+		for _altui,v in pairs(to_launch) do
+			debug(string.format("Launching workflow:%s Link:%s",v.altuiid , json.encode(v.links)))
+			triggerTransition(lul_device,v.altuiid,v.links[1])
+		end
+
+		-- next iteration
 		executeWorkflows(lul_device , nil , workflow_idx )
 		-- let some time pass up so that actions can be executed, then re-evaluate the workflow
 		-- luup.call_delay("executeWorkflows", 4, lul_device)
@@ -3053,7 +3079,7 @@ local function table_search (tt, v,stack,level)
 	if level > 5 then
 		return nil
 	end
-	debug(string.format("table_search(v=%s,stack%s)",v,stack))
+	-- debug(string.format("table_search(v=%s,stack%s)",v,stack))
 	if type(tt) == "table" then
 		for key, value in pairs (tt) do
 			if key ~= v then
