@@ -548,8 +548,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 	
 	function _getIconPath(name) {
-		if (_uniqID==0)
-			return "/cmh/skins/default/img/devices/device_states/{0}".format( name);
+		if (_uniqID==0) {
+			return "../cmh/skins/default/img/devices/device_states/{0}".format( name);
+		}
 		return "//{0}/cmh/skins/default/img/devices/device_states/{1}".format( _upnpHelper.getIpAddr(), name);	
 	};
 	
