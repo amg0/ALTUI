@@ -147,11 +147,11 @@ var UserDataHelper = (function(user_data) {
 					expressions.push(str);
 				}
 				else {
-					AltuiDebug.debug("Invalid State Icon condition definition for deviceid:"+deviceid);
+					AltuiDebug.debug("Invalid State Icon condition definition for deviceid:{0} devsubcat:{1} condition:{2}".format(deviceid,devsubcat,JSON.stringify(condition)) );
 				}
 			}
 			var str = expressions.join(" && ");
-			AltuiDebug.debug("_evaluateConditions(deviceid:{0} devsubcat:{1} str:{2} conditions:{3})".format(deviceid,devsubcat,str,JSON.stringify(conditions)));
+			//AltuiDebug.debug("_evaluateConditions(deviceid:{0} devsubcat:{1} str:{2} conditions:{3})".format(deviceid,devsubcat,str,JSON.stringify(conditions)));
 			var bResult = eval(str) ;
 			return (bResult==undefined) ? false : bResult ;
 		},
@@ -212,7 +212,7 @@ var UserDataHelper = (function(user_data) {
 				return;
 			} else 
 				cbfunc([]);
-			AltuiDebug.debug("_loadDeviceActions() : no services");	
+			//AltuiDebug.debug("_loadDeviceActions() : no services");	
 			return;
 		},
 		getDeviceActions : function (device,cbfunc) {
@@ -223,7 +223,7 @@ var UserDataHelper = (function(user_data) {
 				this._loadDeviceActions(controller,dt,cbfunc);
 			}
 			else {
-				AltuiDebug.debug("_getDeviceActions(null) : null device");
+				//AltuiDebug.debug("_getDeviceActions(null) : null device");
 				cbfunc([]);
 			}
 		},
@@ -629,9 +629,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			return 12;
 		return ( parseInt(_user_data.mode_change_delay || 9) +3);
 	};
-	function _getDeviceByType( device_type ) {
+	function _getDeviceByType( device_type , opt_parents_arr) {
 		for (var i=0; i<_user_data.devices.length; i++ ) {
-			if (_user_data.devices[i].device_type==device_type)
+			if  ( (_user_data.devices[i].device_type==device_type) && (opt_parents_arr==undefined || opt_parents_arr.indexOf(_user_data.devices[i].id_parent)!=-1) )
 				return _user_data.devices[i]
 		}
 		return null;
@@ -953,7 +953,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	function _isUserDataCached() {	return MyLocalStorage.get("VeraBox"+_uniqID)!=null; }
 	
 	function _saveEngine() {
-		AltuiDebug.debug("_saveEngine()");
+		//AltuiDebug.debug("_saveEngine()");
 		var verabox = {
 			_user_data : _user_data,
 		};
@@ -964,7 +964,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 
 	function _loadEngine( user_data ) {
-		AltuiDebug.debug("_loadEngine()");
+		//AltuiDebug.debug("_loadEngine()");
 		if (user_data) {	// if received in parameter ( like pre-prepared by Lua module )
 			_user_data	= user_data;
 		} else {	// or try to get from cache
@@ -982,7 +982,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	// start the polling loop to get user_data
 	function _initDataEngine() {
 		_dataEngine = null;
-		AltuiDebug.debug("_initDataEngine()");
+		//AltuiDebug.debug("_initDataEngine()");
 		// console.log("controller #{0} is requesting user_data with _user_data_DataVersion={1}".format(_uniqID,_user_data_DataVersion));
 		var jqxhr = _httpGet( "?id=user_data&output_format=json&DataVersion="+_user_data_DataVersion,
 			{beforeSend: function(xhr) { xhr.overrideMimeType('text/plain'); }},
@@ -1000,7 +1000,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				}
 			})
 			.always(function() {
-				AltuiDebug.debug("_initDataEngine() (user_data) returned.");
+				//AltuiDebug.debug("_initDataEngine() (user_data) returned.");
 			});
 		return jqxhr;
 	};
@@ -1337,7 +1337,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		if (_uniqID!=0)	// only supported on master controller
 			return;
 			
-		AltuiDebug.debug("_clearData( {2}, {0}, page:{1} )".format(name,npage,handle));
+		//AltuiDebug.debug("_clearData( {2}, {0}, page:{1} )".format(name,npage,handle));
 		var result = "";
 		var url = "data_request?id=lr_ALTUI_Handler&command=clear_data";//&pages="+encodeURIComponent(JSON.stringify(pages));
 		var jqxhr = $.ajax( {
@@ -1370,7 +1370,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		if (_uniqID!=0)	// only supported on master controller
 			return;
 
-		AltuiDebug.debug("_saveDataChunk( {4},{3}, {0}, page:{1}, data:{2} chars  )".format(name,npage,data.length,key,handle));
+		//AltuiDebug.debug("_saveDataChunk( {4},{3}, {0}, page:{1}, data:{2} chars  )".format(name,npage,data.length,key,handle));
 		var result = "";
 		var url = "data_request?id=lr_ALTUI_Handler&command=save_data";//&pages="+encodeURIComponent(JSON.stringify(pages));
 		var jqxhr = $.ajax( {
@@ -1387,7 +1387,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			}
 		})
 		.done(function(data, textStatus, jqXHR) {
-			AltuiDebug.debug("_saveDataChunk( {5}, {4}, {0}, page:{1}, data:{2} chars  ) => Res:{3}".format(name,npage,data.length,JSON.stringify(data),key,handle));
+			//AltuiDebug.debug("_saveDataChunk( {5}, {4}, {0}, page:{1}, data:{2} chars  ) => Res:{3}".format(name,npage,data.length,JSON.stringify(data),key,handle));
 			if ( $.isFunction( cbfunc ) )  {
 				cbfunc(data);			
 			}
@@ -1404,10 +1404,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	function _saveData( key, name, data , cbfunc) {
 		if (_uniqID!=0)	{
 			// only supported on master controller
-			AltuiDebug.debug("_saveData must only be called on master controller #0");
+			//AltuiDebug.debug("_saveData must only be called on master controller #0");
 			return;
 		}	
-		AltuiDebug.debug("_saveData( {0}, {1} chars )".format(name,data.length));
+		//AltuiDebug.debug("_saveData( {0}, {1} chars )".format(name,data.length));
 
 		var bPost = _candoPost(_user_data)
 		

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2017 $";
+var ALTUI_revision = "$Revision: 2018 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2175,7 +2175,7 @@ var UIManager  = ( function( window, undefined ) {
 				var width = tr.width();
 				if (historypre.length==0) {
 					MultiBox.getDeviceVariableHistory( device, varid, function(history) {
-						AltuiDebug.debug("getDeviceVariableHistory returned :"+history.result); 
+						//AltuiDebug.debug("getDeviceVariableHistory returned :"+history.result); 
 						var html = "<tr><td colspan='3'>";
 						html += "<div class='panel panel-default'> <div class='panel-body'>";
 						// html += "<div class='table-responsive'>";
@@ -2259,7 +2259,7 @@ var UIManager  = ( function( window, undefined ) {
 		// var device = MultiBox.getDeviceByID( devid );
 
 		MultiBox.getDeviceActions(device, function( services ) {
-			AltuiDebug.debug("MultiBox.getDeviceActions => returns services:{0}".format( JSON.stringify(services)));
+			//AltuiDebug.debug("MultiBox.getDeviceActions => returns services:{0}".format( JSON.stringify(services)));
 			var lines = [];
 			$.each( services, function( idx,service) {
 				$.each( service.Actions, function (key1,action) {
@@ -2422,7 +2422,7 @@ var UIManager  = ( function( window, undefined ) {
 				var ui_static_data = MultiBox.getDeviceStaticData(device);
 				var str = (ui_static_data && ui_static_data.default_icon ) ? ui_static_data.default_icon : "" ;
 				// var dt = _devicetypesDB[ device.device_type ];
-				AltuiDebug.debug("Icon for device altuiid:"+device.altuiid+"  device.type:"+device.device_type);
+				//AltuiDebug.debug("Icon for device altuiid:"+device.altuiid+"  device.type:"+device.device_type);
 				if (ui_static_data!=null)
 				{
 					//dt.ui_static_data.DisplayStatus
@@ -2461,7 +2461,7 @@ var UIManager  = ( function( window, undefined ) {
 								
 								// mostlikely in UI5 icons are not located in devicestates folder, so let's fix it
 								var baseIconName = ui_static_data.flashicon;
-								AltuiDebug.debug("UI5 style static baseIconName:"+baseIconName);
+								//AltuiDebug.debug("UI5 style static baseIconName:"+baseIconName);
 								var dot = baseIconName.lastIndexOf('.');
 								if (dot >=0)
 									baseIconName=baseIconName.substr(0,dot);
@@ -2469,7 +2469,7 @@ var UIManager  = ( function( window, undefined ) {
 								{
 									baseIconName = "../../../"+baseIconName;
 								}
-								AltuiDebug.debug("UI5 style static baseIconName modified :"+baseIconName);
+								//AltuiDebug.debug("UI5 style static baseIconName modified :"+baseIconName);
 								var ds = ui_static_data.DisplayStatus;
 								if ((ds != undefined) && (ds.Service != undefined) && (ds.Variable != undefined))
 								{
@@ -2485,7 +2485,7 @@ var UIManager  = ( function( window, undefined ) {
 							}
 							else
 								str = si[0] || ui_static_data.default_icon || defaultIconSrc;	// incase si is an empty [}
-							AltuiDebug.debug("Icon for device id:"+id+"  str :"+str);
+							//AltuiDebug.debug("Icon for device id:"+id+"  str :"+str);
 					}
 					else if (ui_static_data.dynamic_icons !=undefined)	//  some dynamic icons found
 					{
@@ -2538,7 +2538,7 @@ var UIManager  = ( function( window, undefined ) {
 							str = (ui_static_data.flashicon != undefined) ? ui_static_data.flashicon : ui_static_data.default_icon;
 						else
 							str = (ui_static_data.default_icon != undefined) ? ui_static_data.default_icon : ui_static_data.flashicon;
-						AltuiDebug.debug("Icon for device id:"+id+"  string from json:"+str);
+						//AltuiDebug.debug("Icon for device id:"+id+"  string from json:"+str);
 						if (str == undefined) {
 							AltuiDebug.debug("Undefined icon in ui_static_data, device.type:"+device.device_type);
 							AltuiDebug.debug("ui_static_data:"+JSON.stringify(ui_static_data));
@@ -2553,17 +2553,17 @@ var UIManager  = ( function( window, undefined ) {
 						// //192.168.1.16/cmh/skins/default/img/devices/device_states/../../icons/Window_Covering.png
 						else if (str.substr(0,6) == "icons/")
 							str = "../../../" +str;
-						AltuiDebug.debug("Icon for device id:"+id+"  string after correction:"+str);
+						//AltuiDebug.debug("Icon for device id:"+id+"  string after correction:"+str);
 					}	
 				}
 				else {
-					AltuiDebug.debug("Icon for device id:"+id+"  DeviceType unknown or not static data");
+					//AltuiDebug.debug("Icon for device id:"+id+"  DeviceType unknown or not static data");
 					str = defaultIconSrc;
 				}
 				
 				//console.log("type:{0} icon:{1}".format(device.device_type,str));
 				if( str.substring(0,4)=="http") {
-					AltuiDebug.debug("Icon for device id:"+id+"  IconPath:"+str);
+					//AltuiDebug.debug("Icon for device id:"+id+"  IconPath:"+str);
 					return str;
 				}
 				
@@ -2572,7 +2572,7 @@ var UIManager  = ( function( window, undefined ) {
 				else 
 					icon = MultiBox.getIconPath(controller, str );
 
-				AltuiDebug.debug("Icon for device id:"+id+"  IconPath:"+icon);
+				//AltuiDebug.debug("Icon for device id:"+id+"  IconPath:"+icon);
 				break;
 		};
 		return icon;
@@ -4560,7 +4560,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	function _refreshUI( bFull, bFirstTime ) {
 		// refresh rooms
 		// refresh devices
-		// AltuiDebug.debug("_refreshUI( {0}, {1} )".format(bFull,bFirstTime));
+		//AltuiDebug.debug("_refreshUI( {0}, {1} )".format(bFull,bFirstTime));
 		
 		// $(".altui-device") which do not have a btngroup in open state
 		// to avoid a refresh to erase an opened popup menu
@@ -9690,7 +9690,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			})
 			.on("click",".altui-store-install-btn",function() {
 				var that = this;
-				var altuiapp_device = MultiBox.getDeviceByType(0,"urn:schemas-upnp-org:device:AltAppStore:1")
+				var altuiapp_device = MultiBox.getDeviceByType(0,"urn:schemas-upnp-org:device:AltAppStore:1",[0,2])		// make sure to only search for openluup altappstore even if several instances exist
 				if (altuiapp_device != null) {
 					var pluginid = $(this).closest(".altui-pluginbox").data("pluginid");
 					var plugin = UIManager._findPlugin(_plugins_data.details.plugins,pluginid)
@@ -13770,7 +13770,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// save state to accelerate the launch next time
 				// UIManager.saveEngine();	
 				MultiBox.saveEngine();
-				AltuiDebug.debug("exiting");
+				//AltuiDebug.debug("exiting");
 			});
 	
 			$(".altui-debug-div").toggle(false);
@@ -13805,7 +13805,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var id = $(this).prop('id')
 					UIControler.onClickHtml('#'+id);
 				})
-				AltuiDebug.debug("init done");
+				//AltuiDebug.debug("init done");
 				// console.log("start UIManager.run()");
 				_refreshFooter();
 				UIManager.run();
@@ -13819,9 +13819,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// }
 		// catch (err) {
 			// PageMessage.message("Exception occurred in "+homepage,"warning");
-			// AltuiDebug.debug("Exception occurred in "+homepage);
-			// AltuiDebug.debug("name: "+err.name);
-			// AltuiDebug.debug("message: "+err.message);
+			//AltuiDebug.debug("Exception occurred in "+homepage);
+			//AltuiDebug.debug("name: "+err.name);
+			//AltuiDebug.debug("message: "+err.message);
 			// console.log("Exception occurred in "+homepage);
 			// console.log("name: "+err.name);// affiche 'Error'
 			// console.log("message: "+err.message); // affiche 'mon message' ou un message d'erreur JavaScript
@@ -14106,8 +14106,8 @@ $(function() {
 	};
 	
 	AltuiDebug.SetDebug( g_ALTUI.g_DeviceTypes.info["debug"] ) ;
-	AltuiDebug.debug("starting engines");
-	AltuiDebug.debug("Configuration: "+JSON.stringify(g_ALTUI.g_DeviceTypes));
+	//AltuiDebug.debug("starting engines");
+	//AltuiDebug.debug("Configuration: "+JSON.stringify(g_ALTUI.g_DeviceTypes));
 
 	EventBus.registerEventHandler("on_ui_initFinished",UIManager,UIManager.signal);
 	EventBus.registerEventHandler("on_ui_userDataLoaded",UIManager,UIManager.signal);
@@ -14117,10 +14117,10 @@ $(function() {
 	var language = getQueryStringValue("lang") || window.navigator.userLanguage || window.navigator.language;
 	SpeechManager.init(language);
 	
-	AltuiDebug.debug("language:"+language);
+	//AltuiDebug.debug("language:"+language);
 
 	if ((language.substring(0, 2) == 'en')) {
-		AltuiDebug.debug("Locale file not needed");
+		//AltuiDebug.debug("Locale file not needed");
 		_onInitLocalization();
 		SpeechManager.initRules([
 			{r:"(switch on|turn on|open).*\\s+(%name%)", t:"device", a:{service:"urn:upnp-org:serviceId:SwitchPower1", action:"SetTarget", params:"{ \"newTargetValue\":1}"}},
@@ -14137,14 +14137,14 @@ $(function() {
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
 			script.src = scriptLocationAndName;
-			AltuiDebug.debug("loading script :"+scriptLocationAndName);
+			//AltuiDebug.debug("loading script :"+scriptLocationAndName);
 			// once script is loaded, we can call style function in it
 			// $(script).load(  function() {
 			$(script).on("load", _onInitLocalization )
 			head.appendChild(script);
 		} else {
 			// if lang is on the url, the js is already loaded by the Lua module. 
-			AltuiDebug.debug("Locale file not needed");
+			//AltuiDebug.debug("Locale file not needed");
 			_onInitLocalization();
 		}
 	}

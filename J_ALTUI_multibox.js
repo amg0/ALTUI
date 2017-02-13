@@ -149,7 +149,7 @@ var MultiBox = ( function( window, undefined ) {
 		
 		if (device.device_json) {
 			if (_devicetypesDB[elems[0]]['json'] && _devicetypesDB[elems[0]]['json'][device.device_json]!=undefined) {
-				AltuiDebug.debug("_getDeviceStaticData({0}) found static data by json:{1}".format(device.altuiid,device.device_json));
+				// AltuiDebug.debug("_getDeviceStaticData({0}) found static data by json:{1}".format(device.altuiid,device.device_json));
 				return _devicetypesDB[elems[0]]['json'][device.device_json].ui_static_data;
 			}
 		} 
@@ -424,9 +424,9 @@ var MultiBox = ( function( window, undefined ) {
 		var id = controllerid || 0;
 		return _controllers[id].controller.getDeviceByAltID( parentdevid , altid );
 	};
-	function _getDeviceByType(controllerid,str) {
+	function _getDeviceByType(controllerid,str,opt_parents_arr) {
 		var id = controllerid || 0;
-		return _controllers[id].controller.getDeviceByType(str);
+		return _controllers[id].controller.getDeviceByType(str,opt_parents_arr);
 	};
 	function _getDeviceActions(device,cbfunc) {
 		if (device==null) {
