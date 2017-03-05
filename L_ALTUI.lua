@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.80"
+local version = "v1.81"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -53,6 +53,7 @@ local ReceivedData = {}				-- buffer for receiving split data chunks
 --calling a function from HTTP in the device context
 --http://192.168.1.5/port_3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&DeviceNum=81&Code=getMapUrl(81)
 
+
 ------------------------------------------------
 -- ALTUI --
 -- DUplicate code to have it available both in global scene/etc and in workflows
@@ -64,6 +65,15 @@ function ALTUI.notify( pushingbox_DID, str )
 	local newstr = modurl.escape( str or "" )
 	luup.inet.wget("http://api.pushingbox.com/pushingbox?devid=" .. pushingbox_DID .. "&value=" .. newstr .. "" )
 	return true
+end
+function ALTUI.getWorkflowBagValue( workflowAltuiid, varname )	
+	-- debug(string.format("getWorkflowBagValue( %s, %s )",workflowAltuiid, varname))
+	if (WorkflowsVariableBag[workflowAltuiid] ~= nil) then
+		-- debug(string.format("getWorkflowBagValue( %s, %s ) => %s",workflowAltuiid, varname,WorkflowsVariableBag[ workflowAltuiid ] [varname]))
+		return WorkflowsVariableBag[ workflowAltuiid ] [varname]
+	end
+	-- debug(string.format("getWorkflowBagValue( %s, %s ) => nil",workflowAltuiid, varname))
+	return nil
 end
 function  ALTUI.time_is_between(startTime,endTime)
 	local hour = tonumber( startTime:sub( startTime:find("%d+") ) )
@@ -1117,7 +1127,7 @@ local function executeStateLua(lul_device,workflow_idx,state,label)
 		if (f==nil) then
 			error(string.format("Wkflow - loadstring %s failed to compile, msg=%s",lua,msg))
 		else
-			local env = { ALTUI=ALTUI, Bag = WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ] }
+			local env = { ALTUI=ALTUI, Bag = WorkflowsVariableBag[ Workflows[workflow_idx].altuiid ] , WorkflowsVariableBag=WorkflowsVariableBag}
 			setfenv(f, setmetatable (env, {__index = _G, __newindex = _G}))
 			local status,res= pcall(  f )
 			
@@ -3249,7 +3259,7 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 		-- set Environment
 		local env = {}
 		if (opt_wkflowidx~=nil) then
-			env = { ALTUI=ALTUI, Bag = WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] }
+			env = { ALTUI=ALTUI, Bag = WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] , WorkflowsVariableBag=WorkflowsVariableBag}
 		end
 		setfenv(f, setmetatable (env, {__index = _G, __newindex = _G}))
 		local func = f()	-- call it
@@ -3689,20 +3699,21 @@ end
 ------------------------------------------------
 -- STARTUP Sequence
 ------------------------------------------------
-function loadCode( code )
+function loadCode( code , lul_device)
 	local req = "http://127.0.0.1:3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code="
 	-- code = "require 'L_ALTUI_LuaRunHandler'\n"
+	code = "local altui_device = "..lul_device.."\n"..code
 	req = req .. modurl.escape(code)
 	local httpcode,content = luup.inet.wget(req)
 	return httpcode,content
 end
 
-function registerHandlers()
+function registerHandlers(lul_device)
 	luup.register_handler("myALTUI_Handler","ALTUI_Handler")
 	-- luup.register_handler('ALTUI_LuaRunHandler','ALTUI_LuaRunHandler')
 
 	local code = [[
-	-- local altuijson = require("L_ALTUIjson")
+
 	local printResult = {}
 	local function myPrint (...)
 		local arg = {}
@@ -3778,6 +3789,15 @@ function registerHandlers()
 			luup.inet.wget("http://api.pushingbox.com/pushingbox?devid=" .. pushingbox_DID .. "&value=" .. newstr .. "" )
 			return true
 		end
+		function ALTUI.getWorkflowBagValue( workflowAltuiid, varname )	
+			local json = require("dkjson")
+			local curValue = luup.variable_get("urn:upnp-org:serviceId:altui1", "WorkflowsVariableBag", altui_device)
+			local WorkflowsVariableBag  = json.decode( curValue ) or {}
+			if (WorkflowsVariableBag[workflowAltuiid] ~= nil) then
+				return WorkflowsVariableBag[ workflowAltuiid ] [varname]
+			end
+			return nil
+		end
 		function  ALTUI.time_is_between(startTime,endTime)
 			local hour = tonumber( startTime:sub( startTime:find("%d+") ) )
 			local minute = tonumber(startTime:sub(-2))
@@ -3814,8 +3834,8 @@ function registerHandlers()
 			return false
 		end
 	]]	
-	local httpcode,content = loadCode(code)
-	httpcode,content = loadCode(code2)
+	local httpcode,content = loadCode(code,lul_device)
+	httpcode,content = loadCode(code2,lul_device)
 	return httpcode
 end
 
@@ -3954,7 +3974,7 @@ function startupDeferred(lul_device)
 	enableWorkflows(lul_device,worfklowmode)	-- will trigger start if mode is true
 	
 	-- start handlers
-	registerHandlers()
+	registerHandlers(lul_device)
 
 	-- process old timers
 	processTimers(lul_device)
