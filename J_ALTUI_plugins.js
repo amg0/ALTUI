@@ -964,11 +964,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
         return html;
     };
 	function _drawTempLeak( device ) {
-        var html = "";
-        var armed = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Armed' )); 
+		var html = "";
+		var armed = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Armed' )); 
 		html += _createOnOffButton( armed,"altui-onoffbtn-"+device.altuiid, _T("Bypass,Arm"), "pull-right" );
-        html += _drawTempSensor(device);
-        var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
+		html += _drawTempSensor(device);
+		var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
 		if (lasttrip != null) {
 			var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
 			html+= "<div class='altui-lasttrip-text text-muted'>{0} {1} </div>".format( timeGlyph,lasttripdate );
@@ -976,7 +976,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleArmed('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
-        return html;
+		return html;
     }
 	
 	// return the html string inside the .panel-body of the .altui-device#id panel
