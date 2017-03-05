@@ -2975,6 +2975,16 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMultiswitch"
 	}	
+	tbl["urn:schemas-rboer-com:device:Harmony:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawHarmony",
+		["ControlPanelFunc"]="ALTUI_PluginDisplays.drawHarmonyControlPanel"
+	}
+	tbl["urn:schemas-rboer-com:device:HarmonyDevice:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawHarmonyDevice",
+		["ControlPanelFunc"]="ALTUI_PluginDisplays.drawHarmonyDeviceControlPanel"
+	}
 	return tbl
 end
 
