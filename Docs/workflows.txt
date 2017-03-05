@@ -1,4 +1,4 @@
-[b]DOC for v1.34[/b]
+[b]WORKFLOW INTRODUCTION[/b]
 
 [b]ON/OFF[/b]
 The workflow mode is controlled by a button in the settings tab of ALTUI device to switch it on or off. you can allways switch it off if you run into trouble  ( which is possible if you create crazy workflow that keeps matching conditions and run in loops ).   you can switch off or switch on the workflow mode without requiring a lua restart
@@ -38,12 +38,18 @@ When the workflow starts it starts in the start state. You can create transition
  
 [b]Transitions[/b]
 Transitions are basically [b]condition[/b] ( device watches & lua expressions, like the watches ) , or [b]timer [/b]( transition is 'met' when the timer described in the transition is met. Transitions may have multiple conditions, and this is an "AND" of all of them to be valid.
-Transition can also be "[b]scheduled[/b]" transition. this is the same scheduling capabilities as scene and will enable the transition to be considered as true on a planned schedule basis. When you associate a schedule to a transition, it will create a scene called " Workflow <altuiid> " with the programmed schedule. the scene will run and trigger the workflow transition.  the Logic remains so even if the transition is considered as "true" when this happens, it will only trigger a worfklow state transition if the active state of the workflow, was the source state of the transition.
+
+Timer transitions can be a hard coded timer ( n seconds ) or a range ( min-max ) which will make ALTUI chose a random duration between min and max seconds for that timer ( and it will be different every time the timer is armed ) 
+
+Transition can also be "[b]scheduled[/b]" transition. this is the same scheduling capabilities as scene and will enable the transition to be considered as true on a planned schedule basis. When you associate a schedule to a transition, it will create a scene called " Workflow <altuiid> " with the programmed schedule. the scene will run and trigger the workflow transition.  House modes apply if you are on UI7.  the Logic remains so even if the transition is considered as "true" when this happens, it will only trigger a worfklow state transition if the active state of the workflow, was the source state of the transition.
 
 if you need "OR" , you create multiple transitions ( multiple arrows on your graph )
 
 [b]Logical expressions for Transitions[/b]
-Blockly editor for Transition condition editor is not yet enabled but Transitions obey to the same rule / syntax than watches , so you can use special variable like new and old , just remember device values are string typed so to express a condition for a tripped motion sensor for instance, you write   new == '1'. you can use luup functions so  new == '1' and luup.is_night() is a valid expression to have for a transition. You can use Bag["xxx"] variables so new == Bag["my_var"] is a valid expression
+Blockly editor for Transition condition editor is enabled , otherwise Transitions obey to the same rule / syntax than watches , so you can use special variable like new and old , just remember device values are string typed so to express a condition for a tripped motion sensor for instance, you write   new == '1'. you can use luup functions so  new == '1' and luup.is_night() is a valid expression to have for a transition. You can use Bag["xxx"] variables so new == Bag["my_var"] is a valid expression
 
 [b]Implementation, details[/b]
 it is based on watch and timers so it is fully asynchronous. inactive workflows do not use any resources on your vera. the only exception is the GUI refresh of active state which is a polling every 3 sec for a small packet of information and this is only hapening on the workflow display page
+
+Workflows can trigger transitions in other worfklows using the method explained here:
+[url=http://forum.micasaverde.com/index.php/topic,33303.msg282392.html#msg282392]http://forum.micasaverde.com/index.php/topic,33303.msg282392.html#msg282392[/url]
