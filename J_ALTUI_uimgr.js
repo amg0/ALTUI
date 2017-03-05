@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2019 $";
+var ALTUI_revision = "$Revision: 2025 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3358,23 +3358,29 @@ var UIManager  = ( function( window, undefined ) {
 	
 	function _deviceDrawControlPanelOneTabContent(device, parent, tabidx ) {
 		// Allways master controller for customer javascript functions, so 0!
-		var _altuitypesDB = MultiBox.getALTUITypesDB();	// Master controller
+		var _altuitypesDB = MultiBox.getALTUITypesDB();		// Master controller number 0
 		var dt = _altuitypesDB[device.device_type];
-		if (dt!=null && dt.ControlPanelFunc!=null && (tabidx==0)) {
-			Altui_ExecuteFunctionByName(dt.ControlPanelFunc, window, device, parent);
-			// _fixHeight( parent );
+		
+		var funcnames = null;
+		if (dt && dt.ControlPanelFunc!=null) {
+			funcnames = dt.ControlPanelFunc.split(",")	// csv string, per each tab idx ( from 0 (altui) to n (vera)
 		}
-		else if (tabidx>0) {
-			// on the contrary, UI5/7 static definition file is part of the controller specific device type DB 
-			// so real controller this time
-			var ui_static_data = MultiBox.getDeviceStaticData(device);
-			if (ui_static_data!=null) {
-				var tab = ui_static_data.Tabs[tabidx-1];
-				if ((tab.TabType!="javascript") || ( $.inArray( tab.ScriptName, _forbiddenScripts) == -1))  {
-					if ( tab.TabType=="flash") {
-						_deviceDrawControlPanelTab( device, tab, parent );		// row for Flash Panel
-					} else {
-						_deviceDrawControlPanelJSTab( device, tab, parent );
+		if ( funcnames && funcnames[tabidx] && funcnames[tabidx].length>0 ) {
+			// for ANY tab, if the function name is specified in ControlPanelFunc as csv like func_for_tab0,func_for_tab1,func_for_tab2,...
+			Altui_ExecuteFunctionByName(funcnames[tabidx], window, device, parent);
+			// _fixHeight( parent );
+		} else {
+			// only if it is a VERA tab  (tabidx>0) then fallback plan is to use JSON definition
+			if (tabidx>0) {
+				var ui_static_data = MultiBox.getDeviceStaticData(device);
+				if (ui_static_data!=null) {
+					var tab = ui_static_data.Tabs[tabidx-1];
+					if ((tab.TabType!="javascript") || ( $.inArray( tab.ScriptName, _forbiddenScripts) == -1))  {
+						if ( tab.TabType=="flash") {
+							_deviceDrawControlPanelTab( device, tab, parent );		// row for Flash Panel
+						} else {
+							_deviceDrawControlPanelJSTab( device, tab, parent );
+						}
 					}
 				}
 			}
@@ -3831,7 +3837,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var _altuitypesDB = MultiBox.getALTUITypesDB();					// for ALTUI plugin info
 				var ui_static_data = MultiBox.getDeviceStaticData(device);
 				if (ui_static_data!=null) {
-					var bExtraTab = (_altuitypesDB[device.device_type] && _altuitypesDB[device.device_type].ControlPanelFunc!=null);
+					var funcnames = null;
+					var bExtraTab = false;
+					if (_altuitypesDB[device.device_type] && _altuitypesDB[device.device_type].ControlPanelFunc!=null) {
+						funcnames = _altuitypesDB[device.device_type].ControlPanelFunc.split(",")
+						bExtraTab = ( funcnames[0].length>0 )
+					}
 					$(panel_body).append( "<div class='row'>" + _createDeviceTabs( device, bExtraTab, ui_static_data.Tabs ) + "</div>" );
 				}
 
