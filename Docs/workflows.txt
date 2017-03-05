@@ -21,9 +21,9 @@ There is a workflow report screen to display all details of states and transitio
 [b]Variable Bags[/b]
 a Bag is a associative array to store workflow specific variable that are visible in any state of the workflow and are persistent accross reboots/reloads.  a resetWorkflow action will reset the variables to null.
 They are accessible in lua code like this and the lua code can just add variable as it wants simply by assigning a value to them:
-[code]Bags["my_variable"] = 2[/code]
+[code]Bag["my_variable"] = 2[/code]
 Be careful that variables starts with a null value if the workflow has been reset for instance so if you use operations that use the previous value of the variable, you must guard it with default values like this:
-[code]Bags["my_variable"] = (Bags["my_variable"] or 0)+1[/code]
+[code]Bag["my_variable"] = (Bag["my_variable"] or 0)+1[/code]
 2 workflows can have the same variable name in their Bag, their will not be name collision, each workflow has its own Bag.
 
 [b]States[/b]
@@ -42,6 +42,8 @@ Transitions are basically [b]condition[/b] ( device watches & lua expressions, l
 Timer transitions can be a hard coded timer ( n seconds ) or a range ( min-max ) which will make ALTUI chose a random duration between min and max seconds for that timer ( and it will be different every time the timer is armed ) 
 
 Transition can also be "[b]scheduled[/b]" transition. this is the same scheduling capabilities as scene and will enable the transition to be considered as true on a planned schedule basis. When you associate a schedule to a transition, it will create a scene called " Workflow <altuiid> " with the programmed schedule. the scene will run and trigger the workflow transition.  House modes apply if you are on UI7.  the Logic remains so even if the transition is considered as "true" when this happens, it will only trigger a worfklow state transition if the active state of the workflow, was the source state of the transition.
+
+Transition of a workflow (A) can also be fired when [b]another workflow[/b] (B) is entering a particular state. you can choose that state from the transition editor screen. as soon as the other workflow (B) reaches that state, ALTUI will check this particular transition :  if the source state of the transition in workflow (A) is matching the actual state of workflow (A), the transition will fire. Otherwise it will be ignored
 
 if you need "OR" , you create multiple transitions ( multiple arrows on your graph )
 
