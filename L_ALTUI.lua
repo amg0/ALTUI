@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.81"
+local version = "v1.82"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -2978,12 +2978,12 @@ local function getDefaultConfig()
 	tbl["urn:schemas-rboer-com:device:Harmony:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawHarmony",
-		["ControlPanelFunc"]="ALTUI_PluginDisplays.drawHarmonyControlPanel"
+		["ControlPanelFunc"]=",ALTUI_PluginDisplays.drawHarmonyControlPanel"
 	}
 	tbl["urn:schemas-rboer-com:device:HarmonyDevice:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawHarmonyDevice",
-		["ControlPanelFunc"]="ALTUI_PluginDisplays.drawHarmonyDeviceControlPanel"
+		["ControlPanelFunc"]=",ALTUI_PluginDisplays.drawHarmonyDeviceControlPanel"
 	}
 	return tbl
 end
