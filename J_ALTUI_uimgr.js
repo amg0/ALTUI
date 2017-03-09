@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2031 $";
+var ALTUI_revision = "$Revision: 2032 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1992,7 +1992,11 @@ var UIManager  = ( function( window, undefined ) {
 				if (parameters[i].key=="graphicurl") {
 					var height = parameters[i].ifheight || 260;
 					var url = String.prototype.format.apply(value,tempPushData.params);
-					html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}' width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(url,i,varid,height);
+					if (url && url.length>5) {
+						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}' width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(url,i,varid,height);
+					} else {
+						html +=_T("No Graphic available")
+					}
 				}
 
 			}
@@ -13438,11 +13442,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		};
 		function _displayWatchGraph(idx,model,force) {
 			if ( (force==true) || ($("span#altui-watch-placeholder-"+idx).text() =="loading..." ) ) {
-				var watch = model.watches[idx];
 				var html = "";
-				html += "<div class='col-xs-12'>";
-					html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'  width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
-				html += "</div>";
+				var watch = model.watches[idx];
+				if (watch.url && watch.url.length>5) {
+					html += "<div class='col-xs-12'>";
+						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'  width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
+					html += "</div>";
+				} else {
+					html +=_T("No Graphic available")
+				}
 				$("span#altui-watch-placeholder-"+idx).html(html);
 			}
 		};
@@ -13461,9 +13469,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			];
 			$.each(model.watches, function(idx,watch) {
 				var html = "";
-				html += "<div class='col-xs-12'>";
-					html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'  width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
-				html += "</div>";
+				if (watch.url && watch.url.length>5) {
+					html += "<div class='col-xs-12'>";
+						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'  width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
+					html += "</div>";
+				} else {
+					html +=_T("No Graphic available")
+				}
 				
 				panels.push({
 						id:'watchidx_'+idx, 
