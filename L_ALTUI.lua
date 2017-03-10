@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.82"
+local version = "v1.83"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -3484,7 +3484,8 @@ function _delWatch(service, variable, deviceid, sceneid, expression, xml, provid
 			-- if (registeredWatches[devidstr][service][variable]['DataProviders']DataProviders[i]['Data']==data) then
 			local n = tablelength(registeredWatches[devidstr][service][variable]['DataProviders'][provider])
 			for i=n,1,-1 do
-				if (registeredWatches[devidstr][service][variable]['DataProviders'][provider][i]['Data']==data) then
+				if (registeredWatches[devidstr][service][variable]['DataProviders'][provider][i]['Data']~=nil) then
+				-- if (registeredWatches[devidstr][service][variable]['DataProviders'][provider][i]['Data']==data) then
 					table.remove(registeredWatches[devidstr][service][variable]['DataProviders'][provider],i)
 					removed = removed +1
 				end
@@ -3572,16 +3573,17 @@ function delWatch( lul_device, service, variable, deviceid, sceneid, expression,
 		luup.variable_set(ALTUI_SERVICE, "VariablesToWatch", table.concat(toKeep,";"), lul_device)
 	else
 		-- data push watch
-		local watchline = setPushParams(service,variable,deviceid,provider,providerparams)
+		local watchline = setPushParams(service,variable,deviceid,provider,{})	 --ignore providerparams
 		debug(string.format("Watch to delete: %s",watchline))
 		local variableWatch= getSetVariable(ALTUI_SERVICE, "VariablesToSend", lul_device, "")
 		local toKeep = {}
 		for k,v  in pairs(variableWatch:split(';')) do
-			if (v ~= watchline) then
+			if (string.starts(v,watchline) == true) then
+			-- if (v == watchline) then
+				debug(string.format("Going to delete this watch: %s",v))
+			else
 				debug(string.format("Keeping this watch: [%s], wanting this watch: [%s]",v,watchline))
 				table.insert(toKeep, v)
-			else
-				debug(string.format("Going to delete this watch: %s",v))
 			end
 		end
 		luup.variable_set(ALTUI_SERVICE, "VariablesToSend", table.concat(toKeep,";"), lul_device)
