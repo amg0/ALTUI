@@ -38,11 +38,12 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2032 $";
+var ALTUI_revision = "$Revision: 2033 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
+var NO_URL = 'no url';
 var _HouseModes = [];
 var deviceModalTemplate = "";
 var deviceActionModalTemplate = "";
@@ -1992,7 +1993,7 @@ var UIManager  = ( function( window, undefined ) {
 				if (parameters[i].key=="graphicurl") {
 					var height = parameters[i].ifheight || 260;
 					var url = String.prototype.format.apply(value,tempPushData.params);
-					if (url && url.length>5) {
+					if (url && url!=NO_URL) {
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}' width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(url,i,varid,height);
 					} else {
 						html +=_T("No Graphic available")
@@ -13436,7 +13437,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				}
 			}
 			return {
-				url:'no url',
+				url:NO_URL,
 				height:null
 			}
 		};
@@ -13444,7 +13445,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			if ( (force==true) || ($("span#altui-watch-placeholder-"+idx).text() =="loading..." ) ) {
 				var html = "";
 				var watch = model.watches[idx];
-				if (watch.url && watch.url.length>5) {
+				if (watch.url && watch.url!=NO_URL) {
 					html += "<div class='col-xs-12'>";
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'  width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
 					html += "</div>";
@@ -13469,7 +13470,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			];
 			$.each(model.watches, function(idx,watch) {
 				var html = "";
-				if (watch.url && watch.url.length>5) {
+				if (watch.url && watch.url!=NO_URL) {
 					html += "<div class='col-xs-12'>";
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'  width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
 					html += "</div>";
