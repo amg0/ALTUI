@@ -7790,6 +7790,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					$.each( w.states, function(i,s) {
 						if (s.name == selected) {
 							var srccell = graph.getCell(s.id);
+							Model.prop = WorkflowManager.getNodeProperties( srccell.attributes.prop ),
 							$("#altui-onEnter").replaceWith( _displayActions( "altui-onEnter",srccell.attributes.prop.onEnter) )
 							$("#altui-onExit").replaceWith( _displayActions( "altui-onExit",srccell.attributes.prop.onExit) )
 							$("#altui-onEnterScenes").replaceWith( _displayScenes( "altui-onEnterScenes",srccell.attributes.prop.onEnterScenes) )
