@@ -2,29 +2,29 @@
 // "use strict";
 // http://192.168.1.16:3480/data_request?id=lr_ALTUI_Handler&command=home
 // This program is free software: you can redistribute it and/or modify
-// it under the condition that it is for private or home useage and 
+// it under the condition that it is for private or home useage and
 // this whole comment is reproduced in the source code file.
 // Commercial utilisation is not authorized without the appropriate
 // written agreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 var MultiBox = ( function( window, undefined ) {
 	var _recorder = null;
 	var _devicetypesDB = {};
 	_devicetypesDB[0] = {};
-	
+
 	var _controllers = [
-		// { ip:''			  ,  controller:null },		// no IP = primary box on which we opened the web page
-		// { ip:'192.168.1.5',  controller:null }		// no IP = primary box on which we opened the web page
+		// { ip:''			  ,	 controller:null },		// no IP = primary box on which we opened the web page
+		// { ip:'192.168.1.5',	controller:null }		// no IP = primary box on which we opened the web page
 		//http://192.168.1.16:3480/luvd/S_IPhone.xml
 		//http://192.168.1.16:3480/data_request?id=device
 		//http://192.168.1.16/port_3480/data_request?id=action&output_format=json&DeviceNum=162&serviceId=urn:upnp-org:serviceId:altui1&action=ProxyGet&newUrl=http://192.168.1.5/port_3480/data_request?id=lu_status2&output_format=json&DataVersion=1&Timeout=60&MinimumDelay=1500&resultName=alexis
 		//http://192.168.1.5/port_3480/data_request?id=lu_status2&output_format=json&DataVersion=1&Timeout=60&MinimumDelay=1500
 	];
-	
+
 	function _controllerOf(altuiid) {
 		var elems = altuiid.split("-");
 		return { controller:parseInt(elems[0]) , id:elems[1] };
@@ -40,10 +40,10 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _getControllers() {
 		return $.map(_controllers,function(c) { return {	ip:c.ip , box_info:c.controller.getBoxFullInfo(), controller: c.controller } });
-	};	
+	};
 	function _initDB(devicetypes) {
-		$.extend(true,_devicetypesDB[0],devicetypes); 	// data received initially comes from ctrl 0
-		return this; 
+		$.extend(true,_devicetypesDB[0],devicetypes);	// data received initially comes from ctrl 0
+		return this;
 	};
 	function _getALTUITypesDB() {
 		return _devicetypesDB[0];
@@ -61,18 +61,18 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _updateDeviceTypeUPnpDB( controllerid, devtype, Dfilename )	{
 		var id = controllerid || 0;
-		if (_devicetypesDB[id][devtype]==null) 
+		if (_devicetypesDB[id][devtype]==null)
 			_devicetypesDB[id][devtype]={};
-		
+
 		// only try to load if not loaded or in the process of loading it
 		if (_devicetypesDB[id][devtype].Dfilename == undefined) {
 			_devicetypesDB[id][devtype].Dfilename = Dfilename;
-			
+
 			// get it into the cache ( or get it from the cache )
 			FileDB.getFileContent(id, Dfilename , function( xmlstr , jqXHR ) {
 				try {
 					var doc = jqXHR ? ((jqXHR.responseXML != undefined) ? jqXHR.responseXML : $.parseXML( xmlstr )) : $.parseXML( xmlstr );
-					
+
 					var xml = $( doc );
 					var imp = xml.find("implementationFile");
 					_devicetypesDB[id][devtype].Ifilename= imp.text();
@@ -122,7 +122,7 @@ var MultiBox = ( function( window, undefined ) {
 			var json = device.device_json || 'nil'; // fallback as on UI5 device_json is not defined
 			if (_devicetypesDB[elems[0]][device.device_type] == undefined)
 				return null;
-			
+
 			if ( (_devicetypesDB[elems[0]][device.device_type][json]==undefined) ) {
 				// try with nil and use this if ok
 				if (_devicetypesDB[elems[0]][device.device_type]['nil']!=undefined) {
@@ -143,24 +143,24 @@ var MultiBox = ( function( window, undefined ) {
 			}
 			return _devicetypesDB[elems[0]][device.device_type].ui_static_data
 		}
-		
+
 		if ((device==null)||(device.device_type==null))
 			return null;
-		
+
 		if (device.device_json) {
 			if (_devicetypesDB[elems[0]]['json'] && _devicetypesDB[elems[0]]['json'][device.device_json]!=undefined) {
 				// AltuiDebug.debug("_getDeviceStaticData({0}) found static data by json:{1}".format(device.altuiid,device.device_json));
 				return _devicetypesDB[elems[0]]['json'][device.device_json].ui_static_data;
 			}
-		} 
+		}
 		return _getDeviceStaticDataByType(device)
 	}
 	function  _getAllEvents(name) {
 		return $.map( _controllers , function(o,i) {return name+"_"+i } );
 	};
-	
+
 	function _initEngine(extraController,firstuserdata, maincontrollertype) {
-		
+
 		function _AllLoaded(eventname) {
 			switch(eventname) {
 				case "on_ui_userDataLoaded":
@@ -173,11 +173,11 @@ var MultiBox = ( function( window, undefined ) {
 			EventBus.publishEvent(eventname);
 		};
 
-		// initialize controller 0 right away, no need to wait					
+		// initialize controller 0 right away, no need to wait
 		maincontrollertype = maincontrollertype || "V";
 		var newcontroller = {
-			ip:'', 
-			type:maincontrollertype, 
+			ip:'',
+			type:maincontrollertype,
 			controller:null
 		};
 		switch(newcontroller.type) {
@@ -189,15 +189,15 @@ var MultiBox = ( function( window, undefined ) {
 				newcontroller.controller = new VeraBox(0,'');		// create the main controller
 		}
 		_controllers.push(newcontroller);
-		
+
 		// add the extra controllers
 		if (extraController.trim().length>0)
 			$.each(extraController.split(','), function(idx,ctrlinfo) {
 				ctrlinfo = ctrlinfo;
 				var splits = ctrlinfo.trim().split("-");
 				var newcontroller = {
-					ip:splits[0], 
-					type:splits[1] || 'V', 
+					ip:splits[0],
+					type:splits[1] || 'V',
 					controller:null
 				}
 				switch (newcontroller.type) {
@@ -243,8 +243,8 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _getIpAddr(altuiid) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getIpAddr();
-	};	
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getIpAddr();
+	};
 	function _isUI5(controller) {
 		if (controller==0)
 			return (_devicetypesDB[0]["info"].ui7Check == "false" );	// we were told by Lua plugin
@@ -260,7 +260,7 @@ var MultiBox = ( function( window, undefined ) {
 		return _controllers[controller].controller.RequestBackup(cbfunc);
 	}
 	function _initializeSysinfo(controller) {
-		return _controllers[controller].controller.initializeSysinfo();	
+		return _controllers[controller].controller.initializeSysinfo();
 	}
 	function _setHouseMode(newmode,cbfunc) {
 		return _controllers[0].controller.setHouseMode(newmode,cbfunc);
@@ -273,7 +273,7 @@ var MultiBox = ( function( window, undefined ) {
 		var arr=[];
 		var answers=0;
 		$.each(_controllers, function( i,c) {
-			c.controller.getRooms( 
+			c.controller.getRooms(
 				function( idx, room) {
 					var index = arr.length;
 					arr.push(room);
@@ -291,14 +291,14 @@ var MultiBox = ( function( window, undefined ) {
 					}
 				}
 			);
-		});		
+		});
 		return dfd.promise();
 	};
 	function _getRoomsSync() {
 		var arr=[];
 		$.each(_controllers, function( i,c) {
 			arr = arr.concat(c.controller.getRoomsSync( ));
-		});		
+		});
 		return arr.sort(altuiSortByName);
 	};
 	function _getRoomByID( controllerid, roomid ) {
@@ -306,13 +306,13 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _getRoomByAltuiID( altuiid ) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[ elems[0] ].controller.getRoomByID( elems[1] );
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[ elems[0] ].controller.getRoomByID( elems[1] );
 	};
 	function _getUsers(func , filterfunc, endfunc) {
 		var arr=[];
 		var answers=0;
 		$.each(_controllers, function( i,c) {
-			c.controller.getUsers( 
+			c.controller.getUsers(
 				function( idx, user) {
 					var index = arr.length;
 					arr.push(user);
@@ -328,7 +328,7 @@ var MultiBox = ( function( window, undefined ) {
 					}
 				}
 			);
-		});		
+		});
 		return _getUsersSync();
 	};
 	function _getUsersSync(controllerid) {
@@ -338,7 +338,7 @@ var MultiBox = ( function( window, undefined ) {
 		else
 			$.each(_controllers, function( i,c) {
 				arr = arr.concat(c.controller.getUsersSync( ));
-			});		
+			});
 		return arr.sort(altuiSortByName2);
 	};
 	function _getUserByID(controllerid, userid) {
@@ -348,7 +348,7 @@ var MultiBox = ( function( window, undefined ) {
 		var usrs = _controllers[0].controller.getUsersSync();
 		if ( (usrs!=null) && (usrs.length>=1) )
 			return usrs[0];
-		
+
 		var user = MyLocalStorage.getSettings('MainUser')
 		if (user==null) {
 			user=  joint.util.uuid();
@@ -356,17 +356,17 @@ var MultiBox = ( function( window, undefined ) {
 		}
 		return {Name:user};
 	};
-	
+
 	function _deleteRoom(room) {
 		var elems = room.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.deleteRoom(elems[1]);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.deleteRoom(elems[1]);
 	};
 	function _createRoom(controllerid, name, cbfunc ) {
 		return _controllers[controllerid].controller.createRoom(name, cbfunc);
 	};
 	function _renameRoom(room, name) {
 		var elems = room.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.renameRoom(elems[1],name);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.renameRoom(elems[1],name);
 	};
 	function _createDevice( controllerid, param , cbfunc ) {
 		var id = controllerid || 0;
@@ -376,7 +376,7 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _renameDevice( device, newname, roomid ) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.renameDevice( device, newname, roomid);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.renameDevice( device, newname, roomid);
 	};
 	function _deleteDevice(device) {
 		// delete watches
@@ -386,7 +386,7 @@ var MultiBox = ( function( window, undefined ) {
 			});
 		});
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.deleteDevice(elems[1]);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.deleteDevice(elems[1]);
 	};
 	function _getDevices( func , filterfunc, endfunc ) {
 		var arr=[];
@@ -411,14 +411,14 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _getDeviceBatteryLevel(device) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getDeviceBatteryLevel(device);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getDeviceBatteryLevel(device);
 	};
 	function _getDeviceByAltuiID( devid ) {
 		var elems = devid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null :_controllers[ elems[0] ].controller.getDeviceByID( elems[1] );
+		return (_controllers[elems[0]]==undefined)	? null :_controllers[ elems[0] ].controller.getDeviceByID( elems[1] );
 	};
 	function _getDeviceByID( controllerid , devid ) {
-		return (_controllers[controllerid]==undefined)  ? null : _controllers[controllerid].controller.getDeviceByID( devid );
+		return (_controllers[controllerid]==undefined)	? null : _controllers[controllerid].controller.getDeviceByID( devid );
 	};
 	function _getDeviceByAltID( controllerid, parentdevid , altid ) {
 		var id = controllerid || 0;
@@ -434,7 +434,7 @@ var MultiBox = ( function( window, undefined ) {
 			return [];
 		}
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getDeviceActions(device,cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getDeviceActions(device,cbfunc);
 	};
 	function _getDeviceService(device,ServiceId,cbfunc) {
 		var dfd = $.Deferred();
@@ -455,26 +455,26 @@ var MultiBox = ( function( window, undefined ) {
 	function _getDeviceEvents(device) {
 		if (device==null) return [];
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getDeviceEvents(device);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getDeviceEvents(device);
 	};
 	function _getDeviceDependants(device) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getDeviceDependants(device);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getDeviceDependants(device);
 	};
 	function _getDeviceVariableHistory( device, varidx, cbfunc) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getDeviceVariableHistory( device, varidx, cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getDeviceVariableHistory( device, varidx, cbfunc);
 	};
 	function _delWatch( w ) {
 		w = $.extend({sceneid:-1, luaexpr:'true', xml:'', provider:''},w);
-		return _controllers['0'].controller.delWatch( w  )
+		return _controllers['0'].controller.delWatch( w	 )
 	};
 	function _addWatch( w ) {
 		w = $.extend({sceneid:-1, luaexpr:'true', xml:'', provider:''},w);
-		return _controllers['0'].controller.addWatch( w  )
+		return _controllers['0'].controller.addWatch( w	 )
 	};
 	function _getWatches(whichwatches,filterfunc) {
-		if ((whichwatches!="VariablesToWatch") && (whichwatches!="VariablesToSend")) 
+		if ((whichwatches!="VariablesToWatch") && (whichwatches!="VariablesToSend"))
 			return null;
 		return _controllers['0'].controller.getWatches( whichwatches,filterfunc );
 	};
@@ -483,7 +483,7 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _getStatesByAltuiID(altuiid) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getStates( elems[1]  );
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getStates( elems[1]	);
 	};
 	function _getStateByID( altuiid, id ) {
 		id = parseInt(id);
@@ -492,7 +492,7 @@ var MultiBox = ( function( window, undefined ) {
 		$.each(states, function( idx, state) {
 			if (state.id==id) {
 				found = state;
-				return false;				
+				return false;
 			}
 		})
 		return found;
@@ -500,12 +500,12 @@ var MultiBox = ( function( window, undefined ) {
 	function _getStates( device ) {
 		if (device==null) return null;
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getStates( elems[1]  );
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getStates( elems[1]	);
 	};
 	function _getStatus( device, service, variable ) {
 		if (device==null) return null;
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getStatus( elems[1], service, variable );
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getStatus( elems[1], service, variable );
 	};
 	function _setStatus( device, service, variable, value, dynamic ) {
 		if (_recorder!=null ) {
@@ -513,11 +513,11 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.setStatus( elems[1], service, variable, value, dynamic );
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.setStatus( elems[1], service, variable, value, dynamic );
 	};
 	function _getJobStatus( controllerid, jobid , cbfunc )
 	{
-		return (_controllers[controllerid]==undefined)  ? null : _controllers[controllerid].controller.getJobStatus( jobid, cbfunc );
+		return (_controllers[controllerid]==undefined)	? null : _controllers[controllerid].controller.getJobStatus( jobid, cbfunc );
 	};
 	function _runAction(device, service, action, params,cbfunc) {
 		if (_recorder!=null ) {
@@ -525,7 +525,7 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.runAction( elems[1], service, action, params, cbfunc )
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runAction( elems[1], service, action, params, cbfunc )
 	};
 	function _runActionByAltuiID(altuiid, service, action, params,cbfunc) {
 		if (_recorder!=null ) {
@@ -533,36 +533,36 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.runAction(elems[1], service, action, params,cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runAction(elems[1], service, action, params,cbfunc);
 		// return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPAction(elems[1], service, action, params,cbfunc);
 	};
 	function _setAttr(device, attribute, value,cbfunc) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.setAttr(elems[1], attribute, value,cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.setAttr(elems[1], attribute, value,cbfunc);
 	};
 	function _isDeviceZwave(device) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.isDeviceZwave(device);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.isDeviceZwave(device);
 	};
 	function _isDeviceZigbee(device) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.isDeviceZigbee(device);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.isDeviceZigbee(device);
 	};
 	function _isDeviceBT(device) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.isDeviceBT(device);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.isDeviceBT(device);
 	};
 	function _updateNeighbors(device) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.updateNeighbors(elems[1]);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.updateNeighbors(elems[1]);
 	};
 	function _modifyDevice(device,cb) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.modifyDevice(elems[1]);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.modifyDevice(elems[1]);
 	}
 	function _setColor(device,hex) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.setColor(elems[1],hex);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.setColor(elems[1],hex);
 	}
 	function _getCategories( cbfunc, filterfunc, endfunc ) {
 		var dfd = $.Deferred();
@@ -586,7 +586,7 @@ var MultiBox = ( function( window, undefined ) {
 
 						if ($.isFunction(endfunc))
 							(endfunc)(arr2);
-						
+
 						dfd.resolve(categories);
 					}
 				}
@@ -599,7 +599,7 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _evaluateConditions(device,devsubcat,conditions) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.evaluateConditions(elems[1],devsubcat,conditions);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.evaluateConditions(elems[1],devsubcat,conditions);
 	};
 	function _getWeatherSettings() {
 		return _controllers[0].controller.getWeatherSettings();
@@ -617,19 +617,19 @@ var MultiBox = ( function( window, undefined ) {
 		// delete watches
 		$.each( MultiBox.getWatches( "VariablesToWatch",
 					function(w) { return (elems[0]==0) && (w.sceneid == elems[1]) }
-				), 
+				),
 				function(i,watch) {
 					MultiBox.delWatch(watch);
 				}
 		);
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.deleteScene(elems[1]);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.deleteScene(elems[1]);
 	};
 	function _getNewSceneID(controllerid) {
 		var id = controllerid || 0;
 		var newid= _controllers[id].controller.getNewSceneID();
 		return {
-			id:  		newid,
-			altuiid: 	"{0}-{1}".format(controllerid,newid)
+			id:			newid,
+			altuiid:	"{0}-{1}".format(controllerid,newid)
 		};
 	};
 	function _getScenes( func , filterfunc, endfunc ) {
@@ -640,7 +640,7 @@ var MultiBox = ( function( window, undefined ) {
 				arr = arr.concat(scenes);
 				answers++
 				if ((answers==_controllers.length) && ($.isFunction(endfunc))) {
-					(endfunc)(arr);					
+					(endfunc)(arr);
 				}
 			});
 		});
@@ -650,27 +650,27 @@ var MultiBox = ( function( window, undefined ) {
 		var arr=[];
 		$.each(_controllers, function( i,c) {
 			arr = arr.concat(c.controller.getScenesSync());
-		});	
+		});
 		return arr;
-	};	
+	};
 	function _getSceneByID(controllerid,sceneid) {
-		return (_controllers[controllerid]==undefined)  ? null : _controllers[controllerid].controller.getSceneByID(sceneid)
+		return (_controllers[controllerid]==undefined)	? null : _controllers[controllerid].controller.getSceneByID(sceneid)
 	};
 	function _getSceneByAltuiID(altuiid) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getSceneByID(elems[1])
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getSceneByID(elems[1])
 	};
 	function _getSceneHistory( scene, cbfunc) {
 		var elems = scene.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getSceneHistory( elems[1], cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getSceneHistory( elems[1], cbfunc);
 	};
 	function _editScene(altuiid,scenejson,cbfunc) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.editScene(elems[1],scenejson,cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.editScene(elems[1],scenejson,cbfunc);
 	};
 	function _renameScene(scene,newname) {
 		var elems = scene.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.renameScene(elems[1],newname);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.renameScene(elems[1],newname);
 	};
 	function _runScene(scene) {
 		if (_recorder!=null ) {
@@ -678,7 +678,7 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = scene.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.runScene(elems[1]);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runScene(elems[1]);
 	};
 	function _runSceneByAltuiID(altuiid) {
 		if (_recorder!=null ) {
@@ -686,7 +686,7 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.runScene(elems[1]);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runScene(elems[1]);
 	};
 	function _getWorkflowStatus(cbfunc) {
 		return _controllers[0].controller.getWorkflowStatus(cbfunc);
@@ -696,9 +696,9 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _getWorkflows(cbfunc) {
 		return _controllers[0].controller.getWorkflows(cbfunc);
-	};	
+	};
 	function _getCustomPages(cbfunc) {
-		return _controllers[0].controller.getCustomPages(cbfunc);		
+		return _controllers[0].controller.getCustomPages(cbfunc);
 	}
 	function _isWorkflowEnabled() {
 		return _controllers[0].controller.isWorkflowEnabled();
@@ -731,34 +731,34 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _saveData( key, name, data , cbfunc) {
 		return _controllers[0].controller.saveData( key, name, data , cbfunc );
-	};	
+	};
 	function _getPlugins( func , endfunc ) {
 		var arr=[];
 		$.each(_controllers, function( i,c) {
 			arr = arr.concat(c.controller.getPlugins( func , null ));
 		});
 		if ($.isFunction(endfunc))
-			(endfunc)( arr );		
+			(endfunc)( arr );
 		return arr;
 	};
 	function _deletePlugin( altuiid, pluginid, cbfunc) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPDeletePlugin(pluginid,cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPDeletePlugin(pluginid,cbfunc);
 	};
 	function _updatePluginFromStore(plugin, cbfunc) {
 		return _controllers[0].controller.getUPnPHelper().UPnPUpdatePlugin2(plugin,cbfunc);
 	};
 	function _updatePlugin( altuiid, pluginid, cbfunc) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPUpdatePlugin(pluginid,cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPUpdatePlugin(pluginid,cbfunc);
 	};
 	function _updatePluginVersion( altuiid, pluginid, ver, cbfunc) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPUpdatePluginVersion(pluginid,ver,cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPUpdatePluginVersion(pluginid,ver,cbfunc);
 	};
 	function _modifyPlugin(altuiid,pluginid,changes,cbfunc) {
 		var elems = altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.modifyPlugin(pluginid,changes,cbfunc);
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.modifyPlugin(pluginid,changes,cbfunc);
 	};
 	function _getFileUrl(controllerid, filename ) {
 		var id = controllerid || 0;
@@ -778,7 +778,7 @@ var MultiBox = ( function( window, undefined ) {
 		$.each(_controllers, function( idx,c) {
 			var idx = idx;
 			c.controller.getPower(function(data) {
-				if (data != "No devices") 
+				if (data != "No devices")
 					$.each(data.split('\n'), function(i,line) {
 						if (line.length>0)
 							lines.push( idx+"-"+line );
@@ -829,7 +829,7 @@ var MultiBox = ( function( window, undefined ) {
 				(this._callback)(action)
 		}
 	};
-	
+
 	function _isRecording() {
 		return _recorder != null;
 	};
@@ -844,42 +844,42 @@ var MultiBox = ( function( window, undefined ) {
 		_recorder = null;
 		return log;
 	};
-	
+
   return {
 	//---------------------------------------------------------
 	// PUBLIC  functions
 	//---------------------------------------------------------
 
 	//static info per device type
-	initDB			 		: _initDB,	// (devicetypes)
-	initEngine				: _initEngine,	
-	reloadEngine			: _reloadEngine,	
+	initDB					: _initDB,	// (devicetypes)
+	initEngine				: _initEngine,
+	reloadEngine			: _reloadEngine,
 	reboot					: _reboot,
 	saveEngine				: _saveEngine,	//()
 	clearEngine				: _clearEngine,	//()
-	
+
 	// controller selection
 	controllerOf : _controllerOf,	//(deviceid)
 	makeAltuiid	 : _makeAltuiid,
-	isAltuiid    : _isAltuiid,
-	getControllers : _getControllers,	
-	
+	isAltuiid	 : _isAltuiid,
+	getControllers : _getControllers,
+
 	// Device Type DB
 	getALTUITypesDB			: _getALTUITypesDB,			// no param
-	getDeviceTypesDB 		: _getDeviceTypesDB,		// ( controllerid )
-	addDeviceType 			: _addDeviceType,			// (devtype, obj)				update devitetype plugin function calls ( from Lua )
+	getDeviceTypesDB		: _getDeviceTypesDB,		// ( controllerid )
+	addDeviceType			: _addDeviceType,			// (devtype, obj)				update devitetype plugin function calls ( from Lua )
 	updateDeviceTypeUPnpDB	: _updateDeviceTypeUPnpDB,	//( controllerid, devtype, Dfilename )		update devicetype UPNP information ( from D_xx S_xx files )
-	updateDeviceTypeUIDB 	: _updateDeviceTypeUIDB,	//( controllerid, devtype, ui_definitions)		update devicetype UI static infos ( from user_data )
+	updateDeviceTypeUIDB	: _updateDeviceTypeUIDB,	//( controllerid, devtype, ui_definitions)		update devicetype UI static infos ( from user_data )
 	getDeviceStaticData		: _getDeviceStaticData,		//(device)
 	// Access & Modes
-	isRemoteAccess	: function() 	{ 	return window.location.href.indexOf("mios.com")!=-1; /*return true;*/ },
-	getBoxInfo		: function( ctrlid ) 	{	return _controllers[ctrlid || 0].controller.getBoxInfo(); },
-	getBoxFullInfo	: function( ctrlid ) 	{	return _controllers[ctrlid || 0].controller.getBoxFullInfo(); },
-	getHouseMode	: function(cb) 	{	return _controllers[0].controller.getHouseMode(cb); },		// (cbfunc)
+	isRemoteAccess	: function()	{	return window.location.href.indexOf("mios.com")!=-1; /*return true;*/ },
+	getBoxInfo		: function( ctrlid )	{	return _controllers[ctrlid || 0].controller.getBoxInfo(); },
+	getBoxFullInfo	: function( ctrlid )	{	return _controllers[ctrlid || 0].controller.getBoxFullInfo(); },
+	getHouseMode	: function(cb)	{	return _controllers[0].controller.getHouseMode(cb); },		// (cbfunc)
 	setHouseMode	: _setHouseMode,		// (newmode,cbfunc)
 	getHouseModeSwitchDelay : _getHouseModeSwitchDelay,
 	RequestBackup: _RequestBackup,
-	
+
 	// Rooms
 	getRooms		: _getRooms,		// in the future getRooms could cache the information and only call _getRooms when needed
 	getRoomsSync	: _getRoomsSync,	//()
@@ -887,50 +887,50 @@ var MultiBox = ( function( window, undefined ) {
 	createRoom		: _createRoom,		//(controllerid, name, cbfunc )
 	renameRoom		: _renameRoom,		//(controllerid, room, name)  returns a promise
 	getRoomByID		: _getRoomByID,		//( roomid )
-	getRoomByAltuiID:_getRoomByAltuiID,	//(altuiid)	
-	
+	getRoomByAltuiID:_getRoomByAltuiID,	//(altuiid)
+
 	// Users
 	getUsers		: _getUsers,
 	getUsersSync	: _getUsersSync,
 	getUserByID		: _getUserByID,
 	getMainUser		: _getMainUser,
-	
+
 	// Devices
 	createDevice			: _createDevice,			// ( param , cbfunc )
 	deleteDevice			: _deleteDevice,			// id
 	renameDevice			: _renameDevice,			// (device, newname )
-	getDevices				: _getDevices, 				// ( func , filterfunc, endfunc )
+	getDevices				: _getDevices,				// ( func , filterfunc, endfunc )
 	getDevicesSync			: _getDevicesSync,			// ()
-	getDeviceByAltuiID		: _getDeviceByAltuiID,		// ( devid ) 
+	getDeviceByAltuiID		: _getDeviceByAltuiID,		// ( devid )
 	getDeviceByType			: _getDeviceByType,			// ( str )
-	getDeviceByID			: _getDeviceByID,			// ( controller, devid ) 
+	getDeviceByID			: _getDeviceByID,			// ( controller, devid )
 	getDeviceByAltID		: _getDeviceByAltID,		// ( parentdevid , altid )
-	getDeviceActions		: _getDeviceActions,		// (device,cbfunc) 
-	getDeviceEvents			: _getDeviceEvents,			// (device)	
+	getDeviceActions		: _getDeviceActions,		// (device,cbfunc)
+	getDeviceEvents			: _getDeviceEvents,			// (device)
 	getDeviceDependants		: _getDeviceDependants,		// (device)
-	getDeviceBatteryLevel 	: _getDeviceBatteryLevel,	// ( device )
-	getDeviceVariableHistory : _getDeviceVariableHistory,//( device, varidx, cbfunc) 
+	getDeviceBatteryLevel	: _getDeviceBatteryLevel,	// ( device )
+	getDeviceVariableHistory : _getDeviceVariableHistory,//( device, varidx, cbfunc)
 	getDeviceService		: _getDeviceService,		// device, serviceId
 	addWatch				: _addWatch,				// (  service, variable, deviceid, sceneid, expression, xml, provider, params)
 	delWatch				: _delWatch,				// (  service, variable, deviceid, sceneid, expression, xml, provider, params )getWatches(whichwatches)
 	getWatches				: _getWatches,				// (whichwatches,filterfunc)
 	getWatchesHistory		: _getWatchesHistory,		// (cbfunc)
-	evaluateConditions 		: _evaluateConditions,		// ( device,devsubcat,conditions ) evaluate a device condition table ( AND between conditions )
+	evaluateConditions		: _evaluateConditions,		// ( device,devsubcat,conditions ) evaluate a device condition table ( AND between conditions )
 	getStates				: _getStates,				// ( device )
 	getStatesByAltuiID		: _getStatesByAltuiID,		// (altuiid)
-	getStateByID			: _getStateByID,				// ( device, id ) 		// return idx of state object in states array , by ID
-	getStatus				: _getStatus,				// ( device, service, variable ) 
-	setStatus				: _setStatus,				// ( device, service, variable, value, dynamic )				
+	getStateByID			: _getStateByID,				// ( device, id )		// return idx of state object in states array , by ID
+	getStatus				: _getStatus,				// ( device, service, variable )
+	setStatus				: _setStatus,				// ( device, service, variable, value, dynamic )
 	getJobStatus			: _getJobStatus,			// (  jobid , cbfunc )
 	setAttr					: _setAttr,					// ( device, attribute, value,function(result) )
 	runAction				: _runAction,				// (device, service, action, params,cbfunc);
-	runActionByAltuiID		: _runActionByAltuiID,		// (altuiid, service, action, params,cbfunc) 
+	runActionByAltuiID		: _runActionByAltuiID,		// (altuiid, service, action, params,cbfunc)
 	isDeviceZwave			: _isDeviceZwave,			// (device)
 	isDeviceZigbee			: _isDeviceZigbee,			// (device)
 	isDeviceBT				: _isDeviceBT,				// (device)
 	updateNeighbors			: _updateNeighbors,			// (device)
 	modifyDevice		: _modifyDevice,
-	
+
 	//Alias
 	setOnOff				: function ( altuiid, onoff) {
 								MultiBox.runActionByAltuiID( altuiid, 'urn:upnp-org:serviceId:SwitchPower1', 'SetTarget', {'newTargetValue':onoff} );
@@ -942,35 +942,35 @@ var MultiBox = ( function( window, undefined ) {
 								this.runActionByAltuiID( altuiid, 'urn:micasaverde-com:serviceId:DoorLock1', 'SetTarget', {'newTargetValue':armed} );
 							},
 	setColor		: _setColor,
-		
+
 	// Categories
 	getCategoryTitle : _getCategoryTitle,		// ( catnum )
 	getCategories	 : _getCategories,			// ( cbfunc, filterfunc, endfunc )
-	
+
 	// Scenes
-	deleteScene			: _deleteScene,		//id	
+	deleteScene			: _deleteScene,		//id
 	getNewSceneID		: _getNewSceneID,	//()
 	getScenes			: _getScenes,		//( func , filterfunc, endfunc ) {
-	getSceneByID		: _getSceneByID,	//(sceneid) {	
+	getSceneByID		: _getSceneByID,	//(sceneid) {
 	getSceneByAltuiID	: _getSceneByAltuiID, // (altuiid)
 	getSceneHistory		: _getSceneHistory,	//( id, cbfunc) {
 	getScenesSync		: _getScenesSync,	//()
-	editScene			: _editScene,		//(altuiid,scenejson, function(result)	
+	editScene			: _editScene,		//(altuiid,scenejson, function(result)
 	renameScene			: _renameScene,		// (scene, newname)
 	runScene			: _runScene,		//(id)
 	runSceneByAltuiID	: _runSceneByAltuiID,
-	
+
 	// workflows
 	getWorkflows		: _getWorkflows,
 	getWorkflowStatus	: _getWorkflowStatus,
 	getWorkflowHistory	: _getWorkflowHistory,
-	isWorkflowEnabled 	: _isWorkflowEnabled,
+	isWorkflowEnabled	: _isWorkflowEnabled,
 
 	// pages
 	getCustomPages : _getCustomPages,
-	
+
 	// Plugins
-	getPlugins			: _getPlugins,			//( func , endfunc ) 
+	getPlugins			: _getPlugins,			//( func , endfunc )
 	deletePlugin		: _deletePlugin,		//(id,function(result)
 	updatePluginFromStore : _updatePluginFromStore,
 	updatePlugin		: _updatePlugin,		//(id,function(result)
@@ -982,33 +982,33 @@ var MultiBox = ( function( window, undefined ) {
 	getIpAddr			: _getIpAddr,			// ()
 	isUI5				: _isUI5,				// (controller)
 	initializeJsonp		: _initializeJsonp,		// (controller)
-	initializeSysinfo   : _initializeSysinfo,	// (controller)
-	getDataProviders    : _getDataProviders,	// (controller)
-	getWeatherSettings 	: _getWeatherSettings,	// ()
-	runLua				: _runLua,				//(code, cbfunc) 
+	initializeSysinfo	: _initializeSysinfo,	// (controller)
+	getDataProviders	: _getDataProviders,	// (controller)
+	getWeatherSettings	: _getWeatherSettings,	// ()
+	runLua				: _runLua,				//(code, cbfunc)
 	getLuaStartup		: _getLuaStartup,		//()
-	setStartupCode		: _setStartupCode,		//(code)	
-	saveChangeCaches	: _saveChangeCaches,	//( msgidx ) 
-	updateChangeCache	: _updateChangeCache,	//( target ) 
+	setStartupCode		: _setStartupCode,		//(code)
+	saveChangeCaches	: _saveChangeCaches,	//( msgidx )
+	updateChangeCache	: _updateChangeCache,	//( target )
 	saveData			: _saveData,			//( name, data , cbfunc)
 	getFileUrl			: _getFileUrl,			//(filename)
-	getFileContent		: _getFileContent,		//(Dfilename , function( xmlstr , jqXHR ) 
-	osCommand			: _osCommand,			//(cmd,cbfunc) 
+	getFileContent		: _getFileContent,		//(Dfilename , function( xmlstr , jqXHR )
+	osCommand			: _osCommand,			//(cmd,cbfunc)
 	getPower			: _getPower,			//(cbfunc)
 	resetPollCounters	: _resetPollCounters,	//()	!  promise API
 	isUserDataCached	: _isUserDataCached,	//()
 	getIconPath			: _getIconPath,			// (device,str)
 	getIcon				: _getIcon,				// ( controllerid, imgpath , cbfunc )
 	// buildUPnPGetFileUrl : _buildUPnPGetFileUrl,	// (name)
-	
+
 	// Upgrade
-	triggerAltUIUpgrade : _triggerAltUIUpgrade,	// (newversion,newtracnum)  : newrev number in TRAC
-	
+	triggerAltUIUpgrade : _triggerAltUIUpgrade,	// (newversion,newtracnum)	: newrev number in TRAC
+
 	// Recorder
-	isRecording 	: _isRecording,
+	isRecording		: _isRecording,
 	startRecorder	: _startRecorder,
 	stopRecorder	: _stopRecorder,
 	// DEBUG
-	
+
   };
 } )( window );
