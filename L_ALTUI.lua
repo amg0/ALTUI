@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.83"
+local version = "v1.84"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -1123,7 +1123,7 @@ local function executeStateLua(lul_device,workflow_idx,state,label)
 	local  lua = state.prop[label] or ""
 	if (lua:len()>0) then
 		debug(string.format("Wkflow - %s Lua code=%s",label,lua))
-		local f,msg = loadstring(lua)
+		local f,msg = loadstring(lua,"ALTUI - executeStateLua")
 		if (f==nil) then
 			error(string.format("Wkflow - loadstring %s failed to compile, msg=%s",lua,msg))
 		else
@@ -3262,7 +3262,7 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 		end
 	]]
 	code = string.format(code,old,new,lastupdate,expr)
-	local f,msg = loadstring(code)
+	local f,msg = loadstring(code,"ALTUI - evaluateUserExpression")
 	if (f==nil) then
 		error(string.format("loadstring %s failed to compile, msg=%s",code,msg))
 	else
@@ -3776,7 +3776,7 @@ function registerHandlers(lul_device)
 		luup.log(string.format("ALTUI: runLua(%s)",lua),50)
 		printResult = {}
 		local errcode = 0
-		local f,results = loadstring(lua)
+		local f,results = loadstring(lua,"ALTUI - LuaRunHandler")
 		if (f==nil) then
 			luup.log(string.format("ALTUI: loadstring %s failed to compile, msg=%s",lua,results),1)
 		else
