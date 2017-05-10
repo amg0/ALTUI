@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.84"
+local version = "v1.85"
 local SWVERSION = "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -2845,6 +2845,10 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawFlood",
 	}
+	tbl["urn:schemas-micasaverde-com:device:GenericSensor:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawGeneric",
+	}
 	tbl["urn:schemas-micasaverde-com:device:WindowCovering:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawWindowCover",
@@ -2875,6 +2879,10 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_iphone.js",
 		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawCanalplus",
 		["ControlPanelFunc"]="ALTUI_IPhoneLocator.drawCanaplusControlPanel"
+	}
+	tbl["urn:schemas-upnp-org:device:wes:1"]= {
+		["ScriptFile"]="J_ALTUI_iphone.js",
+		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawWES",
 	}
 	tbl["urn:schemas-upnp-org:device:altui:1"]= {
 		["ScriptFile"]="J_ALTUI_iphone.js",

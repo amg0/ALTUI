@@ -240,6 +240,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return html;
 	}
 	
+	function _drawGeneric( device) {
+		var html = "";
+		var status = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:GenericSensor1', 'CurrentLevel' ); 
+		html += ("<span class='altui-temperature' >"+status+"</span>");
+		return html;
+	}
+
 	// return the html string inside the .panel-body of the .altui-device#id panel
 	function _drawTempSensor( device) {
 		var html = "";
@@ -1648,6 +1655,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawBinaryLight : _drawBinaryLight,
 	drawBinLightControlPanel : _drawBinLightControlPanel,
 	drawSceneController: _drawSceneController,
+	drawGeneric		: _drawGeneric,
 	drawTempSensor : _drawTempSensor,
 	drawHeater	   : _drawHeater,
 	drawZoneThermostat : _drawZoneThermostat,

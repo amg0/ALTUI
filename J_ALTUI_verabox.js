@@ -899,6 +899,20 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 						}
 						delete scene.encoded_lua;
 					}
+					if (scene.triggers) {
+						$.each(scene.triggers, function(idx,trigger) {
+							if (trigger.encoded_lua==1) {
+								try {
+									trigger.lua = atob(trigger.lua)
+								}
+								catch (e) {
+									// do not decode 
+									AltuiDebug.warning("The scene {0} has a trigger with the encoded_lua flag but the trigger.lua fails to decode. {1}".format(scene.id, trigger.lua))
+								}
+								delete trigger.encoded_lua;
+							}
+						});
+					}
 					// jsonp.ud.scenes.push(scene);
 				});
 			if (data.rooms)
