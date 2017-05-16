@@ -9,8 +9,8 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.85"
-local SWVERSION = "2.2.4"
+local version = "v1.86"
+local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
 local this_device = nil
@@ -3975,7 +3975,7 @@ function startupDeferred(lul_device)
 		[2] 	= { ["key"]= "feedid", ["label"]="Feed ID", ["type"]="number" },
 		[3]		= { ["key"]= "inputkey", ["label"]="Input Key name", ["type"]="text" },
 		[4] 	= { ["key"]= "readwritekey", ["label"]="Read/Write API Key", ["type"]="text" },
-		[5] 	= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]="http://emoncms.org/vis/editrealtime?feedid={1}&embed=1&apikey={3}"}
+		[5] 	= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]="http://emoncms.org/vis/realtime?feedid={1}&embed=1&apikey={3}"}
 	})
 	
 	-- registerDataProvider("Test - not functional",sendValueToStorage_toto,"", {

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2044 $";
+var ALTUI_revision = "$Revision: 2049 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1694,7 +1694,8 @@ var UIManager  = ( function( window, undefined ) {
 	};
 
 	function _loadD3Script( drawfunc ) {
-		_loadScriptIfNeeded('d3.min.js','//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/',drawfunc);
+		_loadScriptIfNeeded('d3.js','//cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/',drawfunc);
+		// _loadScriptIfNeeded('d3.min.js','//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/',drawfunc);
 	};
 
 	// func is the function to call, if it contains module.funcname it is a UI7 style. otherwise it is assumed UI5 style
@@ -11381,13 +11382,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				return;	// stop refreshing
 			MultiBox.getPower( function(res) {
 				var data = _processEnergyData(res);
-				var x = d3.scale.linear()
+				var x = d3.scaleLinear()
 						.range([0, width])
 						.domain([0, d3.max(data, function(d) { return +d[4]; })]);	// d[4] is watts and is text, must convert to int
 
-				var xAxis = d3.svg.axis()
-					.scale(x)
-					.orient("top");
+				var xAxis = d3.axisTop(x);
 
 				var chart = d3.select(".altui-energy-d3chart");
 				chart.selectAll("g.device").data(data);
@@ -11425,13 +11424,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				barHeight = 20;
 				height = (1+data.length)*(barHeight +1);
 
-				var x = d3.scale.linear()
+				var x = d3.scaleLinear()
 						.range([0, width])
 						.domain([0, d3.max(data, function(d) { return +d[4]; })]);	// d[4] is watts and is text, must convert to int
 
-				var xAxis = d3.svg.axis()
-					.scale(x)
-					.orient("top");
+				var xAxis = d3.axisTop(x);
 
 				var chart = d3.select(".altui-energy-d3chart")
 					.attr("width", width + margin.left + margin.right)
@@ -11580,20 +11577,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					}							\
 					.d3chart text.active {		\
 						fill: "+getCSS('color','text-danger')+";				\
+						font-weight:bold	\
 					}							\
 				</style>"
 			);
 
 		function _drawChart( chart, width, height, orderby	) {
-			var x = d3.scale.ordinal()
+			var x= d3.scaleBand()
 				.domain( orders[orderby] )
-				.rangeBands([0, width]);
+				.range([0, width]);
 
-			var y = d3.scale.ordinal()
+			var y = d3.scaleBand()
 				.domain( orders[orderby] )
-				.rangeBands([0, height]);
+				.range([0, height]);
 
-			var c = d3.scale.quantize()
+			var c = d3.scaleQuantize()
 				.domain( [0,1] )
 				.range(["red","orange","yellow","yellowgreen","green"]);
 
@@ -11602,63 +11600,27 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.append("g")
 					.attr("class","ligne")
 					.attr("transform",function(d,i) { return "translate(0,"+y(d.altuiid)+")"; } )
-					.append("text")
-					  .attr("x", -6)
-					  .attr("y", x.rangeBand() / 2)
-					  .attr("dy", ".32em")
-					  .attr("text-anchor", "end")
-					  .text(function(d) { return _nodename(d); })
-						.on("mouseover", function(p) {
-							d3.select(this).classed("active", true);
-						})
-						.on("mouseout", function(p) {
-							d3.select(this).classed("active", false);
-						})
-						.on('click',function(d,i) {
-							var device = MultiBox.getDeviceByAltuiID(d.altuiid);
-							UIManager.deviceDrawVariables(device);
-						});
+					.each(fctcell)
+				.append("text")
+					.attr("x", -6)
+					.attr("y", x.bandwidth() / 2)
+					.attr("dy", ".32em")
+					.attr("text-anchor", "end")
+					.text(function(d) { return _nodename(d); })
+				.on("mouseover", function(p) {
+					d3.select(this).classed("active", true);
+				})
+				.on("mouseout", function(p) {
+					d3.select(this).classed("active", false);
+				})
+				.on('click',function(d,i) {
+					var device = MultiBox.getDeviceByAltuiID(d.altuiid);
+					UIManager.deviceDrawVariables(device);
+				});
 
 			row.append("line")
 				.attr("x2", width);
-			row.exit()
-				.remove();
-
-			var cell = row.selectAll(".cellule")
-				.data( function(d)	{
-					return _NeighborsOf(d);
-					} );
-
-			cell.enter()
-				.append("rect")
-					.attr("class","cellule")
-					.attr("x", function(d) {
-							return x(d);
-							// return x(d.id);
-							} )
-					.attr("width",x.rangeBand())
-					.attr("height",y.rangeBand())
-					// .style("fill",c(_commQuality(d)))
-					.style("fill",function(d) {
-						var cq = _commQuality(d3.select(this.parentNode).datum().altuiid);
-						return (cq<0) ? "grey" : c(_commQuality(d3.select(this.parentNode).datum().altuiid));
-						})
-					.on("mouseover", function(p) {
-						var lignedatum = d3.select(this.parentNode).datum();
-						d3.selectAll(".ligne text").classed("active", function(d, i) { return d.altuiid == lignedatum.altuiid; });
-						d3.selectAll(".colonne text").classed("active", function(d, i) { return d.altuiid == p; });
-					})
-					.on("mouseout", function(p) {
-						d3.selectAll("text").classed("active", false);
-					})
-					.on('click',function(d,i) {
-						var lignedatum = d3.select(this.parentNode).datum();
-						var device = MultiBox.getDeviceByAltuiID(lignedatum.altuiid);
-						UIManager.deviceDrawVariables(device);
-					});
-
-			cell.exit()
-				.remove();
+			row.exit().remove();
 
 			var col = chart.selectAll(".colonne").data(data);
 			col.enter()
@@ -11667,7 +11629,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					.attr("transform",function(d,i) { return "translate("+x(d.altuiid)+",0) rotate(-90)"; } )
 					.append("text")
 					  .attr("x", 6)
-					  .attr("y", x.rangeBand() / 2)
+					  .attr("y", x.bandwidth() / 2)
 					  .attr("dy", ".32em")
 					  .attr("text-anchor", "start")
 					  .text(function(d) { return _nodename(d); });
@@ -11676,13 +11638,52 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.attr("x1", -width);
 
 			col.exit().remove();
+			
+			function fctcell(row) {
+				var cell = d3.select(this).selectAll(".cellule")
+					.data( function(d)	{
+						return _NeighborsOf(d);
+						} );
+
+				cell.enter()
+					.append("rect")
+						.attr("class","cellule")
+						.attr("x", function(d) {
+								return x(d);
+								// return x(d.id);
+								} )
+						.attr("width",x.bandwidth())
+						.attr("height",y.bandwidth())
+						// .style("fill",c(_commQuality(d)))
+						.style("fill",function(d) {
+							var cq = _commQuality(d3.select(this.parentNode).datum().altuiid);
+							return (cq<0) ? "grey" : c(_commQuality(d3.select(this.parentNode).datum().altuiid));
+							})
+						.on("mouseover", function(p) {
+							var lignedatum = d3.select(this.parentNode).datum();
+							d3.selectAll(".ligne text").classed("active", function(d, i) { return d.altuiid == lignedatum.altuiid; });
+							d3.selectAll(".colonne text").classed("active", function(d, i) { return d.altuiid == p; });
+						})
+						.on("mouseout", function(p) {
+							d3.selectAll("text").classed("active", false);
+						})
+						.on('click',function(d,i) {
+							var lignedatum = d3.select(this.parentNode).datum();
+							var device = MultiBox.getDeviceByAltuiID(lignedatum.altuiid);
+							UIManager.deviceDrawVariables(device);
+						});
+
+				cell.exit()
+					.remove();
+			}
+
 		};
 
 
 		function _drawzWavechart()
 		{
 			$(".d3chart").replaceWith("<svg class='d3chart'></svg>");
-			var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("#altui-zwavechart-order").outerHeight() - $("footer").outerHeight();
+			var available_height = $(window).height() - $("div#navbar").outerHeight() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("#altui-zwavechart-order").outerHeight() - $("footer").outerHeight();
 			var margin = {top: 150, right: 10, bottom: 10, left: 150};
 			width = $(".altui-zwavechart-container").innerWidth() - margin.left - margin.right-30;
 			height = Math.min(width,available_height - margin.top - margin.bottom);
@@ -11724,13 +11725,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$("#altui-zwavechart-order").change( function() {
 			var orderby=$(this).val();
 
-			var x = d3.scale.ordinal()
+			var x = d3.scaleBand()
 				.domain( orders[orderby] )
-				.rangeBands([0, width]);
+				.range([0, width]);
 
-			var y = d3.scale.ordinal()
+			var y = d3.scaleBand()
 				.domain( orders[orderby] )
-				.rangeBands([0, height]);
+				.range([0, height]);
 			var t= chart.transition().duration(2000)
 			var row = t.selectAll(".ligne")
 					.delay(function(d, i) { return y(d.altuiid) * 4; })
@@ -11916,11 +11917,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				_updateChartRoutes2(data);
 			};
 			function _createChartRoutes2(data) {
-				linkcolor = d3.scale.quantize()
+				linkcolor = d3.scaleQuantize()
 					.domain( [d3.max(data.links, function(d) {return d.quality;} ),d3.min(data.links, function(d) {return d.quality;} )] )
 					.range(["red","orange","yellow","green"]);
 
-				color = d3.scale.category20();
+				// color = d3.scale.category20();
+				color = d3.scaleOrdinal(d3.schemeCategory20);
 				height = data.nodes.length*ygap;
 				svg = d3.select(".altui-route-d3chart")
 					.attr("width", width + margin.left + margin.right)
@@ -11934,11 +11936,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				links.enter()
 					.insert("svg:path", ".node")		// so that node allways hide links
 					.attr("class","link")
-					// .attr("d", function(d) {
-						// var M = (d.source.group != d.target.group) ? 0 : (60+Math.abs(d.target.y-d.source.y)/ygap*4);
-						// return draw_curve(d.source.x, d.source.y, d.target.x, d.target.y, M);
-					// })
-					.style("stroke-opacity", 0)
+					.attr("d", function(d) {
+						var M = (d.source.group != d.target.group) ? 0 : (60+Math.abs(d.target.y-d.source.y)/ygap*4);
+						return draw_curve(d.source.x, d.source.y, d.target.x, d.target.y, M);
+					})
+					// .style("stroke-opacity", 0)
 					.style("stroke-dasharray", function(d) { return (d.manual_route)  ? "10,10" : null; } )
 					.style("stroke", function(d) { return d.broken ? "red" : linkcolor(d.quality);} );
 
@@ -11953,15 +11955,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				nodes.exit().transition().duration(1000).style("opacity","0").remove();
 
 				var groups = nodes.enter()
-				.append("g")
-				.attr("class", "node")
-				.on("click", sglclick );
+					.append("g")
+					.attr("class", "node")
+					.on("click", sglclick );
 
 				groups.append("circle")
 					.attr("cx", function (d) { return d.x })
 					.attr("cy", function (d) { return d.y })
 					.attr("r", 8 )
-					.style("opacity", 0)
+					// .style("opacity", 0)
 					.style("fill", function (d) { return color(d.color); });
 
 				groups.append("text")
@@ -11969,7 +11971,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					.attr("y", function (d) { return d.y })
 					.attr("dx", 15)
 					.attr("dy", ".35em")
-					.style("opacity", 0)
+					// .style("opacity", 0)
 					.text(function (d) { return d.name; });
 
 				var transition = nodes.transition().duration(1000);
@@ -12020,9 +12022,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				}							\
 				</style>" )
 			.append("<div class='col-xs-12 altui-route-d3chart-container'><svg class='altui-route-d3chart'></svg></div>")
-		var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("#altui-zwavechart-order").outerHeight() - $("footer").outerHeight();
+		var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("footer").outerHeight();
 		width = $(".altui-route-d3chart-container").innerWidth() - margin.left - margin.right;
 		height = Math.max(300,Math.min(width,available_height - margin.top - margin.bottom));
+		 $(".altui-route-d3chart-container").height(height);
 		UIManager.loadD3Script( function() {
 			MultiBox.getDevices(null,function(d) {	return MultiBox.controllerOf(d.altuiid).controller==parseInt($("#altui-controller-select").val()); },function(arr) {
 				devices = arr;
@@ -12031,61 +12034,76 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 	},
 
+	// Returns a list of all nodes under the root.
+	_flatten: function (root) {
+		var nodes = [], i = 0;
+		function recurse(node) {
+			if (node.children) node.children.forEach(recurse);
+			// if (!node.id) node.id = ++i;
+			nodes.push(node);
+		}
+		recurse(root);
+		return nodes;
+	},
+	
+	_findNode: function ( root, id ) {
+		var found=null;
+		if (root.id == id )
+			return root;
+		if (root.children)
+			$.each( root.children, function (i,n) {
+				found =  UIManager._findNode( n, id );
+				return ( found==null );
+			});
+		return found;
+	},
+
+	_addChildrenFromWaitList: function ( data, node) {
+		// search in wait list
+		var children=[]
+		// console.log("searching wait list for childs of {0}".format(node.id));
+		for ( var i = data.wait.length-1; i>=0 ; i--) {
+			if (data.wait[i].id_parent == node.id) {
+				var child = data.wait.splice(i,1)[0];
+				// console.log("found node :"+child.id);
+				node.children.push(child);
+				children.push(child);
+			}
+		}
+		$.each(children, function(i,child) {
+			UIManager._addChildrenFromWaitList( data, child);
+		});
+	},
+
+	_addNode: function (data , node ) {
+		var parent = UIManager._findNode( data.root, node.id_parent );
+		if (parent==null){
+			// console.log("could not find parent, putting in wait list");
+			data.wait.push(node);
+			return;
+		}
+		parent.children.push( node );
+		UIManager._addChildrenFromWaitList(data,node);
+	},
+	
 	pageChildren: function() {
 		var height = null, width = null;
-		var data = { root:[], nodes:[] , links:[] };
+		var data = { root:[], nodes:[] , links:[] , wait:[] };
 		var devices = null;
 
-		// Returns a list of all nodes under the root.
-		function _flatten(root) {
-			var nodes = [], i = 0;
-			function recurse(node) {
-				if (node.children) node.children.forEach(recurse);
-				// if (!node.id) node.id = ++i;
-				nodes.push(node);
-			}
-			recurse(root);
-			return nodes;
-		};
-
-		function _findNode( root, id ) {
-			var found=null;
-			if (root.id == id )
-				return root;
-			if (root.children)
-				$.each( root.children, function (i,n) {
-					found = _findNode( n, id );
-					return ( found==null );
-				});
-			return found;
-		};
-
-		function _addChildrenFromWaitList( node) {
-			// search in wait list
-			var children=[]
-			// console.log("searching wait list for childs of {0}".format(node.id));
-			for ( var i = data.wait.length-1; i>=0 ; i--) {
-				if (data.wait[i].id_parent == node.id) {
-					var child = data.wait.splice(i,1)[0];
-					// console.log("found node :"+child.id);
-					node.children.push(child);
-					children.push(child);
+		function _createLinks(nodes) {
+			var links=[]
+			$.each(nodes, function( idx,n ) {
+				if (n.children) {
+					$.each(n.children, function (ic,nc) {
+						links.push({
+							source: n.id,
+							target: nc.id
+						})
+					})
 				}
-			}
-			$.each(children, function(i,child) {
-				_addChildrenFromWaitList( child);
-			});
-		};
-
-		function _addNode( node ) {
-			var parent = _findNode( data.root, node.id_parent );
-			if (parent==null){
-				// console.log("could not find parent, putting in wait list");
-				data.wait.push(node);
-				return;
-			}
-			parent.children.push( node );
-			_addChildrenFromWaitList(node);
+			})
+			return links
 		};
 
 		function _prepareDataParents( ) {
@@ -12096,7 +12114,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			data.root={ id:"0-0", name:"Main Controller", color:color["ctrl"], children:[] };
 			$.each( MultiBox.getControllers(), function (idx,c) {
 				if (idx>0) {
-					_addNode({
+					UIManager._addNode(data,{
 						id:"{0}-{1}".format(idx,0),
 						name:"Controller "+c.ip,
 						color:color["ctrl"] ,
@@ -12112,7 +12130,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						color[device.device_type]=nColor++;
 					var controllerid = MultiBox.controllerOf(device.altuiid).controller;
 					// console.log("device {0},{1} id_parent:{2}-{3}".format(device.name, device.altuiid,controllerid,device.id_parent));
-					_addNode({
+					UIManager._addNode(data,{
 						id:device.altuiid,
 						name:device.name+", "+device.altuiid,
 						color:color[device.device_type] ,
@@ -12129,61 +12147,85 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		function _drawChartParents() {
 			function _updateDataParents( ) {
-				data.nodes = _flatten(data.root);
-				data.links = d3.layout.tree().links(data.nodes);
+				data.nodes = UIManager._flatten(data.root);
+				data.links = _createLinks(data.nodes);
 			};
 
-			$(".altui-children-d3chart").replaceWith("<svg class='altui-children-d3chart'></svg>");
-			var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("#altui-zwavechart-order").outerHeight() - $("footer").outerHeight();
+			// $(".altui-children-d3chart").replaceWith("<svg class='col-xs-12 altui-children-d3chart'></svg>");
+			var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() /*- $("#altui-zwavechart-order").outerHeight() */ - $("footer").outerHeight();
 			var margin = {top: 20, right: 10, bottom: 10, left: 20};
 			width = $(".altui-children-d3chart-container").innerWidth() - margin.left - margin.right-30;
 			height = Math.max(300,Math.min(width,available_height - margin.top - margin.bottom));
-
+			$(".altui-children-d3chart").height(height)
+			
 			//Set up the colour scale
-			var color = d3.scale.category20();
-
+			var color = d3.scaleOrdinal(d3.schemeCategory20);
 			var svg = d3.select(".altui-children-d3chart")
-				.attr("width", width + margin.left + margin.right)
-				.attr("height", height + margin.top + margin.bottom)
-				// .style("margin-left", -margin.left + "px")
 				.append("g")
-					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+					.attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
 
 			//Set up the force layout
 			data = _prepareDataParents( );
-			var force = d3.layout.force()
-						.charge(function(d) { return -120 - (d.children ? 2*d.children.length : 0) } )
-						.gravity(0.05)
-						.linkDistance(function(d) { return	45+(d.source.children ? 2*d.source.children.length:0 ) })
-						.size([width, height])
+			
+			var simul = d3.forceSimulation( data.nodes ) 
 						.on("tick", function () {
-						// avoid asynchronous tick when the user changed the page
-						// this crashed d3
-						if ($("#altui-pagetitle").html()==_T("Parent/Child Network"))
-						{
-							d3.selectAll(".link")
-								.attr("x1", function(d) { return d.source.x; })
-								.attr("y1", function(d) { return d.source.y; })
-								.attr("x2", function(d) { return d.target.x; })
-								.attr("y2", function(d) { return d.target.y; });
+							// avoid asynchronous tick when the user changed the page
+							// this crashed d3
+							if ($("#altui-pagetitle").html()==_T("Parent/Child Network")) {
+								var radius = 30
+								d3.selectAll("circle")
+									.attr("cx", function (d) { return d.x=Math.max(radius, Math.min(width - radius, d.x));  })
+									.attr("cy", function (d) { return d.y=Math.max(radius, Math.min(height - radius, d.y));; });
+								d3.selectAll("text")
+									.attr("x", function (d) { return d.x=Math.max(radius, Math.min(width - radius, d.x));  })
+									.attr("y", function (d) { return d.y=Math.max(radius, Math.min(height - radius, d.y));; });
+								d3.selectAll(".link")
+									.attr("x1", function(d) { return d.source.x; })
+									.attr("y1", function(d) { return d.source.y; })
+									.attr("x2", function(d) { return d.target.x; })
+									.attr("y2", function(d) { return d.target.y; });
 
-							d3.selectAll("circle")
-								.attr("cx", function (d) { return d.x; })
-								.attr("cy", function (d) { return d.y; });
-							d3.selectAll("text")
-								.attr("x", function (d) { return d.x; })
-								.attr("y", function (d) { return d.y; });
-						}
-					});
-			var drag = force.drag().on("dragstart", dragstart);
+							}
+						});
+			// var drag = simul.drag().on("dragstart", dragstart);
+			var container = document.querySelector(".altui-children-d3chart")
+			var drag = d3.drag()          
+							.container( container )
+							// .subject(dragsubject)
+							.on("start", dragstarted)
+							.on("drag", dragged)
+							.on("end", dragended)	
 
+			// function dragsubject() {
+				// return simul.find(d3.event.x - width / 2, d3.event.y - height / 2);
+			// }
+			function dragstarted(d) {
+				if (!d3.event.active) simul.alphaTarget(0.3).restart();
+				$(d3.event.sourceEvent.currentTarget).toggleClass("fixed",true)
+				d3.event.subject.fx = d3.event.subject.x;
+				d3.event.subject.fy = d3.event.subject.y;
+			};
+			function dragged() {
+				d3.event.subject.fx = d3.event.x;
+				d3.event.subject.fy = d3.event.y;
+			}
+
+			function dragended() {
+				if (!d3.event.active) simul.alphaTarget(0);
+				// d3.event.subject.fx = null;
+				// d3.event.subject.fy = null;
+			}
+							
 			function sglclick(d) {
 				if (d3.event.defaultPrevented) return;
 				// console.log('click');
 				var selection = d3.select(this);
 				if (d3.event.shiftKey) {
 					d.fixed =  false;
-					selection.classed("fixed", false  );
+					delete d.fx;
+					delete d.fy;
+					$(d3.event.currentTarget).toggleClass("fixed",false)
+					simul.alphaTarget(0);
 				}
 				else {
 					if (d.children) {
@@ -12203,15 +12245,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						}
 						selection.selectAll(".plussign").remove();
 					}
-					selection.classed("closed", d._children!=null );
 				}
 				_updateChart(data);
 			};
-			function dragstart(d) {
-				// console.log('dragstart');
-				d3.event.sourceEvent.stopPropagation(); // silence other listeners
-				d3.select(this).classed("fixed", d.fixed = true);
-			};
+
 			function _updateChart(data) {
 				function _countChildren(d) {
 					var s = 0;
@@ -12221,12 +12258,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						})
 					return s;
 				};
+				var width = $(".altui-children-d3chart").width();
+				var height = $(".altui-children-d3chart").height();
 				_updateDataParents();
-				force
-					.nodes( data.nodes )
-					.links( data.links )
-					.start();
 
+				simul
+					.nodes(data.nodes)
+					.velocityDecay(0.2) 
+					.force("link",d3	.forceLink(data.links)
+						.id(function(d) { return d.id; })
+						.distance( function(d) { return	35+(d.source.children ? 2*d.source.children.length : 0 ) } ) )
+					.force("center", d3.forceCenter(width / 2, height / 2))
+					.force("charge", d3.forceManyBody()
+						.strength(function(d) { return -50 - (d.children ? 2*d.children.length : 0) })
+						.distanceMax(200))	
+						
 				var link = svg.selectAll(".link").data( data.links , function(d) { return d.target.id; } );
 				var node = svg.selectAll(".node").data( data.nodes , function(d) { return d.id; } );
 
@@ -12242,16 +12288,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					.attr("y2", function(d) { return d.target.y; });
 
 				node.exit().transition().duration(1000).style("opacity","0").remove();
-				node.classed("fixed", function(d) {
-						return d.fixed })
-					.classed("closed", function(d) {
-						return d._children!=null } );
 
 				var groups = node.enter().append("g")
 							.attr("class", "node")
-							.classed("fixed", function(d) { return d.fixed } )
-							.classed("closed", function(d) { return d._children!=null } )
-							// .on("dblclick", dblclick)
 							.on("click", sglclick )
 							.call( drag );
 					groups.append("circle")
@@ -12311,7 +12350,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					stroke-opacity: .8;		\
 				}							\
 				</style>" )
-			.append(html+"<div class='altui-children-d3chart-container'><svg class='altui-children-d3chart'></svg></div>")
+			.append(html+"<div class='col-row altui-children-d3chart-container'><svg class='col-xs-12 altui-children-d3chart'></svg></div>")
 		UIManager.loadD3Script( function() {
 			MultiBox.getDevices(null,null,function(arr) {
 				// console.log("received {0} devices:".format(arr.length));
@@ -12326,42 +12365,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var data = { root:[], nodes:[] , links:[] };
 		var devices = null;
 
-		// Returns a list of all nodes under the root.
-		function _flatten(root) {
-			var nodes = [], i = 0;
-			function recurse(node) {
-				if (node.children) node.children.forEach(recurse);
-				// if (!node.id) node.id = ++i;
-				nodes.push(node);
-			}
-			recurse(root);
-			return nodes;
-		};
-
-		function _findNode( root, id ) {
-			var found=null;
-			if (root.id == id )
-				return root;
-			if (root.children)
-				$.each( root.children, function (i,n) {
-					found = _findNode( n, id );
-					return ( found==null );
-				});
-			return found;
-		};
-
-		function _addNode( node ) {
-			var parent = _findNode( data.root, node.id_parent );
-			if (parent==null){
-				PageMessage.message("Error building node hierarchy","warning");
-				return;
-			}
-			parent.children.push( node );
-		};
-
 		function _drawChartRoutes() {
+			
 			function _prepareDataRoutes(  ) {
-				data = { root:[], nodes:[] , links:[] };
+				data = { root:[], nodes:[] , links:[] , wait:[] };
 				var color = {};
 				var nColor = 0;
 				var devices = $.grep( MultiBox.getDevicesSync() , function(d) {return (MultiBox.controllerOf(d.altuiid).controller==$("#altui-controller-select").val());} );
@@ -12372,8 +12379,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					if (zwavenet) {
 						color[zwavenet.device_type]=nColor++;
 						data.nodes.push({
-							x:width/2,
-							y:height/2,
+							fx:width/2,
+							fy:height/2,
 							id:parseInt(zwavenet.id),
 							zwid:0,
 							name:zwavenet.name,
@@ -12454,14 +12461,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			};
 
 			$(".altui-children-d3chart").replaceWith("<svg class='altui-children-d3chart'></svg>");
-			var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("#altui-zwavechart-order").outerHeight() - $("footer").outerHeight();
+			var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("footer").outerHeight();
 			var margin = {top: 20, right: 10, bottom: 10, left: 20};
 			width = $(".altui-children-d3chart-container").innerWidth() - margin.left - margin.right-30;
 			height = Math.max(300,Math.min(width,available_height - margin.top - margin.bottom));
 
 			//Set up the colour scale
-			var color = d3.scale.category20();
-			var linkscale = d3.scale.sqrt().domain([0, 500]).range([80, Math.min(width,height)]);
+			// var color = d3.scale.category20();
+			var color = d3.scaleOrdinal(d3.schemeCategory20);
+			var linkscale = d3.scaleSqrt().domain([0, 500]).range([80, Math.min(width,height)]);
 
 			var svg = d3.select(".altui-children-d3chart")
 				.attr("width", width + margin.left + margin.right)
@@ -12472,64 +12480,92 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 			//Set up the force layout
 			data = _prepareDataRoutes( );
-			var force = d3.layout.force()
-			force = force
-				.charge(function(d) { return (d.zwid==0) ? -300 : -100 } )
-				.gravity(0.015)
-				.linkDistance(function(d) {
-					var dist = linkscale( d.linkquality );
-					return	dist; /*   60+d.linkquality*15; */
-					})
-				.linkStrength( function(d) {
-					return 1/(1+d.linkquality/10);
-					})
-				.size([width, height])
+			var simul = d3.forceSimulation() 
 				.on("tick", function () {
 					// avoid asynchronous tick when the user changed the page
 					// this crashed d3
+						var radius = 30
+						d3.selectAll("circle")
+							.attr("cx", function (d) { return d.x=Math.max(radius, Math.min(width - radius, d.x));  })
+							.attr("cy", function (d) { return d.y=Math.max(radius, Math.min(height - radius, d.y));; });
+						d3.selectAll("text")
+							.attr("x", function (d) { return d.x=Math.max(radius, Math.min(width - radius, d.x));  })
+							.attr("y", function (d) { return d.y=Math.max(radius, Math.min(height - radius, d.y));; });
+
 						d3.selectAll(".link")
 							.attr("x1", function(d) { return d.source.x; })
 							.attr("y1", function(d) { return d.source.y; })
 							.attr("x2", function(d) { return d.target.x; })
 							.attr("y2", function(d) { return d.target.y; });
 
-						d3.selectAll("circle")
-							.attr("cx", function (d) { return d.x; })
-							.attr("cy", function (d) { return d.y; });
-						d3.selectAll("text")
-							.attr("x", function (d) { return d.x; })
-							.attr("y", function (d) { return d.y; });
 				});
-			var drag = force.drag().on("dragstart", dragstart);
+			// var drag = simul.drag().on("dragstart", dragstart);
+			var container = document.querySelector(".altui-children-d3chart")
+			var drag = d3.drag()          
+							.container(container)
+							// .subject(dragsubject)
+							.on("start", dragstarted)
+							.on("drag", dragged)
+							.on("end", dragended);
+							
 
-			function dragstart(d) {
-				// console.log('dragstart');
-				d3.event.sourceEvent.stopPropagation(); // silence other listeners
-				d3.select(this).classed("fixed", d.fixed = true);
+			// function dragsubject() {
+				// return simul.find(d3.event.x - width / 2, d3.event.y - height / 2);
+			// }
+			function dragstarted(d) {
+				if (!d3.event.active) simul.alphaTarget(0.3).restart();
+				$(d3.event.sourceEvent.currentTarget).toggleClass("fixed",true)
+				d3.event.subject.fx = d3.event.subject.x;
+				d3.event.subject.fy = d3.event.subject.y;
 			};
+			function dragged() {
+				d3.event.subject.fx = d3.event.x;
+				d3.event.subject.fy = d3.event.y;
+			}
+
+			function dragended() {
+				if (!d3.event.active) simul.alphaTarget(0);
+				// d3.event.subject.fx = null;
+				// d3.event.subject.fy = null;
+			}
+			
 			function sglclick(d) {
 				if (d3.event.defaultPrevented) return;
 				// console.log('click');
 				var selection = d3.select(this);
 				if (d3.event.shiftKey) {
 					d.fixed =  false;
-					selection.classed("fixed", false  );
+					delete d.fx;
+					delete d.fy;
+					$(d3.event.currentTarget).toggleClass("fixed",false)
+					simul.alphaTarget(0);
 				}
 				else {
 				}
 				_updateChart(data);
 			};
 			function _updateChart(data) {
+				var width = $(".altui-children-d3chart").width();
+				var height = $(".altui-children-d3chart").height();
 				_updateDataRoutes(data);
-				force
-					.nodes( data.nodes )
-					.links( data.links )
-					.start();
 
-				var link = svg.selectAll(".link");
-				var node = svg.selectAll(".node");
-				link = link.data( data.links , function(d) { return d.source.id+'-'+d.target.id; } );
-				node = node.data( data.nodes , function(d) { return d.id; } );
+				simul
+					.nodes(data.nodes)
+					.velocityDecay(0.2) 
+					.force("link",d3	.forceLink(data.links)
+						.id(function(d) { return d.id; })
+						// .distance( function(d) { return	/*linkscale( d.linkquality )*/  Math.min(width/3,height/3) } )
+						.strength( function(d) { return	0.05 * 1/(1+d.linkquality/5) } )
+						)
+					.force("center", d3.forceCenter(width / 2, height / 2))
+					.force("charge", d3.forceManyBody()
+						.strength(function(d) { return -50 - ( (d.zwid==0) ? 100 : 0) })
+						// .distanceMax( Math.min(width/2,height/2) )
+						// .distanceMax(200)
+						)	
+
+				var link = svg.selectAll(".link").data( data.links , function(d) { return d.source.id+'-'+d.target.id; } );
+				var node = svg.selectAll(".node").data( data.nodes , function(d) { return d.id; } );
 
 				link.exit().transition().duration(500).style("opacity","0").remove();
 				link.enter()
@@ -12544,16 +12580,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					.attr("y2", function(d) { return d.target.y; });
 
 				node.exit().transition().duration(1000).style("opacity","0").remove();
-				node.classed("fixed", function(d) {
-						return d.fixed })
-					.classed("closed", function(d) {
-						return d._children!=null } );
 
 				var groups = node.enter().append("g")
 							.attr("class", "node")
-							.classed("fixed", function(d) { return d.fixed } )
-							.classed("closed", function(d) { return d._children!=null } )
-							// .on("dblclick", dblclick)
 							.on("click", sglclick )
 							.call( drag );
 					groups.append("circle")
@@ -12623,7 +12652,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					stroke-opacity: .8;		\
 				}							\
 				</style>" )
-			.append("<div class='altui-children-d3chart-container'><svg class='altui-children-d3chart'></svg></div>")
+			.append("<div class='altui-children-d3chart-container '><svg class='altui-children-d3chart'></svg></div>")
 		UIManager.loadD3Script( function() {
 			MultiBox.getDevices(
 				null,
