@@ -3989,6 +3989,47 @@ var TimerEditor = (function() {
 
 var SceneEditor = function (scene) {
 	var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-default btn-xs' aria-label='tbd' title='{3}'>{2}</button>";
+	var sortable_options = {
+		axis: "y",
+		// containment: ".panel-body",
+		// handle: ".altui-scene-action",
+		items: "tr.altui-scene-action",		// prevent selection of last line which is not an action
+		connectWith: ".altui-scene-group tbody",		// allow to drop in other action groups
+		placeholder: "altui-sortable-placeholder",
+		forcePlaceholderSize : true,
+		// opacity: 1,
+		cursor: "move",
+		delay: 150,
+		disabled: (ALTUI_registered==false),
+		distance: 5,
+		tolerance: "pointer",
+		revert: true,
+		stop: function(event, ui) {
+			var ids = ui.item.prop("id").split(".");
+			var org_group = scene.groups[ ids[0] ];
+			var action = org_group.actions[ ids[1] ];
+			var new_groupid = ui.item.parent().closest(".altui-scene-group").data("group-idx");
+			
+			org_group.actions.splice( ids[1], 1 );
+			var arr = $(this).parents("tbody").find("tr[data-group-idx={0}]".format(new_groupid)).find(".altui-scene-group tbody").sortable( "toArray" );
+			// insert new elem at the right position 
+			var index = $.inArray(ui.item.prop("id"),arr);
+			scene.groups[ new_groupid ].actions.splice(index, 0, action)
+			_showSaveNeeded();
+			
+			// now update the UI
+			var tbody = $(this).parents("tbody");
+			_.defer( function() {
+				if (ids[0]  != new_groupid ) {
+					$(tbody).find("tr[data-group-idx={0}]".format(new_groupid)).replaceWith( _displayGroup(scene.groups[ new_groupid ],new_groupid) );
+					$(tbody).find("tr[data-group-idx={0}]".format(new_groupid)).find(".altui-scene-group tbody").sortable(sortable_options);
+				}
+				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).replaceWith( _displayGroup(org_group,ids[0] ) );
+				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group tbody").sortable(sortable_options);				
+			});
+			
+		}
+	};
 
 	// var scenealtuiid = scene.altuiid;
 	var _roomIDToName={
@@ -4431,50 +4472,57 @@ var SceneEditor = function (scene) {
 	};
 
 	function _editGroup( idx,  group , _button ) {
-			var dialog = DialogManager.createPropertyDialog(_T('Scene Action Group'));
-			// DialogManager.dlgAddLine(dialog, "Delay", _T("Delay"),group.delay ,"delay in seconds",{
-				// type:'number',
-				// min:1,
-				// required:''
-			// });
-			DialogManager.dlgAddTimer(dialog, "Delay", _T("Delay"), group.delay.toString().toHHMMSS(), {
-				step: 1
-			});
-			$('div#dialogs')
-				.on( 'submit',"div#dialogModal form", 
-					{ scene: scene, group:group, button:_button },
-					function( event ) {
-						// save for real this time
-						var duration = $("#altui-widget-Delay").val().fromHHMMSS();
-						var bOK = true;
-						$.each(scene.groups, function(idxgrp,grp) {
-							if ((idx!=idxgrp) && (grp.delay == duration))	// cannot have twice the same duration
-							{
-								bOK = false; 
-								return false;
-							}
-						});
-						if (bOK==false) {
-							alert("cannot have twice the same duration");
-							return ;
+		var dialog = DialogManager.createPropertyDialog(_T('Scene Action Group'));
+		// DialogManager.dlgAddLine(dialog, "Delay", _T("Delay"),group.delay ,"delay in seconds",{
+			// type:'number',
+			// min:1,
+			// required:''
+		// });
+		DialogManager.dlgAddTimer(dialog, "Delay", _T("Delay"), group.delay.toString().toHHMMSS(), {
+			step: 1
+		});
+		$('div#dialogs')
+			.on( 'submit',"div#dialogModal form", 
+				{ scene: scene, group:group, button:_button },
+				function( event ) {
+					// save for real this time
+					var duration = $("#altui-widget-Delay").val().fromHHMMSS();
+					var bOK = true;
+					$.each(scene.groups, function(idxgrp,grp) {
+						if ((idx!=idxgrp) && (grp.delay == duration))	// cannot have twice the same duration
+						{
+							bOK = false; 
+							return false;
 						}
-						$('div#dialogModal').modal('hide');
-						var group  = event.data.group;
-						group.delay = duration;
-						
-						// now update UI
-						var parent = event.data.button.closest("tr");
-						if ($(event.data.button).hasClass("altui-editgroup")) {
-							parent.replaceWith( _displayGroup(group,idx) );
-						} else {
-							// Add 
-							scene.groups.push( group );
-							parent.before( _displayGroup(group,scene.groups.length-1) );
-						}
-						_showSaveNeeded();
 					});
-			$('div#dialogModal').modal();
-		};
+					if (bOK==false) {
+						alert("cannot have twice the same duration");
+						return ;
+					}
+					$('div#dialogModal').modal('hide');
+					var group  = event.data.group;
+					group.delay = duration;
+					
+					// now update UI
+					var parent = event.data.button.closest("tr");
+					if ($(event.data.button).hasClass("altui-editgroup")) {
+						var root = parent.parent();
+						parent.replaceWith( _displayGroup(group,idx) );
+						root.find("tr[data-group-idx={0}]".format(idx)).find(".altui-scene-group tbody").sortable(sortable_options);
+					} else {
+						// Add 
+						scene.groups.push( group );
+						var newid = scene.groups.length-1
+						parent.before( _displayGroup(group, newid) );
+						parent.parent().find("tr[data-group-idx={0}]".format(newid)).find(".altui-scene-group tbody").sortable(sortable_options);
+					}
+					
+					// make it sortable.
+					//$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group tbody").sortable(sortable_options);
+					_showSaveNeeded();
+				});
+		$('div#dialogModal').modal();
+	};
 		
 	function _showSaveNeeded( bSaveNeeded ) { // defaults to "save needed"
 		if (bSaveNeeded == false)
@@ -4641,47 +4689,6 @@ var SceneEditor = function (scene) {
 	
 	function _runActions(  ) {
 		//http://stackoverflow.com/questions/15416275/why-does-the-update-event-in-jquery-sortable-seem-to-run-twice-when-testing-for
-		var sortable_options = {
-			axis: "y",
-			// containment: ".panel-body",
-			// handle: ".altui-scene-action",
-			items: "tr.altui-scene-action",		// prevent selection of last line which is not an action
-			connectWith: ".altui-scene-group tbody",		// allow to drop in other action groups
-			placeholder: "altui-sortable-placeholder",
-			forcePlaceholderSize : true,
-			// opacity: 1,
-			cursor: "move",
-			delay: 150,
-			disabled: (ALTUI_registered==false),
-			distance: 5,
-			tolerance: "pointer",
-			revert: true,
-            stop: function(event, ui) {
-				var ids = ui.item.prop("id").split(".");
-				var org_group = scene.groups[ ids[0] ];
-				var action = org_group.actions[ ids[1] ];
-				var new_groupid = ui.item.parent().closest(".altui-scene-group").data("group-idx");
-				
-				org_group.actions.splice( ids[1], 1 );
-				var arr = $(this).parents("tbody").find("tr[data-group-idx={0}]".format(new_groupid)).find(".altui-scene-group tbody").sortable( "toArray" );
-				// insert new elem at the right position 
-				var index = $.inArray(ui.item.prop("id"),arr);
-				scene.groups[ new_groupid ].actions.splice(index, 0, action)
-				_showSaveNeeded();
-				
-				// now update the UI
-				var tbody = $(this).parents("tbody");
-				_.defer( function() {
-					if (ids[0]  != new_groupid ) {
-						$(tbody).find("tr[data-group-idx={0}]".format(new_groupid)).replaceWith( _displayGroup(scene.groups[ new_groupid ],new_groupid) );
-						$(tbody).find("tr[data-group-idx={0}]".format(new_groupid)).find(".altui-scene-group tbody").sortable(sortable_options);
-					}
-					$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).replaceWith( _displayGroup(org_group,ids[0] ) );
-					$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group tbody").sortable(sortable_options);				
-				});
-				
-			}
-		};
 		// $(".altui-scene-action").draggable(draggable_options);
 		$(".altui-scene-group tbody").sortable(sortable_options);
 		// $(".altui-scene-group").droppable(droppable_options);
