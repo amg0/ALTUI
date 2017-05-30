@@ -1134,6 +1134,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var volts = parseFloat(MultiBox.getStatus( device, 'urn:brultech-com:serviceId:PowerMeter1', 'Volts' ));
 		if (isNaN(volts)==false) 
 			html += ALTUI_Templates.wattTemplate.format(volts,"Volts");
+
+		var pulse = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Pulse' )); 
+		if (isNaN(pulse)==false) 
+			html += ALTUI_Templates.wattTemplate.format(pulse,"Pulse");
 		return html;
 	};
 	
