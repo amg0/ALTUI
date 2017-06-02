@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2056 $";
+var ALTUI_revision = "$Revision: 2058 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5818,6 +5818,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	displayTimers		: _displayTimers,
 	jobStatusToColor	: _jobStatusToColor,
 	defaultDeviceDrawWatts: _defaultDeviceDrawWatts,	// default HTML for Watts & UserSuppliedWattage variable
+	defaultDeviceDrawAltuiStrings : _defaultDeviceDrawAltuiStrings,
 	drawDefaultFavoriteDevice : _drawDefaultFavoriteDevice,
 	deviceIcon			: _deviceIconHtml,				//( device, zindex, onclick )
 	deviceDraw			: _deviceDraw,					// draw the mini device on device page; can be customized by a plugin by ["DeviceDrawFunc"]
@@ -14057,72 +14058,72 @@ $(function() {
 		body+="		<span class='icon-bar'></span>";
 		body+="		<span class='icon-bar'></span>";
 		body+="	  </button>		  ";
-		body+="	  <a class='navbar-brand' href='#'></a>";
+		body+="	  <a class='navbar-brand' href='javascript:void(0)'></a>";
 		body+="	</div>";
 		body+="	<div id='navbar' class='navbar-collapse collapse'>";
 		body+="	  <ul class='nav navbar-nav'>";
 		body+="		<li class='active'><div class='imgLogo'></div></li>";
-		body+="		<li><a id='menu_myhome' href='#'  >"+_T("My Home")+"</a></li>";
-		body+="		<li><a id='menu_device' href='#'  >"+_T("Devices")+"</a></li>";
-		body+="		<li><a id='menu_scene' href='#'	 >"+_T("Scenes")+"</a></li>";
+		body+="		<li><a id='menu_myhome' href='javascript:void(0)'  >"+_T("My Home")+"</a></li>";
+		body+="		<li><a id='menu_device' href='javascript:void(0)'  >"+_T("Devices")+"</a></li>";
+		body+="		<li><a id='menu_scene' href='javascript:void(0)'	 >"+_T("Scenes")+"</a></li>";
 		body+="		<li class='dropdown'>";
-		body+="			<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("More")+" <span class='caret'></span></a>";
+		body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("More")+" <span class='caret'></span></a>";
 		body+="			<ul class='dropdown-menu' role='menu'>";
-		body+="				<li><a id='menu_room' href='#'	>"+_T("Rooms")+"</a></li>";
-		body+="				<li><a id='menu_plugins' href='#'  >"+_T("Plugins")+"</a></li>";
-		body+="				<li><a id='altui-app-store' href='#' >"+_T("App Store")+"</a></li>";
-		body+="				<li><a id='menu_timeline' href='#'	>"+_T("Timeline")+"</a></li>";
-		body+="				<li><a id='menu_workflow' href='#'	>"+_T("Workflows")+"</a></li>";
+		body+="				<li><a id='menu_room' href='javascript:void(0)'	>"+_T("Rooms")+"</a></li>";
+		body+="				<li><a id='menu_plugins' href='javascript:void(0)'  >"+_T("Plugins")+"</a></li>";
+		body+="				<li><a id='altui-app-store' href='javascript:void(0)' >"+_T("App Store")+"</a></li>";
+		body+="				<li><a id='menu_timeline' href='javascript:void(0)'	>"+_T("Timeline")+"</a></li>";
+		body+="				<li><a id='menu_workflow' href='javascript:void(0)'	>"+_T("Workflows")+"</a></li>";
 		body+="			<li class='divider'></li>";
 		body+="				<li class='dropdown-header'>Tables</li>";
-		body+="				<li><a id='altui-tbl-watches' href='#' >"+_T("Watches")+"</a></li>";
-		body+="				<li><a id='altui-tbl-device' href='#' >"+_T("Devices")+"</a></li>";
-		body+="				<li><a id='altui-scene-triggers' href='#' >"+_T("Triggers")+"</a></li>";
-		body+="				<li><a id='altui-tbl-scene' href='#' >"+_T("Scenes")+"</a></li>";
-		body+="				<li><a id='altui-tbl-controllers' href='#' >"+_T("Controllers")+"</a></li>";
+		body+="				<li><a id='altui-tbl-watches' href='javascript:void(0)' >"+_T("Watches")+"</a></li>";
+		body+="				<li><a id='altui-tbl-device' href='javascript:void(0)' >"+_T("Devices")+"</a></li>";
+		body+="				<li><a id='altui-scene-triggers' href='javascript:void(0)' >"+_T("Triggers")+"</a></li>";
+		body+="				<li><a id='altui-tbl-scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
+		body+="				<li><a id='altui-tbl-controllers' href='javascript:void(0)' >"+_T("Controllers")+"</a></li>";
 		body+="			<li class='divider'></li>";
 		body+="				<li class='dropdown-header'>Graphic</li>";
-		body+="				<li><a id='altui-graph-watches' href='#' >"+_T("Watch Display")+"</a></li>";
-		body+="				<li><a id='altui-energy' href='#' >"+_T("Power Chart")+"</a></li>";
-		body+="				<li><a id='altui-childrennetwork' href='#' >"+_T("Parent/Child Network")+"</a></li>";
-		body+="				<li><a id='altui-zwavenetwork' href='#' >"+_T("zWave Network")+"</a></li>";
-		body+="				<li><a id='altui-zwaveroutes' href='#' >"+_T("zWave Routes")+"</a></li>";
-		body+="				<li><a id='altui-quality' href='#' >"+_T("Network Quality")+"</a></li>";
+		body+="				<li><a id='altui-graph-watches' href='javascript:void(0)' >"+_T("Watch Display")+"</a></li>";
+		body+="				<li><a id='altui-energy' href='javascript:void(0)' >"+_T("Power Chart")+"</a></li>";
+		body+="				<li><a id='altui-childrennetwork' href='javascript:void(0)' >"+_T("Parent/Child Network")+"</a></li>";
+		body+="				<li><a id='altui-zwavenetwork' href='javascript:void(0)' >"+_T("zWave Network")+"</a></li>";
+		body+="				<li><a id='altui-zwaveroutes' href='javascript:void(0)' >"+_T("zWave Routes")+"</a></li>";
+		body+="				<li><a id='altui-quality' href='javascript:void(0)' >"+_T("Network Quality")+"</a></li>";
 		body+="			</ul>";
 		body+="		</li>";
 		body+="		<li class='dropdown'>";
-		body+="			<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Panels")+" <span class='caret'></span></a>";
+		body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Panels")+" <span class='caret'></span></a>";
 		body+="			<ul class='dropdown-menu' role='menu'>";
-		body+="				<li><a id='altui-pages-see' href='#' >"+_T("Use Custom Pages")+"</a></li>";
-		body+="				<li><a id='altui-pages-edit' href='#' >"+_T("Edit Custom Pages")+"</a></li>";
+		body+="				<li><a id='altui-pages-see' href='javascript:void(0)' >"+_T("Use Custom Pages")+"</a></li>";
+		body+="				<li><a id='altui-pages-edit' href='javascript:void(0)' >"+_T("Edit Custom Pages")+"</a></li>";
 		body+="			</ul>";
 		body+="		</li>";
 		body+="		<li class='dropdown'>";
-		body+="		  <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Misc")+"<span class='caret'></span></a>";
+		body+="		  <a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Misc")+"<span class='caret'></span></a>";
 		body+="		  <ul class='dropdown-menu' role='menu'>";
 		body+="			<li class='dropdown-header'>Access</li>";
-		body+="			<li><a id='altui-remoteaccess' href='#' >"+_T("Remote Access Login")+"</a></li>";
+		body+="			<li><a id='altui-remoteaccess' href='javascript:void(0)' >"+_T("Remote Access Login")+"</a></li>";
 		body+="			<li class='divider'></li>";
 		body+="			<li class='dropdown-header'>Lua</li>";
-		body+="			<li><a id='altui-reload' href='#' >"+_T("Reload Luup Engine")+"</a></li>";
-		body+="			<li><a id='altui-reboot' href='#' >"+_T("Reboot Vera")+"</a></li>";
-		body+="			<li><a id='altui-luastart' href='#' >"+_T("Lua Startup Code")+"</a></li>";
-		body+="			<li><a id='altui-luatest' href='#' >"+_T("Lua Test Code")+"</a></li>";
-		body+="			<li><a id='altui-oscommand' href='#' >"+_T("OS Command")+"</a></li>";
+		body+="			<li><a id='altui-reload' href='javascript:void(0)' >"+_T("Reload Luup Engine")+"</a></li>";
+		body+="			<li><a id='altui-reboot' href='javascript:void(0)' >"+_T("Reboot Vera")+"</a></li>";
+		body+="			<li><a id='altui-luastart' href='javascript:void(0)' >"+_T("Lua Startup Code")+"</a></li>";
+		body+="			<li><a id='altui-luatest' href='javascript:void(0)' >"+_T("Lua Test Code")+"</a></li>";
+		body+="			<li><a id='altui-oscommand' href='javascript:void(0)' >"+_T("OS Command")+"</a></li>";
 		body+="			<li class='divider'></li>";
 		body+="			<li class='dropdown-header'>Admin</li>";
-		body+="			<li><a id='altui-checkupdate' href='#'>"+_T("Check for Updates")+"</a></li>";
-		body+="			<li><a id='altui-optimize' href='#'>"+_T("Options")+"</a></li>";
-		body+="			<li><a id='altui-theme-selector' href='#'>"+_T("Themes")+"</a></li>";
-		body+="			<li><a id='altui-localize' href='#'>"+_T("Localization")+"</a></li>";
-		body+="			<li><a id='altui-debugtools' href='#'>"+_T("Debug")+"</a></li>";
+		body+="			<li><a id='altui-checkupdate' href='javascript:void(0)'>"+_T("Check for Updates")+"</a></li>";
+		body+="			<li><a id='altui-optimize' href='javascript:void(0)'>"+_T("Options")+"</a></li>";
+		body+="			<li><a id='altui-theme-selector' href='javascript:void(0)'>"+_T("Themes")+"</a></li>";
+		body+="			<li><a id='altui-localize' href='javascript:void(0)'>"+_T("Localization")+"</a></li>";
+		body+="			<li><a id='altui-debugtools' href='javascript:void(0)'>"+_T("Debug")+"</a></li>";
 		body+="			<li class='divider'></li>";
 		body+="			<li class='dropdown-header'>About</li>";
-		body+="			<li><a id='altui-license-page' href='#'>"+_T("License Fees")+"</a></li>";
-		body+="			<li><a id='altui-credits' href='#'>"+_T("Credits")+"</a></li>";
-		body+="			<li><a id='altui-evolutions' href='#'>"+_T("Evolutions")+"</a></li>";
+		body+="			<li><a id='altui-license-page' href='javascript:void(0)'>"+_T("License Fees")+"</a></li>";
+		body+="			<li><a id='altui-credits' href='javascript:void(0)'>"+_T("Credits")+"</a></li>";
+		body+="			<li><a id='altui-evolutions' href='javascript:void(0)'>"+_T("Evolutions")+"</a></li>";
 		body+="			<li><a id='altui-support' target='_blank' href='http://forum.micasaverde.com/index.php?board=78.0'>"+_T("Support")+"</a></li>";
-		// body+="			<li><a id='altui-test' href='#'>"+_T("Test")+"</a></li>";
+		// body+="			<li><a id='altui-test' href='javascript:void(0)'>"+_T("Test")+"</a></li>";
 		body+="		  </ul>";
 		body+="		</li>";
 		body+="	  </ul>";
@@ -14340,8 +14341,10 @@ var UIControler = (function(win) {
 			$.each(_pages, function(key,val) {
 				if (val.htmlid == id ){
 					UIControler.changePage(key)
+					return false;
 				}
 			});
+			return false;
 		}
 	}
 })(window);
