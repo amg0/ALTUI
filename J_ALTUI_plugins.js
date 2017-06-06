@@ -244,6 +244,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html = "";
 		var status = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:GenericSensor1', 'CurrentLevel' ); 
 		html += ("<span class='altui-temperature' >"+status+"</span>");
+		if (html=="") {
+			html += UIManager.defaultDeviceDrawAltuiStrings( device );
+		}
 		return html;
 	}
 
