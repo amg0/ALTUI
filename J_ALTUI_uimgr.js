@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2061 $";
+var ALTUI_revision = "$Revision: 2062 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7351,6 +7351,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					scene.favorite = !scene.favorite;
 					Favorites.set('scene', altuiid, scene.favorite );
 					$(this).replaceWith( (scene.favorite==true) ? starGlyph : staremtpyGlyph );
+					UIControler.updateFavoriteScene()
 				})
 				.on("click",".altui-scene-title-name",function(event) {
 					if ( $(this).find("input").length>=1 )
@@ -13863,6 +13864,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 			$(".altui-debug-div").toggle(false);
 
+			var pageIDs = UIControler.getPagesIDs().join(",");
 			$( document )
 				.on ("click", ".navbar-nav a", function() {		// collapse on click on small screens
 					//	$(".navbar-toggle").click();
@@ -13887,14 +13889,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var altuiid = $(this).prop('id');
 					var device = MultiBox.getDeviceByAltuiID(altuiid);
 					UIManager.deviceDrawActions(device);
-				});
-				var pageIDs = UIControler.getPagesIDs().join(",");
-				$(document).on("click", pageIDs, function(e) {
+				})
+				.on("click", pageIDs, function(e) {
 					var id = $(this).prop('id')
 					UIControler.onClickHtml('#'+id);
 				})
-				//AltuiDebug.debug("init done");
-				// console.log("start UIManager.run()");
+				.on("click", "li.altui-dropdown-scene-favorite", function(e) {
+					var altuiid = $(this).data("altuiid");
+					var scene = MultiBox.getSceneByAltuiID(altuiid);
+					if (scene)
+							MultiBox.runScene( scene );
+				});
+				
+				UIControler.updateFavoriteScene();
 				_refreshFooter();
 				UIManager.run();
 		}
@@ -13902,18 +13909,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 	run: function( eventname ) {
 		var homepage = getQueryStringValue("home") || 'pageHome';
-		// try {
-			window["UIManager"][homepage]();	// call function by its name
-		// }
-		// catch (err) {
-			// PageMessage.message("Exception occurred in "+homepage,"warning");
-			//AltuiDebug.debug("Exception occurred in "+homepage);
-			//AltuiDebug.debug("name: "+err.name);
-			//AltuiDebug.debug("message: "+err.message);
-			// console.log("Exception occurred in "+homepage);
-			// console.log("name: "+err.name);// affiche 'Error'
-			// console.log("message: "+err.message); // affiche 'mon message' ou un message d'erreur JavaScript
-		// }
+		window["UIManager"][homepage]();	// call function by its name
 	}
   };	// end of return
 })( window );
@@ -14065,7 +14061,13 @@ $(function() {
 		body+="		<li class='active'><div class='imgLogo'></div></li>";
 		body+="		<li><a id='menu_myhome' href='javascript:void(0)'  >"+_T("My Home")+"</a></li>";
 		body+="		<li><a id='menu_device' href='javascript:void(0)'  >"+_T("Devices")+"</a></li>";
-		body+="		<li><a id='menu_scene' href='javascript:void(0)'	 >"+_T("Scenes")+"</a></li>";
+		body+="		<li class='altui-dropdown-scene dropdown'>";
+		body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Scenes")+" <span class='caret'></span></a>";
+		body+="			<ul class='dropdown-menu' role='menu'>";
+		body+="				<li><a id='menu_scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
+		body+="			</ul>";
+		body+="		</li>";
+		// body+="		<li><a id='menu_scene' href='javascript:void(0)'	 >"+_T("Scenes")+"</a></li>";
 		body+="		<li class='dropdown'>";
 		body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("More")+" <span class='caret'></span></a>";
 		body+="			<ul class='dropdown-menu' role='menu'>";
@@ -14295,15 +14297,6 @@ var UIControler = (function(win) {
 			return null;	// error
 		},
 		getPage : function(title) {
-			// var result = null;
-			// $.each(_pages, function(k,p) {
-				// if(p.title==title)
-				// {
-					// result = p;
-					// return false;
-				// }
-			// });
-			// return result;
 			return _pages[title]
 		},
 		getParentPage: function(page) {
@@ -14326,7 +14319,6 @@ var UIControler = (function(win) {
 			}
 		},
 		changePage: function(code,args) {
-			// _.defer( UIControler.displayPage,code,args)
 			UIControler.displayPage(code,args);
 		},
 		getPagesIDs :function() {
@@ -14345,6 +14337,20 @@ var UIControler = (function(win) {
 				}
 			});
 			return false;
+		},
+		updateFavoriteScene: function ( ) {
+			var ul = $(".altui-dropdown-scene ul");
+			ul.find("li.altui-dropdown-scene-favorite").remove();
+			var favorites = MyLocalStorage.getSettings("Favorites")
+			if (favorites!=null) {
+				$.each(favorites.scene, function( altuiid,bFav) {
+					if (bFav==true) {
+						var scene = MultiBox.getSceneByAltuiID(altuiid)
+						var strLI = "<li class='altui-dropdown-scene-favorite' data-altuiid='{1}'><a href='javascript:void(0)'>{0}</a></li>".format(scene.name,altuiid);
+						ul.append(strLI);
+					}
+				})
+			}
 		}
 	}
 })(window);
