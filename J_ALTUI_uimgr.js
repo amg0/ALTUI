@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2063 $";
+var ALTUI_revision = "$Revision: 2065 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7502,6 +7502,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "<li>";
 				html += "<div class='text-warning altui-state-name'>{0} - <small><span class='text-muted altui-workflow-id'>{1}</span></small></div>".format(state.name,state.id);
 				html += "<ul>";
+					if (isNullOrEmpty(state.comment) != true) {
+						html += "<li class='text-muted'><em>{0}</em></li>".format(state.comment)
+					}
 					if (state.isStart() && state.conditions.length>0) {
 						html += "<li class='altui-action-kind'>Global Conditions</li>"
 						html += "<ul>";
@@ -7532,6 +7535,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									html += "<div class='text-info altui-transition-name'>'{0}' - <small><span class='text-muted altui-workflow-id'>{1}</span></small></div>".format(link.name,link.id);
 								html += "</li>";
 								html += "<ul>";
+									if (isNullOrEmpty(link.comment)!=true) 
+											html += "<li  class='text-muted'><em>{0}</em></li>".format(link.comment);
 									html += "<blockquote class='altui-workflow-transitiondetails'>";
 										html += "<li class='altui-transition-subtitle'>When</li>";
 										html += "<ul>";
@@ -7743,6 +7748,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += HTMLUtils.drawForm( 'altui-state-form', _T("State Properties"),
 				[
 					{ id:"altui-form-StateName", label:_T("State Name"), type:"input", value: Model.name, opt:{required:''} },
+					{ id:"altui-form-StateComment", label:_T("Comment"), type:"input", value: Model.prop.comment },
 					{ id:"altui-form-Actions", label:_T("State Actions"), type:"accordeon", value: [
 						{id:'OnEnter', title:_T("On Enter"), html:
 							HTMLUtils.displayRECButton( 'altui-record-onEnter') +
@@ -7811,6 +7817,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.on( 'submit', function(e) {
 				e.preventDefault();
 				var name = $("#altui-form-StateName").val();
+				Model.prop.comment = $("#altui-form-StateComment").val();
 				Model.prop.onEnterLua = ace.edit( "altui-onEnterLua" ).getValue();
 				Model.prop.onExitLua = ace.edit( "altui-onExitLua" ).getValue();
 				if ($.isFunction(callback))
@@ -8082,6 +8089,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += HTMLUtils.drawForm( 'altui-link-form', _T("Link Properties"),
 				[
 					{ id:"altui-form-LinkName", label:_T("Link Name"), type:"input", value: Model.name, opt:{required:''} },
+					{ id:"altui-form-LinkComment", label:_T("Comment"), type:"input", value: Model.prop.comment },
 					{ id:"altui-LinkSmooth", label:_T("Smooth Link"), type:"input", inputtype:"checkbox", value: Model.prop.smooth	},
 					{ id:"altui-form-Conditions", label:_T("Link Conditions"), type:"accordeon", value: [
 						{id:'Conditions', title:_T("Conditions"), html:_displayConditions( 'altui-conditions',Model.prop.conditions )+BlocklyArea.createBlocklyArea() },
@@ -8137,6 +8145,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.on( 'submit', function(e) {
 				e.preventDefault();
 				Model.name = $("#altui-form-LinkName").val()
+				Model.prop.comment = $("#altui-form-LinkComment").val();
 				Model.prop.timer = $("#altui-timername").val();
 				Model.prop.duration = $("#altui-duration").val();
 				Model.prop.smooth = $("#altui-LinkSmooth").is(':checked');
@@ -8296,16 +8305,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var model = node.attributes;
 			return model.prop && model.prop.stateinfo && model.prop.stateinfo.bStart && (model.prop.stateinfo.bStart==true)
 		}
-
-		// function onDeleteLink(cell) {
-			// if the Link has a schedule, we need to kill it
-			// if (cell.attributes.prop.schedule) {
-					// WorkflowManager.clearLinkScheduleScene(workflow.altuiid,cell)
-			// }
-		// }
-		// function onDeleteNode(cell){
-		// }
-
+		
 		workflow = WorkflowManager.getWorkflow(altuiid);
 		if (workflow==null) return;
 
@@ -14343,12 +14343,20 @@ var UIControler = (function(win) {
 			ul.find("li.altui-dropdown-scene-favorite").remove();
 			var favorites = MyLocalStorage.getSettings("Favorites")
 			if (favorites!=null) {
-				$.each(favorites.scene, function( altuiid,bFav) {
+				var map = $.map(favorites.scene, function( bFav ,altuiid ) {
 					if (bFav==true) {
 						var scene = MultiBox.getSceneByAltuiID(altuiid)
-						var strLI = "<li class='altui-dropdown-scene-favorite' data-altuiid='{1}'><a href='javascript:void(0)'>{0}</a></li>".format(scene.name,altuiid);
-						ul.append(strLI);
+						return {name:scene.name, altuiid:altuiid}
 					}
+				});
+				map.sort(function(a, b){
+					var a1= a.name.toLowerCase(), b1= b.name.toLowerCase();
+					if(a1== b1) return 0;
+					return a1> b1? 1: -1;
+				});
+				$.each(map, function( idx,entry) {
+					var strLI = "<li class='altui-dropdown-scene-favorite' data-altuiid='{1}'><a href='javascript:void(0)'>{0}</a></li>".format(entry.name,entry.altuiid);
+					ul.append(strLI);
 				})
 			}
 		}

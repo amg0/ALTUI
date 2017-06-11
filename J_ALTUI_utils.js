@@ -2510,14 +2510,15 @@ var WorkflowLink = function(graph,cell) {
 		return null;
 	};
 	return {
-		get id()			{ return _cell.id },
-		get name() 			{ return _cell.labels[0].attrs.text.text; },
-		get conditions() { return _cell.prop.conditions || [] },
-		get waitFors() 	{ return _cell.prop.workflows || [] },
-		get schedule() 	{ return _cell.prop.schedule  },
-		get timer() 		{ return (_cell.prop.timer!="") ? { name: _cell.prop.timer , duration: _cell.prop.duration } : null },
-		get source()		{ return new WorkflowState(graph,_stateFromID(_cell.source.id)) },
-		get target()		{ return new WorkflowState(graph,_stateFromID(_cell.target.id)) },
+		get id()					{ return _cell.id },
+		get name() 				{ return _cell.labels[0].attrs.text.text; },
+		get comment()			{ return _cell.prop.comment || "" },
+		get conditions()	{ return _cell.prop.conditions || [] },
+		get waitFors() 		{ return _cell.prop.workflows || [] },
+		get schedule() 		{ return _cell.prop.schedule  },
+		get timer() 			{ return (_cell.prop.timer!="") ? { name: _cell.prop.timer , duration: _cell.prop.duration } : null },
+		get source()			{ return new WorkflowState(graph,_stateFromID(_cell.source.id)) },
+		get target()			{ return new WorkflowState(graph,_stateFromID(_cell.target.id)) },
 	}
 };
 
@@ -2535,6 +2536,7 @@ var WorkflowState = function(graph,cell) {
 			});
 		},
 		get id()			{ return _cell.id },
+		get comment()			{ return _cell.prop.comment || "" },
 		get conditions() 	{ return _cell.prop.conditions || [] },
 		get onEnter() 		{ return _cell.prop.onEnter || [] },
 		get onEnterScenes() { return _cell.prop.onEnterScenes || [] },
@@ -2587,6 +2589,7 @@ var WorkflowManager = (function() {
 		onExit: [],
 		onExitScenes: [],
 		onExitLua: '',
+		comment:""					// user comment
 	};
 	var _def_linkprops = {
 		conditions: [],			// table of device,service,variable, expression with new
@@ -2594,7 +2597,8 @@ var WorkflowManager = (function() {
 		schedule: null,			// schedule ( timer of scene )
 		timer: "",					// timer name
 		smooth: true,				// smooth link
-		duration: ""				// duration ms
+		duration: "",				// duration ms
+		comment:""					// user comment
 	};
 
 	var _def_TimerLabelAttrs = { 
