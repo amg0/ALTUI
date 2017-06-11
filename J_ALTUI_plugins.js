@@ -1140,9 +1140,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		if (isNaN(volts)==false) 
 			html += ALTUI_Templates.wattTemplate.format(volts,"Volts");
 
-		// if (html=="") {
+		if (html=="") {
 			html += UIManager.defaultDeviceDrawAltuiStrings( device );
-		// }
+		}
 		// var pulse = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Pulse' )); 
 		// if (isNaN(pulse)==false) 
 			// html += ALTUI_Templates.wattTemplate.format(pulse,"Pulse");
