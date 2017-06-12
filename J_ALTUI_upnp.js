@@ -525,7 +525,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		var json = JSON.stringify(newscene)
 		// if (0) {
 		// if (_ipaddr=='') {
-		if (json.length >= 5000) {
+		if (json.length >= 3000) {
 			// Local mode
 			var id = newscene.id;	
 			if (id == ALTUI_NEW_SCENE_ID) {
@@ -583,18 +583,6 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 			}
 		});
 
-		// console.log("modified device:",target)
-		// var target = {
-			// "devices":{
-				// "devices_5": {
-					// "states": [
-					//  {},
-					//  ...
-					// ],
-					// "model": "test"
-				// }
-			// }
-		// };
 		return _ModifyUserData( target, function(result) {
 			if (result==null) {
 				PageMessage.message( "Modify Device action failed!", "warning" );				
@@ -623,10 +611,6 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		target.sections={};
 		target.InstalledPlugins2={};
 		target.InstalledPlugins2["InstalledPlugins2_"+plugin.id]= $.extend( true, { Files:[], Devices:[] }, myplugin, changes );
-		// if (pluginSettings )
-			// target.PluginSettings=[
-				// pluginSettings
-			// ];
 			
 		return _ModifyUserData( target, function(result) {
 			if (result==null) {
@@ -647,15 +631,15 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		setConfig	: function(cfg) 		{ 
 			_cfg = $.extend( _cfg,cfg ) ;
 		},
-		getIpAddr		: function () 		{ return _ipaddr; },
+		getIpAddr			: function () 		{ return _ipaddr; },
 		reloadEngine	: _reloadEngine,
 		getUrlHead		: _getUrlHead,
-		proxify			: _proxify,			// ( url )
+		proxify				: _proxify,			// ( url )
 		unproxifyResult	: _unproxifyResult,	// data, textStatus, jqXHR, function(data,textStatus,jqXHR)
 		buildUPnPGetFileUrl : _buildUPnPGetFileUrl,
 		UPnPSetAttrUI7  : _UPnPSetAttrUI7,	//( deviceID, attribute, value, cbfunc)
 		UPnPSetAttr		: _UPnPSetAttr,		// ( deviceID, attribute, value, cbfunc)
-		UPnPSet			: _UPnPSet,			// ( deviceID, service, varName, varValue )
+		UPnPSet				: _UPnPSet,			// ( deviceID, service, varName, varValue )
 		UPnPAction		: _UPnPAction,		// ( deviceID, service, action, params, cbfunc )
 		UPnPGetFile		: _UPnPGetFile,
 		UPnPUpdatePluginVersion : _UPnPUpdatePluginVersion,
