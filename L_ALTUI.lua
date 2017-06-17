@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.87"
+local version = "v1.88"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -3083,23 +3083,14 @@ local function sendValueToStorage_thingspeak(watch_description,lul_device, lul_s
 	debug(string.format("sendValueToStorage_thingspeak(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
 	debug(string.format("watch_description:%s",json.encode(watch_description)))
 	local providerparams = json.decode( watch_description['Data'] )
-	local strtemplate = string.format("key=%s&field%s=%%s",providerparams[3] or "",providerparams[4] or "")
+	local strtemplate = string.format("api_key=%s&field%s=%%s",providerparams[3] or "",providerparams[4] or "")
 	if (isempty(providerparams[3])==false) and ((isempty(providerparams[4])==false)) then
-		local data = string.format(strtemplate,new)
-		local response_body = {}
-		debug(string.format("Provider:%s Url:%s","thingspeak",data))
-		local response, status, headers = https.request{
-			method="POST",
-			url="https://api.thingspeak.com/update",
-			headers = {
-				["Content-Type"] = "application/x-www-form-urlencoded",
-				["Content-Length"] = string.len(data),
-				-- ["X-THINGSPEAKAPIKEY"] = api_write_key
-			},
-			source = ltn12.source.string(data),
-			sink = ltn12.sink.table(response_body)
-		}
-		debug("https Response=" .. json.encode({res=response,sta=status,hea=headers}) )	
+		local val = string.match (new, "%S+")
+		local data = string.format(strtemplate,tostring(val))
+		local url = "https://api.thingspeak.com/update?"..data
+		debug(string.format("Provider:%s Url:%s","thingspeak",url))
+		local httpcode,data = luup.inet.wget(url)
+		debug("httpcode=%s data=%s",httpcode,data )	
 		return response or 0
 	else
 		warning("invalid parameters for thingspeak")
@@ -3315,12 +3306,12 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 						warning(string.format("sendValuetoUrlStorage() failed"))
 					end
 				else
-					debug(string.format("sendValueToStorage: Requires a callback "))
+					debug(string.format("sendValueToStorage: No url, will use callback instead"))
 					local callback_fn = DataProvidersCallbacks[DataProviders[provider]["callback"]]
 					if(callback_fn~=nil) then 
 						(callback_fn)(v[i],lul_device, lul_service, lul_variable,old, new, lastupdate,DataProviders[provider]["parameters"])
 					else
-						warning(string.format("sendValueToStorage: callback and url missing for provider:%s",provider))
+						warning(string.format("sendValueToStorage: both callback and url are missing for provider:%s",provider))
 					end
 				end
 			else
