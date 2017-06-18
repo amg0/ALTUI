@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2066 $";
+var ALTUI_revision = "$Revision: 2070 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14061,7 +14061,8 @@ $(function() {
 		body+="		<li class='active'><div class='imgLogo'></div></li>";
 		body+="		<li><a id='menu_myhome' href='javascript:void(0)'  >"+_T("My Home")+"</a></li>";
 		body+="		<li><a id='menu_device' href='javascript:void(0)'  >"+_T("Devices")+"</a></li>";
-		body+="		<li class='altui-dropdown-scene dropdown'>";
+		body+="		<li class='altui-no-scene-favorite'><a id='menu_scene'  href='javascript:void(0)'  >"+_T("Scenes")+"</a></li>";
+		body+="		<li class='altui-with-scene-favorite altui-dropdown-scene dropdown' style='display: none;'>";
 		body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Scenes")+" <span class='caret'></span></a>";
 		body+="			<ul class='dropdown-menu' role='menu'>";
 		body+="				<li><a id='menu_scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
@@ -14349,15 +14350,22 @@ var UIControler = (function(win) {
 						return {name:scene.name, altuiid:altuiid}
 					}
 				});
-				map.sort(function(a, b){
-					var a1= a.name.toLowerCase(), b1= b.name.toLowerCase();
-					if(a1== b1) return 0;
-					return a1> b1? 1: -1;
-				});
-				$.each(map, function( idx,entry) {
-					var strLI = "<li class='altui-dropdown-scene-favorite' data-altuiid='{1}'><a href='javascript:void(0)'>{0}</a></li>".format(entry.name,entry.altuiid);
-					ul.append(strLI);
-				})
+				if (map.length>0) {
+					$(".altui-with-scene-favorite").show();
+					$(".altui-no-scene-favorite").hide();
+					map.sort(function(a, b){
+						var a1= a.name.toLowerCase(), b1= b.name.toLowerCase();
+						if(a1== b1) return 0;
+						return a1> b1? 1: -1;
+					});
+					$.each(map, function( idx,entry) {
+						var strLI = "<li class='altui-dropdown-scene-favorite' data-altuiid='{1}'><a href='javascript:void(0)'>{0}</a></li>".format(entry.name,entry.altuiid);
+						ul.append(strLI);
+					})
+				} else {
+					$(".altui-with-scene-favorite").hide();
+					$(".altui-no-scene-favorite").show();
+				}
 			}
 		}
 	}

@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.88"
+local version = "v1.89"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -3079,24 +3079,77 @@ local function sendValueToStorage_emoncms(watch_description,lul_device, lul_serv
 	return nil
 end
 
+Queue = {
+	new = function(self,o)
+		o = o or {}   -- create object if user does not provide one
+		setmetatable(o, self)
+		self.__index = self
+		return o
+	end,
+	size = function(self)
+		return #self
+	end,
+	add = function(self,e)
+		return table.insert(self,e)
+	end,
+	getHead = function(self)
+		local elem = self[1]
+		return elem
+	end,
+	removeHead = function(self)
+		table.remove(self,1)
+	end
+}
+
+local Thingspeak_Queue = Queue:new()
+
+function _deferredWgetThingspeak()
+	debug(string.format("_deferredWgetThingspeak : entering... Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+	local url = Thingspeak_Queue:getHead()
+	if (url~=nil) then
+		debug(string.format("_deferredWgetThingspeak calls Url:%s",url))
+		local httpcode,data = luup.inet.wget(url)
+		debug(string.format("_deferredWgetThingspeak httpcode=%s data=%s",httpcode,data ))			
+		if (data~="0") then
+			Thingspeak_Queue:removeHead()
+		else
+			debug("_deferredWgetThingspeak failed to update thingspeak, will retry the same url next time")
+		end
+	else
+		warning("_deferredWgetThingspeak engine has nothing to do, ignoring call")
+	end
+	if (Thingspeak_Queue:size() >0) then
+		debug(string.format("Arming _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+		luup.call_delay("_deferredWgetThingspeak", 5, url)
+	else
+		debug(string.format("No need to rearm _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+	end
+end
+
+local function _CallThingspeakAPI(api_key,field_num,value)
+	local strtemplate = string.format("api_key=%s&field%s=%s",api_key or "",field_num or "",tostring(value))
+	local url = "https://api.thingspeak.com/update?" .. strtemplate
+	Thingspeak_Queue:add(url)
+	if (Thingspeak_Queue:size() == 1) then
+		debug("Starting _deferredWgetThingspeak engine")
+		luup.call_delay("_deferredWgetThingspeak", 1, url)
+	end
+end
+
 local function sendValueToStorage_thingspeak(watch_description,lul_device, lul_service, lul_variable,old, new, lastupdate, provider_params)
 	debug(string.format("sendValueToStorage_thingspeak(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
 	debug(string.format("watch_description:%s",json.encode(watch_description)))
 	local providerparams = json.decode( watch_description['Data'] )
-	local strtemplate = string.format("api_key=%s&field%s=%%s",providerparams[3] or "",providerparams[4] or "")
+
 	if (isempty(providerparams[3])==false) and ((isempty(providerparams[4])==false)) then
-		local val = string.match (new, "%S+")
-		local data = string.format(strtemplate,tostring(val))
-		local url = "https://api.thingspeak.com/update?"..data
-		debug(string.format("Provider:%s Url:%s","thingspeak",url))
-		local httpcode,data = luup.inet.wget(url)
-		debug("httpcode=%s data=%s",httpcode,data )	
-		return response or 0
+		local httpcode,data = _CallThingspeakAPI(providerparams[3] or "",providerparams[4] or "",string.match (new, "%S+"))
+		return httpcode or 0
 	else
-		warning("invalid parameters for thingspeak")
+		error("invalid parameters for thingspeak")
 	end
 	return 0
 end
+
 local function table_search (tt, v,stack,level)
 	local key, value
 	if level > 5 then
