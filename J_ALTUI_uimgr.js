@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2070 $";
+var ALTUI_revision = "$Revision: 2071 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -12828,6 +12828,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				{ name:'variable', type:'string', identifier:false, width:80 },
 				{ name:'deviceid', type:'string', formatter:'devicename', identifier:false,	 },
 				{ name:'sceneid', type:'string', formatter:'scenename', identifier:false,  },
+				{ name:'value', type:'string', formatter:'devicevalue', identifier:false,  },
 				// { name:'luaexpr', type:'string', identifier:false, width:120 },
 				// { name:'xml', type:'string', identifier:false, width:150 }
 			],
@@ -12840,6 +12841,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var scene = MultiBox.getSceneByID(0,row.sceneid);
 					return "#{1}-{0}".format(scene.name,scene.altuiid);
 				},
+				"devicevalue": function( column, row) {
+					var device = MultiBox.getDeviceByAltuiID(row.deviceid);
+					return MultiBox.getStatus( device, row.service, row.variable )
+				}
 			},
 			commands: {
 				'altui-command-edit': {
@@ -12885,12 +12890,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				{ name:'variable', type:'string', identifier:false, width:80 },
 				{ name:'deviceid', type:'string', formatter:'devicename', identifier:false,	 },
 				{ name:'provider', type:'string', identifier:false, width:100 },
+				{ name:'value', type:'string', formatter:'devicevalue', identifier:false,  },
+
 			],
 			formatters: {
 				"devicename": function(column, row) {
 					var device = MultiBox.getDeviceByAltuiID(row.deviceid);
 					return device ? "#{1}-{0}".format(device.name,device.altuiid) : "";
 				},
+				"devicevalue": function( column, row) {
+					var device = MultiBox.getDeviceByAltuiID(row.deviceid);
+					return MultiBox.getStatus( device, row.service, row.variable )
+				}
 			},
 			commands: {
 				'altui-command-see': {
