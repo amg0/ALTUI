@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.89"
+local version = "v1.90"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local NMAX_IN_VAR	= 4000 
@@ -3088,7 +3088,7 @@ Queue = {
 		return o
 	end,
 	size = function(self)
-		return #self
+		return tablelength(self)
 	end,
 	add = function(self,e)
 		return table.insert(self,e)
@@ -3099,20 +3099,60 @@ Queue = {
 	end,
 	removeHead = function(self)
 		table.remove(self,1)
-	end
+	end,
+	removeItem = function(self, idx)
+		table.remove(self,idx)
+	end,
+	list = function(self)
+		local i = 0
+		return function()
+			if (i<#self) then
+			    i=i+1
+			    return i,self[i]
+		    end
+		end
+	end,
 }
 
 local Thingspeak_Queue = Queue:new()
 
+function prepareThingspeakUrl( todo ) 
+	local url = string.format("https://api.thingspeak.com/update?api_key=%s",todo.api_key)
+	local fieldstbl = {}
+	for k,v in pairs(todo.fields) do
+		table.insert( fieldstbl, string.format("field%s=%s",k,v) )
+	end
+	url = url .. "&" .. table.concat(fieldstbl, "&")
+	return url	
+end
+
 function _deferredWgetThingspeak()
 	debug(string.format("_deferredWgetThingspeak : entering... Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
-	local url = Thingspeak_Queue:getHead()
-	if (url~=nil) then
-		debug(string.format("_deferredWgetThingspeak calls Url:%s",url))
+	local cb_obj = Thingspeak_Queue:getHead()
+	if (cb_obj~=nil) then
+		debug(string.format("_deferredWgetThingspeak calls cb_obj:%s",json.encode(cb_obj)))
+		-- find all pending calls for the same channel and different fields
+		local todo = {
+			api_key = cb_obj.api_key,
+			fields = {
+				[cb_obj.field_num] = cb_obj.value
+			},
+			indexes = { 1 }
+		}
+		for k,v in Thingspeak_Queue:list() do
+			if (k>1) and (v.api_key == cb_obj.api_key) and (todo.fields[ v.field_num ]==nil) then
+				todo.fields[ v.field_num ] = v.value
+				table.insert( todo.indexes, 1, k )
+			end
+		end
+		debug( string.format("_deferredWgetThingspeak is preparing to update => %s",json.encode(todo)) )
+		local url = prepareThingspeakUrl( todo )
 		local httpcode,data = luup.inet.wget(url)
-		debug(string.format("_deferredWgetThingspeak httpcode=%s data=%s",httpcode,data ))			
+		debug(string.format("_deferredWgetThingspeak(url=%s) ==> httpcode=%s data=%s",url, httpcode,data ))			
 		if (data~="0") then
-			Thingspeak_Queue:removeHead()
+			for k,v in ipairs(todo.indexes) do
+				Thingspeak_Queue:removeItem(v)
+			end
 		else
 			debug("_deferredWgetThingspeak failed to update thingspeak, will retry the same url next time")
 		end
@@ -3128,12 +3168,11 @@ function _deferredWgetThingspeak()
 end
 
 local function _CallThingspeakAPI(api_key,field_num,value)
-	local strtemplate = string.format("api_key=%s&field%s=%s",api_key or "",field_num or "",tostring(value))
-	local url = "https://api.thingspeak.com/update?" .. strtemplate
-	Thingspeak_Queue:add(url)
+	local cb_obj = { api_key=api_key, field_num=field_num, value= tostring(value) }
+	Thingspeak_Queue:add(cb_obj)
 	if (Thingspeak_Queue:size() == 1) then
 		debug("Starting _deferredWgetThingspeak engine")
-		luup.call_delay("_deferredWgetThingspeak", 1, url)
+		luup.call_delay("_deferredWgetThingspeak", 1, null)
 	end
 end
 
