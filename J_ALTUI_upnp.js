@@ -631,6 +631,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		setConfig	: function(cfg) 		{ 
 			_cfg = $.extend( _cfg,cfg ) ;
 		},
+		getConfig	: function() { return _cfg },
 		getIpAddr			: function () 		{ return _ipaddr; },
 		reloadEngine	: _reloadEngine,
 		getUrlHead		: _getUrlHead,

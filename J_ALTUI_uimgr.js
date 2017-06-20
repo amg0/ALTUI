@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2071 $";
+var ALTUI_revision = "$Revision: 2073 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -12951,12 +12951,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-ctrl-support", glyph:"glyphicon-envelope", label:_T("Support Ticket")},
 		];
 
-		function _displayControllerInfo(box_info) {
+		function _displayControllerInfo(ctrl) {
+			var box_info = ctrl.box_info
 			$.each(box_info, function(k,v) {
 				box_info[k]= HTMLUtils.enhanceValue(v);
 			});
 			var html ="";
 			html += "<div class='altui-ctrl-tools'>{0}</div>".format(HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _buttons ));
+			html +=	 HTMLUtils.array2Table(_buildArrayFromParams({
+				"Can Do http POST": ctrl.controller.candoPost(),
+				"Is Open Luup": ctrl.controller.isOpenLuup(),
+				"Is UI5": ctrl.controller.isUI5()
+			}),null,[],_T("Info"),null,'altui-controller-info');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
 			html +=	 HTMLUtils.array2Table(_buildArrayFromParams(box_info),null,[],_T("Details"),null,'altui-controller-params');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
 			return html;
 		};
@@ -12981,7 +12987,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var name  = (controller.ip == "" ) ? "Main" : controller.ip ;
 			html+="	   <div role='tabpanel' class='altui-controller-panel tab-pane {2}' id='altui_ctrl_{0}'>{1}</div>".format(
 				idx,
-				_displayControllerInfo(controller.box_info),
+				_displayControllerInfo(controller),
 				(bFirst==true ? 'active' : ''));
 			bFirst=false;
 		});

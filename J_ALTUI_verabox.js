@@ -1419,7 +1419,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	function _saveData( key, name, data , cbfunc) {
 		if (_uniqID!=0)	{
 			// only supported on master controller
-			//AltuiDebug.debug("_saveData must only be called on master controller #0");
+			AltuiDebug.debug("_saveData must only be called on master controller #0");
 			return;
 		}	
 		//AltuiDebug.debug("_saveData( {0}, {1} chars )".format(name,data.length));
@@ -1806,7 +1806,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	getIcon			: _getIcon, 		// workaround to get image from vera box
 	getWeatherSettings : _getWeatherSettings,
 	isUI5			: _isUI5,				
-	isOpenLuup : _isOpenLuup,
+	isOpenLuup 		: function() { return _isOpenLuup(_user_data) },
+	candoPost 		: function() { return _candoPost(_user_data) },	
 	getBoxInfo		: _getBoxInfo,		//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()
 	getLuaStartup 	: _getLuaStartup,
@@ -1909,7 +1910,6 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	loadEngine 		: _loadEngine, 		// optional user_data
 	isUserDataCached	: _isUserDataCached,
 	RequestBackup : _RequestBackup,
-
 	initEngine		: function( firstuserdata ) 	{
 						_loadEngine( firstuserdata );
 						_initDataEngine();				// init the data collection engine
