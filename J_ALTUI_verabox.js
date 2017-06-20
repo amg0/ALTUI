@@ -1396,7 +1396,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				name: name,
 				npage: npage,
 				handle: handle,
-				data: (doPost==true) ? data : encodeURIComponent(data),
+				mydata: (doPost==true) ? data : encodeURIComponent(data),
 				dummy:'x'
 			}
 		})
@@ -1407,6 +1407,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			}
 		})
 		.fail(function(jqXHR, textStatus) {
+			AltuiDebug.debug("_saveDataChunk() failed. textStatus:{0}".format(textStatus))
 			if ( $.isFunction( cbfunc ) )  {
 				cbfunc("");			
 			}

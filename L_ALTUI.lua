@@ -2409,10 +2409,11 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 			function(params)
 				local name = lul_parameters["name"]
 				local npage = lul_parameters["npage"]
-				local data = lul_parameters["data"]
+				local data = lul_parameters["mydata"]
 				local handle = lul_parameters["handle"]
 				local prefix = lul_parameters["prefix"] or "Data"
 				debug(string.format("ALTUI_Handler: save_data( name:%s npage:%s handle:%s)",name,npage,handle or ''))
+				debug(string.format("ALTUI_Handler: save_data data: %s",json.encode(data)))
 
 				prefix = prefix .. "_"
 				if (tonumber(npage)==0) then
@@ -2429,7 +2430,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				end
 				
 				local variablename = prefix..name.."_"..npage
-				if (data=="") then
+				if (data=="") or (data==nil) then
 					-- debug(string.format("ALTUI_Handler: save_data( ) - Empty data",name,npage))
 					ReceivedData[handle]["pages"][0] = ""
 					-- luup.variable_set(ALTUI_SERVICE, variablename, " ", deviceID) -- avoid empty str as it seems to delete variable
