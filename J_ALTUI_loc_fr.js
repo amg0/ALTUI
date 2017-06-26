@@ -462,7 +462,8 @@ Localization.init( {
 	"Back":"Retour",
 	"display or not the House mode widget on home page":"Controle l affichage du widget des modes Maison sur la page principale",
 	"Show House Mode on home page":"Gadget des modes Maison sur la page principale",
-	"ShowHouseMode:display or not the House mode widget on home page":"ShowHouseMode:Controle l affichage du widget des modes Maison sur la page principale"
+	"ShowHouseMode:display or not the House mode widget on home page":"ShowHouseMode:Controle l affichage du widget des modes Maison sur la page principale",
+	"Please be patient, registration will become effective after <mark>1 or 2 business days</mark>. Otherwise contact me with a copy of your page footer":"L'enregistrement de la license peut prendre <mark>1 a 2 jours ouvrés</mark>. Au dela, contactez moi avec une copie d'écran du bas de page svp",
 });
 
 // override rules with localized version

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2073 $";
+var ALTUI_revision = "$Revision: 2076 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10740,6 +10740,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html +="<span class='col-xs-12'>{0}</span>".format(
 		_T("For non commercial use, ALTUI plugin is free for trial with some limitation on its functionality. To compensate the effort and time spent on regularly improving this project, a registration fee equivalent to <span class='text-info'><mark><b>2€ per month</b></mark></span> is requested for longer term use. You can choose your level of contribution.")+
 		_T("Once registered you will get:<ul><li>Access to all the releases and auto update mechanism (not available to non registered users)</li><li>Removal of unregistered welcome message, as well as license message in the footer</li></ul>")+
+		"<p>"+_T("Please be patient, registration will become effective after <mark>1 or 2 business days</mark>. Otherwise contact me with a copy of your page footer") + "</p>" +
 		"<i>"+_T("Resellers or Integrators are welcome to contact me for eventual commercial agreements.")+"</i>"
 		)
 		html +="<span class='col-xs-12'><hr>{0}</span>".format( UIManager.getPayPalButtonHtml() );
