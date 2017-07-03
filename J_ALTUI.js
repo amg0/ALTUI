@@ -153,6 +153,8 @@ function altui_Settings(deviceID) {
 	var localbootstrap = get_device_state(deviceID,  altui_Svs, 'LocalBootstrap',1);
 	var extraCtrl = get_device_state(deviceID,  altui_Svs, 'ExtraController',1);
 	var remoteUrl = get_device_state(deviceID,  altui_Svs, 'RemoteAccess',1);
+	var apiKey = get_device_state(deviceID,  altui_Svs, 'VoiceRSS_KEY',1);
+
 	var style='	<style>\
 	  table.altui_table td:first-child {\
 		width: 140px;\
@@ -180,6 +182,7 @@ function altui_Settings(deviceID) {
 	var htmlCDN = '<input id="altui-cdn" class="altui-ui-input form-control" placeholder="optional localcdn pathname, uses internet otherwise"></input>';
 	var htmlBootstrap = '<input id="altui-localbootstrap" class="altui-ui-input form-control" placeholder="optional local bootstrap relative url, use internet otherwise"></input>';
 	var htmlCTRL = '<input id="altui-ctrl" class="altui-ui-input form-control" placeholder="Comma separated list of ip_addr for extra controllers"></input>';
+	var htmlApiKey = '<input id="altui-apikey" class="altui-ui-input form-control" placeholder="Your VoiceRSS API Key"></input>';
 	var htmlSetConfig= '<button class="btn btn-default btn-sm" id="altui-setconfig">Set Configuration</button>';
 	var htmlResetConfig= '<button class="btn btn-default btn-sm" id="altui-resetconfig">Default Configuration</button>';
 	var htmlViewJson = '<button class="btn btn-default btn-sm" id="altui-viewconfig">View Configuration</button>';
@@ -193,6 +196,7 @@ function altui_Settings(deviceID) {
 		//'<tr><td>url options</td><td><ul><li><b>home</b>=(pageHome , pageRooms , pageDevices , pageScenes , pageSceneEdit , pagePlugins , pageUsePages , pageEditPages , pageCredits , pageLuaTest , pageLuaStart , pageOptions , pageEditor , pageZwave , pageLocalization , pagePower , pageChildren , pageRoutes , pageQuality , pageTblDevices , pageOsCommand)</li><li><b>lang</b>=(en , fr , it)</li><li><b>Layout</b>=lean</li><li><b>nPage</b>=nnn</li></ul></td></tr>' +
 		'<tr><td>Home Page Url</td><td> '+htmlHome+' </td></tr>' +
 		'<tr><td>Extra Controllers</td><td> '+htmlCTRL+' </td></tr>' +
+		'<tr><td>Voice RSS API Key for TTS support</td><td> '+htmlApiKey+' </td></tr>' +
 		'<tr><td>Local CDN ?</td><td> '+htmlCDN+' </td></tr>' +
 		'<tr><td>MyHome Image Path</td><td> '+htmlImagePath+' </td></tr>' +		
 		'<tr><td>Background Image</td><td> '+htmlBackground+' </td></tr>' +
@@ -212,6 +216,7 @@ function altui_Settings(deviceID) {
 	jQuery( "#altui-cdn" ).val(localcdn);
 	jQuery( "#altui-localbootstrap" ).val(localbootstrap);
 	jQuery( "#altui-ctrl" ).val(extraCtrl);
+	jQuery( "#altui-apikey" ).val(apiKey);
 
 	//
 	// test isregistered
@@ -258,6 +263,10 @@ function altui_Settings(deviceID) {
 	jQuery( "#altui-ctrl" ).change( function() {
 		var ctrl = jQuery(this).val();
 		saveVar(deviceID,  altui_Svs, "ExtraController", ctrl, true);
+	});
+	jQuery( "#altui-apikey" ).change( function() {
+		var apikey = jQuery(this).val();
+		saveVar(deviceID,  altui_Svs, "VoiceRSS_KEY", apikey, true);
 	});
 	jQuery( "#altui-open-remote" ).click(function() {
 		window.open( remoteUrl, '_blank');

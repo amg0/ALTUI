@@ -9,9 +9,10 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.90"
+local version = "v1.91"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
+local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
 local NMAX_IN_VAR	= 4000 
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
@@ -182,6 +183,15 @@ local function findALTUIDevice()
 	return -1
 end
 
+local function findSONOSDevice()
+	for k,v in pairs(luup.devices) do
+		if( v.device_type == "urn:schemas-micasaverde-com:device:Sonos:1" ) then
+			return k
+		end
+	end
+	return -1
+end
+
 local function table2params(workflowaltuiid,args)
 	local result={}
 	for k,arg in pairs(args) do
@@ -238,7 +248,7 @@ local function setAttrIfChanged(name, value, deviceId)
 end
 
 local function call_action(service,action,params,device)
-	debug(string.format("Wkflow - Calling Action device:%s Service:%s Action:%s Params:%s",device,service,action,json.encode(params)))
+	debug(string.format("Calling Action device:%s Service:%s Action:%s Params:%s",device,service,action,json.encode(params)))
 	local resultCode, resultString, job, returnArguments =luup.call_action(service,action,params,device)
 	return resultCode, resultString, job, returnArguments
 end
@@ -3276,6 +3286,45 @@ function resetDevice(lul_device,norepeat)
 	local httpcode,data = luup.inet.wget("http://localhost:3480/data_request?id=reload",10)
 end
 
+local function createMP3file(lul_device,newMessage)
+	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "") 
+	if (api_key == "") then
+		error(string.format("ALTUI has no defined API key for VoiceRSS. Request is ignored"))
+		return nil
+	end
+	local url = "https://api.voicerss.org/?" .. "key=".. api_key .."&src="..newMessage.."&hl=fr-fr&c=MP3&f=44khz_16bit_mono"
+	debug(string.format("calling url: %s",url))
+	-- return url  => should work but does not for some reasons. 
+	
+	local operationStatusCode, content, httpStatusCode = luup.inet.wget(url,60)
+	debug(string.format("operationStatusCode:%s, httpStatusCode:%s",operationStatusCode or 'nil',  httpStatusCode or 'nil'))
+	debug(string.format("content:%s",json.encode(content or "")))
+	if (operationStatusCode ~= 0) then
+		return nil
+	end
+
+	local f,errmsg,errno = io.open("/www/"..ALTUI_SONOS_MP3, "wb")
+	if (f==nil) then
+		error(string.format("ALTUI could not open the file %s in wb mode. check path & permissions. msg:%s",ALTUI_SONOS_MP3,errmsg))
+		return nil
+	end
+	f:write(content)
+	f:close()
+	return string.format("http://%s/%s",hostname,ALTUI_SONOS_MP3)
+end
+
+function sayTTS(lul_device,newMessage)
+	lul_device = tonumber(lul_device)
+	newMessage = modurl.escape( newMessage or "" )
+	log(string.format("sayTTS(%d,%s)",lul_device, newMessage))
+	local sonos = findSONOSDevice()
+	local uri = createMP3file(lul_device,newMessage)
+	if (uri ~= nil) then
+		local resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", {URI=uri,Volume=30,SameVolumeForAll=true, Duration=3, GroupZones="ALL"}, sonos )
+	end
+	return 0
+end
+
 function UPNPregisterDataProvider(lul_device, newName, newUrl, newJsonParameters)
 	newName = newName or ''
 	newUrl = newUrl or ''
@@ -3984,7 +4033,7 @@ function startupDeferred(lul_device)
 	local worfklowactivestates = getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "")
 	local workflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
 	local ctrlOptions = getSetVariable(ALTUI_SERVICE, "CtrlOptions", lul_device, "1500,60")
-	
+	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "") 
 	
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")

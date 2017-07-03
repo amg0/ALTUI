@@ -101,6 +101,12 @@
             <defaultValue></defaultValue>
             <shortCode>jsonparameters</shortCode>
         </stateVariable>	
+        <stateVariable sendEvents="no">
+            <name>Message</name>
+            <dataType>string</dataType>
+            <defaultValue></defaultValue>
+            <shortCode>message</shortCode>
+        </stateVariable>	
 	</serviceStateTable>
     <actionList>
         <action>
@@ -211,5 +217,15 @@
         <action>
             <name>Reset</name>
         </action>
+		<action>
+            <name>SayTTS</name>
+            <argumentList>
+                <argument>
+                    <name>newMessage</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>Message</relatedStateVariable>
+                </argument>
+            </argumentList>
+		</action>
 	</actionList>
 </scpd>
