@@ -453,7 +453,8 @@ Localization.init( {
 	"Back":"Back",
 	"display or not the House mode widget on home page":"display or not the House mode widget on home page",
 	"Show House Mode on home page":"Show House Mode on home page",
-	"ShowHouseMode:display or not the House mode widget on home page":"ShowHouseMode:display or not the House mode widget on home page"
+	"ShowHouseMode:display or not the House mode widget on home page":"ShowHouseMode:display or not the House mode widget on home page",
+	"Please be patient, registration will become effective after <mark>1 or 2 business days</mark>. Otherwise contact me with a copy of your page footer":"Please be patient, registration will become effective after <mark>1 or 2 business days</mark>. Otherwise contact me with a copy of your page footer",
 });
 
 // override rules with localized version

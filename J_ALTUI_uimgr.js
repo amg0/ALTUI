@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2076 $";
+var ALTUI_revision = "$Revision: 2077 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -599,7 +599,10 @@ var styles ="						\
 	.altui-myhome-device-content .altui-favorites-watts	 {	\
 		right:20px;				\
 	}							\
-	.altui-myhome-device-content .altui-favorites-smalltext { \
+	.altui-myhome-device-content .altui-favorites-smalltext  { \
+		font-size:0.3em;	\
+	} \
+	.altui-myhome-device-content .altui-favorites-mediumtext { \
 		font-size:0.4em;	\
 	} \
 	.altui-theme-label {			\
@@ -929,6 +932,12 @@ var styles ="						\
 		cursor: pointer;		\
 		border-color: green;		\
 	}		\
+	.altui-favorites-lasttrip-text { \
+		position: absolute;		\
+		bottom: 0px;			\
+		left: 0px;				\
+		right: 0px;				\
+	} \
 	.altui-favorites-watts {	\
 		float: right;			\
 		text-align: right;		\
@@ -4254,8 +4263,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.css("font-size",Math.floor(width/6))
 			$(".altui-favorites-device-content")
 				.css("font-size",Math.floor(width/6))
-			$(".altui-favorites-smalltext")
+			$(".altui-favorites-mediumtext")
 				.css("font-size",Math.floor(width/12))
+			$(".altui-favorites-smalltext")
+				.css("font-size",Math.floor(width/24))
 		}
 	};
 
@@ -4277,7 +4288,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				break;
 			case "urn:schemas-micasaverde-com:device:LightSensor:1":
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' );
-				html += "<span>{0}</span> <span class='altui-favorites-smalltext'>lux</span>".format(level/*+ws.tempFormat*/);
+				html += "<span>{0}</span> <span class='altui-favorites-mediumtext'>lux</span>".format(level/*+ws.tempFormat*/);
 				break;
 			case "urn:schemas-upnp-org:device:BinaryLight:1":
 				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' );
@@ -4298,11 +4309,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			case "urn:schemas-micasaverde-com:device:WindowCovering:1"	:
 			case "urn:schemas-upnp-org:device:DimmableLight:1":
 				var loadLevelStatus = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' );
-				html += "<span>{0}</span>  <span class='altui-favorites-smalltext'>%</span>".format(loadLevelStatus);
+				html += "<span>{0}</span>  <span class='altui-favorites-mediumtext'>%</span>".format(loadLevelStatus);
 				break;
 			case "urn:schemas-micasaverde-com:device:HumiditySensor:1":
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' );
-				html += "<span class='altui-favorites-device-content'>{0}</span> <span class='altui-favorites-smalltext'>%</span>".format(level);
+				html += "<span class='altui-favorites-device-content'>{0}</span> <span class='altui-favorites-mediumtext'>%</span>".format(level);
 				break;
 			case "urn:schemas-micasaverde-com:device:VOTS:1":
 			case "urn:schemas-micasaverde-com:device:TemperatureSensor:1":
@@ -4313,8 +4324,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// html += "<span>{0}</span>".format((temp || "") +"&deg;"/*+ws.tempFormat*/);
 				break;
 			case "urn:schemas-micasaverde-com:device:MotionSensor:1":
+			case "urn:schemas-micasaverde-com:device:DoorSensor:1":
 				var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' ));
 				html += ("<span>{0}</span>".format( (tripped==true) ? "<span class='glyphicon glyphicon-flash text-danger' aria-hidden='true'></span>" : " "));
+				html += _drawDefaultFavoriteDevice(device);
+				var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
+				if (lasttrip != null) {
+					var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
+					html+= "<div class='altui-favorites-lasttrip-text altui-favorites-smalltext pull-right'>{0} {1}</div>".format( timeGlyph,lasttripdate );
+				}
 				break;
 			case "urn:schemas-upnp-org:device:VSwitch:1":
 				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VSwitch1', 'Status' );
@@ -4327,7 +4345,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			case "urn:schemas-micasaverde-com:device:PowerMeter:1":
 				var watts = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' );
 				watts = Math.round(parseFloat(watts)*10)/10
-				html += "<span>{0}</span> <span class='altui-favorites-smalltext'>W</span>".format(watts || "-");
+				html += "<span>{0}</span> <span class='altui-favorites-mediumtext'>W</span>".format(watts || "-");
 				break;
 			default:
 				var _altuitypesDB = MultiBox.getALTUITypesDB();	// Master controller
