@@ -3313,14 +3313,15 @@ local function createMP3file(lul_device,newMessage)
 	return string.format("http://%s/%s",hostname,ALTUI_SONOS_MP3)
 end
 
-function sayTTS(lul_device,newMessage)
+function sayTTS(lul_device,newMessage,volume)
 	lul_device = tonumber(lul_device)
 	newMessage = modurl.escape( newMessage or "" )
-	log(string.format("sayTTS(%d,%s)",lul_device, newMessage))
+	volume = tonumber(volume or 30)
+	log(string.format("sayTTS(%d,%s,%d)",lul_device, newMessage,volume))
 	local sonos = findSONOSDevice()
 	local uri = createMP3file(lul_device,newMessage)
 	if (uri ~= nil) then
-		local resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", {URI=uri,Volume=30,SameVolumeForAll=true, Duration=3, GroupZones="ALL"}, sonos )
+		local resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3, GroupZones="ALL"}, sonos )
 	end
 	return 0
 end

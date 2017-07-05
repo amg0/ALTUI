@@ -107,6 +107,12 @@
             <defaultValue></defaultValue>
             <shortCode>message</shortCode>
         </stateVariable>	
+        <stateVariable sendEvents="no">
+            <name>Volume</name>
+            <dataType>ui2</dataType>
+            <defaultValue></defaultValue>
+            <shortCode>volume</shortCode>
+        </stateVariable>	
 	</serviceStateTable>
     <actionList>
         <action>
@@ -224,6 +230,11 @@
                     <name>newMessage</name>
                     <direction>in</direction>
                     <relatedStateVariable>Message</relatedStateVariable>
+                </argument>
+                <argument>
+                    <name>newVolume</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>Volume</relatedStateVariable>
                 </argument>
             </argumentList>
 		</action>
