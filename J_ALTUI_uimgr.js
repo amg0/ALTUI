@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2078 $";
+var ALTUI_revision = "$Revision: 2081 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1681,11 +1681,11 @@ var UIManager  = ( function( window, undefined ) {
 		var len = $('link.'+scriptname.replace(/\./g,"_")).length;
 		if (len==0) {				// not loaded yet
 			UIManager.loadCSS(scriptname,fullscriptname,function() {
-				(drawfunc)();
+				if ($.isFunction(drawfunc)) { (drawfunc)(); }
 			});
 			return;
 		}
-		(drawfunc)();
+		if ($.isFunction(drawfunc)) { (drawfunc)(); }
 	};
 
 	function _loadScriptIfNeeded( scriptname, path, drawfunc ) {
@@ -1695,11 +1695,11 @@ var UIManager  = ( function( window, undefined ) {
 		var len = $('script[src="'+fullscriptname+'"]').length;
 		if (len==0) {				// not loaded yet
 			UIManager.loadScript(fullscriptname,function() {
-				(drawfunc)();
+				if ($.isFunction(drawfunc)) { (drawfunc)(); }
 			});
 			return;
 		}
-		(drawfunc)();
+		if ($.isFunction(drawfunc)) { (drawfunc)(); }
 	};
 
 	function _loadD3Script( drawfunc ) {
@@ -1707,6 +1707,16 @@ var UIManager  = ( function( window, undefined ) {
 		// _loadScriptIfNeeded('d3.min.js','//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/',drawfunc);
 	};
 
+	function _loadJointJSScript( drawfunc ) {
+		var ver = "1.1.0/"; // "1.0.3"
+		_loadCssIfNeeded( "joint.css", "//cdnjs.cloudflare.com/ajax/libs/jointjs/"+ver)
+		_loadScriptIfNeeded('joint.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
+			_loadScriptIfNeeded('joint.shapes.fsa.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
+				_loadScriptIfNeeded('joint.shapes.devs.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,drawfunc);
+			});
+		});
+	};
+	
 	// func is the function to call, if it contains module.funcname it is a UI7 style. otherwise it is assumed UI5 style
 	// UI7 style already uses jquery normally
 	function _fixScriptPostLoad( name, code, ui7style ) {
@@ -5811,6 +5821,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	loadCSS : _loadCSS,							// (cssLocationAndName)
 	loadScript		: _loadScript,		//(scriptLocationAndName)
 	loadD3Script	: _loadD3Script,
+	loadJointJSScript	: _loadJointJSScript,
 	clearScripts	: _clearScripts,
 	setTheme		: _setTheme,	//(themecss)
 	setTitle		: _setTitle,	// str
@@ -7632,7 +7643,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// {id:"altui-workflow-rotate", glyph:"glyphicon-repeat" },
 		];
 		var selected = [];
-		var graph = new joint.dia.Graph();
+		var graph = null;	// will be init later once the scripts are loaded
 
 		function _clearPage() {
 			$(".altui-workflow-toolbar").remove();
@@ -8341,219 +8352,300 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 
 		$(".altui-mainpanel").append("<div class='col-xs-12'><div id='altui-workflow-canvas'></div></div>");
-		//
-		// Set up Jointjs things
-		//
-		var paper = new joint.dia.Paper({
-			el: $('#altui-workflow-canvas'),
-			width: $('#altui-workflow-canvas').parent().innerWidth()-30, height: 600, gridSize: 1,
-			model: graph,
-			// interactive: { labelMove: true },
-			defaultLink: WorkflowManager.Link(null, null, '??', null),
-			validateConnection: function(cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
-				// Prevent linking to links
-				if (cellViewT.model.isLink()) return false;
-				// Prevent linking from output ports to input ports within one element.
-				if (cellViewS === cellViewT) return false;
-				// Prevent linking to start
-				if (cellViewT.model.attributes.prop.stateinfo.bStart==true) return false;
-				return magnetT != null
-				//return magnetT && magnetT.getAttribute('type') === 'input';
-			},
-			// Enable link snapping within 75px lookup radius
-			// snapLinks: { radius: 75 },
-			// Enable marking available cells & magnets
-			markAvailable: true,
-			// prevent dropping link on the paper
-			linkPinning: false,
-			// Allowed number of mousemove events after which the pointerclick event will be still triggered.
-			//or any number > 0 if you have more specific events there
-			// cf http://stackoverflow.com/questions/35443524/jointjs-why-pointerclick-event-doesnt-work-only-pointerdown-gets-fired
-			clickThreshold: 1,
-		});
-		/*
-		function _rotateCell(cell) {
-			var angle = cell.attributes.angle;
-			angle = (angle + 90) % 360;
-			cell.rotate(angle,true);
-			var labelXform = ""
-			switch (angle) {
-				case 0:
-					// labelXform = "translate(45,18) rotate(0,0,0)";
-					labelXform = "rotate(0,0,0)";
-					cell.attr({
-						'.inPorts .port-label' : { transform: 'rotate(0,0,0)' } ,
-						'.outPorts .port-label': { transform: 'rotate(0,0,0)' } ,
-					});
-					break;
-				case 90:
-					// labelXform = "translate(18,45) rotate(-90,0,0)";
-					labelXform = "rotate(-90,0,0)";
-					break;
-				case 180:
-					cell.attr({
-						'.inPorts .port-label' : { transform: 'rotate(180,-22,4)' } ,
-						'.outPorts .port-label': { transform: 'rotate(180, 27,4)' } ,
-					});
-					// labelXform = "translate(45,72) rotate(-180,0,0)";
-					labelXform = "rotate(-180,0,0)";
-					break;
-				case 270:
-					// labelXform = "translate(72,45) rotate(-270,0,0)";
-					labelXform = "rotate(-270,0,0)";
-					break;
-			}
-			cell.attr({
-				'.label' : { transform:labelXform }
-			})
-		};
-		*/
+		UIManager.loadJointJSScript( function() {
+			graph = new joint.dia.Graph();
+			//
+			// Set up Jointjs things
+			//
+			var paper = new joint.dia.Paper({
+				el: $('#altui-workflow-canvas'),
+				width: $('#altui-workflow-canvas').parent().innerWidth()-30, height: 600, gridSize: 1,
+				model: graph,
+				// interactive: { labelMove: true },
+				defaultLink: WorkflowManager.Link(null, null, '??', null),
+				validateConnection: function(cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
+					// Prevent linking to links
+					if (cellViewT.model.isLink()) return false;
+					// Prevent linking from output ports to input ports within one element.
+					if (cellViewS === cellViewT) return false;
+					// Prevent linking to start
+					if (cellViewT.model.attributes.prop.stateinfo.bStart==true) return false;
+					return magnetT != null
+					//return magnetT && magnetT.getAttribute('type') === 'input';
+				},
+				// Enable link snapping within 75px lookup radius
+				// snapLinks: { radius: 75 },
+				// Enable marking available cells & magnets
+				markAvailable: true,
+				// prevent dropping link on the paper
+				linkPinning: false,
+				// Allowed number of mousemove events after which the pointerclick event will be still triggered.
+				//or any number > 0 if you have more specific events there
+				// cf http://stackoverflow.com/questions/35443524/jointjs-why-pointerclick-event-doesnt-work-only-pointerdown-gets-fired
+				clickThreshold: 1,
+			});
 
-		//
-		// Callbacks / Interactivity
-		//
+			//
+			// Callbacks / Interactivity
+			//
 
-		function handleDblClick(cellView, evt, x, y) {
-			var id = cellView.model.id;
-			var cell = graph.getCell(id);
-			var json = graph.toJSON();
-			WorkflowManager.setGraph(workflow.altuiid,JSON.stringify(json));
-			var bSave = _getSaveNeeded();
-			if (cell.isLink()) {
-				var Model = {
-					name: cellView.model.attributes.labels[0].attrs.text.text,
-					prop: WorkflowManager.getLinkProperties( cellView.model.attributes.prop )
-				};
-				onPropertyLink(workflow,Model,function(Model){
-					if (Model) {
-						cellView.model.label(0,{ position: 0.5, attrs: { text: { text: Model.name } }});
-						cellView.model.attributes.prop = Model.prop;
-						cellView.model.attributes.smooth = Model.prop.smooth;
-						// update the graph
-						_saveGraph();
-					}
-					_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])
-					_.defer(_showSaveNeeded, (Model) ? true : bSave );
-				});
-			} else {
-				//
-				// start node is like a global transition
-				// any matched transition will reset the workflow to the start state
-				//
-				if (isStartNode(cell)) {
+			function handleDblClick(cellView, evt, x, y) {
+				var id = cellView.model.id;
+				var cell = graph.getCell(id);
+				var json = graph.toJSON();
+				WorkflowManager.setGraph(workflow.altuiid,JSON.stringify(json));
+				var bSave = _getSaveNeeded();
+				if (cell.isLink()) {
 					var Model = {
-						name: "Start",
-						prop: WorkflowManager.getLinkProperties( cellView.model.attributes.prop ),
-						smooth:false
-					}
+						name: cellView.model.attributes.labels[0].attrs.text.text,
+						prop: WorkflowManager.getLinkProperties( cellView.model.attributes.prop )
+					};
 					onPropertyLink(workflow,Model,function(Model){
 						if (Model) {
-							// cannot change name of start state
-							// cellView.model.label(0,{ position: 0.5, attrs: { text: { text: Model.name } }});
+							cellView.model.label(0,{ position: 0.5, attrs: { text: { text: Model.name } }});
 							cellView.model.attributes.prop = Model.prop;
+							cellView.model.attributes.smooth = Model.prop.smooth;
+							// update the graph
 							_saveGraph();
 						}
 						_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])
 						_.defer(_showSaveNeeded, (Model) ? true : bSave );
 					});
 				} else {
-					var Model = {
-						name: cell.attr('text/text'),
-						prop: WorkflowManager.getNodeProperties( cellView.model.attributes.prop ),
+					//
+					// start node is like a global transition
+					// any matched transition will reset the workflow to the start state
+					//
+					if (isStartNode(cell)) {
+						var Model = {
+							name: "Start",
+							prop: WorkflowManager.getLinkProperties( cellView.model.attributes.prop ),
+							smooth:false
+						}
+						onPropertyLink(workflow,Model,function(Model){
+							if (Model) {
+								// cannot change name of start state
+								// cellView.model.label(0,{ position: 0.5, attrs: { text: { text: Model.name } }});
+								cellView.model.attributes.prop = Model.prop;
+								_saveGraph();
+							}
+							_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])
+							_.defer(_showSaveNeeded, (Model) ? true : bSave );
+						});
+					} else {
+						var Model = {
+							name: cell.attr('text/text'),
+							prop: WorkflowManager.getNodeProperties( cellView.model.attributes.prop ),
+						}
+						onPropertyState(workflow,Model,function(Model){
+							if (Model) {
+								// cellView.model.attr(".label/text",Model.name);
+								cell.attr('text/text',Model.name)
+								cellView.model.attributes.prop = Model.prop;
+								_saveGraph();
+							}
+							_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])
+							_.defer(_showSaveNeeded, (Model) ? true : bSave );
+						});
 					}
-					onPropertyState(workflow,Model,function(Model){
-						if (Model) {
-							// cellView.model.attr(".label/text",Model.name);
-							cell.attr('text/text',Model.name)
-							cellView.model.attributes.prop = Model.prop;
-							_saveGraph();
-						}
-						_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])
-						_.defer(_showSaveNeeded, (Model) ? true : bSave );
+				}
+			}
+
+			paper.on('cell:pointerdown', function(cellView, evt, x, y) {
+				var toolRemove = $(evt.target).parents('.tool-remove')[0];
+				// If `.tool-remove` was clicked.
+				if (toolRemove) {
+					// DialogManager.confirmDialog(_T("Are you sure you want to delete this transition"),function(result) {
+						// if (result == true ) {
+						// }
+					// });
+					if (!confirm(_T("Are you sure you want to delete this transition"))) {
+							// `interactive === false` prevents any action inside joint.dia.Link>>pointerdown().
+							cellView.options.interactive = false;
+							// Put `interactive === true` back in the next turn to make the link interactive again
+							// after the user releases the mouse.
+							_.defer(function() { cellView.options.interactive = true; });
+							// evt.stopPropagation();
+							// evt.preventDefault();
+					} else {
+						_showSaveNeeded();
+						_.defer(_saveGraph);
+					}
+				}
+			});
+
+			paper.on('cell:pointerup', function(cellView, evt, x, y) {
+				if ($("#altui-workflow-edit").hasClass("active")) {
+					$("#altui-workflow-edit").toggleClass("active",false);
+					handleDblClick(cellView, evt, x, y);
+					return;
+				}
+				if (cellView.model.isLink()) {
+					cellView.model.toFront()
+					return;
+				}
+				if (evt.ctrlKey==false) {
+					$.each(selected, function(k,s) {
+						var cell = graph.getCell( s );
+						var view = cell.findView(paper);
+						view.unhighlight(cell);
 					});
-				}
-			}
-		}
-
-		paper.on('cell:pointerdown', function(cellView, evt, x, y) {
-			var toolRemove = $(evt.target).parents('.tool-remove')[0];
-			// If `.tool-remove` was clicked.
-			if (toolRemove) {
-				// DialogManager.confirmDialog(_T("Are you sure you want to delete this transition"),function(result) {
-					// if (result == true ) {
-					// }
-				// });
-				if (!confirm(_T("Are you sure you want to delete this transition"))) {
-						// `interactive === false` prevents any action inside joint.dia.Link>>pointerdown().
-						cellView.options.interactive = false;
-						// Put `interactive === true` back in the next turn to make the link interactive again
-						// after the user releases the mouse.
-						_.defer(function() { cellView.options.interactive = true; });
-						// evt.stopPropagation();
-						// evt.preventDefault();
+					selected=[ cellView.model.id ];
 				} else {
-					_showSaveNeeded();
-					_.defer(_saveGraph);
+					if ($.inArray(cellView.model.id,selected)==-1) {
+						selected.push(cellView.model.id);
+					}
 				}
-			}
-		});
+				cellView.highlight(cellView.model);
+			});
 
-		paper.on('cell:pointerup', function(cellView, evt, x, y) {
-			if ($("#altui-workflow-edit").hasClass("active")) {
-				$("#altui-workflow-edit").toggleClass("active",false);
+			paper.on('cell:pointermove', function(event, x, y) {
+				if (event.model.isLink()) {
+					var clickPoint	= { x: event._dx, y: event._dy },
+						length1		= event.sourcePoint.distance(clickPoint),
+						length2		= event.targetPoint.distance(clickPoint),
+						lengthTotal = length1 + length2, //event.sourcePoint.manhattanDistance(event.targetPoint),
+						position	= _.round( length1 / lengthTotal, 2);
+
+					event.model.label(0, { position: position });
+				}
+			});
+			paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
 				handleDblClick(cellView, evt, x, y);
-				return;
-			}
-			if (cellView.model.isLink()) {
-				cellView.model.toFront()
-				return;
-			}
-			if (evt.ctrlKey==false) {
+			});
+			paper.on('blank:pointerclick', function(cellView, evt, x, y) {
 				$.each(selected, function(k,s) {
 					var cell = graph.getCell( s );
 					var view = cell.findView(paper);
 					view.unhighlight(cell);
 				});
-				selected=[ cellView.model.id ];
-			} else {
-				if ($.inArray(cellView.model.id,selected)==-1) {
-					selected.push(cellView.model.id);
-				}
-			}
-			cellView.highlight(cellView.model);
-		});
-
-		paper.on('cell:pointermove', function(event, x, y) {
-			if (event.model.isLink()) {
-				var clickPoint	= { x: event._dx, y: event._dy },
-					length1		= event.sourcePoint.distance(clickPoint),
-					length2		= event.targetPoint.distance(clickPoint),
-					lengthTotal = length1 + length2, //event.sourcePoint.manhattanDistance(event.targetPoint),
-					position	= _.round( length1 / lengthTotal, 2);
-
-				event.model.label(0, { position: position });
-			}
-		});
-		paper.on('cell:pointerdblclick', function(cellView, evt, x, y) {
-			handleDblClick(cellView, evt, x, y);
-		});
-		paper.on('blank:pointerclick', function(cellView, evt, x, y) {
-			$.each(selected, function(k,s) {
-				var cell = graph.getCell( s );
-				var view = cell.findView(paper);
-				view.unhighlight(cell);
+				selected=[ ];
 			});
-			selected=[ ];
-		});
-		graph.on('change:position change:position change:source change:target change:vertices', function(cell) {
-			paper.fitToContent({ padding:2 })
-			// _.defer(_saveGraph);
-			_showSaveNeeded();
-		});
-		graph.on('remove',function(cell)	{
-			// return cell.isLink() ? onDeleteLink(cell) : onDeleteNode(cell) ;
-			_showSaveNeeded();
-		})
+			graph.on('change:position change:position change:source change:target change:vertices', function(cell) {
+				paper.fitToContent({ padding:2 })
+				// _.defer(_saveGraph);
+				_showSaveNeeded();
+			});
+			graph.on('remove',function(cell)	{
+				// return cell.isLink() ? onDeleteLink(cell) : onDeleteNode(cell) ;
+				_showSaveNeeded();
+			})
+			
+			//
+			// draw the graph
+			//
+			if (workflow.graph_json) {
+				graph.fromJSON( JSON.parse(workflow.graph_json) )
+				$.each( graph.getElements() , function(idx,cell) {
+					cell.attr({
+						circle: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue'},
+					});
+				})
+
+				// strange bug, arrows head are not visible without a first change or a reload of the graph
+				graph.fromJSON( graph.toJSON() )
+				_showSaveNeeded(bSanitized);
+			}
+			else {
+				var s = WorkflowManager.Start();
+				var m2 = WorkflowManager.Node("S1",100,200);
+				var m3 = WorkflowManager.Node("S2",100,100);
+				s.addTo(graph)
+				m2.addTo(graph)
+				m3.addTo(graph)
+				WorkflowManager.Link(s,m2,'test').addTo(graph);
+			}
+
+			// size the paper properly and make the canvas resizable
+			// paper.fitToContent({ padding:2 });
+			paper.scaleContentToFit({ padding:5, preserveAspectRatio:true });
+			//
+			// refresh the graph
+			//
+			var previous_active = null;
+			function _refreshLocalTimer(id,link) {
+					if (link.attributes.labels.length<2)	// old links without 2 labels
+						return;
+					var txt = link.attributes.labels[1].attrs.text.text;
+					var val = 0
+					if (txt.indexOf(':')!=-1) {
+						var date = new Date("1970-01-01T{0}Z".format(txt))
+						val = date.getTime()/1000
+					} else {
+						val = parseInt(txt)
+					}
+					if (val>0) {
+						val--;
+						WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,val);
+						HTMLUtils.startTimer('altui-workflow-local-timer',1000,_refreshLocalTimer,link)
+					}
+			}
+			function _refreshFromRemote(id,data) {
+				HTMLUtils.stopTimer('altui-workflow-local-timer')
+				if (id!='altui-workflow-timer')	return;
+				MultiBox.getWorkflowStatus( function(data) {
+					if (!data) {
+						HTMLUtils.startTimer('altui-workflow-timer',5000,_refreshFromRemote,null);
+						return;
+					}
+					// workflows states
+					if ( data.states[workflow.altuiid] && graph) {
+						var cell = graph.getCell( data.states[workflow.altuiid] );
+						if (previous_active !=null) {
+							previous_active.attr({
+								circle: { fill: isStartNode(previous_active) ? '#2ECC71' : 'lightblue'},
+							});
+						}
+						if (cell) {
+							previous_active = cell;
+							cell.attr({
+								circle: { fill: '#F78181' },
+							});
+						}
+						// Link Timers -- only if registered
+							var linkWithTimer={};
+							$.each(data.timers, function(i,timer) {
+								// local lul_device,workflow_idx,timerstateid,targetstateid,linkid = parts[1],tonumber(parts[2]),parts[3],parts[4],parts[5]
+								var parts = timer.data.split("#");
+								if (data.states[workflow.altuiid] == parts[2]) {
+									var link = graph.getCell( parts[4] )
+									if (link) {	// the user may have deleted it
+										var remaining_sec= Math.floor(timer.expireson - Date.now()/1000);
+										linkWithTimer[parts[4]] = {
+											remaining_sec: remaining_sec,
+											text : "{0} @{1}s".format( link.attributes.prop.timer , remaining_sec )
+											}
+									}
+								}
+							});
+							$.each( graph.getLinks(), function( i, link ) {
+								if (linkWithTimer[link.id]) {
+									WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,linkWithTimer[link.id].remaining_sec);
+									HTMLUtils.startTimer('altui-workflow-local-timer',1000,_refreshLocalTimer,link)
+								} else {
+									if (link.attributes.prop.timer) {
+										WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,null);
+									}
+								}
+							});
+					}
+					// workflows Bag
+					var arr=[];
+					$.each(data.bags[workflow.altuiid], function(key,val) {
+						arr.push({ 'variable':key, 'value':val});
+					});
+					$("#altui-workflow-bag-text").html( HTMLUtils.array2Table(arr,null,[],_T("Variables Bag"),"","") )
+					MultiBox.getWorkflowHistory( workflow.altuiid, function(lines) {
+						if ($("#altui-workflow-history-text").length>0)
+							$.each(lines, function(i,line) { delete line.altuiid });
+							$("#altui-workflow-history-text").html( HTMLUtils.array2Table(lines.reverse().slice(0,20),null,[],_T("History")) )
+						HTMLUtils.startTimer('altui-workflow-timer',3000,_refreshFromRemote,null)
+					});
+				})
+			}
+			_refreshFromRemote('altui-workflow-timer',null);
+	})
+
 		$("#altui-workflow-zoomin").click(function() {
 			var scale = V(paper.viewport).scale();
 			paper.scale(1.20*scale.sx, 1.20*scale.sy);
@@ -8564,16 +8656,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			paper.scale(0.80*scale.sx, 0.80*scale.sy)
 			paper.fitToContent({ padding:2 })
 		});
-		// $('#altui-workflow-rotate').click(function() {
-			// if (selected.length>0) {
-				// $.each(selected, function(k,s) {
-					// var cell = graph.getCell( s );
-					// _rotateCell(cell);
-				// });
-				// _showSaveNeeded();
-				// _saveGraph();
-			// }
-		// });
+
 		$("#altui-workflow-newstate").click(function() {
 			//var elements = workflow.graph.getElements();
 			WorkflowManager.Node("New",0,0).addTo(graph);
@@ -8660,120 +8743,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					}
 			});
 		});
-
-		//
-		// draw the graph
-		//
-		if (workflow.graph_json) {
-			graph.fromJSON( JSON.parse(workflow.graph_json) )
-			$.each( graph.getElements() , function(idx,cell) {
-				cell.attr({
-					circle: { fill: isStartNode(cell) ? '#2ECC71' : 'lightblue'},
-				});
-			})
-
-			// strange bug, arrows head are not visible without a first change or a reload of the graph
-			graph.fromJSON( graph.toJSON() )
-			_showSaveNeeded(bSanitized);
-		}
-		else {
-			var s = WorkflowManager.Start();
-			var m2 = WorkflowManager.Node("S1",100,200);
-			var m3 = WorkflowManager.Node("S2",100,100);
-			s.addTo(graph)
-			m2.addTo(graph)
-			m3.addTo(graph)
-			WorkflowManager.Link(s,m2,'test').addTo(graph);
-		}
-
-		// size the paper properly and make the canvas resizable
-		// paper.fitToContent({ padding:2 });
-		paper.scaleContentToFit({ padding:5, preserveAspectRatio:true });
-		//
-		// refresh the graph
-		//
-		var previous_active = null;
-		function _refreshLocalTimer(id,link) {
-				if (link.attributes.labels.length<2)	// old links without 2 labels
-					return;
-				var txt = link.attributes.labels[1].attrs.text.text;
-				var val = 0
-				if (txt.indexOf(':')!=-1) {
-					var date = new Date("1970-01-01T{0}Z".format(txt))
-					val = date.getTime()/1000
-				} else {
-					val = parseInt(txt)
-				}
-				if (val>0) {
-					val--;
-					WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,val);
-					HTMLUtils.startTimer('altui-workflow-local-timer',1000,_refreshLocalTimer,link)
-				}
-		}
-		function _refreshFromRemote(id,data) {
-			HTMLUtils.stopTimer('altui-workflow-local-timer')
-			if (id!='altui-workflow-timer')	return;
-			MultiBox.getWorkflowStatus( function(data) {
-				if (!data) {
-					HTMLUtils.startTimer('altui-workflow-timer',5000,_refreshFromRemote,null);
-					return;
-				}
-				// workflows states
-				if ( data.states[workflow.altuiid] && graph) {
-					var cell = graph.getCell( data.states[workflow.altuiid] );
-					if (previous_active !=null) {
-						previous_active.attr({
-							circle: { fill: isStartNode(previous_active) ? '#2ECC71' : 'lightblue'},
-						});
-					}
-					if (cell) {
-						previous_active = cell;
-						cell.attr({
-							circle: { fill: '#F78181' },
-						});
-					}
-					// Link Timers -- only if registered
-						var linkWithTimer={};
-						$.each(data.timers, function(i,timer) {
-							// local lul_device,workflow_idx,timerstateid,targetstateid,linkid = parts[1],tonumber(parts[2]),parts[3],parts[4],parts[5]
-							var parts = timer.data.split("#");
-							if (data.states[workflow.altuiid] == parts[2]) {
-								var link = graph.getCell( parts[4] )
-								if (link) {	// the user may have deleted it
-									var remaining_sec= Math.floor(timer.expireson - Date.now()/1000);
-									linkWithTimer[parts[4]] = {
-										remaining_sec: remaining_sec,
-										text : "{0} @{1}s".format( link.attributes.prop.timer , remaining_sec )
-										}
-								}
-							}
-						});
-						$.each( graph.getLinks(), function( i, link ) {
-							if (linkWithTimer[link.id]) {
-								WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,linkWithTimer[link.id].remaining_sec);
-								HTMLUtils.startTimer('altui-workflow-local-timer',1000,_refreshLocalTimer,link)
-							} else {
-								if (link.attributes.prop.timer) {
-									WorkflowManager.updateLinkTimerLabel(link.findView(paper),link,null);
-								}
-							}
-						});
-				}
-				// workflows Bag
-				var arr=[];
-				$.each(data.bags[workflow.altuiid], function(key,val) {
-					arr.push({ 'variable':key, 'value':val});
-				});
-				$("#altui-workflow-bag-text").html( HTMLUtils.array2Table(arr,null,[],_T("Variables Bag"),"","") )
-				MultiBox.getWorkflowHistory( workflow.altuiid, function(lines) {
-					if ($("#altui-workflow-history-text").length>0)
-						$.each(lines, function(i,line) { delete line.altuiid });
-						$("#altui-workflow-history-text").html( HTMLUtils.array2Table(lines.reverse().slice(0,20),null,[],_T("History")) )
-					HTMLUtils.startTimer('altui-workflow-timer',3000,_refreshFromRemote,null)
-				});
-			})
-		}
-		_refreshFromRemote('altui-workflow-timer',null);
 	},
 
 	pageWorkflows: function ()
@@ -8810,9 +8779,48 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
 		}
 
+		UIManager.loadJointJSScript( function() {
+			// do the drawing now that scripts are loaded
+			_drawWorkflows( WorkflowManager.getWorkflows() )
+			// now do the refresh loop
+			MultiBox.getWorkflowStatus( function(data) {
+				if (data) {
+					var StateToName={}
+					// prepare necessary data
+					$.each(data.states, function(altuiid,state) {
+						var workflow = WorkflowManager.getWorkflow( altuiid );
+						if (workflow && workflow.graph_json) {
+							var arr = JSON.parse(workflow.graph_json).cells
+							$.each(arr, function(i,cell) {
+								if (cell.type != "fsa.Arrow") {
+									StateToName[cell.id] = ( cell.attrs.text ? cell.attrs.text.text : 'Start' )
+								}
+							});
+						}
+					});
+					// then program regular refresh
+					function _refresh() {
+						MultiBox.getWorkflowStatus( function(data) {
+							if (!data) {
+								HTMLUtils.startTimer('altui-workflow-page-timer',5000,_refresh,null)
+								return;
+							}
+							$(".altui-workflow").each( function(idx, obj) {
+								var altuiid = $(obj).data("altuiid");
+								var activestate = data.states[altuiid];
+								var name = StateToName[activestate]
+								$(obj).find(".altui-active-state-name").text( name )
+							});
+							HTMLUtils.startTimer('altui-workflow-page-timer',3000,_refresh,null)
+						});
+					}
+					_refresh();
+				}
+			});
+		});
+		
+		// prepare the screen / toolbar and callbacks
 		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsMain ) );
-		_drawWorkflows( WorkflowManager.getWorkflows() )
-
 		$("#altui-workflow-create")
 			.on('click',function() {
 				WorkflowManager.addWorkflow();
@@ -8860,42 +8868,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				WorkflowManager.renameWorkflow($(this).data("altuiid"), newname);
 				$(".altui-mainpanel").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
 			})
-
-		// now do the refresh loop
-		MultiBox.getWorkflowStatus( function(data) {
-			if (data) {
-				var StateToName={}
-				// prepare necessary data
-				$.each(data.states, function(altuiid,state) {
-					var workflow = WorkflowManager.getWorkflow( altuiid );
-					if (workflow && workflow.graph_json) {
-						var arr = JSON.parse(workflow.graph_json).cells
-						$.each(arr, function(i,cell) {
-							if (cell.type != "fsa.Arrow") {
-								StateToName[cell.id] = ( cell.attrs.text ? cell.attrs.text.text : 'Start' )
-							}
-						});
-					}
-				});
-				// then program regular refresh
-				function _refresh() {
-					MultiBox.getWorkflowStatus( function(data) {
-						if (!data) {
-							HTMLUtils.startTimer('altui-workflow-page-timer',5000,_refresh,null)
-							return;
-						}
-						$(".altui-workflow").each( function(idx, obj) {
-							var altuiid = $(obj).data("altuiid");
-							var activestate = data.states[altuiid];
-							var name = StateToName[activestate]
-							$(obj).find(".altui-active-state-name").text( name )
-						});
-						HTMLUtils.startTimer('altui-workflow-page-timer',3000,_refresh,null)
-					});
-				}
-				_refresh();
-			}
-		});
 	},
 
 	_findPlugin: function (plugins,pluginid){

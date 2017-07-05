@@ -112,7 +112,13 @@
             <dataType>ui2</dataType>
             <defaultValue></defaultValue>
             <shortCode>volume</shortCode>
-        </stateVariable>	
+        </stateVariable>
+        <stateVariable sendEvents="no">
+            <name>groupDevices</name>
+            <dataType>string</dataType>
+            <defaultValue></defaultValue>
+            <shortCode>groupdevices</shortCode>
+        </stateVariable>			
 	</serviceStateTable>
     <actionList>
         <action>
@@ -235,6 +241,11 @@
                     <name>newVolume</name>
                     <direction>in</direction>
                     <relatedStateVariable>Volume</relatedStateVariable>
+                </argument>
+                <argument>
+                    <name>newGroupDevices</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>groupDevices</relatedStateVariable>
                 </argument>
             </argumentList>
 		</action>

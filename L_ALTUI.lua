@@ -1720,6 +1720,7 @@ function switch( command, actiontable)
 	return actiontable["default"]
 end
 
+-- WARNING: put the proper src attribute name to work with the UIManager preload check
 local htmlLocalScripts = [[
     <script src="@localcdn@/jquery.min.js"></script>
     <script src="@localcdn@/lodash.min.js"></script>
@@ -1749,6 +1750,11 @@ local htmlLocalScripts = [[
 -- jquery 1.9 jointjs 0.9.7 backbone 1.2.1 spectrum 1.8.0
 -- jquery 2.2.4 jointjs 1.0.3 backbone 1.3.3 spectrum 1.8.0
 
+-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.min.js" ></script>
+-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.shapes.fsa.min.js"></script>
+-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.shapes.devs.min.js"></script>
+
+	
 local htmlScripts = [[
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/@swversion@/jquery.min.js" ></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
@@ -1756,9 +1762,6 @@ local htmlScripts = [[
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script> 
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.min.js" ></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.shapes.fsa.min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.shapes.devs.min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"></script>
@@ -1779,7 +1782,6 @@ local htmlScripts = [[
 	
 	<script src="J_ALTUI_uimgr.js" defer ></script> 
 ]]
-    -- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script> 	
 
 local htmlStyle = [[
 	<style>
@@ -1789,12 +1791,13 @@ local htmlStyle = [[
 
 local defaultBootstrapPath = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
 
+-- WARNING: put the proper class name to work with the UIManager preload check. '.' are replaced by '_'
 local htmlLocalCSSlinks = [[
 	<link rel="stylesheet" href="@localcdn@/jquery-ui.css">
 	<link rel="stylesheet" href="@localcdn@/bootstrap.min.css">
 	<link rel="stylesheet" href="@localcdn@/jquery.bootgrid.min.css">
     <link rel="stylesheet" type="text/css" href="@localcdn@/spectrum.min.css">
-    <link rel="stylesheet" type="text/css" href="@localcdn@/joint.css">
+    <link class="joint_css" rel="stylesheet" type="text/css" href="@localcdn@/joint.css">
 	<link class="altui-theme" rel="stylesheet" href="@ThemeCSS@">	
 ]]
 
@@ -1802,7 +1805,6 @@ local htmlCSSlinks = [[
 	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" href="@localbootstrap@">
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
 	<link class="altui-theme" rel="stylesheet" href="@ThemeCSS@">	
 ]]
@@ -3313,17 +3315,27 @@ local function createMP3file(lul_device,newMessage)
 	return string.format("http://%s/%s",hostname,ALTUI_SONOS_MP3)
 end
 
-function sayTTS(lul_device,newMessage,volume)
+function sayTTS(lul_device,newMessage,volume,groupDevices)
 	lul_device = tonumber(lul_device)
 	newMessage = modurl.escape( newMessage or "" )
 	volume = tonumber(volume or 30)
-	log(string.format("sayTTS(%d,%s,%d)",lul_device, newMessage,volume))
-	local sonos = findSONOSDevice()
+	groupDevices = groupDevices or ""
+	log(string.format("sayTTS(%d,%s,%d,%s)",lul_device, newMessage,volume,groupDevices))
+	
 	local uri = createMP3file(lul_device,newMessage)
+	local resultCode, resultString, job, returnArguments
+	resultCode = -1
 	if (uri ~= nil) then
-		local resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3, GroupZones="ALL"}, sonos )
+		local sonos = findSONOSDevice()
+		local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3}
+		if (groupDevices ~= "") then
+			params["GroupDevices"]= groupDevices
+		else
+			params["GroupZones"]= "ALL"
+		end
+		resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 	end
-	return 0
+	return resultCode
 end
 
 function UPNPregisterDataProvider(lul_device, newName, newUrl, newJsonParameters)
