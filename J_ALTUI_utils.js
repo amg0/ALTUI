@@ -2477,6 +2477,8 @@ var PageManager = (function() {
 	};
 	
 	function _forEachPage( func ) {
+		if (_pages.length==0)
+			this.addPage()
 		$.each(_pages, func);
 	};
 	

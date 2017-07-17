@@ -4047,7 +4047,8 @@ function startupDeferred(lul_device)
 	local workflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
 	local ctrlOptions = getSetVariable(ALTUI_SERVICE, "CtrlOptions", lul_device, "1500,60")
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "") 
-	
+	local custompages = getSetVariable(ALTUI_SERVICE, "Data_CustomPages_0", lul_device, "[]") 
+
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleUserCode", lul_device, "")
