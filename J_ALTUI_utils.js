@@ -415,7 +415,7 @@ var SpeechManager = (function() {
 	function onExecuteResults(cmd) {
 
 		var name2AltuiID = {
-			"device":$.map( MultiBox.getDevicesSync(), function( device, idx) { return {name:_spochen(device.name), altuiid:device.altuiid} } ),
+			"device":$.map( MultiBox.getDevicesSync().filter( function(d) { return isNullOrEmpty(d.name) == false } ), function( device, idx) { return {name:_spochen(device.name), altuiid:device.altuiid} } ),
 			"scene":$.map( MultiBox.getScenesSync(), function( scene, idx) { return {name:_spochen(scene.name), altuiid:scene.altuiid} } ),
 			"room":$.map( MultiBox.getRoomsSync(), function( room, idx) { return {name:_spochen(room.name), altuiid:room.altuiid, orgname:room.name} } ),
 			"altui":[
