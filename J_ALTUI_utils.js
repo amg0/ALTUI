@@ -1799,7 +1799,8 @@ var HTMLUtils = (function() {
 	};	
 	function _drawButtonGroup(htmlid,model) {
 		var html="";
-		html += "<div class='btn-group {0}' role='group' aria-label='...'>".format(model.cls ||'');
+		model = $.extend( true, {cls:'', attr:'', buttons:[] }, model) 
+		html += "<div id='{2}' class='btn-group {0}' {1} role='group' aria-label='group'>".format(model.cls, model.attr,htmlid);
 		$.each(model.buttons, function(i,btn) {
 				var label = (btn.img) ? "<img class='{2}' src='{0}' alt='{1}'></img>".format(btn.img,btn.label||'',btn.imgcls||'' ) : (btn.label||'')
 				html += "<button id='{1}' type='button' class='btn btn-default {0}'>{2}</button>".format(btn.cls||'',btn.id||'',label)
@@ -4623,7 +4624,17 @@ var SceneEditor = function (scene) {
 		function _displayTriggersAndWatches() {
 			var html="";
 			try {
+				var opmode = scene.triggers_operator || "OR"
 				html += UIManager.displayJson( 'Triggers', scene.triggers);
+				if (UIManager.UI7Check()==true) {
+					html += _T("Triggering logical mode") + ": "+ HTMLUtils.drawButtonGroup('altui-trigger-mode-grp', {
+						attr:"data-toggle='buttons'",
+						buttons: [
+							{id:"altui-trigger-or", label:"OR" , cls: "altui-trigger-mode " + ((opmode=="OR") ? "active btn-primary " : "") },
+							{id:"altui-trigger-and",label:"AND", cls: "altui-trigger-mode " + ((opmode=="AND") ? "active btn-primary " : "") },
+						]
+					});
+				}
 				html +="<table class='table table-condensed'>";
 				html +="<caption>{0}</caption>".format(_T("Device Triggers"));
 				html +="<tbody>";
@@ -4723,6 +4734,10 @@ var SceneEditor = function (scene) {
 		$(".altui-json-code").hide();
 		$(".altui-mainpanel")
 			.off("click")
+			.on("click",".altui-trigger-mode",function(e) {
+				$(".altui-trigger-mode").removeClass("active btn-primary");
+				$(this).addClass("active btn-primary");
+			})
 			.on("click",".altui-luatrigger",function() { 
 				var id = parseInt($(this).prop('id'));
 				LuaEditor.openDialog( scene.triggers[id].lua !=undefined ? scene.triggers[id].lua : "" , function(code){
@@ -4777,8 +4792,16 @@ var SceneEditor = function (scene) {
 				scene.name = $("#altui-scene-name-input").val();
 				if (scene.paused==undefined)
 					scene.paused=0;
-
+				
+				//UI7 only features
 				if (UIManager.UI7Check()==true) {
+					//trigger mode
+					if ( $("#altui-trigger-and").hasClass("active") ) {
+						scene.triggers_operator = "AND"
+					} else {
+						scene.triggers_operator = "OR"
+					}
+					// house more
 					scene.modeStatus = HouseModeEditor.getSelectedModes();
 				}
 
