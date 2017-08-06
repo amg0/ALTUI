@@ -4627,7 +4627,7 @@ var SceneEditor = function (scene) {
 				var opmode = scene.triggers_operator || "OR"
 				html += UIManager.displayJson( 'Triggers', scene.triggers);
 				if (UIManager.UI7Check()==true) {
-					html += _T("Triggering logical mode") + ": "+ HTMLUtils.drawButtonGroup('altui-trigger-mode-grp', {
+					html += _T("Scene Trigger Evaluation mode") + ": "+ HTMLUtils.drawButtonGroup('altui-trigger-mode-grp', {
 						attr:"data-toggle='buttons'",
 						buttons: [
 							{id:"altui-trigger-or", label:"OR" , cls: "altui-trigger-mode " + ((opmode=="OR") ? "active btn-primary " : "") },
