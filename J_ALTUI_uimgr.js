@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2088 $";
+var ALTUI_revision = "$Revision: 2089 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -11681,11 +11681,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var margin = {top: 150, right: 10, bottom: 10, left: 150};
 			width = $(".altui-zwavechart-container").innerWidth() - margin.left - margin.right-30;
 			height = Math.min(width,available_height - margin.top - margin.bottom);
+			width = Math.max( width , data.length*11 )
+			height = Math.max( height , data.length*11 )
 			if (width<height)
 				height = width;
 			else
 				width = height;
-
+			
+				
 			chart = d3.select(".d3chart")
 				.attr("width", width + margin.left + margin.right)
 				.attr("height", height + margin.top + margin.bottom)
