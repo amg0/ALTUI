@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2090 $";
+var ALTUI_revision = "$Revision: 2091 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9792,6 +9792,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			scenes:		{ name:'Scenes' , bEnabled:true , update: updateScenes },
 			triggers: { name:'Triggers', bEnabled:true },
 			security: { name:'Security', bEnabled:true, update: updateDevices },
+			securityArmed: { name:'SecurityArmed', bEnabled:false, update: updateDevicesArmed },
 			watches:	{ name:'Watches' , bEnabled:true, update: updateWatches },
 			workflows:{ name:'Workflows', bEnabled:true, update: updateWorkflows },
 		}
@@ -9842,19 +9843,20 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return a.id - b.id;
 		}
 
-		function timelineAddDevice(device,bAddAllways) {
+		function timelineAddDevice(device, idprefix, group, bAddAllways, bArmedOnly) {
 			var lasttrip = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","LastTrip")
 			var tripped = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","Tripped")
+			var armed = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","Armed")
 			// var lastuntrip = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","LastUntrip")
 			// if (lastuntrip)
 					// lastuntrip = lasttrip+5000
 			// var end = ( lastuntrip && (lastuntrip>lasttrip)) ? new Date(lastuntrip*1000) : null
 			if (lasttrip && ((bAddAllways==true) || (tripped=="1")) ) {
-				if (!is_blacklisted("DLT_"+device.altuiid)) {
+				if ( (!is_blacklisted("DLT_"+device.altuiid)) && ( (bArmedOnly==false) || (armed==true)) ) {
 
 					items.update({
-						id: 'DLT_{0}_{1}'.format(device.altuiid,lasttrip),
-						group:'security',	//security
+						id: '{2}_{0}_{1}'.format(device.altuiid,lasttrip,idprefix),
+						group:group,	//security
 						start: new Date(lasttrip*1000),
 						// end:end,
 						content: '<span title="{2}">{0} (<a class="altui-goto-device" data-altuiid="{1}">{1}</a>)</span>{3}'.format(device.name,device.altuiid,HTMLUtils.enhanceValue(lasttrip),removeGlyph),
@@ -9867,7 +9869,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function updateDevices() {
 			MultiBox.getDevices(
 				function(idx,device) {
-					timelineAddDevice(device,true)
+					timelineAddDevice(device, "DLT", 'security',true,false)	// all devices
+				},
+				null,
+				function(alldevices) {
+					// updateWatches()
+					// updateWorkflows()
+					// updateTimeline(groups,items)
+				}
+			)
+		}
+		
+		function updateDevicesArmed() {
+			MultiBox.getDevices(
+				function(idx,device) {
+					timelineAddDevice(device,"ADLT", 'securityArmed', true,true) // armed only devices
 				},
 				null,
 				function(alldevices) {
@@ -10014,9 +10030,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					timeline.on("rangechanged",function(properties) {
 						MyLocalStorage.setSettings("TimelineRange",properties)
 					})
-					// EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function( event,device) {
-						// timelineAddDevice(device)
-					// });
+
 					function _refreshItems(id,data) {
 						$.each(filters, function(k,v) {
 								if (v.update)
@@ -10035,8 +10049,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		// https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css
 		UIManager.clearPage('Timeline',_T("Timeline"),UIManager.oneColumnLayout);
-		_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.17.0/', function() {
-			_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.17.0/',function() {
+		_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/', function() {
+			_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/',function() {
 				_loadCSSText("div.vis-label , div.vis-text { color: "+getCSS('color','text-primary')+" !important;	}")
 				items = new vis.DataSet();			// Create a DataSet (allows two way data-binding)
 				// itemsview = new vis.DataView( items , {
