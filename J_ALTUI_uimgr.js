@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2089 $";
+var ALTUI_revision = "$Revision: 2090 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8393,6 +8393,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			function handleDblClick(cellView, evt, x, y) {
 				var id = cellView.model.id;
 				var cell = graph.getCell(id);
+				if (cell==null) {
+					// in this situation, jointjs started to create a new link, we are interested by the source state
+					cell = graph.getCell( cellView.model.attributes.source.id )
+				}
 				var json = graph.toJSON();
 				WorkflowManager.setGraph(workflow.altuiid,JSON.stringify(json));
 				var bSave = _getSaveNeeded();
@@ -8420,14 +8424,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					if (isStartNode(cell)) {
 						var Model = {
 							name: "Start",
-							prop: WorkflowManager.getLinkProperties( cellView.model.attributes.prop ),
+							prop: WorkflowManager.getLinkProperties( cell.attributes.prop ),
 							smooth:false
 						}
 						onPropertyLink(workflow,Model,function(Model){
 							if (Model) {
 								// cannot change name of start state
 								// cellView.model.label(0,{ position: 0.5, attrs: { text: { text: Model.name } }});
-								cellView.model.attributes.prop = Model.prop;
+								cell.attributes.prop = Model.prop;
 								_saveGraph();
 							}
 							_.defer(UIControler.changePage,"Workflow",[workflow.altuiid])

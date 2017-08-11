@@ -3109,9 +3109,25 @@ var WorkflowManager = (function() {
 		return false;
 	};
 	function _Start() {
+		// joint.shapes.fsa.myStartState = joint.shapes.fsa.StartState.extend({
+			// markup: '<g class="rotatable"><g class="scalable"><circle/></g><text/></g>',
+			// defaults: _.defaultsDeep({
+				// type: 'fsa.myStartState',
+				// size: { width: 20, height: 20 },
+				// attrs: {
+					// circle: {
+					// transform: 'translate(10, 10)',
+					// r: 10,
+					// fill: '#000000'
+					// }
+				// }
+			// }, 
+			// joint.shapes.fsa.StartState.prototype.defaults)
+		// });
 		var m1 = new joint.shapes.fsa.StartState({
 			position: { x: 5, y: 5 },
 			attrs: {
+				// text : { "text": "ST" , 'font-weight': '200' , 'font-size':'.8em'},
 				'circle': { magnet: true , fill: '#2ECC71' }
 			},
 			// custom attributes
