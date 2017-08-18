@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2091 $";
+var ALTUI_revision = "$Revision: 2092 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7221,6 +7221,54 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",_sceneFilter.isValid());
 			_drawScenes(_sceneInThisRoom,false);	// do not redraw toolbar
 		};
+		
+		function _getActionsFromState() {
+			var actions = []
+			var map = {
+				"urn:schemas-upnp-org:device:BinaryLight:1": {
+					state:"Status",
+					service:"urn:upnp-org:serviceId:SwitchPower1",
+					action: "SetTarget",
+					action_argument:"newTargetValue"
+				},
+				"urn:schemas-upnp-org:device:DimmableLight:1": {
+					state:"LoadLevelStatus",
+					service:"urn:upnp-org:serviceId:Dimming1",
+					action: "SetLoadLevelTarget",
+					action_argument:"newLoadlevelTarget"
+				},
+				"urn:schemas-micasaverde-com:device:MotionSensor:1": {
+					state:"Armed",
+					service:"urn:micasaverde-com:serviceId:SecuritySensor1",
+					action: "SetArmed",
+					action_argument:"newArmedValue"
+				},
+				"urn:schemas-micasaverde-com:device:DoorSensor:1": {
+					state:"Armed",
+					service:"urn:micasaverde-com:serviceId:SecuritySensor1",
+					action: "SetArmed",
+					action_argument:"newArmedValue"
+				}
+			}
+			$.each( MultiBox.getDevicesSync(), function( idx,dev ) {
+				if (map[dev.device_type || "x"] != null) {
+					var state = MultiBox.getStatus( dev, map[dev.device_type].service, map[dev.device_type].state)
+					actions.push({
+						"device": dev.id,
+						"service": map[dev.device_type].service,
+						"action": map[dev.device_type].action,
+						"arguments": [
+						  {
+							"name": map[dev.device_type].action_argument,
+							"value": state
+						  }
+						]
+					})
+				}
+			});
+			return actions
+		};
+			
 		function _drawSceneToolbar() {
 			var toolbarHtml="";
 			$.when( _drawRoomFilterButtonAsync( _sceneFilter.room ) )
@@ -7229,12 +7277,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				toolbarHtml+="	<button type='button' class='btn btn-default' id='altui-scene-create' >";
 				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create"));
 				toolbarHtml+="	</button>";
+				toolbarHtml+="	<button type='button' class='btn btn-default' id='altui-scene-create-fromstate' >";
+				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create From State"));
+				toolbarHtml+="	</button>";
 				$(".altui-scene-toolbar").replaceWith( "<div class='altui-scene-toolbar'>"+toolbarHtml+"</div>" );
 
 				$("#altui-scene-create").click( function() {
 					UIControler.changePage('Scene Edit',[NULL_SCENE])
 				});
-
+				$("#altui-scene-create-fromstate").click( function() {
+					var actions = _getActionsFromState()
+					var scenetemplate = {
+							groups: [{"delay":0,"actions":actions}]
+					};
+					// clear page
+					UIControler.changePage('Scene Edit',[NULL_SCENE,scenetemplate])
+				});
 				// multiselect
 				$('#altui-device-room-filter').multiselect({
 					disableIfEmpty: true,
