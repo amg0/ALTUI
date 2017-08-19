@@ -471,7 +471,8 @@ Localization.init( {
 	"Muted":"Muted",
 	"Unmuted":"Unmuted",
 	"Pause":"Pause",
-	"Scene Trigger Evaluation mode":"Mode d'évaluation des déclencheurs"		
+	"Scene Trigger Evaluation mode":"Mode d'évaluation des déclencheurs",
+	"Create From State":"Créer de l\'état courant"		
 });
 
 // override rules with localized version
