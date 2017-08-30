@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2093 $";
+var ALTUI_revision = "$Revision: 2095 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3059,7 +3059,10 @@ var UIManager  = ( function( window, undefined ) {
 						ALTUI_PluginDisplays.toggleButton(devid, "div#altui-device-msb-"+uniqid, state.Display.Service, state.Display.Variable, function(id,newval) {
 							var parameters = {};
 							var whichone = (bInverted) ? newval : 1-newval;
-							parameters[ control.states[whichone].Command.Parameters[0].Name ] = control.states[whichone].Command.Parameters[0].Value;
+							// parameters[ control.states[whichone].Command.Parameters[0].Name ] = control.states[whichone].Command.Parameters[0].Value;
+							$.each( control.states[whichone].Command.Parameters || [], function( idx, param ) {
+								parameters[ param.Name ] = param.Value;
+							});
 							MultiBox.runAction( device,
 								control.states[whichone].Command.Service, control.states[whichone].Command.Action,
 								parameters );
@@ -3161,7 +3164,15 @@ var UIManager  = ( function( window, undefined ) {
 						  },
 						  change: function( event, ui ) {
 							var params={};
-							params[ control.Command.Parameters[0].Name ] = ui.value;
+							// OLD code
+							// params[ control.Command.Parameters[0].Name ] = ui.value;
+							// NEW code
+							$.each( control.Command.Parameters || [], function( idx, param ) {
+								if (param.Value)
+									params[ param.Name ] = param.Value
+								if (param.ID)
+									params[ param.Name ] = ui.value
+							});
 							MultiBox.runAction( device, control.Command.Service, control.Command.Action, params, null );
 						  }
 						});
@@ -3238,7 +3249,13 @@ var UIManager  = ( function( window, undefined ) {
 						  },
 						  change: function( event, ui ) {
 							var params={};
-							params[ control.Command.Parameters[0].Name ] = ui.value/10;
+							// OLD code : params[ control.Command.Parameters[0].Name ] = ui.value/10;
+							$.each( control.Command.Parameters || [], function(idx,param) {
+								if (param.Value )
+									params[ param.Name ] = param.Value;
+								if (param.ID ) // imperfect, but generally works
+									params[ param.Name ] = ui.value/10;
+							});
 							MultiBox.runAction( device, control.Command.Service, control.Command.Action, params, null );
 						  }
 						});
