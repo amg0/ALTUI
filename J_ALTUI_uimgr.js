@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2095 $";
+var ALTUI_revision = "$Revision: 2096 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5699,7 +5699,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	};
 
 	function _getActivePageName() {
-		return $("#altui-page-tabs li.active").text();
+		var str = $("#altui-page-tabs li.active").text();
+		if (str.length != 0)
+			return str
+		str = $(".altui-page-content-one.active").prop("id");
+		return str.substr("altui-page-content-".length);
+		// return $("#altui-page-tabs li.active").text();
 		// return pagename != undefined ? pagename.substring( "altui-page-".length) : '';
 	};
 
@@ -10440,15 +10445,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		if (page)
 				UIManager.setCrumbTitle(page.name);
 
-		// lean layout if requested
-		if ( getQueryStringValue("Layout") == 'lean') {
-			$("#altui-pagemessage").remove();
-			$(".navbar-fixed-top").remove();
-			$("ul.nav-tabs").remove();
-			$(".container-fluid").css("margin-top","-60px");
-			$(".container-fluid").find(".col-xs-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
-		}
-
 		var pageTabs = _createPageTabsHtml( false, nPage ) ;
 		var Html = "<div class='tab-content altui-page-contents'>";
 		PageManager.forEachPage( function( idx, page) {
@@ -10460,9 +10456,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$('#altui-page-tabs li:eq({0}) a'.format((nPage==-1) ? 0 : nPage)).tab('show');
 
 		// lean layout if requested
-		if ( getQueryStringValue("Layout") == 'lean') {
-			$("ul.nav-tabs").remove();
-		}
+		// if ( getQueryStringValue("Layout") == 'lean') {
+			// $("ul.nav-tabs").remove();
+		// }
 		_updateDynamicDisplayTools( false );
 		$('a[data-toggle="tab"]').off('shown.bs.tab').on('shown.bs.tab', function (e) {
 			// $(e.target) = newly activated tab. its parent is the LI, parent of parent is collection of LIs
@@ -10473,6 +10469,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// now artificially pushing a UIController state to be able to go back
 			HistoryManager.pushState( 'Custom Pages', "", [nPage], UIManager.pageUsePages,UIManager);
 		})
+				// lean layout if requested
+		if ( getQueryStringValue("Layout") == 'lean') {
+			$("#altui-pagemessage").remove();
+			$(".navbar-fixed-top").remove();
+			$("ul.nav-tabs").remove();
+			$(".container-fluid").css("margin-top","-60px");
+			$(".container-fluid").find(".col-xs-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
+		}
 	},
 
 	pageEditPages: function ()
