@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2096 $";
+var ALTUI_revision = "$Revision: 2097 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -816,6 +816,12 @@ var styles ="						\
 		padding-bottom: 3px;\
 		padding-left: 5px;\
 	}\
+	div.altui-workflow-body {\
+		padding-top: 3px;\
+		padding-right: 5px;\
+		padding-bottom: 3px;\
+		padding-left: 5px;\
+	}\
 	#altui-device-filter-form { \
 		margin-top:5px;			\
 	}\
@@ -834,7 +840,7 @@ var styles ="						\
 	.form-inline > * {	\
 		margin:5px 3px;	\
 	}					\
-	div.altui-scene-body button {	\
+	div.altui-scene-body button, div.altui-workflow-body button {	\
 		margin-left:1px;			\
 		margin-right:1px;			\
 		margin-top:1px;				\
@@ -7707,6 +7713,94 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		})
 	},
 
+	pageCloneWorkflow: function ( altuiid ) {
+		var IDmap = {};
+		var allDevices = MultiBox.getDevicesSync();
+		function _fixID(oldid) {
+			var v = IDmap[ oldid ]
+			if (v==undefined) {
+				v = joint.util.uuid();
+				IDmap[ oldid ] = v;
+			}
+			return v;
+		};
+		function _createCloneWorkflowModel(workflow) {
+			var model = {
+				workflow:cloneObject(workflow),
+				devices:{}
+			}
+			// first, fix the jointjs ID of all states, source and target ids.
+			// for each device in conditions or in actions, prepare a substitution entry.
+			var graph = JSON.parse(model.workflow.graph_json)
+			graph.active_state = _fixID( graph.active_state );
+			$.each(graph.cells, function(idx,cell) {
+				cell.id = _fixID(cell.id)
+				if (cell.source && cell.source.id)
+					cell.source.id = _fixID(cell.source.id)
+				if (cell.target && cell.target.id)
+					cell.target.id = _fixID(cell.target.id)
+				$.each( cell.prop.onEnter ||[] , function(idx,onenter) {
+					model.devices[onenter.device]={}
+				});
+				$.each( cell.prop.onExit ||[] , function(idx,onexit) {
+					model.devices[onexit.device]={}
+				});
+				$.each( cell.conditions ||[] , function(idx,cond) {
+					model.devices[cond.device]={}
+				});
+			});
+			model.workflow.graph_json = JSON.stringify(graph)
+			
+			return model
+		};
+		
+		function _displayCloneWorkflow(model) {
+			// WorkflowManager.addWorkflow( model.workflow );
+			// var graph =  JSON.parse(model.workflow.graph_json)
+			// return '<pre>{0}</pre>'.format(JSON.stringify(graph,null,2))
+			var html = "<table class='table'>";
+			html += "<caption>Device Substitution Table</caption>";
+			html += "<thead>";
+			html += "<tr>";
+			html += "<th>";
+			html += "ID</th>";
+			html += "<th>";
+			html += "Device</th>";
+			html += "<th>";
+			html += "Type</th>";
+			html += "<th>";
+			html += "Replaced By</th>";
+			html += "</tr>";
+			html += "</thead>";
+			html += "<tbody>";
+			$.each(model.devices, function(prop,value) {
+				var device = MultiBox.getDeviceByAltuiID(prop);
+				if (device) {
+					var samedevices = allDevices.filter( function(d) { return d.device_type == device.device_type} )
+					var select = HTMLUtils.drawSelect({
+						id:'altui-select-version' ,
+						options: $.map(samedevices, function(d) { return {text: "{0} (#{1})".format(d.name,d.altuiid), value: d.altuiid, selected:(d.altuiid==prop)} }),
+						// selected_idx:index+1	// no +1 because Create as the added at the end for this one
+					});				
+					html += "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>".format(prop,device.name || "",device.device_type,select)
+				}
+			});
+			html += "</tbody>";
+			html +="</table>"
+			html +="<button type='submit' class='btn btn-default altui-workflow-clonebutton'>"+_T("Submit")+"</button>";
+			return html;
+		};
+		
+		var workflow = WorkflowManager.getWorkflow(altuiid);
+		if (workflow==null)
+			return;
+
+		UIManager.clearPage('Clone Workflow',_T("Clone Workflow"),UIManager.oneColumnLayout);
+		var model = _createCloneWorkflowModel(workflow);
+		var html = _displayCloneWorkflow(model);
+		$(".altui-mainpanel").append(html);
+	},
+	
 	pageWorkflow: function ( altuiid ) {
 		var workflow = WorkflowManager.getWorkflow(altuiid);
 		if (workflow==null) return;
@@ -8848,7 +8942,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
 			$.each(workflows, function(idx,workflow) {
 				// 0:bootgrid classes 1:altuiid 2:htmlid 3: heading 4:panel body
-				var body = buttonTemplate.format( workflow.altuiid, 'altui-editworkflow pull-left', wrenchGlyph,'default',_T("Settings"));
+				var body = 
+					buttonTemplate.format( workflow.altuiid, 'altui-editworkflow pull-left', wrenchGlyph,'default',_T("Settings")) + 
+					buttonTemplate.format( workflow.altuiid, 'altui-cloneworkflow pull-left', copyGlyph,'default',_T("Clone"));
 				var pauseButtonHtml = glyphTemplate.format( "off", _T("Pause Workflow") , 'altui-pauseworkflow ' + ((workflow.paused>0) ? 'paused':'activated'));
 				html += ALTUI_Templates.workflowContainerTemplate.format(
 					"col-sm-6 col-md-4 col-lg-3",
@@ -8943,6 +9039,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.on('click',".altui-editworkflow",function() {
 				var altuiid = $(this).prop('id');
 				UIControler.changePage("Workflow",[altuiid])
+			})
+			.on('click',".altui-cloneworkflow",function() {
+				var altuiid = $(this).prop('id');
+				UIControler.changePage("Clone Workflow",[altuiid])
 			})
 			.on('click',".altui-workflow-title-name",function(event) {
 				if ( $(this).find("input").length>=1 )
@@ -14397,9 +14497,10 @@ var UIControler = (function(win) {
 			'Timeline':					{ id:38, title:'Timeline',				htmlid:"#menu_timeline", onclick:UIManager.pageTimeline, parent:0 },
 			'My Rooms':					{ id:39, title:'My Rooms',				htmlid:"#menu_myhome", onclick:UIManager.pageMyHome, args:["Room"], parent:0 },
 			'My Scenes':				{ id:41, title:'My Scenes',				htmlid:"#menu_myscenes", onclick:UIManager.pageMyHome, args:["Scene"], parent:39 },
-			'My Covers':				{ id:40, title:'My Covers',					onclick:UIManager.pageMyHome, args:["Cover"], parent:39 },
-			'My Sensors':				{ id:41, title:'My Sensors',				onclick:UIManager.pageMyHome, args:["Sensor"], parent:39 },
-			'My Devices':				{ id:42, title:'My Devices',				onclick:UIManager.pageMyHome, args:["Other"], parent:39 },
+			'My Covers':				{ id:40, title:'My Covers',				onclick:UIManager.pageMyHome, args:["Cover"], parent:39 },
+			'My Sensors':				{ id:41, title:'My Sensors',			onclick:UIManager.pageMyHome, args:["Sensor"], parent:39 },
+			'My Devices':				{ id:42, title:'My Devices',			onclick:UIManager.pageMyHome, args:["Other"], parent:39 },
+			'Clone Workflow':		{ id:43, title:'Clone Workflow',			onclick:UIManager.pageCloneWorkflow, parent:31 },
 	};
 	return {
 		addPage: function (page) {

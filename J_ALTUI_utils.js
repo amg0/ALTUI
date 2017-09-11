@@ -112,7 +112,7 @@ var ALTUI_Templates_Factory= function() {
 		_workflowContainerTemplate	+= 		"<div class='panel panel-default altui-workflow' data-altuiid='{1}' id='{2}'>"
 		_workflowContainerTemplate	+= 		"<div class='panel-heading altui-workflow-heading'>{6} <span class='altui-workflow-title-name'>{3}</span>{4}<div class='text-muted pull-right'> <small>#{1}</small> </div>"
 		_workflowContainerTemplate	+= 	  	"</div>";
-		_workflowContainerTemplate	+= 		"<div class='panel-body'>{5}"
+		_workflowContainerTemplate	+= 		"<div class='panel-body altui-workflow-body'>{5}"
 		_workflowContainerTemplate	+= 	  	"<div class='altui-active-state-name'></div>";
 		_workflowContainerTemplate	+= 	  	"</div>";
 		_workflowContainerTemplate	+= 	  	"</div>";
@@ -1847,18 +1847,22 @@ var HTMLUtils = (function() {
 		toolbarHtml+="</div>";	
 		return "<div class='{0}'>{1}</div>" .format(htmlid,toolbarHtml);
 	};
+	function _drawSelect( model ) {
+		var html ="<select class='form-control' id='{0}'>".format(model.id)
+		$.each( model.options, function(i,opt) {
+			html += "<option {2} value='{0}'>{1}</option>".format(opt.value, opt.text,((opt.selected==true) || (i==model.selected_idx)) ? 'selected':'')	
+		});
+		html += "</select>"
+		return html;
+	};
 	function _drawFormFields( model  ) {
 		var html ="";
 		$.each(model, function(idx,line) {
 			html += "<div class='form-group'>"
 			switch(line.type) {
 				case "select": 
-					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
-					html += "<select class='form-control' id='{0}'>".format(line.id)
-					$.each( line.options, function(i,opt) {
-						html += "<option {2} value='{0}'>{1}</option>".format(opt.value, opt.text,(i==line.selected_idx) ? 'selected':'')	
-					});
-					html += "</select>"
+					html += "<label for='{0}'>{1}</label>".format(line.id,line.label || "");
+					html += _drawSelect( {id:line.id, options:options, selected_idx:line.selected_idx} );
 					break;
 				case "p":
 				case "span":
@@ -1988,6 +1992,7 @@ var HTMLUtils = (function() {
 		createAccordeon : _createAccordeon,		// (panels)
 		drawButtonGroup : _drawButtonGroup,
 		drawToolbar 	: _drawToolbar,
+		drawSelect		: _drawSelect,
 		drawFormFields	: _drawFormFields,		
 		drawForm		: _drawForm,
 		startTimer		: _startTimer,
@@ -2869,7 +2874,7 @@ var WorkflowManager = (function() {
 		_saveW(0);
 	};
 	
-	function _addWorkflow() {
+	function _addWorkflow(workflow) {
 		var altuiid="";
 		if (_workflows.length==0)
 			altuiid="0-1";
@@ -2878,7 +2883,7 @@ var WorkflowManager = (function() {
 			var splits = last.split("-");
 			altuiid = "0-"+(parseInt(splits[1])+1)
 		}
-		_workflows.push( $.extend(true,{},_def_workflow,{ altuiid:altuiid, name:'Workflow '+altuiid }) );		
+		_workflows.push( $.extend(true, {}, _def_workflow, workflow || {}, { altuiid:altuiid, name:'Workflow '+altuiid }) );		
 		_saveNeeded = true;
 	};
 	
