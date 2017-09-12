@@ -1848,7 +1848,7 @@ var HTMLUtils = (function() {
 		return "<div class='{0}'>{1}</div>" .format(htmlid,toolbarHtml);
 	};
 	function _drawSelect( model ) {
-		var html ="<select class='form-control' id='{0}'>".format(model.id)
+		var html ="<select class='form-control {1}' id='{0}'>".format(model.id,model.class)
 		$.each( model.options, function(i,opt) {
 			html += "<option {2} value='{0}'>{1}</option>".format(opt.value, opt.text,((opt.selected==true) || (i==model.selected_idx)) ? 'selected':'')	
 		});
@@ -2883,7 +2883,7 @@ var WorkflowManager = (function() {
 			var splits = last.split("-");
 			altuiid = "0-"+(parseInt(splits[1])+1)
 		}
-		_workflows.push( $.extend(true, {}, _def_workflow, workflow || {}, { altuiid:altuiid, name:'Workflow '+altuiid }) );		
+		_workflows.push( $.extend(true, {}, _def_workflow, { altuiid:altuiid, name:'Workflow '+altuiid } , workflow || {}) );		
 		_saveNeeded = true;
 	};
 	
@@ -4694,7 +4694,7 @@ var SceneEditor = function (scene) {
 		}
 
 		var jsonbutton = {id:'', class:'altui-toggle-json pull-right', label:'json', title:'json' };
-		var htmlSceneEditButton = "  <button type='submit' class='btn btn-default altui-scene-editbutton'>"+_T("Submit")+"</button>";
+		var htmlSceneEditButton = "  <button type='submit' class='btn btn-primary pull-right altui-scene-editbutton'>"+_T("Submit")+"</button>";
 		var html="";
 		html += HTMLUtils.createAccordeon('altui-scene-editor',panels,jsonbutton,scene.altuiid );
 		html += BlocklyArea.createBlocklyArea();

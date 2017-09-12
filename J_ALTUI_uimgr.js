@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2097 $";
+var ALTUI_revision = "$Revision: 2098 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1159,7 +1159,7 @@ var styles ="						\
 	.altui-timers , .altui-timer-instance {\
 	}\
 	.altui-active-state-name {\
-		padding-left: 50px;\
+		padding-left: 90px;\
 	}\
 	.altui-state-name {\
 		font-size: 20px;	\
@@ -7724,11 +7724,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 			return v;
 		};
+		
 		function _createCloneWorkflowModel(workflow) {
 			var model = {
 				workflow:cloneObject(workflow),
 				devices:{}
 			}
+			model.workflow.name = _T("Clone of {0}").format(workflow.name);
 			// first, fix the jointjs ID of all states, source and target ids.
 			// for each device in conditions or in actions, prepare a substitution entry.
 			var graph = JSON.parse(model.workflow.graph_json)
@@ -7745,7 +7747,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$.each( cell.prop.onExit ||[] , function(idx,onexit) {
 					model.devices[onexit.device]={}
 				});
-				$.each( cell.conditions ||[] , function(idx,cond) {
+				$.each( cell.prop.conditions ||[] , function(idx,cond) {
 					model.devices[cond.device]={}
 				});
 			});
@@ -7754,11 +7756,29 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return model
 		};
 		
+		function _changeWorkflowDevices(model) {
+			var graph = JSON.parse(model.workflow.graph_json)
+			$.each(graph.cells, function(idx,cell) {
+				$.each( cell.prop.onEnter ||[] , function(idx,onenter) {
+					onenter.device = model.devices[ onenter.device ] || onenter.device
+				});
+				$.each( cell.prop.onExit ||[] , function(idx,onexit) {
+					onexit.device = model.devices[ onexit.device ] || onexit.device
+				});
+				$.each( cell.prop.conditions ||[] , function(idx,cond) {
+					cond.device = model.devices[cond.device] || cond.device
+				});
+			})
+			model.workflow.graph_json = JSON.stringify(graph);
+			return model.workflow;
+		};
+		
 		function _displayCloneWorkflow(model) {
 			// WorkflowManager.addWorkflow( model.workflow );
 			// var graph =  JSON.parse(model.workflow.graph_json)
 			// return '<pre>{0}</pre>'.format(JSON.stringify(graph,null,2))
-			var html = "<table class='table'>";
+			var html = "<div class='col-xs-12'>"
+			html +="<table class='table'>";
 			html += "<caption>Device Substitution Table</caption>";
 			html += "<thead>";
 			html += "<tr>";
@@ -7778,7 +7798,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				if (device) {
 					var samedevices = allDevices.filter( function(d) { return d.device_type == device.device_type} )
 					var select = HTMLUtils.drawSelect({
-						id:'altui-select-version' ,
+						id:prop ,
+						class:'altui-select-version',
 						options: $.map(samedevices, function(d) { return {text: "{0} (#{1})".format(d.name,d.altuiid), value: d.altuiid, selected:(d.altuiid==prop)} }),
 						// selected_idx:index+1	// no +1 because Create as the added at the end for this one
 					});				
@@ -7787,7 +7808,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 			html += "</tbody>";
 			html +="</table>"
-			html +="<button type='submit' class='btn btn-default altui-workflow-clonebutton'>"+_T("Submit")+"</button>";
+			html +="<button id='altui-workflow-clonebutton' type='submit' class='btn btn-primary pull-right'>"+_T("Submit")+"</button>";
+			html +="</div>"
 			return html;
 		};
 		
@@ -7799,6 +7821,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var model = _createCloneWorkflowModel(workflow);
 		var html = _displayCloneWorkflow(model);
 		$(".altui-mainpanel").append(html);
+		$("#altui-workflow-clonebutton").off().on('click',model,function(event){
+			var model = event.data
+			// collect all replacement devices
+			$(".altui-select-version").each(function(){ model.devices[$(this).prop('id')]=$(this).val() })
+			// fix the workflow
+			var workflow = _changeWorkflowDevices( model );
+			// add the workflow
+			WorkflowManager.addWorkflow(workflow);
+			UIControler.changePage("Workflow Pages")
+		});
 	},
 	
 	pageWorkflow: function ( altuiid ) {
@@ -8960,11 +8992,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 
 		UIManager.clearPage('Workflow Pages',_T("Workflow Pages"),UIManager.oneColumnLayout);
-		$("#altui-pagetitle").css("display","inline").after("<div class='altui-workflow-toolbar'></div>");
-
 		if (MultiBox.isWorkflowEnabled() == false) {
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
 		}
+		$("#altui-pagetitle").css("display","inline").after("<div class='altui-workflow-toolbar'></div>");
+		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsMain ) );
 
 		UIManager.loadJointJSScript( function() {
 			// do the drawing now that scripts are loaded
@@ -9006,8 +9038,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		});
 		
-		// prepare the screen / toolbar and callbacks
-		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsMain ) );
+		// callbacks
 		$("#altui-workflow-create")
 			.on('click',function() {
 				WorkflowManager.addWorkflow();
@@ -9041,8 +9072,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				UIControler.changePage("Workflow",[altuiid])
 			})
 			.on('click',".altui-cloneworkflow",function() {
-				var altuiid = $(this).prop('id');
-				UIControler.changePage("Clone Workflow",[altuiid])
+				if (ALTUI_registered!=true) {
+					$(".altui-mainpanel").prepend( "<div class='alert alert-warning alert-dismissible' role='alert'><button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button><p class='bg-danger'>{0}</p></div>".format(_T("Clone Workflow feature is only available for registered users") ))
+				} else {
+					var altuiid = $(this).prop('id');
+					UIControler.changePage("Clone Workflow",[altuiid])
+				}
 			})
 			.on('click',".altui-workflow-title-name",function(event) {
 				if ( $(this).find("input").length>=1 )
