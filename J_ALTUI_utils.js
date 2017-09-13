@@ -2883,6 +2883,7 @@ var WorkflowManager = (function() {
 			var splits = last.split("-");
 			altuiid = "0-"+(parseInt(splits[1])+1)
 		}
+		delete workflow.altuiid	// make sure we use the new ALTUIID
 		_workflows.push( $.extend(true, {}, _def_workflow, { altuiid:altuiid, name:'Workflow '+altuiid } , workflow || {}) );		
 		_saveNeeded = true;
 	};
