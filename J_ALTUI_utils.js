@@ -1862,7 +1862,7 @@ var HTMLUtils = (function() {
 			switch(line.type) {
 				case "select": 
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label || "");
-					html += _drawSelect( {id:line.id, options:options, selected_idx:line.selected_idx} );
+					html += _drawSelect( {id:line.id, options:line.options, selected_idx:line.selected_idx} );
 					break;
 				case "p":
 				case "span":
