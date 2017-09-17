@@ -172,9 +172,9 @@ function altui_Settings(deviceID) {
 	  }\
 	  </style>';
 
-	var htmlOpenLocal= '<button class="btn btn-default btn-sm" id="altui-open-local">Local</button>';
+	var htmlOpenLocal= '<button class="btn btn-secondary btn-sm" id="altui-open-local">Local</button>';
 	var htmlHome = '<span id="altui-home" class="altui-ui-input" ></span>';
-	var htmlRemote= '<button class="btn btn-default btn-sm" id="altui-open-remote">Remote</button>';
+	var htmlRemote= '<button class="btn btn-secondary btn-sm" id="altui-open-remote">Remote</button>';
 	var htmlConfig = '<textarea id="altui-config" rows="6" cols="70"></textarea>';
 	var htmlTheme = '<input id="altui-theme" class="altui-ui-input form-control" placeholder="Url to download a theme css"></input>';
 	var htmlBackground = '<input id="altui-background-js" class="altui-ui-input form-control" placeholder="Url to download a background image"></input>';
@@ -183,9 +183,9 @@ function altui_Settings(deviceID) {
 	var htmlBootstrap = '<input id="altui-localbootstrap" class="altui-ui-input form-control" placeholder="optional local bootstrap relative url, use internet otherwise"></input>';
 	var htmlCTRL = '<input id="altui-ctrl" class="altui-ui-input form-control" placeholder="Comma separated list of ip_addr for extra controllers"></input>';
 	var htmlApiKey = '<input id="altui-apikey" class="altui-ui-input form-control" placeholder="Your VoiceRSS API Key"></input>';
-	var htmlSetConfig= '<button class="btn btn-default btn-sm" id="altui-setconfig">Set Configuration</button>';
-	var htmlResetConfig= '<button class="btn btn-default btn-sm" id="altui-resetconfig">Default Configuration</button>';
-	var htmlViewJson = '<button class="btn btn-default btn-sm" id="altui-viewconfig">View Configuration</button>';
+	var htmlSetConfig= '<button class="btn btn-secondary btn-sm" id="altui-setconfig">Set Configuration</button>';
+	var htmlResetConfig= '<button class="btn btn-secondary btn-sm" id="altui-resetconfig">Default Configuration</button>';
+	var htmlViewJson = '<button class="btn btn-secondary btn-sm" id="altui-viewconfig">View Configuration</button>';
 	var htmlUrlOptions = altui_buildUrlOptions(deviceID)
 	var html =
 		style+
@@ -304,7 +304,7 @@ function altui_Settings(deviceID) {
 
 function altui_AfterInit(deviceID) {
 	var i=0;
-	var htmlOpenLocal= '<h3>ALTUI Home Page</h3><button class="btn btn-default btn-sm" id="altui-open-local">Open</button><h3>Settings</h3>';
+	var htmlOpenLocal= '<h3>ALTUI Home Page</h3><button class="btn btn-secondary btn-sm" id="altui-open-local">Open</button><h3>Settings</h3>';
 	if (altui_api)
 		altui_api.setCpanelContent("<div>"+htmlOpenLocal+"</div>");	
 	else

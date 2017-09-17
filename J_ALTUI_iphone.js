@@ -72,18 +72,18 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		var device = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		
 		var html ="";
-		html += "<div class='col-xs-12'>";
+		html += "<div class='col-12'>";
 			html += "<h3>Pick a device:</h3>"
 			html += "<div class='row'>";
-				html += "<div class='altui-panel-controls col-xs-6 '>";			
+				html += "<div class='altui-panel-controls col-6 '>";			
 
 					html += DialogManager.pickDevice(devices,device.altuiid,'altui-select-device')
 					var _recordMode = MultiBox.isRecording();
 					html += ALTUI_PluginDisplays.createOnOffButton( _recordMode==true ? 1 : 0,"altui-recordmode-"+device.altuiid, _T("Normal,Recorder") , "pull-left");
 				html += "</div>"
-				html += "<div class='col-xs-6 '>";			
+				html += "<div class='col-6 '>";			
 					html +="<div id='altui-display-box' class='row'>"
-						html += ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'altui-norefresh col-xs-12');	
+						html += ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'altui-norefresh col-12');	
 					html += "</div>";
 				html += "</div>";			
 			html +="</div>";
@@ -121,7 +121,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
 		var ip = device.ip;
 		if (ip) {
-			html+= ("<button id='altui-ipx-{0}' type='button' class='pull-right altui-wes btn btn-default btn-sm '>{1}</button>" .format( device.altuiid,_T("Open") )) ;
+			html+= ("<button id='altui-ipx-{0}' type='button' class='pull-right altui-wes btn btn-secondary btn-sm '>{1}</button>" .format( device.altuiid,_T("Open") )) ;
 			html += "<script type='text/javascript'>";
 			html += " $('button#altui-ipx-{0}').on('click', function() { window.open('http://{1}','_blank'); } );".format(device.altuiid,ip);
 			html += "</script>";
@@ -140,7 +140,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
 		var ip = device.ip;
 		if (ip) {
-			html+= ("<button id='altui-ipx-{0}' type='button' class='pull-right altui-ipx btn btn-default btn-sm '>{1}</button>" .format( device.altuiid,_T("Open") )) ;
+			html+= ("<button id='altui-ipx-{0}' type='button' class='pull-right altui-ipx btn btn-secondary btn-sm '>{1}</button>" .format( device.altuiid,_T("Open") )) ;
 			html += "<script type='text/javascript'>";
 			html += " $('button#altui-ipx-{0}').on('click', function() { window.open('http://{1}','_blank'); } );".format(device.altuiid,ip);
 			html += "</script>";
@@ -178,7 +178,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
 		if (ip) {
-			html+= ("<button id='altui-ksenia-{0}' type='button' class='pull-right altui-ksenia btn btn-default btn-sm '>{1}</button>" .format( device.altuiid,_T("Open") )) ;
+			html+= ("<button id='altui-ksenia-{0}' type='button' class='pull-right altui-ksenia btn btn-secondary btn-sm '>{1}</button>" .format( device.altuiid,_T("Open") )) ;
 			html += "<script type='text/javascript'>";
 			html += " $('button#altui-ksenia-{0}').on('click', function() { window.open('http://{1}','_blank'); } );".format(device.altuiid,ip);
 			html += "</script>";
@@ -198,10 +198,10 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	function _drawRAZBUNKIcon(device) {
 		var html ="";
 		var newsrc = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:razbunk1', 'IconCode' ); 
-		return "<img class='altui-device-icon pull-left img-rounded' src='"+newsrc+"' alt='' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+		return "<img class='altui-device-icon pull-left rounded' src='"+newsrc+"' alt='' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 	};
 
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawIPhone( device) {
 		var dist = Math.round( parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' ) * 100) )/100; 
 		var unit = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Unit' ); 
@@ -250,19 +250,19 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		html +="<div class=''>";
 		html += "<table id='altui-cplus-keytbl'>";
 		html += "<tbody>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='1'>1</button></td><td><button class='altui-cplus-button btn btn-default' id='2'>2</button></td><td><button class='altui-cplus-button btn btn-default' id='3'>3</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='4'>4</button></td><td><button class='altui-cplus-button btn btn-default' id='5'>5</button></td><td><button class='altui-cplus-button btn btn-default' id='6'>6</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='7'>7</button></td><td><button class='altui-cplus-button btn btn-default' id='8'>8</button></td><td><button class='altui-cplus-button btn btn-default' id='9'>9</button></td></tr>";
-		html+="<tr><td colspan='3'><button class='altui-cplus-button btn btn-default' id='0'>0</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Rewind'>Rewind</button></td><td><button class='altui-cplus-button btn btn-default' id='Play'>Play</button></td><td><button class='altui-cplus-button btn btn-default' id='Forward'>Forward</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Stop'>Stop</button></td><td><button class='altui-cplus-button btn btn-default' id='Pause'>Pause</button></td><td><button class='altui-cplus-button btn btn-default' id='Rec'>Rec</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='1'>1</button></td><td><button class='altui-cplus-button btn btn-secondary' id='2'>2</button></td><td><button class='altui-cplus-button btn btn-secondary' id='3'>3</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='4'>4</button></td><td><button class='altui-cplus-button btn btn-secondary' id='5'>5</button></td><td><button class='altui-cplus-button btn btn-secondary' id='6'>6</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='7'>7</button></td><td><button class='altui-cplus-button btn btn-secondary' id='8'>8</button></td><td><button class='altui-cplus-button btn btn-secondary' id='9'>9</button></td></tr>";
+		html+="<tr><td colspan='3'><button class='altui-cplus-button btn btn-secondary' id='0'>0</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='Rewind'>Rewind</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Play'>Play</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Forward'>Forward</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='Stop'>Stop</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Pause'>Pause</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Rec'>Rec</button></td></tr>";
 		html+="<tr><td colspan='3'>-</td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Menu'>Menu</button></td><td><button class='altui-cplus-button btn btn-default' id='Haut'>Haut</button></td><td><button class='altui-cplus-button btn btn-default' id='Guide'>Guide</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Gauche'>Gauche</button></td><td><button class='altui-cplus-button btn btn-default' id='Ok'>Ok</button></td><td><button class='altui-cplus-button btn btn-default' id='Droite'>Droite</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='Retour'>Retour</button></td><td><button class='altui-cplus-button btn btn-default' id='Bas'>Bas</button></td><td><button class='altui-cplus-button btn btn-default' id='Sortie'>Sortie</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='Menu'>Menu</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Haut'>Haut</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Guide'>Guide</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='Gauche'>Gauche</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Ok'>Ok</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Droite'>Droite</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='Retour'>Retour</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Bas'>Bas</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Sortie'>Sortie</button></td></tr>";
 		html+="<tr><td colspan='3'>-</td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='VOL+'>VOL+</button></td><td><button class='altui-cplus-button btn btn-default' id='Mute'>Mute</button></td><td><button class='altui-cplus-button btn btn-default' id='P+'>P+</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='VOL-'>VOL-</button></td><td><button class='altui-cplus-button btn btn-default' id='Info'>Info</button></td><td><button class='altui-cplus-button btn btn-default' id='P-'>P-</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='VOL+'>VOL+</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Mute'>Mute</button></td><td><button class='altui-cplus-button btn btn-secondary' id='P+'>P+</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='VOL-'>VOL-</button></td><td><button class='altui-cplus-button btn btn-secondary' id='Info'>Info</button></td><td><button class='altui-cplus-button btn btn-secondary' id='P-'>P-</button></td></tr>";
 		html += "</tbody>";
 		html += "</table>";
 		html +="</div>";

@@ -37,9 +37,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-blue, .btn.altui-blue { color:blue;}";
 		style += ".altui-orange { color:darkorange;}";
 		style += ".altui-magenta { color:magenta;}";
-		style += ".altui-multiswitch-container { position:absolute; left:58px; right:16px; } .altui-multiswitch-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-multiswitch-container .col-xs-3 { padding-left:1px; padding-right:1px; }  .altui-multiswitch-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
-		style += ".altui-heater-container { position:absolute; left:71px; right:16px; } .altui-heater-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-heater-container .col-xs-3 { padding-left:1px; padding-right:1px; text-align:center;}  .altui-heater-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
-		style += ".altui-heater-container select.input-sm { height:22px; padding:0;}"; 
+		style += ".altui-multiswitch-container { position:absolute; left:58px; right:16px; } .altui-multiswitch-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-multiswitch-container .col-3 { padding-left:1px; padding-right:1px; }  .altui-multiswitch-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
+		style += ".altui-heater-container { position:absolute; left:71px; right:16px; } .altui-heater-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-heater-container .col-3 { padding-left:1px; padding-right:1px; text-align:center;}  .altui-heater-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
+		style += ".altui-heater-container select.form-control-sm { height:22px; padding:0;}"; 
 		style += ".altui-weather1-day1 { position:absolute; bottom:0px; right:0px; transform: scale(0.5,0.5); }";
 		style += ".altui-cyan { color:cyan;}";
 		style += ".altui-countdown-btngrp,.altui-countdown-btngrp-mute  { margin-top:13px;}";
@@ -121,7 +121,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		else {
 			var onoffbuttonTemplate = "<div id='"+id+"' class='" + (extracls || '') +" btn-group' data-toggle='buttons'>";
 			$.each(str, function(idx,val) {
-				onoffbuttonTemplate+=("<label class='btn btn-default btn-sm {0}'> <input type='radio' name='options' autocomplete='off'>{1}</label>").format((parseInt(onoff)==idx)?'active':'',val);
+				onoffbuttonTemplate+=("<label class='btn btn-secondary btn-sm {0}'> <input type='radio' name='options' autocomplete='off'>{1}</label>").format((parseInt(onoff)==idx)?'active':'',val);
 			});
 			onoffbuttonTemplate+="</div>";
 			return onoffbuttonTemplate;
@@ -146,7 +146,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 	}
 	
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawCamera( device ) {
 		var video = (MyLocalStorage.getSettings('ShowVideoThumbnail') || 0)==1;
 		var urlHead = MultiBox.getUrlHead(device.altuiid) 
@@ -252,7 +252,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return html;
 	}
 
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawTempSensor( device) {
 		var html = "";
 		var ws = MultiBox.getWeatherSettings();
@@ -266,7 +266,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		
 	function _internaldrawZoneThermostat( device , userOperatingMode1Items,  userHVACFanOperatingMode1Items, isHeater) {
 		function _button(altuiid, colorclass, glyph, service, action, name, value, incr) {
-			return ("<button type='button' style='width:50%;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-default btn-xs' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format( 
+			return ("<button type='button' style='width:50%;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-secondary btn-sm' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format( 
 			altuiid,		// id
 			glyph,	// label
 			service,
@@ -322,12 +322,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html = "";
 		html += "<div class='altui-heater-container pull-right'>";
 			html += "<div class='row'>";
-				html += "<div class='col-xs-3'>";
+				html += "<div class='col-3'>";
 					html += ("<span class='altui-temperature' >"+((curTemp!=null) ? (parseFloat(curTemp).toFixed(1)+"&deg;"+ws.tempFormat) : "--") +"</span>");
 				html += "</div>";
 //Rene Boer start better drawing of thermostat for me. Else on large it spills below drawing box fo device
-//				html += "<div class='col-xs-3'>";
-				html += "<div class='col-xs-3 col-lg-4'>";
+//				html += "<div class='col-3'>";
+				html += "<div class='col-3 col-lg-4 col-xl-3'>";
 // Rene Boer end				
 					var heatsetpoint = heatsetpoint_target || parseFloat($("#altui-heatsetpoint-"+device.altuiid).text()) || heatsetpoint_current;
 					if (heatsetpoint!=null) {
@@ -339,8 +339,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					}
 				html += "</div>";
 //Rene Boer start
-//				html += "<div class='col-xs-3'>";
-				html += "<div class='col-xs-3 col-lg-4'>";
+//				html += "<div class='col-3'>";
+				html += "<div class='col-3 col-lg-4 col-xl-3'>";
 // Rene Boer end				
 					var coldsetpoint = coldsetpoint_target || parseFloat($("#altui-coldsetpoint-"+device.altuiid).text()) || coldsetpoint_current
 					if ((isHeater==false) && (coldsetpoint!=null)) {
@@ -351,16 +351,16 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 						html += ("<span class='altui-temperature-heater altui-blue' id='altui-coldsetpoint-"+device.altuiid+"'>"+parseFloat(coldsetpoint).toFixed(1)+"&deg;"+ws.tempFormat+"</span>");
 					}
 				html += "</div>";
-				html += "<div class='col-xs-3'>";
+				html += "<div class='col-3'>";
 					if (autosetpoint!=null) {
 						html += ("<span class='altui-temperature-heater' id='altui-autosetpoint-"+device.altuiid+"'>"+parseFloat(autosetpoint).toFixed(1)+"&deg;"+ws.tempFormat+"</span>");
 					}
 				html += "</div>";
 			html += "</div>";
 			html += "<div class='row'>";
-				html += "<div class='col-xs-3'>";
+				html += "<div class='col-3'>";
 					if (userOperatingMode1Items.length>0) {
-						html +="<select id='altui-heater-select-{0}' class='altui-heater-select form-control input-sm'>".format(device.altuiid);
+						html +="<select id='altui-heater-select-{0}' class='altui-heater-select form-control form-control-sm'>".format(device.altuiid);
 						$.each(userOperatingMode1Items, function(idx,item) {
 							html += "<option data-service='{1}' data-action='{2}' data-name='{3}' data-value='{4}' {5}>{0}</option>".format(
 								item.label,item.service,item.action,item.name,item.value,
@@ -369,7 +369,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 						html +="</select>";
 					}
 				html += "</div>";
-				html += "<div class='col-xs-3'>"; 
+				html += "<div class='col-3'>"; 
 					if (bNewControl == false) {
 						//UI5
 						html += _button(device.altuiid, "altui-red", upGlyph, 
@@ -398,7 +398,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 								);						
 					}
 				html += "</div>";
-				html += "<div class='col-xs-3'>";
+				html += "<div class='col-3'>";
 					if (bNewControl == false) {
 						//UI5
 						if (isHeater==false) {
@@ -428,9 +428,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 								);						
 					}				
 				html += "</div>";
-				html += "<div class='col-xs-3'>";
+				html += "<div class='col-3'>";
 					if (userHVACFanOperatingMode1Items.length>0) {
-						html +="<select id='altui-heater-select-{0}' class='altui-heater-select form-control input-sm'>".format(device.altuiid);
+						html +="<select id='altui-heater-select-{0}' class='altui-heater-select form-control form-control-sm'>".format(device.altuiid);
 						$.each(userHVACFanOperatingMode1Items, function(idx,item) {
 							html += "<option data-service='{1}' data-action='{2}' data-name='{3}' data-value='{4}' {5}>{0}</option>".format(
 								item.label,item.service,item.action,item.name,item.value,
@@ -515,7 +515,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return  _internaldrawZoneThermostat( device , userOperatingMode1Items,  userHVACFanOperatingMode1Items, true );
 	};
 		
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawHumidity( device) {
 		var html = "";
 		var status = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' )); 
@@ -549,9 +549,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		var html = "";
 		html += "<div class='pull-right'><div id='altui-wc-"+device.altuiid+"' class='btn-group altui-windowcover' role='group' aria-label='...'>";
-		html += ("  <button id ='altui-window-Up' type='button' class='altui-window-btn btn btn-default btn-sm {0}'>"+_T("Up")+"</button>").format( (status==100) ? 'active' : '' );
-		html += ("  <button id ='altui-window-Stop' type='button' class='altui-window-btn btn btn-default btn-sm'>"+_T("Stop")+"</button>");
-		html += ("  <button id ='altui-window-Down' type='button' class='altui-window-btn btn btn-default btn-sm {0}'>"+_T("Down")+"</button>").format( (status==0) ? 'active' : '' );
+		html += ("  <button id ='altui-window-Up' type='button' class='altui-window-btn btn btn-secondary btn-sm {0}'>"+_T("Up")+"</button>").format( (status==100) ? 'active' : '' );
+		html += ("  <button id ='altui-window-Stop' type='button' class='altui-window-btn btn btn-secondary btn-sm'>"+_T("Stop")+"</button>");
+		html += ("  <button id ='altui-window-Down' type='button' class='altui-window-btn btn btn-secondary btn-sm {0}'>"+_T("Down")+"</button>").format( (status==0) ? 'active' : '' );
 		html += "</div>";
 		html += "</div>";
 		
@@ -567,7 +567,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		MultiBox.runActionByAltuiID ( altuiid, "urn:upnp-org:serviceId:Dimming1", "SetLoadLevelTarget", {newLoadlevelTarget:ui.value} );
 	};
 
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _onColorPicker(e,altuiid,color) {
 		var device = MultiBox.getDeviceByAltuiID(altuiid);
 		MultiBox.setColor(device,color.toHexString());		
@@ -750,7 +750,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += _drawDimmable(device,true);
 		return html;
 	};
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawDoorLock( device) { 
 		var status = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:DoorLock1', 'Status' );
 		var html ="";
@@ -777,12 +777,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return html;
 	};
 	
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawDoorSensor( device) {
 		return _drawMotion( device);
 	};
 
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawSmoke( device) {
 		return _drawMotion( device);
 	};
@@ -798,7 +798,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
     function _drawCombinationSwitch( device ) {
         var html = "";
         
-        html += ("<button id='altui-pokebtn-{0}' type='button' class='pull-right altui-window-btn btn btn-default btn-sm '>{1}</button>" .format( device.altuiid,_T("Poke") )) ;
+        html += ("<button id='altui-pokebtn-{0}' type='button' class='pull-right altui-window-btn btn btn-secondary btn-sm '>{1}</button>" .format( device.altuiid,_T("Poke") )) ;
 
         var label = MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CombinationSwitch1', 'Label' );
         if (label != null) {
@@ -850,8 +850,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
                 }
             }
         }        
-        html += "<button id='altui-Stopbtn-{0}' type='button' class='pull-right altui-window-btn btn btn-default btn-sm {1}'>{2}</button>" .format(device.altuiid, stopbtnstyle, _T(stopbtn)) ;
-        html += "<button id='altui-{2}btn-{0}' type='button' class='pull-right altui-window-btn btn btn-default btn-sm {1}'>{2}</button>" .format(device.altuiid, playbtnstyle, _T(playbtn)) ;
+        html += "<button id='altui-Stopbtn-{0}' type='button' class='pull-right altui-window-btn btn btn-secondary btn-sm {1}'>{2}</button>" .format(device.altuiid, stopbtnstyle, _T(stopbtn)) ;
+        html += "<button id='altui-{2}btn-{0}' type='button' class='pull-right altui-window-btn btn btn-secondary btn-sm {1}'>{2}</button>" .format(device.altuiid, playbtnstyle, _T(playbtn)) ;
         if (title != null) {
             html += "<div class='altui-sonos-text text-muted' style='height: 48px; overflow: hidden'>{0}<br>{1}</div>".format(playstatus, playtitle);
         }
@@ -883,7 +883,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
         return html;
     }
 	
-    // return the html string inside the .panel-body of the .altui-device#id panel
+    // return the html string inside the .card-body of the .altui-device#id panel
     function _drawMultiString( device ) {
         var html = ""; var sAll = _T("All"); var sMore = _T("More"); var sLess = _T("Less");
         if ($('button#altui-morebtn-'+device.altuiid).html() == undefined) {
@@ -893,8 +893,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
         var state = MyLocalStorage.getSettings("MULTISTRINGUISTATE"+device.altuiid);
         var display = state != null ? state['devicestate'] : 0;
         html += "<div class='btn-group pull-right'>";
-        html += " <button id='altui-allbtn-{0}' type='button' class='altui-window-btn btn btn-default btn-xs'>{1}</button>".format( device.altuiid,sAll);
-        html += " <button id='altui-morebtn-{0}' type='button' class='altui-window-btn btn btn-default btn-xs'>{1}</button>".format( device.altuiid,(display != 2 ? sMore : sLess));
+        html += " <button id='altui-allbtn-{0}' type='button' class='altui-window-btn btn btn-secondary btn-sm'>{1}</button>".format( device.altuiid,sAll);
+        html += " <button id='altui-morebtn-{0}' type='button' class='altui-window-btn btn btn-secondary btn-sm'>{1}</button>".format( device.altuiid,(display != 2 ? sMore : sLess));
         html += "</div>";
         html += "<div class='altui-multistring-text-div'>";
         for (var v = 1; v <= 5 ; v++) {
@@ -920,7 +920,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
         return html;
     }
 	
-    // return the html string inside the .panel-body of the .altui-device#id panel
+    // return the html string inside the .card-body of the .altui-device#id panel
     function _drawPnPProxy( device ) {
         var html = "";
         var status = MultiBox.getStatus( device, 'urn:futzle-com:serviceId:UPnPProxy1', 'StatusText' );
@@ -937,15 +937,15 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
         var rtime = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'TimeRemaining');
         html += "<div class='pull-right altui-plts-btn-div'>";
         html += " <div class='btn-group'>";
-        html += "  <button id='altui-armbtn-{0}' type='button' class='altui-plts-btn btn btn-default btn-xs {2}'>{1}</button>".format(device.altuiid, _T("Arm"), armed==1?'btn-info':'');
-        html += "  <button id='altui-bypassbtn-{0}' type='button' class='altui-plts-btn btn btn-default btn-xs {2}'>{1}</button>".format(device.altuiid, _T("Bypass"), armed==0?'btn-info':'');
-        html += "  <button id='altui-triggerbtn-{0}' type='button' class='altui-plts-btn btn btn-default btn-xs'>{1}</button>".format(device.altuiid, _T("Trigger"));
-        html += "  <button id='altui-restartbtn-{0}' type='button' class='altui-plts-btn btn btn-default btn-xs'>{1}</button>".format(device.altuiid, _T("Restart"));
+        html += "  <button id='altui-armbtn-{0}' type='button' class='altui-plts-btn btn btn-secondary btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Arm"), armed==1?'btn-info':'');
+        html += "  <button id='altui-bypassbtn-{0}' type='button' class='altui-plts-btn btn btn-secondary btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Bypass"), armed==0?'btn-info':'');
+        html += "  <button id='altui-triggerbtn-{0}' type='button' class='altui-plts-btn btn btn-secondary btn-sm'>{1}</button>".format(device.altuiid, _T("Trigger"));
+        html += "  <button id='altui-restartbtn-{0}' type='button' class='altui-plts-btn btn btn-secondary btn-sm'>{1}</button>".format(device.altuiid, _T("Restart"));
         html += " </div><br>";
         html += " <div class='btn-group'>";
-        html += "  <button id='altui-onbtn-{0}' type='button' class='altui-plts-btn btn btn-default btn-xs {2}'>{1}</button>".format(device.altuiid, _T("On"), onoff==1?'btn-info':'');
-        html += "  <button id='altui-offbtn-{0}' type='button' class='altui-plts-btn btn btn-default btn-xs {2}'>{1}</button>".format(device.altuiid, _T("Off"), onoff==0?'btn-info':'');
-        html += "  <button id='altui-resetbtn-{0}' type='button' class='altui-plts-btn btn btn-default btn-xs {2}'>{1}</button>".format(device.altuiid, _T("Reset"), state==0?'btn-info':'');
+        html += "  <button id='altui-onbtn-{0}' type='button' class='altui-plts-btn btn btn-secondary btn-sm {2}'>{1}</button>".format(device.altuiid, _T("On"), onoff==1?'btn-info':'');
+        html += "  <button id='altui-offbtn-{0}' type='button' class='altui-plts-btn btn btn-secondary btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Off"), onoff==0?'btn-info':'');
+        html += "  <button id='altui-resetbtn-{0}' type='button' class='altui-plts-btn btn btn-secondary btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Reset"), state==0?'btn-info':'');
         if (state == 3 && rtime != null) {
             var h = '00'; var m = '00'; var s = '00'; var hms = rtime.split(':');
             if ( hms.length == 3) { h = hms[0]; m = hms[1]; s = hms[2] } else if ( hms.length == 2) { m = hms[0]; s = hms[1] } else { s = hms[0] }
@@ -973,8 +973,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
         html += "<div class='text-muted'>Press Start to include"
 
         html += "<div class='pull-right'>";
-        html += ("<button id ='altui-arduino-include-start-{0}' type='button' class='altui-window-btn btn btn-default btn-sm {1}'>"+_T("Start")+"</button>").format(device.altuiid, (including==1) ? 'active' : '' );
-        html += ("<button id ='altui-arduino-include-stop-{0}'  type='button' class='altui-window-btn btn btn-default btn-sm {1}'>"+_T("Stop") +"</button>").format(device.altuiid, (including==0) ? 'active' : '' );
+        html += ("<button id ='altui-arduino-include-start-{0}' type='button' class='altui-window-btn btn btn-secondary btn-sm {1}'>"+_T("Start")+"</button>").format(device.altuiid, (including==1) ? 'active' : '' );
+        html += ("<button id ='altui-arduino-include-stop-{0}'  type='button' class='altui-window-btn btn btn-secondary btn-sm {1}'>"+_T("Stop") +"</button>").format(device.altuiid, (including==0) ? 'active' : '' );
         html += "</div></div>";
 
         html += "<script type='text/javascript'>";
@@ -1000,7 +1000,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
         return html;
     }
 	
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawMotion( device) {
 		var html = "";
 		
@@ -1062,10 +1062,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "<span class='text-warn'>this panel is <mark>not functional</mark>, it requires a brave developper to finish it to manage pin codes etc using device UPNP actions</span>";
 		html += "<table id='altui-cplus-keytbl'>";
 		html += "<tbody>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='1'>1</button></td><td><button class='altui-cplus-button btn btn-default' id='2'>2</button></td><td><button class='altui-cplus-button btn btn-default' id='3'>3</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='4'>4</button></td><td><button class='altui-cplus-button btn btn-default' id='5'>5</button></td><td><button class='altui-cplus-button btn btn-default' id='6'>6</button></td></tr>";
-		html+="<tr><td><button class='altui-cplus-button btn btn-default' id='7'>7</button></td><td><button class='altui-cplus-button btn btn-default' id='8'>8</button></td><td><button class='altui-cplus-button btn btn-default' id='9'>9</button></td></tr>";
-		html+="<tr><td colspan='3'><button class='altui-cplus-button btn btn-default' id='0'>0</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='1'>1</button></td><td><button class='altui-cplus-button btn btn-secondary' id='2'>2</button></td><td><button class='altui-cplus-button btn btn-secondary' id='3'>3</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='4'>4</button></td><td><button class='altui-cplus-button btn btn-secondary' id='5'>5</button></td><td><button class='altui-cplus-button btn btn-secondary' id='6'>6</button></td></tr>";
+		html+="<tr><td><button class='altui-cplus-button btn btn-secondary' id='7'>7</button></td><td><button class='altui-cplus-button btn btn-secondary' id='8'>8</button></td><td><button class='altui-cplus-button btn btn-secondary' id='9'>9</button></td></tr>";
+		html+="<tr><td colspan='3'><button class='altui-cplus-button btn btn-secondary' id='0'>0</button></td></tr>";
 		html += "</tbody>";
 		html += "</table>";
 		html +="</div>";
@@ -1082,7 +1082,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		});
 	};	
 	
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	
 	function _drawBinaryLight( device) {
 		var html ="";
@@ -1249,7 +1249,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var ForecastConditionGroup = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'Forecastday1ConditionGroup');
 		if (ForecastConditionGroup!=null) {
 			var newsrc = (ForecastConditionGroup!=null) ? "http://icons.wxug.com/i/c/i/"+ForecastConditionGroup+".gif" : defaultIconSrc;
-			html += "<img class='altui-device-icon pull-right img-rounded' src='"+newsrc+"' alt='"+ForecastConditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+			html += "<img class='altui-device-icon pull-right rounded' src='"+newsrc+"' alt='"+ForecastConditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 		}
 		html+= "<div class='altui-weather-text'>{0}</div>".format( condition );
 		html+= ("<div class='altui-weather-text'>"+_T("Wind")+": {0}</div>").format( wind );
@@ -1260,7 +1260,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html ="";
 		var conditionGroup = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'ConditionGroup');
 		var newsrc = (conditionGroup!=null) ? "http://icons.wxug.com/i/c/i/"+conditionGroup+".gif" : defaultIconSrc;
-		return "<img class='altui-device-icon pull-left img-rounded' src='"+newsrc+"' alt='"+conditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+		return "<img class='altui-device-icon pull-left rounded' src='"+newsrc+"' alt='"+conditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 	};
 	
 	function _drawWeatherFavorite(device) {
@@ -1268,7 +1268,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var ForecastConditionGroup = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'Forecastday1ConditionGroup');
 		if (ForecastConditionGroup!=null) {
 			var newsrc = (ForecastConditionGroup!=null) ? "http://icons.wxug.com/i/c/i/"+ForecastConditionGroup+".gif" : defaultIconSrc;
-			html += "<img class='altui-device-icon altui-weather1-day1 img-rounded' src='"+newsrc+"' alt='"+ForecastConditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+			html += "<img class='altui-device-icon altui-weather1-day1 rounded' src='"+newsrc+"' alt='"+ForecastConditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 		}
 		return html;
 	};
@@ -1291,7 +1291,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			var hostname = (ipaddr=='') ? window.location.hostname : ipaddr;
 			url = 'http://'+hostname+"/dm/index.html";
 		}
-		html+= ("<button id='altui-datamine-{0}' type='button' class='pull-right altui-datamine-open btn btn-default btn-sm ' >{1}</button>" .format( device.altuiid,_T("Open") )) ;
+		html+= ("<button id='altui-datamine-{0}' type='button' class='pull-right altui-datamine-open btn btn-secondary btn-sm ' >{1}</button>" .format( device.altuiid,_T("Open") )) ;
 		html += "<script type='text/javascript'>";
 		html += " $('button#altui-datamine-{0}.altui-datamine-open').on('click', function() { window.open('{1}','_blank'); } );".format(device.altuiid,url);
 		html += "</script>";
@@ -1312,8 +1312,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				var name = names[btnid] ? names[btnid] : ("Btn_"+(btnid+1));
 				var status = parseInt(MultiBox.getStatus(device,"urn:dcineco-com:serviceId:MSwitch1","Status"+(btnid+1)));
 
-				html += "<div class='col-xs-3'>";
-				html+= ("<button id='{0}' data-btnid='{0}' type='button' class='altui-multiswitch-open altui-multiswitch-open-{3} btn btn-default btn-xs {2}' >{1}</button>".format( 
+				html += "<div class='col-3'>";
+				html+= ("<button id='{0}' data-btnid='{0}' type='button' class='altui-multiswitch-open altui-multiswitch-open-{3} btn btn-secondary btn-sm {2}' >{1}</button>".format( 
 					btnid ,
 					name  ,
 					(status==1) ? 'btn-info' : '',
@@ -1343,8 +1343,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var pattern = MultiBox.getStatus( device, 'urn:a-lurker-com:serviceId:InfoViewer1', 'LuaPattern');
 		var urlhead = MultiBox.getUrlHead(device.altuiid);
 		html += "<div class='btn-group pull-right'>";
-		html+= ("<button id='altui-infoviewer-{0}' type='button' class='altui-infoviewer-btn btn btn-default btn-sm pull-right'>{1}</button>" .format( device.altuiid,_T("Open") )) ;
-		html+= ("<button id='altui-infoviewer-log-{0}' type='button' class='altui-infoviewer-log-btn btn btn-default btn-sm pull-right'>{1}</button>" .format( device.altuiid,_T("Logs") )) ;
+		html+= ("<button id='altui-infoviewer-{0}' type='button' class='altui-infoviewer-btn btn btn-secondary btn-sm pull-right'>{1}</button>" .format( device.altuiid,_T("Open") )) ;
+		html+= ("<button id='altui-infoviewer-log-{0}' type='button' class='altui-infoviewer-log-btn btn btn-secondary btn-sm pull-right'>{1}</button>" .format( device.altuiid,_T("Logs") )) ;
 		html += "</div>";
 		if (pattern!="") {
 			html+= "<div class='altui-infoviewer-pattern'>Pattern:</div>";
@@ -1361,9 +1361,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		var html = "Any thing can go here<hr>";
 		html += "<div class='btn-group btn-group-lg' role='group' aria-label='...'>";
-		html += "  <button type='button' class='btn btn-default'>Left</button>";
-		html += "  <button type='button' class='btn btn-default'>Middle</button>";
-		html += "  <button type='button' class='btn btn-default'>Right</button>";
+		html += "  <button type='button' class='btn btn-secondary'>Left</button>";
+		html += "  <button type='button' class='btn btn-secondary'>Middle</button>";
+		html += "  <button type='button' class='btn btn-secondary'>Right</button>";
 		html += "</div>";
 
 		$(domparent).append(html);
@@ -1386,13 +1386,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			}	
 			else {	if (actBtns.length <= 6) {
 				var btnid = 0;
-				var colCls = 'col-xs-4';
+				var colCls = 'col-4';
 				var colMax = 3;
 				if (actBtns.length <= 2) {
-					colCls = 'col-xs-12';
+					colCls = 'col-12';
 					colMax = 1;
 				} else if (actBtns.length <= 4) {
-					colCls = 'col-xs-6';
+					colCls = 'col-6';
 					colMax = 2;
 				}
 				html += "<div class='altui-harmony-container pull-right'>";
@@ -1401,7 +1401,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					for (var col=0; col<colMax; col++) {
 						if (actBtns[btnid] !== undefined) {
 							html += "<div class='altui-harmony-col {0}'>".format(colCls);
-							html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-act-{3} btn btn-default btn-xs {2}'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'btn-info' : '',device.altuiid);
+							html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-act-{3} btn btn-secondary btn-sm {2}'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'btn-info' : '',device.altuiid);
 							html += "</div>";
 							btnid ++;
 						}	
@@ -1428,7 +1428,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				}
 				html += "<div class='altui-harmony-container pull-right'>";
 				html += "<div id='altui-harmony-act-group-{0}' class='btn-group'>".format(device.altuiid);
-				html += "<button aria-expanded='false' data-toggle='dropdown' type='button' class='btn btn-default btn-xs dropdown-toggle'>";
+				html += "<button aria-expanded='false' data-toggle='dropdown' type='button' class='btn btn-secondary btn-sm dropdown-toggle'>";
 				html += "Select Activity <span class='caret'></span></button>";
 				html += "<ul role='menu' class='dropdown-menu'>";
 				for (i=0; i<actBtns.length; i++) {
@@ -1478,8 +1478,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					" <div class='row'>";
 				for (var btnid=0; btnid<actBtns.length; btnid++) {
 					if (actBtns[btnid] !== undefined) {
-						html += "<div class='altui-harmony-col col-xs-6 col-sm-3 col-md-2 col-lg-1'>";
-						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-cp-act-{3} btn btn-{2} btn-xs'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'primary' : 'default',device.altuiid);
+						html += "<div class='altui-harmony-col col-6 col-sm-3 col-md-2 col-lg-1'>";
+						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-cp-act-{3} btn btn-{2} btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'primary' : 'default',device.altuiid);
 						html += "</div>";
 					}              
 				}
@@ -1488,20 +1488,20 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				html += "<div style='height: 20px;'>&nbsp;</div>"+
 					"<div class='container-fluid'>"+
 					" <div class='row' style='height: 20px;'>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-3 col-lg-2'>Link Status:</div>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'LinkStatus')+"</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Link Status:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'LinkStatus')+"</div>"+
 					" </div>"+
 					" <div class='row' style='height: 20px;'>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-3 col-lg-2'>Current Activity ID:</div>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'CurrentActivityID')+"</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Current Activity ID:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'CurrentActivityID')+"</div>"+
 					" </div>"+
 					" <div class='row' style='height: 20px;'>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-3 col-lg-2'>Last command:</div>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'LastCommand')+"</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Last command:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'LastCommand')+"</div>"+
 					" </div>"+
 					" <div class='row' style='height: 20px;'>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-3 col-lg-2'>Last command time:</div>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'LastCommandTime')+"</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Last command time:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'LastCommandTime')+"</div>"+
 					" </div>"+
 					"</div>";
 				html += "</div>";
@@ -1521,7 +1521,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		$(domparent).height(255);
 	};
 
-	// return the html string inside the .panel-body of the .altui-device#id panel
+	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawHarmonyDevice(device) {
 		var html = "";
 		try {
@@ -1540,13 +1540,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				html += "<div class='altui-harmony-container pull-right'>";
 				if (actBtns.length <= 6) {
 					var btnid = 0;
-					var colCls = 'col-xs-4';
+					var colCls = 'col-4';
 					var colMax = 3;
 					if (actBtns.length <= 2) {
-						colCls = 'col-xs-12';
+						colCls = 'col-12';
 						colMax = 1;
 					} else if (actBtns.length <= 4) {
-						colCls = 'col-xs-6';
+						colCls = 'col-6';
 						colMax = 2;
 					}
 					for (var line=0; line<2 ; line++) {
@@ -1554,7 +1554,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 						for (var col=0; col<colMax; col++) {
 							if (actBtns[btnid] !== undefined) {
 								html += "<div class='altui-harmony-col {0}'>".format(colCls);
-								html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cmd-{2} btn btn-default btn-xs'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
+								html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cmd-{2} btn btn-secondary btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
 								html += "</div>";
 								btnid ++;
 							}	
@@ -1572,7 +1572,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					html += "</script>";
 				} else {
 					html += "<div id='altui-harmonydevice-cmd-group-{0}' class='btn-group'>".format(device.altuiid);
-					html += "<button aria-expanded='false' data-toggle='dropdown' type='button' class='btn btn-default btn-xs dropdown-toggle'>";
+					html += "<button aria-expanded='false' data-toggle='dropdown' type='button' class='btn btn-secondary btn-sm dropdown-toggle'>";
 					html += "Select Command <span class='caret'></span></button>";
 					html += "<ul role='menu' class='dropdown-menu'>";
 					for (var i=0; i<actBtns.length; i++) {
@@ -1620,8 +1620,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					" <div class='row'>";
 				for (var btnid=0; btnid<actBtns.length; btnid++) {
 					if (actBtns[btnid] !== undefined) {
-						html += "<div class='altui-harmony-col col-xs-6 col-sm-3 col-md-2 col-lg-1'>";
-						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cp-cmd-{2} btn btn-default btn-xs'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
+						html += "<div class='altui-harmony-col col-6 col-sm-3 col-md-2 col-lg-1'>";
+						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cp-cmd-{2} btn btn-secondary btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
 						html += "</div>";
 					}              
 				}
@@ -1630,12 +1630,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				html += "<div style='height: 20px;'>&nbsp;</div>"+
 					"<div class='container-fluid'>"+
 					" <div class='row' style='height: 20px;'>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-3 col-lg-2'>Controlling Hub:</div>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'HubName')+"</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Controlling Hub:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'HubName')+"</div>"+
 					" </div>"+
 					" <div class='row' style='height: 20px;'>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-3 col-lg-2'>Last command:</div>"+
-					"  <div class='altui-harmony-col col-xs-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'LastDeviceCommand')+"</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Last command:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'LastDeviceCommand')+"</div>"+
 					" </div>"+
 					"</div>";
 				html += "</div>";

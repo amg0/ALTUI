@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2102 $";
+var ALTUI_revision = "$Revision: 2124 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -50,19 +50,21 @@ var deviceActionModalTemplate = "";
 var defaultDialogModalTemplate = "";
 
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
-var houseModeButtonTemplate = "	 <button type='button' class='btn btn-default altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";
-var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-default'>{2}</button>";
+var houseModeButtonTemplate = "	 <button type='button' class='btn btn-secondary altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";
+var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-secondary'>{2}</button>";
 
-var deleteGlyph = "<span class='glyphicon glyphicon-trash text-danger' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Delete'></span>";
-var copyGlyph = "<span class='glyphicon glyphicon-copy' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Copy'></span>";
-var glyphTemplate = "<span class='glyphicon glyphicon-{0} {2}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}' ></span>";
-var hiddenGlyph = "<span class='glyphicon glyphicon-eye-close' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Hidden'></span>";
-var invisibleGlyph = "<span class='glyphicon glyphicon-ban-circle' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Invisible'></span>";
+var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>' //"<span class='glyphicon glyphicon-{0} {2}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}' ></span>";
+
+
+var deleteGlyph = glyphTemplate.format("trash-o",_T("Delete"),"text-danger") //"<span class='glyphicon glyphicon-trash text-danger' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Delete'></span>";
+var copyGlyph = glyphTemplate.format("clone",_T("Clone")) //"<span class='glyphicon glyphicon-copy' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Copy'></span>";
+var hiddenGlyph = glyphTemplate.format("eye-slash",_T("Hidden"))
+var invisibleGlyph = glyphTemplate.format("ban",_T("Invisible"))
 var timeGlyph="<span class='glyphicon glyphicon-time' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='time'></span>";
-var okGlyph="<span class='glyphicon glyphicon-ok' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='OK'></span>";
-var plusGlyph="<span class='glyphicon glyphicon-plus' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Add'></span>";
-var saveGlyph="<span class='glyphicon glyphicon-save' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Save'></span>";
-var labelGlyph="<span class='glyphicon glyphicon-font' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Label'></span>";
+var okGlyph=glyphTemplate.format("check",_T("OK"))//"<span class='glyphicon glyphicon-ok' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='OK'></span>";
+var plusGlyph=glyphTemplate.format("plus",_T("Create"))//"<span class='glyphicon glyphicon-plus' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Add'></span>";
+var saveGlyph=glyphTemplate.format("floppy-o",_T("Save"))//"<span class='glyphicon glyphicon-save' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Save'></span>";
+var labelGlyph=glyphTemplate.format("font",_T("Text"))//"<span class='glyphicon glyphicon-font' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Label'></span>";
 var wrenchGlyph="";
 var optHorGlyph="";
 var refreshGlyph="";
@@ -353,10 +355,10 @@ var glyphList = [
 	'zoom-in',
 	'zoom-out'
 ]
-var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-default btn-xs' aria-label='tbd' title='{3}'>{2}</button>";
-var smallbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-default btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
+var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-secondary btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
+var smallbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-secondary btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
 var buttonTemplate		= "<button id='{0}' type='button' class='{1} btn btn-{3}' aria-label='tbd' title='{4}'>{2}</button>";
-var buttonDebugHtml = "<button type='button' class='btn btn-default' id='altui-debug-btn' >Debug<span class='caret'></span></button>";
+var buttonDebugHtml = "<button type='button' class='btn btn-secondary' id='altui-debug-btn' >Debug<span class='caret'></span></button>";
 var cameraURI="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAACylBMVEUAAAD///+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Rj5CSkJGTkZKTkpOUkpOVk5SWlJWXlZaXlpaYlpeZl5iamJmbmZqbmpqcmpudm5ydnJ2enJ2enZ2fnp6gnp+hn6CioKGioaGjoaKlo6SlpKWmpKWnpaaopqeop6iqqKmqqamrqqusqquvra6vrq+xr7CysLGysbKzsrO0s7O1s7S1tLS1tLW2tbW4tre8uru+vb2/vr7Av7/Av8DBwMHCwcHDwsPEw8PEw8TFxMTGxcbHxsbHxsfIx8fLysrLysvMy8zOzc7Pzs7Pzs/Q0NDR0NDR0NHS0dHS0dLV1NXX1tbX19fZ2NjZ2Nna2drb29vc29vc3Nzd3Nze3t7f3t7g4ODh4ODh4OHh4eHi4eLi4uLk4+Pk5OTl5eXn5+fo6Ojp6Onr6urr6+vs7Ozt7O3t7e3u7u7v7+/w7/Dy8fHy8vLz8/P09PT19PT19fX39/f4+Pj5+fn6+vr7+/v8+/v8/Pz9/f3+/v7///9IOpZmAAAAdHRSTlMAAAECAwUGCAkKDQ8QERITFhsdHiAhIiUmJygpLC4wMjU2ODtAQUNES1VaXGFna3J0dXZ6e3x9f4GFh4iLjI6QkpWWnp+gp6mrrK6wsbO0t7/AwsbHyMrNz9DT2drb3N/j5Ojq7e7v8PHz9PX3+Pn6+/z9/kpZgkQAAALqSURBVEjH7df3UxNBFAfwEwOIICpVrERRsResoGIXwQJWiFiwYdeYJTQxKIgQuyhWLNgLYixYEBELiiA2lKBEoxIDkfc/GHcvwjhk74BxcBzeL9n9zvvkNrm9zYRpVIdiGnC9YcZoOYjWuONBbbAnQsimtnicHrf/77HzwMlzli5fLPLu26aG2Lz3XFRZs7sLaoBd5xOV/HIfGQRM4YsFIw2XzIW77EjCE5tN+r3ebVc3V1k9D2wyARkpHrifoTfsWMaLwoLMlAhD0IcTO60mnSEXS6Ho4Z3s91CaKiXREmsu7EMaZa9/3IvDo9jburfRJPTgwK1IW6Tyyx60/36JRpWVhHapi6NwuqIpHQ8l+IFGHp4FpB5FxJc+IXFPOvbHTYlwOiQXDFUgPQUHcD6Rii0kuCm7BJ3Rq0y5VJ6hf72AinNwHkTFbcnyNNeRCuAGHisA1CitjHzjFjTsglti4MRWgHJyg0O1APLDIMcTWxrujFt2QlIigIrdG0UASXthNx7b0bAQt2yB5AQAbSieSDUAOw7BdjyxpuHmZHdp05Aa4DKenAf4FpKqw++0jH6rFmCQo0SXACquRaENaRUAClSYh3M/Oh6Dmw7CydA3+ntUodFTeBd2BI7i3I2Ou5Av6dnXmI357B55JYv+XEBiezo2IVtMpipJQMfztFCWn4LiitWbcOrD9VS5kmvEKrWKSP0zjVDEle8f43Embsd5GHgRHX6zXJd/S5H+XKdLZ48Dd+6TxCqQ3Ryys4+Vnz48Pcc+zGiaKY8D0CGo2hNMZMnrJ9ZWVI31tWJ4YKG7ucVoyR907WCB9XAnLmw+CqFZjozz1KpUPN6REc5D6wY0pmLL6b+aV7o1YZyGzBRjucqvvw3TbASeeJtRsMCXvdbCQS0ZxtSxk0tHewHDtB4WzOZjKbhX5VIlMzy6dbBrYSfs4RlQ5RN0NY79EVd5GcdiThxoHHNatKguOLje8Pq6YPSXcMPfhH8Y/wRAzVyUx0VxdgAAAABJRU5ErkJggg==";
 var defaultIconSrc="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAASJSURBVHja7Jp7aI5RHMff123CMOYyMmFY5LZYI5umFmHhD2pyyYzYkju5hCWX0jZKM9rEkCy5tJostxWRIteZe5FLyW2Y68z35Pfq9Os8z573eT3vu9fOr76d5zzn8jyf59x+57yvu6amxlWfrIGrnpkG1sAaWANrYA2sgTWwBnbKGnmT2e12/7MHb8vOaYhgEJQA9YN6Qj2g5lCoSFu4eNF1K3V5sx9o5M+vC0jxvCRoKjQOalmnW9gH0BYI5kKLoE5B06Vttug8KBMKqyX7S+g+9Ab6SGHwAAN2MIICqL9BlifQMegcdAHj9X1QtjBAxcy2BNoENWbJ1VARtAO6BMiaoO7SgG2C4AA0SZF8CFoDyMf/xRgGbCsExVA8S3oEzQJomUG5AQgSoSFQNNSZlqZ4q8uS34Hx0s0MYA+KSQsv/pHlD0eQQctTVFC1MDkQRQrYtQDdoOgFa6F0qGmwdun10Fh2Lx2wOxnseAS7ofZGDhP0DHoAVUJvnQB2e+OWcdcSEKMRnGTZlgN2K+sBWdACRZXfoBPQYeg8ytmC9IrBLjB5T+VQFynLXrz0TDZrC5gJrKrv0HYoG/lf+dpq/vKlMxnsbRqbcsuqYC9B0wH6MGi2h4CJRDCfjT+x9HyR7mUpYIXDkRAoWF9aeBXzovIAcUX6IBMVYzYTedZb+JghCCIo+gFl3gV00sILtcalGHchdPsr1B0v9lJaeiqgjlLRXKRnmED2QpAGjYH6iEdJyeJZp6FCEarcUW8Y7HTpKRKssD0eWLLVDPYqbQtVoGFQAX2gZVBfBuuiuoSDUgpdRv4Yf4/haSxewDyodLZZSMUH+a6AFXDCdUxVQBpZrJj0UHamX4DxoDb0UI/dAsw1KZ5KfrDH9iP9pqKe3mLdhSJtvLNY6vbYhfa2hRNZmRKWPoPFtxhMSkehcJb0ArpRi2THJA91DXR6lo5j8dMSSFeacDx2Ea17T1HHQpbPRSccscj/3KR3tUVwl7V0LjTMyRaOZnG5O49gacUGrbtUUe8KM1iyHKgduzcUdSY62cK9pOvXzPftx/JeUJRPUnRl8dEO03L3t8VRd7X0oUYpJkuPpdAxkSPAHaTrpyytG4uXK8onKO7FsAM74YWJQ4EqyWffZfJO8U526VA27mRrK13/NPCQult4xmyUrZLiG6GuJvmjnOzS8oa+QnG6USZ5XyprVkv9wiM7L3XlOOaz+8zgVWYzXxhp+Raq+GSSJjb/K9kEl2/BKfkRkEM8i3bfJC0NH61SioufYdawPJsVK0V5XQY+S742t32ALWU95jWC4+yIKFpRtszx/bAPVqaY3V+RM2Lm0rYkJ0NlhX4707J5eDCHLTPF1PJmNhJKVtwvQU8YW2d/LiXLJydiOMWTDWBqs0oLM3jAu7QYm78QTHb9+UXCromZOcXOzzYB+csDHRiMoMMBb004NMmoo8RfBwD/Cvo57XTWQZ8tFjsi3E6UPeW3My0njDYOU+hMS/jWEZL7egc6Q4cJqu2mcwfx/4Pp/2lpYA2sgTWwBtbAGlgDO2W/BRgADRV6RjlErQoAAAAASUVORK5CYII="
 var _timerTypes = [];
@@ -366,9 +368,6 @@ var _timerUnits = [
 	{value:'h',text:'h'},
 	{value:'m',text:'m'}
 ];
-
-		// margin-left: 14px;		\
-		// margin-top: 5px;		\
 
 var styles ="						\
 	html {							\
@@ -536,7 +535,7 @@ var styles ="						\
 		bottom: 20px;	\
 		right: 15px;	\
 	}	\
-	.altui-myhome-room-toolbar button.btn-default {	\
+	.altui-myhome-room-toolbar button.btn-secondary {	\
 		background-image: none;	\
 	}	\
 	.altui-myhome-room-toolbar button {	\
@@ -633,11 +632,11 @@ var styles ="						\
 	button.altui-plugin-category-btn {	padding-left:4px; padding-right:4px; }					\
 	.altui-plugin-publish-btn { width: 100%;  }		\
 	.altui-pluginbox , .altui-pageswitchbox, #altui-plugin-name-filter { padding:4px; }				\
-	.altui-pluginbox .panel-body { padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;}	\
+	.altui-pluginbox .card-body { padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;}	\
 	.form-control.altui-version-selector { padding:0px; border:0px; background:darkgrey; }				\
 	.altui-plugin-title { height: 21px;	 overflow:hidden; }		\
 	.altui-plugin-version { font-size:1em;	}		\
-	.altui-plugin-version .input-sm { height: 20px;	 line-height: 20px; }		\
+	.altui-plugin-version .form-control-sm { height: 20px;	 line-height: 20px; }		\
 	a.altui-goto-scene, a.altui-goto-device, a.altui-goto-workflow { color:black; cursor:pointer; }	\
 	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }		\
 	.altui-ace-editor .ui-resizable-helper { border: 2px dotted #00F; }		\
@@ -696,7 +695,6 @@ var styles ="						\
 	div#altui-pagemessage-panel {	\
 		max-height:100px;	\
 		height:100px;		\
-		background-color: #f5f5f5;	\
 		overflow-y: auto;			\
 	}						\
 	div#altui-pagemessage-panel td {	\
@@ -764,7 +762,7 @@ var styles ="						\
 	}	\
 	.altui-device-keyvariables {	\
 	}							\
-	.altui-device-controlpanel .panel-body {	\
+	.altui-device-controlpanel .card-body {	\
 		padding-top: 0px;\
 		padding-bottom: 0px;\
 	}	\
@@ -795,22 +793,23 @@ var styles ="						\
 		margin-left: 2px;			\
 		margin-right: 2px;			\
 	}		\
+	div.altui-scene, div.altui-device, div.altui-workflow { \
+		margin-bottom:6px;	\
+	} \
 	div.altui-device-heading, div.altui-scene-heading, div.altui-workflow-heading {	\
-		height:30px;\
-		padding-top: 5px;\
-		padding-right: 10px;\
-		padding-bottom: 5px;\
-		padding-left: 10px;\
+		height:32px;\
+		padding-top: 0px;\
+		padding-right: 0px;\
+		padding-bottom: 0px;\
+		padding-left: 2px;\
 	}\
 	div.altui-device-body {\
-		height:52px;\
 		padding-top: 0px;\
-		padding-right: 5px;\
-		padding-bottom: 5px;\
-		padding-left: 5px;\
+		padding-right: 0px;\
+		padding-bottom: 0px;\
+		padding-left: 0px;\
 	}\
 	div.altui-scene-body {\
-		height:85px;\
 		padding-top: 3px;\
 		padding-right: 5px;\
 		padding-bottom: 3px;\
@@ -853,7 +852,7 @@ var styles ="						\
 		clear: left;	\
 	}						\
 	.altui-runscene {		\
-		width: 123px;		\
+		width: 81px;		\
 	}						\
 	.altui-hint {		\
 		padding-left:10px;\
@@ -861,7 +860,7 @@ var styles ="						\
 	}						\
 	.altui-scene-date{		\
 		clear: right;		\
-		width: 80px;		\
+		width: 82px;		\
 		text-align: right;	\
 	}						\
 	.altui-pausescene {		\
@@ -1097,7 +1096,7 @@ var styles ="						\
 	  color: green	\
 	}				\
 	#altui-grid, .altui-grid {		\
-		font-size: 12px;	\
+		font-size: 14px;	\
 	}				\
 	#altui-grid th , .altui-grid th {		\
 		font-size: 12px;	\
@@ -1379,7 +1378,7 @@ var UIManager  = ( function( window, undefined ) {
 				onWidgetResize: _onResizeStub,
 				widgetdisplay: function(widget,bEdit)	{
 					var scene = MultiBox.getSceneByAltuiID(widget.properties.sceneid);
-					return "<button type='button' class='{1} btn btn-default' aria-label='Run Scene' onclick='{3}' style='{5}'>{4} {2}</button>".format(
+					return "<button type='button' class='{1} btn btn-secondary' aria-label='Run Scene' onclick='{3}' style='{5}'>{4} {2}</button>".format(
 							scene ? scene.altuiid : NULL_DEVICE,
 							'altui-widget-runscene-button',
 							(widget.properties.glyph.length>0) ? glyphTemplate.format( widget.properties.glyph, _T("Run Scene") , "") : '',
@@ -1404,7 +1403,7 @@ var UIManager  = ( function( window, undefined ) {
 					var device = MultiBox.getDeviceByAltuiID(widget.properties.deviceid);
 					if (device==null)
 						return "";
-					return "<button type='button' class='{1} btn btn-default' aria-label='Run Action' onclick='{3}' style='{5}' >{4}{2}</button>".format(
+					return "<button type='button' class='{1} btn btn-secondary' aria-label='Run Action' onclick='{3}' style='{5}' >{4}{2}</button>".format(
 						device ? device.altuiid : NULL_DEVICE,
 						'altui-widget-upnpaction-button',
 						(widget.properties.glyph.length>0) ? glyphTemplate.format( widget.properties.glyph, _T("Execute Action") , "pull-right") : '',
@@ -1449,7 +1448,7 @@ var UIManager  = ( function( window, undefined ) {
 
 					var html = "";
 					if (widget.properties.displayicon==0) {
-						html = "<button	 type='button' style='color:{4};' class='{1} btn btn-default' aria-label='Run Scene' onclick='{3}' >{2}</button>".format(
+						html = "<button	 type='button' style='color:{4};' class='{1} btn btn-secondary' aria-label='Run Scene' onclick='{3}' >{2}</button>".format(
 						widget.properties.deviceid,					// id
 						'altui-widget-2statebtn',					// class
 						onoffGlyph,									// content
@@ -1623,6 +1622,27 @@ var UIManager  = ( function( window, undefined ) {
 		];
 	};
 
+	function _generateNavBarHTML() {	
+		var html = `
+		<nav class="navbar navbar-expand-md navbar-light bg-light">
+		  <a class="navbar-brand" href="#"><div class='imgLogo'></div></a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+			{0}
+			</ul>
+			<form class="form-inline m-0">
+			  <input class="form-control col-6 p-1 " type="text" placeholder="Search" aria-label="Search">
+			  <button class="btn btn-outline-success col-4 p-1" type="submit">Search</button>
+			</form>
+		  </div>
+		</nav>
+		`
+		return html.format( UIControler.generateMenu() );
+	};
+	
 	//---------------------------------------------------------
 	// private functions
 	//---------------------------------------------------------
@@ -1949,7 +1969,7 @@ var UIManager  = ( function( window, undefined ) {
 		if (options.add_json==true)
 			html += _displayJson( 'Timers', timers);
 		try {
-			html +="<table class='table table-condensed'>";
+			html +="<table class='table table-responsive table-sm'>";
 			html +="<tbody>";
 			if (timers) {
 				$.each( timers, function(idx,timer) {
@@ -2007,9 +2027,9 @@ var UIManager  = ( function( window, undefined ) {
 				var defvalue = parameters[i].default || "";
 				var value = (pushData!=null) ? (pushData.params[i] || defvalue) : '';
 				tempPushData.params[i]=value;
-				html += "<div class='form-group col-xs-12'>";
+				html += "<div class='form-group col-12'>";
 					html += "<label for='datapush-{0}-{1}'>{2}-{3}</label>".format(parameters[i].key, varid, i,parameters[i].label);
-					html += "<input type='{2}' class='form-control input-sm' id='datapush-{0}-{1}' placeholder='{2}' value='{3}'></input>".format(
+					html += "<input type='{2}' class='form-control form-control-sm' id='datapush-{0}-{1}' placeholder='{2}' value='{3}'></input>".format(
 						parameters[i].key,
 						varid,
 						parameters[i].type,
@@ -2034,9 +2054,9 @@ var UIManager  = ( function( window, undefined ) {
 			var state = MultiBox.getStateByID( device.altuiid, varid );
 
 			var html = "";
-			html += "<div class='panel panel-default'> <div class='panel-body'>";
+			html += "<div class='card xxx'> <div class='card-body'>";
 			html += "<div class='row'>";
-				html += "<div class='checkbox col-xs-12 form-inline'>"
+				html += "<div class='checkbox col-12 form-inline'>"
 					html += "<label><input type='checkbox' id='altui-enablePush-{0}' {1}>Enable Push to : </label>".format(
 						varid,
 						(pushData!=null) ? 'checked' : ''
@@ -2052,7 +2072,7 @@ var UIManager  = ( function( window, undefined ) {
 					html += _pushFormFields(providers, (pushData!=null) ? pushData.provider : null ,varid, pushData );
 				html += "</form>"
 			html += "</div>";	//row
-			html += "</div>";	//panel-body
+			html += "</div>";	//card-body
 			html += "</div>";	//panel
 			return html;
 		};
@@ -2125,7 +2145,7 @@ var UIManager  = ( function( window, undefined ) {
 				if (form.length==0) {
 					var that = $(this);
 					// change color
-					that.removeClass("btn-default").addClass("btn-danger");
+					that.removeClass("btn-secondary").addClass("btn-danger");
 					MultiBox.getDataProviders(function(providers) {
 						//
 						// get this push parameters if they exist
@@ -2173,7 +2193,7 @@ var UIManager  = ( function( window, undefined ) {
 					// CLOSING the form : change color
 					var nexttr = tr.next("tr");
 					var pushEnabled = nexttr.find("input#altui-enablePush-"+varid).prop('checked');
-					$(this).addClass("btn-default").toggleClass("btn-info",pushEnabled).removeClass("btn-danger");
+					$(this).addClass("btn-secondary").toggleClass("btn-info",pushEnabled).removeClass("btn-danger");
 					var push = null;
 					var differentWatches=null;
 					// find all watches for this device
@@ -2211,9 +2231,9 @@ var UIManager  = ( function( window, undefined ) {
 					MultiBox.getDeviceVariableHistory( device, varid, function(history) {
 						//AltuiDebug.debug("getDeviceVariableHistory returned :"+history.result);
 						var html = "<tr><td colspan='3'>";
-						html += "<div class='panel panel-default'> <div class='panel-body'>";
+						html += "<div class='card xxx'> <div class='card-body'>";
 						// html += "<div class='table-responsive'>";
-						html +="<table id='{0}' class='table table-condensed altui-variable-value-history'>".format(varid);
+						html +="<table id='{0}' class='table table-responsive table-sm table-responsive altui-variable-value-history'>".format(varid);
 						html +="<thead>";
 						html += ("<tr><th>{0}</th><th>{1}</th><th>{2}</th></tr>".format(_T("Date"),_T("Old"),_T("New")));
 						html +="</thead>";
@@ -2307,7 +2327,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		// 0: action , 1: value , 2: service, 3: devid
 		var deviceActionLineTemplate = "  <tr>";
-		deviceActionLineTemplate += "		  <td><span title='{2}'><button class='btn btn-default btn-sm altui-run-action' data-altuiid='{3}' data-service='{2}' >{0}</button></span></td>";
+		deviceActionLineTemplate += "		  <td><span title='{2}'><button class='btn btn-secondary btn-sm altui-run-action' data-altuiid='{3}' data-service='{2}' >{0}</button></span></td>";
 		deviceActionLineTemplate += "		  <td>{1}</td>";
 		deviceActionLineTemplate += "	  </tr>";
 
@@ -2388,7 +2408,7 @@ var UIManager  = ( function( window, undefined ) {
 			case 7:
 				return "info";
 			case 0:
-				return "active";
+				return "primary";
 			case 2:
 			case 3:
 				return "danger";
@@ -2396,7 +2416,7 @@ var UIManager  = ( function( window, undefined ) {
 				return "success";
 			case -1:
 			default:
-				return "default";
+				return "light";
 		}
 	};
 
@@ -2644,12 +2664,12 @@ var UIManager  = ( function( window, undefined ) {
 		var _devicetypesDB = MultiBox.getALTUITypesDB();	// master controller
 
 		if (device==null)
-			return "<img class='altui-device-icon pull-left img-rounded' data-org-src='/err' src='{0}' alt='_todo_' onerror='UIManager.onDeviceIconError(\"{1}\")' {2} ></img>".format(
+			return "<img class='altui-device-icon pull-left rounded' data-org-src='/err' src='{0}' alt='_todo_' onerror='UIManager.onDeviceIconError(\"{1}\")' {2} ></img>".format(
 				defaultIconSrc,
 				device.altuiid,
 				(zindex ? " style='z-index:{0};' ".format(zindex) : "" )
 				);
-			// return "<img class='altui-device-icon pull-left img-rounded' data-org-src='/err' src='"+defaultIconSrc+"' alt='_todo_' "+(zindex ? "style='z-index:{0}'" : "")+" onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+			// return "<img class='altui-device-icon pull-left rounded' data-org-src='/err' src='"+defaultIconSrc+"' alt='_todo_' "+(zindex ? "style='z-index:{0}'" : "")+" onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 		// if there is a custom function, use it
 
 // Rene Boer start
@@ -2671,13 +2691,13 @@ var UIManager  = ( function( window, undefined ) {
 		}
 		else
 			iconDataSrc = iconPath;
-		return "<img class='altui-device-icon pull-left img-rounded' data-org-src='{0}' src='{1}' {3} alt='_todo_' onerror='UIManager.onDeviceIconError(\"{2}\")' ></img>".format(
+		return "<img class='altui-device-icon pull-left rounded' data-org-src='{0}' src='{1}' {3} alt='_todo_' onerror='UIManager.onDeviceIconError(\"{2}\")' ></img>".format(
 			iconPath,
 			iconDataSrc,
 			device.altuiid,
 			(isNullOrEmpty(onclick)) ? "" : "onclick='{0}'".format(onclick)
 		);
-		// return "<img class='altui-device-icon pull-left img-rounded' data-org-src='"+iconPath+"' src='"+iconDataSrc+"' alt='_todo_' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
+		// return "<img class='altui-device-icon pull-left rounded' data-org-src='"+iconPath+"' src='"+iconDataSrc+"' alt='_todo_' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 	}
 
 	function _deviceDraw(device) {
@@ -2698,7 +2718,7 @@ var UIManager  = ( function( window, undefined ) {
 					color = "info";
 				else if (batteryLevel>=10)
 					color = "warning";
-				color = "progress-bar-"+color;
+				color = "bg-"+color;
 				batteryHtml = ALTUI_Templates.batteryHtmlTemplate.format(batteryLevel,color);
 			}
 
@@ -2733,7 +2753,7 @@ var UIManager  = ( function( window, undefined ) {
 					devicebodyHtml+= _defaultDeviceDraw(device);
 				}
 
-				// $("div.altui-device#"+id+" div.panel-body" ).append(deviceHtml);
+				// $("div.altui-device#"+id+" div.card-body" ).append(deviceHtml);
 				deviceHtml = ALTUI_Templates.devicecontainerTemplate.format(
 					id,
 					_enhancedDeviceTitle(device),
@@ -2779,8 +2799,8 @@ var UIManager  = ( function( window, undefined ) {
 
 	function _sceneDraw(scene,norefresh) {
 
-		var delButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-xs altui-delscene pull-right', deleteGlyph,'default',_T("Delete"));
-		var pauseButtonHtml = glyphTemplate.format( "off", _T("Pause Scene") , 'altui-pausescene ' + ((scene.paused>0) ? 'paused':'activated'));
+		var delButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-delscene pull-right', deleteGlyph,'default',_T("Delete"));
+		var pauseButtonHtml = glyphTemplate.format( "power-off", _T("Pause Scene") , 'altui-pausescene ' + ((scene.paused>0) ? 'paused':'activated'));
 		var favoriteHtml = (scene.favorite==true) ? starGlyph : staremtpyGlyph;
 		var label = ((scene.hidden==true) ? hiddenGlyph+' ' : '') + scene.name;
 
@@ -2793,20 +2813,20 @@ var UIManager  = ( function( window, undefined ) {
 		var idDisplay = "<div class='pull-right text-muted'><small>#"+scene.altuiid+" </small></div>";
 
 		var scenecontainerTemplate = "";
-		scenecontainerTemplate	+=	"<div class='panel panel-default altui-scene "+((norefresh==true) ? 'altui-norefresh': '') +"' id='{0}' data-altuiid='{0}'>"
-		scenecontainerTemplate	+=	"<div class='panel-heading altui-scene-heading'>"+delButtonHtml +idDisplay+" <span class='panel-title altui-scene-title' data-toggle='tooltip' data-placement='left' title='{2}'>"+pauseButtonHtml+favoriteHtml+"<small class='altui-scene-title-name'>{1}</small></span> {9}</div>";
-		scenecontainerTemplate	+=	"<div class='panel-body altui-scene-body'>";
+		scenecontainerTemplate	+=	"<div class='card xxx altui-scene "+((norefresh==true) ? 'altui-norefresh': '') +"' id='{0}' data-altuiid='{0}'>"
+		scenecontainerTemplate	+=	"<div class='card-header altui-scene-heading'>"+delButtonHtml +idDisplay+" <span class='card-title altui-scene-title' data-toggle='tooltip' data-placement='left' title='{2}'>"+pauseButtonHtml+favoriteHtml+"<small class='altui-scene-title-name'>{1}</small></span> {9}</div>";
+		scenecontainerTemplate	+=	"<div class='card-body altui-scene-body'>";
 		scenecontainerTemplate	+=	"<small class='altui-scene-date text-muted pull-right'>{6}</small><small class='altui-scene-date text-info pull-right'>{7}</small>";
 		scenecontainerTemplate	+=	"{3}<div >{4}{8}{5}</div>";
 		scenecontainerTemplate	+=	"</div>";
 		scenecontainerTemplate	+=	"</div>";
 
 		var tooltip = "";
-		var runButtonHtml = buttonTemplate.format( scene.altuiid, 'altui-runscene', _T("Run")+"&nbsp;"+runGlyph,'primary',_T("Run"));
-		var editButtonHtml = buttonTemplate.format( scene.altuiid, 'altui-editscene ', wrenchGlyph,'default',_T("Settings"));
-		var calendarHtml = buttonTemplate.format( scene.altuiid, 'altui-scene-history ', calendarGlyph,'default',_T("History"));
-		var cloneButtonHtml = buttonTemplate.format( scene.altuiid, 'altui-clonescene', copyGlyph,'default',_T("Copy"));
-		var active = (scene.active==true) ? glyphTemplate.format( "ok", _T("active") , 'text-success') : '';
+		var runButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-runscene', _T("Run")+"&nbsp;"+runGlyph,'primary',_T("Run"));
+		var editButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-editscene ', wrenchGlyph,'light',_T("Settings"));
+		var calendarHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-scene-history ', calendarGlyph,'light',_T("History"));
+		var cloneButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-clonescene', copyGlyph,'light',_T("Copy"));
+		var active = (scene.active==true) ? glyphTemplate.format( "check", _T("active") , 'text-success') : '';
 		return scenecontainerTemplate.format(scene.altuiid, label, tooltip, runButtonHtml , editButtonHtml , calendarHtml , lastrun, nextrun,cloneButtonHtml,active);
 	};
 
@@ -2959,7 +2979,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		function _displayControl( domparent, device, control, idx, groupoffset ) {
 			var paddingleft = parseInt($("#altui-device-controlpanel-"+devid).css("padding-left")) + (groupoffset.left || 0);
-			var paddingtop = parseInt($("#altui-device-controlpanel-"+devid+" .panel-body ").css("padding-top")) + (groupoffset.top || 0);
+			var paddingtop = parseInt($("#altui-device-controlpanel-"+devid+" .card-body ").css("padding-top")) + (groupoffset.top || 0);
 			switch(control.ControlType) {
 				case "line_break":
 				case "spacer":
@@ -3086,7 +3106,7 @@ var UIManager  = ( function( window, undefined ) {
 							var valueNow = MultiBox.getStatus( device, control.Display.Service, control.Display.Variable )
 							bActif = (valueToMatch==valueNow);
 						}
-						var button = $( "<button type='button' class='btn btn-xs btn-{1} altui-controlpanel-button'>{0}</button>".format(control.Label.text, bActif ? 'primary' : 'default'))
+						var button = $( "<button type='button' class='btn btn-sm btn-{1} altui-controlpanel-button'>{0}</button>".format(control.Label.text, bActif ? 'primary' : 'default'))
 							.appendTo( $(domparent) );
 
 						control.Display.Width = Math.max( control.Display.Width || 10 , $(button).outerWidth() );
@@ -3292,7 +3312,7 @@ var UIManager  = ( function( window, undefined ) {
 							label = control.Label.text;
 					}
 
-					var button = $( "<button type='button' class='btn btn-xs btn-{1} altui-controlpanel-button'>{0}</button>".format(label, 'default'))
+					var button = $( "<button type='button' class='btn btn-sm btn-{1} altui-controlpanel-button'>{0}</button>".format(label, 'default'))
 						.appendTo( $(domparent) );
 
 					// control.Display.Width = $(button).outerWidth();
@@ -3394,7 +3414,7 @@ var UIManager  = ( function( window, undefined ) {
 		$(domparent).css({position: 'relative'});
 		if (tab.TabType=="flash") {
 			if (tab.AfterInit && tab.AfterInit.Function) {
-				$(domparent).prepend('<div id="cpanel_after_init_container" class="col-xs-12"><div>')
+				$(domparent).prepend('<div id="cpanel_after_init_container" class="col-12"><div>')
 
 				var script = tab.AfterInit.ScriptName;
 				// only if script is not forbidden
@@ -3503,7 +3523,7 @@ var UIManager  = ( function( window, undefined ) {
 			{val : '4h', text: '4 byte hex'},
 			{val : '4d', text: '4 byte dec'},
 		];
-		var sel = $("<select id='altui-deviceconfig-select' class='form-control input-sm'></select>");
+		var sel = $("<select id='altui-deviceconfig-select' class='form-control form-control-sm'></select>");
 		$(options).each(function() {
 			var opt = $("<option>").attr('value',this.val).text(this.text);
 			if (this.val == lengthtype)
@@ -3530,17 +3550,17 @@ var UIManager  = ( function( window, undefined ) {
 		html += "<div class=''><small>{0}</small></span></div>".format( m[2] || "" )
 		html += "</td>";
 		html += "<td>";
-		html += "<div class='col-xs-4'><input required type='number' min='1' class='form-control input-sm' value='{0}'></input></div>".format( m[1] || "" );
+		html += "<div class='col-4'><input required type='number' min='1' class='form-control form-control-sm' value='{0}'></input></div>".format( m[1] || "" );
 		html += smallbuttonTemplate.format( 'altui-deletevar-'+varnum, 'altui-delete-variable', deleteGlyph ,'Delete');
 		html += "</td>";
 		html += "<td>";
 		html += $("<div></div>").append(sel).html();
 		html += "</td>";
 		html += "<td>";
-		html += "<div class='col-xs-6'><input type='number' class='form-control input-sm' value='{0}'></input></div>".format(value || "");
+		html += "<div class='col-6'><input type='number' class='form-control form-control-sm' value='{0}'></input></div>".format(value || "");
 		html += "</td>";
 		html += "<td>";
-		html += "<div class='col-xs-6'>{0}</div>".format(current || "");
+		html += "<div class='col-6'>{0}</div>".format(current || "");
 		html += "</td>";
 		html += "</tr>";
 		return html;
@@ -3557,9 +3577,9 @@ var UIManager  = ( function( window, undefined ) {
 				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"LastRouteUpdate" },
 				{ service:"urn:micasaverde-com:serviceId:SecuritySensor1", name:"LastTrip" },
 			];
-			// var html = "<div class='col-xs-12'>";
+			// var html = "<div class='col-12'>";
 			var html = "";
-			html += "<div class='panel panel-default'><div class='panel-body altui-device-keyvariables'>";
+			html += "<div class='card xxx'><div class='card-body altui-device-keyvariables'>";
 			html += "<div class='row'>";
 			$.each(variables, function(idx,variable) {
 				var value = MultiBox.getStatus( device, variable.service, variable.name);
@@ -3586,11 +3606,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					setvariables = curvariables || "";
 				var getvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "VariablesGet") || "";
 				html +="<div class='row'>";
-				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-xs-12 altui-device-config'>"
+				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 altui-device-config'>"
 				html += _drawDeviceLastUpdateStats( device );
 				// if (isNullOrEmpty(setvariables) == false) {
 					html += "<form id='myform' data-toggle='validator' role='form' action='javascript:void(0);' >";
-					html += "<table class='table table-condensed altui-config-variables'>";
+					html += "<table class='table table-responsive table-sm altui-config-variables'>";
 					html +=("<caption>{0} <button id='"+device.altuiid+"' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(_T("Device zWave Parameters"),_T('Save Changes'));
 					html += "<thead>";
 					html += "<tr>";
@@ -3673,9 +3693,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var usedin_objects = MultiBox.getDeviceDependants(device);
 			var html ="";
 			html +="<div class='row altui-device-usedin'>";
-			html += "<div id='altui-device-usedin-"+device.altuiid+"' class='col-xs-12'>"
+			html += "<div id='altui-device-usedin-"+device.altuiid+"' class='col-12'>"
 			html += "<ul>";
-			var smallbuttonTemplate ="<button id='{0}' type='button' class='{1} btn btn-default btn-sm' aria-label='tbd' title='{3}'>{2}</button>";;
+			var smallbuttonTemplate ="<button id='{0}' type='button' class='{1} btn btn-secondary btn-sm' aria-label='tbd' title='{3}'>{2}</button>";;
 			if (usedin_objects.length>0)
 				$.each(usedin_objects, function(idx,obj) {
 					var info=null;
@@ -3688,7 +3708,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								obj.type,
 								"{0} (<small class='text-muted'>{1}</small>)".format(obj.action.action,info.arguments)
 								);
-							html += smallbuttonTemplate.format(obj.scene,"btn btn-default btn-sm altui-scene-goto",searchGlyph,_T("See")); // searchGlyph
+							html += smallbuttonTemplate.format(obj.scene,"btn btn-secondary btn-sm altui-scene-goto",searchGlyph,_T("See")); // searchGlyph
 							html += "</li>";
 							break;
 						case "trigger":
@@ -3699,7 +3719,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								obj.type,
 								"{0} {1} (<small class='text-muted'>{2}</small>)".format(info.name, info.descr,info.condition)
 								);
-							html += smallbuttonTemplate.format(obj.scene,"btn btn-default btn-sm altui-scene-goto",searchGlyph,_T("See")); // searchGlyph
+							html += smallbuttonTemplate.format(obj.scene,"btn btn-secondary btn-sm altui-scene-goto",searchGlyph,_T("See")); // searchGlyph
 							html += "</li>";
 							break;
 						case "actionworkflow":
@@ -3709,7 +3729,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								obj.workflow.name,
 								obj.state,
 								"{0} (<small class='text-muted'>{1}</small>)".format(obj.action.action,info.arguments),
-								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-default btn-sm altui-wflow-goto",searchGlyph,_T("See"))
+								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-secondary btn-sm altui-wflow-goto",searchGlyph,_T("See"))
 							);
 							break;
 						case "triggerworkflow":
@@ -3720,7 +3740,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								obj.transition || "",
 								obj.cond.variable,
 								obj.cond.luaexpr,
-								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-default btn-sm altui-wflow-goto",searchGlyph,_T("See"))
+								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-secondary btn-sm altui-wflow-goto",searchGlyph,_T("See"))
 							);
 							break;
 					}
@@ -3746,7 +3766,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var users = MultiBox.getUsersSync(devicecontroller);
 			var html ="";
 			html +="<div class='row altui-device-triggers'>";
-			html += "<div id='altui-device-triggers-"+device.altuiid+"' class='col-xs-12'>"
+			html += "<div id='altui-device-triggers-"+device.altuiid+"' class='col-12'>"
 			html += "<ul>";
 			var scenes = $.grep(MultiBox.getScenesSync(), function(scene) {
 				var scenecontroller = MultiBox.controllerOf(scene.altuiid).controller;
@@ -3767,8 +3787,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += "<li>{0}:({1}) {2} {3}</li>".format(
 						scene.name,
 						names.join(","),
-						buttonTemplate.format( scene.altuiid, 'btn-xs altui-scene-goto',searchGlyph,'default',_T("See")),
-						buttonTemplate.format( scene.altuiid, 'btn-xs altui-device-deltrigger text-danger', deleteGlyph,'default',_T("Delete"))
+						buttonTemplate.format( scene.altuiid, 'btn-sm altui-scene-goto',searchGlyph,'default',_T("See")),
+						buttonTemplate.format( scene.altuiid, 'btn-sm altui-device-deltrigger text-danger', deleteGlyph,'default',_T("Delete"))
 						);
 				});
 			}
@@ -3791,13 +3811,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// Draw hidding attribute panel
 			var html ="";
 			html+="<div class='row'>";
-			html += "<div id='altui-device-attributes-"+devid+"' class='col-xs-12 altui-device-attributes'>"
+			html += "<div id='altui-device-attributes-"+devid+"' class='col-12 altui-device-attributes'>"
 			html += "<form class='form'>";
 			$.each( device, function(key,val) {
 				if (val!=undefined) {
 					var typ = Object.prototype.toString.call(val);
 					if ((typ!="[object Object]") && (typ!="[object Array]")){
-						html += "<div class='col-sm-6 col-md-4 col-lg-3'>";
+						html += "<div class='col-sm-6 col-md-4 col-lg-3 col-xl-2'>";
 						html += "<div class='form-group'>";
 						html += "<label for='"+key+"'>"+key+"</label>";
 						html += _enhanceEditorValue(key,val,devid)
@@ -3845,7 +3865,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			MultiBox.getRooms(null, function(room,idx) {
 				return ( MultiBox.controllerOf(room.altuiid).controller == devicecontroller );
 			},function(rooms) {
-				var htmlRoomSelect = "<select id='altui-room-list' class='form-control input-sm'>";
+				var htmlRoomSelect = "<select id='altui-room-list' class='form-control form-control-sm'>";
 				if (rooms)
 						htmlRoomSelect	  += "<option value='{1}' {2}>{0}</option>".format(_T("No Room"),0,'');
 						$.each(rooms, function(idx,room) {
@@ -3854,16 +3874,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						});
 				htmlRoomSelect	  += "</select>";
 
-				var htmlDeleteButton= (device.donotdelete==true) ? '' : buttonTemplate.format( device.altuiid, 'btn-xs altui-deldevice pull-right', deleteGlyph,'default',_T("Delete"));
+				var htmlDeleteButton= (device.donotdelete==true) ? '' : buttonTemplate.format( device.altuiid, 'btn-sm altui-deldevice pull-right', deleteGlyph,'default',_T("Delete"));
 				var html ="";
 				html+="<div class='row'>";
-					html +="<div id='altui-device-controlpanel-"+device.altuiid+"' class='col-xs-12 altui-device-controlpanel' data-altuiid='"+device.altuiid+"'>";
-					html +="	<div class='panel panel-default'>";
-					html +="		<div class='panel-heading form-inline'>";
+					html +="<div id='altui-device-controlpanel-"+device.altuiid+"' class='col-12 altui-device-controlpanel' data-altuiid='"+device.altuiid+"'>";
+					html +="	<div class='card xxx'>";
+					html +="		<div class='card-header form-inline'>";
 					html += htmlDeleteButton;
-					html +="			<h1 class='panel-title'>{0} {1} {2} (#{3}) "+htmlRoomSelect+"</h1>";
+					html +="			<h1 class='card-title'>{0} {1} {2} (#{3}) "+htmlRoomSelect+"</h1>";
 					html +="		</div>";
-					html +="		<div class='panel-body'>";
+					html +="		<div class='card-body'>";
 					html +="		</div>";
 					html +="	</div>";
 					html +="</div>";
@@ -3908,7 +3928,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			if (_toLoad==0) {
 				$(container).append( "<div class='row'><div class='altui-debug-div'></div></div>" );	// Draw hidden debug panel
 
-				var panel_body = container.find(".altui-device-controlpanel .panel-body");
+				var panel_body = container.find(".altui-device-controlpanel .card-body");
 				var _altuitypesDB = MultiBox.getALTUITypesDB();					// for ALTUI plugin info
 				var ui_static_data = MultiBox.getDeviceStaticData(device);
 				var dt = _altuitypesDB[_getDeviceDrawMapping(device)];
@@ -4182,7 +4202,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				footerMap.curusername = curuser ? curuser.Name : '';
 
 				usdGlyph = glyphTemplate.format( "usd", _T("License") , 'text-warning');
-				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-default', "{0} {1}".format(usdGlyph,_T("License")),'default',_T("License"));
+				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-secondary', "{0} {1}".format(usdGlyph,_T("License")),'default',_T("License"));
 
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
@@ -4524,7 +4544,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var html = "";
 
 			html += "<div class='altui-favorites row'>";
-			html += "<div class='altui-favorites-sortable col-xs-12'>";
+			html += "<div class='altui-favorites-sortable col-12'>";
 			$.each(favoritesToDraw,function(idx,fav) {
 				if (fav.name=="meteo") {
 					var meteoTemplate = "";
@@ -5169,10 +5189,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		DialogManager.dlgAddDevices( dialog , '', widget.properties.deviceid, function() {
 			DialogManager.dlgAddCheck(dialog,'DisplayIcon',widget.properties.displayicon,_T("Display with device Icon"));
 			DialogManager.dlgAddVariables(dialog, null, widget, function() {
-				DialogManager.dlgAddLine(dialog,'ValueON', _T('Value ON'),widget.properties.onvalue,"",{placeholder:"Leave empty for 1 or true"},"col-xs-6");
-				DialogManager.dlgAddLine(dialog,'ValueOFF', _T('Value OFF'),widget.properties.offvalue,"",{placeholder:"Leave empty for 0 or false or null"},"col-xs-6");
-				DialogManager.dlgAddLine(dialog,'OnLabel', _T('OnLabel'), widget.properties.labels[1],"",null,"col-xs-6");
-				DialogManager.dlgAddLine(dialog,'OffLabel', _T('OffLabel'),widget.properties.labels[0],"",null,"col-xs-6");
+				DialogManager.dlgAddLine(dialog,'ValueON', _T('Value ON'),widget.properties.onvalue,"",{placeholder:"Leave empty for 1 or true"},"col-6");
+				DialogManager.dlgAddLine(dialog,'ValueOFF', _T('Value OFF'),widget.properties.offvalue,"",{placeholder:"Leave empty for 0 or false or null"},"col-6");
+				DialogManager.dlgAddLine(dialog,'OnLabel', _T('OnLabel'), widget.properties.labels[1],"",null,"col-6");
+				DialogManager.dlgAddLine(dialog,'OffLabel', _T('OffLabel'),widget.properties.labels[0],"",null,"col-6");
 				DialogManager.dlgAddCheck(dialog,'Inverted',widget.properties.inverted);
 				DialogManager.dlgAddActions("altui-widget-action-off",dialog, widget, widget.properties.action_off, _T('Action to switch OFF'), function() {
 					DialogManager.dlgAddActions("altui-widget-action-on",dialog, widget, widget.properties.action_on, _T('Action to switch ON'), function() {
@@ -5821,9 +5841,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 	function _createControllerSelect(htmlid) {
 		var html = "";
-		html += "<form class='form-inline col-xs-12'>";
+		html += "<form class='form-inline col-12'>";
 			html += "<div class='form-group'>";
-				html += "<label class='control-label ' for='altui-controller-select' >"+_T("Controller")+":</label>";
+				html += "<label class='form-control-label ' for='altui-controller-select' >"+_T("Controller")+":</label>";
 				html += "<select id='"+htmlid+"' class='form-control'>";
 				$.each(MultiBox.getControllers(), function( idx, controller) {
 					html += "<option value='{0}'>{1}</option>".format( idx , controller.ip=='' ? window.location.hostname : controller.ip  );
@@ -5846,6 +5866,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	//---------------------------------------------------------
 	initEngine		: _initEngine,
 	initLocalizedGlobals : _initLocalizedGlobals,
+	generateNavBarHTML : _generateNavBarHTML,
 	forceOptions	: _forceOptions,	// (name,value)
 	loadCSS : _loadCSS,							// (cssLocationAndName)
 	loadScript		: _loadScript,		//(scriptLocationAndName)
@@ -5897,7 +5918,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				return ''
 
 			var onclick_prop = (page.htmlid) ? ("onclick='UIControler.onClickHtml(\"{0}\");return false;'".format(page.htmlid)) : ''
-			var thisline = "<li><a class='altui-breadcrumd-item' id='{0}' href='javascript:void(0);' {1} >{2}</a></li>".format(page.id,onclick_prop,_T(page.title));
+			var thisline = "<li class='breadcrumb-item'><a class='altui-breadcrumd-item' id='{0}' href='javascript:void(0);' {1} >{2}</a></li>".format(page.id,onclick_prop,_T(page.title));
 			var parent = UIControler.getParentPage(page);
 			return ( (parent) ? _parentsOf(parent) : '' ) + thisline
 		};
@@ -5905,17 +5926,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var html = "";
 		//html += buttonTemplate.format( -1, 'altui-back',glyphTemplate.format( "backward", _T("Back"), "" ),'default',_T("Back")),
 		html +="<ol class='breadcrumb altui-breadcrumb'>";
-		html += "<li><a class='altui-back' href='javascript:void(0);'>{0}</a></li>".format(glyphTemplate.format( "backward", _T("Back"), "" ));
+		html += "<li class='breadcrumb-item'><a class='altui-back' href='javascript:void(0);'>{0}</a></li>".format(glyphTemplate.format( "chevron-left", _T("Back"), "" ));
 		var page = UIControler.getPage(pagecode);
 		var parent = UIControler.getParentPage(page);
 		if (page) {
 			html += _parentsOf(parent);
-			html += "<li class='active'>{0}<span class='altui-page-title'>{1}</span></li>".format(_T(page.title), title ? (": "+title) : '' );
+			html += "<li class='breadcrumb-item active'>{0}<span class='altui-page-title'>{1}</span></li>".format(_T(page.title), title ? (": "+title) : '' );
 		}
 		html+="</ol>";
-		// if(title) {
-			// html += "<h4 class='altui-page-title'>{0}</h4>".format(title)
-		// }
 		return html;
 	},
 	setCrumbTitle: function(title) {
@@ -5927,7 +5945,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		var body="";
 		body+="	<div class='altui-layout row'>";
-		body+="		<div class='col-xs-12 altui-mainpanel'>";
+		body+="		<div class='col-12 altui-mainpanel'>";
 		body+="		</div>";
 		body+="	</div>";
 		return body;
@@ -5943,10 +5961,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		var body="";
 		body+="	<div class='altui-layout row'>";
-		body+="		<div class='col-xs-12 col-sm-push-1 col-sm-10'>";
-		body+="			<div class=''><h4 id='altui-pagetitle' >"+title+"</h4></div>";
-		body+="			<div class='altui-mainpanel row'>";
-		body+="			</div>";
+		body+="		<div class='col-12'>";
+		body+="			<div class='row'><h4 id='altui-pagetitle' class='col-12'>"+title+"</h4></div>";
+		body+="			<div class='altui-mainpanel row'></div>";
 		body+="		</div>";
 		body+="	</div>";
 		return body;
@@ -5955,18 +5972,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		var body="";
 		body+="	<div class='altui-layout row'>";
-		body+="		<div class='col-sm-10 col-sm-push-2'>";
-		body+="			<h3 id='altui-pagetitle' >"+title+"</h3>";
-		body+="			<div class='altui-mainpanel row'>";
-		body+="			</div>";
-		body+="		</div>";
-		body+="		<div class='col-sm-2 col-sm-pull-10 hidden-xs {0}'>".format( (MyLocalStorage.getSettings('FixedLeftButtonBar') || "")==1 ? 'affix' : '' );
+		body+="		<div class='col-sm-2 d-none d-sm-block {0}'>".format( (MyLocalStorage.getSettings('FixedLeftButtonBar') || "")==1 ? 'affix' : '' );
 		body+="			<div class='altui-leftnav btn-group-vertical' role='group' aria-label='...'>";
 		body+="				<!--";
-		body+="				<button type='button' class='btn btn-default'>One</button>";
-		body+="				<button type='button' class='btn btn-default'>Deux</button>";
-		body+="				<button type='button' class='btn btn-default'>Trois</button>";
+		body+="				<button type='button' class='btn btn-secondary'>One</button>";
+		body+="				<button type='button' class='btn btn-secondary'>Deux</button>";
+		body+="				<button type='button' class='btn btn-secondary'>Trois</button>";
 		body+="				-->";
+		body+="			</div>";
+		body+="		</div>";
+		body+="		<div class='col-sm-10'>";
+		body+="			<h3 id='altui-pagetitle' >"+title+"</h3>";
+		body+="			<div class='altui-mainpanel row'>";
 		body+="			</div>";
 		body+="		</div>";
 		body+="	</div>";
@@ -5991,8 +6008,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		var body = (layoutfunc)(title || '' );
 		$("div[role=main]").append(body);
-		PageMessage.init();
-		$("#altui-toggle-messages").before ( UIManager.breadCrumb( breadcrumb ) );
+		PageMessage.init(breadcrumb);
 
 		// elements outside of the layout
 		$("#dialogs").off().empty();
@@ -6034,7 +6050,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
 				ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride');
 			var html="";
-			html ="<div class='altui-weather-widget hidden-xs'>";
+			html ="<div class='altui-weather-widget d-none d-sm-block'>";
 			// html +='<a href="//www.accuweather.com/fr/fr/meylan/1097583/weather-forecast/1097583" class="aw-widget-legal">';
 			html +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
 			html +=('</a><div id="awcc1439296613816" class="aw-widget-current"	data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
@@ -6042,7 +6058,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// console.log(html);
 			$(".altui-mainpanel").append(html);
 		}
-		$(".altui-mainpanel").append("<div class='col-xs-12'><div class='altui-favorites row'></div></div>");
+		$(".altui-mainpanel").append("<div class='col-12'><div class='altui-favorites row'></div></div>");
 
 		_registerFavoriteClickHandlers();
 		_redrawFavorites( true );
@@ -6168,8 +6184,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		formHtml+=" <div class='input-group '>";
 		formHtml+="		  <input id='altui-create-room-name' type='text' class='form-control' placeholder='Room name...'>";
 		formHtml+="		  <span class='input-group-btn'>";
-		formHtml+="			<button id='altui-create-room' class='btn btn-default' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button>";
-		// formHtml+="		   <button id='altui-save-rooms' class='btn btn-default' type='button'>"+saveGlyph+"&nbsp;"+_T("Save")+"</button>";
+		formHtml+="			<button id='altui-create-room' class='btn btn-secondary' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button>";
+		// formHtml+="		   <button id='altui-save-rooms' class='btn btn-secondary' type='button'>"+saveGlyph+"&nbsp;"+_T("Save")+"</button>";
 		formHtml+="		  </span>";
 		formHtml+="		</div><!-- /input-group -->";
 		formHtml+="		</div><!-- /form-group -->";
@@ -6181,7 +6197,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// table of rooms
 		$(".altui-mainpanel")
 			.append( _createControllerSelect('altui-controller-select'))
-			.append($("<div class='col-xs-12'><table id='table' class='table table-condensed'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Scenes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
+			.append($("<div class='col-12'><table id='table' class='table table-responsive table-sm'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Scenes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
 		$("#altui-controller-select").closest(".form-group").append(formHtml);
 
 		var roomListTemplate = "<tr data-altuiid='{0}'><td>{0}</td><td><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td><td>{4}</td></tr>";
@@ -6200,7 +6216,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					enableHTML : true,
 					includeSelectAllOption: true,
 					maxHeight: 300,
-					buttonClass: 'btn btn-default btn-sm',
+					buttonClass: 'btn btn-secondary btn-sm',
 					onChange: function(element, checked) {
 						var scenealtuiid = $(element).val();
 						 var scene= MultiBox.getSceneByAltuiID( scenealtuiid );
@@ -6238,7 +6254,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					enableHTML : true,
 					includeSelectAllOption: true,
 					maxHeight: 300,
-					buttonClass: 'btn btn-default btn-sm',
+					buttonClass: 'btn btn-secondary btn-sm',
 					onChange: function(element, checked) {
 						 // $("#altui-save-rooms").addClass("btn-danger");
 
@@ -6272,7 +6288,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						var width = $(this).width();
 						var id = $(this).prop('id');
 						var room = MultiBox.getRoomByAltuiID(id);
-						$(this).replaceWith("<input class='altui-room-name-inp form-control input-sm' id='{0}' value='{1}'></input>".format(room.altuiid, room.name.escapeXml()));
+						$(this).replaceWith("<input class='altui-room-name-inp form-control form-control-sm' id='{0}' value='{1}'></input>".format(room.altuiid, room.name.escapeXml()));
 						$("input#{0}".format(room.altuiid)).width(width);
 					})
 					.off("focusout",".altui-room-name-inp")
@@ -6328,13 +6344,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		UIManager.clearPage('Control Panel',"{0} {1} <small>#{2}</small>".format( device.name , category ,altuiid),UIManager.oneColumnLayout);
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
 
-		var html = "<div class='form-inline col-xs-12'>";
-		html += "<button type='button' class='btn btn-default' id='altui-toggle-attributes' >"+_T("Attributes")+"<span class='caret'></span></button>";
-		html += "<button type='button' class='btn btn-default altui-device-variables' id='"+altuiid+"'>"+_T("Variables")+"</button>";
-		html += "<button type='button' class='btn btn-default altui-device-actions' id='"+altuiid+"' >"+_T("Actions")+"</button>";
-		html += "<button type='button' class='btn btn-default' id='altui-device-config' >"+_T("Configuration")+"<span class='caret'></span></button>";
-		html += "<button type='button' class='btn btn-default' id='altui-device-usedin' >"+_T("Used in")+"<span class='caret'></span></button>";
-		html += "<button type='button' class='btn btn-default' id='altui-device-triggers' >"+_T("Notification")+"<span class='caret'></span></button>";
+		var html = "<div class='form-inline col-12'>";
+		html += "<button type='button' class='btn btn-secondary' id='altui-toggle-attributes' >"+_T("Attributes")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-secondary altui-device-variables' id='"+altuiid+"'>"+_T("Variables")+"</button>";
+		html += "<button type='button' class='btn btn-secondary altui-device-actions' id='"+altuiid+"' >"+_T("Actions")+"</button>";
+		html += "<button type='button' class='btn btn-secondary' id='altui-device-config' >"+_T("Configuration")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-secondary' id='altui-device-usedin' >"+_T("Used in")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-secondary' id='altui-device-triggers' >"+_T("Notification")+"<span class='caret'></span></button>";
 		if (AltuiDebug.IsDebug())
 			html +=	 buttonDebugHtml;
 		html += "</div>";
@@ -6343,7 +6359,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		//
 		// Draw device control panel (attributes+panel+debug)
 		//
-		$(".altui-mainpanel").append( "<div id='altui-device-controlpanel-container-"+altuiid+"' class='col-xs-12 altui-device-controlpanel-container'></div>" );
+		$(".altui-mainpanel").append( "<div id='altui-device-controlpanel-container-"+altuiid+"' class='col-12 altui-device-controlpanel-container'></div>" );
 		var container = $("#altui-device-controlpanel-container-"+altuiid);
 		UIManager.deviceDrawControlPanel( device, container );	//altuiid, device, domparent
 
@@ -6419,9 +6435,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		//{1} : 192.168.1.16/localcdn
 		var timer = null;
-		var template =	"<div class='col-xs-12 col-sm-6 col-md-4 col-lg-3'>"+
-							"<div class='altui-myhome-panel panel panel-default'>"+
-								"<div class='altui-myhome-room panel-body' data-altuiid='${altuiid}'>"+
+		var template =	"<div class='col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2'>"+
+							"<div class='altui-myhome-panel card xxx'>"+
+								"<div class='altui-myhome-room card-body' data-altuiid='${altuiid}'>"+
 										"<div class='altui-myhome-roomimg altui-myhome-transparent' style='background-image: url({1}/${file}.jpg),url({2})'></div>"+
 										"{0}"+
 								"</div>"+
@@ -6580,7 +6596,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 			// clear all
 			$(".altui-mainpanel").html("").prepend(
-			"<div class='col-xs-12'>{0}</div>".format(UIManager.breadCrumb(model.breadcrumb,model.title)) )
+			"<div class='col-12'>{0}</div>".format(UIManager.breadCrumb(model.breadcrumb,model.title)) )
 
 			// prepare the template
 			var tmpl = _.template( template.format(model.overlay, g_ALTUI.g_CustomImagePath,model.defaulturi) )
@@ -6846,8 +6862,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			deviceCreateModalTemplate += "	<div class='modal-dialog modal-lg'>";
 			deviceCreateModalTemplate += "	  <div class='modal-content'>";
 			deviceCreateModalTemplate += "		<div class='modal-header'>";
+			deviceCreateModalTemplate += "		  <h5 class='modal-title'>Create Device</h5>";
 			deviceCreateModalTemplate += "		  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-			deviceCreateModalTemplate += "		  <h4 class='modal-title'>Create Device</h4>";
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		<div class='modal-body'>";
 				deviceCreateModalTemplate += "		<div class='row-fluid'>";
@@ -6869,7 +6885,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		<div class='modal-footer'>";
-			deviceCreateModalTemplate += "		  <button type='button' class='btn btn-default' data-dismiss='modal'>"+_T("Close")+"</button>";
+			deviceCreateModalTemplate += "		  <button type='button' class='btn btn-secondary' data-dismiss='modal'>"+_T("Close")+"</button>";
 			deviceCreateModalTemplate += "		  <button type='button' class='btn btn-primary'>"+_T("Save Changes")+"</button>";
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "	  </div><!-- /.modal-content -->";
@@ -6898,8 +6914,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var filterHtml="";
 			// filterHtml+="<div class='btn-group'>";
 			filterHtml+="<div class='altui-pagefilter'>";
-			filterHtml+="<div class='panel panel-default' id='altui-device-filter-form'>";
-			filterHtml+="  <div class='panel-body'>";
+			filterHtml+="<div class='card xxx' id='altui-device-filter-form'>";
+			filterHtml+="  <div class='card-body'>";
 				filterHtml+="<form class='form-inline'>";
 					$.each(_checks, function(idx,check) {
 						filterHtml+="<div class='form-group'><div class='checkbox'>";
@@ -6936,10 +6952,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					null,
 					function(categories) {
 						categoryfilterHtml+='</select>';
-						categoryfilterHtml+="  <button type='button' class='btn btn-default' id='altui-device-filter' >";
+						categoryfilterHtml+="  <button type='button' class='btn btn-secondary' id='altui-device-filter' >";
 						categoryfilterHtml+=  (searchGlyph + '&nbsp;' +_T('Filter') + "<span class='caret'></span>");
 						categoryfilterHtml+="  </button>";
-						categoryfilterHtml+="  <button type='button' class='btn btn-default' id='altui-device-create' >";
+						categoryfilterHtml+="  <button type='button' class='btn btn-secondary' id='altui-device-create' >";
 						categoryfilterHtml+= (plusGlyph + "&nbsp;" + _T("Create"));
 						categoryfilterHtml+="  </button>";
 					}
@@ -7040,10 +7056,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						},
 						response: function( event, ui ) {
 							if (ui.content.length>0) {
-								$("#altui-device-name-filter").removeClass("has-error");
+								$("#altui-device-name-filter").removeClass("has-danger");
 								return;
 							}
-							$("#altui-device-name-filter").addClass("has-error");
+							$("#altui-device-name-filter").addClass("has-danger");
 							ui.content.push( { label:_T('No Match'), value:'' } );
 						},
 					});
@@ -7232,7 +7248,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		function sceneDraw(idx, scene) {
 			var html = UIManager.sceneDraw(scene);
-			var scenecontainerTemplate="<div class=' col-sm-6 col-md-4'>";
+			var scenecontainerTemplate="<div class=' col-sm-6 col-md-4 col-xl-3 '>";
 			scenecontainerTemplate	+=	html;
 			scenecontainerTemplate	+=	"</div>";
 			var domPanel = $(".altui-mainpanel");
@@ -7308,10 +7324,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$.when( _drawRoomFilterButtonAsync( _sceneFilter.room ) )
 			.then(function( html) {
 				toolbarHtml+= html;	// room filter
-				toolbarHtml+="	<button type='button' class='btn btn-default' id='altui-scene-create' >";
+				toolbarHtml+="	<button type='button' class='btn btn-secondary' id='altui-scene-create' >";
 				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create"));
 				toolbarHtml+="	</button>";
-				toolbarHtml+="	<button type='button' class='btn btn-default' id='altui-scene-create-fromstate' >";
+				toolbarHtml+="	<button type='button' class='btn btn-secondary' id='altui-scene-create-fromstate' >";
 				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create From State"));
 				toolbarHtml+="	</button>";
 				$(".altui-scene-toolbar").replaceWith( "<div class='altui-scene-toolbar'>"+toolbarHtml+"</div>" );
@@ -7450,8 +7466,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						));
 					MultiBox.getSceneHistory( scene, function(history) {
 						var html="";
-						html += "<div class='panel panel-default'> <div class='panel-body'>";
-						html +="<table id='{0}' class='table table-condensed altui-variable-value-history'>".format(altuiid);
+						html += "<div class='card xxx'> <div class='card-body'>";
+						html +="<table id='{0}' class='table table-responsive table-sm altui-variable-value-history'>".format(altuiid);
 						html +="<thead>";
 						html += ("<tr><th>{0}</th><th>{1}</th></tr>".format(_T("Date"),_T("Name")));
 						html +="</thead>";
@@ -7549,7 +7565,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		UIManager.clearPage('Scene Edit',altuiid!=NULL_SCENE ? "Edit Scene #"+scene.altuiid : "Create Scene",UIManager.oneColumnLayout);
 
 		var editor = SceneEditor( scene );
-		var html = "<div class='col-xs-12'>" ;
+		var html = "<div class='col-12'>" ;
 			html += UIManager.sceneDraw( scene, true);	// draw scene
 			html += editor.sceneEditDraw();					// draw editor
 		html += "</div>";
@@ -7663,7 +7679,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 										html += "<li class='altui-transition-subtitle'>When</li>";
 										html += "<ul>";
 											if (link.schedule )
-												html += "<li>Schedule: {0}</li>".format(UIManager.displayTimers( [ link.schedule ] , { only_text:true, add_button:false, add_json:false }).replace('table table-condensed','table altui-workflow-schedule'));
+												html += "<li>Schedule: {0}</li>".format(UIManager.displayTimers( [ link.schedule ] , { only_text:true, add_button:false, add_json:false }).replace('table table-responsive table-sm','table altui-workflow-schedule'));
 											if (link.timer)
 												html += "<li>Timer: '{0}' expiration {1}s</li>".format(link.timer.name,link.timer.duration);
 											html += _displayConditions(link.conditions)
@@ -7686,7 +7702,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 
 		var _toolsWorkflow = [
-			{id:"altui-workflow-edit", glyph:"glyphicon-pencil", label:_T("Edit")},
+			{id:"altui-workflow-edit", glyph:"pencil", label:_T("Edit")},
 		];
 
 		var workflow = WorkflowManager.getWorkflow(altuiid);
@@ -7695,10 +7711,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		UIManager.clearPage('Workflow Report',_T("Workflow Report"),UIManager.oneColumnLayout);
 		var html = "";
-		html += "<div class='col-xs-12'><div id='altui-workflow-report'>";
+		html += "<div class='col-12'><div id='altui-workflow-report'>";
 		html += HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow )
-		html += "<div class='panel panel-default'>"
-			html += "<div class='panel-body'>"
+		html += "<div class='card xxx'>"
+			html += "<div class='card-body'>"
 				html += _displayWorkflowHeader(workflow)
 				html += _displayWorkflowStats(WorkflowManager.getWorkflowStats(altuiid))
 			html += "</div>"
@@ -7777,7 +7793,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// WorkflowManager.addWorkflow( model.workflow );
 			// var graph =  JSON.parse(model.workflow.graph_json)
 			// return '<pre>{0}</pre>'.format(JSON.stringify(graph,null,2))
-			var html = "<div class='col-xs-12'>"
+			var html = "<div class='col-12'>"
 			html +="<table class='table'>";
 			html += "<caption>Device Substitution Table</caption>";
 			html += "<thead>";
@@ -7842,17 +7858,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var editButton = xsbuttonTemplate.format("{0}","altui-edit-item-{1}",editGlyph,"Edit");
 		var blocklyButton = xsbuttonTemplate.format("{0}","altui-blockly-item-{1}",wrenchGlyph.replace( _T("Settings") , "Blockly") ,"Blockly");
 		var _toolsWorkflow = [
-			{id:"altui-workflow-save", glyph:"glyphicon-save", label:_T("Save")},
-			{id:"altui-workflow-reset", glyph:"glyphicon-off", label:_T("Reset")},
-			{id:"altui-workflow-newstate", glyph:"glyphicon-unchecked", label:_T("State")},
-			{id:"altui-workflow-edit", glyph:"glyphicon-pencil", label:_T("Edit")},
-			{id:"altui-workflow-delete", glyph:"glyphicon-remove", label:_T("Delete")},
-			{id:"altui-workflow-report", glyph:"glyphicon-list", label:_T("Report")},
-			{id:"altui-workflow-history", collapsetarget:"#altui-workflow-history-text", glyph:"glyphicon-calendar", label:_T("History")},
+			{id:"altui-workflow-save", glyph:"floppy-o", label:_T("Save")},
+			{id:"altui-workflow-reset", glyph:"refresh", label:_T("Reset")},
+			{id:"altui-workflow-newstate", glyph:"square-o", label:_T("State")},
+			{id:"altui-workflow-edit", glyph:"pencil", label:_T("Edit")},
+			{id:"altui-workflow-delete", glyph:"trash-o", label:_T("Delete")},
+			{id:"altui-workflow-report", glyph:"list", label:_T("Report")},
+			{id:"altui-workflow-history", collapsetarget:"#altui-workflow-history-text", glyph:"history", label:_T("History")},
 			{id:"altui-workflow-bag", collapsetarget:"#altui-workflow-bag-text", glyph:"glyphicon-compressed", label:_T("Bag")},
-			{id:"altui-workflow-export", glyph:"glyphicon-floppy-save", label:_T("Import/Export")},
-			{id:"altui-workflow-zoomin", glyph:"glyphicon-plus" },
-			{id:"altui-workflow-zoomout", glyph:"glyphicon-minus" },
+			{id:"altui-workflow-export", glyph:"shopping-bag", label:_T("Import/Export")},
+			{id:"altui-workflow-zoomin", glyph:"search-plus" },
+			{id:"altui-workflow-zoomout", glyph:"search-minus" },
 			// {id:"altui-workflow-rotate", glyph:"glyphicon-repeat" },
 		];
 		var selected = [];
@@ -7869,7 +7885,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					$('div#dialogModal').modal();
 					$('div#dialogs')
 						.off('click')
-						.on( 'click','.modal-footer .btn-default', function(e) {
+						.on( 'click','.modal-footer .btn-secondary', function(e) {
 							e.stopPropagation();
 							$('div#dialogModal').modal('hide');
 							(callback)(null);
@@ -7916,7 +7932,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							$('div#dialogModal').modal();
 							$('div#dialogs')
 								.off('click')
-								.on( 'click','.modal-footer .btn-default', function(e) {
+								.on( 'click','.modal-footer .btn-secondary', function(e) {
 									e.stopPropagation();
 									$('div#dialogModal').modal('hide');
 									(callback)(null);
@@ -7981,12 +7997,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			function _displayLua(htmlid,lua) {
 				var html = ""
 				lua = lua || ""
-				html +="<h4>Lua</h4>"
+				html +="<h5>Lua</h5>"
 				html +="<div class='altui-ace-editor' id='{0}'>{1}</div>".format(htmlid,lua)
 				return html;
 			}
 			_clearPage();
-			var html = "<div class='col-xs-12'>";
+			var html = "<div class='col-12'>";
 			html += HTMLUtils.drawForm( 'altui-state-form', _T("State Properties"),
 				[
 					{ id:"altui-form-StateName", label:_T("State Name"), type:"input", value: Model.name, opt:{required:''} },
@@ -8232,7 +8248,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							$('div#dialogModal').modal();
 							$('div#dialogs')
 								.off('click')
-								.on( 'click','.modal-footer .btn-default', function(e) {
+								.on( 'click','.modal-footer .btn-secondary', function(e) {
 									e.stopPropagation();
 									$('div#dialogModal').modal('hide');
 									(callback)(null);
@@ -8280,7 +8296,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				DialogManager.dlgAddWorkflowStates(dialog,'altui-select-workflowstate', _T("States") , exclusion_altuiid, waitForState);
 				$('div#dialogModal').modal();
 				$('div#dialogs')
-					.off('click').on( 'click','.modal-footer .btn-default', function(e) {
+					.off('click').on( 'click','.modal-footer .btn-secondary', function(e) {
 						e.stopPropagation();
 						$('div#dialogModal').modal('hide');
 						(callback)(null);
@@ -8326,7 +8342,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				return html;
 			};
 			_clearPage();
-			var html = "<div class='col-xs-12'>";
+			var html = "<div class='col-12'>";
 
 			html += HTMLUtils.drawForm( 'altui-link-form', _T("Link Properties"),
 				[
@@ -8564,7 +8580,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			PageMessage.message( "Workflow had to be adjusted to your vera, save is needed", "info");
 		}
 
-		$(".altui-mainpanel").append("<div class='col-xs-12'><div id='altui-workflow-canvas'></div></div>");
+		$(".altui-mainpanel").append("<div class='col-12'><div id='altui-workflow-canvas'></div></div>");
 		UIManager.loadJointJSScript( function() {
 			graph = new joint.dia.Graph();
 			//
@@ -8965,8 +8981,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageWorkflows: function ()
 	{
 		var _toolsMain = [
-			{id:"altui-workflow-create", glyph:"glyphicon-plus", label:_T("Create")},
-			{id:"altui-workflow-save", glyph:"glyphicon-floppy-save", label:_T("Save")}
+			{id:"altui-workflow-create", glyph:"plus", label:_T("Create")},
+			{id:"altui-workflow-save", glyph:"floppy-o", label:_T("Save")}
 		];
 
 		function _drawWorkflows(workflows) {
@@ -8977,26 +8993,25 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var body = 
 					buttonTemplate.format( workflow.altuiid, 'altui-editworkflow pull-left', wrenchGlyph,'default',_T("Settings")) + 
 					buttonTemplate.format( workflow.altuiid, 'altui-cloneworkflow pull-left', copyGlyph,'default',_T("Clone"));
-				var pauseButtonHtml = glyphTemplate.format( "off", _T("Pause Workflow") , 'altui-pauseworkflow ' + ((workflow.paused>0) ? 'paused':'activated'));
+				var pauseButtonHtml = glyphTemplate.format( "power-off", _T("Pause Workflow") , 'altui-pauseworkflow ' + ((workflow.paused>0) ? 'paused':'activated'));
 				html += ALTUI_Templates.workflowContainerTemplate.format(
-					"col-sm-6 col-md-4 col-lg-3",
+					"col-sm-6 col-md-4 col-lg-3 col-xl-2",
 					workflow.altuiid,
 					workflow.altuiid,
 					workflow.name,
-					buttonTemplate.format( workflow.altuiid, 'btn-xs altui-delworkflow pull-right', deleteGlyph,'default',_T("Delete")),
+					buttonTemplate.format( workflow.altuiid, 'btn-sm altui-delworkflow pull-right', deleteGlyph,'default',_T("Delete")),
 					body,
 					pauseButtonHtml
 					);
 			});
-			$(".altui-mainpanel").html(html);
+			$(".altui-mainpanel").append(html);
 		}
 
 		UIManager.clearPage('Workflow Pages',_T("Workflow Pages"),UIManager.oneColumnLayout);
 		if (MultiBox.isWorkflowEnabled() == false) {
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
 		}
-		$("#altui-pagetitle").css("display","inline").after("<div class='altui-workflow-toolbar'></div>");
-		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsMain ) );
+		$(".altui-mainpanel").append(HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsMain, 'my-2 col-12' ))
 
 		UIManager.loadJointJSScript( function() {
 			// do the drawing now that scripts are loaded
@@ -9340,14 +9355,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _drawPublishForm( model , vkey ) {
 			model = $.extend( { id:0, Title:"",	 Description:"", Icon:"", Instructions:"", AllowMultiple:0, AutoUpdate:0, Devices:[], Versions:{}, Repositories:[] } , model );
 			var html="";
-			html += "<div id='altui-plugin-div' class='col-xs-12' data-pluginid='{0}'>".format(model.id);
+			html += "<div id='altui-plugin-div' class='col-12' data-pluginid='{0}'>".format(model.id);
 				html += "<div class='row'>"
-					html += "<div class='col-xs-6'>"
+					html += "<div class='col-6'>"
 						html += "<div class='altui-select-app'>"
 						html += _drawPluginSelect( _plugins_data, model	 )
 						html += "</div>"
 					html += "</div>"
-					html += "<div class='col-xs-6'>"
+					html += "<div class='col-6'>"
 						html += "<div class='altui-select-version'>"
 						if (model) {
 							if ( (vkey == undefined) && (Object.keys(model.Versions).length>0))
@@ -9361,7 +9376,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += "</div>"
 				html += "</div>"
 				html += "<div class='row'>"
-					html += "<div class='col-xs-12'>"
+					html += "<div class='col-12'>"
 						var verparts = (vkey || "").split(/\.(.+)?/)
 						html += HTMLUtils.drawForm( 'altui-publish-form', _T("Edit Application Properties"),
 							[
@@ -9492,7 +9507,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				})
 				.on("click","#altui-btn-create", function() {
 					var plugin = _getPluginFromForm();
-					if ( $('#altui-publish-form').validator('validate').has('.has-error').length == 0)
+					if ( $('#altui-publish-form').validator('validate').has('.has-danger').length == 0)
 					{
 						_updatePlugin( plugin ,"create" ) .done( function(data) {
 							PageMessage.message( data, "success");
@@ -9537,7 +9552,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		var publish_url = 'https://script.google.com/macros/s/AKfycbw7ZFJM0EWhYtc1aEm4fWxk2vC6gwO4S4ly6y3g0xCqE_5cRHkO/exec';
 		UIManager.clearPage('Publish App',_T("Publish Application"),UIManager.oneColumnLayout);
-		$(".altui-mainpanel").append("<div class='altui-plugin-msg col-xs-12'></div><div class='altui-plugin-msg2 col-xs-12'></div><div id='altui-plugin-div'></div>");
+		$(".altui-mainpanel").append("<div class='altui-plugin-msg col-12'></div><div class='altui-plugin-msg2 col-12'></div><div id='altui-plugin-div'></div>");
 		_displayPublishPage();
 	},
 
@@ -9606,13 +9621,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var html = "";
 			html += "<div class='altui-store-categories btn-group-vertical'>"
 
-			html += "<button id='*' type='button' class='altui-plugin-category-btn btn btn-default'>{0}</button>".format(_T("All"))
+			html += "<button id='*' type='button' class='altui-plugin-category-btn btn btn-secondary'>{0}</button>".format(_T("All"))
 				$.each(arr, function(i,entry) {
-					html += "<button id='{0}' type='button' class='altui-plugin-category-btn btn btn-default'>{0} <span class='pull-right hidden-xs badge'>{1}</span></button>"
+					html += "<button id='{0}' type='button' class='altui-plugin-category-btn btn btn-secondary'>{0} <span class='pull-right d-none d-sm-block badge badge-secondary'>{1}</span></button>"
 					.format(entry,_counts[entry] || 0 )
 				});
 			html += "</div>"
-			html += "<button id='altui-publish' type='button' class='altui-plugin-publish-btn btn btn-default'>{0}</button>".format(_T("Publish"))
+			html += "<button id='altui-publish' type='button' class='altui-plugin-publish-btn btn btn-secondary'>{0}</button>".format(_T("Publish"))
 			return html;
 		}
 		function _displayCarousel( ) {
@@ -9676,7 +9691,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				});
 		}
 		function _drawVersionSelect(pluginapp,arr) {
-			var html = "<select class='input-sm form-control altui-version-selector'>"
+			var html = "<select class='form-control-sm form-control altui-version-selector'>"
 			// var arr = _orderVersions(pluginapp);
 			$.each(arr, function(key,version) {
 					html += "<option value='{0}'>{1}</option>".format(version.label,version.label.substring(0,13))
@@ -9705,18 +9720,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				stars += glyphTemplate.format("star",reviews.average_rating,"text-warning")
 			}
 			for( var i=1+Math.round(reviews.average_rating); i<=5; i++) {
-				stars += glyphTemplate.format("star-empty",reviews.average_rating,"")
+				stars += glyphTemplate.format("star-o",reviews.average_rating,"")
 			}
-			html +="<div class='{2}'>{0} <span class='badge'>{1}</span></div>".format(stars, reviews.nb,cls)
+			html +="<div class='{2}'>{0} <span class='badge badge-secondary'>{1}</span></div>".format(stars, reviews.nb,cls)
 			return html;
 		}
 		function _displayOnePlugin(plugin) {
 			var arr = _orderVersions(plugin);
 			var firstversionid = arr[0].id;
 			var html = "";
-				html += "<div id='{0}' class='col-xs-6 col-sm-4 col-md-3 col-lg-2 altui-pluginbox' data-pluginid='{0}'>".format(plugin.id)
-					html += "<div class='panel panel-default altui-pluginbox-panel'>"
-						html += "<div class='panel-body'>"
+				html += "<div id='{0}' class='col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 altui-pluginbox' data-pluginid='{0}'>".format(plugin.id)
+					html += "<div class='card xxx altui-pluginbox-panel'>"
+						html += "<div class='card-body'>"
 							html += "<div class='altui-plugin-version pull-right'>{0}</div>".format(_drawVersionSelect(plugin,arr))
 							html += ( plugin.Icon && plugin.Icon.startsWith('https') ? "<img {1} class='altui-plugin-icon' src='{0}'></img>"  : "<img {1} class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon,"onerror='this.src=defaultIconSrc'");
 							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title.htmlEncode())
@@ -9732,7 +9747,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		function _displayPageSwitch(direction) {
 			var html = "";
-				html += "<div class='altui-pageswitchbox col-xs-2'>"
+				html += "<div class='altui-pageswitchbox col-2'>"
 				// buttonTemplate		= "<button id='{0}' type='button' class='{1} btn btn-{3}' aria-label='tbd' title='{4}'>{2}</button>"
 				html += buttonTemplate.format(direction,'altui-plugin-pageswitch',pageGlyphs[direction]+" "+direction,'default',direction)
 							// html += "<div class='altui-plugin-pageswitch' data-direction='{1}'>{0}</div>".format(pageGlyphs[direction],direction)
@@ -9742,7 +9757,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		function _displayPlugins( filter ) {
 			filter = $.extend({},filter)
-			$(".altui-store-items").html("<div class='col-xs-12'><div class='jumbotron'><p>{0}</p></div></div>".format(pageGlyphs["spinner"]));
+			$(".altui-store-items").html("<div class='col-12'><div class='jumbotron'><p>{0}</p></div></div>".format(pageGlyphs["spinner"]));
 			$(".altui-store-paging").html( "" );
 			var filterbtn = filter.filterbtn
 			var filtername = filter.filtername
@@ -9799,7 +9814,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			_computeCounts();
 			// carousel
 			html += "<div class='row'>";
-				html += "<div class='col-xs-12'>";
+				html += "<div class='col-12'>";
 					html += _displayCarousel()
 				html += "</div>";
 			html += "</div>";
@@ -9807,11 +9822,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 			html += "<div class='row'>";
 				// categories
-				html += "<div class='col-xs-2'>{0}</div>".format( _displayCategories() )
+				html += "<div class='col-2'>{0}</div>".format( _displayCategories() )
 				// plugins
-				html += "<div class='col-xs-10'>"
+				html += "<div class='col-10'>"
 					html += "<div class='row'>";
-						html+="<div id='altui-plugin-name-filter' class='col-xs-12 input-group'>";
+						html+="<div id='altui-plugin-name-filter' class='col-12 input-group'>";
 							html+="<span class='input-group-addon' id='altui-plugin-search-btn'>"+searchGlyph+"</span>";
 							html+="<input id='altui-plugin-name-filter-input' type='text' class='form-control' placeholder='Plugin Name' aria-describedby='name' value=''>";
 						html += "</div>";
@@ -10018,11 +10033,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			workflows:{ name:'Workflows', bEnabled:true, update: updateWorkflows },
 		}
 		var _toolsTimeline = [
-			{id:"altui-zoomIn", glyph:"glyphicon-zoom-in", label:_T("Zoom In")},
-			{id:"altui-zoomOut", glyph:"glyphicon-zoom-out", label:_T("Zoom Out")},
-			{id:"altui-moveLeft", glyph:"glyphicon-backward", label:_T("Move Left")},
-			{id:"altui-moveRight", glyph:"glyphicon-forward", label:_T("Move Right")},
-			{id:"altui-moveNow", glyph:"glyphicon-time", label:_T("Track Now")},
+			{id:"altui-zoomIn", glyph:"search-plus", label:_T("Zoom In")},
+			{id:"altui-zoomOut", glyph:"search-minus", label:_T("Zoom Out")},
+			{id:"altui-moveLeft", glyph:"hand-o-left", label:_T("Move Left")},
+			{id:"altui-moveRight", glyph:"hand-o-right", label:_T("Move Right")},
+			{id:"altui-moveNow", glyph:"clock-o", label:_T("Track Now")},
 			{id:"altui-timeline-filter", type:"select", multiple:"true" },
 		];
 
@@ -10288,7 +10303,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$.each(filters, function(k,v) {
 						groups.add({id: k, content: v.name});
 				});
-				var html = "<div class='col-xs-12' id='visualization'>"
+				var html = "<div class='col-12' id='visualization'>"
 					html += HTMLUtils.drawToolbar( 'altui-timeline-toolbar', _toolsTimeline )
 				html +="</div>";
 
@@ -10313,7 +10328,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						enableHTML : true,
 						includeSelectAllOption: true,
 						maxHeight: 300,
-						buttonClass: 'btn btn-default',
+						buttonClass: 'btn btn-secondary',
 						onChange: function(element, checked) {
 							// Get selected options.
 							var toShow = $.map($('#altui-timeline-filter :selected'),function(e)  { return e.value; })
@@ -10396,31 +10411,31 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		function _getFileButton(plugin) {
 			var html = "";
-			html +="<div class='btn-group'>";
-			html +="  <button id='{0}' type='button' class='btn btn-default btn-sm dropdown-toggle altui-plugin-files' data-toggle='dropdown' aria-expanded='false'>".format(plugin.id);
-			html +=	 (_T("Files")+" <span class='caret'></span>");
+			html +="<div class='dropdown'>";
+			html +="  <button id='{0}' type='button' class='btn btn-secondary btn-sm dropdown-toggle altui-plugin-files' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>".format(plugin.id);
+			html +=	 _T("Files"); //+" <span class='caret'></span>");
 			html +="  </button>";
-			html +="  <ul class='dropdown-menu' role='menu'>";
+			html +="  <div class='dropdown-menu' aria-labelledby='{0}'>";
 			if (plugin.Files)
 				$.each(plugin.Files.sort(_sortBySourceName), function(idx,file) {
-					html +="	<li><a class='altui-plugin-file' href='#' data-plugin='{1}'>{0}</a></li>".format(file.SourceName,plugin.altuiid);
+					html +="<a class='dropdown-item altui-plugin-file' href='#' data-plugin='{1}'>{0}</a>".format(file.SourceName,plugin.altuiid);
 				});
-			html +="  </ul>";
+			html +="  </div>";
 			html +="</div>";
 			// var filebutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-files',	glyphTemplate.format("file","Files",""));
 			return html;
 		};
 
-		var pluginTemplate = "<tr data-altuiid='{9}'><td>{6}</td><td>{0}<div><small>{9}</small></div></td><td>{1}.{2}</td><td>{10}</td><td>{7}</td><td>{3} {4}</td><td>{5}</td><td>{8}</td></tr>";
+		var pluginTemplate = "<tr data-altuiid='{9}'><td>{6}</td><td>{0}<div><small>{9}</small></div></td><td>{1}.{2}</td><td>{10}</td><td>{7}</td><td><div class='btn-group'>{3}{4}</div></td><td>{5}</td><td>{8}</td></tr>";
 		function drawPlugin(idx, plugin) {
 			plugin.Icon = plugin.Icon || defIcon;
 			var iconTemplate = ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ).format(plugin.Icon);
 			var filebutton = _getFileButton(plugin);
-			var helpbutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-question-sign',	 glyphTemplate.format("question-sign","Help",""), "Help");
-			var infobutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-info-sign',	 glyphTemplate.format("info-sign","Information",""), "Info");
+			var helpbutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-question-sign',	 glyphTemplate.format("question-circle","Help",""), "Help");
+			var infobutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-info-sign',	 glyphTemplate.format("info-circle","Information",""), "Info");
 			var updatebutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-update',	glyphTemplate.format("retweet","Update Now",""), "Update");
 			var deletebutton = smallbuttonTemplate.format( plugin.id, 'altui-plugin-icon altui-plugin-uninstall',  glyphTemplate.format("remove","Uninstall",""), "Uninstall");
-			var inputbox = "<input class='form-control input-sm altui-plugin-version' id='altui-plugin-version-{0}' title='{1}'></input>".format( plugin.altuiid,_T("Version number or empty for latest official version"));
+			var inputbox = "<input class='form-control form-control-sm altui-plugin-version' id='altui-plugin-version-{0}' title='{1}'></input>".format( plugin.altuiid,_T("Version number or empty for latest official version"));
 
 			var autoupdate = plugin.AltuiSettings ? (plugin.AltuiSettings.AutoUpdate==1) : (parseInt(plugin.AutoUpdate)==1);
 			var pluginTxt = pluginTemplate.format(
@@ -10429,7 +10444,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				plugin.VersionMinor,
 				helpbutton,
 				infobutton,
-				inputbox+updatebutton,
+				'<div class="input-group">'+inputbox+updatebutton+'</div>',
 				iconTemplate,
 				filebutton,
 				deletebutton,
@@ -10567,7 +10582,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		};
 
-		$(".altui-mainpanel").append($("<table id='table' class='table table-condensed'><thead><tr><th></th><th>"+_T("Name")+"</th><th>"+_T("Version")+"</th><th>"+_T("Update")+"</th><th>"+_T("Files")+"</th><th>Actions</th><th>"+_T("Update")+"</th><th>"+_T("Uninstall")+"</th></tr></thead><tbody></tbody></table>"));
+		$(".altui-mainpanel").append($("<div class='col-12'><table id='table' class='table table-responsive table-sm'><thead><tr><th></th><th>"+_T("Name")+"</th><th>"+_T("Version")+"</th><th>"+_T("Update")+"</th><th>"+_T("Files")+"</th><th>Actions</th><th>"+_T("Update")+"</th><th>"+_T("Uninstall")+"</th></tr></thead><tbody></tbody></table></div>"));
 		MultiBox.getPlugins( drawPlugin , endDrawPlugin);
 	},
 
@@ -10587,7 +10602,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 		Html += "</div>";
 
-		$(".altui-mainpanel").html( "<div class='col-xs-12'>"+pageTabs + Html +"</div>");
+		$(".altui-mainpanel").html( "<div class='col-12'>"+pageTabs + Html +"</div>");
 		$('#altui-page-tabs li:eq({0}) a'.format((nPage==-1) ? 0 : nPage)).tab('show');
 
 		// lean layout if requested
@@ -10601,7 +10616,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var nPage = $(e.target).parent().parent().children().index( $(e.target).parent() )
 			var page = PageManager.getPageByIdx(nPage);
 			UIManager.setCrumbTitle(page.name);
-			// now artificially pushing a UIController state to be able to go back
+			// now artificially pushing a UIControler state to be able to go back
 			HistoryManager.pushState( 'Custom Pages', "", [nPage], UIManager.pageUsePages,UIManager);
 		})
 				// lean layout if requested
@@ -10610,7 +10625,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$(".navbar-fixed-top").remove();
 			$("ul.nav-tabs").remove();
 			$(".container-fluid").css("margin-top","-60px");
-			$(".container-fluid").find(".col-xs-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
+			$(".container-fluid").find(".col-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
 		}
 	},
 
@@ -10672,13 +10687,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				Html += _getPageHtml(page, true)	// edit mode
 			});
 			Html += "</div>";
-			return "<div class='col-xs-12'>"+pageTabs + Html+"</div>";
+			return "<div class='col-12'>"+pageTabs + Html+"</div>";
 		};
 
 		function _createToolboxHtml() {
 			function _createToolHtml(tool) {
 				var html="";
-				html += ("<div class='altui-widget {0} col-xs-11' id='{1}' data-type='{0}' >{2}</div>").format(tool.cls,tool.id,tool.html);
+				html += ("<div class='altui-widget {0} col-11' id='{1}' data-type='{0}' >{2}</div>").format(tool.cls,tool.id,tool.html);
 				return html;
 			};
 
@@ -10687,14 +10702,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				lines.push( "<div class='row'>"+_createToolHtml(tool)+"</div>" );
 			});
 
-			var editBoxTemplate = "<div class='row'><div class='altui-edittoolbox col-xs-11' aria-label=''>{0}</div></div>";
+			var editBoxTemplate = "<div class='row'><div class='altui-edittoolbox col-11' aria-label=''>{0}</div></div>";
 			var editBoxLines = new Array();
 			$.each(edittools , function(idx,tool) {
 				var glyph = glyphTemplate.format( tool.glyph, tool.glyph,"" );
 				editBoxLines.push("<div id='{0}' class='altui-edittools' title='{2}'>{1}</div>".format(tool.glyph,glyph,tool.label || ''));
 			});
 			lines.push(editBoxTemplate.format( editBoxLines.join('') ) );
-			lines.push( "<div class='row'><div class='altui-widget-delete col-xs-11'>"+deleteGlyph+"</div></div>"  );
+			lines.push( "<div class='row'><div class='altui-widget-delete col-11'>"+deleteGlyph+"</div></div>"  );
 			return lines.join('');
 		};
 
@@ -10966,13 +10981,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		UIManager.clearPage('License',_T("License Fees"),UIManager.twoColumnLayout);
 		$("#altui-pagemessage").remove();
 		var html = "";
-		html +="<span class='col-xs-12'>{0}</span>".format(
+		html +="<span class='col-12'>{0}</span>".format(
 		_T("For non commercial use, ALTUI plugin is free for trial with some limitation on its functionality. To compensate the effort and time spent on regularly improving this project, a registration fee equivalent to <span class='text-info'><mark><b>2€ per month</b></mark></span> is requested for longer term use. You can choose your level of contribution.")+
 		_T("Once registered you will get:<ul><li>Access to all the releases and auto update mechanism (not available to non registered users)</li><li>Removal of unregistered welcome message, as well as license message in the footer</li></ul>")+
 		"<p>"+_T("Please be patient, registration will become effective after <mark>1 or 2 business days</mark>. Otherwise contact me with a copy of your page footer") + "</p>" +
 		"<i>"+_T("Resellers or Integrators are welcome to contact me for eventual commercial agreements.")+"</i>"
 		)
-		html +="<span class='col-xs-12'><hr>{0}</span>".format( UIManager.getPayPalButtonHtml() );
+		html +="<span class='col-12'><hr>{0}</span>".format( UIManager.getPayPalButtonHtml() );
 		$(".altui-mainpanel").append(html);
 		$("form input[type='image']").click( function() {
 			// capture user submission
@@ -11217,11 +11232,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				YAML:		 "yaml|yml"
 		};
 		var _tools= [
-			{id:'altui-copy-clipboard-'+htmlid,	 glyph:"glyphicon-copy", label:_T("Copy")},
-			{id:'altui-top-'+htmlid, glyph:"glyphicon-fast-backward", label:_T("Top")},
-			{id:'altui-pageup-'+htmlid, glyph:"glyphicon-step-backward", label:_T("Page Up")},
-			{id:'altui-pagedown-'+htmlid, glyph:"glyphicon-step-forward", label:_T("Page Down")},
-			{id:'altui-bottom-'+htmlid, glyph:"glyphicon-fast-forward", label:_T("Bottom")},
+			{id:'altui-copy-clipboard-'+htmlid,	 glyph:"clipboard", label:_T("Copy")},
+			{id:'altui-top-'+htmlid, glyph:"fast-backward", label:_T("Top")},
+			{id:'altui-pageup-'+htmlid, glyph:"backward", label:_T("Page Up")},
+			{id:'altui-pagedown-'+htmlid, glyph:"forward", label:_T("Page Down")},
+			{id:'altui-bottom-'+htmlid, glyph:"fast-forward", label:_T("Bottom")},
 		];
 		// var copybutton = buttonTemplate.format( 'altui-copy-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'default',_T("Copy"));
 		var html = "";
@@ -11244,7 +11259,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="	<pre id='altui-editor-output'></pre>";
 			html +="  </div>";
 		}
-		html +=("  <button id='altui-luaform-button-"+htmlid+"' type='submit' class='btn btn-default'>"+button+"</button>");
+		html +=("  <button id='altui-luaform-button-"+htmlid+"' type='submit' class='btn btn-secondary'>"+button+"</button>");
 		html +="</form>";
 		domparent.append(html);
 
@@ -11321,7 +11336,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageLuaTest: function ()
 	{
 		UIManager.clearPage('LuaTest',_T("Lua Code Test"),UIManager.oneColumnLayout);
-		$(".altui-mainpanel").append("<div class='col-xs-12'><p>"+_T("This test code will succeed if it is syntactically correct. It must be the body of a function and can return something. The return object and console output will be displayed)")+"</p></div>");
+		$(".altui-mainpanel").append("<div class='col-12'><p>"+_T("This test code will succeed if it is syntactically correct. It must be the body of a function and can return something. The return object and console output will be displayed)")+"</p></div>");
 		var lastOne = MyLocalStorage.getSettings("LastOne_LuaTest") || "return true";
 		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Test Code"),lastOne,true,_T("Submit"),function(lua) {
 			MyLocalStorage.setSettings("LastOne_LuaTest",lua);
@@ -11359,7 +11374,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html+="	   <label for='altui-btngroup'>"+_T("Frequent Commands")+editButtonHtml+"</label>";
 			html+="		<div class='btn-group' id='altui-btngroup'>";
 			$.each(commands, function(idx,obj) {
-				html += "<button id='{0}' type='button' class='btn btn-default altui-oscommand-button' data-cmd='{2}' '>{1}</button>".format(idx,obj.label,obj.command.replace(/'/g, '&quot;'));
+				html += "<button id='{0}' type='button' class='border btn btn-secondary altui-oscommand-button' data-cmd='{2}' '>{1}</button>".format(idx,obj.label,obj.command.replace(/'/g, '&quot;'));
 			});
 			html+="		</div>";
 			html+="	 </div>";
@@ -11367,7 +11382,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		};
 		function _drawCommandTable(commands) {
 			var html="";
-			html+= "<table class='table table-condensed altui-oscommand-configtbl'>";
+			html+= "<table class='table table-responsive table-sm altui-oscommand-configtbl'>";
 			html+= "	<thead>";
 			html+= "	  <tr>";
 			html+= "<th>"+_T("Actions")+"</th>";
@@ -11428,7 +11443,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var editButtonHtml = buttonTemplate.format( 'altui-editoscmd-0', 'altui-editoscmd', editGlyph,'default',"");
 
 		var html = "";
-		html+="<div class='col-xs-12'><form>";
+		html+="<div class='col-12'><form>";
 		html+=	"<p>"+_T("Enter a Vera OS ( Unix ) command, the stdout will be returned and displayed below")+"</p>";
 		html += _drawFrequentCommandBar(commands);
 		html += _createControllerSelect('altui-controller-select');
@@ -11437,7 +11452,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html+="	   <input type='text' class='form-control' id='oscommand' placeholder='Type your OS command like: df '>";
 		html+="	 </div>";
 		html+="</form>";
-		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-default'>"+_T("Run")+"</button>";
+		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-secondary'>"+_T("Run")+"</button>";
 		html+="<hr>";
 		html+="<h3>"+_T("Output")+"</h3>";
 		html+="<pre id='altui-oscommand-result' class='pre-scrollable'></pre>";
@@ -11773,14 +11788,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var html = "";
 		html += "<form class='form-inline'>";
 			html += "<div class='form-group'>";
-				html += "<label class='control-label ' for='altui-zwavechart-order' >"+_T("Order By")+":</label>";
+				html += "<label class='form-control-label ' for='altui-zwavechart-order' >"+_T("Order By")+":</label>";
 				html += "<select id='altui-zwavechart-order' class='form-control'>";
 					html += "<option value='id'>ID</option>";
 					html += "<option value='name'>"+_T("Name")+"</option>";
 					html += "<option value='mesh'>"+_T("Mesh")+"</option>";
 				html += "</select>";
 			html += "</div>";
-			html += ("<button type='button' id='altui-reset-pollcounters' class='btn btn-default' >"+_T("Reset Poll Counters")+"</button>");
+			html += ("<button type='button' id='altui-reset-pollcounters' class='btn btn-secondary' >"+_T("Reset Poll Counters")+"</button>");
 			html += "<div class='form-group altui-quality-color'></div><span class=''>: {0}</span>".format(_T("Poll Success Rate"))
 			html += "<div class='form-group altui-quality-grey'></div><span class=''>: {0}</span>".format(_T("No Poll"))
 		html += "</form>";
@@ -12256,7 +12271,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					fill: none;				\
 				}							\
 				</style>" )
-			.append("<div class='col-xs-12 altui-route-d3chart-container'><svg class='altui-route-d3chart'></svg></div>")
+			.append("<div class='col-12 altui-route-d3chart-container'><svg class='altui-route-d3chart'></svg></div>")
 		var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("footer").outerHeight();
 		width = $(".altui-route-d3chart-container").innerWidth() - margin.left - margin.right;
 		height = Math.max(300,Math.min(width,available_height - margin.top - margin.bottom));
@@ -12386,7 +12401,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				data.links = _createLinks(data.nodes);
 			};
 
-			// $(".altui-children-d3chart").replaceWith("<svg class='col-xs-12 altui-children-d3chart'></svg>");
+			// $(".altui-children-d3chart").replaceWith("<svg class='col-12 altui-children-d3chart'></svg>");
 			var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() /*- $("#altui-zwavechart-order").outerHeight() */ - $("footer").outerHeight();
 			var margin = {top: 20, right: 10, bottom: 10, left: 20};
 			width = $(".altui-children-d3chart-container").innerWidth() - margin.left - margin.right-30;
@@ -12585,7 +12600,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					stroke-opacity: .8;		\
 				}							\
 				</style>" )
-			.append(html+"<div class='col-row altui-children-d3chart-container'><svg class='col-xs-12 altui-children-d3chart'></svg></div>")
+			.append(html+"<div class='col-12 altui-children-d3chart-container'><svg class='w-100 altui-children-d3chart'></svg></div>")
 		UIManager.loadD3Script( function() {
 			MultiBox.getDevices(null,null,function(arr) {
 				// console.log("received {0} devices:".format(arr.length));
@@ -13013,23 +13028,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		UIManager.clearPage('Debug',_T("Debug Tools"),UIManager.oneColumnLayout);
 		var html = "";
-		html += "<div class='col-xs-12'>";
-			html +="<div class='panel panel-default'>";
-				html +="  <div class='panel-heading'>"+_T("Debug Actions")+"</div>";
-				html +="  <div class='panel-body'>";
+		html += "<div class='col-12'>";
+			html +="<div class='card xxx'>";
+				html +="  <div class='card-header'>"+_T("Debug Actions")+"</div>";
+				html +="  <div class='card-body'>";
 					$.each(actions, function(idx,action) {
 						html +="<div class='btn-group' role='group' aria-label='Debug Tools'>";
-						html += "<button class='btn btn-default {1}' type='button' >{0}</button>".format(action.title,action.id);
+						html += "<button class='btn btn-secondary {1}' type='button' >{0}</button>".format(action.title,action.id);
 						html += "</div>";
 					});
 				html += "</div>";
 			html +="  </div>";
 		html +="</div>";
-		html += "<div class='col-xs-12'>";
+		html += "<div class='col-12'>";
 			html+="<h3>"+_T("Output");
 			var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
 			html += buttonTemplate.format( 'altui-debug-clipboard', 'altui-copy-clipboard', glyph,'default',_T("Copy"));
-				// html += "<button class='btn btn-default altui-json-viewer' type='button' >{0}</button>".format(_T("Json Viewer"));
+				// html += "<button class='btn btn-secondary altui-json-viewer' type='button' >{0}</button>".format(_T("Json Viewer"));
 			html+="</h3>";
 			html+="<pre id='altui-oscommand-result' class='pre-scrollable'></pre>";
 		html +="</div>";
@@ -13202,7 +13217,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		UIManager.clearPage('TblControllers',_T("Table Controllers"),UIManager.oneColumnLayout);
 		var html="";
-		html+="<div>";
+		html+="<div class='col-12'>";
 		html+="	 <ul class='nav nav-tabs' role='tablist'>";
 		var controllers = MultiBox.getControllers();
 		var bFirst=true;
@@ -13533,8 +13548,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 		});
 		var html = "";
-		html+="<div class='col-xs-12'>";
-		html+=("<table id='"+htmlid+"' class='altui-grid table table-condensed table-hover table-striped'>");
+		html+="<div class='col-12'>";
+		html+=("<table id='"+htmlid+"' class='altui-grid table table-responsive table-sm table-hover table-striped'>");
 		html+="	   <thead>";
 		html+="	   <tr>";
 
@@ -13555,7 +13570,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					{
 						var cmds="";
 						$.each(model.commands, function(key,cmd) {
-							cmds += "<button type=\"button\" class=\"btn btn-xs btn-default {0}\" data-row-id=\"{2}\">{1}</button>".format(
+							cmds += "<button type=\"button\" class=\"btn btn-sm btn-secondary {0}\" data-row-id=\"{2}\">{1}</button>".format(
 								key,
 								cmd.glyph,
 								row[identifier]
@@ -13583,7 +13598,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html+="	   </tbody>";
 		html+="</table>";
 		html+="</div>";
-		html+="<div id='altui-aftertable-"+htmlid+"' class='col-xs-12'>";
+		html+="<div id='altui-aftertable-"+htmlid+"' class='col-12'>";
 		html+="</div>";
 
 		(model.domcontainer).append( html );
@@ -13730,7 +13745,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var html = "";
 				var watch = model.watches[idx];
 				if (watch.url && watch.url!=NO_URL) {
-					html += "<div class='col-xs-12'>";
+					html += "<div class='col-12'>";
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
 					html += "</div>";
 				} else {
@@ -13755,7 +13770,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$.each(model.watches, function(idx,watch) {
 				var html = "";
 				if (watch.url && watch.url!=NO_URL) {
-					html += "<div class='col-xs-12'>";
+					html += "<div class='col-12'>";
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
 					html += "</div>";
 				} else {
@@ -13824,28 +13839,28 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageThemes: function() {
 		UIManager.clearPage('Themes',_T("Themes"),UIManager.oneColumnLayout);
 		PageMessage.message( "Select a theme by clicking on it and refresh your browser", "info");
-		var resetButton = buttonTemplate.format( "altui-theme-reset", 'btn-default', _T("Reset"),"default",_T('Reset Theme Override'));
+		var resetButton = buttonTemplate.format( "altui-theme-reset", 'btn-secondary', _T("Reset"),"default",_T('Reset Theme Override'));
 		var html = "";
-		html += "<div class='col-xs-12'>";
-		html +="<div class='panel panel-default'>";
-		html +="  <div class='panel-heading'>"+_T("Themes")+" Bootswatch.com "+resetButton+"</div>";
-		html +="  <div class='panel-body'>";
+		html += "<div class='col-12'>";
+		html +="<div class='card xxx'>";
+		html +="  <div class='card-header'>"+_T("Themes")+" Bootswatch.com "+resetButton+"</div>";
+		html +="  <div class='card-body'>";
 		html += "<div id='altui-themes' class='row'>";
 		html +="</div>";	//row
 		html +="</div>";	//body
 		html +="</div>";	//panel
-		html +="</div>";	//col-xs-12
+		html +="</div>";	//col-12
 		$(".altui-mainpanel").append(html);
 		$.getJSON( "https://bootswatch.com/api/3.json", function( data ) {
 			$.each(data.themes,function(idx,theme) {
 				var html ="";
-				html += "<div class='altui-theme-thumbnail col-xs-6 col-md-4 col-lg-3' data-preview='{1}' data-href='{0}'>".format(theme.cssCdn,theme.preview);
+				html += "<div class='altui-theme-thumbnail col-6 col-md-4 col-lg-3 col-xl-2' data-preview='{1}' data-href='{0}'>".format(theme.cssCdn,theme.preview);
 				html += "<label class='altui-theme-label'>{0} {1}</label>".format(
 					theme.description,
 					xsbuttonTemplate.format( '', 'altui-theme-preview', "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>",_T('Preview'))
 					);
 				html += "<img width='100%' src='{0}'></img>".format(theme.thumbnail);
-				html +="</div>";	//col-xs-12
+				html +="</div>";	//col-12
 				$("#altui-themes").append(html);
 			});
 		});
@@ -13870,7 +13885,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var init =	(MyLocalStorage.getSettings(check.id)!=null) ? MyLocalStorage.getSettings(check.id) : check._default;
 			switch( check.type ) {
 				case 'select':
-					html +="<label title='"+_T(check.help)+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label> : ";
+					html +="<label title='"+check.id+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label> : ";
 					html +="<select id='altui-"+check.id+"' title='"+check.id+"'>";
 					$.each(check.choices.split("|"),function(id,unit){
 						html += "<option value='{0}' {1}>{0}</option>".format( unit , (unit==init) ? 'selected' : '' );
@@ -13881,7 +13896,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					});
 					break;
 				case 'checkbox':
-					html +="<label title='"+_T(check.help)+"' class='checkbox-inline'>";
+					html +="<label title='"+check.id+"' class='checkbox-inline'>";
 					html +=("  <input type='checkbox' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>"+_T(check.label));
 					html +="</label>";
 					$(".altui-mainpanel").on("click","#altui-"+check.id,function(){
@@ -13889,7 +13904,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					});
 					break;
 				case 'number':
-					html +="<label title='"+_T(check.help)+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label>:";
+					html +="<label title='"+check.id+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label>:";
 					html +=("<input type='number' min='"+(check.min||0) +"' max='"+(check.max||999) +"' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>");
 					$(".altui-mainpanel").on("focusout","#altui-"+check.id,function(){
 					$("#altui-"+check.id).is(':checked')
@@ -13897,7 +13912,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					});
 					break;
 			}
-			var helpbutton = xsbuttonTemplate.format( id, 'altui-help-button',	glyphTemplate.format("question-sign","",""), _T(check.id+":"+check.help));
+			var helpbutton = xsbuttonTemplate.format( id, 'altui-help-button',	glyphTemplate.format("question","",""), _T(check.id+":"+check.help));
 			html+=helpbutton;
 			return html;
 		};
@@ -13923,23 +13938,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		UIManager.clearPage('Options',_T("Options"),UIManager.oneColumnLayout);
 
 		var color = IconDB.isDB() ? "text-success" : "text-danger";
-		var okGlyph = glyphTemplate.format( "ok-sign", "OK" , color );
+		var okGlyph = glyphTemplate.format( "check-circle", "OK" , color );
 
 		color = FileDB.isDB() ? "text-success" : "text-danger";
-		var okGlyph2 = glyphTemplate.format( "ok-sign", "OK" , color );
+		var okGlyph2 = glyphTemplate.format( "check-circle", "OK" , color );
 
 		color = MultiBox.isUserDataCached(0) ? "text-success" : "text-danger";
-		var okGlyph3 = glyphTemplate.format( "ok-sign", "OK" , color );
+		var okGlyph3 = glyphTemplate.format( "check-circle", "OK" , color );
 
 		color =	 MyLocalStorage.get("Pages")!=null ? "text-success" : "text-danger";
-		var okGlyph4 = glyphTemplate.format( "ok-sign", "OK" , color );
+		var okGlyph4 = glyphTemplate.format( "check-circle", "OK" , color );
 
 		var html = "";
 
-		html +="<div class='col-xs-12'>";
-		html +=" <div class='panel panel-default'>";
-		html +="  <div class='panel-heading'>"+_T("Options")+"</div>";
-		html +="  <div class='panel-body'>";
+		html +="<div class='col-12'>";
+		html +=" <div class='card xxx'>";
+		html +="  <div class='card-header'>"+_T("Options")+"</div>";
+		html +="  <div class='card-body'>";
 		html += "  <div class='row'>";
 			$.each(_userOptions, function(id,check) {
 				if (check.hidden!=true) {
@@ -13954,10 +13969,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html +="</div>";
 
 		//http://api.github.com/repos/ajaxorg/ace/contents/lib/ace/theme
-		html += "<div class='col-xs-12'>";
-			html +="<div class='panel panel-default'>";
-				html +="  <div class='panel-heading'>"+_T("Editor Control")+"</div>";
-				html +="  <div class='panel-body'>";
+		html += "<div class='col-12'>";
+			html +="<div class='card xxx'>";
+				html +="  <div class='card-header'>"+_T("Editor Control")+"</div>";
+				html +="  <div class='card-body'>";
 					html += "<div class='row'>";
 						html += "<div class='col-sm-4'>";
 							html +="<label title='"+_T("Editor Theme")+"' class='' for='altui-ace-theme'>"+_T("Editor Theme")+"</label> :"
@@ -13971,39 +13986,39 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							html += "<div id='altui-editor-sample'>--- Comment sample\nlocal var = 1234\nlocal var2 = { \"abc\", tonumber(4), \"def\", 565 }\nfunction test(a)\n\tlocal i = \"Hello World of ALTUI\"\n\treturn i\nend</div>";
 						html += "</div>";
 					html += "</div>";
-					// <button id='9' type='button' class='altui-help-button btn btn-default btn-xs' aria-label='tbd' title='Unit for temperature'><span class='glyphicon glyphicon-question-sign ' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title=''></span></button>
+					// <button id='9' type='button' class='altui-help-button btn btn-secondary btn-sm' aria-label='tbd' title='Unit for temperature'><span class='glyphicon glyphicon-question-sign ' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title=''></span></button>
 				html += "</div>";
 			html +="</div>";
 		html +="</div>";
 
-		html += "<div class='col-xs-12'>";
-			html +="<div class='panel panel-default'>";
-			html +="  <div class='panel-heading'>"+_T("Cache Control")+"</div>";
-				html +="  <div class='panel-body'>";
+		html += "<div class='col-12'>";
+			html +="<div class='card xxx'>";
+			html +="  <div class='card-header'>"+_T("Cache Control")+"</div>";
+				html +="  <div class='card-body'>";
 					html +="<div class='btn-group' role='group' aria-label='Icon DB'>";
-						html += "<button class='btn btn-default altui-save-IconDB' type='submit'>"+saveGlyph+" Save Icon DB</button>";
-						html += "<button class='btn btn-default altui-clear-IconDB' type='submit'>"+okGlyph+" Clear Icon DB</button>";
+						html += "<button class='btn btn-secondary altui-save-IconDB' type='submit'>"+saveGlyph+" Save Icon DB</button>";
+						html += "<button class='btn btn-secondary altui-clear-IconDB' type='submit'>"+okGlyph+" Clear Icon DB</button>";
 					html += "</div>";
 					html += "<div class='btn-group' role='group' aria-label='File DB'>";
-						html += "<button class='btn btn-default altui-save-FileDB' type='submit'>"+saveGlyph+" Save File DB</button>";
-						html += "<button class='btn btn-default altui-clear-FileDB' type='submit'>"+okGlyph2+" Clear File DB</button>";
+						html += "<button class='btn btn-secondary altui-save-FileDB' type='submit'>"+saveGlyph+" Save File DB</button>";
+						html += "<button class='btn btn-secondary altui-clear-FileDB' type='submit'>"+okGlyph2+" Clear File DB</button>";
 					html += "</div>";
 					html += "<div class='btn-group' role='group' aria-label='User Data DB'>";
-						html += "<button class='btn btn-default altui-save-userdata' type='submit'>"+saveGlyph+"Save UserData</button>";
-						html += "<button class='btn btn-default altui-clear-userdata' type='submit'>"+okGlyph3+" Clear UserData</button>";
+						html += "<button class='btn btn-secondary altui-save-userdata' type='submit'>"+saveGlyph+"Save UserData</button>";
+						html += "<button class='btn btn-secondary altui-clear-userdata' type='submit'>"+okGlyph3+" Clear UserData</button>";
 					html += "</div>";
 				html += "</div>";
 			html +="</div>";
 		html +="</div>";
 
-		html += "<div class='col-xs-12'>";
-		html +="<div class='panel panel-default'>";
-		html +="  <div class='panel-heading'>"+_T("Custom Pages Control")+"</div>";
-		html +="  <div class='panel-body'>";
+		html += "<div class='col-12'>";
+		html +="<div class='card xxx'>";
+		html +="  <div class='card-header'>"+_T("Custom Pages Control")+"</div>";
+		html +="  <div class='card-body'>";
 			html += "<div class='btn-group' role='group' aria-label='User Pages DB'>";
-			html += "<button class='btn btn-default altui-save-userpage' type='submit'>"+saveGlyph+"Save User Pages</button>";
-			html += "<button class='btn btn-default altui-restore-userpage' type='submit'>"+loadGlyph+"Restore From User Pages Cache</button>";
-			html += "<button class='btn btn-default altui-clear-userpage' type='submit'>"+okGlyph4+" Clear User Pages Cache</button>";
+			html += "<button class='btn btn-secondary altui-save-userpage' type='submit'>"+saveGlyph+"Save User Pages</button>";
+			html += "<button class='btn btn-secondary altui-restore-userpage' type='submit'>"+loadGlyph+"Restore From User Pages Cache</button>";
+			html += "<button class='btn btn-secondary altui-clear-userpage' type='submit'>"+okGlyph4+" Clear User Pages Cache</button>";
 			html += "</div>";
 		html += "</div>";
 		html +="  </div>";
@@ -14034,9 +14049,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			editor.setFontSize( parseInt($(this).val()) );
 			_saveOption("EditorFontSize",parseInt($(this).val()))
 		})
-		$(".altui-help-button").click( function() {
+		$(".altui-help-button").click( _userOptions, function(e) {
 			var help = $(this).attr("title").split(':');
-			DialogManager.infoDialog(help[0],_T(help[1]));
+			var userOptions = e.data;
+			var arr = userOptions.filter( function(opt) { return (opt.id == help[0]) } )
+			if (arr.length>0)
+				DialogManager.infoDialog(help[0],_T(arr[0].help))
 		});
 
 		$(".altui-save-IconDB").click( function() {
@@ -14122,10 +14140,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						$(".navbar-collapse").collapse('hide');
 				} )
 				.on ("click touchend", ".imgLogo", function() { UIControler.changePage('Home') })
-				.on( "click", "#altui-reload", UIManager.reloadEngine )
-				.on( "click", "#altui-reboot", UIManager.reboot )
-				.on( "click", "#altui-remoteaccess", UIManager.pageRemoteAccess )
-				.on( "click", "#altui-checkupdate", UIManager.pageCheckUpdate)
+				// .on( "click", "#altui-reload", UIManager.reloadEngine )
+				// .on( "click", "#altui-reboot", UIManager.reboot )
+				// .on( "click", "#altui-remoteaccess", UIManager.pageRemoteAccess )
+				// .on( "click", "#altui-checkupdate", UIManager.pageCheckUpdate)
 				.on( "click", "#altui-debug-btn", function() {
 					$(".altui-debug-div").toggle();
 					$("#altui-debug-btn span.caret").toggleClass( "caret-reversed" );
@@ -14144,7 +14162,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var id = $(this).prop('id')
 					UIControler.onClickHtml('#'+id);
 				})
-				.on("click", "li.altui-dropdown-scene-favorite", function(e) {
+				.on("click", "a.altui-dropdown-scene-favorite", function(e) {
 					var altuiid = $(this).data("altuiid");
 					var scene = MultiBox.getSceneByAltuiID(altuiid);
 					if (scene)
@@ -14180,13 +14198,13 @@ $(function() {
 		deviceModalTemplate += "  <div class='modal-dialog modal-lg'>";
 		deviceModalTemplate += "	<div class='modal-content'>";
 		deviceModalTemplate += "	  <div class='modal-header'>";
+		deviceModalTemplate += "		<h5 class='modal-title'>{1} <small>#{2}</small> - Variables</h5>";
 		deviceModalTemplate += "		<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-		deviceModalTemplate += "		<h4 class='modal-title'>{1} <small>#{2}</small> - Variables</h4>";
 		deviceModalTemplate += "	  </div>";
 		deviceModalTemplate += "	  <div class='modal-body'>";
 		deviceModalTemplate += "	  <div class='row' >";
-		deviceModalTemplate += "	  <div class='col-xs-12' style='overflow-x: auto;'>";
-		deviceModalTemplate += " <table class='table table-condensed'>";
+		deviceModalTemplate += "	  <div class='col-12' style='overflow-x: auto;'>";
+		deviceModalTemplate += " <table class='table table-responsive table-sm'>";
 		deviceModalTemplate += "	   <thead>";
 		deviceModalTemplate += "		 <tr>";
 		// deviceModalTemplate += "			  <th>#</th>";
@@ -14215,11 +14233,11 @@ $(function() {
 		deviceActionModalTemplate += "	<div class='modal-dialog'>";
 		deviceActionModalTemplate += "	  <div class='modal-content'>";
 		deviceActionModalTemplate += "		<div class='modal-header'>";
+		deviceActionModalTemplate += "		  <h5 class='modal-title'>{1} <small>#{2}</small> - Actions</h5>";
 		deviceActionModalTemplate += "		  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-		deviceActionModalTemplate += "		  <h4 class='modal-title'>{1} <small>#{2}</small> - Actions</h4>";
 		deviceActionModalTemplate += "		</div>";
 		deviceActionModalTemplate += "		<div class='modal-body'>";
-		deviceActionModalTemplate += "	<table class='table table-condensed' >";
+		deviceActionModalTemplate += "	<table class='table table-responsive table-sm' >";
 		deviceActionModalTemplate += "		 <thead>";
 		deviceActionModalTemplate += "		   <tr>";
 		deviceActionModalTemplate += "			 <th>"+_T("Action")+"</th>";
@@ -14245,8 +14263,8 @@ $(function() {
 		defaultDialogModalTemplate += "	   <form name='{0}' class='form' data-toggle='validator' onsubmit='return false;'>";
 		defaultDialogModalTemplate += "	   <div class='modal-content'>";
 		defaultDialogModalTemplate += "		 <div class='modal-header'>";
+		defaultDialogModalTemplate += "		   <h5 class='modal-title'>{1} </h5>";
 		defaultDialogModalTemplate += "		   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-		defaultDialogModalTemplate += "		   <h4 class='modal-title'>{1} </h4>";
 		defaultDialogModalTemplate += "		 </div>";
 		defaultDialogModalTemplate += "		 <div class='modal-body'>";
 		defaultDialogModalTemplate += "		 <div class='row-fluid'>";
@@ -14254,7 +14272,7 @@ $(function() {
 		defaultDialogModalTemplate += "		 </div>";
 		defaultDialogModalTemplate += "		 </div>";
 		defaultDialogModalTemplate += "		 <div class='modal-footer'>";
-		defaultDialogModalTemplate += "		   <button type='button' class='btn btn-default' data-dismiss='modal'>"+_T("Close")+"</button>";
+		defaultDialogModalTemplate += "		   <button type='button' class='btn btn-secondary' data-dismiss='modal'>"+_T("Close")+"</button>";
 		// defaultDialogModalTemplate += "		  <button type='submit' class='btn btn-primary'>{3}</button>";
 		defaultDialogModalTemplate += "		 </div>";
 		defaultDialogModalTemplate += "	   </div><!-- /.modal-content -->";
@@ -14263,9 +14281,9 @@ $(function() {
 		defaultDialogModalTemplate += "</div><!-- /.modal -->";
 
 	//"<span class='glyphicon glyphicon-search' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Search'></span>"
-		staremtpyGlyph =glyphTemplate.format( "star-empty", _T("Favorite"), "altui-favorite text-muted" );
+		staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );
 		starGlyph = glyphTemplate.format( "star", _T("Favorite"), "altui-favorite text-warning" );
-		questionGlyph=glyphTemplate.format( "question-sign", _T("Question"), "text-warning" );
+		questionGlyph=glyphTemplate.format( "question", _T("Question"), "text-warning" );
 		searchGlyph=glyphTemplate.format( "search", _T("Search"), "" );
 		wrenchGlyph=glyphTemplate.format("wrench", _T("Settings"), "" );
 		optHorGlyph=glyphTemplate.format( "option-horizontal", _T("Option"), "pull-left" );
@@ -14274,7 +14292,7 @@ $(function() {
 		refreshGlyph=glyphTemplate.format( "refresh", _T("Refresh"), "text-warning" );
 		removeGlyph=glyphTemplate.format( "remove", _T("Remove"), "" );
 		loadGlyph = glyphTemplate.format( "open", _T("Load") , "");
-		infoGlyph = glyphTemplate.format( "info-sign", _T("Info") , "text-info");
+		infoGlyph = glyphTemplate.format( "info", _T("Info") , "text-info");
 		picGlyph = glyphTemplate.format( "picture", _T("Image") , "");
 		upGlyph = glyphTemplate.format( "arrow-up", _T("More") , "");
 		downGlyph = glyphTemplate.format( "arrow-down", _T("Less") , "");
@@ -14284,105 +14302,106 @@ $(function() {
 		recordGlyph = glyphTemplate.format( "record", _T("Record") , "text-danger");
 		eyeOpenGlyph = glyphTemplate.format( "eye-open", _T("See") , "");
 		cameraGlyph = glyphTemplate.format( "facetime-video", _T("Camera") , "");
-		onoffGlyph = glyphTemplate.format( "off", _T("On Off") , "");
+		onoffGlyph = glyphTemplate.format( "power-off", _T("On Off") , "");
 		scaleGlyph = glyphTemplate.format( "scale", _T("Gauge") , "");
 		homeGlyph = glyphTemplate.format( "home", _T("Rooms") , "");
 		tagsGlyph = glyphTemplate.format( "tags", _T("Category") , "");
-		helpGlyph = glyphTemplate.format( "question-sign", "" , "");
+		helpGlyph = glyphTemplate.format( "question", "" , "");
 
 		UIManager.initLocalizedGlobals();
 
 		var body = "";
 		body+="<!-- Fixed navbar -->";
 		body+="<div id='dialogs'></div>";
-		body+="<nav class='navbar navbar-default navbar-fixed-top'>";
-		body+=" <div class='container'>";
-		body+="	<div class='navbar-header'>";
-		body+="	  <button type='button' class='navbar-toggle collapsed pull-left' data-toggle='collapse' data-target='#navbar' aria-expanded='false' aria-controls='navbar'>";
-		body+="		<span class='sr-only'>Toggle navigation</span>";
-		body+="		<span class='icon-bar'></span>";
-		body+="		<span class='icon-bar'></span>";
-		body+="		<span class='icon-bar'></span>";
-		body+="	  </button>		  ";
-		body+="	  <a class='navbar-brand' href='javascript:void(0)'></a>";
-		body+="	</div>";
-		body+="	<div id='navbar' class='navbar-collapse collapse'>";
-		body+="	  <ul class='nav navbar-nav'>";
-		body+="		<li class='active'><div class='imgLogo'></div></li>";
-		body+="		<li><a id='menu_myhome' href='javascript:void(0)'  >"+_T("My Home")+"</a></li>";
-		body+="		<li><a id='menu_device' href='javascript:void(0)'  >"+_T("Devices")+"</a></li>";
-		body+="		<li class='altui-no-scene-favorite'><a id='menu_scene'  href='javascript:void(0)'  >"+_T("Scenes")+"</a></li>";
-		body+="		<li class='altui-with-scene-favorite altui-dropdown-scene dropdown' style='display: none;'>";
-		body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Scenes")+" <span class='caret'></span></a>";
-		body+="			<ul class='dropdown-menu' role='menu'>";
-		body+="				<li><a id='menu_scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
-		body+="			</ul>";
-		body+="		</li>";
+		body += UIManager.generateNavBarHTML()
+		// body+="<nav class='navbar navbar-default navbar-fixed-top'>";
+		// body+=" <div class='container'>";
+		// body+="	<div class='navbar-header'>";
+		// body+="	  <button type='button' class='navbar-toggle collapsed pull-left' data-toggle='collapse' data-target='#navbar' aria-expanded='false' aria-controls='navbar'>";
+		// body+="		<span class='sr-only'>Toggle navigation</span>";
+		// body+="		<span class='icon-bar'></span>";
+		// body+="		<span class='icon-bar'></span>";
+		// body+="		<span class='icon-bar'></span>";
+		// body+="	  </button>		  ";
+		// body+="	  <a class='navbar-brand' href='javascript:void(0)'></a>";
+		// body+="	</div>";
+		// body+="	<div id='navbar' class='navbar-collapse collapse'>";
+		// body+="	  <ul class='nav navbar-nav'>";
+		// body+="		<li class='active'><div class='imgLogo'></div></li>";
+		// body+="		<li><a id='menu_myhome' href='javascript:void(0)'  >"+_T("My Home")+"</a></li>";
+		// body+="		<li><a id='menu_device' href='javascript:void(0)'  >"+_T("Devices")+"</a></li>";
+		// body+="		<li class='altui-no-scene-favorite'><a id='menu_scene'  href='javascript:void(0)'  >"+_T("Scenes")+"</a></li>";
+		// body+="		<li class='altui-with-scene-favorite altui-dropdown-scene dropdown' style='display: none;'>";
+		// body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Scenes")+" <span class='caret'></span></a>";
+		// body+="			<ul class='dropdown-menu' role='menu'>";
+		// body+="				<li><a id='menu_scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
+		// body+="			</ul>";
+		// body+="		</li>";
 		// body+="		<li><a id='menu_scene' href='javascript:void(0)'	 >"+_T("Scenes")+"</a></li>";
-		body+="		<li class='dropdown'>";
-		body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("More")+" <span class='caret'></span></a>";
-		body+="			<ul class='dropdown-menu' role='menu'>";
-		body+="				<li><a id='menu_room' href='javascript:void(0)'	>"+_T("Rooms")+"</a></li>";
-		body+="				<li><a id='menu_plugins' href='javascript:void(0)'  >"+_T("Plugins")+"</a></li>";
-		body+="				<li><a id='altui-app-store' href='javascript:void(0)' >"+_T("App Store")+"</a></li>";
-		body+="				<li><a id='menu_timeline' href='javascript:void(0)'	>"+_T("Timeline")+"</a></li>";
-		body+="				<li><a id='menu_workflow' href='javascript:void(0)'	>"+_T("Workflows")+"</a></li>";
-		body+="			<li class='divider'></li>";
-		body+="				<li class='dropdown-header'>Tables</li>";
-		body+="				<li><a id='altui-tbl-watches' href='javascript:void(0)' >"+_T("Watches")+"</a></li>";
-		body+="				<li><a id='altui-tbl-device' href='javascript:void(0)' >"+_T("Devices")+"</a></li>";
-		body+="				<li><a id='altui-scene-triggers' href='javascript:void(0)' >"+_T("Triggers")+"</a></li>";
-		body+="				<li><a id='altui-tbl-scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
-		body+="				<li><a id='altui-tbl-controllers' href='javascript:void(0)' >"+_T("Controllers")+"</a></li>";
-		body+="			<li class='divider'></li>";
-		body+="				<li class='dropdown-header'>Graphic</li>";
-		body+="				<li><a id='altui-graph-watches' href='javascript:void(0)' >"+_T("Watch Display")+"</a></li>";
-		body+="				<li><a id='altui-energy' href='javascript:void(0)' >"+_T("Power Chart")+"</a></li>";
-		body+="				<li><a id='altui-childrennetwork' href='javascript:void(0)' >"+_T("Parent/Child Network")+"</a></li>";
-		body+="				<li><a id='altui-zwavenetwork' href='javascript:void(0)' >"+_T("zWave Network")+"</a></li>";
-		body+="				<li><a id='altui-zwaveroutes' href='javascript:void(0)' >"+_T("zWave Routes")+"</a></li>";
-		body+="				<li><a id='altui-quality' href='javascript:void(0)' >"+_T("Network Quality")+"</a></li>";
-		body+="			</ul>";
-		body+="		</li>";
-		body+="		<li class='dropdown'>";
-		body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Panels")+" <span class='caret'></span></a>";
-		body+="			<ul class='dropdown-menu' role='menu'>";
-		body+="				<li><a id='altui-pages-see' href='javascript:void(0)' >"+_T("Use Custom Pages")+"</a></li>";
-		body+="				<li><a id='altui-pages-edit' href='javascript:void(0)' >"+_T("Edit Custom Pages")+"</a></li>";
-		body+="			</ul>";
-		body+="		</li>";
-		body+="		<li class='dropdown'>";
-		body+="		  <a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Misc")+"<span class='caret'></span></a>";
-		body+="		  <ul class='dropdown-menu' role='menu'>";
-		body+="			<li class='dropdown-header'>Access</li>";
-		body+="			<li><a id='altui-remoteaccess' href='javascript:void(0)' >"+_T("Remote Access Login")+"</a></li>";
-		body+="			<li class='divider'></li>";
-		body+="			<li class='dropdown-header'>Lua</li>";
-		body+="			<li><a id='altui-reload' href='javascript:void(0)' >"+_T("Reload Luup Engine")+"</a></li>";
-		body+="			<li><a id='altui-reboot' href='javascript:void(0)' >"+_T("Reboot Vera")+"</a></li>";
-		body+="			<li><a id='altui-luastart' href='javascript:void(0)' >"+_T("Lua Startup Code")+"</a></li>";
-		body+="			<li><a id='altui-luatest' href='javascript:void(0)' >"+_T("Lua Test Code")+"</a></li>";
-		body+="			<li><a id='altui-oscommand' href='javascript:void(0)' >"+_T("OS Command")+"</a></li>";
-		body+="			<li class='divider'></li>";
-		body+="			<li class='dropdown-header'>Admin</li>";
-		body+="			<li><a id='altui-checkupdate' href='javascript:void(0)'>"+_T("Check for Updates")+"</a></li>";
-		body+="			<li><a id='altui-optimize' href='javascript:void(0)'>"+_T("Options")+"</a></li>";
-		body+="			<li><a id='altui-theme-selector' href='javascript:void(0)'>"+_T("Themes")+"</a></li>";
-		body+="			<li><a id='altui-localize' href='javascript:void(0)'>"+_T("Localization")+"</a></li>";
-		body+="			<li><a id='altui-debugtools' href='javascript:void(0)'>"+_T("Debug")+"</a></li>";
-		body+="			<li class='divider'></li>";
-		body+="			<li class='dropdown-header'>About</li>";
-		body+="			<li><a id='altui-license-page' href='javascript:void(0)'>"+_T("License Fees")+"</a></li>";
-		body+="			<li><a id='altui-credits' href='javascript:void(0)'>"+_T("Credits")+"</a></li>";
-		body+="			<li><a id='altui-evolutions' href='javascript:void(0)'>"+_T("Evolutions")+"</a></li>";
-		body+="			<li><a id='altui-support' target='_blank' href='http://forum.micasaverde.com/index.php?board=78.0'>"+_T("Support")+"</a></li>";
+		// body+="		<li class='dropdown'>";
+		// body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("More")+" <span class='caret'></span></a>";
+		// body+="			<ul class='dropdown-menu' role='menu'>";
+		// body+="				<li><a id='menu_room' href='javascript:void(0)'	>"+_T("Rooms")+"</a></li>";
+		// body+="				<li><a id='menu_plugins' href='javascript:void(0)'  >"+_T("Plugins")+"</a></li>";
+		// body+="				<li><a id='altui-app-store' href='javascript:void(0)' >"+_T("App Store")+"</a></li>";
+		// body+="				<li><a id='menu_timeline' href='javascript:void(0)'	>"+_T("Timeline")+"</a></li>";
+		// body+="				<li><a id='menu_workflow' href='javascript:void(0)'	>"+_T("Workflows")+"</a></li>";
+		// body+="			<li class='divider'></li>";
+		// body+="				<li class='dropdown-header'>Tables</li>";
+		// body+="				<li><a id='altui-tbl-watches' href='javascript:void(0)' >"+_T("Watches")+"</a></li>";
+		// body+="				<li><a id='altui-tbl-device' href='javascript:void(0)' >"+_T("Devices")+"</a></li>";
+		// body+="				<li><a id='altui-scene-triggers' href='javascript:void(0)' >"+_T("Triggers")+"</a></li>";
+		// body+="				<li><a id='altui-tbl-scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
+		// body+="				<li><a id='altui-tbl-controllers' href='javascript:void(0)' >"+_T("Controllers")+"</a></li>";
+		// body+="			<li class='divider'></li>";
+		// body+="				<li class='dropdown-header'>Graphic</li>";
+		// body+="				<li><a id='altui-graph-watches' href='javascript:void(0)' >"+_T("Watch Display")+"</a></li>";
+		// body+="				<li><a id='altui-energy' href='javascript:void(0)' >"+_T("Power Chart")+"</a></li>";
+		// body+="				<li><a id='altui-childrennetwork' href='javascript:void(0)' >"+_T("Parent/Child Network")+"</a></li>";
+		// body+="				<li><a id='altui-zwavenetwork' href='javascript:void(0)' >"+_T("zWave Network")+"</a></li>";
+		// body+="				<li><a id='altui-zwaveroutes' href='javascript:void(0)' >"+_T("zWave Routes")+"</a></li>";
+		// body+="				<li><a id='altui-quality' href='javascript:void(0)' >"+_T("Network Quality")+"</a></li>";
+		// body+="			</ul>";
+		// body+="		</li>";
+		// body+="		<li class='dropdown'>";
+		// body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Panels")+" <span class='caret'></span></a>";
+		// body+="			<ul class='dropdown-menu' role='menu'>";
+		// body+="				<li><a id='altui-pages-see' href='javascript:void(0)' >"+_T("Use Custom Pages")+"</a></li>";
+		// body+="				<li><a id='altui-pages-edit' href='javascript:void(0)' >"+_T("Edit Custom Pages")+"</a></li>";
+		// body+="			</ul>";
+		// body+="		</li>";
+		// body+="		<li class='dropdown'>";
+		// body+="		  <a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Misc")+"<span class='caret'></span></a>";
+		// body+="		  <ul class='dropdown-menu' role='menu'>";
+		// body+="			<li class='dropdown-header'>Access</li>";
+		// body+="			<li><a id='altui-remoteaccess' href='javascript:void(0)' >"+_T("Remote Access Login")+"</a></li>";
+		// body+="			<li class='divider'></li>";
+		// body+="			<li class='dropdown-header'>Lua</li>";
+		// body+="			<li><a id='altui-reload' href='javascript:void(0)' >"+_T("Reload Luup Engine")+"</a></li>";
+		// body+="			<li><a id='altui-reboot' href='javascript:void(0)' >"+_T("Reboot Vera")+"</a></li>";
+		// body+="			<li><a id='altui-luastart' href='javascript:void(0)' >"+_T("Lua Startup Code")+"</a></li>";
+		// body+="			<li><a id='altui-luatest' href='javascript:void(0)' >"+_T("Lua Test Code")+"</a></li>";
+		// body+="			<li><a id='altui-oscommand' href='javascript:void(0)' >"+_T("OS Command")+"</a></li>";
+		// body+="			<li class='divider'></li>";
+		// body+="			<li class='dropdown-header'>Admin</li>";
+		// body+="			<li><a id='altui-checkupdate' href='javascript:void(0)'>"+_T("Check for Updates")+"</a></li>";
+		// body+="			<li><a id='altui-optimize' href='javascript:void(0)'>"+_T("Options")+"</a></li>";
+		// body+="			<li><a id='altui-theme-selector' href='javascript:void(0)'>"+_T("Themes")+"</a></li>";
+		// body+="			<li><a id='altui-localize' href='javascript:void(0)'>"+_T("Localization")+"</a></li>";
+		// body+="			<li><a id='altui-debugtools' href='javascript:void(0)'>"+_T("Debug")+"</a></li>";
+		// body+="			<li class='divider'></li>";
+		// body+="			<li class='dropdown-header'>About</li>";
+		// body+="			<li><a id='altui-license-page' href='javascript:void(0)'>"+_T("License Fees")+"</a></li>";
+		// body+="			<li><a id='altui-credits' href='javascript:void(0)'>"+_T("Credits")+"</a></li>";
+		// body+="			<li><a id='altui-evolutions' href='javascript:void(0)'>"+_T("Evolutions")+"</a></li>";
+		// body+="			<li><a id='altui-support' target='_blank' href='http://forum.micasaverde.com/index.php?board=78.0'>"+_T("Support")+"</a></li>";
 		// body+="			<li><a id='altui-test' href='javascript:void(0)'>"+_T("Test")+"</a></li>";
-		body+="		  </ul>";
-		body+="		</li>";
-		body+="	  </ul>";
-		body+="	</div><!--/.nav-collapse -->";
-		body+="	 </div>";
-		body+="</nav>";
+		// body+="		  </ul>";
+		// body+="		</li>";
+		// body+="	  </ul>";
+		// body+="	</div><!--/.nav-collapse -->";
+		// body+="	 </div>";
+		// body+="</nav>";
 		body+="<div class='container-fluid theme-showcase' role='main'>";
 		body+="</div> <!-- /container -->";
 		body+="<div id='altui-background'></div>";
@@ -14536,14 +14555,123 @@ var UIControler = (function(win) {
 			'My Sensors':				{ id:41, title:'My Sensors',			onclick:UIManager.pageMyHome, args:["Sensor"], parent:39 },
 			'My Devices':				{ id:42, title:'My Devices',			onclick:UIManager.pageMyHome, args:["Other"], parent:39 },
 			'Clone Workflow':		{ id:43, title:'Clone Workflow',			onclick:UIManager.pageCloneWorkflow, parent:31 },
+			'Remote Access':		{ id:44, title:'Remote Access Login', htmlid:"#altui-remoteaccess", onclick:UIManager.pageRemoteAccess, parent:0 },
+			'Reload':		{ id:45, title:'Reload Luup Engine', htmlid:"#altui-reload", onclick:UIManager.reloadEngine, parent:0 },
+			'Reboot':		{ id:46, title:'Reboot Vera', htmlid:"#altui-reboot", onclick:UIManager.reboot, parent:0 },
+			'CheckUpdate':		{ id:47, title:'Check for Updates', htmlid:"#altui-checkupdate", onclick:UIManager.pageCheckUpdate, parent:0 },
 	};
+	var menu = [
+		{id:'menu_myhome' , child:null},
+		{id:'menu_device' , child:null},
+		{id:'menu_scene'  , child:null},
+		{id:'menu_scene_withfavorite'  , label:_T("Scenes"), child:[
+			{id:'menu_scene'  , child:null},
+		]},
+		{id:'menu_more'  , label:_T("More") , child:[
+			{id:'menu_room' , child:null},
+			{id:'menu_plugins' , child:null},
+			{id:'altui-app-store' , child:null},
+			{id:'menu_timeline' , child:null},
+			{id:'menu_workflow' , child:null},
+			{id:-1},
+			{id:'altui-tbl-watches' , child:null},
+			{id:'altui-tbl-device' , child:null},
+			{id:'altui-scene-triggers' , child:null},
+			{id:'altui-tbl-scene' , child:null},
+			{id:'altui-tbl-controllers' , child:null},
+			{id:-1},
+			{id:'altui-graph-watches' , child:null},
+			{id:'altui-energy' , child:null},
+			{id:'altui-childrennetwork' , child:null},
+			{id:'altui-zwavenetwork' , child:null},
+			{id:'altui-zwaveroutes' , child:null},
+			{id:'altui-quality' , child:null}
+		]},
+		{id:'menu_panels', label:_T("Panels"), child:[
+			{id:'altui-pages-see' , child:null},
+			{id:'altui-pages-edit' , child:null},
+		]},
+		{id:'menu_misc' , label:_T("Misc"), child:[
+			{id:'altui-remoteaccess' , child:null},
+			{id:-1},
+			{id:'altui-reload' , child:null},
+			{id:'altui-reboot' , child:null},
+			{id:'altui-luastart' , child:null},
+			{id:'altui-luatest' , child:null},
+			{id:'altui-oscommand' , child:null},
+			{id:-1},
+			{id:'altui-checkupdate' , child:null},
+			{id:'altui-optimize' , child:null},
+			{id:'altui-theme-selector' , child:null},
+			{id:'altui-localize' , child:null},
+			{id:'altui-debugtools' , child:null},
+			{id:-1},
+			{id:'altui-license-page' , child:null},
+			{id:'altui-credits' , child:null},
+			{id:'altui-evolutions' , child:null},
+			{id:'altui-support' , label:_T("Support"), href:'http://forum.micasaverde.com/index.php?board=78.0', child:null}
+		]},
+	];
+	var itemtemplate = `
+		<li class="nav-item">
+		<a id="{0}" class="nav-link" href="javascript:void(0)">{1}</a>
+		</li>`;
+	var dropdowntemplate = `
+		<li id="{0}" class="nav-item dropdown">
+		<a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		{1}
+		</a>
+		<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		{2}
+		</div>
+		</li>`;
+	var dropdownItemTemplate='<a id="{0}" class="dropdown-item {2}" href="javascript:void(0)" {3} >{1}</a>'
 	return {
+		
+		generateMenu: function() {
+			var htmlmenu = "";
+			var mapidtopage = {};
+
+			function _generateChildMenu(items) {
+				var html="";
+				$.each(items, function(idx,menuitem) {
+					if (menuitem.id==-1)
+						html += '<div class="dropdown-divider"></div>'
+					else {
+						var label = menuitem.label || mapidtopage[menuitem.id].title
+						if (menuitem.href) {
+							html += '<a class="dropdown-item" target="_blank" href="{1}">{0}</a>'.format(_T(label),menuitem.href)
+						} else {
+							html += dropdownItemTemplate.format(menuitem.id,_T(label),"")
+						}
+					}
+				});
+				return html;
+			};
+			
+			$.each(_pages, function(idx,page) {
+				if (page.htmlid) {
+					mapidtopage[page.htmlid.substr(1)] = page;
+				}
+			});
+
+			$.each(menu, function(idx,menuitem) {
+				var label = menuitem.label || mapidtopage[menuitem.id].title
+				if (menuitem.child==null) {
+					htmlmenu += itemtemplate.format( menuitem.id , _T(label) )
+				} else {
+					htmlmenu += dropdowntemplate.format( menuitem.id, _T(label) , _generateChildMenu(menuitem.child) )
+				}
+			});
+			return htmlmenu
+		},
+		
 		addPage: function (page) {
 			if (page.id!=undefined && page.parent!=undefined && page.title!=undefined && _pages[page.title]==undefined)
 			{
 				var id = Math.max.apply(null,($.map(_pages, function(p) { return p.id }))) +1;
 				page.id = id;
-			_pages[ page.title ] = page;
+				_pages[ page.title ] = page;
 				return page.id
 			}
 			return null;	// error
@@ -14591,8 +14719,7 @@ var UIControler = (function(win) {
 			return false;
 		},
 		updateFavoriteScene: function ( ) {
-			var ul = $(".altui-dropdown-scene ul");
-			ul.find("li.altui-dropdown-scene-favorite").remove();
+			
 			var favorites = MyLocalStorage.getSettings("Favorites")
 			if (favorites!=null) {
 				var map = $.map(favorites.scene, function( bFav ,altuiid ) {
@@ -14602,20 +14729,21 @@ var UIControler = (function(win) {
 					}
 				});
 				if (map.length>0) {
-					$(".altui-with-scene-favorite").show();
-					$(".altui-no-scene-favorite").hide();
+					$("#menu_scene_withfavorite").show();
+					$("#menu_scene").hide();
 					map.sort(function(a, b){
 						var a1= a.name.toLowerCase(), b1= b.name.toLowerCase();
 						if(a1== b1) return 0;
 						return a1> b1? 1: -1;
 					});
+					$(".altui-dropdown-scene-favorite").remove()
 					$.each(map, function( idx,entry) {
-						var strLI = "<li class='altui-dropdown-scene-favorite' data-altuiid='{1}'><a href='javascript:void(0)'>{0}</a></li>".format(entry.name,entry.altuiid);
-						ul.append(strLI);
+						var item = dropdownItemTemplate.format(entry.altuiid,entry.name,'altui-dropdown-scene-favorite','data-altuiid="{0}"'.format(entry.altuiid))
+						$("#menu_scene_withfavorite").find("div.dropdown-menu").append(item);
 					})
 				} else {
-					$(".altui-with-scene-favorite").hide();
-					$(".altui-no-scene-favorite").show();
+					$("#menu_scene_withfavorite").hide();
+					$("#menu_scene").show();
 				}
 			}
 		}

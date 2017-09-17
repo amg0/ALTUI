@@ -65,15 +65,14 @@ var ALTUI_Templates = null;
 var ALTUI_Templates_Factory= function() {
 	var _dropdownTemplate =  "";		
 	_dropdownTemplate +=  "<div class='btn-group pull-right'>";
-	_dropdownTemplate += "<button class='btn btn-default btn-xs dropdown-toggle altui-device-command' type='button' data-toggle='dropdown' aria-expanded='false'>"; 
-	_dropdownTemplate += "<span class='caret'></span>";
+	_dropdownTemplate += "<button class='btn btn-light btn-sm dropdown-toggle altui-device-command' type='button' data-toggle='dropdown' aria-expanded='false'>"; 
 	_dropdownTemplate += "</button>";
-	_dropdownTemplate += "<ul class='dropdown-menu' role='menu'>";
-	_dropdownTemplate += "<li><a id='{0}' class='altui-device-variables' href='#' role='menuitem'>Variables</a></li>";
-	_dropdownTemplate += "<li><a id='{0}' class='altui-device-actions' href='#' role='menuitem'>Actions</a></li>";
-	_dropdownTemplate += "<li><a id='{0}' class='altui-device-controlpanelitem' href='#' role='menuitem'>Control Panel</a></li>";
-	_dropdownTemplate += "<li><a id='{0}' class='altui-device-hideshowtoggle' href='#' role='menuitem'>{1}</a></li>";
-	_dropdownTemplate += "</ul></div>";
+	_dropdownTemplate += "<div class='dropdown-menu' role='menu'>";
+	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-variables' href='#' role='menuitem'>Variables</a>";
+	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-actions' href='#' role='menuitem'>Actions</a>";
+	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-controlpanelitem' href='#' role='menuitem'>Control Panel</a>";
+	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-hideshowtoggle' href='#' role='menuitem'>{1}</a>";
+	_dropdownTemplate += "</div></div>";
 	_dropdownTemplate += "<div class='pull-right text-muted'><small>#{0} </small></div>";
 	
 	var _batteryHtmlTemplate="";
@@ -83,15 +82,15 @@ var ALTUI_Templates_Factory= function() {
 	_batteryHtmlTemplate+="  </div>";
 	_batteryHtmlTemplate+="</div>";
 	
-	var _devicecontainerTemplate	= "<div class='panel panel-{4} altui-device' data-altuiid='{5}' id='{0}'>"
-	_devicecontainerTemplate	+=		"<div class='panel-heading altui-device-heading'>{6} {7}<div class='panel-title altui-device-title' data-toggle='tooltip' data-placement='left' title='{2}'>{1}</div></div>";
-	_devicecontainerTemplate	+=  	"<div class='panel-body altui-device-body'>";
-	_devicecontainerTemplate	+= 	  	"{8}{3}";
-	_devicecontainerTemplate	+= 	  "</div>";
+	var _devicecontainerTemplate	= "<div class='card altui-device' data-altuiid='{5}' id='{0}'>"
+		_devicecontainerTemplate	+=		"<div class='card-header bg-{4} altui-device-heading'>{6} {7}<div class='card-title altui-device-title' data-toggle='tooltip' data-placement='left' title='{2}'>{1}</div></div>";
+		_devicecontainerTemplate	+=  	"<div class='card-body altui-device-body'>";
+		_devicecontainerTemplate	+= 	  	"{8}{3}";
+		_devicecontainerTemplate	+= 	  	"</div>";
 	_devicecontainerTemplate	+= 	  "</div>";
 	
 	var _deviceEmptyContainerTemplate="<div class=' {2} '>";
-		_deviceEmptyContainerTemplate	+= 		"<div class='panel panel-default altui-device' data-altuiid='{1}' id='{0}'>"
+		_deviceEmptyContainerTemplate	+= 		"<div class='card xxx altui-device' data-altuiid='{1}' id='{0}'>"
 		_deviceEmptyContainerTemplate	+= 	  	"</div>";
 		_deviceEmptyContainerTemplate	+= 	"</div>";		
 		
@@ -109,10 +108,10 @@ var ALTUI_Templates_Factory= function() {
 
 	// 0:bootgrid classes 1:altuiid 2:htmlid 3: name 4:right header buttons 5:panel body 6:left header buttons
 	var _workflowContainerTemplate=		"<div class='{0} '>";
-		_workflowContainerTemplate	+= 		"<div class='panel panel-default altui-workflow' data-altuiid='{1}' id='{2}'>"
-		_workflowContainerTemplate	+= 		"<div class='panel-heading altui-workflow-heading'>{6} <span class='altui-workflow-title-name'>{3}</span>{4}<div class='text-muted pull-right'> <small>#{1}</small> </div>"
+		_workflowContainerTemplate	+= 		"<div class='card xxx altui-workflow' data-altuiid='{1}' id='{2}'>"
+		_workflowContainerTemplate	+= 		"<div class='card-header altui-workflow-heading'>{6} <span class='altui-workflow-title-name'>{3}</span>{4}<div class='text-muted pull-right'> <small>#{1}</small> </div>"
 		_workflowContainerTemplate	+= 	  	"</div>";
-		_workflowContainerTemplate	+= 		"<div class='panel-body altui-workflow-body'>{5}"
+		_workflowContainerTemplate	+= 		"<div class='card-body altui-workflow-body'>{5}"
 		_workflowContainerTemplate	+= 	  	"<div class='altui-active-state-name'></div>";
 		_workflowContainerTemplate	+= 	  	"</div>";
 		_workflowContainerTemplate	+= 	  	"</div>";
@@ -275,7 +274,7 @@ function _formatTrigger(controller,trigger)
 
 var HouseModeEditor = (function() {
 	function _displayModes2(htmlid,cls,modes) {
-		var tmpl = "<button type='button' class='btn btn-default altui-housemode2'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>"
+		var tmpl = "<button type='button' class='btn btn-secondary altui-housemode2'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>"
 		var html ="<div class='housemode2'>";
 				$.each(_HouseModes, function(idx,mode) {
 					var select = ($.inArray( mode.id.toString(), modes) == -1) ? "housemode2_unselected" : "housemode2_selected";
@@ -373,7 +372,7 @@ var SpeechManager = (function() {
 			recognition.interimResults = true;
 
 			recognition.onstart = function() { 
-				$("#altui-speech-button").addClass('btn-danger').removeClass('btn-default');
+				$("#altui-speech-button").addClass('btn-danger').removeClass('btn-secondary');
 				started = true;
 				_setTimer();
 			}
@@ -385,7 +384,7 @@ var SpeechManager = (function() {
 			recognition.onend = function() { 
 				started = false;
 				_clearTimer();
-				$("#altui-speech-button").removeClass('btn-danger').addClass('btn-default');
+				$("#altui-speech-button").removeClass('btn-danger').addClass('btn-secondary');
 				$("#altui-speech-text").html("");
 				//onExecuteResults();
 				final_transcript = [];
@@ -500,12 +499,12 @@ var SpeechManager = (function() {
 			_execute_callback = execute_callback;
 		},
 		getGlyph: function() {
-			return "<span class='glyphicon glyphicon-volume-up' title='speech'></span>";		
+			return '<i class="fa fa-volume-up" aria-hidden="true"></i>';		
 		},
 		getHtml: function() {
 			if (recognition==null) return "";
 			Html="";
-			Html+="	<button id='altui-speech-button' class='btn btn-default {1}' type='button'>{0}</button>".format(
+			Html+="	<button id='altui-speech-button' class='btn btn-secondary {1}' type='button'>{0}</button>".format(
 				SpeechManager.getGlyph(),
 				(started==true) ? 'btn-danger' : ''
 				);
@@ -532,8 +531,8 @@ var LuaEditor = (function () {
 	luaEditorModalTemplate += "  <div class='modal-dialog modal-lg'>";
 	luaEditorModalTemplate += "    <div class='modal-content'>";
 	luaEditorModalTemplate += "      <div class='modal-header'>";
+	luaEditorModalTemplate += "        <h5 class='modal-title'>{0}</h5>";
 	luaEditorModalTemplate += "        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-	luaEditorModalTemplate += "        <h4 class='modal-title'>{0}</h4>";
 	luaEditorModalTemplate += "      </div>";
 	luaEditorModalTemplate += "      <div class='modal-body'>";
 	luaEditorModalTemplate += "      	<div class='form-group'>";
@@ -543,8 +542,8 @@ var LuaEditor = (function () {
 	luaEditorModalTemplate += "      	</div>";
 	luaEditorModalTemplate += "      </div>";
 	luaEditorModalTemplate += "      <div class='modal-footer'>";
-	// luaEditorModalTemplate += "        <button type='button' class='btn btn-default' data-dismiss='modal'>"+_T("Close")+"</button>";
-	// luaEditorModalTemplate += "        <button type='button' class='btn btn-default altui-luacode-test' >"+_T("Test Code")+"</button>";
+	// luaEditorModalTemplate += "        <button type='button' class='btn btn-secondary' data-dismiss='modal'>"+_T("Close")+"</button>";
+	// luaEditorModalTemplate += "        <button type='button' class='btn btn-secondary altui-luacode-test' >"+_T("Test Code")+"</button>";
 	// luaEditorModalTemplate += "        <button type='button' class='btn btn-primary altui-luacode-save' data-dismiss='modal'>"+_T("Save Changes")+"</button>";
 	luaEditorModalTemplate += "      </div>";
 	luaEditorModalTemplate += "    </div><!-- /.modal-content -->";
@@ -924,7 +923,7 @@ var DialogManager = ( function() {
 		propertyline += "<div class='form-group'>";
 		propertyline += "	<label for='altui-widget-"+name+"' title='"+(help || '')+"'>"+label+"</label>";
 		if (help)
-			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-default btn-xs altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
+			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-secondary btn-sm altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
 		propertyline += "<input id='altui-widget-"+name+"' name='{0}' value='{1}' {2}></input>"
 			.format(name,value,optstr);
 		propertyline += "</div>";
@@ -945,12 +944,12 @@ var DialogManager = ( function() {
 		propertyline += "<div class='form-group'>";
 		propertyline += "	<label for='altui-widget-"+name+"' title='"+(help || '')+"'>"+label+"</label>";
 		if (help)
-			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-default btn-xs altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
+			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-secondary btn-sm altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
 		
 		propertyline += "<div class='input-group'>";
 			propertyline += "<input id='altui-widget-"+name+"' class='form-control' "+optstr+" value='"+value.escapeXml()+"' "+placeholder+" ></input>";
 			propertyline += "<span class='input-group-btn'>";
-				propertyline += buttonTemplate.format( "altui-edit-"+name, 'btn-default', "Blockly "+editGlyph,'default',_T('Edit Watch Expression'));
+				propertyline += buttonTemplate.format( "altui-edit-"+name, 'btn-secondary', "Blockly "+editGlyph,'default',_T('Edit Watch Expression'));
 			propertyline += "</span>";
 			propertyline += "<input type='hidden' id='altui-xml-"+name+"' class='form-control' value='"+xml.escapeXml()+"' ></input>";
 		propertyline += "</div>";
@@ -967,7 +966,7 @@ var DialogManager = ( function() {
 	}
 	function _dlgAddLine(dialog, name, label, value,help, options, col_css)
 	{
-		var col_css = col_css || ''; //|| 'col-xs-12';
+		var col_css = col_css || ''; //|| 'col-12';
 		var optstr = HTMLUtils.optionsToString($.extend( {type:'text'},options));
 		value = (value==undefined) ? '' : value.toString() ;
 		var placeholder = ((options !=undefined) && (options.placeholder==undefined)) ? "placeholder='enter "+name+"'" : "";
@@ -975,7 +974,7 @@ var DialogManager = ( function() {
 		propertyline += "<div class='form-group {0}'>".format(col_css);
 		propertyline += "	<label for='altui-widget-"+name+"' title='"+(help || '')+"'>"+label+"</label>";
 		if (help)
-			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-default btn-xs altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
+			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-secondary btn-sm altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
 		propertyline += "	<input id='altui-widget-"+name+"' class='form-control' "+optstr+" value='"+value.escapeXml()+"' "+placeholder+" ></input>";
 		propertyline += "</div>";
 		$(dialog).find(".row-fluid").append(propertyline);
@@ -988,9 +987,9 @@ var DialogManager = ( function() {
 		propertyline += "<div class='form-group'>"
 		propertyline += "	<label for='altui-widget-"+name+"' title='"+(help || '')+"'>"+label+"</label>";
 		if (help)
-			propertyline += "<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-default btn-xs altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
+			propertyline += "<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-secondary btn-sm altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
 
-		propertyline += "<div class='row'><div class='col-sm-9 col-xs-12'>{0}</div><div class='col-sm-3 hidden-xs'><small>{1}</small></div></div>".format(
+		propertyline += "<div class='row'><div class='col-sm-9 col-12'>{0}</div><div class='col-sm-3 d-none d-sm-block'><small>{1}</small></div></div>".format(
 			"<div class='form-control altui-dialog-ace' id='altui-editor-text-{1}'>{0}</div>".format(value.escapeXml(),name),
 			help || ''
 		)
@@ -1012,12 +1011,12 @@ var DialogManager = ( function() {
 		propertyline += "<div class='form-group'>";
 		propertyline += "	<label for='altui-widget-"+name+"' title='"+(help || '')+"'>"+label+"</label>";
 		if (help)
-			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-default btn-xs altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
+			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-secondary btn-sm altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
 		// propertyline += "	<input type='url' id='altui-widget-"+name+"' class='form-control' "+optstr+" value='"+value+"' "+placeholder+" ></input>";
 		propertyline += "<div class='input-group'>";
 		  propertyline += "<input type='text' id='altui-widget-"+name+"' class='form-control' "+optstr+" value='"+value+"' "+placeholder+" placeholder='Url...'>";
 		  propertyline += "<span class='input-group-btn'>";
-			propertyline += "<button data-forinput='altui-widget-"+name+"' class='btn btn-default altui-url-test' type='button'>"+_T("Test")+"!</button>";
+			propertyline += "<button data-forinput='altui-widget-"+name+"' class='btn btn-secondary altui-url-test' type='button'>"+_T("Test")+"!</button>";
 		  propertyline += "</span>";
 		propertyline += "</div>"; // <!-- /input-group -->
 	propertyline += "</div>";
@@ -1709,7 +1708,7 @@ var HTMLUtils = (function() {
 		var html="";
 		var idcolumn = idcolumn || 'id';
 		var viscols = viscols || [idcolumn];
-		// html+="<div class='col-xs-12'>";
+		// html+="<div class='col-12'>";
 		if ( (arr) && ($.isArray(arr) && (arr.length>0)) ) {
 			var display_order = [];
 			var keys= Object.keys(arr[0]);
@@ -1725,7 +1724,7 @@ var HTMLUtils = (function() {
 			});
 			
 			var bFirst=true;
-			html+="<table id='{1}' class='table table-condensed table-hover table-striped {0}'>".format(cls || '', htmlid || 'altui-grid' );
+			html+="<table id='{1}' class='table table-responsive table-sm table-hover table-striped {0}'>".format(cls || '', htmlid || 'altui-grid' );
 			if (caption)
 				html += "<caption>{0}</caption>".format(caption)
 			$.each(arr, function(idx,obj) {
@@ -1776,17 +1775,17 @@ var HTMLUtils = (function() {
 		html += "<div class='{0}' id='{1}'>".format(cls,id||'');
 		html += "    <div class='panel-group' id='accordion'>";
 		$.each( panels, function (idx,panel){
-			html += "        <div class='panel panel-default' id='"+panel.id+"'>";
-			html += "            <div class='panel-heading'>";
+			html += "        <div class='card xxx' id='"+panel.id+"'>";
+			html += "            <div class='card-header'>";
 			if (button) {
 				html += xsbuttonTemplate.format(button.id, button.class, button.label, button.title);
 			}
-			html += "                <h4 class='panel-title'>";
+			html += "                <h5 class='card-title'>";
 			html += "                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse"+panel.id+"'>"+panel.title+"</a><span class='altui-hint' id='altui-hint-"+panel.id+"'></span><span id='altui-caret' class='caret'></span>";
-			html += "                </h4>";
+			html += "                </h5>";
 			html += "            </div>";
 			html += "            <div id='collapse"+panel.id+"' class='panel-collapse collapse {0}'>".format(bFirst ? 'in':'');
-			html += "                <div class='panel-body'>";
+			html += "                <div class='card-body'>";
 			html += 					panel.html || _T(' ');
 			html += "                </div>";
 			html += "            </div>";
@@ -1803,16 +1802,17 @@ var HTMLUtils = (function() {
 		html += "<div id='{2}' class='btn-group {0}' {1} role='group' aria-label='group'>".format(model.cls, model.attr,htmlid);
 		$.each(model.buttons, function(i,btn) {
 				var label = (btn.img) ? "<img class='{2}' src='{0}' alt='{1}'></img>".format(btn.img,btn.label||'',btn.imgcls||'' ) : (btn.label||'')
-				html += "<button id='{1}' type='button' class='btn btn-default {0}'>{2}</button>".format(btn.cls||'',btn.id||'',label)
+				html += "<button id='{1}' type='button' class='btn btn-secondary {0}'>{2}</button>".format(btn.cls||'',btn.id||'',label)
 		})
-		// <button type='button' class='btn btn-default'>Left</button>
-		// <button type='button' class='btn btn-default'>Middle</button>
-		// <button type='button' class='btn btn-default'>Right</button>
+		// <button type='button' class='btn btn-secondary'>Left</button>
+		// <button type='button' class='btn btn-secondary'>Middle</button>
+		// <button type='button' class='btn btn-secondary'>Right</button>
 		html += "</div>";
 		return html;
 	};
-	function _drawToolbar(htmlid,tools) {
-		var toolbarHtml="<div>";	
+	function _drawToolbar(htmlid,tools,cls) {
+		cls = cls||"";
+		var toolbarHtml="<div>"
 		var preareas=[];
 		$.each(tools, function(idx,tool) {
 			var collapsecss = "";
@@ -1828,8 +1828,8 @@ var HTMLUtils = (function() {
 					break;
 				case 'button':
 				default:
-					toolbarHtml+="  <button type='button' class='btn btn-default {3}' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
-					var glyph = "<span class='glyphicon {0}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}'></span>".format(tool.glyph,tool.label || tool.title || '');
+					toolbarHtml+="  <button type='button' class='btn btn-secondary {3}' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
+					var glyph = glyphTemplate.format(tool.glyph,tool.label || tool.title || '');
 					toolbarHtml += glyph;
 					if (tool.label)
 						toolbarHtml+=("&nbsp;" + tool.label);
@@ -1845,7 +1845,7 @@ var HTMLUtils = (function() {
 			toolbarHtml+="<div class='collapse' id='{0}'></div>".format(idPre);
 		});
 		toolbarHtml+="</div>";	
-		return "<div class='{0}'>{1}</div>" .format(htmlid,toolbarHtml);
+		return "<div class='{0} {1}'>{2}</div>" .format(htmlid,cls,toolbarHtml);
 	};
 	function _drawSelect( model ) {
 		var html ="<select class='form-control {1}' id='{0}'>".format(model.id,model.class)
@@ -3344,11 +3344,11 @@ var BlocklyArea = (function(htmlid){
 	function _createBlocklyArea() {
 		var html="";
 		html += "<div class='altui-blockly-editor' style='display: none;' >";
-			html += "<div class='panel panel-default'>";
-			html += "  <div class='panel-heading'>";
-			html += "    <h3 class='panel-title'>Watch Expression</h3>";
+			html += "<div class='card xxx'>";
+			html += "  <div class='card-header'>";
+			html += "    <h3 class='card-title'>Watch Expression</h3>";
 			html += "  </div>";
-			html += "  <div class='panel-body'>";
+			html += "  <div class='card-body'>";
 				html+="<xml id='toolbox' style='display: none'>";
 				html+="    <category name='Watch Types'>";
 				html+="      <block type='when'></block>";
@@ -4017,10 +4017,10 @@ var TimerEditor = (function() {
 })();
 
 var SceneEditor = function (scene) {
-	var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-default btn-xs' aria-label='tbd' title='{3}'>{2}</button>";
+	var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-secondary btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
 	var sortable_options = {
 		axis: "y",
-		// containment: ".panel-body",
+		// containment: ".card-body",
 		// handle: ".altui-scene-action",
 		items: "tr.altui-scene-action",		// prevent selection of last line which is not an action
 		connectWith: ".altui-scene-group tbody",		// allow to drop in other action groups
@@ -4473,7 +4473,7 @@ var SceneEditor = function (scene) {
 		var html="";
 		html += "<tr data-group-idx='"+idx+"'>";
 		html += "<td>";
-		html +="<h4>{0}</h4>".format(result);
+		html +="<h5>{0}</h5>".format(result);
 		// html += "</td>";
 		// html +="<td>";
 		if (idx>0) {
@@ -4483,7 +4483,7 @@ var SceneEditor = function (scene) {
 		html += smallbuttonTemplate.format( idx, 'altui-editgroup', editGlyph, 'Edit group');
 		html +="</td>";			
 		html += "<td>";
-		html +="<table class='table table-condensed altui-scene-group' data-group-idx='"+idx+"'>";
+		html +="<table class='table table-responsive table-sm altui-scene-group' data-group-idx='"+idx+"'>";
 		html +="<tbody>";
 		$.each(group.actions, function(ida,action) {
 			html += _displayAction(action,ida,idx);
@@ -4555,9 +4555,9 @@ var SceneEditor = function (scene) {
 		
 	function _showSaveNeeded( bSaveNeeded ) { // defaults to "save needed"
 		if (bSaveNeeded == false)
-			$(".altui-scene-editbutton").removeClass("btn-danger").addClass("btn-default");
+			$(".altui-scene-editbutton").removeClass("btn-danger").addClass("btn-secondary");
 		else
-			$(".altui-scene-editbutton").removeClass("btn-default").addClass("btn-danger");
+			$(".altui-scene-editbutton").removeClass("btn-secondary").addClass("btn-danger");
 		_updateAccordeonHeaders();
 	};
 
@@ -4565,7 +4565,7 @@ var SceneEditor = function (scene) {
 		var html="";
 		html += UIManager.displayJson( 'Actions', scene.groups );
 		try {
-			html +="<table class='table table-condensed'>";
+			html +="<table class='table table-responsive table-sm'>";
 			html +="<tbody>";
 			if (scene.groups)
 			{
@@ -4588,7 +4588,7 @@ var SceneEditor = function (scene) {
 	};
 	
 	function _sceneEditDraw() {
-		// var htmlSceneAddButtonTmpl = "  <button type='submit' class='btn btn-default {0}'>"+plusGlyph+"</button>";
+		// var htmlSceneAddButtonTmpl = "  <button type='submit' class='btn btn-secondary {0}'>"+plusGlyph+"</button>";
 		var rooms = $.grep( MultiBox.getRoomsSync(), function(room,idx) {
 			_roomIDToName[room.altuiid]=room.name;
 			return ( MultiBox.controllerOf(room.altuiid).controller == scenecontroller );
@@ -4629,7 +4629,7 @@ var SceneEditor = function (scene) {
 		function _displayWatches(scenewatches) {
 			html = "";
 			if (scenecontroller==0) {
-				html +="<table class='table table-condensed'>";
+				html +="<table class='table table-responsive table-sm'>";
 				html +="<caption>{0}</caption>".format(_T("Device Variable Watches"));
 				html +="<tbody>";
 				$.each( scenewatches, function (idx,watch) {				
@@ -4657,7 +4657,7 @@ var SceneEditor = function (scene) {
 						]
 					});
 				}
-				html +="<table class='table table-condensed'>";
+				html +="<table class='table table-responsive table-sm'>";
 				html +="<caption>{0}</caption>".format(_T("Device Triggers"));
 				html +="<tbody>";
 				if (scene.triggers) {
@@ -4714,9 +4714,9 @@ var SceneEditor = function (scene) {
 		var editor = ace.edit( "altui-luascene" );
 		var luacode = editor.getValue();
 		$("#altui-hint-Lua").html( (luacode=="") ? "" : plusGlyph );
-		$("#altui-hint-Triggers").html( '<span class="badge">{0}</span>'.format( scene.triggers.length + scenewatches.length));
-		$("#altui-hint-Timers").html( '<span class="badge">{0}</span>'.format( scene.timers.length));
-		$("#altui-hint-Actions").html( '<span class="badge">{0}</span>'.format( _countActions(scene)) );
+		$("#altui-hint-Triggers").html( '<span class="badge badge-secondary">{0}</span>'.format( scene.triggers.length + scenewatches.length));
+		$("#altui-hint-Timers").html( '<span class="badge badge-secondary">{0}</span>'.format( scene.timers.length));
+		$("#altui-hint-Actions").html( '<span class="badge badge-secondary">{0}</span>'.format( _countActions(scene)) );
 		var header = "{0} in {1}".format(scene.name,_roomIDToName["{0}-{1}".format(scenecontroller,scene.room)]);
 		if (UIManager.UI7Check())
 		{
@@ -5056,7 +5056,7 @@ var SceneEditor = function (scene) {
 //  Page UI pieces helpers
 // ===========================
 var PageMessage = (function(window, undefined ) {
-	var _badgeTemplate = '<span class="badge">{0}</span>&nbsp;';
+	var _badgeTemplate = '<span class="badge badge-secondary">{0}</span>&nbsp;';
 	var _msgTemplate = '<span class="altui-pagemessage-txt" >{0}</span>';
 	var _pageMessageIdx = 0;
 	
@@ -5075,7 +5075,8 @@ var PageMessage = (function(window, undefined ) {
 	{
 		var close = "<button class='close altui-pagemessage-close' type='button' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
 		var badgehtml = (badge>1) ? _badgeTemplate.format(badge) : "";
-		var htmlmsg = ("<tr data-idx='{0}' {4} class='{3}'><td>"+close+"</td><td>"+badgehtml+"</td><td>{1}</td><td class='altui-pagemessage-txt'>{2}</td><td>{5}</td></tr>").format( 
+		var htmlmsg = ("<tr data-idx='{0}' {4} class='table-{3}'><td>"+close+"</td><td>"+badgehtml+"</td><td>{1}</td><td class='altui-pagemessage-txt'>{2}</td><td>{5}</td></tr>")
+		.format( 
 			_pageMessageIdx,
 			now.toLocaleString(),
 			txt.htmlEncode(),
@@ -5088,7 +5089,7 @@ var PageMessage = (function(window, undefined ) {
 	function _updateMessageButtonColor() {
 		var button =$("#altui-toggle-messages");
 		function _setColor(cls) {
-			button.attr("class","dropdown-toggle btn "+"btn-"+cls);
+			button.attr("class","btn btn-"+cls);
 		};
 		var divs = $("div#altui-pagemessage");
 		if (divs.has("tr.danger").length>0)
@@ -5103,9 +5104,8 @@ var PageMessage = (function(window, undefined ) {
 			_setColor('success');
 		else {
 			_setColor('default');
-			// $("#altui-toggle-messages").dropdown("toggle");
-			button.next(".collapse").removeClass("in");
-			button.filter("span").removeClass( "caret-reversed" );
+			// button.next(".collapse").removeClass("in");
+			// button.filter("span").removeClass( "caret-reversed" );
 		}
 	};
 	
@@ -5125,7 +5125,7 @@ var PageMessage = (function(window, undefined ) {
 		if (bReload==true) {
 			if (level=="success")
 				level="info";
-			html += "<button class='btn btn-default btn-sm altui-savechanges-button' onclick='MultiBox.saveChangeCaches(0,\"{0}\")'>Save Changes</button>";
+			html += "<button class='btn btn-secondary btn-sm altui-savechanges-button' onclick='MultiBox.saveChangeCaches(0,\"{0}\")'>Save Changes</button>";
 		}
 
 		//
@@ -5211,22 +5211,24 @@ var PageMessage = (function(window, undefined ) {
 		}, 5000 );
 	};
 
-	function _init() {
-		var Html="";
-		Html+="<div class='' id='altui-pagemessage'>";
-		Html+="	<button id='altui-toggle-messages' class='btn btn-default dropdown-toggle' type='button' data-toggle='collapse' data-target='#altui-pagemessage-panel' >";
-		Html+=( _T("Messages") + "&nbsp;<span class='caret'></span>");
-		Html+="	</button>";
-		Html+= SpeechManager.getHtml();
-		Html+="	<div class='panel panel-default collapse' id='altui-pagemessage-panel' >";
-		Html+="		<div class='panel-body'>";
-		Html+="			<table class='table table-condensed table-responsive'>";
-		Html+="				<tbody>";
-		Html+="				</tbody>";
-		Html+="			</table>";
-		Html+="		</div>";
-		Html+="	</div>";
-		Html+="</div>";
+	function _init(breadcrumb) {
+var Html=`
+<div id='altui-pagemessage'>
+	<form class='form-inline'>
+	{0}
+	<button id="altui-toggle-messages" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#altui-pagemessage-panel" aria-expanded="false" aria-controls="collapseExample">
+	{1} <i class="fa fa-caret-down" aria-hidden="true"></i>
+	</button>
+	{2}
+	</form>
+	<div class="collapse" id="altui-pagemessage-panel">
+		<div class="card card-body">
+		<table class='table table-responsive table-sm table-responsive'>
+		<tbody></tbody>
+		</div>
+	</div>
+</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml())
+		
 		$("#altui-pagetitle").before( Html );
 		// close button for pageMessages
 		$( document )
@@ -5237,7 +5239,7 @@ var PageMessage = (function(window, undefined ) {
 			})
 			.off( "click", "#altui-toggle-messages")
 			.on( "click", "#altui-toggle-messages", function() {
-				$(this).find("span").toggleClass( "caret-reversed" );
+				// $(this).find("span").toggleClass( "caret-reversed" );
 			})
 			.off( "click", "#altui-speech-button")
 			.on( "click", "#altui-speech-button", function() {

@@ -384,8 +384,8 @@ var Interface = function (undefined) {
 				DialogTemplate += "    <form class='form' data-toggle='validator' onsubmit='return false;'>";
 				DialogTemplate += "    <div class='modal-content'>";
 				DialogTemplate += "      <div class='modal-header'>";
+				DialogTemplate += "        <h5 class='modal-title'>{1} </h5>";
 				DialogTemplate += "        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-				DialogTemplate += "        <h4 class='modal-title'>{1} </h4>";
 				DialogTemplate += "      </div>";
 				DialogTemplate += "      <div class='modal-body'>";
 				DialogTemplate += "      <div class='row-fluid'>";
@@ -393,7 +393,7 @@ var Interface = function (undefined) {
 				DialogTemplate += "      </div>";
 				DialogTemplate += "      </div>";
 				DialogTemplate += "      <div class='modal-footer'>";
-				DialogTemplate += "        <button type='submit' class='btn btn-default' data-dismiss='modal'>{4}</button>";
+				DialogTemplate += "        <button type='submit' class='btn btn-secondary' data-dismiss='modal'>{4}</button>";
 				DialogTemplate += "      </div>";
 				DialogTemplate += "    </div><!-- /.modal-content -->";
 				DialogTemplate += "    </form>";
@@ -491,7 +491,7 @@ var Interface = function (undefined) {
 
 				 $('div#dialogs')
 					.off('click')
-					.on( 'click','.modal-footer .btn-default', function(e) {
+					.on( 'click','.modal-footer .btn-secondary', function(e) {
 						e.stopPropagation();
 						var retval = false
 						if (displayConfirmationPopup == !0) {
