@@ -393,7 +393,7 @@ var Interface = function (undefined) {
 				DialogTemplate += "      </div>";
 				DialogTemplate += "      </div>";
 				DialogTemplate += "      <div class='modal-footer'>";
-				DialogTemplate += "        <button type='submit' class='btn btn-secondary' data-dismiss='modal'>{4}</button>";
+				DialogTemplate += "        <button type='submit' class='btn btn-light' data-dismiss='modal'>{4}</button>";
 				DialogTemplate += "      </div>";
 				DialogTemplate += "    </div><!-- /.modal-content -->";
 				DialogTemplate += "    </form>";
@@ -491,7 +491,7 @@ var Interface = function (undefined) {
 
 				 $('div#dialogs')
 					.off('click')
-					.on( 'click','.modal-footer .btn-secondary', function(e) {
+					.on( 'click','.modal-footer .btn-light', function(e) {
 						e.stopPropagation();
 						var retval = false
 						if (displayConfirmationPopup == !0) {

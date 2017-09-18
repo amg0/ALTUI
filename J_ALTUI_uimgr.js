@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2124 $";
+var ALTUI_revision = "$Revision: 2129 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -50,8 +50,8 @@ var deviceActionModalTemplate = "";
 var defaultDialogModalTemplate = "";
 
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
-var houseModeButtonTemplate = "	 <button type='button' class='btn btn-secondary altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";
-var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-secondary'>{2}</button>";
+var houseModeButtonTemplate = "	 <button type='button' class='btn btn-light altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";
+var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-light'>{2}</button>";
 
 var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>' //"<span class='glyphicon glyphicon-{0} {2}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}' ></span>";
 
@@ -90,7 +90,16 @@ var scaleGlyph = "";
 var helpGlyph = "";
 var homeGlyph = "";
 var tagsGlyph = "";
-var glyphList = [
+var glyphList = []
+
+//https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less
+var tmp = ""
+$.get("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less",function(data) {
+	glyphList = $.map( data.split('\n').filter( function(line) {return line.substr(0,7)=="@fa-var"} ), function(line,idx) { return line.split(':')[0].substr(8) } )
+})
+
+/*
+[
 	'adjust',
 	'alert',
 	'align-center',
@@ -355,10 +364,11 @@ var glyphList = [
 	'zoom-in',
 	'zoom-out'
 ]
-var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-secondary btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
-var smallbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-secondary btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
+*/
+var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
+var smallbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
 var buttonTemplate		= "<button id='{0}' type='button' class='{1} btn btn-{3}' aria-label='tbd' title='{4}'>{2}</button>";
-var buttonDebugHtml = "<button type='button' class='btn btn-secondary' id='altui-debug-btn' >Debug<span class='caret'></span></button>";
+var buttonDebugHtml = "<button type='button' class='btn btn-light' id='altui-debug-btn' >Debug<span class='caret'></span></button>";
 var cameraURI="data:image/png;base64,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";
 var defaultIconSrc="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAASJSURBVHja7Jp7aI5RHMff123CMOYyMmFY5LZYI5umFmHhD2pyyYzYkju5hCWX0jZKM9rEkCy5tJostxWRIteZe5FLyW2Y68z35Pfq9Os8z573eT3vu9fOr76d5zzn8jyf59x+57yvu6amxlWfrIGrnpkG1sAaWANrYA2sgTWwBnbKGnmT2e12/7MHb8vOaYhgEJQA9YN6Qj2g5lCoSFu4eNF1K3V5sx9o5M+vC0jxvCRoKjQOalmnW9gH0BYI5kKLoE5B06Vttug8KBMKqyX7S+g+9Ab6SGHwAAN2MIICqL9BlifQMegcdAHj9X1QtjBAxcy2BNoENWbJ1VARtAO6BMiaoO7SgG2C4AA0SZF8CFoDyMf/xRgGbCsExVA8S3oEzQJomUG5AQgSoSFQNNSZlqZ4q8uS34Hx0s0MYA+KSQsv/pHlD0eQQctTVFC1MDkQRQrYtQDdoOgFa6F0qGmwdun10Fh2Lx2wOxnseAS7ofZGDhP0DHoAVUJvnQB2e+OWcdcSEKMRnGTZlgN2K+sBWdACRZXfoBPQYeg8ytmC9IrBLjB5T+VQFynLXrz0TDZrC5gJrKrv0HYoG/lf+dpq/vKlMxnsbRqbcsuqYC9B0wH6MGi2h4CJRDCfjT+x9HyR7mUpYIXDkRAoWF9aeBXzovIAcUX6IBMVYzYTedZb+JghCCIo+gFl3gV00sILtcalGHchdPsr1B0v9lJaeiqgjlLRXKRnmED2QpAGjYH6iEdJyeJZp6FCEarcUW8Y7HTpKRKssD0eWLLVDPYqbQtVoGFQAX2gZVBfBuuiuoSDUgpdRv4Yf4/haSxewDyodLZZSMUH+a6AFXDCdUxVQBpZrJj0UHamX4DxoDb0UI/dAsw1KZ5KfrDH9iP9pqKe3mLdhSJtvLNY6vbYhfa2hRNZmRKWPoPFtxhMSkehcJb0ArpRi2THJA91DXR6lo5j8dMSSFeacDx2Ea17T1HHQpbPRSccscj/3KR3tUVwl7V0LjTMyRaOZnG5O49gacUGrbtUUe8KM1iyHKgduzcUdSY62cK9pOvXzPftx/JeUJRPUnRl8dEO03L3t8VRd7X0oUYpJkuPpdAxkSPAHaTrpyytG4uXK8onKO7FsAM74YWJQ4EqyWffZfJO8U526VA27mRrK13/NPCQult4xmyUrZLiG6GuJvmjnOzS8oa+QnG6USZ5XyprVkv9wiM7L3XlOOaz+8zgVWYzXxhp+Raq+GSSJjb/K9kEl2/BKfkRkEM8i3bfJC0NH61SioufYdawPJsVK0V5XQY+S742t32ALWU95jWC4+yIKFpRtszx/bAPVqaY3V+RM2Lm0rYkJ0NlhX4707J5eDCHLTPF1PJmNhJKVtwvQU8YW2d/LiXLJydiOMWTDWBqs0oLM3jAu7QYm78QTHb9+UXCromZOcXOzzYB+csDHRiMoMMBb004NMmoo8RfBwD/Cvo57XTWQZ8tFjsi3E6UPeW3My0njDYOU+hMS/jWEZL7egc6Q4cJqu2mcwfx/4Pp/2lpYA2sgTWwBtbAGlgDO2W/BRgADRV6RjlErQoAAAAASUVORK5CYII="
 var _timerTypes = [];
@@ -535,7 +545,7 @@ var styles ="						\
 		bottom: 20px;	\
 		right: 15px;	\
 	}	\
-	.altui-myhome-room-toolbar button.btn-secondary {	\
+	.altui-myhome-room-toolbar button.btn-light {	\
 		background-image: none;	\
 	}	\
 	.altui-myhome-room-toolbar button {	\
@@ -828,6 +838,8 @@ var styles ="						\
 		margin-top:2px;			\
 		margin-right:5px;		\
 		margin-bottom:0px;		\
+		overflow: visible;		\
+		word-wrap: normal;		\
 	}\
 	div.altui-battery .progress-bar { \
 		color: black;			\
@@ -1378,7 +1390,7 @@ var UIManager  = ( function( window, undefined ) {
 				onWidgetResize: _onResizeStub,
 				widgetdisplay: function(widget,bEdit)	{
 					var scene = MultiBox.getSceneByAltuiID(widget.properties.sceneid);
-					return "<button type='button' class='{1} btn btn-secondary' aria-label='Run Scene' onclick='{3}' style='{5}'>{4} {2}</button>".format(
+					return "<button type='button' class='{1} btn btn-light' aria-label='Run Scene' onclick='{3}' style='{5}'>{4} {2}</button>".format(
 							scene ? scene.altuiid : NULL_DEVICE,
 							'altui-widget-runscene-button',
 							(widget.properties.glyph.length>0) ? glyphTemplate.format( widget.properties.glyph, _T("Run Scene") , "") : '',
@@ -1403,7 +1415,7 @@ var UIManager  = ( function( window, undefined ) {
 					var device = MultiBox.getDeviceByAltuiID(widget.properties.deviceid);
 					if (device==null)
 						return "";
-					return "<button type='button' class='{1} btn btn-secondary' aria-label='Run Action' onclick='{3}' style='{5}' >{4}{2}</button>".format(
+					return "<button type='button' class='{1} btn btn-light' aria-label='Run Action' onclick='{3}' style='{5}' >{4}{2}</button>".format(
 						device ? device.altuiid : NULL_DEVICE,
 						'altui-widget-upnpaction-button',
 						(widget.properties.glyph.length>0) ? glyphTemplate.format( widget.properties.glyph, _T("Execute Action") , "pull-right") : '',
@@ -1448,7 +1460,7 @@ var UIManager  = ( function( window, undefined ) {
 
 					var html = "";
 					if (widget.properties.displayicon==0) {
-						html = "<button	 type='button' style='color:{4};' class='{1} btn btn-secondary' aria-label='Run Scene' onclick='{3}' >{2}</button>".format(
+						html = "<button	 type='button' style='color:{4};' class='{1} btn btn-light' aria-label='Run Scene' onclick='{3}' >{2}</button>".format(
 						widget.properties.deviceid,					// id
 						'altui-widget-2statebtn',					// class
 						onoffGlyph,									// content
@@ -1624,7 +1636,7 @@ var UIManager  = ( function( window, undefined ) {
 
 	function _generateNavBarHTML() {	
 		var html = `
-		<nav class="navbar navbar-expand-md navbar-light bg-light">
+		<nav id="navbar" class="navbar navbar-expand-md navbar-light bg-light">
 		  <a class="navbar-brand" href="#"><div class='imgLogo'></div></a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -2145,7 +2157,7 @@ var UIManager  = ( function( window, undefined ) {
 				if (form.length==0) {
 					var that = $(this);
 					// change color
-					that.removeClass("btn-secondary").addClass("btn-danger");
+					that.removeClass("btn-light").addClass("btn-danger");
 					MultiBox.getDataProviders(function(providers) {
 						//
 						// get this push parameters if they exist
@@ -2193,7 +2205,7 @@ var UIManager  = ( function( window, undefined ) {
 					// CLOSING the form : change color
 					var nexttr = tr.next("tr");
 					var pushEnabled = nexttr.find("input#altui-enablePush-"+varid).prop('checked');
-					$(this).addClass("btn-secondary").toggleClass("btn-info",pushEnabled).removeClass("btn-danger");
+					$(this).addClass("btn-light").toggleClass("btn-info",pushEnabled).removeClass("btn-danger");
 					var push = null;
 					var differentWatches=null;
 					// find all watches for this device
@@ -2327,7 +2339,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		// 0: action , 1: value , 2: service, 3: devid
 		var deviceActionLineTemplate = "  <tr>";
-		deviceActionLineTemplate += "		  <td><span title='{2}'><button class='btn btn-secondary btn-sm altui-run-action' data-altuiid='{3}' data-service='{2}' >{0}</button></span></td>";
+		deviceActionLineTemplate += "		  <td><span title='{2}'><button class='btn btn-light btn-sm altui-run-action' data-altuiid='{3}' data-service='{2}' >{0}</button></span></td>";
 		deviceActionLineTemplate += "		  <td>{1}</td>";
 		deviceActionLineTemplate += "	  </tr>";
 
@@ -3490,10 +3502,10 @@ var UIManager  = ( function( window, undefined ) {
 	};
 
 	function _getActiveDeviceTabIdx() {
-		var obj = $("#altui-devtab-tabs li.active");
+		var obj = $("#altui-devtab-tabs a.active");
 		if (obj.length ==0)
 			return null;
-		var pagename = obj.prop('id');
+		var pagename = obj.parent().prop('id');
 		return pagename.substring( "altui-devtab-".length);
 	};
 
@@ -3695,7 +3707,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="<div class='row altui-device-usedin'>";
 			html += "<div id='altui-device-usedin-"+device.altuiid+"' class='col-12'>"
 			html += "<ul>";
-			var smallbuttonTemplate ="<button id='{0}' type='button' class='{1} btn btn-secondary btn-sm' aria-label='tbd' title='{3}'>{2}</button>";;
+			var smallbuttonTemplate ="<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";;
 			if (usedin_objects.length>0)
 				$.each(usedin_objects, function(idx,obj) {
 					var info=null;
@@ -3708,7 +3720,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								obj.type,
 								"{0} (<small class='text-muted'>{1}</small>)".format(obj.action.action,info.arguments)
 								);
-							html += smallbuttonTemplate.format(obj.scene,"btn btn-secondary btn-sm altui-scene-goto",searchGlyph,_T("See")); // searchGlyph
+							html += smallbuttonTemplate.format(obj.scene,"btn btn-light btn-sm altui-scene-goto",searchGlyph,_T("See")); // searchGlyph
 							html += "</li>";
 							break;
 						case "trigger":
@@ -3719,7 +3731,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								obj.type,
 								"{0} {1} (<small class='text-muted'>{2}</small>)".format(info.name, info.descr,info.condition)
 								);
-							html += smallbuttonTemplate.format(obj.scene,"btn btn-secondary btn-sm altui-scene-goto",searchGlyph,_T("See")); // searchGlyph
+							html += smallbuttonTemplate.format(obj.scene,"btn btn-light btn-sm altui-scene-goto",searchGlyph,_T("See")); // searchGlyph
 							html += "</li>";
 							break;
 						case "actionworkflow":
@@ -3729,7 +3741,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								obj.workflow.name,
 								obj.state,
 								"{0} (<small class='text-muted'>{1}</small>)".format(obj.action.action,info.arguments),
-								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-secondary btn-sm altui-wflow-goto",searchGlyph,_T("See"))
+								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-light btn-sm altui-wflow-goto",searchGlyph,_T("See"))
 							);
 							break;
 						case "triggerworkflow":
@@ -3740,7 +3752,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								obj.transition || "",
 								obj.cond.variable,
 								obj.cond.luaexpr,
-								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-secondary btn-sm altui-wflow-goto",searchGlyph,_T("See"))
+								smallbuttonTemplate.format(obj.workflow.altuiid,"btn btn-light btn-sm altui-wflow-goto",searchGlyph,_T("See"))
 							);
 							break;
 					}
@@ -3812,14 +3824,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var html ="";
 			html+="<div class='row'>";
 			html += "<div id='altui-device-attributes-"+devid+"' class='col-12 altui-device-attributes'>"
-			html += "<form class='form'>";
+			html += "<form class='form form-row'>";
 			$.each( device, function(key,val) {
 				if (val!=undefined) {
 					var typ = Object.prototype.toString.call(val);
 					if ((typ!="[object Object]") && (typ!="[object Array]")){
 						html += "<div class='col-sm-6 col-md-4 col-lg-3 col-xl-2'>";
 						html += "<div class='form-group'>";
-						html += "<label for='"+key+"'>"+key+"</label>";
+						html += "<label class='font-weight-bold' for='"+key+"'>"+key+"</label>";
 						html += _enhanceEditorValue(key,val,devid)
 						// html += "<input id='"+key+"' data-altuiid='"+devid+"' class='form-control' value='"+val+"'></input>";
 						html += "</div>"
@@ -3878,10 +3890,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var html ="";
 				html+="<div class='row'>";
 					html +="<div id='altui-device-controlpanel-"+device.altuiid+"' class='col-12 altui-device-controlpanel' data-altuiid='"+device.altuiid+"'>";
-					html +="	<div class='card xxx'>";
+					html +="	<div class='card '>";
 					html +="		<div class='card-header form-inline'>";
 					html += htmlDeleteButton;
-					html +="			<h1 class='card-title'>{0} {1} {2} (#{3}) "+htmlRoomSelect+"</h1>";
+					html +="			<h4 class='card-title'>{0} {1} {2} (#{3}) "+htmlRoomSelect+"</h4>";
 					html +="		</div>";
 					html +="		<div class='card-body'>";
 					html +="		</div>";
@@ -3900,24 +3912,24 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var lines= [];
 				lines.push("<ul class='nav nav-tabs' id='altui-devtab-tabs' role='tablist'>");
 				if (bExtraTab) {
-					lines.push( "<li id='altui-devtab-0' role='presentation' ><a href='#altui-devtab-content-0' aria-controls='{0}' role='tab' data-toggle='tab'>{0}</a></li>".format("AltUI") );
+					lines.push( "<li class='nav-item' id='altui-devtab-0' role='presentation' ><a class='nav-link' href='#altui-devtab-content-0' aria-controls='{0}' role='tab' data-toggle='tab'>{0}</a></li>".format("AltUI") );
 				}
 				if (tabs!=undefined)
 					$.each( tabs, function( idx,tab) {
 						if ((tab.TabType!="javascript") || ( $.inArray( tab.ScriptName, _forbiddenScripts) == -1)) {
-							lines.push( "<li id='altui-devtab-{1}' role='presentation' ><a href='#altui-devtab-content-{1}' aria-controls='{0}' role='tab' data-toggle='tab'>{0}</a></li>".format(tab.Label.text,idx+1) );
+							lines.push( "<li class='nav-item' id='altui-devtab-{1}' role='presentation' ><a class='nav-link' href='#altui-devtab-content-{1}' aria-controls='{0}' role='tab' data-toggle='tab'>{0}</a></li>".format(tab.Label.text,idx+1) );
 						}
 					});
 				lines.push("</ul>");
 				var html = "<div class='tab-content {0}'>".format( (UIManager.UI7Check()==true) ? '' : 'altui-tabcontent-fix');
 				if (bExtraTab) {
-					html += "<div id='altui-devtab-content-0' class='tab-pane bg-info altui-devtab-content'>";
+					html += "<div id='altui-devtab-content-0' class='tab-pane bg-light altui-devtab-content'>";
 					html += "</div>";
 				}
 				if (tabs!=undefined)
 					$.each( tabs, function( idx,tab) {
 						if ((tab.TabType!="javascript") || ( $.inArray( tab.ScriptName, _forbiddenScripts) == -1)) {
-							html += "<div id='altui-devtab-content-{0}' class='tab-pane bg-info altui-devtab-content'>".format(idx+1);
+							html += "<div id='altui-devtab-content-{0}' class='tab-pane fade bg-light altui-devtab-content'>".format(idx+1);
 							html += "</div>";
 						}
 					});
@@ -3940,7 +3952,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						funcnames = dt.ControlPanelFunc.split(",")
 						bExtraTab = ( funcnames[0].length>0 )
 					}
-					$(panel_body).append( "<div class='row'>" + _createDeviceTabs( device, bExtraTab, ui_static_data.Tabs ) + "</div>" );
+					$(panel_body).append( "<div class='row'><div class='col-12'>" + _createDeviceTabs( device, bExtraTab, ui_static_data.Tabs ) + "</div></div>" );
 				}
 
 				$(panel_body).find("li a").first().tab('show');	// activate first tab
@@ -4202,7 +4214,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				footerMap.curusername = curuser ? curuser.Name : '';
 
 				usdGlyph = glyphTemplate.format( "usd", _T("License") , 'text-warning');
-				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-secondary', "{0} {1}".format(usdGlyph,_T("License")),'default',_T("License"));
+				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-light', "{0} {1}".format(usdGlyph,_T("License")),'default',_T("License"));
 
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
@@ -5975,9 +5987,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		body+="		<div class='col-sm-2 d-none d-sm-block {0}'>".format( (MyLocalStorage.getSettings('FixedLeftButtonBar') || "")==1 ? 'affix' : '' );
 		body+="			<div class='altui-leftnav btn-group-vertical' role='group' aria-label='...'>";
 		body+="				<!--";
-		body+="				<button type='button' class='btn btn-secondary'>One</button>";
-		body+="				<button type='button' class='btn btn-secondary'>Deux</button>";
-		body+="				<button type='button' class='btn btn-secondary'>Trois</button>";
+		body+="				<button type='button' class='btn btn-light'>One</button>";
+		body+="				<button type='button' class='btn btn-light'>Deux</button>";
+		body+="				<button type='button' class='btn btn-light'>Trois</button>";
 		body+="				-->";
 		body+="			</div>";
 		body+="		</div>";
@@ -6184,8 +6196,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		formHtml+=" <div class='input-group '>";
 		formHtml+="		  <input id='altui-create-room-name' type='text' class='form-control' placeholder='Room name...'>";
 		formHtml+="		  <span class='input-group-btn'>";
-		formHtml+="			<button id='altui-create-room' class='btn btn-secondary' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button>";
-		// formHtml+="		   <button id='altui-save-rooms' class='btn btn-secondary' type='button'>"+saveGlyph+"&nbsp;"+_T("Save")+"</button>";
+		formHtml+="			<button id='altui-create-room' class='btn btn-light' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button>";
+		// formHtml+="		   <button id='altui-save-rooms' class='btn btn-light' type='button'>"+saveGlyph+"&nbsp;"+_T("Save")+"</button>";
 		formHtml+="		  </span>";
 		formHtml+="		</div><!-- /input-group -->";
 		formHtml+="		</div><!-- /form-group -->";
@@ -6216,7 +6228,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					enableHTML : true,
 					includeSelectAllOption: true,
 					maxHeight: 300,
-					buttonClass: 'btn btn-secondary btn-sm',
+					buttonClass: 'btn btn-light btn-sm',
 					onChange: function(element, checked) {
 						var scenealtuiid = $(element).val();
 						 var scene= MultiBox.getSceneByAltuiID( scenealtuiid );
@@ -6254,7 +6266,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					enableHTML : true,
 					includeSelectAllOption: true,
 					maxHeight: 300,
-					buttonClass: 'btn btn-secondary btn-sm',
+					buttonClass: 'btn btn-light btn-sm',
 					onChange: function(element, checked) {
 						 // $("#altui-save-rooms").addClass("btn-danger");
 
@@ -6345,12 +6357,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
 
 		var html = "<div class='form-inline col-12'>";
-		html += "<button type='button' class='btn btn-secondary' id='altui-toggle-attributes' >"+_T("Attributes")+"<span class='caret'></span></button>";
-		html += "<button type='button' class='btn btn-secondary altui-device-variables' id='"+altuiid+"'>"+_T("Variables")+"</button>";
-		html += "<button type='button' class='btn btn-secondary altui-device-actions' id='"+altuiid+"' >"+_T("Actions")+"</button>";
-		html += "<button type='button' class='btn btn-secondary' id='altui-device-config' >"+_T("Configuration")+"<span class='caret'></span></button>";
-		html += "<button type='button' class='btn btn-secondary' id='altui-device-usedin' >"+_T("Used in")+"<span class='caret'></span></button>";
-		html += "<button type='button' class='btn btn-secondary' id='altui-device-triggers' >"+_T("Notification")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-light' id='altui-toggle-attributes' >"+_T("Attributes")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-light altui-device-variables' id='"+altuiid+"'>"+_T("Variables")+"</button>";
+		html += "<button type='button' class='btn btn-light altui-device-actions' id='"+altuiid+"' >"+_T("Actions")+"</button>";
+		html += "<button type='button' class='btn btn-light' id='altui-device-config' >"+_T("Configuration")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-light' id='altui-device-usedin' >"+_T("Used in")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-light' id='altui-device-triggers' >"+_T("Notification")+"<span class='caret'></span></button>";
 		if (AltuiDebug.IsDebug())
 			html +=	 buttonDebugHtml;
 		html += "</div>";
@@ -6885,7 +6897,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		<div class='modal-footer'>";
-			deviceCreateModalTemplate += "		  <button type='button' class='btn btn-secondary' data-dismiss='modal'>"+_T("Close")+"</button>";
+			deviceCreateModalTemplate += "		  <button type='button' class='btn btn-light' data-dismiss='modal'>"+_T("Close")+"</button>";
 			deviceCreateModalTemplate += "		  <button type='button' class='btn btn-primary'>"+_T("Save Changes")+"</button>";
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "	  </div><!-- /.modal-content -->";
@@ -6952,10 +6964,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					null,
 					function(categories) {
 						categoryfilterHtml+='</select>';
-						categoryfilterHtml+="  <button type='button' class='btn btn-secondary' id='altui-device-filter' >";
+						categoryfilterHtml+="  <button type='button' class='btn btn-light' id='altui-device-filter' >";
 						categoryfilterHtml+=  (searchGlyph + '&nbsp;' +_T('Filter') + "<span class='caret'></span>");
 						categoryfilterHtml+="  </button>";
-						categoryfilterHtml+="  <button type='button' class='btn btn-secondary' id='altui-device-create' >";
+						categoryfilterHtml+="  <button type='button' class='btn btn-light' id='altui-device-create' >";
 						categoryfilterHtml+= (plusGlyph + "&nbsp;" + _T("Create"));
 						categoryfilterHtml+="  </button>";
 					}
@@ -7324,10 +7336,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$.when( _drawRoomFilterButtonAsync( _sceneFilter.room ) )
 			.then(function( html) {
 				toolbarHtml+= html;	// room filter
-				toolbarHtml+="	<button type='button' class='btn btn-secondary' id='altui-scene-create' >";
+				toolbarHtml+="	<button type='button' class='btn btn-light' id='altui-scene-create' >";
 				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create"));
 				toolbarHtml+="	</button>";
-				toolbarHtml+="	<button type='button' class='btn btn-secondary' id='altui-scene-create-fromstate' >";
+				toolbarHtml+="	<button type='button' class='btn btn-light' id='altui-scene-create-fromstate' >";
 				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create From State"));
 				toolbarHtml+="	</button>";
 				$(".altui-scene-toolbar").replaceWith( "<div class='altui-scene-toolbar'>"+toolbarHtml+"</div>" );
@@ -7885,7 +7897,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					$('div#dialogModal').modal();
 					$('div#dialogs')
 						.off('click')
-						.on( 'click','.modal-footer .btn-secondary', function(e) {
+						.on( 'click','.modal-footer .btn-light', function(e) {
 							e.stopPropagation();
 							$('div#dialogModal').modal('hide');
 							(callback)(null);
@@ -7932,7 +7944,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							$('div#dialogModal').modal();
 							$('div#dialogs')
 								.off('click')
-								.on( 'click','.modal-footer .btn-secondary', function(e) {
+								.on( 'click','.modal-footer .btn-light', function(e) {
 									e.stopPropagation();
 									$('div#dialogModal').modal('hide');
 									(callback)(null);
@@ -8248,7 +8260,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							$('div#dialogModal').modal();
 							$('div#dialogs')
 								.off('click')
-								.on( 'click','.modal-footer .btn-secondary', function(e) {
+								.on( 'click','.modal-footer .btn-light', function(e) {
 									e.stopPropagation();
 									$('div#dialogModal').modal('hide');
 									(callback)(null);
@@ -8296,7 +8308,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				DialogManager.dlgAddWorkflowStates(dialog,'altui-select-workflowstate', _T("States") , exclusion_altuiid, waitForState);
 				$('div#dialogModal').modal();
 				$('div#dialogs')
-					.off('click').on( 'click','.modal-footer .btn-secondary', function(e) {
+					.off('click').on( 'click','.modal-footer .btn-light', function(e) {
 						e.stopPropagation();
 						$('div#dialogModal').modal('hide');
 						(callback)(null);
@@ -8575,13 +8587,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow ) );
 
-		var bSanitized = WorkflowManager.sanitizeWorkflow(workflow.altuiid);
-		if ( bSanitized == true) {
-			PageMessage.message( "Workflow had to be adjusted to your vera, save is needed", "info");
-		}
 
 		$(".altui-mainpanel").append("<div class='col-12'><div id='altui-workflow-canvas'></div></div>");
 		UIManager.loadJointJSScript( function() {
+			var bSanitized = WorkflowManager.sanitizeWorkflow(workflow.altuiid);
+			if ( bSanitized == true) {
+				PageMessage.message( "Workflow had to be adjusted to your vera, save is needed", "info");
+			}
 			graph = new joint.dia.Graph();
 			//
 			// Set up Jointjs things
@@ -8877,7 +8889,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				})
 			}
 			_refreshFromRemote('altui-workflow-timer',null);
-	})
+		})
 
 		$("#altui-workflow-zoomin").click(function() {
 			var scale = V(paper.viewport).scale();
@@ -9621,13 +9633,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var html = "";
 			html += "<div class='altui-store-categories btn-group-vertical'>"
 
-			html += "<button id='*' type='button' class='altui-plugin-category-btn btn btn-secondary'>{0}</button>".format(_T("All"))
+			html += "<button id='*' type='button' class='altui-plugin-category-btn btn btn-light'>{0}</button>".format(_T("All"))
 				$.each(arr, function(i,entry) {
-					html += "<button id='{0}' type='button' class='altui-plugin-category-btn btn btn-secondary'>{0} <span class='pull-right d-none d-sm-block badge badge-secondary'>{1}</span></button>"
+					html += "<button id='{0}' type='button' class='altui-plugin-category-btn btn btn-light'>{0} <span class='pull-right d-none d-sm-block badge badge-secondary'>{1}</span></button>"
 					.format(entry,_counts[entry] || 0 )
 				});
 			html += "</div>"
-			html += "<button id='altui-publish' type='button' class='altui-plugin-publish-btn btn btn-secondary'>{0}</button>".format(_T("Publish"))
+			html += "<button id='altui-publish' type='button' class='altui-plugin-publish-btn btn btn-light'>{0}</button>".format(_T("Publish"))
 			return html;
 		}
 		function _displayCarousel( ) {
@@ -10328,7 +10340,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						enableHTML : true,
 						includeSelectAllOption: true,
 						maxHeight: 300,
-						buttonClass: 'btn btn-secondary',
+						buttonClass: 'btn btn-light',
 						onChange: function(element, checked) {
 							// Get selected options.
 							var toShow = $.map($('#altui-timeline-filter :selected'),function(e)  { return e.value; })
@@ -10412,7 +10424,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _getFileButton(plugin) {
 			var html = "";
 			html +="<div class='dropdown'>";
-			html +="  <button id='{0}' type='button' class='btn btn-secondary btn-sm dropdown-toggle altui-plugin-files' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>".format(plugin.id);
+			html +="  <button id='{0}' type='button' class='btn btn-light btn-sm dropdown-toggle altui-plugin-files' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>".format(plugin.id);
 			html +=	 _T("Files"); //+" <span class='caret'></span>");
 			html +="  </button>";
 			html +="  <div class='dropdown-menu' aria-labelledby='{0}'>";
@@ -11259,7 +11271,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="	<pre id='altui-editor-output'></pre>";
 			html +="  </div>";
 		}
-		html +=("  <button id='altui-luaform-button-"+htmlid+"' type='submit' class='btn btn-secondary'>"+button+"</button>");
+		html +=("  <button id='altui-luaform-button-"+htmlid+"' type='submit' class='btn btn-light'>"+button+"</button>");
 		html +="</form>";
 		domparent.append(html);
 
@@ -11374,7 +11386,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html+="	   <label for='altui-btngroup'>"+_T("Frequent Commands")+editButtonHtml+"</label>";
 			html+="		<div class='btn-group' id='altui-btngroup'>";
 			$.each(commands, function(idx,obj) {
-				html += "<button id='{0}' type='button' class='border btn btn-secondary altui-oscommand-button' data-cmd='{2}' '>{1}</button>".format(idx,obj.label,obj.command.replace(/'/g, '&quot;'));
+				html += "<button id='{0}' type='button' class='border btn btn-light altui-oscommand-button' data-cmd='{2}' '>{1}</button>".format(idx,obj.label,obj.command.replace(/'/g, '&quot;'));
 			});
 			html+="		</div>";
 			html+="	 </div>";
@@ -11452,7 +11464,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html+="	   <input type='text' class='form-control' id='oscommand' placeholder='Type your OS command like: df '>";
 		html+="	 </div>";
 		html+="</form>";
-		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-secondary'>"+_T("Run")+"</button>";
+		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-light'>"+_T("Run")+"</button>";
 		html+="<hr>";
 		html+="<h3>"+_T("Output")+"</h3>";
 		html+="<pre id='altui-oscommand-result' class='pre-scrollable'></pre>";
@@ -11795,7 +11807,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += "<option value='mesh'>"+_T("Mesh")+"</option>";
 				html += "</select>";
 			html += "</div>";
-			html += ("<button type='button' id='altui-reset-pollcounters' class='btn btn-secondary' >"+_T("Reset Poll Counters")+"</button>");
+			html += ("<button type='button' id='altui-reset-pollcounters' class='btn btn-light' >"+_T("Reset Poll Counters")+"</button>");
 			html += "<div class='form-group altui-quality-color'></div><span class=''>: {0}</span>".format(_T("Poll Success Rate"))
 			html += "<div class='form-group altui-quality-grey'></div><span class=''>: {0}</span>".format(_T("No Poll"))
 		html += "</form>";
@@ -13034,7 +13046,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html +="  <div class='card-body'>";
 					$.each(actions, function(idx,action) {
 						html +="<div class='btn-group' role='group' aria-label='Debug Tools'>";
-						html += "<button class='btn btn-secondary {1}' type='button' >{0}</button>".format(action.title,action.id);
+						html += "<button class='btn btn-light {1}' type='button' >{0}</button>".format(action.title,action.id);
 						html += "</div>";
 					});
 				html += "</div>";
@@ -13044,7 +13056,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html+="<h3>"+_T("Output");
 			var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
 			html += buttonTemplate.format( 'altui-debug-clipboard', 'altui-copy-clipboard', glyph,'default',_T("Copy"));
-				// html += "<button class='btn btn-secondary altui-json-viewer' type='button' >{0}</button>".format(_T("Json Viewer"));
+				// html += "<button class='btn btn-light altui-json-viewer' type='button' >{0}</button>".format(_T("Json Viewer"));
 			html+="</h3>";
 			html+="<pre id='altui-oscommand-result' class='pre-scrollable'></pre>";
 		html +="</div>";
@@ -13570,7 +13582,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					{
 						var cmds="";
 						$.each(model.commands, function(key,cmd) {
-							cmds += "<button type=\"button\" class=\"btn btn-sm btn-secondary {0}\" data-row-id=\"{2}\">{1}</button>".format(
+							cmds += "<button type=\"button\" class=\"btn btn-sm btn-light {0}\" data-row-id=\"{2}\">{1}</button>".format(
 								key,
 								cmd.glyph,
 								row[identifier]
@@ -13839,7 +13851,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageThemes: function() {
 		UIManager.clearPage('Themes',_T("Themes"),UIManager.oneColumnLayout);
 		PageMessage.message( "Select a theme by clicking on it and refresh your browser", "info");
-		var resetButton = buttonTemplate.format( "altui-theme-reset", 'btn-secondary', _T("Reset"),"default",_T('Reset Theme Override'));
+		var resetButton = buttonTemplate.format( "altui-theme-reset", 'btn-light', _T("Reset"),"default",_T('Reset Theme Override'));
 		var html = "";
 		html += "<div class='col-12'>";
 		html +="<div class='card xxx'>";
@@ -13986,7 +13998,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							html += "<div id='altui-editor-sample'>--- Comment sample\nlocal var = 1234\nlocal var2 = { \"abc\", tonumber(4), \"def\", 565 }\nfunction test(a)\n\tlocal i = \"Hello World of ALTUI\"\n\treturn i\nend</div>";
 						html += "</div>";
 					html += "</div>";
-					// <button id='9' type='button' class='altui-help-button btn btn-secondary btn-sm' aria-label='tbd' title='Unit for temperature'><span class='glyphicon glyphicon-question-sign ' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title=''></span></button>
+					// <button id='9' type='button' class='altui-help-button btn btn-light btn-sm' aria-label='tbd' title='Unit for temperature'><span class='glyphicon glyphicon-question-sign ' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title=''></span></button>
 				html += "</div>";
 			html +="</div>";
 		html +="</div>";
@@ -13996,16 +14008,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="  <div class='card-header'>"+_T("Cache Control")+"</div>";
 				html +="  <div class='card-body'>";
 					html +="<div class='btn-group' role='group' aria-label='Icon DB'>";
-						html += "<button class='btn btn-secondary altui-save-IconDB' type='submit'>"+saveGlyph+" Save Icon DB</button>";
-						html += "<button class='btn btn-secondary altui-clear-IconDB' type='submit'>"+okGlyph+" Clear Icon DB</button>";
+						html += "<button class='btn btn-light altui-save-IconDB' type='submit'>"+saveGlyph+" Save Icon DB</button>";
+						html += "<button class='btn btn-light altui-clear-IconDB' type='submit'>"+okGlyph+" Clear Icon DB</button>";
 					html += "</div>";
 					html += "<div class='btn-group' role='group' aria-label='File DB'>";
-						html += "<button class='btn btn-secondary altui-save-FileDB' type='submit'>"+saveGlyph+" Save File DB</button>";
-						html += "<button class='btn btn-secondary altui-clear-FileDB' type='submit'>"+okGlyph2+" Clear File DB</button>";
+						html += "<button class='btn btn-light altui-save-FileDB' type='submit'>"+saveGlyph+" Save File DB</button>";
+						html += "<button class='btn btn-light altui-clear-FileDB' type='submit'>"+okGlyph2+" Clear File DB</button>";
 					html += "</div>";
 					html += "<div class='btn-group' role='group' aria-label='User Data DB'>";
-						html += "<button class='btn btn-secondary altui-save-userdata' type='submit'>"+saveGlyph+"Save UserData</button>";
-						html += "<button class='btn btn-secondary altui-clear-userdata' type='submit'>"+okGlyph3+" Clear UserData</button>";
+						html += "<button class='btn btn-light altui-save-userdata' type='submit'>"+saveGlyph+"Save UserData</button>";
+						html += "<button class='btn btn-light altui-clear-userdata' type='submit'>"+okGlyph3+" Clear UserData</button>";
 					html += "</div>";
 				html += "</div>";
 			html +="</div>";
@@ -14016,9 +14028,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html +="  <div class='card-header'>"+_T("Custom Pages Control")+"</div>";
 		html +="  <div class='card-body'>";
 			html += "<div class='btn-group' role='group' aria-label='User Pages DB'>";
-			html += "<button class='btn btn-secondary altui-save-userpage' type='submit'>"+saveGlyph+"Save User Pages</button>";
-			html += "<button class='btn btn-secondary altui-restore-userpage' type='submit'>"+loadGlyph+"Restore From User Pages Cache</button>";
-			html += "<button class='btn btn-secondary altui-clear-userpage' type='submit'>"+okGlyph4+" Clear User Pages Cache</button>";
+			html += "<button class='btn btn-light altui-save-userpage' type='submit'>"+saveGlyph+"Save User Pages</button>";
+			html += "<button class='btn btn-light altui-restore-userpage' type='submit'>"+loadGlyph+"Restore From User Pages Cache</button>";
+			html += "<button class='btn btn-light altui-clear-userpage' type='submit'>"+okGlyph4+" Clear User Pages Cache</button>";
 			html += "</div>";
 		html += "</div>";
 		html +="  </div>";
@@ -14272,7 +14284,7 @@ $(function() {
 		defaultDialogModalTemplate += "		 </div>";
 		defaultDialogModalTemplate += "		 </div>";
 		defaultDialogModalTemplate += "		 <div class='modal-footer'>";
-		defaultDialogModalTemplate += "		   <button type='button' class='btn btn-secondary' data-dismiss='modal'>"+_T("Close")+"</button>";
+		defaultDialogModalTemplate += "		   <button type='button' class='btn btn-light' data-dismiss='modal'>"+_T("Close")+"</button>";
 		// defaultDialogModalTemplate += "		  <button type='submit' class='btn btn-primary'>{3}</button>";
 		defaultDialogModalTemplate += "		 </div>";
 		defaultDialogModalTemplate += "	   </div><!-- /.modal-content -->";
@@ -14299,7 +14311,7 @@ $(function() {
 		uncheckedGlyph= glyphTemplate.format( "unchecked", _T("Frame") , "");
 		runGlyph = glyphTemplate.format( "play", _T("Run Scene") , "");
 		editGlyph = glyphTemplate.format( "pencil", _T("Edit") , "");
-		recordGlyph = glyphTemplate.format( "record", _T("Record") , "text-danger");
+		recordGlyph = glyphTemplate.format( "video-camera", _T("Record") , "text-danger");
 		eyeOpenGlyph = glyphTemplate.format( "eye-open", _T("See") , "");
 		cameraGlyph = glyphTemplate.format( "facetime-video", _T("Camera") , "");
 		onoffGlyph = glyphTemplate.format( "power-off", _T("On Off") , "");
