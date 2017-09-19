@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2133 $";
+var ALTUI_revision = "$Revision: 2134 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5966,6 +5966,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		var body="";
 		body+="	<div class='altui-layout row'>";
+		body+="		<div class='col-12 altui-mainpanel'>";
+		body+="		</div>";
 		body+="	</div>";
 		return body;
 	},
@@ -6603,7 +6605,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 			// clear all
 			$(".altui-mainpanel").html("").prepend(
-			"<div class='col-12'>{0}</div>".format(UIManager.breadCrumb(model.breadcrumb,model.title)) )
+			"<div class='row'>{0}</div>".format(UIManager.breadCrumb(model.breadcrumb,model.title)) )
 
 			// prepare the template
 			var tmpl = _.template( template.format(model.overlay, g_ALTUI.g_CustomImagePath,model.defaulturi) )
@@ -6614,7 +6616,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$.each(data, function(idx,item) {
 				html += tmpl(item)
 			});
-			$(".altui-mainpanel").append( html );
+			$(".altui-mainpanel").append( "<div class='row'>{0}</div>".format( html ));
 			$(".altui-mainpanel")
 				.off('click', ".altui-myhome-room")
 				.on('click', ".altui-myhome-room",function(e) {
@@ -6761,7 +6763,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 
 		UIManager.clearPage('My Home',_T('My Home'),UIManager.fullColumnLayout);
-		$(".altui-layout").append("<div class='altui-mainpanel'></div>")
 
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function (eventname,device) {
 			var jqelem = $(".altui-myhome-device-content[data-altuiid={0}]".format(device.altuiid))
