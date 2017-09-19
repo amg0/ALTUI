@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2129 $";
+var ALTUI_revision = "$Revision: 2133 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -812,6 +812,7 @@ var styles ="						\
 		padding-right: 0px;\
 		padding-bottom: 0px;\
 		padding-left: 2px;\
+		overflow: hidden; \
 	}\
 	div.altui-device-body {\
 		padding-top: 0px;\
@@ -1271,14 +1272,14 @@ var UIManager  = ( function( window, undefined ) {
 		];
 
 		edittools = [
-			{id:1000, glyph:'object-align-top' , onclick: onAlignTop},
-			{id:1010, glyph:'object-align-horizontal', onclick: onAlignHorizontal },
-			{id:1020, glyph:'object-align-bottom' , onclick: onAlignBottom },
-			{id:1030, glyph:'object-align-left' , onclick: onAlignLeft },
-			{id:1040, glyph:'object-align-vertical' , onclick: onAlignVertical},
-			{id:1050, glyph:'object-align-right' , onclick: onAlignRight},
-			{id:1060, glyph:'option-horizontal' , onclick: onDistribHorizontal, label:_T("Distribute Horizontally")},
-			{id:1070, glyph:'option-vertical' , onclick: onDistribVertical, label:_T("Distribute Vertically")},
+			{id:1000, glyph:'arrow-up' , onclick: onAlignTop},
+			{id:1010, glyph:'arrows', onclick: onAlignHorizontal },
+			{id:1020, glyph:'arrow-down' , onclick: onAlignBottom },
+			{id:1030, glyph:'align-left' , onclick: onAlignLeft },
+			{id:1040, glyph:'align-center' , onclick: onAlignVertical},
+			{id:1050, glyph:'align-right' , onclick: onAlignRight},
+			{id:1060, glyph:'arrows-h' , onclick: onDistribHorizontal, label:_T("Distribute Horizontally")},
+			{id:1070, glyph:'arrows-v' , onclick: onDistribVertical, label:_T("Distribute Vertically")},
 		];
 		tools = [
 			{	id:10,
@@ -1580,7 +1581,7 @@ var UIManager  = ( function( window, undefined ) {
 			{	id:90,
 				cls:'altui-widget-slider',
 				defaultSize: { width:50, height:100 },
-				html: _toolHtml(glyphTemplate.format( "resize-vertical", _T("Slider") , ""),_T("Slider")),
+				html: _toolHtml(glyphTemplate.format( "sliders", _T("Slider") , ""),_T("Slider")),
 				property: _onPropertySlider,
 				onWidgetResize: _onResizeSlider,	// same as camera
 				widgetdisplay: function(widget,bEdit)	{
@@ -1646,8 +1647,8 @@ var UIManager  = ( function( window, undefined ) {
 			{0}
 			</ul>
 			<form class="form-inline m-0">
-			  <input class="form-control col-6 p-1 " type="text" placeholder="Search" aria-label="Search">
-			  <button class="btn btn-outline-success col-4 p-1" type="submit">Search</button>
+			  <input id="altui-search-text" class="form-control col-6 p-1 " type="text" placeholder="Search" aria-label="Search">
+			  <button id="altui-search" class="btn btn-outline-success col-4 p-1" type="submit">Search</button>
 			</form>
 		  </div>
 		</nav>
@@ -3324,7 +3325,7 @@ var UIManager  = ( function( window, undefined ) {
 							label = control.Label.text;
 					}
 
-					var button = $( "<button type='button' class='btn btn-sm btn-{1} altui-controlpanel-button'>{0}</button>".format(label, 'default'))
+					var button = $( "<button type='button' class='btn btn-sm btn-{1} altui-controlpanel-button'>{0}</button>".format(label, 'light'))
 						.appendTo( $(domparent) );
 
 					// control.Display.Width = $(button).outerWidth();
@@ -3799,12 +3800,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					html += "<li>{0}:({1}) {2} {3}</li>".format(
 						scene.name,
 						names.join(","),
-						buttonTemplate.format( scene.altuiid, 'btn-sm altui-scene-goto',searchGlyph,'default',_T("See")),
+						buttonTemplate.format( scene.altuiid, 'btn-sm altui-scene-goto',searchGlyph,'light',_T("See")),
 						buttonTemplate.format( scene.altuiid, 'btn-sm altui-device-deltrigger text-danger', deleteGlyph,'default',_T("Delete"))
 						);
 				});
 			}
-			html += "<li>{0}</li>".format(buttonTemplate.format( 'altui-device-createtrigger', 'altui-device-createtrigger', plusGlyph+_T("Create"),'default',_T("Create") ));
+			html += "<li>{0}</li>".format(buttonTemplate.format( 'altui-device-createtrigger', 'altui-device-createtrigger', plusGlyph+_T("Create"),'secondary',_T("Create") ));
 			html += "</ul>";
 			html += "</div>";
 			html += "</div>";	// row
@@ -4214,7 +4215,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				footerMap.curusername = curuser ? curuser.Name : '';
 
 				usdGlyph = glyphTemplate.format( "usd", _T("License") , 'text-warning');
-				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-light', "{0} {1}".format(usdGlyph,_T("License")),'default',_T("License"));
+				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-light', "{0} {1}".format(usdGlyph,_T("License")),'secondary',_T("License"));
 
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
@@ -5766,22 +5767,21 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var lines = new Array();
 		PageManager.forEachPage( function( idx, page) {
 			// if ((idxPage==-1) || (idx==idxPage)) {
-				lines.push( "<li id='altui-page-{1}' role='presentation' ><a href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,page.name.replace(' ','_')) ); // no white space in ID
+				lines.push( "<li class='nav-item' id='altui-page-{1}' role='presentation' ><a class='nav-link' href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,page.name.replace(' ','_')) ); // no white space in ID
 			// }
 		});
 
 		if (bEditMode==true) {
-			actions+="<li role='presentation' class='dropdown'>";
-			actions+="<a class='dropdown-toggle' data-toggle='dropdown' href='#' role='button' aria-expanded='false'>";
-			actions+="Actions <span class='caret'></span>";
-			actions+="</a>";
-			actions+="<ul class='dropdown-menu' role='menu'>";
-			actions+="<li><a id='altui-page-action-new' href='#'>"+_T("New Page")+"</a></li>";
-			actions+="<li><a id='altui-page-action-properties' href='#'>"+_T("Page Properties")+"</a></li>";
-			actions+="<li><a id='altui-page-action-delete' href='#'>"+_T("Delete this Page")+"</a></li>";
-			actions+="</ul>";
+			actions+="<li class='nav-item dropdown' role='presentation' >";
+			actions+="<a class='nav-link dropdown-toggle' data-toggle='dropdown' href='#' role='button' aria-expanded='false'>";
+			actions+="Actions</a>";
+			actions+="<div class='dropdown-menu' role='menu'>";
+			actions+="<a class='dropdown-item' id='altui-page-action-new' href='#'>"+_T("New Page")+"</a>";
+			actions+="<a class='dropdown-item' id='altui-page-action-properties' href='#'>"+_T("Page Properties")+"</a>";
+			actions+="<a class='dropdown-item' id='altui-page-action-delete' href='#'>"+_T("Delete this Page")+"</a>";
+			actions+="</div>";
 			actions+="</li>";
-			actions+="<li><a id='altui-page-action-save' href='#'>"+_T("Save All Pages")+"</a></li>";
+			actions+="<li class='nav-item'><a class='nav-link' id='altui-page-action-save' href='#'>"+_T("Save All Pages")+"</a></li>";
 		}
 		return "<ul class='nav nav-tabs {2}' id='altui-page-tabs' role='tablist'>{0}{1}</ul>".format(
 			lines.join(''),actions, /*(idxPage==-1) ? '' : "hidden"*/ '');
@@ -5985,12 +5985,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var body="";
 		body+="	<div class='altui-layout row'>";
 		body+="		<div class='col-sm-2 d-none d-sm-block {0}'>".format( (MyLocalStorage.getSettings('FixedLeftButtonBar') || "")==1 ? 'affix' : '' );
-		body+="			<div class='altui-leftnav btn-group-vertical' role='group' aria-label='...'>";
-		body+="				<!--";
-		body+="				<button type='button' class='btn btn-light'>One</button>";
-		body+="				<button type='button' class='btn btn-light'>Deux</button>";
-		body+="				<button type='button' class='btn btn-light'>Trois</button>";
-		body+="				-->";
+		body+="			<div class='altui-leftnav border border-secondary btn-group-vertical' role='group' aria-label='...'>";
 		body+="			</div>";
 		body+="		</div>";
 		body+="		<div class='col-sm-10'>";
@@ -6212,7 +6207,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.append($("<div class='col-12'><table id='table' class='table table-responsive table-sm'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Scenes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
 		$("#altui-controller-select").closest(".form-group").append(formHtml);
 
-		var roomListTemplate = "<tr data-altuiid='{0}'><td>{0}</td><td><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td><td>{4}</td></tr>";
+		var roomListTemplate = "<tr data-altuiid='{0}'><td style='white-space: nowrap'>{0}</td><td style='white-space: nowrap'><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td><td>{4}</td></tr>";
 		MultiBox.getRooms( null,null,function( rooms) {
 			if (rooms) {
 				$.each(rooms.sort(altuiSortByName), function(idx,room) {
@@ -8049,7 +8044,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// resize
 				$(elem).resizable({
 					// containment: "parent",
-					maxWidth:$(elem).closest(".panel").innerWidth()-30, // ugly but easier, padding 15 on
+					maxWidth:$(elem).closest(".card").innerWidth()-30, // ugly but easier, padding 15 on
 					stop: function( event, ui ) {
 						editor.resize();
 					}
@@ -9003,8 +8998,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$.each(workflows, function(idx,workflow) {
 				// 0:bootgrid classes 1:altuiid 2:htmlid 3: heading 4:panel body
 				var body = 
-					buttonTemplate.format( workflow.altuiid, 'altui-editworkflow pull-left', wrenchGlyph,'default',_T("Settings")) + 
-					buttonTemplate.format( workflow.altuiid, 'altui-cloneworkflow pull-left', copyGlyph,'default',_T("Clone"));
+					buttonTemplate.format( workflow.altuiid, 'altui-editworkflow pull-left', wrenchGlyph,'light',_T("Settings")) + 
+					buttonTemplate.format( workflow.altuiid, 'altui-cloneworkflow pull-left', copyGlyph,'light',_T("Clone"));
 				var pauseButtonHtml = glyphTemplate.format( "power-off", _T("Pause Workflow") , 'altui-pauseworkflow ' + ((workflow.paused>0) ? 'paused':'activated'));
 				html += ALTUI_Templates.workflowContainerTemplate.format(
 					"col-sm-6 col-md-4 col-lg-3 col-xl-2",
@@ -9016,7 +9011,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					pauseButtonHtml
 					);
 			});
-			$(".altui-mainpanel").append(html);
+			return html;
 		}
 
 		UIManager.clearPage('Workflow Pages',_T("Workflow Pages"),UIManager.oneColumnLayout);
@@ -9024,10 +9019,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
 		}
 		$(".altui-mainpanel").append(HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsMain, 'my-2 col-12' ))
+		.append("<div class='col-12'><div class='altui-workflows-pane row'></div></div>")
 
 		UIManager.loadJointJSScript( function() {
 			// do the drawing now that scripts are loaded
-			_drawWorkflows( WorkflowManager.getWorkflows() )
+			$(".altui-workflows-pane").html( _drawWorkflows( WorkflowManager.getWorkflows() ) )
 			// now do the refresh loop
 			MultiBox.getWorkflowStatus( function(data) {
 				if (data) {
@@ -9069,7 +9065,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$("#altui-workflow-create")
 			.on('click',function() {
 				WorkflowManager.addWorkflow();
-				$(".altui-mainpanel").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
+				$(".altui-workflows-pane").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
 			});
 		$("#altui-workflow-save")
 			.on('click',function() {
@@ -9092,7 +9088,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.on('click',".altui-delworkflow",function() {
 				var altuiid = $(this).prop('id');
 				WorkflowManager.deleteWorkflow(altuiid);
-				$(".altui-mainpanel").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
+				$(".altui-workflows-pane").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
 			})
 			.on('click',".altui-editworkflow",function() {
 				var altuiid = $(this).prop('id');
@@ -9119,7 +9115,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var dom =$(this).closest(".altui-workflow").removeClass("altui-norefresh");
 				$(this).parent().text(newname);
 				WorkflowManager.renameWorkflow($(this).data("altuiid"), newname);
-				$(".altui-mainpanel").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
+				$(".altui-workflows-pane").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
 			})
 	},
 
@@ -9761,7 +9757,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var html = "";
 				html += "<div class='altui-pageswitchbox col-2'>"
 				// buttonTemplate		= "<button id='{0}' type='button' class='{1} btn btn-{3}' aria-label='tbd' title='{4}'>{2}</button>"
-				html += buttonTemplate.format(direction,'altui-plugin-pageswitch',pageGlyphs[direction]+" "+direction,'default',direction)
+				html += buttonTemplate.format(direction,'altui-plugin-pageswitch',pageGlyphs[direction]+" "+direction,'secondary',direction)
 							// html += "<div class='altui-plugin-pageswitch' data-direction='{1}'>{0}</div>".format(pageGlyphs[direction],direction)
 							// html += "<div class='altui-plugin-title'>{0}</div>".format(direction)
 				html += "</div>"
@@ -10557,7 +10553,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					UIControler.changePage('Editor',[name,txt,"Download",function(txt) {
 						$(".altui-mainpanel a[download]")[0].click();
 					}])
-					$(".altui-mainpanel").prepend("<div class='hidden' >Download: <a href='"+url+"' download>"+name+"</a></div>");
+					// $(".altui-mainpanel").prepend("<div class='hidden' >Download: <a href='"+url+"' download>"+name+"</a></div>");
 				});
 			});
 			$(".altui-plugin-update").click(function() {
@@ -10705,24 +10701,29 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _createToolboxHtml() {
 			function _createToolHtml(tool) {
 				var html="";
-				html += ("<div class='altui-widget {0} col-11' id='{1}' data-type='{0}' >{2}</div>").format(tool.cls,tool.id,tool.html);
+				html += ("<div class='altui-widget {0} col-12' id='{1}' data-type='{0}' >{2}</div>").format(tool.cls,tool.id,tool.html);
 				return html;
 			};
 
+			var html = "<div class='row'>";
+
 			var lines = new Array();
 			$.each(tools , function(idx,tool) {
-				lines.push( "<div class='row'>"+_createToolHtml(tool)+"</div>" );
+				lines.push( _createToolHtml(tool) );
 			});
 
-			var editBoxTemplate = "<div class='row'><div class='altui-edittoolbox col-11' aria-label=''>{0}</div></div>";
+			var editBoxTemplate = "<div class='altui-edittoolbox col-12' aria-label=''>{0}</div>";
 			var editBoxLines = new Array();
 			$.each(edittools , function(idx,tool) {
 				var glyph = glyphTemplate.format( tool.glyph, tool.glyph,"" );
 				editBoxLines.push("<div id='{0}' class='altui-edittools' title='{2}'>{1}</div>".format(tool.glyph,glyph,tool.label || ''));
 			});
 			lines.push(editBoxTemplate.format( editBoxLines.join('') ) );
-			lines.push( "<div class='row'><div class='altui-widget-delete col-11'>"+deleteGlyph+"</div></div>"  );
-			return lines.join('');
+			
+			lines.push( "<div class='altui-widget-delete col-12'>"+deleteGlyph+"</div>"  );
+			html += lines.join('');
+			html += "</div>"
+			return html
 		};
 
 		function _displayPages() {
@@ -11053,7 +11054,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$.each(data, function(idx,version) {
 				panels.push( {id: version.v , title: "V "+version.v, html: _displayFeatures(version.v,version.features) } );
 			});
-			var html = HTMLUtils.createAccordeon('altui-evolutions',panels );
+			var html = HTMLUtils.createAccordeon('col-12 altui-evolutions',panels );
 			$(".altui-mainpanel").append(html);
 		})
 		.fail( function( jqxhr, textStatus, errorThrown	 ) {
@@ -11262,16 +11263,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var glyph = glyphTemplate.format('copy',_T("Copy to clipboard"), '');
 			html +="  <div class='form-group'>";
 			html +="	<label for='altui-editor-result'>"+_T("Return Result")+":</label>";
-			html +=	 buttonTemplate.format( 'altui-copyresult-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'default',_T("Copy"));
+			html +=	 buttonTemplate.format( 'altui-copyresult-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
 			html +="	<pre id='altui-editor-result'></pre>";
 			html +="  </div>";
 			html +="  <div class='form-group'>";
 			html +="	<label for='altui-editor-output'>"+_T("Console Output")+":</label>";
-			html +=	 buttonTemplate.format( 'altui-copyoutput-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'default',_T("Copy"));
+			html +=	 buttonTemplate.format( 'altui-copyoutput-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
 			html +="	<pre id='altui-editor-output'></pre>";
 			html +="  </div>";
 		}
-		html +=("  <button id='altui-luaform-button-"+htmlid+"' type='submit' class='btn btn-light'>"+button+"</button>");
+		html +=("  <button id='altui-luaform-button-"+htmlid+"' type='submit' class='btn btn-primary'>"+button+"</button>");
 		html +="</form>";
 		domparent.append(html);
 
@@ -11452,7 +11453,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		UIManager.clearPage('OsCommand',_T("OS Command"),UIManager.oneColumnLayout);
 
-		var editButtonHtml = buttonTemplate.format( 'altui-editoscmd-0', 'altui-editoscmd', editGlyph,'default',"");
+		var editButtonHtml = buttonTemplate.format( 'altui-editoscmd-0', 'altui-editoscmd', editGlyph,'secondary',"");
 
 		var html = "";
 		html+="<div class='col-12'><form>";
@@ -11464,7 +11465,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html+="	   <input type='text' class='form-control' id='oscommand' placeholder='Type your OS command like: df '>";
 		html+="	 </div>";
 		html+="</form>";
-		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-light'>"+_T("Run")+"</button>";
+		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-primary'>"+_T("Run")+"</button>";
 		html+="<hr>";
 		html+="<h3>"+_T("Output")+"</h3>";
 		html+="<pre id='altui-oscommand-result' class='pre-scrollable'></pre>";
@@ -11798,7 +11799,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// $("div#dialogs").append(deviceModalTemplate.format( '', '', 0 ));
 		DialogManager.registerDialog('deviceModal',deviceModalTemplate.format( '', '', 0 ));
 		var html = "";
-		html += "<form class='form-inline'>";
+		html += "<form class='col-12 form-inline'>";
 			html += "<div class='form-group'>";
 				html += "<label class='form-control-label ' for='altui-zwavechart-order' >"+_T("Order By")+":</label>";
 				html += "<select id='altui-zwavechart-order' class='form-control'>";
@@ -11811,9 +11812,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "<div class='form-group altui-quality-color'></div><span class=''>: {0}</span>".format(_T("Poll Success Rate"))
 			html += "<div class='form-group altui-quality-grey'></div><span class=''>: {0}</span>".format(_T("No Poll"))
 		html += "</form>";
-			html += "<div class='altui-zwavechart-container'>";
-				html += "<svg class='d3chart'></svg>";
-			html += "</div>";
+		html += "<div class='col-12 altui-zwavechart-container'>";
+			html += "<svg class='d3chart'></svg>";
+		html += "</div>";
 		$(".altui-mainpanel")
 			.append(html)
 			.append(
@@ -11942,7 +11943,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _drawzWavechart()
 		{
 			$(".d3chart").replaceWith("<svg class='d3chart'></svg>");
-			var available_height = $(window).height() - $("div#navbar").outerHeight() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("#altui-zwavechart-order").outerHeight() - $("footer").outerHeight();
+			var available_height = $(window).height() - $("nav#navbar").outerHeight() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() - $("#altui-zwavechart-order").outerHeight() - $("footer").outerHeight();
 			var margin = {top: 150, right: 10, bottom: 10, left: 150};
 			width = $(".altui-zwavechart-container").innerWidth() - margin.left - margin.right-30;
 			height = Math.min(width,available_height - margin.top - margin.bottom);
@@ -12914,7 +12915,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					stroke-opacity: .8;		\
 				}							\
 				</style>" )
-			.append("<div class='altui-children-d3chart-container '><svg class='altui-children-d3chart'></svg></div>")
+			.append("<div class='col-12 altui-children-d3chart-container'><svg class='altui-children-d3chart'></svg></div>")
 		UIManager.loadD3Script( function() {
 			MultiBox.getDevices(
 				null,
@@ -13055,7 +13056,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html += "<div class='col-12'>";
 			html+="<h3>"+_T("Output");
 			var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
-			html += buttonTemplate.format( 'altui-debug-clipboard', 'altui-copy-clipboard', glyph,'default',_T("Copy"));
+			html += buttonTemplate.format( 'altui-debug-clipboard', 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
 				// html += "<button class='btn btn-light altui-json-viewer' type='button' >{0}</button>".format(_T("Json Viewer"));
 			html+="</h3>";
 			html+="<pre id='altui-oscommand-result' class='pre-scrollable'></pre>";
@@ -13656,7 +13657,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		// Add CSV export button
 		var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
-		var csvButtonHtml = buttonTemplate.format( 'altui-grid-btn-'+htmlid, 'altui-tbl2csv', glyph,'default');
+		var csvButtonHtml = buttonTemplate.format( 'altui-grid-btn-'+htmlid, 'altui-tbl2csv', glyph,'secondary');
 		$('#'+htmlid+'-header').find('.actions.btn-group').append(csvButtonHtml);
 		$("#altui-grid-btn-"+htmlid).click( function() {
 			if ($('#altui-aftertable-'+htmlid).find('form').length==0) {
@@ -13797,7 +13798,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 			'glyphicon-refresh'
 			var refreshbutton = {id:'', class:'altui-graph-refresh pull-right', label:refreshGlyph+' '+_T('Refresh'), title:'refresh' };
-			var html = HTMLUtils.createAccordeon('altui-graph-accordion',panels,refreshbutton);
+			var html = HTMLUtils.createAccordeon('col-12 altui-graph-accordion',panels,refreshbutton);
 			$(domparent).append(html);
 
 			// ACE
@@ -13807,7 +13808,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
 
 			_displayWatchGraph(0,model);
-			$('.panel').on('shown.bs.collapse', function (e) {
+			$('.card').on('shown.bs.collapse', function (e) {
 				e.stopPropagation();
 				var idx = parseInt(e.currentTarget.id.substring("watchidx_".length));
 				_displayWatchGraph(idx,model);
@@ -14179,6 +14180,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var scene = MultiBox.getSceneByAltuiID(altuiid);
 					if (scene)
 							MultiBox.runScene( scene );
+				})
+				.on("click","button#altui-search",function(e) {
+					var val = $("#altui-search-text").val()
+					alert(val)
+					return false;
 				});
 				
 				UIControler.updateFavoriteScene();
@@ -14305,17 +14311,17 @@ $(function() {
 		removeGlyph=glyphTemplate.format( "remove", _T("Remove"), "" );
 		loadGlyph = glyphTemplate.format( "open", _T("Load") , "");
 		infoGlyph = glyphTemplate.format( "info", _T("Info") , "text-info");
-		picGlyph = glyphTemplate.format( "picture", _T("Image") , "");
+		picGlyph = glyphTemplate.format( "picture-o", _T("Image") , "");
 		upGlyph = glyphTemplate.format( "arrow-up", _T("More") , "");
 		downGlyph = glyphTemplate.format( "arrow-down", _T("Less") , "");
-		uncheckedGlyph= glyphTemplate.format( "unchecked", _T("Frame") , "");
+		uncheckedGlyph= glyphTemplate.format( "square-o", _T("Frame") , "");
 		runGlyph = glyphTemplate.format( "play", _T("Run Scene") , "");
 		editGlyph = glyphTemplate.format( "pencil", _T("Edit") , "");
 		recordGlyph = glyphTemplate.format( "video-camera", _T("Record") , "text-danger");
 		eyeOpenGlyph = glyphTemplate.format( "eye-open", _T("See") , "");
-		cameraGlyph = glyphTemplate.format( "facetime-video", _T("Camera") , "");
+		cameraGlyph = glyphTemplate.format( "video-camera", _T("Camera") , "");
 		onoffGlyph = glyphTemplate.format( "power-off", _T("On Off") , "");
-		scaleGlyph = glyphTemplate.format( "scale", _T("Gauge") , "");
+		scaleGlyph = glyphTemplate.format( "tachometer", _T("Gauge") , "");
 		homeGlyph = glyphTemplate.format( "home", _T("Rooms") , "");
 		tagsGlyph = glyphTemplate.format( "tags", _T("Category") , "");
 		helpGlyph = glyphTemplate.format( "question", "" , "");
@@ -14326,94 +14332,6 @@ $(function() {
 		body+="<!-- Fixed navbar -->";
 		body+="<div id='dialogs'></div>";
 		body += UIManager.generateNavBarHTML()
-		// body+="<nav class='navbar navbar-default navbar-fixed-top'>";
-		// body+=" <div class='container'>";
-		// body+="	<div class='navbar-header'>";
-		// body+="	  <button type='button' class='navbar-toggle collapsed pull-left' data-toggle='collapse' data-target='#navbar' aria-expanded='false' aria-controls='navbar'>";
-		// body+="		<span class='sr-only'>Toggle navigation</span>";
-		// body+="		<span class='icon-bar'></span>";
-		// body+="		<span class='icon-bar'></span>";
-		// body+="		<span class='icon-bar'></span>";
-		// body+="	  </button>		  ";
-		// body+="	  <a class='navbar-brand' href='javascript:void(0)'></a>";
-		// body+="	</div>";
-		// body+="	<div id='navbar' class='navbar-collapse collapse'>";
-		// body+="	  <ul class='nav navbar-nav'>";
-		// body+="		<li class='active'><div class='imgLogo'></div></li>";
-		// body+="		<li><a id='menu_myhome' href='javascript:void(0)'  >"+_T("My Home")+"</a></li>";
-		// body+="		<li><a id='menu_device' href='javascript:void(0)'  >"+_T("Devices")+"</a></li>";
-		// body+="		<li class='altui-no-scene-favorite'><a id='menu_scene'  href='javascript:void(0)'  >"+_T("Scenes")+"</a></li>";
-		// body+="		<li class='altui-with-scene-favorite altui-dropdown-scene dropdown' style='display: none;'>";
-		// body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Scenes")+" <span class='caret'></span></a>";
-		// body+="			<ul class='dropdown-menu' role='menu'>";
-		// body+="				<li><a id='menu_scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
-		// body+="			</ul>";
-		// body+="		</li>";
-		// body+="		<li><a id='menu_scene' href='javascript:void(0)'	 >"+_T("Scenes")+"</a></li>";
-		// body+="		<li class='dropdown'>";
-		// body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("More")+" <span class='caret'></span></a>";
-		// body+="			<ul class='dropdown-menu' role='menu'>";
-		// body+="				<li><a id='menu_room' href='javascript:void(0)'	>"+_T("Rooms")+"</a></li>";
-		// body+="				<li><a id='menu_plugins' href='javascript:void(0)'  >"+_T("Plugins")+"</a></li>";
-		// body+="				<li><a id='altui-app-store' href='javascript:void(0)' >"+_T("App Store")+"</a></li>";
-		// body+="				<li><a id='menu_timeline' href='javascript:void(0)'	>"+_T("Timeline")+"</a></li>";
-		// body+="				<li><a id='menu_workflow' href='javascript:void(0)'	>"+_T("Workflows")+"</a></li>";
-		// body+="			<li class='divider'></li>";
-		// body+="				<li class='dropdown-header'>Tables</li>";
-		// body+="				<li><a id='altui-tbl-watches' href='javascript:void(0)' >"+_T("Watches")+"</a></li>";
-		// body+="				<li><a id='altui-tbl-device' href='javascript:void(0)' >"+_T("Devices")+"</a></li>";
-		// body+="				<li><a id='altui-scene-triggers' href='javascript:void(0)' >"+_T("Triggers")+"</a></li>";
-		// body+="				<li><a id='altui-tbl-scene' href='javascript:void(0)' >"+_T("Scenes")+"</a></li>";
-		// body+="				<li><a id='altui-tbl-controllers' href='javascript:void(0)' >"+_T("Controllers")+"</a></li>";
-		// body+="			<li class='divider'></li>";
-		// body+="				<li class='dropdown-header'>Graphic</li>";
-		// body+="				<li><a id='altui-graph-watches' href='javascript:void(0)' >"+_T("Watch Display")+"</a></li>";
-		// body+="				<li><a id='altui-energy' href='javascript:void(0)' >"+_T("Power Chart")+"</a></li>";
-		// body+="				<li><a id='altui-childrennetwork' href='javascript:void(0)' >"+_T("Parent/Child Network")+"</a></li>";
-		// body+="				<li><a id='altui-zwavenetwork' href='javascript:void(0)' >"+_T("zWave Network")+"</a></li>";
-		// body+="				<li><a id='altui-zwaveroutes' href='javascript:void(0)' >"+_T("zWave Routes")+"</a></li>";
-		// body+="				<li><a id='altui-quality' href='javascript:void(0)' >"+_T("Network Quality")+"</a></li>";
-		// body+="			</ul>";
-		// body+="		</li>";
-		// body+="		<li class='dropdown'>";
-		// body+="			<a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Panels")+" <span class='caret'></span></a>";
-		// body+="			<ul class='dropdown-menu' role='menu'>";
-		// body+="				<li><a id='altui-pages-see' href='javascript:void(0)' >"+_T("Use Custom Pages")+"</a></li>";
-		// body+="				<li><a id='altui-pages-edit' href='javascript:void(0)' >"+_T("Edit Custom Pages")+"</a></li>";
-		// body+="			</ul>";
-		// body+="		</li>";
-		// body+="		<li class='dropdown'>";
-		// body+="		  <a href='javascript:void(0)' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"+_T("Misc")+"<span class='caret'></span></a>";
-		// body+="		  <ul class='dropdown-menu' role='menu'>";
-		// body+="			<li class='dropdown-header'>Access</li>";
-		// body+="			<li><a id='altui-remoteaccess' href='javascript:void(0)' >"+_T("Remote Access Login")+"</a></li>";
-		// body+="			<li class='divider'></li>";
-		// body+="			<li class='dropdown-header'>Lua</li>";
-		// body+="			<li><a id='altui-reload' href='javascript:void(0)' >"+_T("Reload Luup Engine")+"</a></li>";
-		// body+="			<li><a id='altui-reboot' href='javascript:void(0)' >"+_T("Reboot Vera")+"</a></li>";
-		// body+="			<li><a id='altui-luastart' href='javascript:void(0)' >"+_T("Lua Startup Code")+"</a></li>";
-		// body+="			<li><a id='altui-luatest' href='javascript:void(0)' >"+_T("Lua Test Code")+"</a></li>";
-		// body+="			<li><a id='altui-oscommand' href='javascript:void(0)' >"+_T("OS Command")+"</a></li>";
-		// body+="			<li class='divider'></li>";
-		// body+="			<li class='dropdown-header'>Admin</li>";
-		// body+="			<li><a id='altui-checkupdate' href='javascript:void(0)'>"+_T("Check for Updates")+"</a></li>";
-		// body+="			<li><a id='altui-optimize' href='javascript:void(0)'>"+_T("Options")+"</a></li>";
-		// body+="			<li><a id='altui-theme-selector' href='javascript:void(0)'>"+_T("Themes")+"</a></li>";
-		// body+="			<li><a id='altui-localize' href='javascript:void(0)'>"+_T("Localization")+"</a></li>";
-		// body+="			<li><a id='altui-debugtools' href='javascript:void(0)'>"+_T("Debug")+"</a></li>";
-		// body+="			<li class='divider'></li>";
-		// body+="			<li class='dropdown-header'>About</li>";
-		// body+="			<li><a id='altui-license-page' href='javascript:void(0)'>"+_T("License Fees")+"</a></li>";
-		// body+="			<li><a id='altui-credits' href='javascript:void(0)'>"+_T("Credits")+"</a></li>";
-		// body+="			<li><a id='altui-evolutions' href='javascript:void(0)'>"+_T("Evolutions")+"</a></li>";
-		// body+="			<li><a id='altui-support' target='_blank' href='http://forum.micasaverde.com/index.php?board=78.0'>"+_T("Support")+"</a></li>";
-		// body+="			<li><a id='altui-test' href='javascript:void(0)'>"+_T("Test")+"</a></li>";
-		// body+="		  </ul>";
-		// body+="		</li>";
-		// body+="	  </ul>";
-		// body+="	</div><!--/.nav-collapse -->";
-		// body+="	 </div>";
-		// body+="</nav>";
 		body+="<div class='container-fluid theme-showcase' role='main'>";
 		body+="</div> <!-- /container -->";
 		body+="<div id='altui-background'></div>";

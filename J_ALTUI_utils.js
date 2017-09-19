@@ -1777,7 +1777,7 @@ var HTMLUtils = (function() {
 		html += "<div class='{0}' id='accordeon{1}' role='tablist'>".format(cls,id);
 		$.each( panels, function (idx,panel){
 			html += "        <div class='card' id='"+panel.id+"'>";
-			html += "            <div class='card-header' role='tab'>";
+			html += "            <div class='card-header p-1' role='tab'>";
 			if (button) {
 				html += xsbuttonTemplate.format(button.id, button.class, button.label, button.title);
 			}
@@ -2884,7 +2884,8 @@ var WorkflowManager = (function() {
 			var splits = last.split("-");
 			altuiid = "0-"+(parseInt(splits[1])+1)
 		}
-		delete workflow.altuiid	// make sure we use the new ALTUIID
+		if (workflow) 
+			delete workflow.altuiid	// make sure we use the new ALTUIID
 		_workflows.push( $.extend(true, {}, _def_workflow, { altuiid:altuiid, name:'Workflow '+altuiid } , workflow || {}) );		
 		_saveNeeded = true;
 	};
@@ -4746,7 +4747,7 @@ var SceneEditor = function (scene) {
 			
 		$("div#altui-luascene").resizable({
 			// containment: "parent",
-			maxWidth:$("div#altui-luascene").closest(".panel").innerWidth()-30, // ugly but easier, padding 15 on each size
+			maxWidth:$("div#altui-luascene").closest(".card").innerWidth()-30, // ugly but easier, padding 15 on each size
 			stop: function( event, ui ) {
 				editor.resize();
 			}
@@ -5093,18 +5094,18 @@ var PageMessage = (function(window, undefined ) {
 			button.attr("class","btn btn-"+cls);
 		};
 		var divs = $("div#altui-pagemessage");
-		if (divs.has("tr.danger").length>0)
+		if (divs.has("tr.table-danger").length>0)
 			_setColor('danger');
-		else if (divs.has("tr.warning").length>0)
+		else if (divs.has("tr.table-warning").length>0)
 			_setColor('warning');
-		else if (divs.has("tr.info").length>0)
+		else if (divs.has("tr.table-info").length>0)
 		// else if ($("div#altui-pagemessage  tr.info").length>0)
 			_setColor('info');
-		else if (divs.has("tr.success").length>0)
+		else if (divs.has("tr.table-success").length>0)
 		// else if ($("div#altui-pagemessage  tr.success").length>0)
 			_setColor('success');
 		else {
-			_setColor('default');
+			_setColor('light');
 			// button.next(".collapse").removeClass("in");
 			// button.filter("span").removeClass( "caret-reversed" );
 		}
@@ -5214,10 +5215,10 @@ var PageMessage = (function(window, undefined ) {
 
 	function _init(breadcrumb) {
 var Html=`
-<div id='altui-pagemessage'>
+<div id='altui-pagemessage' class='col-12'>
 	<form class='form-inline'>
 	{0}
-	<button id="altui-toggle-messages" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#altui-pagemessage-panel" aria-expanded="false" aria-controls="collapseExample">
+	<button id="altui-toggle-messages" class="btn btn-light" type="button" data-toggle="collapse" data-target="#altui-pagemessage-panel" aria-expanded="false" aria-controls="collapseExample">
 	{1} <i class="fa fa-caret-down" aria-hidden="true"></i>
 	</button>
 	{2}
