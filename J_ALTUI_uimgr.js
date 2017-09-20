@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2135 $";
+var ALTUI_revision = "$Revision: 2136 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9650,20 +9650,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var nentries = Math.min(nMax,pluginIDs.length);
 			var html = "";
 			html += "<div id='carousel-example-generic' class='carousel slide altui-store-carousel' data-ride='carousel'>"
-			html += "  <!-- Indicators -->"
 			html += "  <ol class='carousel-indicators'>"
 			for( var i=0;i<nentries;i++) {
 				html += "<li data-target='#carousel-example-generic' data-slide-to='{1}' class='{0}'></li>".format( ((bFirst) ? 'active':'' ),i )
 				bFirst = false;
 			}
 			html += "  </ol>"
-			html += "  <!-- Wrapper for slides -->"
 			bFirst = true;
 			html += "  <div class='carousel-inner'>"
 			for (i=0; i<nentries ; i++) {
 				var index = (nentries <=nMax) ? i : getRandomInt(0,_plugins_data.plugins.length);
 				var plugin = $.extend( {}, defaultPlugin, _plugins_data.plugins[index.toString()] );
-					html += "	 <div class='item {0}'>".format( (bFirst) ? 'active':'')
+					html += "	 <div class='carousel-item {0}'>".format( (bFirst) ? 'active':'')
 					html += "	   <div class='altui-features-box'></div>"
 					html += "	   <div class='carousel-caption'>"
 					html += ( plugin.Icon.startsWith('https') ? "<img src='{0}'></img>"	 : "<img class='pull-left' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon);
@@ -9674,11 +9672,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 			html += "  </div>"
 			html += "  <!-- Controls -->"
-			html += "  <a class='left carousel-control' href='#carousel-example-generic' role='button' data-slide='prev'>"
-			html += "	 <span class='glyphicon glyphicon-chevron-left'></span>"
+			html += "  <a class='carousel-control-prev' href='#carousel-example-generic' role='button' data-slide='prev'>"
+				html +='<span class="carousel-control-prev-icon" aria-hidden="true"></span>'
+				html +='<span class="sr-only">Previous</span>'	
 			html += "  </a>"
-			html += "  <a class='right carousel-control' href='#carousel-example-generic' role='button' data-slide='next'>"
-			html += "	 <span class='glyphicon glyphicon-chevron-right'></span>"
+			
+			html += "  <a class='carousel-control-next' href='#carousel-example-generic' role='button' data-slide='next'>"
+				html +='<span class="carousel-control-next-icon" aria-hidden="true"></span>'
+				html +='<span class="sr-only">Next</span>'	
 			html += "  </a>"
 			html += "</div> <!-- Carousel -->"
 			return html;
@@ -9737,7 +9738,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var arr = _orderVersions(plugin);
 			var firstversionid = arr[0].id;
 			var html = "";
-				html += "<div id='{0}' class='col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 altui-pluginbox' data-pluginid='{0}'>".format(plugin.id)
+				html += "<div id='{0}' class='col-6 col-sm-4 col-lg-3 altui-pluginbox' data-pluginid='{0}'>".format(plugin.id)
 					html += "<div class='card xxx altui-pluginbox-panel'>"
 						html += "<div class='card-body'>"
 							html += "<div class='altui-plugin-version pull-right'>{0}</div>".format(_drawVersionSelect(plugin,arr))
