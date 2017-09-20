@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2134 $";
+var ALTUI_revision = "$Revision: 2135 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -812,7 +812,6 @@ var styles ="						\
 		padding-right: 0px;\
 		padding-bottom: 0px;\
 		padding-left: 2px;\
-		overflow: hidden; \
 	}\
 	div.altui-device-body {\
 		padding-top: 0px;\
@@ -5987,7 +5986,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var body="";
 		body+="	<div class='altui-layout row'>";
 		body+="		<div class='col-sm-2 d-none d-sm-block {0}'>".format( (MyLocalStorage.getSettings('FixedLeftButtonBar') || "")==1 ? 'affix' : '' );
-		body+="			<div class='altui-leftnav border border-secondary btn-group-vertical' role='group' aria-label='...'>";
+		body+="			<div class='altui-leftnav btn-group-vertical' role='group' aria-label='...'>";
 		body+="			</div>";
 		body+="		</div>";
 		body+="		<div class='col-sm-10'>";
@@ -6453,10 +6452,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							"</div>"+
 						"</div>";
 		var room_toolbar = [
-			{id:"device" , cls:"altui-myhome-onoffdevice btn-lg", glyph:"glyphicon-cog", title:_T("Device")},
-			{id:"sensors" ,cls:"altui-myhome-sensors btn-lg", glyph:"glyphicon-dashboard", title:_T("Sensors")},
-			{id:"covers" ,cls:"altui-myhome-covers btn-lg", glyph:"glyphicon-sort", title:_T("Covers")},
-			{id:"scene" ,cls:"altui-myhome-scene btn-lg", glyph:"glyphicon-film", title:_T("Scene")},
+			{id:"device" , cls:"altui-myhome-onoffdevice btn-lg", glyph:"cog", title:_T("Device")},
+			{id:"sensors" ,cls:"altui-myhome-sensors btn-lg", glyph:"tachometer", title:_T("Sensors")},
+			{id:"covers" ,cls:"altui-myhome-covers btn-lg", glyph:"arrows-v", title:_T("Covers")},
+			{id:"scene" ,cls:"altui-myhome-scene btn-lg", glyph:"film", title:_T("Scene")},
 			// {cls:"altui-myhome-sensor", glyph:"glyphicon-flash", title:_T("Sensors")},
 		];
 		var coverfilter = [
@@ -10856,6 +10855,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// containment: ".altui-custompage-canvas",
 			grid: [ 5,5 ],
 			helper: "clone",
+			zIndex: 100,
 			cursorAt: { left: 5 },
 			// snap: true,
 			// snapMode: "inner",
@@ -14337,6 +14337,8 @@ $(function() {
 		body+="</div> <!-- /container -->";
 		body+="<div id='altui-background'></div>";
 		$("#wrap").prepend(body);
+		$("#menu_scene_withfavorite").hide();
+		$("#menu_scene").show();
 
 		ALTUI_Templates = ALTUI_Templates_Factory();
 		if (g_ALTUI.g_CustomBackground.length>0) {

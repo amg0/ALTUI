@@ -67,7 +67,7 @@ var ALTUI_Templates_Factory= function() {
 	_dropdownTemplate +=  "<div class='btn-group pull-right'>";
 	_dropdownTemplate += "<button class='btn btn-light btn-sm dropdown-toggle altui-device-command' type='button' data-toggle='dropdown' aria-expanded='false'>"; 
 	_dropdownTemplate += "</button>";
-	_dropdownTemplate += "<div class='dropdown-menu' role='menu'>";
+	_dropdownTemplate += "<div class='dropdown-menu dropdown-menu-right' role='menu'>";
 	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-variables' href='#' role='menuitem'>Variables</a>";
 	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-actions' href='#' role='menuitem'>Actions</a>";
 	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-controlpanelitem' href='#' role='menuitem'>Control Panel</a>";
