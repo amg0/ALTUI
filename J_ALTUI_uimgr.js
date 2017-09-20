@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2136 $";
+var ALTUI_revision = "$Revision: 2137 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14117,6 +14117,32 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		MultiBox.reboot(0)
 	},
 	signal: function( eventname ) {
+			function _searchText(val) {
+				var result={}
+				var pattern = new RegExp(val,"i");
+				var devices = MultiBox.getDevicesSync().filter( function(d) {
+					return (d.name) && (pattern.test(d.name)==true)
+				});
+				result[_T("Devices")] = devices
+				var scenes = MultiBox.getScenesSync().filter( function(d) {
+					return (d.name) && (pattern.test(d.name)==true)
+				});
+				result[_T("Scenes")] = scenes
+				return result
+			};
+			function _prepareBodyMessage(searchResult){
+				var lines=[]
+				$.each(searchResult, function(key,tbl) {
+					lines.push("<h5>{0}</h5>".format(key))
+					lines.push("<ul>");
+					$.each(tbl, function(i,res) {
+						lines.push("<li>{0}, <small>({1})</small></li>".format(res.name,res.altuiid))
+					})
+					lines.push("</ul>");
+				});
+				return lines.join("\n");
+			};
+			
 		switch (eventname) {
 			case 'on_ui_initFinished':
 				bUIReady =true;
@@ -14185,7 +14211,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				})
 				.on("click","button#altui-search",function(e) {
 					var val = $("#altui-search-text").val()
-					alert(val)
+					var searchResult = _searchText(val);
+					var messageHtml = _prepareBodyMessage(searchResult);
+					DialogManager.infoDialog(_T("Search Results"),messageHtml);
 					return false;
 				});
 				

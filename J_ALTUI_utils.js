@@ -757,16 +757,16 @@ var DialogManager = ( function() {
 		var warningpic = "<div class='altui-warningicon pull-left'>{0}</div>".format(questionGlyph);
 		return _genericDialog(message,warningpic+_T("Are you Sure ?"),buttons,cbfunc)
 	};
-	function _quickDialog(type,title,message,cbfunc) {
-		var glyph = glyphTemplate.format( type+"-sign", _T(type) , "text-"+type);
-		var header= "<div class='altui-{2}icon pull-left'>{0}</div> {1}".format(glyph,title,type);
+	function _quickDialog(type,cls,title,message,cbfunc) {
+		var glyph = glyphTemplate.format( type, _T(type) , "text-"+type);
+		var header= "<div class='altui-{2}icon {3} pull-left'>{0}</div> {1}".format(glyph,title,type,cls);
 		return _genericDialog(message,header,[],cbfunc);
 	};
 	function _infoDialog(title,message,cbfunc) {
-		return _quickDialog("info",title,message,cbfunc);
+		return _quickDialog("info-circle", "text-primary", title,message,cbfunc);
 	};
 	function _warningDialog(title,message,cbfunc) {
-		return _quickDialog("warning",title,message,cbfunc);
+		return _quickDialog("exclamation-triangle", "text-warning", title,message,cbfunc);
 	};
 	function _triggerDialog( trigger, controller, cbfunc ) {
 		var dialog = DialogManager.createPropertyDialog(_T('Trigger'));
