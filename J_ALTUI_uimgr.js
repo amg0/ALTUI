@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2139 $";
+var ALTUI_revision = "$Revision: 2140 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7873,7 +7873,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-workflow-delete", glyph:"trash-o", label:_T("Delete")},
 			{id:"altui-workflow-report", glyph:"list", label:_T("Report")},
 			{id:"altui-workflow-history", collapsetarget:"#altui-workflow-history-text", glyph:"history", label:_T("History")},
-			{id:"altui-workflow-bag", collapsetarget:"#altui-workflow-bag-text", glyph:"glyphicon-compressed", label:_T("Bag")},
+			{id:"altui-workflow-bag", collapsetarget:"#altui-workflow-bag-text", glyph:"shopping-basket", label:_T("Bag")},
 			{id:"altui-workflow-export", glyph:"shopping-bag", label:_T("Import/Export")},
 			{id:"altui-workflow-zoomin", glyph:"search-plus" },
 			{id:"altui-workflow-zoomout", glyph:"search-minus" },
@@ -11267,12 +11267,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="  <div class='form-group'>";
 			html +="	<label for='altui-editor-result'>"+_T("Return Result")+":</label>";
 			html +=	 buttonTemplate.format( 'altui-copyresult-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
-			html +="	<pre id='altui-editor-result'></pre>";
+			html +="	<pre class='border border-secondary bg-light' id='altui-editor-result'> </pre>";
 			html +="  </div>";
 			html +="  <div class='form-group'>";
 			html +="	<label for='altui-editor-output'>"+_T("Console Output")+":</label>";
 			html +=	 buttonTemplate.format( 'altui-copyoutput-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
-			html +="	<pre id='altui-editor-output'></pre>";
+			html +="	<pre class='border border-secondary bg-light' id='altui-editor-output'> </pre>";
 			html +="  </div>";
 		}
 		html +=("  <button id='altui-luaform-button-"+htmlid+"' type='submit' class='btn btn-primary'>"+button+"</button>");
