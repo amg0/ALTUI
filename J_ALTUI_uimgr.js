@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2137 $";
+var ALTUI_revision = "$Revision: 2138 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2080,7 +2080,7 @@ var UIManager  = ( function( window, undefined ) {
 					html += '</select>';
 				html += "</div>"
 
-				html += "<form id='form-{0}' class='form'>".format(varid);
+				html += "<form id='form-{0}' class='col-12 form'>".format(varid);
 					html += _pushFormFields(providers, (pushData!=null) ? pushData.provider : null ,varid, pushData );
 				html += "</form>"
 			html += "</div>";	//row
@@ -2104,7 +2104,7 @@ var UIManager  = ( function( window, undefined ) {
 						row.val,
 						state.service,
 						state.id,
-						(row.sendWatch!=null) ? 'btn-info' : '',
+						(row.sendWatch!=null) ? 'btn-info' : 'btn-light',
 						(row.sendWatch!=null) ? row.sendWatch.provider : ''
 					);
 				lines.push(	 str );
@@ -2157,7 +2157,7 @@ var UIManager  = ( function( window, undefined ) {
 				if (form.length==0) {
 					var that = $(this);
 					// change color
-					that.removeClass("btn-light").addClass("btn-danger");
+					that.removeClass("btn-light").removeClass("btn-info").addClass("btn-danger");
 					MultiBox.getDataProviders(function(providers) {
 						//
 						// get this push parameters if they exist
@@ -2205,7 +2205,8 @@ var UIManager  = ( function( window, undefined ) {
 					// CLOSING the form : change color
 					var nexttr = tr.next("tr");
 					var pushEnabled = nexttr.find("input#altui-enablePush-"+varid).prop('checked');
-					$(this).addClass("btn-light").toggleClass("btn-info",pushEnabled).removeClass("btn-danger");
+					var cls = (pushEnabled==true) ? "btn-info" : "btn-light"
+					$(this).addClass(cls).removeClass("btn-danger");
 					var push = null;
 					var differentWatches=null;
 					// find all watches for this device
