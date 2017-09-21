@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2138 $";
+var ALTUI_revision = "$Revision: 2139 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14503,7 +14503,7 @@ var UIControler = (function(win) {
 			'TblScenes':				{ id:27, title:'TblScenes',				htmlid:"#altui-tbl-scene", onclick:UIManager.pageTblScenes, parent:0 },
 			'TblControllers':		{ id:28, title:'TblControllers',	htmlid:"#altui-tbl-controllers", onclick:UIManager.pageTblControllers, parent:0 },
 			'TblWatches':				{ id:29, title:'TblWatches',			htmlid:"#altui-tbl-watches", onclick:UIManager.pageTblWatches, parent:0 },
-			'WatchDisplay':			{ id:30, title:'WatchDisplay',		htmlid:"#altui-graph-watches", onclick:UIManager.pageWatchDisplay, parent:0 },
+			'WatchDisplay':			{ id:30, title:'Watch Display',		htmlid:"#altui-graph-watches", onclick:UIManager.pageWatchDisplay, parent:0 },
 			'Workflow Pages':		{ id:31, title:'Workflow Pages',	htmlid:"#menu_workflow", onclick:UIManager.pageWorkflows, parent:0 },
 			'Workflow':					{ id:32, title:'Workflow',					onclick:UIManager.pageWorkflow, parent:31 },
 			'Workflow Report':	{ id:33, title:'Workflow Report',	onclick:UIManager.pageWorkflowReport, parent:31 },
@@ -14537,11 +14537,11 @@ var UIControler = (function(win) {
 			{id:'menu_timeline' , child:null},
 			{id:'menu_workflow' , child:null},
 			{id:-1},
-			{id:'altui-tbl-watches' , child:null},
-			{id:'altui-tbl-device' , child:null},
+			{id:'altui-tbl-watches' , label:_T("Table Watches"), child:null},
+			{id:'altui-tbl-device' , label:_T("Table Devices"),child:null},
 			{id:'altui-scene-triggers' , child:null},
-			{id:'altui-tbl-scene' , child:null},
-			{id:'altui-tbl-controllers' , child:null},
+			{id:'altui-tbl-scene' , label:_T("Table Scenes"),child:null},
+			{id:'altui-tbl-controllers' , label:_T("Table Controllers"),child:null},
 			{id:-1},
 			{id:'altui-graph-watches' , child:null},
 			{id:'altui-energy' , child:null},
@@ -14559,15 +14559,15 @@ var UIControler = (function(win) {
 			{id:-1},
 			{id:'altui-reload' , child:null},
 			{id:'altui-reboot' , child:null},
-			{id:'altui-luastart' , child:null},
-			{id:'altui-luatest' , child:null},
+			{id:'altui-luastart' , label:_T("Lua Startup"), child:null},
+			{id:'altui-luatest' , label:_T("Lua Code Test"), child:null},
 			{id:'altui-oscommand' , child:null},
 			{id:-1},
 			{id:'altui-checkupdate' , child:null},
 			{id:'altui-optimize' , child:null},
 			{id:'altui-theme-selector' , child:null},
-			{id:'altui-localize' , child:null},
-			{id:'altui-debugtools' , child:null},
+			{id:'altui-localize' , label:_T("Localizations"), child:null},
+			{id:'altui-debugtools' , label:_T("Debug Tools"), child:null},
 			{id:-1},
 			{id:'altui-license-page' , child:null},
 			{id:'altui-credits' , child:null},
