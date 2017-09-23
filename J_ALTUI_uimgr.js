@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2140 $";
+var ALTUI_revision = "$Revision: 2141 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13625,7 +13625,22 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$.extend({
 				caseSensitive: false,
 				statusMapping: {},
-				formatters: model.formatters || {}
+				formatters: model.formatters || {},
+				// fix for bootstrap 4 new classes
+				templates: {
+					icon: '<i class="{{css.icon}} {{ctx.iconCss}}"></i>',
+					actionDropDown: "<div class=\"{{css.dropDownMenu}}\"><button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"><span class=\"{{css.dropDownMenuText}}\">{{ctx.content}}</span> <span class=\"caret\"></span></button><ul class=\"{{css.dropDownMenuItems}}\" role=\"menu\"></ul></div>",
+					actionDropDownItem: "<li><a data-action=\"{{ctx.action}}\" class=\"{{css.dropDownItem}} {{css.dropDownItemButton}}\">{{ctx.text}}</a></li>",
+					paginationItem: "<li class=\"page-item {{ctx.css}}\"><a data-page=\"{{ctx.page}}\" class=\"page-link {{css.paginationButton}}\">{{ctx.text}}</a></li>",
+				},
+				css: {
+					icon: "icon fa",
+					iconColumns: "fa-table",
+					iconDown: "fa-chevron-down",
+					iconRefresh: "fa-refresh",
+					iconSearch: "fa-search",
+					iconUp: "fa-chevron-up",
+				}
 			},options)
 		).on("click.rs.jquery.bootgrid", function(e,columns,row) {
 			if (row) {	// click on header does not generate a row
@@ -13660,7 +13675,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		// Add CSV export button
 		var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
-		var csvButtonHtml = buttonTemplate.format( 'altui-grid-btn-'+htmlid, 'altui-tbl2csv', glyph,'secondary');
+		var csvButtonHtml = buttonTemplate.format( 'altui-grid-btn-'+htmlid, 'altui-tbl2csv', glyph,'light');
 		$('#'+htmlid+'-header').find('.actions.btn-group').append(csvButtonHtml);
 		$("#altui-grid-btn-"+htmlid).click( function() {
 			if ($('#altui-aftertable-'+htmlid).find('form').length==0) {
