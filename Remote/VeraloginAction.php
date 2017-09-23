@@ -96,6 +96,7 @@
 						{
 							$pwdSeed = "oZ7QE6LcLJp6fiWzdqZc";
 							$SHA1UserPassword = sha1( $user.$pwd.$pwdSeed );
+							// new srv to be confirmed => $url = "https://vera-us-oem-autha11.mios.com/autha/auth/username/"."$user"."?SHA1Password="."$SHA1UserPassword"."&PK_Oem=1";
 							$url = "https://us-autha11.mios.com/autha/auth/username/"."$user"."?SHA1Password="."$SHA1UserPassword"."&PK_Oem=1";
 							//$url="http://www.google.com";
 
@@ -188,6 +189,7 @@
 					<caption>Click on the device you want to reach</caption>
 					<thead>
 					<tr>	
+					<th>Name</th>
 					<th>InternalIP</th>
 					<th>Platform</th>
 					<th>Firmware</th>
@@ -199,6 +201,7 @@
 					<?php
 					foreach( $DeviceTable as $key => $device) {
 						echo '<tr class="altui-remote-device" id="'.$key.'">';
+						echo '<td>'.$device->Name.'</td>';
 						echo '<td>'.$device->RelayInfo->InternalIP.'</td>';
 						echo '<td>'.$device->RelayInfo->Platform.' #'.$device->PK_Device.'</td>';
 						echo '<td>'.$device->RelayInfo->FirmwareVersion.'</td>';
