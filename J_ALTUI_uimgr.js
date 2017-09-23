@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2141 $";
+var ALTUI_revision = "$Revision: 2143 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3887,14 +3887,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						});
 				htmlRoomSelect	  += "</select>";
 
-				var htmlDeleteButton= (device.donotdelete==true) ? '' : buttonTemplate.format( device.altuiid, 'btn-sm altui-deldevice pull-right', deleteGlyph,'default',_T("Delete"));
+				var htmlDeleteButton= (device.donotdelete==true) ? '' : buttonTemplate.format( device.altuiid, 'btn-sm altui-deldevice ml-auto', deleteGlyph,'default',_T("Delete"));
 				var html ="";
 				html+="<div class='row'>";
 					html +="<div id='altui-device-controlpanel-"+device.altuiid+"' class='col-12 altui-device-controlpanel' data-altuiid='"+device.altuiid+"'>";
 					html +="	<div class='card '>";
 					html +="		<div class='card-header form-inline'>";
-					html += htmlDeleteButton;
 					html +="			<h4 class='card-title'>{0} {1} {2} (#{3}) "+htmlRoomSelect+"</h4>";
+					html += 			htmlDeleteButton;
 					html +="		</div>";
 					html +="		<div class='card-body'>";
 					html +="		</div>";
@@ -11471,7 +11471,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-primary'>"+_T("Run")+"</button>";
 		html+="<hr>";
 		html+="<h3>"+_T("Output")+"</h3>";
-		html+="<pre id='altui-oscommand-result' class='pre-scrollable'></pre>";
+		html+="<pre id='altui-oscommand-result' class='border border-secondary bg-light pre-scrollable'> </pre>";
 		html+="</div>";
 		$(".altui-mainpanel").append( html );
 
@@ -13062,7 +13062,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += buttonTemplate.format( 'altui-debug-clipboard', 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
 				// html += "<button class='btn btn-light altui-json-viewer' type='button' >{0}</button>".format(_T("Json Viewer"));
 			html+="</h3>";
-			html+="<pre id='altui-oscommand-result' class='pre-scrollable'></pre>";
+			html+="<pre id='altui-oscommand-result' class='pre-scrollable border border-secondary bg-light'> </pre>";
 		html +="</div>";
 
 		// append HTML
@@ -14133,31 +14133,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		MultiBox.reboot(0)
 	},
 	signal: function( eventname ) {
-			function _searchText(val) {
-				var result={}
-				var pattern = new RegExp(val,"i");
-				var devices = MultiBox.getDevicesSync().filter( function(d) {
-					return (d.name) && (pattern.test(d.name)==true)
-				});
-				result[_T("Devices")] = devices
-				var scenes = MultiBox.getScenesSync().filter( function(d) {
-					return (d.name) && (pattern.test(d.name)==true)
-				});
-				result[_T("Scenes")] = scenes
-				return result
-			};
-			function _prepareBodyMessage(searchResult){
-				var lines=[]
-				$.each(searchResult, function(key,tbl) {
-					lines.push("<h5>{0}</h5>".format(key))
-					lines.push("<ul>");
-					$.each(tbl, function(i,res) {
-						lines.push("<li>{0}, <small>({1})</small></li>".format(res.name,res.altuiid))
-					})
-					lines.push("</ul>");
-				});
-				return lines.join("\n");
-			};
 			
 		switch (eventname) {
 			case 'on_ui_initFinished':
@@ -14226,10 +14201,53 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							MultiBox.runScene( scene );
 				})
 				.on("click","button#altui-search",function(e) {
+					var map = {
+						'Devices':	{goto:'Control Panel'},
+						'Scenes':	{goto:'Scene Edit'}
+					};
+					function _searchText(val) {
+						var result={}
+						var pattern = new RegExp(val,"i");
+						var devices = MultiBox.getDevicesSync().filter( function(d) {
+							return (d.name) && 
+							( (pattern.test(d.name)==true) || (pattern.test(d.manufacturer)==true) || (pattern.test(d.model)==true)  )
+						});
+						result["Devices"] = devices
+						var scenes = MultiBox.getScenesSync().filter( function(d) {
+							return (d.name) && (pattern.test(d.name)==true)
+						});
+						result["Scenes"] = scenes
+						return result
+					};
+					
+					function _prepareBodyMessage(searchResult){
+						var lines=[]
+						$.each(searchResult, function(key,tbl) {
+							lines.push("<h5>{0}</h5>".format(_T(key)))
+							lines.push("<ul>");
+							$.each(tbl, function(i,res) {
+								lines.push("<li>{0}, <small><A href='#' class='altui-search-result' id='{2}_{1}'>({1})</A></small></li>".format(res.name,res.altuiid,key))
+							})
+							lines.push("</ul>");
+						});
+						return lines.join("\n");
+					};
 					var val = $("#altui-search-text").val()
 					var searchResult = _searchText(val);
 					var messageHtml = _prepareBodyMessage(searchResult);
 					DialogManager.infoDialog(_T("Search Results"),messageHtml);
+					$(".altui-search-result").click( map, function(event) {
+						var id = $(this).prop('id')
+						var map = event.data
+						var parts = id.split("_")
+						var params = []
+						params.push( parts[1] )
+						$("#dialogModal").modal('hide')
+						setTimeout(function() { 
+							UIControler.changePage( map[parts[0]].goto , params )
+						} , 300 );
+						return false;
+					});
 					return false;
 				});
 				
