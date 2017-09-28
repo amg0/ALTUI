@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.91beta"
+local version = "v1.92"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -4038,7 +4038,8 @@ function startupDeferred(lul_device)
 	local url_req = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home"
 	local localurl = getSetVariableIfEmpty(ALTUI_SERVICE,"LocalHome", lul_device, url_req)
 	local present = getSetVariable(ALTUI_SERVICE,"Present", lul_device, 0)
-	local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://vera-ui.strongcubedfitness.com/Veralogin.php")
+	-- local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://vera-ui.strongcubedfitness.com/Veralogin.php")
+	local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://remotevera.000webhostapp.com/veralogin.php")
 	local css = getSetVariable(ALTUI_SERVICE,"ThemeCSS", lul_device, "")
 	local imgpath = getSetVariable(ALTUI_SERVICE,"ImagePath", lul_device, "")
 	local background = getSetVariable(ALTUI_SERVICE,"BackgroundImg", lul_device, "")

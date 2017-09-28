@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2143 $";
+var ALTUI_revision = "$Revision: 2146 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1819,6 +1819,11 @@ var UIManager  = ( function( window, undefined ) {
 			subst = '#RGBController_white .ui-slider-range, #RGBController_white .ui-slider-handle,#RGBController_white .ui-widget-header, #RGBController_white .ui-state-default { background-image:url(\'\'); background-color: $1 !important; }';
 			code = code.replace(re, subst);
 			}
+		// bootstrap fixes
+		re = /btn-default/g;
+		var subst = 'btn-secondary';
+		code = code.replace(re, subst);
+		
 		return code;
 	};
 
@@ -2945,9 +2950,7 @@ var UIManager  = ( function( window, undefined ) {
 			altuiid: device.altuiid,
 			controllerid: MultiBox.controllerOf(device.altuiid).controller,
 		});
-		// set_set_panel_html_callback(function(html) {
-			// $(domparent).html(html);
-		// });
+
 		try {
 			var result = eval( func+"("+device.id+")" );	// we need the real VERA box ID here
 		}
@@ -2962,31 +2965,6 @@ var UIManager  = ( function( window, undefined ) {
 		function _prepareSceneGroupOffset( tab, control ) {
 			var h = $("#cpanel_after_init_container").height() || 0;
 			var offset={top:h, left:0 };
-			// var ctrlgroupid = control.ControlGroup;
-			// var ctrlgroup = null;
-			// $.each(tab.ControlGroup, function(i,grp) {
-				// if (grp.id == ctrlgroupid) {
-					// ctrlgroup=grp;
-					// return false;
-				// }
-			// })
-			// if (ctrlgroup) {
-				// var scenegrpid = ctrlgroup.scenegroup;
-				// var scenegrp = null;
-				// $.each(tab.SceneGroup, function(i,scn) {
-					// if (scn.id==scenegrpid) {
-						// scenegrp=scn;
-						// offset.top = scn.top || 0;
-						// offset.left = scn.left || 0;
-						// return false;
-					// }
-				// });
-
-			// }
-			// offset = {
-				// top:offset.top*24,
-				// left:offset.top*80
-			// };
 			return offset;
 		};
 
@@ -3119,7 +3097,7 @@ var UIManager  = ( function( window, undefined ) {
 							var valueNow = MultiBox.getStatus( device, control.Display.Service, control.Display.Variable )
 							bActif = (valueToMatch==valueNow);
 						}
-						var button = $( "<button type='button' class='btn btn-sm btn-{1} altui-controlpanel-button'>{0}</button>".format(control.Label.text, bActif ? 'primary' : 'default'))
+						var button = $( "<button type='button' class='btn btn-sm btn-{1} altui-controlpanel-button'>{0}</button>".format(control.Label.text, bActif ? 'primary' : 'secondary'))
 							.appendTo( $(domparent) );
 
 						control.Display.Width = Math.max( control.Display.Width || 10 , $(button).outerWidth() );
@@ -9088,8 +9066,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			})
 			.on('click',".altui-delworkflow",function() {
 				var altuiid = $(this).prop('id');
-				WorkflowManager.deleteWorkflow(altuiid);
-				$(".altui-workflows-pane").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
+				DialogManager.confirmDialog(_T("Are you sure you want to delete workflow ({0})").format(altuiid),function(result) {
+					if (result==true) {
+						WorkflowManager.deleteWorkflow(altuiid);
+						$(".altui-workflows-pane").html( _drawWorkflows( WorkflowManager.getWorkflows() ) );
+					}
+				});
 			})
 			.on('click',".altui-editworkflow",function() {
 				var altuiid = $(this).prop('id');
