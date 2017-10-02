@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v1.92"
+local version = "v1.93"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -1900,7 +1900,7 @@ local htmlLayout = [[
 		// -->
 	</script>
 	<div id="wrap"></div>
-	<footer id="footer"><hr><p class="text-center"><small id="altui-footer"><span class="bg-danger">Waiting Initial Data</span></small></p><span id="debug"></span></footer>
+	<footer class="bg-light" id="footer"><hr class="m-0"><p class="text-center m-1"><small id="altui-footer"><span class="bg-danger">Waiting Initial Data</span></small></p><span id="debug"></span></footer>
 </body>
 </html>
 ]]

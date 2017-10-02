@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2148 $";
+var ALTUI_revision = "$Revision: 2151 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -48,6 +48,7 @@ var _HouseModes = [];
 var deviceModalTemplate = "";
 var deviceActionModalTemplate = "";
 var defaultDialogModalTemplate = "";
+var simul = null;	// global D3 forceSimulation
 
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
 var houseModeButtonTemplate = "	 <button type='button' class='btn btn-light altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";
@@ -98,273 +99,7 @@ $.get("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/va
 	glyphList = $.map( data.split('\n').filter( function(line) {return line.substr(0,7)=="@fa-var"} ), function(line,idx) { return line.split(':')[0].substr(8) } )
 })
 
-/*
-[
-	'adjust',
-	'alert',
-	'align-center',
-	'align-justify',
-	'align-left',
-	'align-right',
-	'apple',
-	'arrow-down',
-	'arrow-left',
-	'arrow-right',
-	'arrow-up',
-	'asterisk',
-	'baby-formula',
-	'backward',
-	'ban-circle',
-	'barcode',
-	'bed',
-	'bell',
-	'bishop',
-	'bitcoin',
-	'blackboard',
-	'bold',
-	'book',
-	'bookmark',
-	'briefcase',
-	'btc',
-	'bullhorn',
-	'calendar',
-	'camera',
-	'cd',
-	'certificate',
-	'check',
-	'chevron-down',
-	'chevron-left',
-	'chevron-right',
-	'chevron-up',
-	'circle-arrow-down',
-	'circle-arrow-left',
-	'circle-arrow-right',
-	'circle-arrow-up',
-	'cloud',
-	'cloud-download',
-	'cloud-upload',
-	'cog',
-	'collapse-down',
-	'collapse-up',
-	'comment',
-	'compressed',
-	'console',
-	'copy',
-	'copyright-mark',
-	'credit-card',
-	'cutlery',
-	'dashboard',
-	'download',
-	'download-alt',
-	'duplicate',
-	'earphone',
-	'edit',
-	'education',
-	'eject',
-	'envelope',
-	'equalizer',
-	'erase',
-	'eur',
-	'euro',
-	'exclamation-sign',
-	'expand',
-	'export',
-	'eye-close',
-	'eye-open',
-	'facetime-video',
-	'fast-backward',
-	'fast-forward',
-	'file',
-	'film',
-	'filter',
-	'fire',
-	'flag',
-	'flash',
-	'floppy-disk',
-	'floppy-open',
-	'floppy-remove',
-	'floppy-save',
-	'floppy-saved',
-	'folder-close',
-	'folder-open',
-	'font',
-	'forward',
-	'fullscreen',
-	'gbp',
-	'gift',
-	'glass',
-	'globe',
-	'grain',
-	'hand-down',
-	'hand-left',
-	'hand-right',
-	'hand-up',
-	'hdd',
-	'hd-video',
-	'header',
-	'headphones',
-	'heart',
-	'heart-empty',
-	'home',
-	'hourglass',
-	'ice-lolly',
-	'ice-lolly-tasted',
-	'import',
-	'inbox',
-	'indent-left',
-	'indent-right',
-	'info-sign',
-	'italic',
-	'jpy',
-	'king',
-	'knight',
-	'lamp',
-	'leaf',
-	'level-up',
-	'link',
-	'list',
-	'list-alt',
-	'lock',
-	'log-in',
-	'log-out',
-	'magnet',
-	'map-marker',
-	'menu-down',
-	'menu-hamburger',
-	'menu-left',
-	'menu-right',
-	'menu-up',
-	'minus',
-	'minus-sign',
-	'modal-window',
-	'move',
-	'music',
-	'new-window',
-	'object-align-bottom',
-	'object-align-horizontal',
-	'object-align-left',
-	'object-align-right',
-	'object-align-top',
-	'object-align-vertical',
-	'off',
-	'oil',
-	'ok',
-	'ok-circle',
-	'ok-sign',
-	'open',
-	'open-file',
-	'option-horizontal',
-	'option-vertical',
-	'paperclip',
-	'paste',
-	'pause',
-	'pawn',
-	'pencil',
-	'phone',
-	'phone-alt',
-	'picture',
-	'piggy-bank',
-	'plane',
-	'play',
-	'play-circle',
-	'plus',
-	'plus-sign',
-	'print',
-	'pushpin',
-	'qrcode',
-	'queen',
-	'question-sign',
-	'random',
-	'record',
-	'refresh',
-	'registration-mark',
-	'remove',
-	'remove-circle',
-	'remove-sign',
-	'repeat',
-	'resize-full',
-	'resize-horizontal',
-	'resize-small',
-	'resize-vertical',
-	'retweet',
-	'road',
-	'rub',
-	'ruble',
-	'save',
-	'saved',
-	'save-file',
-	'scale',
-	'scissors',
-	'screenshot',
-	'sd-video',
-	'search',
-	'send',
-	'share',
-	'share-alt',
-	'shopping-cart',
-	'signal',
-	'sort',
-	'sort-by-alphabet',
-	'sort-by-alphabet-alt',
-	'sort-by-attributes',
-	'sort-by-attributes-alt',
-	'sort-by-order',
-	'sort-by-order-alt',
-	'sound-5-1',
-	'sound-6-1',
-	'sound-7-1',
-	'sound-dolby',
-	'sound-stereo',
-	'star',
-	'star-empty',
-	'stats',
-	'step-backward',
-	'step-forward',
-	'stop',
-	'subscript',
-	'subtitles',
-	'sunglasses',
-	'superscript',
-	'tag',
-	'tags',
-	'tasks',
-	'tent',
-	'text-background',
-	'text-color',
-	'text-height',
-	'text-size',
-	'text-width',
-	'th',
-	'th-large',
-	'th-list',
-	'thumbs-down',
-	'thumbs-up',
-	'time',
-	'tint',
-	'tower',
-	'transfer',
-	'trash',
-	'tree-conifer',
-	'tree-deciduous',
-	'triangle-bottom',
-	'triangle-left',
-	'triangle-right',
-	'triangle-top',
-	'unchecked',
-	'upload',
-	'usd',
-	'user',
-	'volume-down',
-	'volume-off',
-	'volume-up',
-	'warning-sign',
-	'wrench',
-	'xbt',
-	'yen',
-	'zoom-in',
-	'zoom-out'
-]
-*/
+
 var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
 var smallbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
 var buttonTemplate		= "<button id='{0}' type='button' class='{1} btn btn-{3}' aria-label='tbd' title='{4}'>{2}</button>";
@@ -388,17 +123,17 @@ var styles ="						\
 	  /* Margin bottom by footer height */		\
 	  /* margin-bottom: 140px;	*/				\
 	}				\
+	footer {		\
+		position: absolute;	\
+		bottom: 0px;	\
+		left : 0px;	\
+		right: 0px;	\
+	}				\
 	#wrap {				\
 	}					\
 	#filler {			\
 		height: 140px;	\
 	}					\
-	footer {					\
-	  position: absolute;		\
-	  bottom: 0;				\
-	  width: 100%;				\
-	  z-index: -1;				\
-	}							\
 	@-webkit-keyframes blinker {	\
 	  50% { opacity: 0.0; }	\
 	}	\
@@ -1222,7 +957,7 @@ var UIManager  = ( function( window, undefined ) {
 	// in English, we will apply the _T() later, at display time
 	var _userOptions = [
 		{ id:'ShowVideoThumbnail', type:'checkbox', label:"Show Video Thumbnail in Local mode", _default:1, help:'In Local access mode, show camera in video stream mode' },
-		{ id:'FixedLeftButtonBar', type:'checkbox', label:"Left Buttons are fixed on the page", _default:1, help:'choose whether or not the selection Buttons on the left are scrolling with the page' },
+		//{ id:'FixedLeftButtonBar', type:'checkbox', label:"Left Buttons are fixed on the page", _default:1, help:'choose whether or not the selection Buttons on the left are scrolling with the page' },
 		{ id:'ShowWeather', type:'checkbox', label:"Show Weather on home page", _default:1, help:'display or not the weather widget on home page' },
 		{ id:'ShowHouseMode', type:'checkbox', label:"Show House Mode on home page", _default:1, help:'display or not the House mode widget on home page' },
 		{ id:'UseVeraFavorites', type:'checkbox', label:"Use Vera Favorites", _default:0, help:'use the same favorites as set on your VERA box but prevent to have different favorites per client device' },
@@ -4141,14 +3876,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 	function _refreshFooterSize() {
 		if ( MyLocalStorage.getSettings('StickyFooter')==1 ) {
-			$("#wrap")
-					.css("width","100%")
-					.css("overflow-y","auto")
-					.css("overflow-x","hidden")
-					.css("position","absolute")
-					.css("top",$(".navbar-fixed-top").outerHeight(true))
+			$("footer").css("position","sticky").css("bottom",0).css("z-index",99)
+			// $("#wrap")
+					// .css("width","100%")
+					// .css("overflow-y","auto")
+					// .css("overflow-x","hidden")
+					// .css("position","absolute")
+					// .css("top","0")
+					//.css("top",$("#navbar").outerHeight(true))
 					// .css("padding-top",$(".navbar-fixed-top").outerHeight(true)) //$(".navbar-fixed-top").outerHeight(true))
-					.css("bottom",$("footer").outerHeight(true))
+					// .css("bottom",$("footer").outerHeight(true))
 					// .css("max-height",window.innerHeight-$("footer").height() - $(".navbar-fixed-top").outerHeight(true));
 		} else {
 			$("body").css("margin-bottom",$("footer").outerHeight(true));
@@ -4198,7 +3935,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 				var footerTemplate =  MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "FooterBranding" )
-					|| "<p>${appname} ${luaversion}.${jsrevision}, ${copyright} 2017 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></p><span>${paypal}</span><span id='altui-osstats'></span>";
+					|| "<span>${appname} ${luaversion}.${jsrevision}, ${copyright} 2017 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></span><span>${paypal}</span><span id='altui-osstats'></span>";
 				var tmpl = _.template(footerTemplate.trim());
 				var footerstr =tmpl( footerMap )
 
@@ -6012,7 +5749,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$(".altui-back").off().on('click',function(e) {
 			window.history.go(-1)
 		});
-
+		
+		// kill D3 forceSimulation if it exists
+		if (simul != null) {
+			simul.stop() 
+			simul=null
+		}
 	},
 
 	//window.open("data_request?id=lr_ALTUI_Handler&command=home","_self");
@@ -12415,7 +12157,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			//Set up the force layout
 			data = _prepareDataParents( );
 			
-			var simul = d3.forceSimulation( data.nodes ) 
+			simul = d3.forceSimulation( data.nodes ) 
 						.on("tick", function () {
 							// avoid asynchronous tick when the user changed the page
 							// this crashed d3
@@ -12728,7 +12470,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 			//Set up the force layout
 			data = _prepareDataRoutes( );
-			var simul = d3.forceSimulation() 
+			simul = d3.forceSimulation() 
 				.on("tick", function () {
 					// avoid asynchronous tick when the user changed the page
 					// this crashed d3
