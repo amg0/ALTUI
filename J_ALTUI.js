@@ -88,9 +88,8 @@ function findDeviceIP(deviceID)
 //-------------------------------------------------------------
 // Device TAB : Donate
 //-------------------------------------------------------------	
-function altui_Donate(deviceID) {
-	var htmlDonate='For those who really like this plugin and feel like it, you can donate what you want here on Paypal. It will not buy you more support not any garantee that this can be maintained or evolve in the future but if you want to show you are happy and would like my kids to transform some of the time I steal from them into some <i>concrete</i> returns, please feel very free ( and absolutely not forced to ) to donate whatever you want.  thank you ! ';
-	htmlDonate+='<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"><input type="hidden" name="cmd" value="_donations"><input type="hidden" name="business" value="alexis.mermet@free.fr"><input type="hidden" name="lc" value="FR"><input type="hidden" name="item_name" value="Alexis Mermet"><input type="hidden" name="item_number" value="ALTUI"><input type="hidden" name="no_note" value="0"><input type="hidden" name="currency_code" value="EUR"><input type="hidden" name="bn" value="PP-DonationsBF:btn_donateCC_LG.gif:NonHostedGuest"><input type="image" src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1"></form>';
+function altui_License(deviceID) {
+	var htmlDonate='ALTUI is a sofrware as a service model, it can be used freely for non commercial useage but some features are limited to the licensed user. once ALTUI is installed you can go to ALTUI License page for subscribing to ALTUI';
 	var html = '<div>'+htmlDonate+'</div>';
 	set_panel_html(html);
 }

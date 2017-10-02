@@ -303,14 +303,14 @@
 	},
 	{
 		"Label": {
-			"lang_tag": "donate",
-			"text": "Donate"
+			"lang_tag": "license",
+			"text": "License"
 		},
 		"TopNavigationTab": "1",
 		"Position": "7",
 		"TabType": "javascript",
 		"ScriptName": "J_ALTUI.js",
-		"Function": "altui_Donate"
+		"Function": "altui_License"
 	}
 ],
   "sceneList": {

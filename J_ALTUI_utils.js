@@ -2657,7 +2657,11 @@ var WorkflowManager = (function() {
 		$.each(workflows,  function(i,w) {
 			w = $.extend( {}, _def_workflow, w);
 			delete w.active_states;
-			
+			$.each(w.graph_json.cells.filter( function(c) { return c.type == "fsa.Arrow" } ), function(idx,l) {
+				// selector field seems useless and sometime corrupted ( &gt; instead of > ) so we remove it
+				if (l.source.selector)
+					delete l.source.selector
+			})
 			// if not compacted, compact it
 			// if already string, do not touch it
 			if ($.isPlainObject(_workflows[i].graph_json))

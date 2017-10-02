@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2146 $";
+var ALTUI_revision = "$Revision: 2148 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1636,7 +1636,7 @@ var UIManager  = ( function( window, undefined ) {
 
 	function _generateNavBarHTML() {	
 		var html = `
-		<nav id="navbar" class="navbar navbar-expand-md navbar-light bg-light">
+		<nav id="navbar" class="navbar navbar-expand-md navbar-dark bg-primary">
 		  <a class="navbar-brand" href="#"><div class='imgLogo'></div></a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -6422,7 +6422,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	{
 		//{1} : 192.168.1.16/localcdn
 		var timer = null;
-		var template =	"<div class='col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2'>"+
+		var template =	"<div class='col-12 col-sm-6 col-md-4 col-lg-3'>"+
 							"<div class='altui-myhome-panel card xxx'>"+
 								"<div class='altui-myhome-room card-body' data-altuiid='${altuiid}'>"+
 										"<div class='altui-myhome-roomimg altui-myhome-transparent' style='background-image: url({1}/${file}.jpg),url({2})'></div>"+
@@ -6583,7 +6583,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 			// clear all
 			$(".altui-mainpanel").html("").prepend(
-			"<div class='row'>{0}</div>".format(UIManager.breadCrumb(model.breadcrumb,model.title)) )
+			"<div class='row'><div class='col'>{0}</div></div>".format(UIManager.breadCrumb(model.breadcrumb,model.title)) )
 
 			// prepare the template
 			var tmpl = _.template( template.format(model.overlay, g_ALTUI.g_CustomImagePath,model.defaulturi) )
@@ -7698,7 +7698,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		UIManager.clearPage('Workflow Report',_T("Workflow Report"),UIManager.oneColumnLayout);
 		var html = "";
 		html += "<div class='col-12'><div id='altui-workflow-report'>";
-		html += HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow )
+		html += HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow, 'col-12' )
 		html += "<div class='card xxx'>"
 			html += "<div class='card-body'>"
 				html += _displayWorkflowHeader(workflow)
@@ -8559,7 +8559,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			PageMessage.message( "Workflow mode is not enabled on your ALTUI device", "warning");
 		}
 
-		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow ) );
+		$(".altui-workflow-toolbar").replaceWith( HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _toolsWorkflow,' col-12' ) );
 
 
 		$(".altui-mainpanel").append("<div class='col-12'><div id='altui-workflow-canvas'></div></div>");
@@ -10296,7 +10296,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						groups.add({id: k, content: v.name});
 				});
 				var html = "<div class='col-12' id='visualization'>"
-					html += HTMLUtils.drawToolbar( 'altui-timeline-toolbar', _toolsTimeline )
+					html += HTMLUtils.drawToolbar( 'altui-timeline-toolbar', _toolsTimeline,' col-12' )
 				html +="</div>";
 
 				$(".altui-mainpanel").append(html)
@@ -13852,7 +13852,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageThemes: function() {
 		UIManager.clearPage('Themes',_T("Themes"),UIManager.oneColumnLayout);
 		PageMessage.message( "Select a theme by clicking on it and refresh your browser", "info");
-		var resetButton = buttonTemplate.format( "altui-theme-reset", 'btn-light', _T("Reset"),"default",_T('Reset Theme Override'));
+		var resetButton = buttonTemplate.format( "altui-theme-reset", 'btn-secondary', _T("Reset"),"",_T('Reset Theme Override'));
 		var html = "";
 		html += "<div class='col-12'>";
 		html +="<div class='card xxx'>";
@@ -13867,10 +13867,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$.getJSON( "https://bootswatch.com/api/3.json", function( data ) {
 			$.each(data.themes,function(idx,theme) {
 				var html ="";
+				theme.cssCdn = theme.cssCdn.replace("maxcdn.bootstrapcdn.com/bootswatch/latest/","bootswatch.com/4-alpha/")
+				theme.preview = theme.preview.replace("bootswatch.com/","bootswatch.com/4-alpha/")
+				theme.thumbnail = theme.thumbnail.replace("bootswatch.com/","bootswatch.com/4-alpha/")
 				html += "<div class='altui-theme-thumbnail col-6 col-md-4 col-lg-3 col-xl-2' data-preview='{1}' data-href='{0}'>".format(theme.cssCdn,theme.preview);
 				html += "<label class='altui-theme-label'>{0} {1}</label>".format(
 					theme.description,
-					xsbuttonTemplate.format( '', 'altui-theme-preview', "<span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>",_T('Preview'))
+					xsbuttonTemplate.format( '', 'altui-theme-preview', eyeOpenGlyph,_T('Preview'))
 					);
 				html += "<img width='100%' src='{0}'></img>".format(theme.thumbnail);
 				html +="</div>";	//col-12
@@ -14355,7 +14358,7 @@ $(function() {
 		calendarGlyph=glyphTemplate.format( "calendar",	 _T("History"), "" );
 		refreshGlyph=glyphTemplate.format( "refresh", _T("Refresh"), "text-warning" );
 		removeGlyph=glyphTemplate.format( "remove", _T("Remove"), "" );
-		loadGlyph = glyphTemplate.format( "open", _T("Load") , "");
+		loadGlyph = glyphTemplate.format( "folder-open", _T("Load") , "");
 		infoGlyph = glyphTemplate.format( "info", _T("Info") , "text-info");
 		picGlyph = glyphTemplate.format( "picture-o", _T("Image") , "");
 		upGlyph = glyphTemplate.format( "arrow-up", _T("More") , "");
@@ -14364,7 +14367,7 @@ $(function() {
 		runGlyph = glyphTemplate.format( "play", _T("Run Scene") , "");
 		editGlyph = glyphTemplate.format( "pencil", _T("Edit") , "");
 		recordGlyph = glyphTemplate.format( "video-camera", _T("Record") , "text-danger");
-		eyeOpenGlyph = glyphTemplate.format( "eye-open", _T("See") , "");
+		eyeOpenGlyph = glyphTemplate.format( "eye", _T("See") , "");
 		cameraGlyph = glyphTemplate.format( "video-camera", _T("Camera") , "");
 		onoffGlyph = glyphTemplate.format( "power-off", _T("On Off") , "");
 		scaleGlyph = glyphTemplate.format( "tachometer", _T("Gauge") , "");
