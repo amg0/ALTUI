@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2151 $";
+var ALTUI_revision = "$Revision: 2152 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -123,6 +123,9 @@ var styles ="						\
 	  /* Margin bottom by footer height */		\
 	  /* margin-bottom: 140px;	*/				\
 	}				\
+	.btn-xs { \
+		font-size: .700rem; \
+	} \
 	footer {		\
 		position: absolute;	\
 		bottom: 0px;	\
@@ -861,10 +864,11 @@ var styles ="						\
 	}\
 	.altui-device-icon {			\
 		cursor: pointer;	\
-		margin-left: 0px;	\
+		margin-left: 1px;	\
 		margin-right: 0px;	\
+		margin-top: 2px;	\
+		margin-bottom: 2px;	\
 		height: 50px;		\
-		margin-top: 1px;	\
 		width: 50px;		\
 	}						\
 	.altui-oscommand-configtbl th {		\

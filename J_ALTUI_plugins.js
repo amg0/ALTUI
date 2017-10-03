@@ -27,7 +27,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-watts, .altui-volts, .altui-countdown  {font-size: 16px;}";
 		style += ".altui-watts-unit {font-size: 12px;}";
 		style += ".altui-temperature  {font-size: 16px;}";
-		style += ".altui-temperature-heater  {font-size: 12px;}";
+		style += ".altui-temperature-heater  {font-size: 12px; white-space: pre;}";
 		style += ".altui-temperature-minor  {font-size: 8px;}";
 		style += ".altui-humidity, .altui-light  {font-size: 18px;}";
 		style += ".altui-motion {font-size: 22px;}";
@@ -39,7 +39,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-magenta { color:magenta;}";
 		style += ".altui-multiswitch-container { position:absolute; left:58px; right:16px; } .altui-multiswitch-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-multiswitch-container .col-3 { padding-left:1px; padding-right:1px; }  .altui-multiswitch-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
 		style += ".altui-heater-container { position:absolute; left:71px; right:16px; } .altui-heater-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-heater-container .col-3 { padding-left:1px; padding-right:1px; text-align:center;}  .altui-heater-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
-		style += ".altui-heater-container select.form-control-sm { height:22px; padding:0;}"; 
+		style += ".altui-heater-container select.form-control-sm { height:22px !important; padding:0;}"; 
 		style += ".altui-weather1-day1 { position:absolute; bottom:0px; right:0px; transform: scale(0.5,0.5); }";
 		style += ".altui-cyan { color:cyan;}";
 		style += ".altui-countdown-btngrp,.altui-countdown-btngrp-mute  { margin-top:13px;}";
@@ -1154,7 +1154,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	var CD_restart = glyphTemplate.format( "fast-backward", _T("Restart") , "");
 	var CD_cancel = glyphTemplate.format( "stop", _T("Cancel") , "");
 	var CD_force = glyphTemplate.format( "bell", _T("Force") , "");
-	var CD_mute = glyphTemplate.format( "ban-circle", _T("Muted") , "");
+	var CD_mute = glyphTemplate.format( "microphone-slash", _T("Muted") , "");
 	var CD_unmute = glyphTemplate.format( "bullhorn", _T("Unmuted") , "");
 	
 	function _drawMuteButton(device,cls) {
@@ -1307,13 +1307,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		html += "<div class='altui-multiswitch-container pull-right'>";
 		for (var line=0; line<2 ; line++) {
-			html += "<div class='row'>";
+			html += "<div class='row p-0'>";
 			for (var col=0; col<4; col ++) {
 				var name = names[btnid] ? names[btnid] : ("Btn_"+(btnid+1));
 				var status = parseInt(MultiBox.getStatus(device,"urn:dcineco-com:serviceId:MSwitch1","Status"+(btnid+1)));
 
 				html += "<div class='col-3'>";
-				html+= ("<button id='{0}' data-btnid='{0}' type='button' class='altui-multiswitch-open altui-multiswitch-open-{3} btn btn-light btn-sm {2}' >{1}</button>".format( 
+				html+= ("<button id='{0}' data-btnid='{0}' type='button' class='m-0 p-0 altui-multiswitch-open altui-multiswitch-open-{3} btn btn-light btn-sm {2}' >{1}</button>".format( 
 					btnid ,
 					name  ,
 					(status==1) ? 'btn-info' : '',
