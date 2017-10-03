@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2152 $";
+var ALTUI_revision = "$Revision: 2153 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3829,7 +3829,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			if ($("#wrap #altui-license").length==0) {
 				// rotating license message
 				var close = "<button class='close altui-pagemessage-close' type='button' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-				$("body nav").after("<blockquote id='altui-license' class='blockquote'><p class='text-warning'>{0}.({1}){2}</p></blockquote>".format(
+				$("body nav").after("<blockquote id='altui-license' class='w-75 blockquote'><p class='text-warning'>{0}.({1}){2}</p></blockquote>".format(
 					_T("Unregistered version for {0}").format(res.license.name),
 					(res.license.date!=null) ? res.license.date : '',
 					close
@@ -3934,7 +3934,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				footerMap.curusername = curuser ? curuser.Name : '';
 
 				usdGlyph = glyphTemplate.format( "usd", _T("License") , 'text-warning');
-				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-light', "{0} {1}".format(usdGlyph,_T("License")),'secondary',_T("License"));
+				footerMap.paypal = buttonTemplate.format( "altui-license-page", 'btn-sm btn-light', "{0} {1}".format(usdGlyph,_T("License")),'secondary',_T("License"));
 
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
