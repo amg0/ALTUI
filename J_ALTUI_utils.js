@@ -5217,25 +5217,25 @@ var PageMessage = (function(window, undefined ) {
 		}, 5000 );
 	};
 
-	function _init(breadcrumb) {
-var Html=`
-<div id='altui-pagemessage' class='col-12'>
-	<form class='form-inline'>
-	{0}
-	<button id="altui-toggle-messages" class="btn btn-light" type="button" data-toggle="collapse" data-target="#altui-pagemessage-panel" aria-expanded="false" aria-controls="collapseExample">
-	{1} <i class="fa fa-caret-down" aria-hidden="true"></i>
-	</button>
-	{2}
-	</form>
-	<div class="collapse" id="altui-pagemessage-panel">
-		<div class="card card-body">
-		<table class='table table-responsive table-sm table-responsive'>
-		<tbody></tbody>
-		</div>
-	</div>
-</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml())
+	function _init(breadcrumb,cls) {
+		var Html=`
+		<div id='altui-pagemessage' class='{3}'>
+			<form class='form-inline'>
+			{0}
+			<button id="altui-toggle-messages" class="btn btn-light" type="button" data-toggle="collapse" data-target="#altui-pagemessage-panel" aria-expanded="false" aria-controls="collapseExample">
+			{1} <i class="fa fa-caret-down" aria-hidden="true"></i>
+			</button>
+			{2}
+			</form>
+			<div class="collapse" id="altui-pagemessage-panel">
+				<div class="card card-body">
+				<table class='table table-responsive table-sm table-responsive'>
+				<tbody></tbody>
+				</div>
+			</div>
+		</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml(),cls||"")
 		
-		$("#altui-pagetitle").before( Html );
+		$("#altui-pagemessage").html(  Html );
 		// close button for pageMessages
 		$( document )
 			.off( "click", ".altui-pagemessage-close")

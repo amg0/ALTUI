@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2157 $";
+var ALTUI_revision = "$Revision: 2158 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5700,8 +5700,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var body="";
 		body+="	<div class='altui-layout row'>";
 		body+="		<div class='col-12'>";
-		body+="			<div class='row'><h4 id='altui-pagetitle' class='col-12'>"+title+"</h4></div>";
-		body+="			<div class='altui-mainpanel row'></div>";
+		body+="			<div class='row'><span class='col-12' id='altui-pagemessage'></span><h4 id='altui-pagetitle' class='col-12'>"+title+"</h4></div>";
+		body+="			<div class='row altui-mainpanel'></div>";
 		body+="		</div>";
 		body+="	</div>";
 		return body;
@@ -5715,8 +5715,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		body+="			</div>";
 		body+="		</div>";
 		body+="		<div class='col-sm-10'>";
-		body+="			<h3 id='altui-pagetitle' >"+title+"</h3>";
-		body+="			<div class='altui-mainpanel row'>";
+		body+="			<div class='row'><span class='col-12' id='altui-pagemessage'></span><h3 class='col-12' id='altui-pagetitle' >"+title+"</h3></div>";
+		body+="			<div class='altui-mainpanel row'></div>";
 		body+="			</div>";
 		body+="		</div>";
 		body+="	</div>";
@@ -6718,7 +6718,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						_drawDevices(deviceFilter,false);	// do not redraw toolbar
 					};
 					// Display
-					$(".altui-device-toolbar").replaceWith( "<div class='altui-device-toolbar'>"+roomfilterHtml+categoryfilterHtml+filterHtml+"</div>" );
+					$(".altui-device-toolbar").replaceWith( "<div class='col-12 altui-device-toolbar'>"+roomfilterHtml+categoryfilterHtml+filterHtml+"</div>" );
 					$('#altui-device-room-filter').multiselect({
 						disableIfEmpty: true,
 						enableHTML : true,
@@ -6864,7 +6864,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		// Page Preparation
 		UIManager.clearPage('Devices',_T("Devices"),UIManager.twoColumnLayout);
-		$("#altui-pagetitle").css("display","inline").after("<div class='altui-device-toolbar'></div>");
+		$("#altui-pagetitle").css("display","inline").after("<div class='col-12 altui-device-toolbar'></div>");
 
 		// Dialogs
 		DialogManager.registerDialog('deviceCreateModal', _deviceCreateModalHtml() );
@@ -7067,7 +7067,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				toolbarHtml+="	<button type='button' class='btn btn-light' id='altui-scene-create-fromstate' >";
 				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create From State"));
 				toolbarHtml+="	</button>";
-				$(".altui-scene-toolbar").replaceWith( "<div class='altui-scene-toolbar'>"+toolbarHtml+"</div>" );
+				$(".altui-scene-toolbar").replaceWith( "<div class='col-12 altui-scene-toolbar'>"+toolbarHtml+"</div>" );
 
 				$("#altui-scene-create").click( function() {
 					UIControler.changePage('Scene Edit',[NULL_SCENE])
@@ -7260,7 +7260,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 
 		UIManager.clearPage('Scenes',_T("Scenes"));
-		$("#altui-pagetitle").css("display","inline").after("<div class='altui-scene-toolbar'></div>");
+		$("#altui-pagetitle").css("display","inline").after("<div class='col-12 altui-scene-toolbar'></div>");
 
 		// on the left, get the rooms
 		UIManager.leftnavRooms(
