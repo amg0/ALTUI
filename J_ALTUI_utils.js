@@ -1705,10 +1705,11 @@ var HTMLUtils = (function() {
 		});
 		return tbl.join(' ');
 	};
-	function _array2Table(arr,idcolumn,viscols,caption,cls,htmlid) {
+	function _array2Table(arr,idcolumn,viscols,caption,cls,htmlid,bResponsive) {
 		var html="";
 		var idcolumn = idcolumn || 'id';
 		var viscols = viscols || [idcolumn];
+		var responsive = ((bResponsive==null) || (bResponsive==true)) ? 'table-responsive' : ''
 		// html+="<div class='col-12'>";
 		if ( (arr) && ($.isArray(arr) && (arr.length>0)) ) {
 			var display_order = [];
@@ -1725,7 +1726,7 @@ var HTMLUtils = (function() {
 			});
 			
 			var bFirst=true;
-			html+="<table id='{1}' class='table table-responsive table-sm table-hover table-striped {0}'>".format(cls || '', htmlid || 'altui-grid' );
+			html+="<table id='{1}' class='table {2} table-sm table-hover table-striped {0}'>".format(cls || '', htmlid || 'altui-grid' , responsive );
 			if (caption)
 				html += "<caption>{0}</caption>".format(caption)
 			$.each(arr, function(idx,obj) {

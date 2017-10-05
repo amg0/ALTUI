@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2159 $";
+var ALTUI_revision = "$Revision: 2160 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -100,8 +100,8 @@ $.get("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/va
 })
 
 
-var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
-var smallbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";
+var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}' {4}>{2}</button>";
+var smallbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}' {4}>{2}</button>";
 var buttonTemplate		= "<button id='{0}' type='button' class='{1} btn btn-{3}' aria-label='tbd' title='{4}'>{2}</button>";
 var buttonDebugHtml = "<button type='button' class='btn btn-light' id='altui-debug-btn' >Debug<span class='caret'></span></button>";
 var cameraURI="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAACylBMVEUAAAD///+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Qjo+Rj5CSkJGTkZKTkpOUkpOVk5SWlJWXlZaXlpaYlpeZl5iamJmbmZqbmpqcmpudm5ydnJ2enJ2enZ2fnp6gnp+hn6CioKGioaGjoaKlo6SlpKWmpKWnpaaopqeop6iqqKmqqamrqqusqquvra6vrq+xr7CysLGysbKzsrO0s7O1s7S1tLS1tLW2tbW4tre8uru+vb2/vr7Av7/Av8DBwMHCwcHDwsPEw8PEw8TFxMTGxcbHxsbHxsfIx8fLysrLysvMy8zOzc7Pzs7Pzs/Q0NDR0NDR0NHS0dHS0dLV1NXX1tbX19fZ2NjZ2Nna2drb29vc29vc3Nzd3Nze3t7f3t7g4ODh4ODh4OHh4eHi4eLi4uLk4+Pk5OTl5eXn5+fo6Ojp6Onr6urr6+vs7Ozt7O3t7e3u7u7v7+/w7/Dy8fHy8vLz8/P09PT19PT19fX39/f4+Pj5+fn6+vr7+/v8+/v8/Pz9/f3+/v7///9IOpZmAAAAdHRSTlMAAAECAwUGCAkKDQ8QERITFhsdHiAhIiUmJygpLC4wMjU2ODtAQUNES1VaXGFna3J0dXZ6e3x9f4GFh4iLjI6QkpWWnp+gp6mrrK6wsbO0t7/AwsbHyMrNz9DT2drb3N/j5Ojq7e7v8PHz9PX3+Pn6+/z9/kpZgkQAAALqSURBVEjH7df3UxNBFAfwEwOIICpVrERRsResoGIXwQJWiFiwYdeYJTQxKIgQuyhWLNgLYixYEBELiiA2lKBEoxIDkfc/GHcvwjhk74BxcBzeL9n9zvvkNrm9zYRpVIdiGnC9YcZoOYjWuONBbbAnQsimtnicHrf/77HzwMlzli5fLPLu26aG2Lz3XFRZs7sLaoBd5xOV/HIfGQRM4YsFIw2XzIW77EjCE5tN+r3ebVc3V1k9D2wyARkpHrifoTfsWMaLwoLMlAhD0IcTO60mnSEXS6Ho4Z3s91CaKiXREmsu7EMaZa9/3IvDo9jburfRJPTgwK1IW6Tyyx60/36JRpWVhHapi6NwuqIpHQ8l+IFGHp4FpB5FxJc+IXFPOvbHTYlwOiQXDFUgPQUHcD6Rii0kuCm7BJ3Rq0y5VJ6hf72AinNwHkTFbcnyNNeRCuAGHisA1CitjHzjFjTsglti4MRWgHJyg0O1APLDIMcTWxrujFt2QlIigIrdG0UASXthNx7b0bAQt2yB5AQAbSieSDUAOw7BdjyxpuHmZHdp05Aa4DKenAf4FpKqw++0jH6rFmCQo0SXACquRaENaRUAClSYh3M/Oh6Dmw7CydA3+ntUodFTeBd2BI7i3I2Ou5Av6dnXmI357B55JYv+XEBiezo2IVtMpipJQMfztFCWn4LiitWbcOrD9VS5kmvEKrWKSP0zjVDEle8f43Embsd5GHgRHX6zXJd/S5H+XKdLZ48Dd+6TxCqQ3Ryys4+Vnz48Pcc+zGiaKY8D0CGo2hNMZMnrJ9ZWVI31tWJ4YKG7ucVoyR907WCB9XAnLmw+CqFZjozz1KpUPN6REc5D6wY0pmLL6b+aV7o1YZyGzBRjucqvvw3TbASeeJtRsMCXvdbCQS0ZxtSxk0tHewHDtB4WzOZjKbhX5VIlMzy6dbBrYSfs4RlQ5RN0NY79EVd5GcdiThxoHHNatKguOLje8Pq6YPSXcMPfhH8Y/wRAzVyUx0VxdgAAAABJRU5ErkJggg==";
@@ -4182,6 +4182,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						break;
 					case "urn:schemas-micasaverde-com:device:WindowCovering:1"	:
 					case "urn:schemas-upnp-org:device:DimmableLight:1":
+					case "urn:schemas-upnp-org:device:DimmableRGBLight:1":
 						var status = parseInt(MultiBox.getStatus(device,"urn:upnp-org:serviceId:Dimming1","LoadLevelStatus") || 1);
 						MultiBox.runAction( device , "urn:upnp-org:serviceId:Dimming1", "SetLoadLevelTarget", {newLoadlevelTarget: ((status>0) ? 0 : 100) } );
 						break;
@@ -6163,23 +6164,60 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 
 	onDeviceIconError : function( altuiid ) {
-		// this.src = defaultIconSrc
-		// $(this).attr('src',defaultIconSrc);
 		$("div.altui-device[data-altuiid="+altuiid+"] img").attr('src',defaultIconSrc);
 	},
 
 	pageMyHome: function ( key, args )
 	{
 		function _tableScenes(room) {
+			//runGlyph = glyphTemplate.format( "play", _T("Run Scene") , "");
 			var scenes = MultiBox.getScenesSync().filter( function(scene) { return scene.room == room.id } );
-			var arr = $.map( scenes, function(s,i) { return {altuiid:s.altuiid, name:s.name} } )
-			return HTMLUtils.array2Table(arr,'altuiid',[],null,'cls','htmlid')
+			var arr = $.map( scenes, function(s,i) { 
+				return {
+					altuiid:s.altuiid, 
+					name:s.name,
+					run: smallbuttonTemplate.format( s.altuiid, 'altui-favorites-scene-content', runGlyph, _T("Run"), 'data-altuiid="{0}"'.format(s.altuiid) )
+				}
+			})
+			return HTMLUtils.array2Table(arr,'altuiid',[],null,'altui-myhome-scenes','htmlid',false)
+		}
+		
+		function _deviceIcon(device) {
+			return UIManager.deviceIcon(device)
+				.replace('altui-device-icon','w-50 h-50 altui-device-icon')
+				.replace('alt=\'','data-altuiid="{0}" alt=\''.format(device.altuiid))
+		}
+
+		function _deviceInfo(device) {
+			var str = ""
+			str = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' )
+			if (str)
+				return str + "%"
+			str = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' )
+			if (str)
+				return str + '&deg;'
+			str = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' )
+			if (str)
+				return str + 'W'
+			str = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' )
+			if (str)
+				return str
+			str = MultiBox.getStatus( device, 'urn:brultech-com:serviceId:PowerMeter1', 'Volts' )
+			if (str)
+				return str + 'V'
+			str = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","Armed")
+			if (str)
+				return (str==1) ? 'Armed' : ''
+			str = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:DoorLock1', 'Status' )
+			if (str)
+				return (str==1) ? 'Locked' : ''
+			return " " 
 		}
 		
 		function _tableDevices(room) {
-			var devices = MultiBox.getDevicesSync().filter( function(device) { return device.room == room.id } );
-			var arr = $.map( devices, function(d,i) { return {altuiid:d.altuiid, name:d.name} } )
-			return HTMLUtils.array2Table(arr,'altuiid',[],null,'cls','htmlid')
+			var devices = MultiBox.getDevicesSync().filter( function(device) { return (device.room == room.id) && (device.invisible != true) } );
+			var arr = $.map( devices, function(d,i) { return {altuiid:d.altuiid, name:d.name, " ":_deviceIcon(d), val:_deviceInfo(d)} } )
+			return HTMLUtils.array2Table(arr,'altuiid',[],null,'altui-myhome-devices','htmlid',false)
 		}
 		
 		UIManager.clearPage('Rooms',_T("Rooms"),UIManager.oneColumnLayout);
@@ -6202,6 +6240,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				  </div>
 				</div>`.format(g_ALTUI.g_CustomImagePath,defaulturi ) )
 			var html="";
+			rooms.push({name:_T("No Room"), altuiid:"0-0", id:0})
 			$.each(rooms, function(idx,room) {
 				var model = {
 					name: room.name,
@@ -6212,7 +6251,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				}
 				html += htmlTemplate(model)
 			})
+
 			$(".altui-mainpanel").html(html)
+			_registerFavoriteClickHandlers("altui-device-icon")
+			EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function (eventname,device) {
+				var jqelem = $(".altui-device-icon[data-altuiid={0}]".format(device.altuiid))
+				if (jqelem.length>0) {
+					$(jqelem).replaceWith(_deviceIcon(device))
+				}
+			})
 		})
 	},
 	
