@@ -721,13 +721,14 @@ var DialogManager = ( function() {
 			message || "")
 		);
 	};
-	function _genericDialog(message,title,buttons,cbfunc) {
+	function _genericDialog(message,pic,title,buttons,cbfunc) {
 		var result = false;
 		var dialog = DialogManager.registerDialog('dialogModal',
 						defaultDialogModalTemplate.format( 'dialogModal',
-								title, 	// title
-								message,							// body
-								""));								// size
+								title, 		// title
+								message,	// body
+								"",			// size
+								pic));		// icon
 		$.each(buttons,function(i,button) {
 			DialogManager.dlgAddDialogButton(dialog, button.isdefault, button.label, '', button.id , { 'data-dismiss':'modal'} );
 		});
@@ -754,13 +755,13 @@ var DialogManager = ( function() {
 	}
 	function _confirmDialog(message,cbfunc,buttons) {
 		var buttons = buttons || [{isdefault:true, label:_T("Yes")}];
-		var warningpic = "<div class='altui-warningicon pull-left'>{0}</div>".format(questionGlyph);
-		return _genericDialog(message,warningpic+_T("Are you Sure ?"),buttons,cbfunc)
+		var warningpic = "<div class='altui-exclamation-triangle-icon pull-left'>{0}</div>".format(questionGlyph);
+		return _genericDialog(message,warningpic,_T("Are you Sure ?"),buttons,cbfunc)
 	};
 	function _quickDialog(type,cls,title,message,cbfunc) {
 		var glyph = glyphTemplate.format( type, _T(type) , "text-"+type);
-		var header= "<div class='altui-{2}icon {3} pull-left'>{0}</div> {1}".format(glyph,title,type,cls);
-		return _genericDialog(message,header,[],cbfunc);
+		var pic= "<div class='altui-{1}-icon {2} pull-left'>{0}</div>".format(glyph,type,cls);
+		return _genericDialog(message,pic,title,[],cbfunc);
 	};
 	function _infoDialog(title,message,cbfunc) {
 		return _quickDialog("info-circle", "text-primary", title,message,cbfunc);

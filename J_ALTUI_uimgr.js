@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2163 $";
+var ALTUI_revision = "$Revision: 2165 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -441,10 +441,11 @@ var styles ="						\
 		padding-top:	1px;	\
 		padding-bottom: 1px;	\
 	}					\
-	.altui-warningicon, .altui-infoicon {	\
-		font-size: 25px;\
-		padding-left: 5px;		\
-		padding-right: 5px;		\
+	.altui-exclamation-triangle-icon, .altui-info-circle-icon {	\
+		font-size: 37px;	\
+		padding-left: 5px;	\
+		padding-right: 5px;	\
+		margin-top: -17px;	\
 	}					\
 	.altui-widget-frame-div , .solid-border {	\
 		border:1px solid;\
@@ -1420,13 +1421,13 @@ var UIManager  = ( function( window, undefined ) {
 			{0}
 			</ul>
 			<form class="form-inline m-0">
-			  <input id="altui-search-text" class="form-control col-6 p-1 " type="text" placeholder="Search" aria-label="Search">
-			  <button id="altui-search" class="btn btn-outline-success col-4 p-1" type="submit">Search</button>
+			  <input id="altui-search-text" class="form-control col-6 p-1 " type="text" placeholder="{1}" aria-label="{1}">
+			  <button id="altui-search" class="btn btn-outline-success col-4 p-1" type="submit">{1}</button>
 			</form>
 		  </div>
 		</nav>
 		`
-		return html.format( UIControler.generateMenu() );
+		return html.format( UIControler.generateMenu(),_T("Search") );
 	};
 	
 	//---------------------------------------------------------
@@ -14212,28 +14213,28 @@ $(function() {
 		deviceActionModalTemplate += "	</div><!-- /.modal-dialog -->";
 		deviceActionModalTemplate += "</div><!-- /.modal -->";
 
-		// 0:id 1: title, 2: body, 3: class size
-		defaultDialogModalTemplate = "<div id='{0}' class='modal fade'>";
-		defaultDialogModalTemplate += "	 <div class='modal-dialog {3}'>";
-		defaultDialogModalTemplate += "	   <form name='{0}' class='form' data-toggle='validator' onsubmit='return false;'>";
-		defaultDialogModalTemplate += "	   <div class='modal-content'>";
-		defaultDialogModalTemplate += "		 <div class='modal-header'>";
-		defaultDialogModalTemplate += "		   <h5 class='modal-title'>{1} </h5>";
-		defaultDialogModalTemplate += "		   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-		defaultDialogModalTemplate += "		 </div>";
-		defaultDialogModalTemplate += "		 <div class='modal-body'>";
-		defaultDialogModalTemplate += "		 <div class='row-fluid'>";
-		defaultDialogModalTemplate += "		 {2}";
-		defaultDialogModalTemplate += "		 </div>";
-		defaultDialogModalTemplate += "		 </div>";
-		defaultDialogModalTemplate += "		 <div class='modal-footer'>";
-		defaultDialogModalTemplate += "		   <button type='button' class='btn btn-light' data-dismiss='modal'>"+_T("Close")+"</button>";
-		// defaultDialogModalTemplate += "		  <button type='submit' class='btn btn-primary'>{3}</button>";
-		defaultDialogModalTemplate += "		 </div>";
-		defaultDialogModalTemplate += "	   </div><!-- /.modal-content -->";
-		defaultDialogModalTemplate += "	   </form>";
-		defaultDialogModalTemplate += "	 </div><!-- /.modal-dialog -->";
-		defaultDialogModalTemplate += "</div><!-- /.modal -->";
+		// 0:id 1: title, 2: body, 3: class size 4:icon
+		defaultDialogModalTemplate = 
+`<div id='{0}' class='modal fade'>
+	 <div class='modal-dialog {3}'>
+	   <form name='{0}' class='form' data-toggle='validator' onsubmit='return false;'>
+	   <div class='modal-content'>
+		 <div class='modal-header'>
+		   <div class='modal-title'>{4}<h5 class='d-inline-block'>{1}</h5> </div>
+		   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+		 </div>
+		 <div class='modal-body'>
+		 <div class='row-fluid'>
+		 {2}
+		 </div>
+		 </div>
+		 <div class='modal-footer'>
+		   <button type='button' class='btn btn-light' data-dismiss='modal'>`+_T("Close")+`</button>
+		 </div>
+	   </div><!-- /.modal-content -->
+	   </form>
+	 </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->`
 
 	//"<span class='glyphicon glyphicon-search' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Search'></span>"
 		staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );

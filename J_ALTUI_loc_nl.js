@@ -472,7 +472,8 @@ Localization.init( {
 	"Unmuted":"Unmuted",
 	"Pause":"Pauzeer",
 	"Scene Trigger Evaluation mode":"Scene Trigger evaluatie modus",
-	"Create From State":"Creër van Status"
+	"Create From State":"Creër van Status",
+	"Search Results":"Search Results"
 });
 
 // override rules with localized version
