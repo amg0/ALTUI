@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2165 $";
+var ALTUI_revision = "$Revision: 2166 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -275,17 +275,27 @@ var styles ="						\
 	.blocklyTreeLabel {			\
 		color: black;			\
 	}							\
-	@media (min-width: 768px) {	\
-		.card-columns {	\
-			column-count: 2;	\
-		}	\
-	}	\
-	@media (min-width: 992px) {	\
+	@media (min-width: 10px) { \
+		.card-columns { \
+			column-count: 1; \
+		} \
+	} \
+	@media (min-width: 736px) { \
+		.card-columns { \
+			column-count: 2; \
+		} \
+	} \
+	@media (min-width: 1100px) {	\
 		.card-columns {	\
 			column-count: 3;	\
 		}	\
 	}	\
-	@media (min-width: 1200px) {	\
+	@media (min-width: 1480px) {	\
+		.card-columns {	\
+			column-count: 4;	\
+		}	\
+	}	\
+	@media (min-width: 1840px) {	\
 		.card-columns {	\
 			column-count: 5;	\
 		}	\
