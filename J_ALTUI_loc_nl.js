@@ -151,7 +151,7 @@ Localization.init( {
 	"Localize":"Lokaliseer",
 	"Localizations":"Lokalisaties",
 	"Power Chart":"Vermogensgrafiek",
-	"Power":"Vermogen",
+	"Power":"Engergieverbruik",
 	"Localization information":"Lokalisatie informatie",
 	"Mesh":"Netwerk",
 	"Order By":"Sorteer op",
@@ -463,22 +463,22 @@ Localization.init( {
 	"display or not the House mode widget on home page":"toon de House Modes widget op de startpagina wel of niet",
 	"Show House Mode on home page":"Toon de House Mode op de startpagina",
 	"ShowHouseMode:display or not the House mode widget on home page":"ShowHouseMode:toon de House Modes widget op de startpagina wel of niet",
-	"Please be patient, registration will become effective after <mark>1 or 2 business days</mark>. Otherwise contact me with a copy of your page footer":"Please be patient, registration will become effective after <mark>1 or 2 business days</mark>. Otherwise contact me with a copy of your page footer",
-	"Execute Action":"Execute Action",
+	"Please be patient, registration will become effective after <mark>1 or 2 business days</mark>. Otherwise contact me with a copy of your page footer":"Geduld A.U.B, de registratie wordt effecttief na <mark1 of 2 kantoordagen</mark>. Zo niet, neem contact met mij op inclusief een kopie van de pagina footer",
+	"Execute Action":"Aktie uitvoeren",
 	"Start":"Start",
 	"Cancel":"Cancel",
-	"Force":"Force",
+	"Force":"Forceer",
 	"Muted":"Muted",
 	"Unmuted":"Unmuted",
-	"Pause":"Pause",
-	"Scene Trigger Evaluation mode":"Scene Trigger Evaluation mode",
-	"Create From State":"Create From State"
+	"Pause":"Pauzeer",
+	"Scene Trigger Evaluation mode":"Scene Trigger evaluatie modus",
+	"Create From State":"Creër van Status"
 });
 
 // override rules with localized version
 SpeechManager.initRules([
 	{r:"(zet aan|schakelaar aan|open).*\\s+(%name%)", t:"device", a:{service:"urn:upnp-org:serviceId:SwitchPower1", action:"SetTarget", params:"{ \"newTargetValue\":1}"}},
-	{r:"(zet uit|schakelaar uit|close).*\\s+(%name%)", t:"device", a:{service:"urn:upnp-org:serviceId:SwitchPower1", action:"SetTarget", params:"{ \"newTargetValue\":0}"}},
+	{r:"(zet uit|schakelaar uit|sluit).*\\s+(%name%)", t:"device", a:{service:"urn:upnp-org:serviceId:SwitchPower1", action:"SetTarget", params:"{ \"newTargetValue\":0}"}},
 	{r:"(run|start).*\\s+(%name%)", t:"scene" },
 	{r:"(toon|open).*\\s+(%name%)", t:"altui" },
 	{r:"(toon|open).*\\s+(%name%)", t:"room" }

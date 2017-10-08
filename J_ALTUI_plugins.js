@@ -52,14 +52,20 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-colorpicker { margin-top: 2px; width:30px; margin-right: 15px; }";	
 		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";	
 		style += ".altui-infoviewer-pattern { font-size: 14px; }";	
-		style += "div.altui-windowcover button.btn-sm { width: 2.9em; padding:1px;}";
+//RB Change start
+//		style += "div.altui-windowcover button.btn-sm { width: 2.9em; padding:1px;}";
+		style += "div.altui-windowcover button.btn-sm { width: 2.9em; padding:1px; overflow: hidden;}";
+//RB Change end
 		style += ".altui-sonos-text, .altui-combsw-text, .altui-sysmon-text, .altui-veraalerts-text {font-size: 11px;}";
 		style += ".altui-multistring-text-div { margin-top: 2px; height: 48px; overflow: hidden; }"
         style += ".altui-multistring-text-some { font-size: 11px; }";
         style += ".altui-multistring-text-all { font-size: 7px; }";
 		style += ".altui-multistring-text-1, .altui-multistring-text-2 { }";
 // Rene Boer start		
-		style += ".altui-harmony-controlpanel { left:70px; right:16px; } .altui-harmony-container { position:absolute; left:70px; right:16px; } .altui-harmony-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-harmony-col { padding-left:3px; padding-right:3px; }  .altui-harmony-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
+//RB Change start
+//		style += ".altui-harmony-controlpanel { left:70px; right:16px; } .altui-harmony-container { position:absolute; left:70px; right:16px; } .altui-harmony-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-harmony-col { padding-left:3px; padding-right:3px; }  .altui-harmony-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
+		style += ".altui-harmony-controlpanel { left:58px; right:16px; } .altui-harmony-container { position:absolute; left:58px; right:16px; } .altui-harmony-container .row { padding:0px !important; margin-left:0px; margin-right:0px;} .altui-harmony-col { padding-left:1px; padding-right:1px; }  .altui-harmony-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding:0px !important; margin:0px !important; width: 100%; max-width: 100% }";
+//RB Change end
 // Rene Boer end
 		style += ".altui-upnpproxy-text { font-size: 11px; margin-left: 2px; margin-top: 22px; }";
 		style += ".altui-plts-btn-div { margin-top: 4px; height: 48px; overflow:hidden; } .altui-plts-btn { width: 50px; font-size: 11px; line-height: 1.5; } .altui-plts-btn-on { color: white; background-color: #006C44; } .altui-plts-btn-on:hover, .altui-plts-btn-on:focus, .altui-plts-btn-on:active, .altui-plts-btn-on:active:focus, .altui-plts-btn-on.active:focus { color: white; background-color: #006C44; outline: 0 none; box-shadow: none; } .altui-plts-time-text-div { float: left; margin-left: 6px; margin-top: 5px; font-size: 9px; overflow: hidden; }";
@@ -266,7 +272,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		
 	function _internaldrawZoneThermostat( device , userOperatingMode1Items,  userHVACFanOperatingMode1Items, isHeater) {
 		function _button(altuiid, colorclass, glyph, service, action, name, value, incr) {
-			return ("<button type='button' style='width:50%;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-light btn-sm' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format( 
+//RB Change start			
+//			return ("<button type='button' style='width:50%;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-light btn-sm' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format( 
+			return ("<button type='button' style='width:50%; padding:0px !important;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-light btn-sm' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format( 
+//RB Change end
 			altuiid,		// id
 			glyph,	// label
 			service,
@@ -398,7 +407,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 								);						
 					}
 				html += "</div>";
-				html += "<div class='col-3'>";
+				html += "<div class='col-3' style='padding: 0px !important'>";
 					if (bNewControl == false) {
 						//UI5
 						if (isHeater==false) {
@@ -1316,7 +1325,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				html+= ("<button id='{0}' data-btnid='{0}' type='button' class='m-0 p-0 altui-multiswitch-open altui-multiswitch-open-{3} btn btn-light btn-sm {2}' >{1}</button>".format( 
 					btnid ,
 					name  ,
-					(status==1) ? 'btn-info' : '',
+//RB Change start
+//					(status==1) ? 'btn-info' : '',
+					(status==1) ? 'active' : '',
+//RB Change end
 					device.altuiid
 					)) ;
 				// html+= "x";
@@ -1401,7 +1413,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					for (var col=0; col<colMax; col++) {
 						if (actBtns[btnid] !== undefined) {
 							html += "<div class='altui-harmony-col {0}'>".format(colCls);
-							html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-act-{3} btn btn-light btn-sm {2}'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'btn-info' : '',device.altuiid);
+//RB Change start
+//							html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-act-{3} btn btn-light btn-sm {2}'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'btn-info' : '',device.altuiid);
+							html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-act-{3} btn btn-light btn-sm {2}'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'active' : '',device.altuiid);
+//RB Change end
 							html += "</div>";
 							btnid ++;
 						}	
