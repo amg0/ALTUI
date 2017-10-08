@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2166 $";
+var ALTUI_revision = "$Revision: 2167 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4208,6 +4208,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.on("click",".altui-favorites-scene-content",function() {
 				var altuiid = $(this).data("altuiid");
 				MultiBox.runSceneByAltuiID(altuiid);
+				return false;
 			})
 			.off("click",cls)
 			.on("click",cls,function() {
@@ -4236,6 +4237,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						UIControler.changePage('Control Panel',[altuiid])
 						break;
 				}
+				return false;
 			});
 	}
 
@@ -6308,6 +6310,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 			$(".altui-mainpanel").html(html)
 			_registerFavoriteClickHandlers("altui-myhomedevice-icon")
+			$(".altui-mainpanel")
+			.off("click",".altui-myhome-devices tr")
+			.on("click",".altui-myhome-devices tr",function(d) {
+				var altuiid = $(this).find("td:first-child").html()
+				UIControler.changePage('Control Panel',[ altuiid ])
+				return false;
+			})
+			.off("click",".altui-myhome-scenes tr")
+			.on("click",".altui-myhome-scenes tr",function(d) {
+				var altuiid = $(this).find("td:first-child").html()
+				UIControler.changePage('Scene Edit',[altuiid])
+				return false;
+			})
 			EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function (eventname,device) {
 				var jqelem = $(".altui-myhomedevice-icon[data-altuiid={0}]".format(device.altuiid))
 				if (jqelem.length>0) {
