@@ -5165,7 +5165,7 @@ var PageMessage = (function(window, undefined ) {
 		else {
 			var htmlmsg = _messageRow(idx, 1, now.toLocaleString(),txt,html.format(idx),level,dataset);
 			$("div#altui-pagemessage tbody").prepend( htmlmsg );
-			$("div#altui-pagemessage  tr.success[data-idx='" + idx + "']").each( function(idx,elem) {
+			$("div#altui-pagemessage  tr.table-success[data-idx='" + idx + "']").each( function(idx,elem) {
 				var that = $(elem);
 				setTimeout( function() { $(that).remove();_updateMessageButtonColor(); } , 5000 );
 			});
