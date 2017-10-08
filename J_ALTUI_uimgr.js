@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2167 $";
+var ALTUI_revision = "$Revision: 2169 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10988,46 +10988,33 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		];
 
 		var html = "";
-		html += "<nav>"
-		html += "<ul class='nav nav-pills nav-stacked' data-spy='affix'>";
-		// <li class='active'><a href='#section1'>Section 1</a></li>
+		html += '<nav class="nav nav-pills flex-column">'
 		$.each(tbl, function (idx,line) {
-			html += "<li><a href='#{0}'>{1}</a></li>".format(line[0].replace(' ','_'),line[0])
+			html += '<a class="nav-link" href="#">{0}</a>'.format(line[0])
 		});
-		html += "</ul>"
 		html += "</nav>"
 		$(".altui-leftnav").append( html );
 
-		html = "";
-		html += "<dl>";
+		var template = 
+		`<div class="card" >
+		  <div class="card-header">{1}</div>
+		  <div class="card-body">
+			<h4 data-name="{0}" class="card-title">{0}</h4>
+			<p class="card-text">{2}</p>
+			<a href="{1}" target="_blank" class="card-link">{0}</a>
+		  </div>
+		</div>`
+		html = '<div class="card-columns">';
 		$.each(tbl, function (idx,line) {
-			html +="<dt id='{0}'>{1}</dt>".format(line[0].replace(' ','_'),line[0]);
-			html +="<dd>{0}</dd>(<a href='{1}'>{1}</a>)<hr>".format(line[2],line[1]);
+			html += template.format(line[0],line[1],line[2])
 		});
-		html +="</dl>";
-
+		html += '</div>'
 		$(".altui-mainpanel").append(html);
 
 		$(".altui-leftnav a").on('click', function(e) {
-		   // prevent default anchor click behavior
-		   e.preventDefault();
-
-		   // store hash
-		   var hash = $(this).attr("href");
-
-		   // animate
-		   $('html, body').animate({
-			   scrollTop: $(hash).offset().top - $('.navbar-fixed-top').height()
-			 }, 300, function(){
-
-			   // when done, add hash to url
-			   // (default click behaviour)
-			   window.location.hash = hash;
-			 });
-
-		   // Highlight
-		   $("dt").removeClass("bg-warning");
-		   $(hash).addClass("bg-warning");
+			$(".card").removeClass("bg-success text-white")
+			$(".card-title[data-name='"+$(this).html()+"']").parents(".card").addClass("bg-success text-white")
+			return false;
 		});
 	},
 
