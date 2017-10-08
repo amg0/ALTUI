@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2170 $";
+var ALTUI_revision = "$Revision: 2171 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6223,7 +6223,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					run: smallbuttonTemplate.format( s.altuiid, 'altui-favorites-scene-content', runGlyph, _T("Run"), 'data-altuiid="{0}"'.format(s.altuiid) )
 				}
 			})
-			return HTMLUtils.array2Table(arr,'altuiid',[],null,'altui-myhome-scenes','htmlid',false)
+			return (arr.length>0) ? HTMLUtils.array2Table(arr,'altuiid',[],null,'altui-myhome-scenes','htmlid',false) : null
 		}
 		
 		function _deviceIcon(device) {
@@ -6270,7 +6270,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _tableDevices(room) {
 			var devices = MultiBox.getDevicesSync().filter( function(device) { return (device.room == room.id) && (device.invisible != true) } );
 			var arr = $.map( devices, function(d,i) { return {altuiid:d.altuiid, name:d.name, " ":_deviceIcon(d), val:_deviceInfo(d)} } )
-			return HTMLUtils.array2Table(arr,'altuiid',[],null,'altui-myhome-devices','htmlid',false)
+			return (arr.length>0) ? HTMLUtils.array2Table(arr,'altuiid',[],null,'altui-myhome-devices','htmlid',false) : null
+		}
+		
+		function _generateNavTabs(altuiid, tbldevice, tblscene) {
+			var html = '<nav class="nav nav-tabs" id="myTab" role="tablist">'
+			if (tbldevice) 
+				html += '<a class="nav-item nav-link active" id="nav-device-tab" data-toggle="tab" href="#nav-device-{0}" role="tab" aria-controls="nav-device" aria-expanded="true">Devices</a>'.format(altuiid)
+			if (tblscene)
+				html += '<a class="nav-item nav-link" id="nav-scene-tab" data-toggle="tab" href="#nav-scene-{0}" role="tab" aria-controls="nav-scene">Scenes</a>'.format(altuiid)
+			html += '</nav>'
+			html += '<div class="tab-content" id="nav-tabContent">'
+			if (tbldevice) 
+				html += '<div class="tab-pane fade show active" id="nav-device-{1}" role="tabpanel" aria-labelledby="nav-home-tab">{0}</div>'.format(tbldevice,altuiid)
+			if (tblscene)
+				html += '<div class="tab-pane fade" id="nav-scene-{1}" role="tabpanel" aria-labelledby="nav-profile-tab">{0}</div>'.format(tblscene,altuiid)
+			html += '</div>'
+			return html
 		}
 		
 		var limit = (ALTUI_registered!=true) ? 5 : null;
@@ -6284,14 +6300,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				  <div class="card-body">
 					<h4 class="card-title">\${name}</h4>
 					<h6 class="card-subtitle mb-2 text-muted">\${altuiid}</h6>
-					<nav class="nav nav-tabs" id="myTab" role="tablist">
-					  <a class="nav-item nav-link active" id="nav-device-tab" data-toggle="tab" href="#nav-device-\${altuiid}" role="tab" aria-controls="nav-device" aria-expanded="true">Devices</a>
-					  <a class="nav-item nav-link" id="nav-scene-tab" data-toggle="tab" href="#nav-scene-\${altuiid}" role="tab" aria-controls="nav-scene">Scenes</a>
-					</nav>
-					<div class="tab-content" id="nav-tabContent">
-					  <div class="tab-pane fade show active" id="nav-device-\${altuiid}" role="tabpanel" aria-labelledby="nav-home-tab">\${tbldevice}</div>
-					  <div class="tab-pane fade" id="nav-scene-\${altuiid}" role="tabpanel" aria-labelledby="nav-profile-tab">\${tblscene}</div>
-					</div>
+					\${navtabs}
 				  </div>
 				</div>`.format(g_ALTUI.g_CustomImagePath,defaulturi ) )
 			var html="";
@@ -6299,12 +6308,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html += "<div class='card-columns'>"
 			var n=0;
 			$.each(rooms, function(idx,room) {
+				var tbldevice = _tableDevices(room)
+				var tblscene = _tableScenes(room)
+				var navtabs = _generateNavTabs(room.altuiid,tbldevice,tblscene)
 				var model = {
 					name: room.name,
 					altuiid: room.altuiid,
 					file:'R_'+room.altuiid,
-					tbldevice: _tableDevices(room),
-					tblscene: _tableScenes(room)
+					navtabs: navtabs
 				}
 				n++
 				if ((limit==null) || (n<=limit))

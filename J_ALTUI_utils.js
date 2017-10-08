@@ -1711,7 +1711,7 @@ var HTMLUtils = (function() {
 		var idcolumn = idcolumn || 'id';
 		var viscols = viscols || [idcolumn];
 		var responsive = ((bResponsive==null) || (bResponsive==true)) ? 'table-responsive' : ''
-		// html+="<div class='col-12'>";
+
 		if ( (arr) && ($.isArray(arr) && (arr.length>0)) ) {
 			var display_order = [];
 			var keys= Object.keys(arr[0]);
@@ -1761,7 +1761,7 @@ var HTMLUtils = (function() {
 		}
 		else
 			html +="<div>{0}</div>".format(_T("No data to display"))
-		// html+="</div>";
+
 		return html;
 	};
 	
