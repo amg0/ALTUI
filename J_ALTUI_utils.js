@@ -1648,9 +1648,11 @@ if (typeof String.prototype.format == 'undefined') {
 
 if (typeof String.prototype.startsWith != 'function') {
   // see below for better implementation!
-  String.prototype.startsWith = function (str){
-    return this.indexOf(str) == 0;
-  };
+  String.prototype.startsWith = function (str){	return this.indexOf(str) == 0; };
+};
+
+if (typeof String.prototype.contains != 'function') {
+	String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
 };
 
 if (typeof String.prototype.htmlEncode == 'undefined') {
