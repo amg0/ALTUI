@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2174 $";
+var ALTUI_revision = "$Revision: 2176 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6146,38 +6146,33 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 
 		function _deviceInfo(device) {
-			var str = ""
-			str = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' )
-			if (str)
-				return str + MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Unit' )
-			str = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' )
-			if (str)
-				return str + "%"
-			str = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' )
-			if (str)
-				return str + '&deg;'
-			str = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' )
-			if (str)
-				return str + 'W'
-			str = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' )
-			if (str)
-				return "<small>{0}</small>".format(HTMLUtils.enhanceValue(str))
-			str = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' )
-			if (str)
-				return str
-			str = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' )
-			if (str)
-				return str
-			str = MultiBox.getStatus( device, 'urn:brultech-com:serviceId:PowerMeter1', 'Volts' )
-			if (str)
-				return str + 'V'
-			str = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:SecuritySensor1","Armed")
-			if (str)
-				return (str==1) ? 'Armed' : ''
-			str = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:DoorLock1', 'Status' )
-			if (str)
-				return (str==1) ? 'Locked' : ''
-			return " " 
+			function _armed(str) { return (str==1) ? 'Armed' : '' }
+			function _locked(str) { return (str==1) ? 'Locked' : '' }
+			function _firstelem(str) { return (str || "").split(",")[0] }
+			var arr= [
+				{service:'urn:upnp-org:serviceId:IPhoneLocator1', variable:'Distance', format:'{0}' },
+				{service:'urn:upnp-org:serviceId:Dimming1', variable:'LoadLevelStatus', format:'{0}%' },
+				{service:'urn:upnp-org:serviceId:TemperatureSensor1', variable:'CurrentTemperature', format:'{0}&deg;' },
+				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'Watts', format:'{0}W' },
+				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'LastTrip', format:'<small>{0}</small>', translate:HTMLUtils.enhanceValue },
+				{service:'urn:micasaverde-com:serviceId:LightSensor1', variable:'CurrentLevel', format:'{0}' },
+				{service:'urn:micasaverde-com:serviceId:HumiditySensor1', variable:'CurrentLevel', format:'{0}' },
+				{service:'urn:micasaverde-com:serviceId:PowerMeter1', variable:'Volts', format:'{0}V' },
+				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'Armed', format:'{0}', translate:_armed },
+				{service:'urn:micasaverde-com:serviceId:DoorLock1', variable:'Status', format:'{0}', translate:_locked },
+				{service:'urn:upnp-org:serviceId:cplus1', variable:'CurrentChannel', format:'{0}', translate:_firstelem},
+			]
+			var tpl = "<span class='altui-device-info'>{0}</span>"
+			for (var i=0 ; i<arr.length ; i++) {
+				var str = MultiBox.getStatus( device, arr[i].service, arr[i].variable )
+				if (str) {
+					if ($.isFunction(arr[i].translate))
+						str = arr[i].translate(str)
+					var template = arr[i].format || '{0}'
+					return tpl.format( template.format(str) )
+				}
+			}
+			return tpl.format(" ")
 		}
 		
 		function _tableDevices(room) {
@@ -6262,6 +6257,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function (eventname,device) {
 				var jqelem = $(".altui-myhomedevice-icon[data-altuiid={0}]".format(device.altuiid))
 				if (jqelem.length>0) {
+					$(jqelem).parents("tr").find(".altui-device-info").parent().html(_deviceInfo(device))
 					$(jqelem).replaceWith(_deviceIcon(device))
 				}
 			})
