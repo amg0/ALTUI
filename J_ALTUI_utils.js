@@ -1806,8 +1806,8 @@ var HTMLUtils = (function() {
 		model = $.extend( true, {cls:'', attr:'', buttons:[] }, model) 
 		html += "<div id='{2}' class='btn-group {0}' {1} role='group' aria-label='group'>".format(model.cls, model.attr,htmlid);
 		$.each(model.buttons, function(i,btn) {
-				var label = (btn.img) ? "<img class='{2}' src='{0}' alt='{1}'></img>".format(btn.img,btn.label||'',btn.imgcls||'' ) : (btn.label||'')
-				html += "<button id='{1}' type='button' class='btn btn-light {0}'>{2}</button>".format(btn.cls||'',btn.id||'',label)
+			var label = (btn.img) ? "<img class='{2}' src='{0}' alt='{1}'></img>".format(btn.img,btn.label||'',btn.imgcls||'' ) : (btn.label||'')
+			html += "<button id='{2}' type='button' class='btn {0} {1}'>{3}</button>".format(btn.background || 'btn-light',btn.cls||'',btn.id||'',label)
 		})
 		// <button type='button' class='btn btn-light'>Left</button>
 		// <button type='button' class='btn btn-light'>Middle</button>

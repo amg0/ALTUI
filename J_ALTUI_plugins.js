@@ -739,10 +739,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		};
 		$.each(QuibinoLevels , function(i,level) {
 			var extracls = "altui-dimmable-qubino-btn";
-			if (i == currentLevel)
-				extracls += " btn-success"
+			var background = (i == currentLevel) ? "btn-success" : "btn-light" 
 			model.buttons.push( 				
-				{cls:extracls, id:"qubflw_"+device.altuiid+"_"+level.cmd+"_"+level.value , img:iconpath+"qubino-"+level.cmd+"-icon.png", label:level.cmd, imgcls:'altui-dimmable-qubino-btn-img'}
+				{background:background, cls:extracls, id:"qubflw_"+device.altuiid+"_"+level.cmd+"_"+level.value , img:iconpath+"qubino-"+level.cmd+"-icon.png", label:level.cmd, imgcls:'altui-dimmable-qubino-btn-img'}
 			);
 		});
 		var html = HTMLUtils.drawButtonGroup(device.altuiid,model)
