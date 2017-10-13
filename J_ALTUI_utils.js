@@ -109,7 +109,7 @@ var ALTUI_Templates_Factory= function() {
 	// 0:bootgrid classes 1:altuiid 2:htmlid 3: name 4:right header buttons 5:panel body 6:left header buttons
 	var _workflowContainerTemplate=		"<div class='{0} '>";
 		_workflowContainerTemplate	+= 		"<div class='card xxx altui-workflow' data-altuiid='{1}' id='{2}'>"
-		_workflowContainerTemplate	+= 		"<div class='card-header altui-workflow-heading'>{6} <span class='altui-workflow-title-name'>{3}</span>{4}<div class='text-muted pull-right'> <small>#{1}</small> </div>"
+		_workflowContainerTemplate	+= 		"<div class='card-header altui-workflow-heading'>{6} {4}<div class='text-muted pull-right'> <small>#{1}</small></div> <span class='altui-workflow-title-name'>{3}</span>"
 		_workflowContainerTemplate	+= 	  	"</div>";
 		_workflowContainerTemplate	+= 		"<div class='card-body altui-workflow-body'>{5}"
 		_workflowContainerTemplate	+= 	  	"<div class='altui-active-state-name'></div>";
