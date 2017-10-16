@@ -879,7 +879,7 @@ var DialogManager = ( function() {
 		propertyline +=("  <input type='checkbox' class='"+(extraclass || '')+"' id='altui-widget-"+name+"' " + ( (value==true) ? 'checked' : '') +" value='"+value+"' title='check to invert status value'>"+(label ? label : name));
 		propertyline +="</label>";
 		// propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 
 	function _dlgAddDayOfWeek(dialog,name, label, value, _timerDOW)
@@ -899,7 +899,7 @@ var DialogManager = ( function() {
 		propertyline += xsbuttonTemplate.format('altui-TimerDayOfWeek-setAll','',okGlyph,_T("All"));
 		propertyline += xsbuttonTemplate.format('altui-TimerDayOfWeek-clearAll','',removeGlyph,_T("None"));
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 		$("#altui-TimerDayOfWeek-setAll").click(function(){
 			$(".altui-widget-TimerDayOfWeek").each( function(i,e) {
 				var id = parseInt($(e).prop('id').substring( ("altui-widget-"+name).length ));
@@ -928,7 +928,7 @@ var DialogManager = ( function() {
 		propertyline += "<input id='altui-widget-"+name+"' name='{0}' value='{1}' {2}></input>"
 			.format(name,value,optstr);
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 		$("#altui-widget-{0}".format(name)).spectrum({
 			preferredFormat: 'hex',			
 			replacerClassName: 'altui-colorpicker-replacer',	
@@ -955,7 +955,7 @@ var DialogManager = ( function() {
 			propertyline += "<input type='hidden' id='altui-xml-"+name+"' class='form-control' value='"+xml.escapeXml()+"' ></input>";
 		propertyline += "</div>";
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 		
 		$("#altui-widget-LuaExpression").on("change",function() {
 			$("#altui-xml-LuaExpression").val( "" );
@@ -963,7 +963,7 @@ var DialogManager = ( function() {
 	}
 	function _dlgAddHtml(dialog,html) 
 	{
-		$(dialog).find(".row-fluid").append(html);
+		$(dialog).find(".row").append(html);
 	}
 	function _dlgAddLine(dialog, name, label, value,help, options, col_css)
 	{
@@ -978,7 +978,7 @@ var DialogManager = ( function() {
 			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-light btn-sm altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
 		propertyline += "	<input id='altui-widget-"+name+"' class='form-control' "+optstr+" value='"+value.escapeXml()+"' "+placeholder+" ></input>";
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 	function _dlgAddEditor(dialog,name,label,value,help,language)
 	{
@@ -995,7 +995,7 @@ var DialogManager = ( function() {
 			help || ''
 		)
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 		
 		// init ACE editor
 		var editor = null;
@@ -1021,7 +1021,7 @@ var DialogManager = ( function() {
 		  propertyline += "</span>";
 		propertyline += "</div>"; // <!-- /input-group -->
 	propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 	function _dlgAddSelect(dialog, name, label, value, lines, htmloptions)
 	{
@@ -1036,7 +1036,7 @@ var DialogManager = ( function() {
 		})
 		propertyline += "</select>";
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};	
 	function _dlgAddSelectGlyph(dialog, name, label, value, lines, htmloptions) {
 		var optstr = HTMLUtils.optionsToString(htmloptions);
@@ -1053,7 +1053,7 @@ var DialogManager = ( function() {
 			propertyline += "</select>";
 			propertyline += "</div>";
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 		$(dialog)
 			.off("change","select#altui-widget-"+name)
 			.on('change', "select#altui-widget-"+name,function(ui,event) {
@@ -1078,7 +1078,7 @@ var DialogManager = ( function() {
 		propertyline += "</select>";
 		propertyline += "</div>";	// form inline
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 	
 	function _dlgAddTime(dialog, name, value, _timerRelative)
@@ -1143,7 +1143,7 @@ var DialogManager = ( function() {
 		propertyline += "</select>";
 		propertyline += "</div>";	// form inline
 		propertyline += "</div>";	// form group
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 	
 	function _dlgAddTimer(dialog, name, label, value, htmloptions )
@@ -1154,7 +1154,7 @@ var DialogManager = ( function() {
 		propertyline += "	<label for='altui-widget-"+name+"' title='Date Time'>"+(label ? label : name)+"</label>";
 		propertyline += "	<input required id='altui-widget-"+name+"' class='form-control' type='text' pattern='^[0-2][0-9]:[0-5][0-9]:[0-5][0-9]$' step='1' value='"+value+"' placeholder='hh:mm:ss' "+optstr+"></input>";
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 	
 	function _dlgAddDateTime(dialog, name, value )
@@ -1164,7 +1164,7 @@ var DialogManager = ( function() {
 		propertyline += "	<label for='altui-widget-"+name+"' title='Date Time'>"+name+"</label>";
 		propertyline += "	<input id='altui-widget-"+name+"' class='form-control' type='datetime-local' value='"+value+"' placeholder='absolute time' ></input>";
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 	
 	function _dlgAddHouseMode(dialog, name, label, modes ) {
@@ -1173,7 +1173,7 @@ var DialogManager = ( function() {
 		propertyline += "	<label for='altui-widget-"+name+"' title='House Modes'>"+label+"</label>";
 		propertyline += HouseModeEditor.displayModes( 'altui-widget-'+name , '', modes );
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 
 	function _dlgAddVariables(dialog, forDeviceName, widget, cbfunc, serviceId)
@@ -1194,7 +1194,7 @@ var DialogManager = ( function() {
 		propertyline += "	<label for='altui-widget-servicevariable'>Variable</label>";
 		propertyline +=     _getDeviceServiceVariableSelect( device , widget.properties.service, widget.properties.variable, serviceId );
 		propertyline += "</div>";
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 		cbfunc();
 	};
 	
@@ -1227,7 +1227,7 @@ var DialogManager = ( function() {
 		propertyline +=     _pickDevice(devices,deviceid,name);
 		propertyline += "</div>";
 		
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 };
 	
 	function _dlgAddDevices(dialog, name, deviceid, cbfunc, filterfunc)
@@ -1244,7 +1244,7 @@ var DialogManager = ( function() {
 				propertyline +=     _pickDevice(devices,deviceid,name);
 				propertyline += "</div>";
 				
-				$(dialog).find(".row-fluid").append(propertyline);
+				$(dialog).find(".row").append(propertyline);
 				cbfunc(devices);
 			}
 		);
@@ -1271,7 +1271,7 @@ var DialogManager = ( function() {
 			}
 		});
 		propertyline += "</select>"
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 	
 	function _dlgAddScenes(dialog, widget, cbfunc)
@@ -1289,7 +1289,7 @@ var DialogManager = ( function() {
 				propertyline += "      		<label for='altui-widget-sceneid'>Scene to Run</label>";
 				propertyline += 			select.wrap( "<div></div>" ).parent().html();
 				propertyline += "      	</div>";
-				$(dialog).find(".row-fluid").append(propertyline);
+				$(dialog).find(".row").append(propertyline);
 				cbfunc();
 			} 
 		);
@@ -1417,7 +1417,7 @@ var DialogManager = ( function() {
 		propertyline += _getEventArguments( selected_event , args );
 		propertyline += "</div>";
 		
-		$(dialog).find(".row-fluid").append(propertyline);
+		$(dialog).find(".row").append(propertyline);
 	};
 	
 	function _dlgAddActions(id, dialog,widget,actiondescriptor,label, cbfunc, filterByServiceID)
@@ -1462,7 +1462,7 @@ var DialogManager = ( function() {
 			propertyline +=     result;
 			propertyline += "</div>";
 			
-			$(dialog).find(".row-fluid").append(propertyline);
+			$(dialog).find(".row").append(propertyline);
 			
 			//callback, if select action changes, we need to update parameters
 			$("#"+id).on("change", _onChangeAction );
@@ -3957,7 +3957,7 @@ var TimerEditor = (function() {
 		HtmlContent: function() {
 			var html = $('div#dialogModal').html();
 			$('div#dialogModal').html("")
-			return $( html ).find(".row-fluid").html();
+			return $( html ).find(".row").html();
 		},
 		getResult: function() {
 			// save for real this time

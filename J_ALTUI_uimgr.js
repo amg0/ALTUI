@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2180 $";
+var ALTUI_revision = "$Revision: 2181 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -498,7 +498,6 @@ var styles ="						\
 		padding-right: 0px;\
 		padding-bottom: 0px;\
 		padding-left: 2px;\
-		overflow: hidden; \
 	}\
 	div.altui-device-body {\
 		padding-top: 0px;\
@@ -3827,7 +3826,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var html ="<ul>";
 				html += $.map(res.update.newFeatures,function(e) { return "<li>"+e+"</li>"} ).join('');
 				html +="</ul>"
-				$("div#dialogModal .row-fluid").append(html);
+				$("div#dialogModal .row").append(html);
 			}
 		}
 		return (res.update && res.update.valid)
@@ -6713,7 +6712,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			deviceCreateModalTemplate += "		  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		<div class='modal-body'>";
-				deviceCreateModalTemplate += "		<div class='row-fluid'>";
+				deviceCreateModalTemplate += "		<div class='container-fluid'><div class='row'>";
 						deviceCreateModalTemplate += "<form>";
 							deviceCreateModalTemplate += "<div class='form-group'>";
 								deviceCreateModalTemplate += "<label for='altui-input-dtitle'>Device Name</label>";
@@ -6729,7 +6728,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							deviceCreateModalTemplate += "</div>";
 							deviceCreateModalTemplate += "<p class='help-block'>Enter the device D_xx and I_xx file name</p>";
 						deviceCreateModalTemplate += "</form>";
-				deviceCreateModalTemplate += "		</div>";
+				deviceCreateModalTemplate += "		</div></div>";
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		<div class='modal-footer'>";
 			deviceCreateModalTemplate += "		  <button type='button' class='btn btn-light' data-dismiss='modal'>"+_T("Close")+"</button>";
@@ -7337,7 +7336,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						html +="</tbody>";
 						html +="</table>";
 						html += "  </div></div>";
-						$(dialog).find(".row-fluid").append(html);
+						$(dialog).find(".row").append(html);
 						$('div#dialogModal').modal();
 					});
 				})
