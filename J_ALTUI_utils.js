@@ -721,13 +721,13 @@ var DialogManager = ( function() {
 			message || "")
 		);
 	};
-	function _genericDialog(message,pic,title,buttons,cbfunc) {
+	function _genericDialog(message,pic,title,size,buttons,cbfunc) {
 		var result = false;
 		var dialog = DialogManager.registerDialog('dialogModal',
 						defaultDialogModalTemplate.format( 'dialogModal',
 								title, 		// title
 								message,	// body
-								"",			// size
+								size,			// size
 								pic));		// icon
 		$.each(buttons,function(i,button) {
 			DialogManager.dlgAddDialogButton(dialog, button.isdefault, button.label, '', button.id , { 'data-dismiss':'modal'} );
@@ -756,18 +756,18 @@ var DialogManager = ( function() {
 	function _confirmDialog(message,cbfunc,buttons) {
 		var buttons = buttons || [{isdefault:true, label:_T("Yes")}];
 		var warningpic = "<div class='altui-exclamation-triangle-icon pull-left'>{0}</div>".format(questionGlyph);
-		return _genericDialog(message,warningpic,_T("Are you Sure ?"),buttons,cbfunc)
+		return _genericDialog(message,warningpic,_T("Are you Sure ?"),"",buttons,cbfunc)
 	};
-	function _quickDialog(type,cls,title,message,cbfunc) {
+	function _quickDialog(type,cls,title,size,message,cbfunc) {
 		var glyph = glyphTemplate.format( type, _T(type) , "text-"+type);
 		var pic= "<div class='altui-{1}-icon {2} pull-left'>{0}</div>".format(glyph,type,cls);
-		return _genericDialog(message,pic,title,[],cbfunc);
+		return _genericDialog(message,pic,title,size,[],cbfunc);
 	};
 	function _infoDialog(title,message,cbfunc) {
-		return _quickDialog("info-circle", "text-primary", title,message,cbfunc);
+		return _quickDialog("info-circle", "text-primary", title,"modal-lg",message,cbfunc);
 	};
 	function _warningDialog(title,message,cbfunc) {
-		return _quickDialog("exclamation-triangle", "text-warning", title,message,cbfunc);
+		return _quickDialog("exclamation-triangle", "text-warning", title,"",message,cbfunc);
 	};
 	function _triggerDialog( trigger, controller, cbfunc ) {
 		var dialog = DialogManager.createPropertyDialog(_T('Trigger'));

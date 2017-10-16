@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2179 $";
+var ALTUI_revision = "$Revision: 2180 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14073,11 +14073,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					function _prepareBodyMessage(searchResult){
 						var lines=[]
 						$.each(searchResult, function(key,tbl) {
+							lines.push("<div class='col-12 col-lg-6'>")
 							lines.push("<h5>{0}</h5>".format(_T(key)))
 							lines.push("<ul>");
 							$.each(tbl, function(i,res) {
 								lines.push("<li>{0}, <small><A href='#' class='altui-search-result' id='{2}_{1}'>({1})</A></small></li>".format(res.name,res.altuiid,key))
 							})
+							lines.push("</div>")
 							lines.push("</ul>");
 						});
 						return lines.join("\n");
@@ -14200,9 +14202,11 @@ $(function() {
 		   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
 		 </div>
 		 <div class='modal-body'>
-		 <div class='row-fluid'>
-		 {2}
-		 </div>
+			 <div class='container-fluid'>
+				 <div class='row'>
+				 {2}
+				 </div>
+			 </div>
 		 </div>
 		 <div class='modal-footer'>
 		   <button type='button' class='btn btn-light' data-dismiss='modal'>`+_T("Close")+`</button>
