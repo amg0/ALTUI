@@ -727,7 +727,7 @@ var DialogManager = ( function() {
 						defaultDialogModalTemplate.format( 'dialogModal',
 								title, 		// title
 								message,	// body
-								size,			// size
+								size,		// size
 								pic));		// icon
 		$.each(buttons,function(i,button) {
 			DialogManager.dlgAddDialogButton(dialog, button.isdefault, button.label, '', button.id , { 'data-dismiss':'modal'} );
@@ -845,7 +845,7 @@ var DialogManager = ( function() {
 						defaultDialogModalTemplate.format( 'dialogModal',
 								title, 			// title
 								"",				// body
-								"modal-lg"
+								"modal-lg"		
 							));
 		DialogManager.dlgAddDialogButton(dialog, true, _T("Save Changes"));
 		$("div#dialogModal").off('click', '.altui-help-button')

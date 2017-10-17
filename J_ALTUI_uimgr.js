@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2181 $";
+var ALTUI_revision = "$Revision: 2182 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10414,7 +10414,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					UIControler.changePage('Editor',[name,txt,"Download",function(txt) {
 						$(".altui-mainpanel a[download]")[0].click();
 					}])
-					// $(".altui-mainpanel").prepend("<div class='hidden' >Download: <a href='"+url+"' download>"+name+"</a></div>");
+					$(".altui-mainpanel").prepend("<div class='d-none' >Download: <a href='"+url+"' download>"+name+"</a></div>");
 				});
 			});
 			$(".altui-plugin-update").click(function() {
@@ -12821,7 +12821,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							defaultDialogModalTemplate.format( 'dialogModal',
 							_T('Command Parameters'),		// title
 							"<form></form>",				// body
-							"modal-lg"		// size
+							"modal-lg"						// size
 						));
 			var lastOne = MyLocalStorage.getSettings("LastOne_"+name) || "";
 			DialogManager.dlgAddLine(dialog, name, label, lastOne,"", {required:''} );
