@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2182 $";
+var ALTUI_revision = "$Revision: 2183 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -358,7 +358,7 @@ var styles ="						\
 		padding-top:	1px;	\
 		padding-bottom: 1px;	\
 	}					\
-	.altui-exclamation-triangle-icon, .altui-info-circle-icon {	\
+	.altui-dialog-icon {	\
 		font-size: 37px;	\
 		padding-left: 5px;	\
 		padding-right: 5px;	\
@@ -1217,7 +1217,8 @@ var UIManager  = ( function( window, undefined ) {
 								defaultDialogModalTemplate.format( 'dialogModal-'+widget.id,
 								_T('Alert - Camera'),					// title
 								"<div>"+_cameraDraw(device,size)+"</div>",	// body
-								"modal-lg"		// size
+								"modal-lg",	// size
+								""	// glyph icon
 							));
 							dialog.modal("show");
 							dialog.off('hidden.bs.modal')
@@ -4718,8 +4719,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var dialog = DialogManager.registerDialog('dialogModal',
 						defaultDialogModalTemplate.format( 'dialogModal',
 						'Image Properties',																// title
-						"<form>"+propertyline.format( widget.properties.url.htmlEncode() )+"</form>",				// body
-						"modal-lg"	// body
+						"<form>"+propertyline.format( widget.properties.url.htmlEncode() )+"</form>",	// body
+						"modal-lg",	// size
+						""	// glyph icon
 					));
 
 		DialogManager.dlgAddDialogButton($('div#dialogModal'), true, _T("Save Changes"));
@@ -7319,7 +7321,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						defaultDialogModalTemplate.format( 'dialogModal',
 						_T("Scene History"),			// title
 						"",				// body
-						"modal-lg"		// size
+						"modal-lg",	// size
+						""	// glyph icon
 						));
 					MultiBox.getSceneHistory( scene, function(history) {
 						var html="";
@@ -7336,7 +7339,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						html +="</tbody>";
 						html +="</table>";
 						html += "  </div></div>";
-						$(dialog).find(".row").append(html);
+						$(dialog).find(".altui-dialog-row").append(html);
 						$('div#dialogModal').modal();
 					});
 				})
@@ -9754,10 +9757,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var plugin = UIManager._findPlugin(_plugins_data.details.plugins,pluginid)
 				var dialog = DialogManager.registerDialog('dialogModal',
 									defaultDialogModalTemplate.format( 'dialogModal',
-									_T('Plugin Rating for {0}'.format(plugin.Title)),	// title
-									_displayPluginReviews("altui-reviews-graph",plugin) ,						// body
-									""		// size
-								));
+										_T('Plugin Rating for {0}'.format(plugin.Title)),	// title
+										_displayPluginReviews("altui-reviews-graph",plugin) ,						// body
+										"",	// size
+										""	// glyph icon
+									));
 				var choices = $.map( [ "1-poor","2-below avg","3-average","4-above avg","5-excellent" ] , function(e,i) {return { value:i+1,text:_T(e) } } );
 				DialogManager.dlgAddHtml(dialog, "<div class='altui-plugin-review-tbl'></div>")
 				DialogManager.dlgAddSelect(dialog, "Rating", _T("Rating"), 3, choices, null)
@@ -10525,9 +10529,10 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 			var dialog = DialogManager.registerDialog('dialogModal',
 							defaultDialogModalTemplate.format( 'dialogModal',
-							'Page Properties',					// title
-							"<form>"+propertyline+"</form>",	// body
-							"modal-lg"		// size
+								'Page Properties',					// title
+								"<form>"+propertyline+"</form>",	// body
+								"modal-lg",	// size
+								""	// glyph icon
 						));
 
 			DialogManager.dlgAddDialogButton($('div#dialogModal'), true, _T("Save Changes"));
@@ -11344,7 +11349,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 								defaultDialogModalTemplate.format('dialogModal',
 								_T('Command Parameters'),		// title
 								"<form></form>",				// body
-								"modal-lg"		// size
+								"modal-lg",	// size
+								""	// glyph icon
 							));
 				var lastOne = MyLocalStorage.getSettings("LastOne_"+'param0') || "";
 				DialogManager.dlgAddLine(dialog, 'param0', _T('Parameter'), lastOne,"", {required:''} );
@@ -12821,7 +12827,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							defaultDialogModalTemplate.format( 'dialogModal',
 							_T('Command Parameters'),		// title
 							"<form></form>",				// body
-							"modal-lg"						// size
+							"modal-lg",	// size
+							""	// glyph icon
 						));
 			var lastOne = MyLocalStorage.getSettings("LastOne_"+name) || "";
 			DialogManager.dlgAddLine(dialog, name, label, lastOne,"", {required:''} );
@@ -14197,12 +14204,12 @@ $(function() {
 	   <form name='{0}' class='form' data-toggle='validator' onsubmit='return false;'>
 	   <div class='modal-content'>
 		 <div class='modal-header'>
-		   <div class='modal-title'>{4}<h5 class='d-inline-block'>{1}</h5> </div>
+		   <div class='modal-title'><div class='altui-dialog-icon pull-left'>{4} </div><h5 class='d-inline-block'>{1}</h5> </div>
 		   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
 		 </div>
 		 <div class='modal-body'>
 			 <div class='container-fluid'>
-				 <div class='row'>
+				 <div class='altui-dialog-row'>
 				 {2}
 				 </div>
 			 </div>
