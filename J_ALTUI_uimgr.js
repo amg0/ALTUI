@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2186 $";
+var ALTUI_revision = "$Revision: 2187 $";
 var ALTUI_registered = false;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10914,7 +10914,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$.each(features, function(i,f) {
 					html += "<li>{0}</li>".format(f)
 				});
-				html += "<li><a href='https://github.com/amg0/ALTUI/releases/tag/{0}'>See in <span class='text-info'>GitHub</span></a></li>".format(v)
+				html += "<li><a href='https://github.com/amg0/ALTUI/releases/tag/{0}' target='_blank'>See in <span class=''>GitHub</span></a></li>".format(v)
 				html += "</ul>";
 				return html;
 			};
@@ -13770,39 +13770,85 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	},
 	pageOptions: function() {
 		function _displayOption(id,check) {
+			var helpbutton = `
+				<small id="{0}" class="form-text text-muted">
+					( {1} )
+				</small>`.format(
+					id,
+					_T(check.id+":"+check.help)
+				)
+			// var helpbutton = xsbuttonTemplate.format( id, 'altui-help-button',	glyphTemplate.format("question","",""), _T(check.id+":"+check.help));
 			var html="";
 			var init =	(MyLocalStorage.getSettings(check.id)!=null) ? MyLocalStorage.getSettings(check.id) : check._default;
 			switch( check.type ) {
 				case 'select':
-					html +="<label title='"+check.id+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label> : ";
-					html +="<select id='altui-"+check.id+"' title='"+check.id+"'>";
+					var htmlOptions="";
 					$.each(check.choices.split("|"),function(id,unit){
-						html += "<option value='{0}' {1}>{0}</option>".format( unit , (unit==init) ? 'selected' : '' );
+						htmlOptions += "<option value='{0}' {1}>{0}</option>".format( unit , (unit==init) ? 'selected' : '' );
 					})
-					html +="</select>";
+					html += `
+					  <div class="form-group">
+						<label for="altui-{0}">{3}</label>
+						<select class="form-control" id="altui-{0}">
+							{1}
+						</select>
+						{2}
+					  </div>`.format(
+						check.id,
+						htmlOptions,
+						helpbutton,
+						check.label
+					  )
 					$(".altui-mainpanel").on("change","#altui-"+check.id,function(){
 						_saveOption(check.id, $("#altui-"+check.id).val());
 					});
 					break;
 				case 'checkbox':
-					html +="<label title='"+check.id+"' class='checkbox-inline'>";
-					html +=("  <input type='checkbox' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>"+_T(check.label));
-					html +="</label>";
+					html += `
+					<div class="form-check">
+					  <label class="form-check-label">
+						<input id='altui-{0}' class="form-check-input" type="checkbox" value="{1}" {2}>
+							{3}
+					  </label>
+					  {4}
+					</div>`.format(
+						check.id,
+						init,
+						(init==true) ? 'checked' : '',
+						_T(check.label),
+						helpbutton
+					)
+					// html +="<label title='"+check.id+"' class='checkbox-inline'>";
+					// html +=("  <input type='checkbox' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>"+_T(check.label));
+					// html +="</label>";
 					$(".altui-mainpanel").on("click","#altui-"+check.id,function(){
 						_saveOption(check.id,$("#altui-"+check.id).is(':checked'));
 					});
 					break;
 				case 'number':
-					html +="<label title='"+check.id+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label>:";
-					html +=("<input type='number' min='"+(check.min||0) +"' max='"+(check.max||999) +"' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>");
+					html += `
+					  <div class="form-group">
+						<label for="altui-{0}">{1}</label>
+						<input type="number" min="{3}" max="{4}" class="form-control" id="altui-{0}" value="{2}" placeholder="name@example.com">
+						{5}
+					  </div>
+					`.format(
+						check.id,
+						_T(check.label),
+						init,
+						(check.min||0),
+						(check.max||999),
+						helpbutton
+					);
+  
+					// html +="<label title='"+check.id+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label>:";
+					// html +=("<input type='number' min='"+(check.min||0) +"' max='"+(check.max||999) +"' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>");
 					$(".altui-mainpanel").on("focusout","#altui-"+check.id,function(){
-					$("#altui-"+check.id).is(':checked')
 						_saveOption(check.id,parseInt($("#altui-"+check.id).val()));
 					});
 					break;
 			}
-			var helpbutton = xsbuttonTemplate.format( id, 'altui-help-button',	glyphTemplate.format("question","",""), _T(check.id+":"+check.help));
-			html+=helpbutton;
+			// html+=helpbutton;
 			return html;
 		};
 		function _saveOption(name,value) {
@@ -13840,25 +13886,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		var html = "";
 
-		html +="<div class='col-12'>";
+		html +="<div class='col-12 mb-2'>";
 		html +=" <div class='card xxx'>";
 		html +="  <div class='card-header'>"+_T("Options")+"</div>";
-		html +="  <div class='card-body'>";
-		html += "  <div class='row'>";
+		html +="  <div class='card-body'><form>";
 			$.each(_userOptions, function(id,check) {
 				if (check.hidden!=true) {
-					html += "<div class='col-sm-6'>";
+					// html += "<div class='col-sm-6'>";
 					html += _displayOption(id,check);
-					html += "</div>";
+					// html += "</div>";
 				}
 			});
-		html +="   </div>";
-		html +="  </div>";
+		html +="  </form></div>";
 		html +=" </div>";
 		html +="</div>";
 
 		//http://api.github.com/repos/ajaxorg/ace/contents/lib/ace/theme
-		html += "<div class='col-12'>";
+		html += "<div class='col-12 mb-2'>";
 			html +="<div class='card xxx'>";
 				html +="  <div class='card-header'>"+_T("Editor Control")+"</div>";
 				html +="  <div class='card-body'>";
@@ -13880,15 +13924,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="</div>";
 		html +="</div>";
 
-		html += "<div class='col-12'>";
+		html += "<div class='col-12 mb-2'>";
 			html +="<div class='card xxx'>";
 			html +="  <div class='card-header'>"+_T("Cache Control")+"</div>";
 				html +="  <div class='card-body'>";
-					html +="<div class='btn-group' role='group' aria-label='Icon DB'>";
+					html +="<div class='btn-group mr-2' role='group' aria-label='Icon DB'>";
 						html += "<button class='btn btn-light altui-save-IconDB' type='submit'>"+saveGlyph+" Save Icon DB</button>";
 						html += "<button class='btn btn-light altui-clear-IconDB' type='submit'>"+okGlyph+" Clear Icon DB</button>";
 					html += "</div>";
-					html += "<div class='btn-group' role='group' aria-label='File DB'>";
+					html += "<div class='btn-group mr-2' role='group' aria-label='File DB'>";
 						html += "<button class='btn btn-light altui-save-FileDB' type='submit'>"+saveGlyph+" Save File DB</button>";
 						html += "<button class='btn btn-light altui-clear-FileDB' type='submit'>"+okGlyph2+" Clear File DB</button>";
 					html += "</div>";
@@ -13900,7 +13944,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="</div>";
 		html +="</div>";
 
-		html += "<div class='col-12'>";
+		html += "<div class='col-12 mb-2'>";
 		html +="<div class='card xxx'>";
 		html +="  <div class='card-header'>"+_T("Custom Pages Control")+"</div>";
 		html +="  <div class='card-body'>";
@@ -13938,13 +13982,13 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			editor.setFontSize( parseInt($(this).val()) );
 			_saveOption("EditorFontSize",parseInt($(this).val()))
 		})
-		$(".altui-help-button").click( _userOptions, function(e) {
-			var help = $(this).attr("title").split(':');
-			var userOptions = e.data;
-			var arr = userOptions.filter( function(opt) { return (opt.id == help[0]) } )
-			if (arr.length>0)
-				DialogManager.infoDialog(help[0],_T(arr[0].help))
-		});
+		// $(".altui-help-button").click( _userOptions, function(e) {
+			// var help = $(this).attr("title").split(':');
+			// var userOptions = e.data;
+			// var arr = userOptions.filter( function(opt) { return (opt.id == help[0]) } )
+			// if (arr.length>0)
+				// DialogManager.infoDialog(help[0],_T(arr[0].help))
+		// });
 
 		$(".altui-save-IconDB").click( function() {
 			IconDB.saveDB();
