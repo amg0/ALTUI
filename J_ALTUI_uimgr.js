@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2190 $";
+var ALTUI_revision = "$Revision: 2191 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -767,7 +767,6 @@ var styles ="						\
 		width: 100%;		\
 	}		\
 	.altui-breadcrumb {		\
-		display: inline-block;	\
 		margin-right: 10px;		\
 		padding-top: 6px;		\
 		padding-bottom: 6px;	\
