@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2189 $";
+var ALTUI_revision = "$Revision: 2190 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10150,14 +10150,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// now artificially pushing a UIControler state to be able to go back
 			HistoryManager.pushState( 'Custom Pages', "", [nPage], UIManager.pageUsePages,UIManager);
 		})
-				// lean layout if requested
-		if ( getQueryStringValue("Layout") == 'lean') {
-			$("#altui-pagemessage").remove();
-			$(".navbar-fixed-top").remove();
-			$("ul.nav-tabs").remove();
-			$(".container-fluid").css("margin-top","-60px");
-			$(".container-fluid").find(".col-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
-		}
 	},
 
 	pageEditPages: function ()
@@ -13819,6 +13811,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	run: function( eventname ) {
 		var homepage = getQueryStringValue("home") || 'pageHome';
 		window["UIManager"][homepage]();	// call function by its name
+		UIControler.leanMode();
 	}
   };	// end of return
 })( window );
@@ -14248,12 +14241,23 @@ var UIControler = (function(win) {
 			});
 			return parent
 		},
+		leanMode:function() {
+			// lean layout if requested
+			if ( getQueryStringValue("Layout") == 'lean') {
+				$("#altui-pagemessage").remove();
+				$("#navbar").remove();
+				$("ul.nav-tabs").remove();
+				// $(".container-fluid").css("margin-top","-60px");
+				// $(".container-fluid").find(".col-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
+			}
+		},
 		displayPage: function( code, args ) {
 			if (_pages[code]) {
 				var pageargs = [].concat( _pages[code].args || [] );
 				pageargs = pageargs.concat( args || [] );
 				(_pages[code].onclick).apply(UIManager,pageargs);
 			}
+			UIControler.leanMode();
 		},
 		changePage: function(code,args) {
 			UIControler.displayPage(code,args);
