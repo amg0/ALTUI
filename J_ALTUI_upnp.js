@@ -43,7 +43,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	function _buildAttributeSetUrl( deviceID, attribute, value) {
 		// TODO: investigate if we can use : http://192.168.1.16/port_3480/data_request?id=lu_variableset&DeviceNum=58&Variable=onDashboard&Value=0
 		// var url = _getUrlHead()+"?id=lr_ALTUI_Handler&command=set_attribute&devid="+deviceID+"&attr="+attribute+"&value="+encodeURIComponent(value);
-		var url = _getUrlHead()+"?id=lu_variableset&DeviceNum="+deviceID+"&Variable="+attribute+"&Value="+encodeURIComponent(value);
+		var url = _getUrlHead()+"?id=lu_variableset&DeviceNum="+deviceID+"&Variable="+attribute+"&Value="+encodeURIComponent(value || "");
 		return _proxify(url);
 	}
 	
