@@ -5234,7 +5234,7 @@ var PageMessage = (function(window, undefined ) {
 			</form>
 			<div class="collapse" id="altui-pagemessage-panel">
 				<div class="card card-body">
-				<table class='table table-responsive table-sm table-responsive'>
+				<table class='table table-sm '>
 				<tbody></tbody>
 				</div>
 			</div>
