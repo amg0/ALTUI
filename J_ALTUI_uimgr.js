@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2197 $";
+var ALTUI_revision = "$Revision: 2198 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4147,6 +4147,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.off("click",".altui-favorites-scene-content")
 			.on("click",".altui-favorites-scene-content",function() {
 				var altuiid = $(this).data("altuiid");
+				$(this).addClass("btn-success").removeClass("btn-light");
+				var that = $(this);
+				setTimeout( function() { that.removeClass("btn-success").addClass("btn-light") }, 2000 )
 				MultiBox.runSceneByAltuiID(altuiid);
 				return false;
 			})
