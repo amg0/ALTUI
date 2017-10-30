@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2196 $";
+var ALTUI_revision = "$Revision: 2197 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13619,10 +13619,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="<div class='card xxx'>";
 			html +="  <div class='card-header'>"+_T("Cache Control")+"</div>";
 				html +="  <div class='card-body'>";
-					html +="<div class='btn-group mr-2' role='group' aria-label='Icon DB'>";
-						html += "<button class='btn btn-light altui-save-IconDB' type='submit'>"+saveGlyph+" Save Icon DB</button>";
-						html += "<button class='btn btn-light altui-clear-IconDB' type='submit'>"+okGlyph+" Clear Icon DB</button>";
-					html += "</div>";
+					if (MultiBox.isRemoteAccess()) {
+						html +="<div class='btn-group mr-2' role='group' aria-label='Icon DB'>";
+							html += "<button class='btn btn-light altui-save-IconDB' type='submit'>"+saveGlyph+" Save Icon DB</button>";
+							html += "<button class='btn btn-light altui-clear-IconDB' type='submit'>"+okGlyph+" Clear Icon DB</button>";
+						html += "</div>";
+					}
 					html += "<div class='btn-group mr-2' role='group' aria-label='File DB'>";
 						html += "<button class='btn btn-light altui-save-FileDB' type='submit'>"+saveGlyph+" Save File DB</button>";
 						html += "<button class='btn btn-light altui-clear-FileDB' type='submit'>"+okGlyph2+" Clear File DB</button>";
