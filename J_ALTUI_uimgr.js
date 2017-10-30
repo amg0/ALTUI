@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2198 $";
+var ALTUI_revision = "$Revision: 2199 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6169,9 +6169,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var limit = (ALTUI_registered===false) ? 5 : null;
 		
 		function _tableScenes(room) {
-			var search = $("#altui-search-text").val();
+			var search = $("#altui-search-text").val().toUpperCase();
 			var scenes = MultiBox.getScenesSync().filter( function(scene) { 
-				return (scene.room == room.id ) && ( (search.length==0) || (scene.name.toUpperCase().contains(search.toUpperCase())==true) )
+				return (scene.room == room.id ) && ( (search.length==0) || (room.name.toUpperCase().contains(search)==true) || (scene.name.toUpperCase().contains(search)==true) )
 			});
 			var arr = $.map( scenes, function(s,i) { 
 				return {
@@ -6220,9 +6220,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		
 		function _tableDevices(room) {
-			var search = $("#altui-search-text").val();
+			var search = $("#altui-search-text").val().toUpperCase();
 			var devices = MultiBox.getDevicesSync().filter( function(device) { 
-				return (device.room == room.id) && (device.invisible != true) && ( (search.length==0) || (device.name.toUpperCase().contains(search.toUpperCase())==true) ) 
+				return (device.room == room.id) && (device.invisible != true) && ( (search.length==0) || (room.name.toUpperCase().contains(search)==true) || (device.name.toUpperCase().contains(search)==true) ) 
 			});
 			var arr = $.map( devices, function(d,i) { return {id:d.altuiid, name:d.name, " ":_deviceIcon(d), val:_deviceInfo(d)} } )
 			return (arr.length>0) ? HTMLUtils.array2Table(arr,'id',[],null,'altui-myhome-devices','htmlid',false) : null
