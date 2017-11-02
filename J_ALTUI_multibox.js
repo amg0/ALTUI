@@ -351,7 +351,7 @@ var MultiBox = ( function( window, undefined ) {
 
 		var user = MyLocalStorage.getSettings('MainUser')
 		if (user==null) {
-			user=  joint.util.uuid();
+			user=  uuidv4();	//joint.util.uuid();
 			MyLocalStorage.setSettings('MainUser',user);
 		}
 		return {Name:user};
