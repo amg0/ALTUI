@@ -955,15 +955,31 @@ var DialogManager = ( function() {
 			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-light btn-sm altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
 		
 		propertyline += "<div class='input-group'>";
-			propertyline += "<input id='altui-widget-"+name+"' class='form-control' "+optstr+" value='"+value.escapeXml()+"' "+placeholder+" ></input>";
-			propertyline += "<span class='input-group-btn'>";
-				propertyline += buttonTemplate.format( "altui-edit-"+name, 'btn-light', "Blockly "+editGlyph,'default',_T('Edit Watch Expression'));
-			propertyline += "</span>";
+			propertyline += "<textarea rows='1' cols='50' id='altui-widget-"+name+"' class='form-control' "+optstr+"  "+placeholder+" >"+value.escapeXml()+"</textarea>";
 			propertyline += "<input type='hidden' id='altui-xml-"+name+"' class='form-control' value='"+xml.escapeXml()+"' ></input>";
+			propertyline += buttonTemplate.format( "altui-edit-"+name, 'btn-light input-group-addon', "Blockly "+editGlyph,'default',_T('Edit Watch Expression'));
 		propertyline += "</div>";
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 		
+		// init Ace editor
+		// var id = 'altui-widget-'+name
+		// var init =	MyLocalStorage.getSettings("EditorTheme") || "monokai";		
+		// var editor = ace.edit( id );
+		// editor.getSession().setMode( "ace/mode/lua" );
+		// editor.setTheme( "ace/theme/"+init );
+		// editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
+		// resize
+		// setTimeout( function() {
+			// $('#'+id).resizable({
+				// containment: "parent",
+				// maxWidth:$(elem).closest(".card").innerWidth()-30, // ugly but easier, padding 15 on
+				// stop: function( event, ui ) {
+					// editor.resize();
+				// }
+			// });
+		// },500);
+				
 		$("#altui-widget-LuaExpression").on("change",function() {
 			$("#altui-xml-LuaExpression").val( "" );
 		});

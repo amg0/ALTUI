@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2202 $";
+var ALTUI_revision = "$Revision: 2203 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5919,7 +5919,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		formHtml+=" <div class='form-group '>";
 		formHtml+=" <div class='input-group '>";
 		formHtml+="		  <input id='altui-create-room-name' type='text' class='form-control' placeholder='Room name...'>";
-		formHtml+="		  <span class='input-group-btn'>";
+		formHtml+="		  <span class='input-group-addon'>";
 		formHtml+="			<button id='altui-create-room' class='btn btn-light' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button>";
 		// formHtml+="		   <button id='altui-save-rooms' class='btn btn-light' type='button'>"+saveGlyph+"&nbsp;"+_T("Save")+"</button>";
 		formHtml+="		  </span>";
@@ -7835,11 +7835,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						}
 						DialogManager.dlgAddVariables(dialog, null, widget, function() {
 							var helptext = _T("Lua Expression with new being newvalue and old being oldvalue of type string. Ignore errors about undefined variables");
-							// DialogManager.dlgAddLine(dialog, "LuaExpression", helptext,
-								// condition ? condition.luaexpr : "",
-								// _T("Expression with old new as variables and lua operators like <  >	 <= >= == ~="),
-								// {	placeholder:helptext, required:''}
-								// )
+
 							DialogManager.dlgAddEditor(
 								dialog,
 								"LuaExpression",
