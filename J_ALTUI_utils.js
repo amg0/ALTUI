@@ -1010,6 +1010,18 @@ var DialogManager = ( function() {
 		editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
 		editor.getSession().setMode( "ace/mode/"+language);
 		editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
+		
+		setTimeout(function() {
+			var parentwidth = $("#altui-editor-text-"+name).parent().width()
+			$("#altui-editor-text-"+name).resizable({
+				// containment: "parent",
+				maxWidth:parentwidth,
+				stop: function( event, ui ) { 
+					if (editor) 
+						editor.resize(); 
+				}
+			});
+		},500);
 	};
 	function _dlgAddUrl(dialog, name, label, value,help, options) {
 		var optstr = HTMLUtils.optionsToString($.extend( {type:'text'},options));
@@ -1719,7 +1731,7 @@ var HTMLUtils = (function() {
 		var html="";
 		var idcolumn = idcolumn || 'id';
 		var viscols = viscols || [idcolumn];
-		var responsive = ((bResponsive==null) || (bResponsive==true)) ? 'table-responsive' : ''
+		var responsive = ((bResponsive==null) || (bResponsive==true)) ? 'table-responsive-OFF' : ''
 
 		if ( (arr) && ($.isArray(arr) && (arr.length>0)) ) {
 			var display_order = [];
@@ -4500,7 +4512,7 @@ var SceneEditor = function (scene) {
 		html += smallbuttonTemplate.format( idx, 'altui-editgroup', editGlyph, 'Edit group');
 		html +="</td>";			
 		html += "<td>";
-		html +="<table class='table table-responsive table-sm altui-scene-group' data-group-idx='"+idx+"'>";
+		html +="<table class='table table-responsive-OFF table-sm altui-scene-group' data-group-idx='"+idx+"'>";
 		html +="<tbody>";
 		$.each(group.actions, function(ida,action) {
 			html += _displayAction(action,ida,idx);
@@ -4582,7 +4594,7 @@ var SceneEditor = function (scene) {
 		var html="";
 		html += UIManager.displayJson( 'Actions', scene.groups );
 		try {
-			html +="<table class='table table-responsive table-sm'>";
+			html +="<table class='table table-responsive-OFF table-sm'>";
 			html +="<tbody>";
 			if (scene.groups)
 			{
@@ -4646,7 +4658,7 @@ var SceneEditor = function (scene) {
 		function _displayWatches(scenewatches) {
 			html = "";
 			if (scenecontroller==0) {
-				html +="<table class='table table-responsive table-sm'>";
+				html +="<table class='table table-responsive-OFF table-sm'>";
 				html +="<caption>{0}</caption>".format(_T("Device Variable Watches"));
 				html +="<tbody>";
 				$.each( scenewatches, function (idx,watch) {				
@@ -4674,7 +4686,7 @@ var SceneEditor = function (scene) {
 						]
 					});
 				}
-				html +="<table class='table table-responsive table-sm'>";
+				html +="<table class='table table-responsive-OFF table-sm'>";
 				html +="<caption>{0}</caption>".format(_T("Device Triggers"));
 				html +="<tbody>";
 				if (scene.triggers) {
@@ -4764,7 +4776,8 @@ var SceneEditor = function (scene) {
 			// containment: "parent",
 			maxWidth:$("div#altui-luascene").closest(".card").innerWidth()-30, // ugly but easier, padding 15 on each size
 			stop: function( event, ui ) {
-				editor.resize();
+				if (editor)
+					editor.resize();
 			}
 		});			
 		_updateAccordeonHeaders();

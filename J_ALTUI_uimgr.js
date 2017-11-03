@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2201 $";
+var ALTUI_revision = "$Revision: 2202 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -366,6 +366,8 @@ var styles ="						\
 	.altui-ace-editor .ui-resizable-handle { background-color: white; }		\
 	#altui-editor-text .ui-resizable-helper { border: 2px dotted #00F; }	\
 	#altui-editor-text .ui-resizable-handle { background-color: white; }	\
+	#altui-editor-text-LuaExpression .ui-resizable-helper { border: 2px dotted #00F; }	\
+	#altui-editor-text-LuaExpression .ui-resizable-handle { background-color: white; }	\
 	.altui-editor-area { width:100%; height:100% }	\
 	div.altui-timeline-item-tripped { background-color:#f2dede; } \
 	div.altui-timeline-item-untripped { background-color:#dff0d8; } \
@@ -1709,7 +1711,7 @@ var UIManager  = ( function( window, undefined ) {
 		if (options.add_json==true)
 			html += _displayJson( 'Timers', timers);
 		try {
-			html +="<table class='table table-responsive table-sm'>";
+			html +="<table class='table table-responsive-OFF table-sm'>";
 			html +="<tbody>";
 			if (timers) {
 				$.each( timers, function(idx,timer) {
@@ -1973,8 +1975,8 @@ var UIManager  = ( function( window, undefined ) {
 						//AltuiDebug.debug("getDeviceVariableHistory returned :"+history.result);
 						var html = "<tr><td colspan='3'>";
 						html += "<div class='card xxx'> <div class='card-body'>";
-						// html += "<div class='table-responsive'>";
-						html +="<table id='{0}' class='table table-responsive table-sm table-responsive altui-variable-value-history'>".format(varid);
+						// html += "<div class='table-responsive-OFF'>";
+						html +="<table id='{0}' class='table table-responsive-OFF table-sm table-responsive-OFF altui-variable-value-history'>".format(varid);
 						html +="<thead>";
 						html += ("<tr><th>{0}</th><th>{1}</th><th>{2}</th></tr>".format(_T("Date"),_T("Old"),_T("New")));
 						html +="</thead>";
@@ -3324,7 +3326,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += _drawDeviceLastUpdateStats( device );
 				// if (isNullOrEmpty(setvariables) == false) {
 					html += "<form id='myform' data-toggle='validator' role='form' action='javascript:void(0);' >";
-					html += "<table class='table table-responsive table-sm altui-config-variables'>";
+					html += "<table class='table table-responsive-OFF table-sm altui-config-variables'>";
 					html +=("<caption>{0} <button id='"+device.altuiid+"' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(_T("Device zWave Parameters"),_T('Save Changes'));
 					html += "<thead>";
 					html += "<tr>";
@@ -5931,7 +5933,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// table of rooms
 		$(".altui-mainpanel")
 			.append( _createControllerSelect('altui-controller-select'))
-			.append($("<div class='col-12'><table id='table' class='table table-responsive table-sm'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Scenes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
+			.append($("<div class='col-12'><table id='table' class='table table-responsive-OFF table-sm'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Scenes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
 		$("#altui-controller-select").closest(".form-group").append(formHtml);
 
 		var roomListTemplate = "<tr data-altuiid='{0}'><td style='white-space: nowrap'>{0}</td><td style='white-space: nowrap'><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td><td>{4}</td></tr>";
@@ -7062,7 +7064,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					MultiBox.getSceneHistory( scene, function(history) {
 						var html="";
 						html += "<div class='card xxx'> <div class='card-body'>";
-						html +="<table id='{0}' class='table table-responsive table-sm altui-variable-value-history'>".format(altuiid);
+						html +="<table id='{0}' class='table table-responsive-OFF table-sm altui-variable-value-history'>".format(altuiid);
 						html +="<thead>";
 						html += ("<tr><th>{0}</th><th>{1}</th></tr>".format(_T("Date"),_T("Name")));
 						html +="</thead>";
@@ -7280,7 +7282,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 										html += "<li class='altui-transition-subtitle'>When</li>";
 										html += "<ul>";
 											if (link.schedule )
-												html += "<li>Schedule: {0}</li>".format(UIManager.displayTimers( [ link.schedule ] , { only_text:true, add_button:false, add_json:false }).replace('table table-responsive table-sm','table altui-workflow-schedule'));
+												html += "<li>Schedule: {0}</li>".format(UIManager.displayTimers( [ link.schedule ] , { only_text:true, add_button:false, add_json:false }).replace('table table-responsive-OFF table-sm','table altui-workflow-schedule'));
 											if (link.timer)
 												html += "<li>Timer: '{0}' expiration {1}s</li>".format(link.timer.name,link.timer.duration);
 											html += _displayConditions(link.conditions)
@@ -10190,7 +10192,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			});
 		};
 
-		$(".altui-mainpanel").append($("<div class='col-12'><table id='table' class='table table-responsive table-sm'><thead><tr><th></th><th>"+_T("Name")+"</th><th>"+_T("Version")+"</th><th>"+_T("Update")+"</th><th>"+_T("Files")+"</th><th>Actions</th><th>"+_T("Update")+"</th><th>"+_T("Uninstall")+"</th></tr></thead><tbody></tbody></table></div>"));
+		$(".altui-mainpanel").append($("<div class='col-12'><table id='table' class='table table-responsive-OFF table-sm'><thead><tr><th></th><th>"+_T("Name")+"</th><th>"+_T("Version")+"</th><th>"+_T("Update")+"</th><th>"+_T("Files")+"</th><th>Actions</th><th>"+_T("Update")+"</th><th>"+_T("Uninstall")+"</th></tr></thead><tbody></tbody></table></div>"));
 		MultiBox.getPlugins( drawPlugin , endDrawPlugin);
 	},
 
@@ -10976,7 +10978,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		};
 		function _drawCommandTable(commands) {
 			var html="";
-			html+= "<table class='table table-responsive table-sm altui-oscommand-configtbl'>";
+			html+= "<table class='table table-responsive-OFF table-sm altui-oscommand-configtbl'>";
 			html+= "	<thead>";
 			html+= "	  <tr>";
 			html+= "<th>"+_T("Actions")+"</th>";
@@ -13144,7 +13146,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		});
 		var html = "";
 		html+="<div class='col-12'>";
-		html+=("<table id='"+htmlid+"' class='altui-grid table table-responsive table-sm table-hover table-striped'>");
+		html+=("<table id='"+htmlid+"' class='altui-grid table table-responsive-OFF table-sm table-hover table-striped'>");
 		html+="	   <thead>";
 		html+="	   <tr>";
 
@@ -13920,7 +13922,7 @@ $(function() {
 		deviceModalTemplate += "	  <div class='modal-body'>";
 		deviceModalTemplate += "	  <div class='row' >";
 		deviceModalTemplate += "	  <div class='col-12' style='overflow-x: auto;'>";
-		deviceModalTemplate += " <table class='table table-responsive table-sm'>";
+		deviceModalTemplate += " <table class='table table-responsive-OFF table-sm'>";
 		deviceModalTemplate += "	   <thead>";
 		deviceModalTemplate += "		 <tr>";
 		// deviceModalTemplate += "			  <th>#</th>";
@@ -13953,7 +13955,7 @@ $(function() {
 		deviceActionModalTemplate += "		  <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
 		deviceActionModalTemplate += "		</div>";
 		deviceActionModalTemplate += "		<div class='modal-body'>";
-		deviceActionModalTemplate += "	<table class='table table-responsive table-sm' >";
+		deviceActionModalTemplate += "	<table class='table table-responsive-OFF table-sm' >";
 		deviceActionModalTemplate += "		 <thead>";
 		deviceActionModalTemplate += "		   <tr>";
 		deviceActionModalTemplate += "			 <th>"+_T("Action")+"</th>";
