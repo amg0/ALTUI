@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2203 $";
+var ALTUI_revision = "$Revision: 2204 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5916,15 +5916,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 		UIManager.clearPage('Rooms',_T("Rooms"),UIManager.oneColumnLayout);
 		var formHtml="";
-		formHtml+=" <div class='form-group '>";
+		formHtml+=" <div class='ml-2 form-group '>";
 		formHtml+=" <div class='input-group '>";
-		formHtml+="		  <input id='altui-create-room-name' type='text' class='form-control' placeholder='Room name...'>";
-		formHtml+="		  <span class='input-group-addon'>";
-		formHtml+="			<button id='altui-create-room' class='btn btn-light' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button>";
-		// formHtml+="		   <button id='altui-save-rooms' class='btn btn-light' type='button'>"+saveGlyph+"&nbsp;"+_T("Save")+"</button>";
-		formHtml+="		  </span>";
-		formHtml+="		</div><!-- /input-group -->";
-		formHtml+="		</div><!-- /form-group -->";
+		formHtml+="		<input id='altui-create-room-name' type='text' class='form-control' placeholder='Room name...'>";
+		formHtml+="		<button id='altui-create-room' class='input-group-addon btn btn-light' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button>";
+		formHtml+="	</div><!-- /input-group -->";
+		formHtml+="	</div><!-- /form-group -->";
 
 		// on the left nav
 		// nothing
