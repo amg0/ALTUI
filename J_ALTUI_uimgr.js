@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2207 $";
+var ALTUI_revision = "$Revision: 2210 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -928,6 +928,9 @@ var styles ="						\
 		float: left;\
 		font-size: 32px;	\
 		animation: blinker 2s linear infinite;	\
+	} \
+	.altui-plugin-reviews { \
+		cursor: pointer; \
 	} \
 ";
 
@@ -5933,7 +5936,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			.append($("<div class='col-12'><table id='table' class='table table-responsive-OFF table-sm'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Scenes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
 		$("#altui-controller-select").closest(".form-group").append(formHtml);
 
-		var roomListTemplate = "<tr data-altuiid='{0}'><td style='white-space: nowrap'>{0}</td><td style='white-space: nowrap'><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td><td>{4}</td></tr>";
+		var roomListTemplate = "<tr data-altuiid='{0}'><td style='white-space: nowrap'>{0}</td><td style='white-space: nowrap'><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td><td style='white-space: nowrap'>{4}</td></tr>";
 		MultiBox.getRooms( null,null,function( rooms) {
 			if (rooms) {
 				$.each(rooms.sort(altuiSortByName), function(idx,room) {
@@ -6451,7 +6454,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		<div class='modal-body'>";
 				deviceCreateModalTemplate += "		<div class='container-fluid'><div class='row'>";
-						deviceCreateModalTemplate += "<form>";
+						deviceCreateModalTemplate += "<form class='col'>";
 							deviceCreateModalTemplate += "<div class='form-group'>";
 								deviceCreateModalTemplate += "<label for='altui-input-dtitle'>Device Name</label>";
 								deviceCreateModalTemplate += "<input type='text' class='form-control' id='altui-input-dtitle' placeholder='Enter the name'>";
@@ -6463,8 +6466,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							deviceCreateModalTemplate += "<div class='form-group'>";
 								deviceCreateModalTemplate += "<label for='altui-input-ifile'>I_xxx.xml filename</label>";
 								deviceCreateModalTemplate += "<input type='text' class='form-control' id='altui-input-ifile' placeholder='Enter the filename'>";
+								deviceCreateModalTemplate += "<small class='form-text text-muted'>{0}</small>".format(_T("Enter the device D_xx and I_xx file name"));
 							deviceCreateModalTemplate += "</div>";
-							deviceCreateModalTemplate += "<p class='help-block'>Enter the device D_xx and I_xx file name</p>";
 						deviceCreateModalTemplate += "</form>";
 				deviceCreateModalTemplate += "		</div></div>";
 			deviceCreateModalTemplate += "		</div>";
@@ -9490,8 +9493,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var dialog = DialogManager.registerDialog('dialogModal',
 									defaultDialogModalTemplate.format( 'dialogModal',
 										_T('Plugin Rating for {0}'.format(plugin.Title)),	// title
-										_displayPluginReviews("altui-reviews-graph",plugin) ,						// body
-										"",	// size
+										_displayPluginReviews("altui-reviews-graph",plugin) ,	// body
+										"modal-lg",	// size
 										""	// glyph icon
 									));
 				var choices = $.map( [ "1-poor","2-below avg","3-average","4-above avg","5-excellent" ] , function(e,i) {return { value:i+1,text:_T(e) } } );
@@ -10031,7 +10034,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			return html;
 		};
 
-		var pluginTemplate = "<tr data-altuiid='{9}'><td>{6}</td><td>{0}<div><small>{9}</small></div></td><td>{1}.{2}</td><td>{10}</td><td>{7}</td><td><div class='btn-group'>{3}{4}</div></td><td>{5}</td><td>{8}</td></tr>";
+		var pluginTemplate = "<tr data-altuiid='{9}'><td>{6}</td><td style='white-space: nowrap'>{0}<small> #{9}</small></td><td>{1}.{2}</td><td>{10}</td><td>{7}</td><td><div class='btn-group'>{3}{4}</div></td><td>{5}</td><td>{8}</td></tr>";
 		function drawPlugin(idx, plugin) {
 			plugin.Icon = plugin.Icon || defIcon;
 			var iconTemplate = ( plugin.Icon.startsWith('https') ? "<img class='altui-plugin-icon' src='{0}'></img>"  : "<img class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ).format(plugin.Icon);
@@ -10295,8 +10298,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				return html;
 			};
 
-			var html = "<div class='row'>";
-
 			var lines = new Array();
 			$.each(tools , function(idx,tool) {
 				lines.push( _createToolHtml(tool) );
@@ -10311,8 +10312,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			lines.push(editBoxTemplate.format( editBoxLines.join('') ) );
 			
 			lines.push( "<div class='altui-widget-delete col-12'>"+deleteGlyph+"</div>"  );
-			html += lines.join('');
-			html += "</div>"
+			var html = `<div class="mt-2 ml-1 mr-1 row">{0}</div>`.format( lines.join('') )
 			return html
 		};
 
