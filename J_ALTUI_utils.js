@@ -1936,6 +1936,10 @@ var HTMLUtils = (function() {
 						type,
 						pattern,
 						checked);
+					html += '<div class="invalid-feedback">{0}</div>'.format(line.invalidfeedback || _T("Please enter a valid element"))
+					if (line.helptext) {
+						html +='<small id="passwordHelpBlock" class="form-text text-muted">{0}</small>'.format( line.helptext )
+					}
 					break;
 				case "accordeon":
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);

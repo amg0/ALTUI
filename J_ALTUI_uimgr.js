@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2210 $";
+var ALTUI_revision = "$Revision: 2212 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3269,9 +3269,10 @@ var UIManager  = ( function( window, undefined ) {
 		html += "<div class=''><small>{0}</small></span></div>".format( m[2] || "" )
 		html += "</td>";
 		html += "<td>";
-		html += "<div class='col-4'><input required type='number' min='1' class='form-control form-control-sm' value='{0}'></input></div>".format( m[1] || "" );
+		html += "<div class='form-row'><input required type='number' min='1' class='col-4 form-control form-control-sm' value='{0}'></input>".format( m[1] || "" );
 		html += smallbuttonTemplate.format( 'altui-deletevar-'+varnum, 'altui-delete-variable', deleteGlyph ,'Delete');
-		html += "</td>";
+		html += '<div class="invalid-feedback">{0}</div>'.format(_T("Enter a valid variable number"))
+		html += "</div></td>";
 		html += "<td>";
 		html += $("<div></div>").append(sel).html();
 		html += "</td>";
@@ -3328,7 +3329,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 altui-device-config'>"
 				html += _drawDeviceLastUpdateStats( device );
 				// if (isNullOrEmpty(setvariables) == false) {
-					html += "<form id='myform' data-toggle='validator' role='form' action='javascript:void(0);' >";
+					html += "<form id='myform' role='form' action='javascript:void(0);' novalidate >";
 					html += "<table class='table table-responsive-OFF table-sm altui-config-variables'>";
 					html +=("<caption>{0} <button id='"+device.altuiid+"' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(_T("Device zWave Parameters"),_T('Save Changes'));
 					html += "<thead>";
@@ -3375,17 +3376,18 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						var id = $(this).prop('id');
 						var tr = $(this).closest('tr').remove();	// remove the line purely
 					});
-					// .on('click',".altui-device-config-save",function() {
-						// var result = $('#myform').validator('validate');
-						// $("#myform").submit();
-					// });
+
 				$("#myform").on('submit', function(e) {
-					if (e.isDefaultPrevented()) {
+					var form = $("#myform")[0]
+					if (form.checkValidity() === false) {
 						// handle the invalid form...
-					} else {
-						// everything looks good!
 						e.preventDefault();
-						// var result = $('#myform').validator('validate');
+						e.stopPropagation();
+						form.classList.add('was-validated');
+					}
+					else {
+						// everything looks good!
+						form.classList.add('was-validated');
 						var altuiid = $('#myform .altui-device-config-save').prop('id');
 						var controllerid = MultiBox.controllerOf(altuiid).controller;
 						var device = MultiBox.getDeviceByAltuiID(altuiid);
@@ -9008,7 +9010,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 									{ id:"altui-btn-submit", label:_T("Modify"), type:"submit",	 },
 								]}
 							],
-							"data-toggle='validator'"
+							"novalidate" //"data-toggle='validator'"
 						);
 					html += "</div>"
 				html += "</div>"
@@ -9111,27 +9113,35 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				.on("click","#altui-btn-close", function() {
 					_.defer(  UIManager.pageAppStore)
 				})
-				.on("click","#altui-btn-create", function() {
+				.on("click","#altui-btn-create", function(event) {
 					var plugin = _getPluginFromForm();
-					if ( $('#altui-publish-form').validator('validate').has('.has-danger').length == 0)
-					{
+					var form = $("#altui-btn-create").closest("form")[0]
+					if (form.checkValidity() === false) {
+						event.preventDefault();
+						event.stopPropagation();
+					} else {
 						_updatePlugin( plugin ,"create" ) .done( function(data) {
 							PageMessage.message( data, "success");
 						})
 					}
+					form.classList.add('was-validated');
 				})
-				.on("submit","#altui-publish-form", function(e) {
-				// .on("click","#altui-btn-submit", function(e) {
-					e.stopPropagation();
-					var plugin = _getPluginFromForm();
-					if ( isNullOrEmpty(plugin.Title) )
-						return;
-					_updatePlugin( plugin ) .done( function(data) {
-						PageMessage.message( data, "success");
-					})
+				.on("submit","#altui-publish-form", function(event) {
+					var form = $("#altui-publish-form")[0]
+					if (form.checkValidity() === false) {
+						event.preventDefault();
+						event.stopPropagation();
+					} else {
+						var plugin = _getPluginFromForm();
+						if ( isNullOrEmpty(plugin.Title) )
+							return false;
+						_updatePlugin( plugin ) .done( function(data) {
+							PageMessage.message( data, "success");
+						})
+					}
+					form.classList.add('was-validated');
 					return false;
 				})
-
 		}
 
 		function _displayPublishPage() {
@@ -10232,48 +10242,33 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 	pageEditPages: function ()
 	{
 		function _pagePageProperty(pagename) {
-			var propertyline = "";
 			var page = PageManager.getPageFromName(pagename);
-			var pageAttributes = [
-				{ key:'name',		label:'Name',			placeholder:'enter name' },
-				{ key:'background',	label:'CSS Background', placeholder:'enter css string' , helptext:'any css3 valid background property'}
+			//var pattern = (line.pattern != undefined ) ? "pattern='{0}'".format(line.pattern) : "";
+			var model = [
+				{ id:'name',		label:_T('Name'),			type:"input",	value:page['name'], pattern:"[^_]+", placeholder:'enter name' , opt:{required:true}, invalidfeedback:_T('Please provide a name without a _ character') },
+				{ id:'background',	label:'CSS Background', 	type:"input",	value:page['background'], placeholder:'enter css string' , helptext:'any css3 valid background property'},
 			];
-
-			$.each( pageAttributes , function(idx,attributes) {
-				var htmlid = 'altui-page-'+attributes.key;
-				propertyline += "<div class='form-group'>";
-				propertyline += "	<label for='{0}'>{1}</label>".format(htmlid, attributes.label);
-				propertyline += "	<input id='{0}' class='form-control' type='text' value='{2}' placeholder='{1}'></input>"
-					.format(
-						htmlid,
-						attributes.placeholder,
-						page[ attributes.key ].replace(/'/g, '&quot;')
-					);
-				if (attributes.helptext)
-					propertyline += "<p class='help-block'>{0}</p>".format(attributes.helptext);
-				propertyline += "</div>";
-			});
-
-			var dialog = DialogManager.registerDialog('dialogModal',
-							defaultDialogModalTemplate.format( 'dialogModal',
-								'Page Properties',					// title
-								"<form>"+propertyline+"</form>",	// body
-								"modal-lg",	// size
-								""	// glyph icon
-						));
-
+			var html = HTMLUtils.drawFormFields(  model );
+			var dialog = DialogManager.registerDialog('dialogModal', defaultDialogModalTemplate.format( 'dialogModal', 'Page Properties', html, 'modal-lg',''))
 			DialogManager.dlgAddDialogButton($('div#dialogModal'), true, _T("Save Changes"));
-			// buttons
-			$('div#dialogModal button.btn-primary').off('click');
-			$('div#dialogModal button.btn-primary').on( 'click', function() {
-				$.each( pageAttributes , function(idx,attributes) {
-					var htmlid = 'altui-page-'+attributes.key;
-					page[ attributes.key ] = $("#"+htmlid).val();
-				});
-				$('div#dialogModal').modal('hide');
-				_displayPages();
-			});
 
+			// buttons
+			$('div#dialogModal .btn-primary').off('click');
+			$('div#dialogModal .btn-primary').on( 'click', function(event) {
+				var form = $('div#dialogModal form')[0]
+				if (form.checkValidity() === false) {
+					event.preventDefault();
+					event.stopPropagation();
+				} else {
+					// everything looks good!
+					$.each( ['name','background'] , function(idx,htmlid) {
+						page[ htmlid ] = $("#"+htmlid).val();
+					});
+					$('div#dialogModal').modal('hide');
+					_displayPages();
+				}
+				form.classList.add('was-validated');	  
+			});
 			$('div#dialogModal').modal();
 		};
 
@@ -10663,7 +10658,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			["jQuery","http://jquery.com/","javascript framework and browser differences abstraction layer"],
 			["jQueryUI","http://jqueryui.com/","jQuery User Interface widgets ( like slider )"],
 			["Touch Punch","http://touchpunch.furf.com/","jQuery UI fix for touch screen devices"],
-			["Bootstrap Validator","https://github.com/1000hz/bootstrap-validator","Form validator in Bootstrap 3 style"],
+			// ["Bootstrap Validator","https://github.com/1000hz/bootstrap-validator","Form validator in Bootstrap 3 style"],
 			["D3js","http://d3js.org/","D3 Data Driven Documents & Les Miserables tutorial"],
 			["Bootgrid","http://www.jquery-bootgrid.com/","Jquery Bootstrap Grid"],
 			["Blockly","https://developers.google.com/blockly/","Blockly Library"],
@@ -13974,7 +13969,7 @@ $(function() {
 		defaultDialogModalTemplate = 
 `<div id='{0}' class='modal fade'>
 	 <div class='modal-dialog {3}'>
-	   <form name='{0}' class='form' data-toggle='validator' onsubmit='return false;'>
+	   <form name='{0}' class='form'  onsubmit='return false;'>
 	   <div class='modal-content'>
 		 <div class='modal-header'>
 		   <div class='modal-title'><div class='altui-dialog-icon pull-left'>{4} </div><h5 class='d-inline-block'>{1}</h5> </div>
