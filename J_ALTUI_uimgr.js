@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2214 $";
+var ALTUI_revision = "$Revision: 2215 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7984,7 +7984,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						{ id:"altui-btn-close", label:_T("Close"), type:"button",  },
 						{ id:"altui-btn-submit", label:_T("Submit"), type:"submit",	 },
 					]}
-				]
+				],
+				'novalidate'
 			);
 			html += "</div>"
 
@@ -8023,25 +8024,33 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$('#altui-link-form')
 			.off()
 			.on( 'submit', function(e) {
-				e.preventDefault();
-				Model.name = $("#altui-form-LinkName").val()
-				Model.prop.comment = $("#altui-form-LinkComment").val();
-				Model.prop.timer = $("#altui-timername").val();
-				Model.prop.duration = $("#altui-duration").val();
-				Model.prop.smooth = $("#altui-LinkSmooth").is(':checked');
-				// Model.prop.schedule already set
+				var form = $('#altui-link-form')[0]
+				if (form.checkValidity() === false) {
+					// handle the invalid form...
+					e.preventDefault();
+					e.stopPropagation();
+				} else {
+					e.preventDefault();
+					Model.name = $("#altui-form-LinkName").val()
+					Model.prop.comment = $("#altui-form-LinkComment").val();
+					Model.prop.timer = $("#altui-timername").val();
+					Model.prop.duration = $("#altui-duration").val();
+					Model.prop.smooth = $("#altui-LinkSmooth").is(':checked');
+					// Model.prop.schedule already set
 
-				if ( isNullOrEmpty(Model.prop.duration) != isNullOrEmpty(Model.prop.timer)) {
-					DialogManager.warningDialog(_T("Invalid Timer"),_T("Timer name and duration must not be empty"));
-					return false;
+					if ( isNullOrEmpty(Model.prop.duration) != isNullOrEmpty(Model.prop.timer)) {
+						DialogManager.warningDialog(_T("Invalid Timer"),_T("Timer name and duration must not be empty"));
+						return false;
+					}
+					// if it is empty and it is not the start state
+					if ( Model.prop.stateinfo && (Model.prop.stateinfo.bStart!=true) && (Model.prop.conditions.length==0) && (isNullOrEmpty(Model.prop.duration)) && (isNullOrEmpty(Model.prop.schedule))) {
+						DialogManager.warningDialog(_T("Invalid Transition"),_T("Transition appears to be empty, you need at least a condition , a schedule or a timer"));
+						return false;
+					}
+					if ($.isFunction(callback))
+						(callback)(Model);
 				}
-				// if it is empty and it is not the start state
-				if ( Model.prop.stateinfo && (Model.prop.stateinfo.bStart!=true) && (Model.prop.conditions.length==0) && (isNullOrEmpty(Model.prop.duration)) && (isNullOrEmpty(Model.prop.schedule))) {
-					DialogManager.warningDialog(_T("Invalid Transition"),_T("Transition appears to be empty, you need at least a condition , a schedule or a timer"));
-					return false;
-				}
-				if ($.isFunction(callback))
-					(callback)(Model);
+				form.classList.add('was-validated');
 				return false;
 			})
 			.on( 'click','#altui-btn-close',function() {

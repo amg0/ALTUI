@@ -2383,6 +2383,10 @@ var PageManager = (function() {
 				}
 				if (child.zindex == undefined )
 					child.zindex = 0;
+				if (child.cls == "altui-widget-2statebtn") {
+					if (child.size.height<60)
+						child.size.height=60
+				}
 			});
 	};
 	
