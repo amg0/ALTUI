@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2212 $";
+var ALTUI_revision = "$Revision: 2214 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -53,19 +53,17 @@ var simul = null;	// global D3 forceSimulation
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
 var houseModeButtonTemplate = "	 <button type='button' class='btn btn-light altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";
 var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-light'>{2}</button>";
+var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>' 
 
-var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>' //"<span class='glyphicon glyphicon-{0} {2}' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='{1}' ></span>";
-
-
-var deleteGlyph = glyphTemplate.format("trash-o",_T("Delete"),"text-danger") //"<span class='glyphicon glyphicon-trash text-danger' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Delete'></span>";
-var copyGlyph = glyphTemplate.format("clone",_T("Clone")) //"<span class='glyphicon glyphicon-copy' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Copy'></span>";
+var deleteGlyph = glyphTemplate.format("trash-o",_T("Delete"),"text-danger")
+var copyGlyph = glyphTemplate.format("clone",_T("Clone"))
 var hiddenGlyph = glyphTemplate.format("eye-slash",_T("Hidden"))
 var invisibleGlyph = glyphTemplate.format("ban",_T("Invisible"))
-var timeGlyph="<span class='glyphicon glyphicon-time' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='time'></span>";
-var okGlyph=glyphTemplate.format("check",_T("OK"))//"<span class='glyphicon glyphicon-ok' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='OK'></span>";
-var plusGlyph=glyphTemplate.format("plus",_T("Create"))//"<span class='glyphicon glyphicon-plus' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Add'></span>";
-var saveGlyph=glyphTemplate.format("floppy-o",_T("Save"))//"<span class='glyphicon glyphicon-save' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Save'></span>";
-var labelGlyph=glyphTemplate.format("font",_T("Text"))//"<span class='glyphicon glyphicon-font' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Label'></span>";
+var timeGlyph= glyphTemplate.format("clock-o",_T("Time"))
+var okGlyph=glyphTemplate.format("check",_T("OK"))
+var plusGlyph=glyphTemplate.format("plus",_T("Create"))
+var saveGlyph=glyphTemplate.format("floppy-o",_T("Save"))
+var labelGlyph=glyphTemplate.format("font",_T("Text"))
 var wrenchGlyph="";
 var optHorGlyph="";
 var refreshGlyph="";
@@ -2018,24 +2016,31 @@ var UIManager  = ( function( window, undefined ) {
 		// show
 		$('#deviceCreateModal button.btn-primary')
 			.off('click')
-			.on('click', function() {
-				if (confirm("Are you sure you want to create this device")) {
-					MultiBox.createDevice(
-						0,	// only on main controller for now
-						{
-							dfile: $("#altui-input-dfile").val(),
-							ifile: $("#altui-input-ifile").val(),
-							descr: $("#altui-input-dtitle").val()
-						},
-						function ( newid ) {
-							$('#deviceCreateModal').modal('hide');
-							if (newid !=null)
-								PageMessage.message( _T("Device {0} created successfully").format(newid), "info");
-							else
-								PageMessage.message( _T("Device creation failed"), "danger");
-						}
-					);
+			.on('click', function(e) {
+				var form = $(this).closest(".modal-content").find("form")[0]
+				if (form.checkValidity() === false) {
+					event.preventDefault();
+					event.stopPropagation();
+				} else {
+					if (confirm("Are you sure you want to create this device")) {
+						MultiBox.createDevice(
+							0,	// only on main controller for now
+							{
+								dfile: $("#altui-input-dfile").val(),
+								ifile: $("#altui-input-ifile").val(),
+								descr: $("#altui-input-dtitle").val()
+							},
+							function ( newid ) {
+								$('#deviceCreateModal').modal('hide');
+								if (newid !=null)
+									PageMessage.message( _T("Device {0} created successfully").format(newid), "info");
+								else
+									PageMessage.message( _T("Device creation failed"), "danger");
+							}
+						);
+					}
 				}
+				form.classList.add('was-validated');
 			});
 		$('#deviceCreateModal').modal();
 	};
@@ -4105,7 +4110,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			case "urn:schemas-micasaverde-com:device:MotionSensor:1":
 			case "urn:schemas-micasaverde-com:device:DoorSensor:1":
 				var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' ));
-				html += ("<span>{0}</span>".format( (tripped==true) ? "<span class='glyphicon glyphicon-flash text-danger' aria-hidden='true'></span>" : " "));
+				html += ("<span>{0}</span>".format( (tripped==true) ? glyphTemplate.format('bolt','trigger','text-danger') : " "));
 				html += _drawDefaultFavoriteDevice(device);
 				var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
 				if (lasttrip != null) {
@@ -6456,19 +6461,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			deviceCreateModalTemplate += "		</div>";
 			deviceCreateModalTemplate += "		<div class='modal-body'>";
 				deviceCreateModalTemplate += "		<div class='container-fluid'><div class='row'>";
-						deviceCreateModalTemplate += "<form class='col'>";
+						deviceCreateModalTemplate += "<form class='col' novalidate>";
 							deviceCreateModalTemplate += "<div class='form-group'>";
 								deviceCreateModalTemplate += "<label for='altui-input-dtitle'>Device Name</label>";
-								deviceCreateModalTemplate += "<input type='text' class='form-control' id='altui-input-dtitle' placeholder='Enter the name'>";
+								deviceCreateModalTemplate += "<input required type='text' class='form-control' id='altui-input-dtitle' placeholder='Enter the name'>";
+								deviceCreateModalTemplate += "<div class='invalid-feedback'>{0}</div>".format(_T("Enter a valid device name"))
 							deviceCreateModalTemplate += "</div>";
 							deviceCreateModalTemplate += "<div class='form-group'>";
 								deviceCreateModalTemplate += "<label for='altui-input-dfile'>D_xxx.xml filename</label>";
-								deviceCreateModalTemplate += "<input type='text' class='form-control' id='altui-input-dfile' placeholder='Enter the filename'>";
+								deviceCreateModalTemplate += "<input required pattern='D.+\.xml' type='text' class='form-control' id='altui-input-dfile' placeholder='Enter the filename'>";
+								deviceCreateModalTemplate += "<div class='invalid-feedback'>{0}</div>".format(_T("Enter a valid Dxxx.xml file name"))
+								deviceCreateModalTemplate += "<small class='form-text text-muted'>{0}</small>".format(_T("Enter the device Definition file name"));
 							deviceCreateModalTemplate += "</div>";
 							deviceCreateModalTemplate += "<div class='form-group'>";
 								deviceCreateModalTemplate += "<label for='altui-input-ifile'>I_xxx.xml filename</label>";
-								deviceCreateModalTemplate += "<input type='text' class='form-control' id='altui-input-ifile' placeholder='Enter the filename'>";
-								deviceCreateModalTemplate += "<small class='form-text text-muted'>{0}</small>".format(_T("Enter the device D_xx and I_xx file name"));
+								deviceCreateModalTemplate += "<input required pattern='I.+\.xml' type='text' class='form-control' id='altui-input-ifile' placeholder='Enter the filename'>";
+								deviceCreateModalTemplate += "<div class='invalid-feedback'>{0}</div>".format(_T("Enter a valid Ixxx.xml file name"))
+								deviceCreateModalTemplate += "<small class='form-text text-muted'>{0}</small>".format(_T("Enter the device Implementation file name"));
 							deviceCreateModalTemplate += "</div>";
 						deviceCreateModalTemplate += "</form>";
 				deviceCreateModalTemplate += "		</div></div>";
@@ -7217,7 +7226,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				html += "{5} device:'<strong>{0}</strong>' ({1}) when {2}-{3} <br><span class='text-info'>{4}</span>".format(
 					device.name,
 					cond.device, cond.service, cond.variable, cond.luaexpr.replace('\n','<br>'),
-					cond.triggeronly ? "<mark><span class='glyphicon glyphicon-flash' aria-hidden='true'></span></mark> <span class='text-danger'>Trigger</span>, " : ''
+					cond.triggeronly ? ("<mark>{0}</mark> <span class='text-danger'>Trigger</span>, ".format(glyphTemplate.format('bolt','trigger','text-danger'))) : ''
 					);
 				html += "</li>";
 			});
@@ -7629,7 +7638,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						{ id:"altui-btn-close", label:_T("Close"), type:"button",  },
 						{ id:"altui-btn-submit", label:_T("Submit"), type:"submit",	 },
 					]}
-				]
+				],
+				'novalidate'
 			);
 			html += "</div>"
 			$(".altui-mainpanel").html ( html );
@@ -7680,16 +7690,25 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			$('#altui-state-form')
 			.off()
 			.on( 'submit', function(e) {
-				e.preventDefault();
-				var name = $("#altui-form-StateName").val();
-				Model.prop.comment = $("#altui-form-StateComment").val();
-				Model.prop.onEnterLua = ace.edit( "altui-onEnterLua" ).getValue();
-				Model.prop.onExitLua = ace.edit( "altui-onExitLua" ).getValue();
-				if ($.isFunction(callback))
-					(callback)({
-						name:name,
-						prop:Model.prop
-					});
+				var form = $(this)[0]
+				if (form.checkValidity() === false) {
+					// handle the invalid form...
+					e.preventDefault();
+					e.stopPropagation();
+				}
+				else {
+					e.preventDefault();
+					var name = $("#altui-form-StateName").val();
+					Model.prop.comment = $("#altui-form-StateComment").val();
+					Model.prop.onEnterLua = ace.edit( "altui-onEnterLua" ).getValue();
+					Model.prop.onExitLua = ace.edit( "altui-onExitLua" ).getValue();
+					if ($.isFunction(callback))
+						(callback)({
+							name:name,
+							prop:Model.prop
+						});
+				}
+				form.classList.add('was-validated');
 				return false;
 			})
 			.on( 'click', '.altui-button-record', function() {
@@ -7886,7 +7905,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					var ui = cloneObject(cond);
 					ui.device = _displayDeviceName("",cond.device)
 					ui.luaexpr = ui.luaexpr.replace("\n","<br>")
-					ui.triggeronly = (cond.triggeronly ? "<mark><span class='glyphicon glyphicon-flash' aria-hidden='true'></span></mark>" : '' )
+					ui.triggeronly = (cond.triggeronly ? "<mark>{0}</span></mark>".format(glyphTemplate.format('bolt','trigger','text-danger')) : '' )
 					arr.push($.extend({},ui,{ "-":editButton.format(idx,htmlid)+blocklyButton.format(idx,htmlid)+delButton.format(idx,htmlid) }));
 				});
 				arr.push({
@@ -10691,7 +10710,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			<a href="{1}" target="_blank" class="card-link">{0}</a>
 		  </div>
 		</div>`
-		html = '<div class="altui-masonry card-columns">';
+		html = '<div class="col-12 card-columns">';
 		$.each(tbl, function (idx,line) {
 			html += template.format(line[0],line[1],line[2])
 		});
@@ -12779,11 +12798,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 	pageTblControllers:function() {
 		var _buttons = [
-			{id:"altui-ctrl-backup", glyph:"glyphicon-save", label:_T("Backup Controller")},
-			{id:"altui-ctrl-heal", glyph:"glyphicon-heart-empty", label:_T("ZWave Heal")},
-			{id:"altui-ctrl-inclusion", glyph:"glyphicon-plus", label:_T("ZWave Inclusion")},
-			{id:"altui-ctrl-exclusion", glyph:"glyphicon-minus", label:_T("ZWave Exclusion")},
-			{id:"altui-ctrl-support", glyph:"glyphicon-envelope", label:_T("Support Ticket")},
+			{id:"altui-ctrl-backup", glyph:"floppy-o", label:_T("Backup Controller")},
+			{id:"altui-ctrl-heal", glyph:"medkit", label:_T("ZWave Heal")},
+			{id:"altui-ctrl-inclusion", glyph:"plus", label:_T("ZWave Inclusion")},
+			{id:"altui-ctrl-exclusion", glyph:"minus", label:_T("ZWave Exclusion")},
+			{id:"altui-ctrl-support", glyph:"envelope-o", label:_T("Support Ticket")},
 		];
 
 		function _displayControllerInfo(ctrl) {
@@ -13385,7 +13404,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						html: "<span id='altui-watch-placeholder-"+idx+"'>loading...</span>"
 				});
 			});
-			'glyphicon-refresh'
 			var refreshbutton = {id:'', class:'altui-graph-refresh pull-right', label:refreshGlyph+' '+_T('Refresh'), title:'refresh' };
 			var html = HTMLUtils.createAccordeon('col-12 altui-graph-accordion',panels,refreshbutton);
 			$(domparent).append(html);
@@ -13967,30 +13985,29 @@ $(function() {
 
 		// 0:id 1: title, 2: body, 3: class size 4:icon
 		defaultDialogModalTemplate = 
-`<div id='{0}' class='modal fade'>
-	 <div class='modal-dialog {3}'>
-	   <form name='{0}' class='form'  onsubmit='return false;'>
-	   <div class='modal-content'>
-		 <div class='modal-header'>
-		   <div class='modal-title'><div class='altui-dialog-icon pull-left'>{4} </div><h5 class='d-inline-block'>{1}</h5> </div>
-		   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-		 </div>
-		 <div class='modal-body'>
-			 <div class='container-fluid'>
-				 <div class='altui-dialog-row'>
-				 {2}
-				 </div>
-			 </div>
-		 </div>
-		 <div class='modal-footer'>
-		   <button type='button' class='btn btn-light' data-dismiss='modal'>`+_T("Close")+`</button>
-		 </div>
-	   </div><!-- /.modal-content -->
-	   </form>
-	 </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->`
+			`<div id='{0}' class='modal fade'>
+				 <div class='modal-dialog {3}'>
+				   <form name='{0}' class='form'  onsubmit='return false;'>
+				   <div class='modal-content'>
+					 <div class='modal-header'>
+					   <div class='modal-title'><div class='altui-dialog-icon pull-left'>{4} </div><h5 class='d-inline-block'>{1}</h5> </div>
+					   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+					 </div>
+					 <div class='modal-body'>
+						 <div class='container-fluid'>
+							 <div class='altui-dialog-row'>
+							 {2}
+							 </div>
+						 </div>
+					 </div>
+					 <div class='modal-footer'>
+					   <button type='button' class='btn btn-light' data-dismiss='modal'>`+_T("Close")+`</button>
+					 </div>
+				   </div><!-- /.modal-content -->
+				   </form>
+				 </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->`
 
-	//"<span class='glyphicon glyphicon-search' aria-hidden='true' data-toggle='tooltip' data-placement='bottom' title='Search'></span>"
 		staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );
 		starGlyph = glyphTemplate.format( "star", _T("Favorite"), "altui-favorite text-warning" );
 		questionGlyph=glyphTemplate.format( "question", _T("Question"), "text-warning" );

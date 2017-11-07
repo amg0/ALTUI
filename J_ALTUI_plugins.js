@@ -145,8 +145,6 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			status = parseInt( status );
 			if (status>0)		// special case of dimmer
 				status=1;
-			// $(htmlselector).removeClass("on").addClass("spinner");
-			// $(htmlselector).removeClass("on").removeClass("off").addClass("center-block").html(glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin big-glyph" ));
 			$(htmlselector).find("input").prop('checked', (status==0)); // invert
 			cbfunc(device, 1-status);
 		}
@@ -1028,7 +1026,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		// armed, tripped
 		var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' )); 
-		html += ("<span class='altui-motion' >{0}</span>".format( (tripped==true) ? "<span class='glyphicon glyphicon-flash text-danger' aria-hidden='true'></span>" : ""));
+		html += ("<span class='altui-motion' >{0}</span>".format( (tripped==true) ? "<i class='fa fa-bolt text-danger' aria-hidden='true'></i>" : ""));
 
 		// armed
 		html += "<script type='text/javascript'>";
@@ -1045,7 +1043,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var sl_PinFailed = MultiBox.getStatus( device, 'urn:schemas-micasaverde-com:device:Keypad:1', 'sl_PinFailed' ); 
 		html += _createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("Unlock,Lock") , "pull-right");
 		if (sl_PinFailed=="1") {
-			html += "<div class='text-danger'><span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> Invalid PIN Entered</div>";
+			html += "<div class='text-danger'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i> Invalid PIN Entered</div>";
 		}
 		if (sl_UserCode != null) {
 			var re = /UserName="(.*)"/;

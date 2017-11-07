@@ -621,7 +621,7 @@ var LuaEditor = (function () {
 })();
 
 var DialogManager = ( function() {
-	var helpGlyph = "<span class='glyphicon glyphicon-question-sign ' aria-hidden='true'></span>"
+	var helpGlyph = '<i class="fa fa-question text-primary" aria-hidden="true" title="Help"></i>' 
 	// this method assumes htmlDialog id property is equal to 'name'
 	function _registerDialog( name, htmlDialog ) {
 		var dialog = $("div#dialogs div#"+name);
@@ -1899,17 +1899,19 @@ var HTMLUtils = (function() {
 	function _drawFormFields( model  ) {
 		var html ="";
 		$.each(model, function(idx,line) {
-			html += "<div class='form-group'>"
 			switch(line.type) {
 				case "select": 
+					html += "<div class='form-group'>"
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label || "");
 					html += _drawSelect( {id:line.id, options:line.options, selected_idx:line.selected_idx} );
+					html += "</div>"
 					break;
 				case "p":
 				case "span":
 				case "pre":
 				case "div":
 					// no form control for text display
+					html += "<div class='form-group'>"
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
 					html +="<{0}  id='{1}' class='' {3}>{2}</{0}>".format(
 						line.type,
@@ -1917,39 +1919,59 @@ var HTMLUtils = (function() {
 						_enhanceValue(line.value),
 						HTMLUtils.optionsToString(line.opt)
 						);
+					html += "</div>"
 					break;
 				case "buttonbar":
+					html += "<div class='form-group'>"
 					$.each(line.value, function(idx,btn) {
 						var cls = (btn.type=="submit") ? "primary" : "default"  
 						html += "<button id='{3}' type='{0}' class='btn btn-{1}'>{2}</button>".format(btn.type,cls,btn.label,btn.id);
 					});
+					html += "</div>"
 					break;
 				case "input":
-					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
-					var type = (line.inputtype!=undefined) ? "type='{0}'".format(line.inputtype) : "";
-					var pattern = (line.pattern != undefined ) ? "pattern='{0}'".format(line.pattern) : "";
-					var checked = ((line.inputtype=="checkbox") && (line.value==true))? "checked" : "";
-					html +="<input id='{0}' class='form-control' value='{1}' {2} {3} {4} {5}></input>".format(
-						line.id,
-						line.value,
-						HTMLUtils.optionsToString(line.opt),
-						type,
-						pattern,
-						checked);
+					if (line.inputtype=="checkbox") {
+						var checked = (line.value==true)? "checked" : "";
+						html += "<div class='form-checked'>"
+						html += "<label for='{0}' class='form-check-label'> <input id='{0}' type='checkbox' class='form-check-input' value='{2}' {3} {4}> {1}</input></label>".format(
+							line.id,
+							line.label,
+							line.value,
+							HTMLUtils.optionsToString(line.opt),
+							checked
+							);
+					} else {
+						html += "<div class='form-group'>"
+						html += "<label for='{0}' '>{1}</label>".format(line.id,line.label);
+						var type = (line.inputtype!=undefined) ? "type='{0}'".format(line.inputtype) : "";
+						var pattern = (line.pattern != undefined ) ? "pattern='{0}'".format(line.pattern) : "";
+						var checked = ((line.inputtype=="checkbox") && (line.value==true))? "checked" : "";
+						html +="<input id='{0}' class='form-control' value='{1}' {2} {3} {4} {5}></input>".format(
+							line.id,
+							line.value,
+							HTMLUtils.optionsToString(line.opt),
+							type,
+							pattern,
+							checked);
+					}
 					html += '<div class="invalid-feedback">{0}</div>'.format(line.invalidfeedback || _T("Please enter a valid element"))
 					if (line.helptext) {
 						html +='<small id="passwordHelpBlock" class="form-text text-muted">{0}</small>'.format( line.helptext )
 					}
+					html += "</div>"
 					break;
 				case "accordeon":
+					html += "<div class='form-group'>"
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label);
 					html += HTMLUtils.createAccordeon(line.id,line.value);
+					html += "</div>"
 					break;
 				default:
+					html += "<div class='form-group'>"
 					html += "<span class='text-danger'>Not Implemented:{0}</span>".format(line.type)
+					html += "</div>"
 					break;
 			}
-			html += "</div>"
 		});
 		return html;
 	};
@@ -4169,7 +4191,7 @@ var SceneEditor = function (scene) {
 		html +="</td>";
 		
 		html +="<td>";
-		html += smallbuttonTemplate.format( idx, 'altui-luatrigger', "<span class='glyphicon glyphicon-flash' aria-hidden='true'>Lua</span>",trigger.lua);
+		html += smallbuttonTemplate.format( idx, 'altui-luatrigger', "<i class='fa fa-file-text-o' aria-hidden='true'></i><span> Lua</span>",trigger.lua);
 		html +="</td>";
 		
 		html +="<td>";
