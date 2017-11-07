@@ -10335,7 +10335,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			lines.push(editBoxTemplate.format( editBoxLines.join('') ) );
 			
 			lines.push( "<div class='altui-widget-delete col-12'>"+deleteGlyph+"</div>"  );
-			var html = `<div class="mt-2 ml-1 mr-1 row">{0}</div>`.format( lines.join('') )
+			var html = `<div class="mt-2 ml-1 row">{0}</div>`.format( lines.join('') )
 			return html
 		};
 
