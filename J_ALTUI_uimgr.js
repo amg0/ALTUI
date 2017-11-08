@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2217 $";
+var ALTUI_revision = "$Revision: 2219 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -587,8 +587,6 @@ var styles =`
 	}						
 	.altui-scene-date{		
 		clear: right;		
-		width: 139px;		
-		text-align: right;	
 	}						
 	.altui-scene-btnarea{	
 		margin-top:5px;
@@ -2566,20 +2564,40 @@ var UIManager  = ( function( window, undefined ) {
 
 		var scenecontainerTemplate = "";
 		scenecontainerTemplate	+=	"<div class='card xxx altui-scene "+((norefresh==true) ? 'altui-norefresh': '') +"' id='{0}' data-altuiid='{0}'>"
-		scenecontainerTemplate	+=	"<div class='card-header altui-scene-heading'>"+delButtonHtml +idDisplay+" <span class='card-title altui-scene-title' data-toggle='tooltip' data-placement='left' title='{2}'>"+pauseButtonHtml+favoriteHtml+"<small class='altui-scene-title-name'>{1}</small></span> {9}</div>";
+		scenecontainerTemplate	+=	"<div class='card-header altui-scene-heading'>"+delButtonHtml +idDisplay+" <span class='card-title altui-scene-title' data-toggle='tooltip' data-placement='left' title='{2}'>"+pauseButtonHtml+favoriteHtml+"<small class='altui-scene-title-name'>{1}</small></span> {3}</div>";
 		scenecontainerTemplate	+=	"<div class='card-body altui-scene-body'>";
-		scenecontainerTemplate	+=	"<small class='altui-scene-date text-nowrap text-muted pull-right'>{6}</small><small class='altui-scene-date text-nowrap text-info pull-right'>{7}</small>";
+/*
+		scenecontainerTemplate	+=	"<small class='altui-scene-date text-muted pull-right'>{6}</small><small class='altui-scene-date text-info pull-right'>{7}</small>";
 		scenecontainerTemplate	+=	"{3}<div class='altui-scene-btnarea'>{4}{8}{5}</div>";
-		scenecontainerTemplate	+=	"</div>";
-		scenecontainerTemplate	+=	"</div>";
+
+*/
+		scenecontainerTemplate	+= `
+			<div class='d-flex'>
+				<div class=' '>
+					<div>{0}</div>
+					<div class='altui-scene-btnarea text-nowrap'>{1}{2}{3}</div>
+				</div>
+				<div class='ml-auto '>
+					<div class='altui-scene-date text-muted text-wrap pull-right'><small>{4}</small></div>
+					<div class='altui-scene-date text-info text-wrap pull-right'><small>{5}</small></div>
+				</div>
+			</div>
+			`.format(
+				buttonTemplate.format( scene.altuiid, 'btn-sm altui-runscene', _T("Run")+"&nbsp;"+runGlyph,'primary',_T("Run")),
+				buttonTemplate.format( scene.altuiid, 'btn-sm altui-editscene ', wrenchGlyph,'light',_T("Settings")),
+				buttonTemplate.format( scene.altuiid, 'btn-sm altui-clonescene', copyGlyph,'light',_T("Copy")),
+				buttonTemplate.format( scene.altuiid, 'btn-sm altui-scene-history ', calendarGlyph,'light',_T("History")),
+				lastrun,
+				nextrun)
 
 		var tooltip = "";
-		var runButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-runscene', _T("Run")+"&nbsp;"+runGlyph,'primary',_T("Run"));
-		var editButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-editscene ', wrenchGlyph,'light',_T("Settings"));
-		var calendarHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-scene-history ', calendarGlyph,'light',_T("History"));
-		var cloneButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-clonescene', copyGlyph,'light',_T("Copy"));
+		// var runButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-runscene', _T("Run")+"&nbsp;"+runGlyph,'primary',_T("Run"));
+		// var editButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-editscene ', wrenchGlyph,'light',_T("Settings"));
+		// var calendarHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-scene-history ', calendarGlyph,'light',_T("History"));
+		// var cloneButtonHtml = buttonTemplate.format( scene.altuiid, 'btn-sm altui-clonescene', copyGlyph,'light',_T("Copy"));
 		var active = (scene.active==true) ? glyphTemplate.format( "check", _T("active") , 'text-success') : '';
-		return scenecontainerTemplate.format(scene.altuiid, label, tooltip, runButtonHtml , editButtonHtml , calendarHtml , lastrun, nextrun,cloneButtonHtml,active);
+		return scenecontainerTemplate.format(
+			scene.altuiid, label, tooltip, active);
 	};
 
 	function _cameraDraw(device,size,zindex) // size:1,2,3,... 1=220px
