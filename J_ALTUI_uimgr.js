@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2216 $";
+var ALTUI_revision = "$Revision: 2217 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2170,7 +2170,7 @@ var UIManager  = ( function( window, undefined ) {
 				return "success";
 			case -1:
 			default:
-				return "light";
+				return "";
 		}
 	};
 
@@ -13484,9 +13484,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$.getJSON( "https://bootswatch.com/api/3.json", function( data ) {
 			$.each(data.themes,function(idx,theme) {
 				var html ="";
-				theme.cssCdn = theme.cssCdn.replace("maxcdn.bootstrapcdn.com/bootswatch/latest/","bootswatch.com/4-alpha/")
-				theme.preview = theme.preview.replace("bootswatch.com/","bootswatch.com/4-alpha/")
-				theme.thumbnail = theme.thumbnail.replace("bootswatch.com/","bootswatch.com/4-alpha/")
+				theme.cssCdn = theme.cssCdn.replace("maxcdn.bootstrapcdn.com/bootswatch/latest/","bootswatch.com/4/")
+				theme.preview = theme.preview.replace("bootswatch.com/","bootswatch.com/")
+				theme.thumbnail = theme.thumbnail.replace("bootswatch.com/","bootswatch.com/")
 				html += "<div class='altui-theme-thumbnail col-6 col-md-4 col-lg-3 col-xl-2' data-preview='{1}' data-href='{0}'>".format(theme.cssCdn,theme.preview);
 				html += "<label class='altui-theme-label'>{0} {1}</label>".format(
 					theme.description,
