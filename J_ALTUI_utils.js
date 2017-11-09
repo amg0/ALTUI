@@ -4235,7 +4235,7 @@ var SceneEditor = function (scene) {
 	function _editLuaExpression(idxwatch) {
 		var watch = scenewatches[idxwatch];
 		// hide scene & scene editor accordeon
-		$(".altui-scene").toggle(false);
+		// $(".altui-scene").toggle(false);
 		$(".altui-scene-editor").toggle(false);
 		$(".altui-scene-editbutton").toggle(false);
 
@@ -4309,6 +4309,7 @@ var SceneEditor = function (scene) {
 					return;
 				var idxwatch = _getWatchDialogValues();
 				_editLuaExpression( idxwatch );
+				return false;
 			})
 			.on( 'submit',"div#dialogModal form",  function( event ) {	
 				_getWatchDialogValues();

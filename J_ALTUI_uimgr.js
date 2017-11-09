@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2219 $";
+var ALTUI_revision = "$Revision: 2221 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10880,15 +10880,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html +="	<div id='altui-editor-text'>"+txt.htmlEncode()+"</div>";
 		html +="  </div>";
 		if (outputarea!=null) {
-			var glyph = glyphTemplate.format('copy',_T("Copy to clipboard"), '');
+			var glyph = glyphTemplate.format('clipboard',_T("Copy to clipboard"), '');
 			html +="  <div class='form-group'>";
-			html +="	<label for='altui-editor-result'>"+_T("Return Result")+":</label>";
-			html +=	 buttonTemplate.format( 'altui-copyresult-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
+			html +="	<label for='altui-editor-result'>"+_T("Return Result")+":</label> ";
+			html +=	 buttonTemplate.format( 'altui-copyresult-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'',_T("Copy"));
 			html +="	<pre class='border border-secondary bg-light' id='altui-editor-result'> </pre>";
 			html +="  </div>";
 			html +="  <div class='form-group'>";
-			html +="	<label for='altui-editor-output'>"+_T("Console Output")+":</label>";
-			html +=	 buttonTemplate.format( 'altui-copyoutput-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
+			html +="	<label for='altui-editor-output'>"+_T("Console Output")+":</label> ";
+			html +=	 buttonTemplate.format( 'altui-copyoutput-clipboard-'+htmlid, 'altui-copy-clipboard', glyph,'',_T("Copy"));
 			html +="	<pre class='border border-secondary bg-light' id='altui-editor-output'> </pre>";
 			html +="  </div>";
 		}
@@ -10975,8 +10975,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			MyLocalStorage.setSettings("LastOne_LuaTest",lua);
 			MultiBox.runLua(0,lua, function(res) {
 				res = $.extend({success:false, result:"",output:""},res);
-				$("#altui-editor-result").text(res.result);
-				$("#altui-editor-output").text(res.output);
+				$("#altui-editor-result").text(res.result+"\n");
+				$("#altui-editor-output").text(res.output+"\n");
 				if ( res.success ==true )
 					PageMessage.message( _T("Code execution succeeded"), "success");
 				else
@@ -11002,13 +11002,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{ name:'delete', glyph:deleteGlyph }
 		];
 		function _drawFrequentCommandBar(commands) {
+			var editButtonHtml = buttonTemplate.format( 'altui-editoscmd-0', 'altui-editoscmd', editGlyph+" "+_T("Edit"),'primary',"");
 			var html="";
 			html+="	 <div id='altui-frequent-commands-bar' class='form-group'>";
-			html+="		<label for='altui-btngroup'> {0} {1}</label>".format(_T("Frequent Commands"),editButtonHtml);
+			html+="		<label for='altui-btngroup'> {0}</label>".format(_T("Frequent Commands"));
 			html+="		<div class='' id='altui-btngroup'>";
 			$.each(commands, function(idx,obj) {
 				html += "<button id='{0}' type='button' class='border btn btn-light altui-oscommand-button' data-cmd='{2}' '>{1}</button>".format(idx,obj.label,obj.command.replace(/'/g, '&quot;'));
 			});
+			html += editButtonHtml
 			html+="		</div>";
 			html+="	 </div>";
 			return html;
@@ -11072,7 +11074,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		};
 
 		UIManager.clearPage('OsCommand',_T("OS Command"),UIManager.oneColumnLayout);
-		var editButtonHtml = buttonTemplate.format( 'altui-editoscmd-0', 'altui-editoscmd', editGlyph+" "+_T("Edit"),'primary',"");
 
 		var html = "";
 		html+="<div class='col-12'><form>";
@@ -12675,9 +12676,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			html +="  </div>";
 		html +="</div>";
 		html += "<div class='col-12'>";
-			html+="<h3>"+_T("Output");
-			var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
-			html += buttonTemplate.format( 'altui-debug-clipboard', 'altui-copy-clipboard', glyph,'secondary',_T("Copy"));
+			html+="<h3>"+_T("Output")+" ";
+			var glyph = glyphTemplate.format('clipboard',_T("Copy to clipboard"), '');
+			html += buttonTemplate.format( 'altui-debug-clipboard', 'altui-copy-clipboard', glyph,'',_T("Copy"));
 				// html += "<button class='btn btn-light altui-json-viewer' type='button' >{0}</button>".format(_T("Json Viewer"));
 			html+="</h3>";
 			html+="<pre id='altui-oscommand-result' class='pre-scrollable border border-secondary bg-light'> </pre>";
