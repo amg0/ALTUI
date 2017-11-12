@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2222 $";
+var ALTUI_revision = "$Revision: 2223 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -348,8 +348,7 @@ var styles =`
 	.altui-store-carousel { margin-bottom:10px; }					
 	.altui-store-categories { width: 100%; overflow: hidden; }					
 	.altui-features-box { height:200px; width: 100%; background:grey; opacity:0.4; }	
-	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }		
-	.altui-plugin-pageswitch {	font-size: 20px; }					
+	.altui-store-install-btn , .altui-store-mcvinstall-btn {  margin-left:1px; margin-right:1px; }							
 	button.altui-plugin-category-btn {	padding-left:4px; padding-right:4px; }					
 	.altui-plugin-publish-btn { width: 100%;  }		
 	.altui-pluginbox , .altui-pageswitchbox, #altui-plugin-name-filter { padding:4px; }				
@@ -9261,8 +9260,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var arr = ["abc","def","ghi","jkl","mno","pqr","stu","vwx","yz "];
 		var installglyph = glyphTemplate.format( "cloud-download", _T("Install"), "" );
 		var pageGlyphs = {
-			"forward" : glyphTemplate.format( "forward", _T("Next Page"), "" ),
-			"backward" : glyphTemplate.format( "backward", _T("Prev Page"), "" ),
+			// "forward" : glyphTemplate.format( "forward", _T("Next Page"), "" ),
+			// "backward" : glyphTemplate.format( "backward", _T("Prev Page"), "" ),
 			"spinner" : glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" )
 		};
 		var pluginsFilter = {
@@ -9438,10 +9437,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _displayPageSwitch(direction) {
 			var html = "";
 				html += "<div class='altui-pageswitchbox col-2'>"
-				// buttonTemplate		= "<button id='{0}' type='button' class='{1} btn btn-{3}' aria-label='tbd' title='{4}'>{2}</button>"
-				html += buttonTemplate.format(direction,'altui-plugin-pageswitch',pageGlyphs[direction]+" "+direction,'secondary',direction)
-							// html += "<div class='altui-plugin-pageswitch' data-direction='{1}'>{0}</div>".format(pageGlyphs[direction],direction)
-							// html += "<div class='altui-plugin-title'>{0}</div>".format(direction)
+				// html += buttonTemplate.format(direction,'altui-plugin-pageswitch',pageGlyphs[direction]+" "+direction,'secondary',direction)
 				html += "</div>"
 				return html;
 		}
@@ -9489,14 +9485,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				});
 
 				$(".altui-store-items").html(html);
+				$(".altui-store-paging").html( "<div id='altui-pager'></div>" );
 
-				html ="";
-				if (_plugins_data.details.pagination.page>1)
-					html +=_displayPageSwitch("backward")
-				if (_plugins_data.details.pagination.page<_plugins_data.details.pagination.nbPage)
-					html +=_displayPageSwitch("forward")
-
-				$(".altui-store-paging").html( html );
+				$("#altui-pager").Pager({
+					large: true,
+					maxpages: _plugins_data.details.pagination.nbPage,
+					curpage: _plugins_data.details.pagination.page,
+					batchpages: 5,
+					onprev: function(e) { nPage-- ; _displayPlugins( pluginsFilter ); },
+					onnext: function(e) { nPage++ ; _displayPlugins( pluginsFilter ); },
+					onpage: function(e,n) { nPage = parseInt(n) ; _displayPlugins( pluginsFilter ); }
+				})
 			});
 		}
 		function _displayStore(	 ) {
@@ -9542,10 +9541,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				_plugins_data = data;
 			};
 			_plugins_data.plugins.sort( function(a,b) {return a.Title.localeCompare(b.Title); } )
-
 			$(".altui-mainpanel").html(_displayStore());
+
 			pluginsFilter = { }
 			_displayPlugins( pluginsFilter );
+			
+			// interactivity
 			$('#altui-plugin-name-filter-input').autocomplete({
 				source: $.map(_plugins_data.plugins, function(p) { return p.Title } ),
 				select: function( event, ui ) {
@@ -9553,7 +9554,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					_displayPlugins( pluginsFilter );
 				}
 			});
-			// interactivity
 			$(".altui-mainpanel").off()
 			.on("change","#altui-plugin-name-filter-input",function() {
 				var filter = $(this).val();
@@ -14456,3 +14456,4 @@ var UIControler = (function(win) {
 		}
 	}
 })(window);
+

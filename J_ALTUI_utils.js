@@ -9,6 +9,92 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+
+//
+// jQuery plugin amg0: dynamic pagination
+//
+(function ( $ ) {
+	$.fn.Pager = function( options )
+	{
+		// options.
+		$.fn.Pager.settings = $.extend( {}, $.fn.Pager.defaults, options );
+
+		// Go through the matched elements and return the jQuery object.
+		return this.each( function() {
+			var id = $(this).prop('id')
+			var items =""
+			var cur = $.fn.Pager.settings.curpage;
+			var max = Math.min( $.fn.Pager.settings.maxpages , cur+$.fn.Pager.settings.batchpages/2);
+			var min = Math.max( 1, cur-$.fn.Pager.settings.batchpages/2 )
+			for( var i=min; i<=max; i++ ) {
+				items += '<li class="'+id+'page page-item '+((i==cur) ? 'active' : '' ) +'"><a class="page-link" href="javascript:return false">'+i+'</a></li>'
+			}
+			var html = `
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination `+(($.fn.Pager.settings.large==true) ? 'pagination-lg' : '' )+`">
+					<li class="page-item `+((cur<=1) ? 'disabled' : '' )+`">
+					  <a id='`+id+`prev' class="page-link" href="javascript:return false" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+						<span class="sr-only">Previous</span>
+					  </a>
+					</li>` + items +
+					`<li class="page-item `+((cur>=max) ? 'disabled' : '') +`">
+					  <a id='`+id+`next' class="page-link" href="javascript:return false" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+						<span class="sr-only">Next</span>
+					  </a>
+					</li>
+				  </ul>
+				</nav>`
+			$(this).html(html);
+			$(this)
+			.on('click','#'+id+'prev',function(e) {
+				if ($.isFunction($.fn.Pager.settings.onprev)) {
+					($.fn.Pager.settings.onprev)(e)
+				}
+				return false;
+			})
+			.on('click','#'+id+'next',function(e) {
+				if ($.isFunction($.fn.Pager.settings.onnext)) {
+					($.fn.Pager.settings.onnext)(e)
+				}
+				return false;
+			})
+			.on('click','.'+id+'page',function(e) {
+				if ($.isFunction($.fn.Pager.settings.onpage)) {
+					var str = $(this).find("a").text();
+					($.fn.Pager.settings.onpage)(e,str);
+				}
+				return false;
+			})
+		});
+	};
+	// Public defaults and settings.
+	$.fn.Pager.defaults = {
+		large: false,
+		maxpages: 1,
+		curpage: 1,
+		batchpages: 5,
+		onnext: null,
+		onprev: null,
+		onpage: null
+	};
+	$.fn.Pager.settings = { };	
+	
+	
+	// Private functions.
+	function myFunc()
+	{
+		return;
+	};
+	// Public functions.
+	$.fn.Pager.func = function()
+	{
+		return;
+	};
+})(jQuery);
+
+
 function getQueryStringValue (key) {  
   return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
 } 
@@ -5386,5 +5472,4 @@ var HistoryManager = ( function(win) {
 		}
 	}
 })( window )
-
 
