@@ -5393,7 +5393,7 @@ var PageMessage = (function(window, undefined ) {
 			</div>
 		</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml(),cls||"")
 		
-		$("#altui-pagemessage").html(  Html );
+		$("#altui-pagemessage-span").html(  Html );
 		// close button for pageMessages
 		$( document )
 			.off( "click", ".altui-pagemessage-close")
