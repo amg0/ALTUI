@@ -24,30 +24,54 @@
 			var id = $(this).prop('id')
 			var items =""
 			var cur = $.fn.Pager.settings.curpage;
-			var max = Math.min( $.fn.Pager.settings.maxpages , cur+$.fn.Pager.settings.batchpages/2);
-			var min = Math.max( 1, cur-$.fn.Pager.settings.batchpages/2 )
+			var max = Math.min( $.fn.Pager.settings.maxpages , cur+Math.floor($.fn.Pager.settings.batchpages/2));
+			var min = Math.max( 1, cur-Math.floor($.fn.Pager.settings.batchpages/2))
 			for( var i=min; i<=max; i++ ) {
 				items += '<li class="'+id+'page page-item '+((i==cur) ? 'active' : '' ) +'"><a class="page-link" href="javascript:return false">'+i+'</a></li>'
 			}
 			var html = `
-				<nav aria-label="Page navigation example">
+				<nav aria-label="Page navigation">
 				  <ul class="pagination `+(($.fn.Pager.settings.large==true) ? 'pagination-lg' : '' )+`">
 					<li class="page-item `+((cur<=1) ? 'disabled' : '' )+`">
-					  <a id='`+id+`prev' class="page-link" href="javascript:return false" aria-label="Previous">
+					  <a id='`+id+`start' class="page-link" href="javascript:return false" aria-label="Previous">
 						<span aria-hidden="true">&laquo;</span>
+						<span class="sr-only">Start</span>
+					  </a>
+					</li>
+					<li class="page-item `+((cur<=1) ? 'disabled' : '' )+`">
+					  <a id='`+id+`prev' class="page-link" href="javascript:return false" aria-label="Previous">
+						<span aria-hidden="true">&lt;</span>
 						<span class="sr-only">Previous</span>
 					  </a>
-					</li>` + items +
-					`<li class="page-item `+((cur>=max) ? 'disabled' : '') +`">
+					</li>` + items + `
+					<li class="page-item `+((cur>=max) ? 'disabled' : '') +`">
 					  <a id='`+id+`next' class="page-link" href="javascript:return false" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
+						<span aria-hidden="true">&gt;</span>
 						<span class="sr-only">Next</span>
+					  </a>
+					</li>
+					<li class="page-item `+((cur>=max) ? 'disabled' : '') +`">
+					  <a id='`+id+`end' class="page-link" href="javascript:return false" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+						<span class="sr-only">End</span>
 					  </a>
 					</li>
 				  </ul>
 				</nav>`
 			$(this).html(html);
 			$(this)
+			.on('click','#'+id+'start',function(e) {
+				if ($.isFunction($.fn.Pager.settings.onprev)) {
+					($.fn.Pager.settings.onstart)(e)
+				}
+				return false;
+			})
+			.on('click','#'+id+'end',function(e) {
+				if ($.isFunction($.fn.Pager.settings.onnext)) {
+					($.fn.Pager.settings.onend)(e)
+				}
+				return false;
+			})
 			.on('click','#'+id+'prev',function(e) {
 				if ($.isFunction($.fn.Pager.settings.onprev)) {
 					($.fn.Pager.settings.onprev)(e)
@@ -75,8 +99,10 @@
 		maxpages: 1,
 		curpage: 1,
 		batchpages: 5,
+		onstart: null,
 		onnext: null,
 		onprev: null,
+		onend: null,
 		onpage: null
 	};
 	$.fn.Pager.settings = { };	

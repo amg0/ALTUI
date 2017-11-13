@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2224 $";
+var ALTUI_revision = "$Revision: 2226 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6382,7 +6382,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes = $.merge(filteredDeviceTypes, categoryFilters[$(this).prop('id')].types) } )
 				$.each(_roomsNameToID, function(name,roomarr) {
 					var tbldevice = _tableDevices(name,filteredDeviceTypes)
-					var tblscene = _tableScenes(name)
+					var tblscene = (filteredDeviceTypes.length>0) ? null : _tableScenes(name)
 					var navtabs = _generateNavTabs(name,tbldevice,tblscene)
 					var defaultaltuiid = MultiBox.makeAltuiid(roomarr[0].controller,roomarr[0].id)
 					var model = {
@@ -9362,7 +9362,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		}
 		function _displayCategories() {
 			var html = "";
-			html += "<div class='altui-store-categories btn-group-vertical'>"
+			html += "<div class='altui-store-categories btn-group-vertical'>"  /*data-toggle='buttons'*/
 
 			html += "<button id='*' type='button' class='altui-plugin-category-btn btn btn-light'>{0}</button>".format(_T("All"))
 				$.each(arr, function(i,entry) {
@@ -9543,13 +9543,15 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$(".altui-store-paging").html( "<div id='altui-pager'></div>" );
 
 				$("#altui-pager").Pager({
-					large: true,
+					// large: true,
 					maxpages: _plugins_data.details.pagination.nbPage,
 					curpage: _plugins_data.details.pagination.page,
 					batchpages: 5,
-					onprev: function(e) { nPage-- ; _displayPlugins( pluginsFilter ); },
-					onnext: function(e) { nPage++ ; _displayPlugins( pluginsFilter ); },
-					onpage: function(e,n) { nPage = parseInt(n) ; _displayPlugins( pluginsFilter ); }
+					onstart: function(e) { nPage=1 ; _displayPlugins( pluginsFilter ); },
+					onend:   function(e) { nPage=_plugins_data.details.pagination.nbPage; _displayPlugins( pluginsFilter ); },
+					onprev:  function(e) { nPage-- ; _displayPlugins( pluginsFilter ); },
+					onnext:  function(e) { nPage++ ; _displayPlugins( pluginsFilter ); },
+					onpage:  function(e,n) { nPage = parseInt(n) ; _displayPlugins( pluginsFilter ); }
 				})
 			});
 		}
