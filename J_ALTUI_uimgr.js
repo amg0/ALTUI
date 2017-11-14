@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2226 $";
+var ALTUI_revision = "$Revision: 2227 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6114,7 +6114,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var category = MultiBox.getCategoryTitle( device.category_num );
 
 		UIManager.clearPage('Control Panel',"{0} {1} <small>#{2}</small>".format( device.name , category ,altuiid),UIManager.oneColumnLayout);
-		EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
 
 		var html = "<div class='form-inline col-12'>";
 		html += "<button type='button' class='btn btn-light' id='altui-toggle-attributes' >"+_T("Attributes")+"<span class='caret'></span></button>";
@@ -6134,6 +6133,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		$(".altui-mainpanel").append( "<div id='altui-device-controlpanel-container-"+altuiid+"' class='col-12 altui-device-controlpanel-container'></div>" );
 		var container = $("#altui-device-controlpanel-container-"+altuiid);
 		UIManager.deviceDrawControlPanel( device, container );	//altuiid, device, domparent
+		// EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
+		EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function (eventname,device) {
+			$(".altui-device-controlpanel[data-altuiid='"+device.altuiid+"']").not(".altui-norefresh").each( function(index,element) {
+				// force a refresh/drawing if needed.
+				// the event handler for the tab SHOW event will take care of the display of the tab
+				var activeTabIdx = _getActiveDeviceTabIdx();
+				var domparent  =  $('div#altui-devtab-content-'+activeTabIdx);
+				_displayActiveDeviceTab(activeTabIdx, device, domparent);
+			});			
+		})
 
 		//
 		// Manage interactions
@@ -6248,7 +6257,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			function _locked(str) { return (str==1) ? 'Locked' : '' }
 			function _firstelem(str) { return (str || "").split(",")[0] }
 			var arr= [
-				{service:'urn:upnp-org:serviceId:IPhoneLocator1', variable:'Distance', format:'{0}' },
+				{service:'urn:upnp-org:serviceId:IPhoneLocator1', variable:'Distance,Unit', format:'{0} {1}' },
 				{service:'urn:upnp-org:serviceId:Dimming1', variable:'LoadLevelStatus', format:'{0}%' },
 				{service:'urn:upnp-org:serviceId:TemperatureSensor1', variable:'CurrentTemperature', format:'{0}&deg;' },
 				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'Watts', format:'{0}W' },
@@ -6259,15 +6268,23 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'Armed', format:'{0}', translate:_armed },
 				{service:'urn:micasaverde-com:serviceId:DoorLock1', variable:'Status', format:'{0}', translate:_locked },
 				{service:'urn:upnp-org:serviceId:cplus1', variable:'CurrentChannel', format:'{0}', translate:_firstelem},
+				{service:'urn:upnp-org:serviceId:VSwitch1', variable:'Text1,Text2', format:'<small>{0} {1}</small>'}
 			]
 			var tpl = "<span class='altui-device-info'>{0}</span>"
 			for (var i=0 ; i<arr.length ; i++) {
-				var str = MultiBox.getStatus( device, arr[i].service, arr[i].variable )
-				if (str) {
-					if ($.isFunction(arr[i].translate))
-						str = arr[i].translate(str)
+				var vars = arr[i].variable.split(",")
+				if (MultiBox.getStatus( device, arr[i].service, vars[0] ) != null) {
+					var strings = []
+					for (var j=0; j<vars.length; j++) {
+						var val = MultiBox.getStatus( device, arr[i].service, vars[j] ) || ""
+						if ($.isFunction(arr[i].translate)) {
+							val = arr[i].translate(val)
+						} 
+						strings.push(  val )
+					}
 					var template = arr[i].format || '{0}'
-					return tpl.format( template.format(str) )
+					var result = String.prototype.format.apply(template,strings)
+					return tpl.format( result )
 				}
 			}
 			return tpl.format(" ")
