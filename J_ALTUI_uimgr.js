@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2227 $";
+var ALTUI_revision = "$Revision: 2228 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6256,6 +6256,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			function _armed(str) { return (str==1) ? 'Armed' : '' }
 			function _locked(str) { return (str==1) ? 'Locked' : '' }
 			function _firstelem(str) { return (str || "").split(",")[0] }
+			function _daynight(str) { return (str==1) ? 'Day' : 'Night' }
 			var arr= [
 				{service:'urn:upnp-org:serviceId:IPhoneLocator1', variable:'Distance,Unit', format:'{0} {1}' },
 				{service:'urn:upnp-org:serviceId:Dimming1', variable:'LoadLevelStatus', format:'{0}%' },
@@ -6268,7 +6269,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'Armed', format:'{0}', translate:_armed },
 				{service:'urn:micasaverde-com:serviceId:DoorLock1', variable:'Status', format:'{0}', translate:_locked },
 				{service:'urn:upnp-org:serviceId:cplus1', variable:'CurrentChannel', format:'{0}', translate:_firstelem},
-				{service:'urn:upnp-org:serviceId:VSwitch1', variable:'Text1,Text2', format:'<small>{0} {1}</small>'}
+				{service:'urn:upnp-org:serviceId:VSwitch1', variable:'Text1,Text2', format:'<small>{0} {1}</small>'},
+				{service:'urn:dcineco-com:serviceId:MSwitch1', variable:'Text1,Text2', format:'<small>{0} {1}</small>'},
+				{service:'urn:a-lurker-com:serviceId:InfoViewer1', variable:'LuaPattern' },
+				{service:'urn:rts-services-com:serviceId:DayTime', variable:'Status', translate:_daynight }
+				
 			]
 			var tpl = "<span class='altui-device-info'>{0}</span>"
 			for (var i=0 ; i<arr.length ; i++) {
