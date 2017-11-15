@@ -462,7 +462,20 @@ Localization.init( {
 	"Pause":"Pause",
 	"Scene Trigger Evaluation mode":"Scene Trigger Evaluation mode"	,
 	"Create From State":"Create From State",
-	"Search Results":"Search Results"
+	"Search Results":"Search Results",
+	"Enter a valid device name":"Enter a valid device name",
+	"Enter a valid Dxxx.xml file name":"Enter a valid Dxxx.xml file name",
+	"Enter the device Definition file name":"Enter the device Definition file name",
+	"Enter a valid Ixxx.xml file name":"Enter a valid Ixxx.xml file name",
+	"Enter the device Implementation file name":"Enter the device Implementation file name",
+	"Fix Device States":"Fix Device States",
+	"Users":"Users",
+	"Are you sure you want to clone scene ({0})":"Are you sure you want to clone scene ({0})",
+	"Clone":"Clone",
+	"ShowMyHomeImages:Show Images headers in MyHome page cards":"ShowMyHomeImages:Show Images headers in MyHome page cards",
+	"Show Images in MyHome page":"Show Images in MyHome page",
+	"UseMasonryInMyHome:Use Masonry layout for cards in MyHome page":"UseMasonryInMyHome:Use Masonry layout for cards in MyHome page",
+	"Use Masonry layout in MyHome page":"Use Masonry layout in MyHome page"
 });
 
 // override rules with localized version

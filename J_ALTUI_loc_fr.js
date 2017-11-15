@@ -473,7 +473,20 @@ Localization.init( {
 	"Pause":"Pause",
 	"Scene Trigger Evaluation mode":"Mode d'évaluation des déclencheurs",
 	"Create From State":"Créer de l\'état courant",
-	"Search Results":"Résultats"	
+	"Search Results":"Résultats",
+	"Enter a valid device name":"Entrer un nom de périphérique valide",
+	"Enter a valid Dxxx.xml file name":"Entrer un fichier Dxxx.xml valide",
+	"Enter the device Definition file name":"Entrer le fichier de definition du périphérique",
+	"Enter a valid Ixxx.xml file name":"Entrer un fichier Ixxx.xml valide",
+	"Enter the device Implementation file name":"Enter the device Implementation file name",
+	"Fix Device States":"Fix Device States"	,
+	"Users":"Utilisateurs",
+	"Are you sure you want to clone scene ({0})":"Voulez vous cloner la scene ({0})",
+	"Clone":"Clone",
+	"ShowMyHomeImages:Show Images headers in MyHome page cards":"ShowMyHomeImages:Affiche des images dans la page MyHome",
+	"Show Images in MyHome page":"Affiche des images dans la page MyHome",
+	"UseMasonryInMyHome:Use Masonry layout for cards in MyHome page":"UseMasonryInMyHome:Utilise le placement Masonry pour les cartes de la page MyHome",
+	"Use Masonry layout in MyHome page":"Utilise le placement Masonry sur la page MyHome"
 });
 
 // override rules with localized version
