@@ -180,6 +180,11 @@ function Altui_ExecuteFunctionByName(functionName, context , device, extraparam)
 	return context[func].call(context, device, extraparam);
 };
 	
+// 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
+var houseModeButtonTemplate = "	 <button type='button' class='btn btn-light altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";
+var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-light'>{2}</button>";
+var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>' 
+
 var ALTUI_Templates = null;
 var ALTUI_Templates_Factory= function() {
 	var _dropdownTemplate =  "";		
@@ -821,15 +826,15 @@ var DialogManager = ( function() {
 		
 	function _createSpinningDialog(message,glyph) {
 				// 0: title, 1: body
-		var glyph2 = glyph || glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin big-glyph" );
+		var glyph2 = glyph || '<i class="fa fa-spinner fa-pulse fa-3x fa-fw text-warning"></i><span class="sr-only">Loading...</span>'
 		
 		var defaultSpinDialogModalTemplate="";
 		defaultSpinDialogModalTemplate = "<div id='dialogModal' class='modal' data-backdrop='static' data-keyboard='false'>";
 		defaultSpinDialogModalTemplate += "  <div class='modal-dialog modal-sm'>";
 		defaultSpinDialogModalTemplate += "    <div class='modal-content'>";
 		defaultSpinDialogModalTemplate += "      <div class='modal-body'>";
-		defaultSpinDialogModalTemplate += "      <div class='row-fluid'>";
-		defaultSpinDialogModalTemplate += "      {0} {1}";
+		defaultSpinDialogModalTemplate += "      <div class='row justify-content-between'>";
+		defaultSpinDialogModalTemplate += "      <div class='col-2'>{0}</div> <div class='col-9'>{1}</div>";
 		defaultSpinDialogModalTemplate += "      </div>";
 		defaultSpinDialogModalTemplate += "      </div>";
 		defaultSpinDialogModalTemplate += "    </div><!-- /.modal-content -->";
@@ -4385,7 +4390,7 @@ var SceneEditor = function (scene) {
 				return true;	 //(MultiBox.controllerOf(device.altuiid).controller == scenecontroller);
 			}
 		);
-		
+
 		function _getWatchDialogValues() {
 			// get new values
 			var altuiid = $("#altui-select-device").val();
@@ -4417,10 +4422,14 @@ var SceneEditor = function (scene) {
 		
 		$('div#dialogs')
 			.on('click',"#altui-edit-LuaExpression", function(event) {
-				if ((typeof Blockly == "undefined") || ($("#altui-select-device").val()==0))
-					return;
 				var idxwatch = _getWatchDialogValues();
-				_editLuaExpression( idxwatch );
+				setTimeout( function(idxwatch) {
+					UIManager.initBlockly( function() {
+						if ((typeof Blockly == "undefined") || ($("#altui-select-device").val()==0))
+							return;
+						_editLuaExpression( idxwatch );
+					})
+				}, 500, idxwatch );
 				return false;
 			})
 			.on( 'submit',"div#dialogModal form",  function( event ) {	

@@ -1777,14 +1777,16 @@ local htmlScripts = [[
 	<script src="J_ALTUI_verabox.js" ></script> 
 	<script src="J_ALTUI_multibox.js" ></script> 
 
-	<script src="J_ALTUI_b_blockly_compressed.js" ></script> 
-	<script src="J_ALTUI_b_blocks_compressed.js" ></script> 
-	<script src="J_ALTUI_b_javascript_compressed.js" ></script> 
-	<script src="J_ALTUI_b_lua_compressed.js" ></script> 
-	
-	<script src="J_ALTUI_uimgr.js" defer ></script> 
+	<script type='text/javascript' data-src='J_ALTUI_plugins.js' src='J_ALTUI_plugins.js'></script>
+	<script type='text/javascript' data-src='J_ALTUI_iphone.js' src='J_ALTUI_iphone.js'></script>
+	<script src="J_ALTUI_uimgr.js"  ></script> 
 ]]
 
+	-- <script src="J_ALTUI_b_blockly_compressed.js" defer ></script> 
+	-- <script src="J_ALTUI_b_blocks_compressed.js" defer ></script> 
+	-- <script src="J_ALTUI_b_javascript_compressed.js" defer ></script> 
+	-- <script src="J_ALTUI_b_lua_compressed.js" defer ></script> 
+	
 local htmlStyle = [[
 	<style>
 	body {  }
@@ -2218,7 +2220,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local loaded = {}
 				local styles = {}
 				local idx= 1
-				-- scripts[idx] = "J_ALTUI_utils.js"
+				-- scripts[idx] = "J_ALTUI_plugins.js"
 				-- loaded[scripts[idx]]=true
 				-- idx = idx+1
 				local lang=""
@@ -2269,7 +2271,6 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 						"//<!-- \n".. str .. "\n// // -->\n"
 						)
 				end
-				
 				-- get pages
 				-- local pagelist = getDataFor( deviceID, "CustomPages" ) or "{}"
 				-- if (pagelist=="[]") then
