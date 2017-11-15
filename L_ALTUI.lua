@@ -1898,6 +1898,9 @@ local htmlLayout = [[
 			 //g_Workflows : @workflows@
 		}
 		g_ALTUI.g_OrgTheme = g_ALTUI.g_CustomTheme;
+
+		_loadStyle('ALTUI_PluginDisplays.getStyle')
+		_loadStyle('ALTUI_IPhoneLocator.getStyle')
 		
 		// -->
 	</script>

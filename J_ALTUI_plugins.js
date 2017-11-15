@@ -1125,7 +1125,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 							var controller = MultiBox.controllerOf(device.altuiid).controller;
 							var scene = MultiBox.getSceneByID(controller,scene_mode[0])
 							if (scene!=null)
-								html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Scene"),scene.name)
+								html += "<div class='altui-lasttrip-text text-muted'><small>{0}</small></div>".format(scene.name)
 						}	
 						if (scene_mode[1]!="0") 	// mode
 							html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Mode"),_HouseModes[ parseInt(scene_mode[1])-1 ].text)
