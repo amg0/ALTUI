@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2231 $";
+var ALTUI_revision = "$Revision: 2232 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2571,7 +2571,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		var scenecontainerTemplate = "";
 		scenecontainerTemplate	+=	"<div class='card xxx altui-scene "+((norefresh==true) ? 'altui-norefresh': '') +"' id='{0}' data-altuiid='{0}'>"
-		scenecontainerTemplate	+=	"<div class='card-header altui-scene-heading'>"+delButtonHtml +idDisplay+" <div class='card-title altui-scene-title' data-toggle='tooltip' data-placement='left' title='{2}'>"+pauseButtonHtml+favoriteHtml+"<small class='altui-scene-title-name'>{1}</small></div> {3}</div>";
+		scenecontainerTemplate	+=	"<div class='card-header altui-scene-heading'>"+delButtonHtml +idDisplay+" <div class='card-title altui-scene-title' data-toggle='tooltip' data-placement='left' title='{1}'>"+pauseButtonHtml+favoriteHtml+"<small class='altui-scene-title-name'>{1}</small> {3}</div></div>";
 		scenecontainerTemplate	+=	"<div class='card-body altui-scene-body'>";
 /*
 		scenecontainerTemplate	+=	"<small class='altui-scene-date text-muted pull-right'>{6}</small><small class='altui-scene-date text-info pull-right'>{7}</small>";
