@@ -1981,7 +1981,7 @@ var HTMLUtils = (function() {
 			var tooltype = tool.type || 'button'
 			switch( tooltype ) {
 				case 'select':
-					toolbarHtml+='<select id="{0}" multiple="multiple">'.format(tool.id);
+					toolbarHtml+='<select id="{0}" class="{1}" multiple="multiple">'.format(tool.id,tool.cls||'');
 					toolbarHtml+='</select>'
 					break;
 				case 'button':

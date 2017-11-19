@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2232 $";
+var ALTUI_revision = "$Revision: 2235 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9807,7 +9807,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			{id:"altui-moveLeft", glyph:"hand-o-left", label:_T("Move Left")},
 			{id:"altui-moveRight", glyph:"hand-o-right", label:_T("Move Right")},
 			{id:"altui-moveNow", glyph:"clock-o", label:_T("Track Now")},
-			{id:"altui-timeline-filter", type:"select", multiple:"true" },
+			{id:"altui-timeline-filter", cls:"ml-2", type:"select", multiple:"true" },
 		];
 
 		/**
@@ -10082,7 +10082,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				$("#altui-moveRight").click(function () { move(-0.2); });
 				$("#altui-moveLeft").click(function () { move(0.2); });
 				$("#altui-moveNow").click(function () {
-					$(this).toggleClass("active");
+					$(this).toggleClass("active btn-light btn-info");
 					move(0);
 				});
 
@@ -10097,7 +10097,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						enableHTML : true,
 						includeSelectAllOption: true,
 						maxHeight: 300,
-						buttonClass: 'btn btn-light',
+						buttonClass: 'btn btn-light ml-1',
 						onChange: function(element, checked) {
 							// Get selected options.
 							var toShow = $.map($('#altui-timeline-filter :selected'),function(e)  { return e.value; })
