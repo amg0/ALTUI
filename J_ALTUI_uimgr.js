@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2235 $";
+var ALTUI_revision = "$Revision: 2236 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3356,13 +3356,14 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				if (isNullOrEmpty(setvariables))
 					setvariables = curvariables || "";
 				var getvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "VariablesGet") || "";
-				html +="<div class='row'>";
-				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 altui-device-config'>"
+				html +="<div class='row altui-device-config collapse'>";
+				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 '>"
+				html += "<h6>{0}</h6>".format(_T("Device zWave Parameters"))
 				html += _drawDeviceLastUpdateStats( device );
 				// if (isNullOrEmpty(setvariables) == false) {
 					html += "<form id='myform' role='form' action='javascript:void(0);' novalidate >";
 					html += "<table class='table table-responsive-OFF table-sm altui-config-variables'>";
-					html +=("<caption>{0} <button id='"+device.altuiid+"' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(_T("Device zWave Parameters"),_T('Save Changes'));
+					html +=("<caption><button id='{0}' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(device.altuiid,_T('Save Changes'));
 					html += "<thead>";
 					html += "<tr>";
 					html += "<th>";
@@ -3444,7 +3445,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		function _deviceDrawDeviceUsedIn( device, container ) {
 			var usedin_objects = MultiBox.getDeviceDependants(device);
 			var html ="";
-			html +="<div class='row altui-device-usedin'>";
+			html +="<div class='row altui-device-usedin collapse'>";
 			html += "<div id='altui-device-usedin-"+device.altuiid+"' class='col-12'>"
 			html += "<ul>";
 			var smallbuttonTemplate ="<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";;
@@ -3517,7 +3518,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			var devicecontroller = MultiBox.controllerOf(device.altuiid).controller;
 			var users = MultiBox.getUsersSync(devicecontroller);
 			var html ="";
-			html +="<div class='row altui-device-triggers'>";
+			html +="<div class='row altui-device-triggers collapse'>";
 			html += "<div id='altui-device-triggers-"+device.altuiid+"' class='col-12'>"
 			html += "<ul>";
 			var scenes = $.grep(MultiBox.getScenesSync(), function(scene) {
@@ -3563,7 +3564,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			// Draw hidding attribute panel
 			var html ="";
 			html+="<div class='row'>";
-			html += "<div id='altui-device-attributes-"+devid+"' class='col-12 altui-device-attributes'>"
+			html += "<div id='altui-device-attributes-"+devid+"' class='col-12 altui-device-attributes collapse'>"
 			html += "<form class='form form-row'>";
 			$.each( device, function(key,val) {
 				if (val!=undefined) {
@@ -3701,8 +3702,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				_displayActiveDeviceTab(activeTabIdx, device, domparent);
 
 				if (bAsync) {
-					$("#altui-device-attributes-"+device.altuiid).toggle(false);		// hide them by default;
-					// $("#altui-device-usedin-"+device.altuiid).toggle(false);		// hide them by default;
 					$(".altui-debug-div").toggle(false);					// hide
 				}
 
@@ -6115,12 +6114,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		UIManager.clearPage('Control Panel',"{0} {1} <small>#{2}</small>".format( device.name , category ,altuiid),UIManager.oneColumnLayout);
 
 		var html = "<div class='form-inline col-12'>";
-		html += "<button type='button' class='btn btn-light' id='altui-toggle-attributes' >"+_T("Attributes")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-light' id='altui-toggle-attributes' data-toggle='collapse' data-target='#altui-device-attributes-{0}'>{1}</button>".format(altuiid,_T("Attributes"));
 		html += "<button type='button' class='btn btn-light altui-device-variables' id='"+altuiid+"'>"+_T("Variables")+"</button>";
 		html += "<button type='button' class='btn btn-light altui-device-actions' id='"+altuiid+"' >"+_T("Actions")+"</button>";
-		html += "<button type='button' class='btn btn-light' id='altui-device-config' >"+_T("Configuration")+"<span class='caret'></span></button>";
-		html += "<button type='button' class='btn btn-light' id='altui-device-usedin' >"+_T("Used in")+"<span class='caret'></span></button>";
-		html += "<button type='button' class='btn btn-light' id='altui-device-triggers' >"+_T("Notification")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-light' id='altui-device-config' data-toggle='collapse' data-target='.altui-device-config' >"+_T("Configuration")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-light' id='altui-device-usedin' data-toggle='collapse' data-target='.altui-device-usedin' >{0}<span class='caret'></span></button>".format(_T("Used in"));
+		html += "<button type='button' class='btn btn-light' id='altui-device-triggers' data-toggle='collapse' data-target='.altui-device-triggers' >"+_T("Notification")+"<span class='caret'></span></button>";
 		if (AltuiDebug.IsDebug())
 			html +=	 buttonDebugHtml;
 		html += "</div>";
@@ -6146,12 +6145,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		//
 		// Manage interactions
 		//
-		$("#altui-device-attributes-"+altuiid).toggle(false);		// hide them by default;
-		$("#altui-device-config-"+altuiid).toggle(false);			// hide them by default;
-		$(".altui-device-usedin").toggle(false);		// toggle attribute box
-		$(".altui-device-triggers").toggle(false);		// toggle attribute box
-		// $("#altui-device-usedin-"+altuiid).toggle(false);			// hide them by default;
-		// $("#altui-device-triggers-"+altuiid).toggle(false);			// hide them by default;
 		$(".altui-debug-div").toggle(false);						// hide
 		$(container).off('click','.altui-deldevice')
 					.on('click','.altui-deldevice',	 function(e) {
@@ -6162,26 +6155,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 							}
 						});
 					});
-
-		$("#altui-toggle-attributes").click( function() {
-			$("#altui-device-attributes-"+altuiid).toggle();		// toggle attribute box
-			$("#altui-toggle-attributes span.caret").toggleClass( "caret-reversed" );
-		});
-
-		$("#altui-device-usedin").click( function() {
-			// $("#altui-device-usedin-"+altuiid).toggle();		// toggle attribute box
-			$(".altui-device-usedin").toggle();		// toggle attribute box
-			$("#altui-device-usedin span.caret").toggleClass( "caret-reversed" );
-		});
-		$("#altui-device-triggers").click( function() {
-			// $("#altui-device-triggers-"+altuiid).toggle();		// toggle attribute box
-			$(".altui-device-triggers").toggle();		// toggle attribute box
-			$("#altui-device-triggers span.caret").toggleClass( "caret-reversed" );
-		});
-		$("#altui-device-config").click( function() {
-			$("#altui-device-config-"+altuiid).toggle();		// toggle attribute box
-			$("#altui-device-config span.caret").toggleClass( "caret-reversed" );
-		});
 
 		// resgister a handler on tab click to force a disaply & reload of JS tab , even if already loaded
 		$(container).off('click','.altui-device-controlpanel ul#altui-devtab-tabs a')
@@ -6686,7 +6659,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						MyLocalStorage.setSettings("DeviceRoomFilter",_deviceDisplayFilter.room);
 						if ( MyLocalStorage.getSettings('SyncLastRoom')==1 )
 							MyLocalStorage.setSettings("SceneRoomFilter",_deviceDisplayFilter.room);
-						$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid());
+						$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false);
 						_drawDevices(deviceFilter,false);	// do not redraw toolbar
 					};
 					function _onChangeCategoryFilter() {
@@ -6695,7 +6668,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						if (_deviceDisplayFilter.category.length==0)
 							_deviceDisplayFilter.category=0;
 						MyLocalStorage.setSettings("CategoryFilter",_deviceDisplayFilter.category);
-						$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid());
+						$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false);
 						_drawDevices(deviceFilter,false);	// do not redraw toolbar
 					};
 					// Display
@@ -6809,8 +6782,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 						_onClickRoomButton( $(this).prop('id') , $(this).data('altuiid') );
 					});
 
-					$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid());
-					$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid());
+					$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false);
+					$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false)
 					dfd.resolve();
 				});
 			});
