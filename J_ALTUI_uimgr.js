@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2236 $";
+var ALTUI_revision = "$Revision: 2237 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -958,6 +958,7 @@ var UIManager  = ( function( window, undefined ) {
 		//{ id:'FixedLeftButtonBar', type:'checkbox', label:"Left Buttons are fixed on the page", _default:1, help:'choose whether or not the selection Buttons on the left are scrolling with the page' },
 		{ id:'ShowWeather', type:'checkbox', label:"Show Weather on home page", _default:1, help:'display or not the weather widget on home page' },
 		{ id:'ShowHouseMode', type:'checkbox', label:"Show House Mode on home page", _default:1, help:'display or not the House mode widget on home page' },
+		{ id:'ServerSideOptions', type:'checkbox', label:"Share options on all ALTUI clients", _default:0, help:'use option choices from the vera to share the same options across several ALTUI clients' },
 		{ id:'UseVeraFavorites', type:'checkbox', label:"Use Vera Favorites", _default:0, help:'use the same favorites as set on your VERA box but prevent to have different favorites per client device' },
 		{ id:'SyncLastRoom', type:'checkbox', label:"Same Room for Devices/Scenes", _default:1, help:'keep the same last selected room between the device and the scene pages'},
 		{ id:'StickyFooter', type:'checkbox', label:"Sticky Footer to bottom", _default:0, help:'Fixes the footer at the bottom of the page but could have performance issues on mobile browsers'},
@@ -1553,7 +1554,7 @@ var UIManager  = ( function( window, undefined ) {
 			subst = '#RGBController_white .ui-slider-range, #RGBController_white .ui-slider-handle,#RGBController_white .ui-widget-header, #RGBController_white .ui-state-default { background-image:url(\'\'); background-color: $1 !important; }';
 			code = code.replace(re, subst);
 			}
-		// bootstrap fixes
+		// bootstrap 4 fixes
 		re = /btn-default/g;
 		var subst = 'btn-secondary';
 		code = code.replace(re, subst);
@@ -4540,21 +4541,17 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		if (isNullOrEmpty(serveroptions)) {
 			serveroptions="{}";
 		}
-		var defaults = JSON.parse(serveroptions);
-		// option1=val1,option2=val2,...
-		// serveroptions = atob(serveroptions);
-		// var tbl = serveroptions.split(',');
-		// var defaults={};
-		// $.each(tbl, function(idx,elem) {
-			// var key_vals=elem.split('=');
-			// defaults[ key_vals[0] ] =  key_vals[1];
-		// });
+		var options = JSON.parse(serveroptions);
+		var serversideOptions = MyLocalStorage.getSettings("ServerSideOptions")
+
 		$.each( $.merge( $.merge( [], _userOptions ), _editorOptions ) , function(idx,opt) {
 			if (MyLocalStorage.getSettings(opt.id) == null)
-				if (defaults[opt.id] != undefined )
-					MyLocalStorage.setSettings(opt.id, atob(defaults[opt.id]) );
-				else
-					MyLocalStorage.setSettings(opt.id, opt._default);
+				MyLocalStorage.setSettings(opt.id, opt._default);
+			if ( (serversideOptions==true) && (options[opt.id] != undefined ) ) {
+				var v= atob(options[opt.id])
+				if (isInteger(v)) v= parseInt(v);
+				MyLocalStorage.setSettings(opt.id, v );
+			}
 		});
 	};
 	function _forceOptions(name,value) {
@@ -13615,7 +13612,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					( {1} )
 				</small>`.format(
 					id,
-					_T(check.id+":"+check.help)
+					_T(check.id+": "+check.help)
 				)
 			// var helpbutton = xsbuttonTemplate.format( id, 'altui-help-button',	glyphTemplate.format("question","",""), _T(check.id+":"+check.help));
 			var html="";
@@ -13664,7 +13661,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					// html +=("  <input type='checkbox' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>"+_T(check.label));
 					// html +="</label>";
 					$(".altui-mainpanel").on("click","#altui-"+check.id,function(){
-						_saveOption(check.id,$("#altui-"+check.id).is(':checked'));
+						_saveOption(check.id,$("#altui-"+check.id).is(':checked') ? 1 : 0);
 					});
 					break;
 				case 'number':
@@ -13696,22 +13693,24 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		};
 		function _saveOption(name,value) {
 			MyLocalStorage.setSettings(name, value);
-
-			// save a copy of the simple options to Vera
-			var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
-			var altui_settings = MyLocalStorage.get("ALTUI_Settings");
-			var tbl={}
-			$.each(altui_settings,function(key,val) {
-				if ( (val!=null) && (isObject(val)==false)) {
-					tbl[key]=btoa(val.toString())
-				}
-			});
-			var serveroptions_str = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "ServerOptions" );
-			if (isNullOrEmpty(serveroptions_str))
-				serveroptions_str="{}";
-			var old_options = JSON.parse(  serveroptions_str );
-			old_options = $.extend(true,old_options,tbl);
-			MultiBox.setStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "ServerOptions", JSON.stringify(old_options) );
+			// var serversideOptions = MyLocalStorage.getSettings("ServerSideOptions")
+			// if (serversideOptions==1) {
+				// save a copy of the simple options to Vera
+				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
+				var altui_settings = MyLocalStorage.get("ALTUI_Settings");
+				var tbl={}
+				$.each(altui_settings,function(key,val) {
+					if ( (val!=null) && (isObject(val)==false)) {
+						tbl[key]=btoa(val.toString())
+					}
+				});
+				var serveroptions_str = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "ServerOptions" );
+				if (isNullOrEmpty(serveroptions_str))
+					serveroptions_str="{}";
+				var old_options = JSON.parse(  serveroptions_str );
+				old_options = $.extend(true,old_options,tbl);
+				MultiBox.setStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "ServerOptions", JSON.stringify(old_options) );
+			// }
 		};
 		UIManager.clearPage('Options',_T("Options"),UIManager.oneColumnLayout);
 
@@ -13827,13 +13826,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			editor.setFontSize( parseInt($(this).val()) );
 			_saveOption("EditorFontSize",parseInt($(this).val()))
 		})
-		// $(".altui-help-button").click( _userOptions, function(e) {
-			// var help = $(this).attr("title").split(':');
-			// var userOptions = e.data;
-			// var arr = userOptions.filter( function(opt) { return (opt.id == help[0]) } )
-			// if (arr.length>0)
-				// DialogManager.infoDialog(help[0],_T(arr[0].help))
-		// });
 
 		$(".altui-save-IconDB").click( function() {
 			IconDB.saveDB();
