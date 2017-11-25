@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2237 $";
+var ALTUI_revision = "$Revision: 2238 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6489,7 +6489,9 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		var isRoomFilterValid		= (function() {
 			return ($.isArray(this.room)) ? (this.room.length>0) : (this.room!=-1);
 		}).bind(_deviceDisplayFilter);
-
+		var isDeviceFilterValid = (function() {
+			return ( ( this.favorites || this.invisible || this.batterydevice || this.zwavedevice || this.zigbee_device || this.bt_device || (this.filtername && this.filtername.length>0) )!=false )
+		}).bind(_deviceDisplayFilter);
 		// filter function
 		function deviceFilter(device) {
 			var batteryLevel = MultiBox.getDeviceBatteryLevel(device);
@@ -6760,7 +6762,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					$("#altui-device-filter").click( function() {
 						_deviceDisplayFilter.filterformvisible = !_deviceDisplayFilter.filterformvisible;
 						$("#altui-device-filter-form").toggle();
-						$("#altui-device-filter span.caret").toggleClass( "caret-reversed" );
+						// $("#altui-device-filter span.caret").toggleClass( "caret-reversed" );
 					});
 
 					$.each(_checks, function(idx,check) {
@@ -6781,6 +6783,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 
 					$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false);
 					$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false)
+					$("#altui-device-filter").toggleClass("btn-info",isDeviceFilterValid()).toggleClass("btn-light",isDeviceFilterValid()==false)
 					dfd.resolve();
 				});
 			});
