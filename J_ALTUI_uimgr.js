@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2239 $";
+var ALTUI_revision = "$Revision: 2240 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1476,12 +1476,13 @@ var UIManager  = ( function( window, undefined ) {
 	};
 
 	function _loadD3Script( drawfunc ) {
-		_loadScriptIfNeeded('d3.min.js','//cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/',drawfunc);
+		_loadScriptIfNeeded('d3.min.js','//cdnjs.cloudflare.com/ajax/libs/d3/4.12.0/',drawfunc);
 		// _loadScriptIfNeeded('d3.min.js','//cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/',drawfunc);
 	};
 
 	function _loadJointJSScript( drawfunc ) {
-		var ver = "1.1.0/"; // "1.0.3"
+		//https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.0.1/joint.min.js
+		var ver = "2.0.1/";	// "1.1.0/"; // "1.0.3"
 		_loadCssIfNeeded( "joint.css", "//cdnjs.cloudflare.com/ajax/libs/jointjs/"+ver)
 		_loadScriptIfNeeded('joint.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
 			_loadScriptIfNeeded('joint.shapes.fsa.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
