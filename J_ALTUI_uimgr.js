@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2240 $";
+var ALTUI_revision = "$Revision: 2241 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4369,8 +4369,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					} ,
 					$(elem).data("altuiconfig")
 					);
-				gageCfg.max = Math.max(temp, gageCfg.max);
-				gageCfg.min = Math.min(temp, gageCfg.min);
+				gageCfg.max = Math.max(5*Math.ceil(temp/5), gageCfg.max);
+				gageCfg.min = Math.min(5*Math.floor(temp/5), gageCfg.min);
 				var g = new JustGage({
 					id: "altui-gauge-favorite-"+altuiid,
 					value: temp,
@@ -4381,7 +4381,20 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					minLabelMinFontSize:17,
 					maxLabelMinFontSize:17,
 					decimals:1,
-					valueFontColor: valueFontColor
+					valueFontColor: valueFontColor,
+					customSectors: [{
+						color : "#0000ff",
+						lo : -99,
+						hi : 0
+						},{
+						color : "#00ff00",
+						lo : 1,
+						hi : 20
+						},{
+						color : "#ff0000",
+						lo : 21,
+						hi : 999
+					}]
 				  });
 				$(elem).data("justgage",  g).data("altuiconfig",gageCfg);
 				return true;
