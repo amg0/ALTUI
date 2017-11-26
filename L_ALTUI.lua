@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.02"
+local version = "v2.03"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -1759,16 +1759,16 @@ local htmlLocalScripts = [[
 	
 local htmlScripts = [[
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/@swversion@/jquery.min.js" ></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.js" ></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.js" ></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" ></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script> 
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
-	<script type="text/javascript" src="//cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script> 	
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
 	<script type="text/javascript"  
 	  src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>
@@ -1812,8 +1812,8 @@ local htmlCSSlinks = [[
 	<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" >
 	<link rel="stylesheet" type="text/css" href="@localbootstrap@">
-	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css">
 	<link class="altui-theme" rel="stylesheet" href="@ThemeCSS@">	
 ]]
 
