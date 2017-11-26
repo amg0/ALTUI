@@ -1735,7 +1735,8 @@ local htmlLocalScripts = [[
 	<script src="@localcdn@/spectrum.min.js"></script>
 	<script src="@localcdn@/raphael-min.js"></script>
 	<script src="@localcdn@/ace.js"></script>	
-  <script src="@localcdn@/jsapi.js"></script> 	
+	<script src="@localcdn@/justgage.min.js"></script>
+	<script src="@localcdn@/jsapi.js"></script> 	
 	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
 	<script src="J_ALTUI_utils.js" ></script>
 	<script src="J_ALTUI_api.js" ></script>
@@ -1767,6 +1768,7 @@ local htmlScripts = [[
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="//cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
 	<script type="text/javascript"  
 	  src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>
