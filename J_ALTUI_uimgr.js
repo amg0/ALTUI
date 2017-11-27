@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2243 $";
+var ALTUI_revision = "$Revision: 2244 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2014,6 +2014,13 @@ var UIManager  = ( function( window, undefined ) {
 				MultiBox.setStatus( device, state.service, state.variable, "");
 				var cell = tr.find(".altui-variable-value")
 				$(cell).text("");
+				DialogManager.confirmDialog(_T("Do you also want to delete this variable definitively ? ({0})").format(state.variable),function(result) {
+					if (result==true) {
+						MultiBox.modifyDevice(device , function( result ) {
+							$("#altui-oscommand-result").text(JSON.stringify(result,null,2));	// pretty print				} )
+						});
+					}
+				});
 			});
 			$(".altui-variable-value").click( _clickOnValue );
 			// show the modal
@@ -2195,21 +2202,36 @@ var UIManager  = ( function( window, undefined ) {
 	}
 
 	function _defaultDeviceDrawWatts( device ) {
-		var html ="";
+		var strings = []
+		var services = [
+			"urn:micasaverde-com:serviceId:LightSensor1",
+			"urn:micasaverde-com:serviceId:HumiditySensor1",
+			"urn:micasaverde-com:serviceId:GenericSensor1"
+		]
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' ));
 		var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
-
 		if (isNaN(watts)==false)
-			html += ALTUI_Templates.wattTemplate.format(watts,"W");
+			strings.push(  ALTUI_Templates.wattTemplate.format(watts,"W") )
 		else {
 			watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'UserSuppliedWattage' ));
 			if (isNaN(watts)==false)
-				html += ALTUI_Templates.wattTemplate.format(watts,"W");
+				strings.push( ALTUI_Templates.wattTemplate.format(watts,"W") )
 		}
 		if (isNaN(kwh)==false)
-			html += ALTUI_Templates.wattTemplate.format(Math.round(kwh),"kWH");
-		return html;
+			strings.push( ALTUI_Templates.wattTemplate.format(Math.round(kwh),"kWH") )
+		
+		if (strings.length==0) {
+			$.each(services, function(i,s) {
+				var val = parseFloat(MultiBox.getStatus( device, s, 'CurrentLevel' ));
+				if (isNaN(val)==false) {
+					strings.push( ALTUI_Templates.wattTemplate.format(val," ") )
+					return false;
+				}
+			})
+		}
+		return strings.join(" ");
 	};
+	
 	function _defaultDeviceDrawAltuiStrings(device) {
 		var html ="";
 		$.each( ['DisplayLine1','DisplayLine2'],function(i,v) {
@@ -2219,6 +2241,7 @@ var UIManager  = ( function( window, undefined ) {
 		});
 		return html!="" ? html : optHorGlyph;
 	};
+	
 	function _defaultDeviceDraw( device ) {
 		var html = _defaultDeviceDrawWatts(device);
 		html += _defaultDeviceDrawAltuiStrings(device);
@@ -3320,29 +3343,124 @@ var UIManager  = ( function( window, undefined ) {
 	};
 	function _deviceDrawControlPanel( device, container ) {
 		var controller = MultiBox.controllerOf(device.altuiid).controller;
-
+		
+		function toHex2(d) {
+			return  ("000"+(Number(d).toString(16))).slice(-4).toLowerCase()
+		}
+		function toHex(d) {
+			return  ("0"+(Number(d).toString(16))).slice(-2).toLowerCase()
+		}
+		function _decodeVersion(s) {
+			//There are 5 values: Z-Wave Library Type, Z-Wave Protocol Version, Z-Wave Protocol Sub Version, Application Version, Application Sub Version
+			var splits = s.split(",")
+			var strings=[]
+			strings.push("Library Type:"+ALTUI_zWaveLibraryType[splits[0]])
+			strings.push("zWave Protocol Major,Minor: {0},{1}".format( splits[1],splits[2] ))
+			strings.push("Application Major,Minor: {0},{1}".format( splits[3],splits[4] ))
+			return "<ul><li>"+strings.join("</li><li>")+"</li></ul>"
+		}
+		
+		function _decodeNodeInfo(value) {
+			var strings=[]
+			$.each(value.split(","), function(i,v) {
+				if (v!="")
+					strings.push("<li>{0} (0x{1})</li>".format(ALTUI_zWaveCommandClass[v] || _T("Unknown Class") , v))
+			});
+			return "<ul>{0}</ul>".format(strings.join(""));
+		}
+		
+		function _decodeCapabilities(value) {
+			var parts = value.split("|")
+			var splits = parts[0].split(",")
+			var strings=[]
+			//The first six numbers in capabilities are reported by the ZWave ZW_GetNodeProtocolInfo function (0x41):
+			var str = []
+			var labels = [
+				"Capability",
+				"Security",
+				"Reserved",
+				"Basic Device Class",
+				"Generic Device Class",
+				"Specific Device Class"
+			]
+			if (parseInt(splits[0])<128)
+				strings.push("Battery Operated, wakes up occasionally")
+			var i=0
+			for (i=0; i<3; i++) {
+				str.push("{0} ({1})".format(labels[i],splits[i]))
+			}
+			str.push("{0}: {1}".format(labels[3],"{0} ({1})".format(ALTUI_BasicType[ toHex(splits[3]) ],splits[3])) )
+			var zwtype = ALTUI_GenericSpecificType[toHex(splits[4])]
+			str.push( "{0}: {1}".format(labels[4], "{0} ({1})".format(zwtype.gt,splits[4])) )
+			str.push( "{0}: {1}".format(labels[5], "{0} ({1})".format(zwtype.st[toHex(splits[5])],splits[5])) )
+			for (i=6; i<splits.length; i++ ) {
+				if (splits[i]!="") {
+					switch(splits[i]) {
+						case "L":
+							str.push("Listens");break;
+						case "R":
+							str.push("Routes");break;
+						case "B":
+							str.push("Beams");break;
+						case "RS":
+							str.push("Routing Slave");break;
+						case "W1":
+							str.push("Requires beaming");break;
+						default: {
+							str.push("Unk flag:{0}".format(splits[i]));break;
+						}
+					}
+				}
+			}
+			strings.push("ZW_GetNodeProtocolInfo: {0}<ul><li>".format(parts[0])+str.join("</li><li>")+"</li></ul>")
+			strings.push("Extra:"+parts[1])
+			return "<ul><li>"+strings.join("</li><li>")+"</li></ul>"
+		}
+		function _decodeManufacturor(value) {
+			var splits = value.split(",")
+			return "{0} ({1})".format(ALTUI_Manufacturor[ toHex2(splits[0]) ] || "Unknown",splits[0]) + ", {0}, {1}".format(splits[1],splits[2])
+		}
+		
 		function _drawDeviceLastUpdateStats( device ) {
 			var variables = [
+				{ name:"manufacturer" }, { name:"model" }, { name:"name" },
 				{ service:"urn:micasaverde-com:serviceId:HaDevice1", name:"FirstConfigured" },
 				{ service:"urn:micasaverde-com:serviceId:HaDevice1", name:"LastUpdate" },
 				{ service:"urn:micasaverde-com:serviceId:HaDevice1", name:"BatteryDate" },
 				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"LastWakeup" },
 				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"LastRouteUpdate" },
 				{ service:"urn:micasaverde-com:serviceId:SecuritySensor1", name:"LastTrip" },
+				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"ManufacturerInfo", decode:_decodeManufacturor, help:"http://z-wave.sigmadesigns.com/wp-content/uploads/2016/08/SDS13740-1-Z-Wave-Plus-Device-and-Command-Class-Types-and-Defines-Specification.pdf" },
+				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"VersionInfo", decode:_decodeVersion, help:"http://wiki.micasaverde.com/index.php/ZWave_Protocol_Version" },
+				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"Capabilities", decode:_decodeCapabilities, help:"http://wiki.micasaverde.com/index.php/ZWave_Command_Classes" },
+				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"NodeInfo", decode:_decodeNodeInfo },
 			];
-			// var html = "<div class='col-12'>";
 			var html = "";
 			html += "<div class='card xxx'><div class='card-body altui-device-keyvariables'>";
 			html += "<div class='row'>";
 			$.each(variables, function(idx,variable) {
-				var value = MultiBox.getStatus( device, variable.service, variable.name);
+				var value = null
+				if (variable.service)
+					value = MultiBox.getStatus( device, variable.service, variable.name);
+				else 
+					value = device[variable.name] || "";
 				if ((value !=null) && (value !="")) {
-					html += "<div class='col-sm-6 col-md-4'><b>{0}</b>: {1}</div>".format(variable.name,HTMLUtils.enhanceValue(value));
+					if ($.isFunction(variable.decode)) {
+						var help = (variable.help) ? "<a href='{0}' target='_blank'>{1}</a>".format(variable.help,_T("Help")) : ""
+						html += "<div class='col-sm-6'><b>{0}</b>:{2} {1}</div>".format(variable.name,(variable.decode)(value),help)
+					}
+					else
+						html += "<div class='col-sm-6 col-md-4'><b>{0}</b>: {1}</div>".format(variable.name,HTMLUtils.enhanceValue(value));
 				}
 			});
 			html += "</div>";
+			var nodeinfo = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:ZWaveDevice1","NodeInfo")
+			if (nodeinfo) {
+				var splits = nodeinfo.split(",")
+			}
+			html += "<div class='row'>";
+			html += "</div>";
 			html +="</div></div>";		// panel
-			// html += "</div>";			// col
 			return html;
 		};
 
@@ -3360,43 +3478,43 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var getvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "VariablesGet") || "";
 				html +="<div class='row altui-device-config collapse'>";
 				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 '>"
-				html += "<h6>{0}</h6>".format(_T("Device zWave Parameters"))
 				html += _drawDeviceLastUpdateStats( device );
 				// if (isNullOrEmpty(setvariables) == false) {
-					html += "<form id='myform' role='form' action='javascript:void(0);' novalidate >";
-					html += "<table class='table table-responsive-OFF table-sm altui-config-variables'>";
-					html +=("<caption><button id='{0}' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(device.altuiid,_T('Save Changes'));
-					html += "<thead>";
-					html += "<tr>";
-					html += "<th>";
-					html += "</th>";
-					html += "<th>";
-					html += "Var</th>";
-					html += "<th>";
-					html += "Length Type</th>";
-					html += "<th>";
-					html += "Desired</th>";
-					html += "<th>";
-					html += "Current</th>";
-					html += "</tr>";
-					html += "</thead>";
-					html += "<tbody>";
-					var curelems = curvariables.split(',');
-					var elems = setvariables.split(',');
-					var getelems = getvariables.split(',');
-					if (elems.length>=3) {
-						for (var i=0;i<elems.length;i+=3) {
-							html += _displayConfigVariable( device,elems[i],elems[i+1],elems[i+2],_findCurrentValue(getelems,elems[i]) );
-						}
+				html += "<h6>{0}</h6>".format(_T("Device zWave Parameters"))
+				html += "<form id='myform' role='form' action='javascript:void(0);' novalidate >";
+				html += "<table class='table table-responsive-OFF table-sm altui-config-variables'>";
+				html +=("<caption><button id='{0}' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(device.altuiid,_T('Save Changes'));
+				html += "<thead>";
+				html += "<tr>";
+				html += "<th>";
+				html += "</th>";
+				html += "<th>";
+				html += "Var</th>";
+				html += "<th>";
+				html += "Length Type</th>";
+				html += "<th>";
+				html += "Desired</th>";
+				html += "<th>";
+				html += "Current</th>";
+				html += "</tr>";
+				html += "</thead>";
+				html += "<tbody>";
+				var curelems = curvariables.split(',');
+				var elems = setvariables.split(',');
+				var getelems = getvariables.split(',');
+				if (elems.length>=3) {
+					for (var i=0;i<elems.length;i+=3) {
+						html += _displayConfigVariable( device,elems[i],elems[i+1],elems[i+2],_findCurrentValue(getelems,elems[i]) );
 					}
-					html += "<tr>";
-					html += "<td colspan='5'>";
-					html += smallbuttonTemplate.format( 'altui-addvar', 'altui-add-variable', plusGlyph ,'Add');
-					html += "</td>";
-					html += "</tr>";
-					html += "</tbody>";
-					html += "</table>";
-					html += "</form>";
+				}
+				html += "<tr>";
+				html += "<td colspan='5'>";
+				html += smallbuttonTemplate.format( 'altui-addvar', 'altui-add-variable', plusGlyph ,'Add');
+				html += "</td>";
+				html += "</tr>";
+				html += "</tbody>";
+				html += "</table>";
+				html += "</form>";
 				// }
 				html += "</div>";	// device-config
 				html += "</div>";	// row
@@ -6250,7 +6368,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'Watts', format:'{0}W' },
 				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'LastTrip', format:'<small>{0}</small>', translate:HTMLUtils.enhanceValue },
 				{service:'urn:micasaverde-com:serviceId:LightSensor1', variable:'CurrentLevel', format:'{0}' },
-				{service:'urn:micasaverde-com:serviceId:HumiditySensor1', variable:'CurrentLevel', format:'{0}' },
+				{service:'urn:micasaverde-com:serviceId:HumiditySensor1', variable:'CurrentLevel', format:'{0}%' },
 				{service:'urn:micasaverde-com:serviceId:PowerMeter1', variable:'Volts', format:'{0}V' },
 				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'Armed', format:'{0}', translate:_armed },
 				{service:'urn:micasaverde-com:serviceId:DoorLock1', variable:'Status', format:'{0}', translate:_locked },
@@ -6258,8 +6376,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				{service:'urn:upnp-org:serviceId:VSwitch1', variable:'Text1,Text2', format:'<small>{0} {1}</small>'},
 				{service:'urn:dcineco-com:serviceId:MSwitch1', variable:'Text1,Text2', format:'<small>{0} {1}</small>'},
 				{service:'urn:a-lurker-com:serviceId:InfoViewer1', variable:'LuaPattern' },
-				{service:'urn:rts-services-com:serviceId:DayTime', variable:'Status', translate:_daynight }
-				
+				{service:'urn:rts-services-com:serviceId:DayTime', variable:'Status', translate:_daynight },
+				{service:'urn:micasaverde-com:serviceId:GenericSensor1', variable:'CurrentLevel', format:'{0}' },				
 			]
 			var tpl = "<span class='altui-device-info'>{0}</span>"
 			for (var i=0 ; i<arr.length ; i++) {
