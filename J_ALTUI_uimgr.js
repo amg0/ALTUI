@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2244 $";
+var ALTUI_revision = "$Revision: 2245 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -281,7 +281,7 @@ var styles =`
 		} 
 	} 
 	@media (min-width: 736px) { 
-		.card-columns { 
+		.card-columns, .altui-zwavecfg-card.card-columns { 
 			column-count: 2; 
 		} 
 	} 
@@ -294,11 +294,14 @@ var styles =`
 		.card-columns {	
 			column-count: 4;	
 		}	
+		.altui-zwavecfg-card.card-columns{	
+			column-count: 3;	
+		}
 	}	
 	@media (min-width: 1840px) {	
 		.card-columns {	
 			column-count: 5;	
-		}	
+		}
 	}	
 	.altui-myhome-title{ 
 		cursor: pointer;	
@@ -3421,7 +3424,7 @@ var UIManager  = ( function( window, undefined ) {
 			return "{0} ({1})".format(ALTUI_Manufacturor[ toHex2(splits[0]) ] || "Unknown",splits[0]) + ", {0}, {1}".format(splits[1],splits[2])
 		}
 		
-		function _drawDeviceLastUpdateStats( device ) {
+		function _drawDeviceZWConfiguration( device ) {
 			var variables = [
 				{ name:"manufacturer" }, { name:"model" }, { name:"name" },
 				{ service:"urn:micasaverde-com:serviceId:HaDevice1", name:"FirstConfigured" },
@@ -3436,24 +3439,29 @@ var UIManager  = ( function( window, undefined ) {
 				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"NodeInfo", decode:_decodeNodeInfo },
 			];
 			var html = "";
-			html += "<div class='card xxx'><div class='card-body altui-device-keyvariables'>";
-			html += "<div class='row'>";
+			html += "<div class='card'><div class='card-body altui-device-keyvariables'>";
+
+			html += "<div class='card-columns altui-zwavecfg-card'>";
 			$.each(variables, function(idx,variable) {
 				var value = null
 				if (variable.service)
 					value = MultiBox.getStatus( device, variable.service, variable.name);
 				else 
 					value = device[variable.name] || "";
+				
 				if ((value !=null) && (value !="")) {
+					html += "<div class='card'><div class='card-body'>"
 					if ($.isFunction(variable.decode)) {
 						var help = (variable.help) ? "<a href='{0}' target='_blank'>{1}</a>".format(variable.help,_T("Help")) : ""
-						html += "<div class='col-sm-6'><b>{0}</b>:{2} {1}</div>".format(variable.name,(variable.decode)(value),help)
+						html += "<div ><b>{0}</b>:{2} {1}</div>".format(variable.name,(variable.decode)(value),help)
 					}
 					else
-						html += "<div class='col-sm-6 col-md-4'><b>{0}</b>: {1}</div>".format(variable.name,HTMLUtils.enhanceValue(value));
+						html += "<div ><b>{0}</b>: {1}</div>".format(variable.name,HTMLUtils.enhanceValue(value));
+					html += "</div></div>"
 				}
 			});
 			html += "</div>";
+
 			var nodeinfo = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:ZWaveDevice1","NodeInfo")
 			if (nodeinfo) {
 				var splits = nodeinfo.split(",")
@@ -3478,7 +3486,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				var getvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "VariablesGet") || "";
 				html +="<div class='row altui-device-config collapse'>";
 				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 '>"
-				html += _drawDeviceLastUpdateStats( device );
+				html += _drawDeviceZWConfiguration( device );
 				// if (isNullOrEmpty(setvariables) == false) {
 				html += "<h6>{0}</h6>".format(_T("Device zWave Parameters"))
 				html += "<form id='myform' role='form' action='javascript:void(0);' novalidate >";
@@ -6277,6 +6285,11 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		//
 		// Manage interactions
 		//
+		$(".altui-mainpanel")
+			.off('click','#altui-toggle-attributes,#altui-device-config,#altui-device-usedin,#altui-device-triggers')
+			.on('click','#altui-toggle-attributes,#altui-device-config,#altui-device-usedin,#altui-device-triggers',function() {
+				$(this).toggleClass("btn-light btn-info")
+			})
 		$(".altui-debug-div").toggle(false);						// hide
 		$(container).off('click','.altui-deldevice')
 					.on('click','.altui-deldevice',	 function(e) {
