@@ -64,7 +64,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	function _drawAltUIControlPanel( device, domparent) {
 		function _displayOneDevice( altuiid ) {
 			var device = MultiBox.getDeviceByAltuiID(altuiid);
-			$("#altui-display-box").html( ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid));
+			$("#altui-display-box").html( ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'altui-norefresh col-12'));
 			$('.altui-device[data-altuiid={0}]'.format(device.altuiid)).html( UIManager.deviceDraw(device) );
 		}
 
