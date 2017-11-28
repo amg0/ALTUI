@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2245 $";
+var ALTUI_revision = "$Revision: 2246 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3421,7 +3421,11 @@ var UIManager  = ( function( window, undefined ) {
 		}
 		function _decodeManufacturor(value) {
 			var splits = value.split(",")
-			return "{0} ({1})".format(ALTUI_Manufacturor[ toHex2(splits[0]) ] || "Unknown",splits[0]) + ", {0}, {1}".format(splits[1],splits[2])
+			var str=[]
+			str.push("{0} ({1})".format(ALTUI_Manufacturor[ toHex2(splits[0]) ] || "Unknown",splits[0])) 
+			str.push("Product Type: {0}".format(splits[1]))
+			str.push("Product ID: {0}".format(splits[2]))
+			return "<ul><li>"+str.join("</li><li>")+"</li></ul>"
 		}
 		
 		function _drawDeviceZWConfiguration( device ) {
@@ -6232,16 +6236,12 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			}
 		});
 
-		// $(".altui-mainpanel").off("click","button#altui-create-room");
 		$(".altui-mainpanel").off('click')
 		.on("click","button#altui-create-room",function()
 		{
 			MultiBox.createRoom(parseInt($("#altui-controller-select").val()),$("#altui-create-room-name").val() );
 		})
-		// .on("click","button#altui-save-rooms",function()
-		// {
-			// $("#altui-save-rooms").removeClass("btn-danger");
-		// });
+
 	},
 
 	pageControlPanel: function( altuiid )
