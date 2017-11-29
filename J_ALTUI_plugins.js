@@ -52,6 +52,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-colorpicker { margin-top: 2px; width:30px; margin-right: 15px; }";	
 		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";	
 		style += ".altui-infoviewer-pattern { font-size: 14px; }";	
+		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";
 //RB Change start
 //		style += "div.altui-windowcover button.btn-sm { width: 2.9em; padding:1px;}";
 		style += "div.altui-windowcover button.btn-sm { width: 2.9em; padding:1px; overflow: hidden;}";
@@ -1365,6 +1366,18 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return html;
 	};	
 	
+	function _draw_Paradox_IP150_wps( device) {
+		var html ="";
+		var urlhead = MultiBox.getUrlHead(device.altuiid);
+		html += "<div class='btn-group pull-right'>";
+		html+= ("<button id='altui-Paradox_IP150_wps-{0}' type='button' class='altui-Paradox_IP150_wps-btn btn btn-light btn-sm pull-right'>{1}</button>" .format( device.altuiid,_T("Zones") )) ;
+		html += "</div>";
+		html += "<script type='text/javascript'>";
+		html += " $('button.altui-Paradox_IP150_wps-btn').on('click', function() { window.open('{0}?id=lr_al_paradox_wps_info','_blank'); } );".format(urlhead);
+		html += "</script>";
+		return html;
+	};	
+	
 	function _drawBinLightControlPanel(device, domparent) {
 
 		var html = "Any thing can go here<hr>";
@@ -1722,6 +1735,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawWeatherIcon : _drawWeatherIcon,
 	drawWeatherFavorite : _drawWeatherFavorite,
 	drawInfoViewer  : _drawInfoViewer,
+	draw_Paradox_IP150_wps : _draw_Paradox_IP150_wps,
 	drawDataMine 	: _drawDataMine,
 	drawMultiswitch : _drawMultiswitch,		// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
 // Rene Boer start
