@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2249 $";
+var ALTUI_revision = "$Revision: 2250 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3353,6 +3353,9 @@ var UIManager  = ( function( window, undefined ) {
 		function toHex(d) {
 			return  ("0"+(Number(d).toString(16))).slice(-2).toLowerCase()
 		}
+		function fromHex(v) {
+			return parseInt(v, 16).toString(10)
+		}
 		function _decodeVersion(s) {
 			//There are 5 values: Z-Wave Library Type, Z-Wave Protocol Version, Z-Wave Protocol Sub Version, Application Version, Application Sub Version
 			var splits = s.split(",")
@@ -3363,11 +3366,18 @@ var UIManager  = ( function( window, undefined ) {
 			return "<ul><li>"+strings.join("</li><li>")+"</li></ul>"
 		}
 		
-		function _decodeNodeInfo(value) {
+		function _decodeNodeInfo(value,device) {
+			var capabilities = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "Capabilities");
+			capabilities = capabilities.split("|")[1]
 			var strings=[]
-			$.each(value.split(","), function(i,v) {
-				if (v!="")
-					strings.push("<li>{0} (0x{1})</li>".format(ALTUI_zWaveCommandClass[v] || _T("Unknown Class") , v))
+			$.each(capabilities.split(","), function(i,v) {
+				if (v!="") {
+					var cap_ver = v.split(':')
+					var key = toHex(cap_ver[0])
+					if ( (cap_ver.length>1) && (cap_ver[1]!="0") )
+						key += ("_V"+cap_ver[1])
+					strings.push("<li>0x{1}-{0}</li>".format(ALTUI_zWaveCommandClass[key] || _T("Unknown Class") , key))
+				}
 			});
 			return "<ul>{0}</ul>".format(strings.join(""));
 		}
@@ -3457,7 +3467,7 @@ var UIManager  = ( function( window, undefined ) {
 					html += "<div class='card'><div class='card-body'>"
 					if ($.isFunction(variable.decode)) {
 						var help = (variable.help) ? "<a href='{0}' target='_blank'>{1}</a>".format(variable.help,_T("Help")) : ""
-						html += "<div ><b>{0}</b>:{2} {1}</div>".format(variable.name,(variable.decode)(value),help)
+						html += "<div ><b>{0}</b>:{2} {1}</div>".format(variable.name,(variable.decode)(value,device),help)
 					}
 					else
 						html += "<div ><b>{0}</b>: {1}</div>".format(variable.name,HTMLUtils.enhanceValue(value));
