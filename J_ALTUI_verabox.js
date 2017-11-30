@@ -2295,7 +2295,19 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				(cbfunc)(result);
 		});
 	};
-	
+	function _setSceneMonitorMode(id,mode, cbfunc) {
+		var jqxhr = _httpGet( "?id=change_scene_mode&SceneID={0}&ModeName={1}".format(id,mode), {}, 
+			function(data, textStatus, jqXHR) {
+				if ((data!=null) && (data!="ERROR")) {
+					if ($.isFunction(cbfunc))
+						(cbfunc)(data);
+				}
+				else 
+					PageMessage.message(_T("Could not change scene monitor mode")+" "+sceneid, "warning");
+			}
+		);
+		return jqxhr;
+	};
 	function _getDeviceVariableHistory( device, varid, cbfunc) {
 		var id = device.id;
 		var state = MultiBox.getStateByID(device.altuiid,varid);
@@ -2634,7 +2646,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	getScenesSync	: function() 		{ return _scenes; },
 	getSceneByID 	: _getSceneByID,
 	getNewSceneID	: _getNewSceneID,
-
+	setSceneMonitorMode : _setSceneMonitorMode,
+	
 	// pages
 	getCustomPages : _getCustomPages,
 	

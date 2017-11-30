@@ -688,6 +688,10 @@ var MultiBox = ( function( window, undefined ) {
 		var elems = altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runScene(elems[1]);
 	};
+	function _setSceneMonitorMode(scene,mode,cbfunc) {
+		var elems = scene.altuiid.split("-");
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.setSceneMonitorMode( elems[1], mode, cbfunc);
+	};
 	function _getWorkflowStatus(cbfunc) {
 		return _controllers[0].controller.getWorkflowStatus(cbfunc);
 	};
@@ -959,6 +963,7 @@ var MultiBox = ( function( window, undefined ) {
 	renameScene			: _renameScene,		// (scene, newname)
 	runScene			: _runScene,		//(id)
 	runSceneByAltuiID	: _runSceneByAltuiID,
+	setSceneMonitorMode : _setSceneMonitorMode,
 
 	// workflows
 	getWorkflows		: _getWorkflows,

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2250 $";
+var ALTUI_revision = "$Revision: 2251 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -504,7 +504,11 @@ var styles =`
 		text-overflow: ellipsis;
 		overflow: hidden;		
 		height: 28px;			
-	}		
+	}
+	.altui-scene-eyemonitor {
+		font-size:19px;
+		display: none;
+	}
 	.altui-scene-title {
 		white-space: nowrap; 
 		overflow: hidden;		
@@ -2596,16 +2600,16 @@ var UIManager  = ( function( window, undefined ) {
 		nextrun = (nextrun==0) ? '' : timeGlyph+" "+_toIso(new Date(nextrun*1000)).replace('T',' ');
 
 		var idDisplay = "<div class='pull-right text-muted'><small>#"+scene.altuiid+" </small></div>";
-
+		// scene.status_mode="continuous"
+		var eyeMonitorHtml = 
+			(scene.status_mode=="continuous") 
+			? glyphTemplate.format( "eye", _T("Monitor Scene") ,"altui-scene-eyemonitor text-success" ) 
+			: glyphTemplate.format( "eye-slash", _T("Monitor Scene") ,"altui-scene-eyemonitor text-muted" ) 
+		
 		var scenecontainerTemplate = "";
 		scenecontainerTemplate	+=	"<div class='card xxx altui-scene "+((norefresh==true) ? 'altui-norefresh': '') +"' id='{0}' data-altuiid='{0}'>"
-		scenecontainerTemplate	+=	"<div class='card-header altui-scene-heading'>"+delButtonHtml +idDisplay+" <div class='card-title altui-scene-title' data-toggle='tooltip' data-placement='left' title='{1}'>"+pauseButtonHtml+favoriteHtml+"<small class='altui-scene-title-name'>{1}</small> {3}</div></div>";
+		scenecontainerTemplate	+=	"<div class='card-header altui-scene-heading'>"+delButtonHtml +idDisplay+" <div class='card-title altui-scene-title' data-toggle='tooltip' data-placement='left' title='{1}'>"+pauseButtonHtml+favoriteHtml+eyeMonitorHtml+" <small class='altui-scene-title-name'>{1}</small> {3}</div></div>";
 		scenecontainerTemplate	+=	"<div class='card-body altui-scene-body'>";
-/*
-		scenecontainerTemplate	+=	"<small class='altui-scene-date text-muted pull-right'>{6}</small><small class='altui-scene-date text-info pull-right'>{7}</small>";
-		scenecontainerTemplate	+=	"{3}<div class='altui-scene-btnarea'>{4}{8}{5}</div>";
-
-*/
 		scenecontainerTemplate	+= `
 			<div class='d-flex'>
 				<div class=' '>
@@ -7351,6 +7355,16 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 					Favorites.set('scene', altuiid, scene.favorite );
 					$(this).replaceWith( (scene.favorite==true) ? starGlyph : staremtpyGlyph );
 					UIControler.updateFavoriteScene()
+				})
+				.on("click",".altui-scene-eyemonitor",function(event) {
+					var scenedom = $(this).closest(".altui-scene");
+					var altuiid = scenedom.data('altuiid');
+					var scene = MultiBox.getSceneByAltuiID(altuiid);
+					var cmd = (scene.status_mode=="continuous")  ? "normal" : "continuous"
+					var that = $(this)
+					MultiBox.setSceneMonitorMode(scene,cmd, function(result) {
+						that.toggleClass("text-muted text-success")
+					});
 				})
 				.on("click",".altui-scene-title-name",function(event) {
 					if ( $(this).find("input").length>=1 )
