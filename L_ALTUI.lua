@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.04"
+local version = "v2.05"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3106,6 +3106,55 @@ local function sendValueToStorage_emoncms(watch_description,lul_device, lul_serv
 	return nil
 end
 
+local function sendValueToStorage_ifttt(watch_description,lul_device, lul_service, lul_variable,old, new, lastupdate, provider_params)
+	debug(string.format("sendValueToStorage_ifttt(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
+	debug(string.format("watch_description:%s",json.encode(watch_description)))
+	local providerparams = json.decode( watch_description['Data'] )
+
+	local url = string.format("https://maker.ifttt.com/trigger/%s/with/key/%s",
+		providerparams[2],	-- event name
+		providerparams[1]	-- web hook key
+	)
+	local body = string.format('{"value1":"%s","value2":"%s","value3":"%s"}',
+		lul_device,
+		lul_service..":"..lul_variable,
+		old..":"..new
+	)
+	local result = {}
+	local response, status, headers = https.request({
+		method="POST",
+		url = url,
+		source= ltn12.source.string(body),
+		headers = {
+			-- ["Host"]="192.168.1.5",
+			-- ["Connection"]= "keep-alive",
+			-- ["Origin"]="http://192.168.1.5",
+			-- ["User-Agent"]="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36",
+			["Content-Type"] = "application/json",
+			["Content-Length"] = body:len(),
+			-- ["Accept"]="text/plain, */*; q=0.01",
+			-- ["Accept-Encoding"]="gzip, deflate",
+			-- ["Accept-Language"]= "fr,fr-FR;q=0.8,en;q=0.6,en-US;q=0.4",
+		},
+		sink = ltn12.sink.table(result)
+	})
+	
+	debug(string.format("response:%s",response))	
+	debug(string.format("status:%s",status))	
+
+	-- everything looks good
+	if (response==1) then
+		local completestring = table.concat(result)
+		debug(string.format("ALTUI: Succeed to POST to %s , result=%s",url,completestring))
+	else
+	-- fail to connect
+		debug(string.format("ALTUI: Failed to POST to %s ",url))
+		return 0
+	end
+	
+	return 1
+end
+
 Queue = {
 	new = function(self,o)
 		o = o or {}   -- create object if user does not provide one
@@ -4140,6 +4189,11 @@ function startupDeferred(lul_device)
 		[5] 	= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]="http://emoncms.org/vis/realtime?feedid={1}&embed=1&apikey={3}"}
 	})
 	
+	registerDataProvider("IFTTT","sendValueToStorage_ifttt",sendValueToStorage_ifttt, "", {
+		[1] 	= { ["key"]= "webhookkey", ["label"]="Web Hook Key", ["type"]="text" },
+		[2] 	= { ["key"]= "eventname", ["label"]="Hook Event Name", ["type"]="text" ,["default"]="vera_data_published"},
+	})
+
 	-- registerDataProvider("Test - not functional",sendValueToStorage_toto,"", {
 		-- [1] 	= { ["key"]= "toto", ["label"]="To To", ["type"]="text" },
 		-- [2] 	= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url" , ["default"]="//www.google.com/{0}"}
