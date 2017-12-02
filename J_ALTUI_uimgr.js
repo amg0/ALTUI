@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2252 $";
+var ALTUI_revision = "$Revision: 2253 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14554,7 +14554,7 @@ var UIControler = (function(win) {
 					else {
 						var label = menuitem.label || mapidtopage[menuitem.id].title
 						if (menuitem.href) {
-							html += '<a class="dropdown-item" target="_blank" href="{1}">{0}</a>'.format(_T(label),menuitem.href)
+							html += '<a id="{2}" class="dropdown-item" target="_blank" href="{1}">{0}</a>'.format(_T(label),menuitem.href,menuitem.id)
 						} else {
 							html += dropdownItemTemplate.format(menuitem.id,_T(label),"")
 						}
