@@ -3118,7 +3118,7 @@ local function sendValueToStorage_ifttt(watch_description,lul_device, lul_servic
 	local body = string.format('{"value1":"%s","value2":"%s","value3":"%s"}',
 		lul_device,
 		lul_service..":"..lul_variable,
-		old..":"..new
+		new
 	)
 	local result = {}
 	local response, status, headers = https.request({
