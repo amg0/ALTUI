@@ -1155,6 +1155,14 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			// html += ALTUI_Templates.wattTemplate.format(pulse,"Pulse");
 		return html;
 	};
+
+	var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>' 
+	var CD_start = glyphTemplate.format( "play", _T("Start") , "");
+	var CD_restart = glyphTemplate.format( "fast-backward", _T("Restart") , "");
+	var CD_cancel = glyphTemplate.format( "stop", _T("Cancel") , "");
+	var CD_force = glyphTemplate.format( "bell", _T("Force") , "");
+	var CD_mute = glyphTemplate.format( "microphone-slash", _T("Muted") , "");
+	var CD_unmute = glyphTemplate.format( "bullhorn", _T("Unmuted") , "");
 		
 	function _drawMuteButton(device,cls) {
 		var model2 = {
@@ -1174,12 +1182,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	};
 	function _drawCountDown( device) {
 		// some static variables
-		var CD_start = glyphTemplate.format( "play", _T("Start") , "");
-		var CD_restart = glyphTemplate.format( "fast-backward", _T("Restart") , "");
-		var CD_cancel = glyphTemplate.format( "stop", _T("Cancel") , "");
-		var CD_force = glyphTemplate.format( "bell", _T("Force") , "");
-		var CD_mute = glyphTemplate.format( "microphone-slash", _T("Muted") , "");
-		var CD_unmute = glyphTemplate.format( "bullhorn", _T("Unmuted") , "");
+
 		var model = {
 			cls:'pull-right altui-countdown-btngrp',
 			buttons: [
