@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.05"
+local version = "v2.06"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -887,6 +887,7 @@ end
 -- 
 local function initWorkflows(lul_device)
 	debug(string.format("Wkflow - initWorkflows(%s)",lul_device))
+	
 	-- get active states for persistency
 	WorkflowsActiveState = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "") ) or {}
 	WorkflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
@@ -905,7 +906,6 @@ local function initWorkflows(lul_device)
 				cells={}
 			}
 		end
-		
 		
 		if (WorkflowsVariableBag[Workflows[k].altuiid]==nil) then
 			WorkflowsVariableBag[Workflows[k].altuiid] = {}
@@ -928,7 +928,7 @@ local function initWorkflows(lul_device)
 			Workflows[k]["graph_json"].active_state = last_known_active
 		end
 	end
-
+	
 	-- save active states for persistency
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), lul_device)
 	
@@ -951,11 +951,13 @@ local function initWorkflows(lul_device)
 end
 
 local function findWorkflowIdx(workflowAltuiid)
+	debug(string.format("findWorkflowIdx(%s)",workflowAltuiid))
 	for k,v in pairs(Workflows) do 
 		if (Workflows[k].altuiid == workflowAltuiid) then
 			return k
 		end
 	end
+	warning(string.format("findWorkflowIdx - did not find index, return 0") )
 	return 0
 end
 
@@ -996,9 +998,13 @@ local function triggerTransition(lul_device,workflowAltuiid,transitionId)
 	-- schedule execution
 	if (WFLOW_MODE == true) then
 		local workflow_idx = findWorkflowIdx(workflowAltuiid)
-		executeWorkflows(lul_device , nil , workflow_idx )
-		-- exec Workflows with a delay
-		-- luup.call_delay("executeWorkflows", 1, lul_device)
+		if (workflow_idx>0) then
+			executeWorkflows(lul_device , nil , workflow_idx )
+			-- exec Workflows with a delay
+			-- luup.call_delay("executeWorkflows", 1, lul_device)
+		else
+			warning( string.format("triggerTransition ignored because workflow #%s is not found",workflowAltuiid))
+		end
 	end
 end
 
@@ -1334,7 +1340,11 @@ function executeWorkflows(lul_device , watchevent , workflow_idx )
 			debug(string.format("Wkflow - executeWorkflows limited to specific workflows"))
 			for k,v in pairs(watchevent.watch['Expressions']['workflow']) do
 				workflow_idx = findWorkflowIdx(v.WorkflowAltuiID)
-				evalWorkflowState( lul_device, workflow_idx, watchevent )
+				if (workflow_idx>0) then
+					evalWorkflowState( lul_device, workflow_idx, watchevent )
+				else
+					warning( string.format("executeWorkflows watchevent is ignored because workflow #%s is not found",v.WorkflowAltuiID))
+				end
 			end
 		else
 			for k,v in pairs(Workflows) do 
@@ -3885,7 +3895,6 @@ function initVariableWatches( lul_device )
 			_addWatch(  service, variable, device, -1, "true", "", provider, providerparams )
 		end
 	end
-	-- luup.variable_set(ALTUI_SERVICE, "VariablesToSend", table.concat(toKeep,";"), lul_device)
 	
 	watches = remoteVariableWatch:split(";")
 	for k,v  in pairs(watches) do
@@ -3894,7 +3903,6 @@ function initVariableWatches( lul_device )
 			addRemoteWatch(lul_device,service,variable,device,ctrlid,ipaddr)
 		end
 	end
-	-- luup.variable_set(ALTUI_SERVICE, "RemoteVariablesToWatch", table.concat(toKeep,";"), lul_device)
 end
 
 	
@@ -4201,7 +4209,7 @@ function startupDeferred(lul_device)
 
 	-- init watches
 	fixVariableWatchesDeviceID( lul_device )
-	initVariableWatches( lul_device)
+	initVariableWatches( lul_device )
 
 	-- init timers
 	initTimers(lul_device)
@@ -4221,8 +4229,7 @@ function startupDeferred(lul_device)
 	else
 		luup.set_failure(false,lul_device)	-- should be 0 in UI7
 	end
-	
-	-- 
+
 	log("startup completed")
 end
 		
@@ -4234,13 +4241,10 @@ function initstatus(lul_device)
 	hostname = getIP()
 	local delay = 1		-- delaying first refresh by x seconds
 	debug("initstatus("..lul_device..") startup for Root device, delay:"..delay)
-	-- http://192.168.1.5:3480/data_request?id=lr_IPX800_Handler
-	
+
 	-- almost random seed
-	math.randomseed( os.time() )
-	
+	math.randomseed( os.time() )	
 	luup.call_delay("startupDeferred", delay, tostring(lul_device))		
 end
  
 -- do not delete, last line must be a CR according to MCV wiki page
-

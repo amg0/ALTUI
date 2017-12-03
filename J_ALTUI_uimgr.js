@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2254 $";
+var ALTUI_revision = "$Revision: 2255 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13549,13 +13549,6 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 			if ($('#altui-aftertable-'+htmlid).find('form').length==0) {
 				var data = $("#"+htmlid).table2CSV({
 					delivery:'direct'
-					// delivery : function(data) {
-						// $(".altui-mainpanel").append("<pre id='altui-temp-txt'>{0}</pre>".format(data));
-						// Altui_SelectText( "altui-temp-txt" );
-						// document.execCommand('copy');
-						// $("#altui-temp-txt").remove();
-						// PageMessage.message( _T("Data copied in clipboard"), "info");
-					// }
 				});
 				$(".altui-mainpanel").append("<pre id='altui-temp-txt'>{0}</pre>".format(data));
 				Altui_SelectText( "altui-temp-txt" );
