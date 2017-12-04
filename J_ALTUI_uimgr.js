@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2256 $";
+var ALTUI_revision = "$Revision: 2258 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6393,6 +6393,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				{service:'urn:upnp-org:serviceId:Dimming1', variable:'LoadLevelStatus', format:'{0}%' },
 				{service:'urn:upnp-org:serviceId:TemperatureSensor1', variable:'CurrentTemperature', format:'{0}&deg;' },
 				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'Watts', format:'{0}W' },
+				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'KWH', format:'{0}kWH' },
 				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'LastTrip', format:'<small>{0}</small>', translate:HTMLUtils.enhanceValue },
 				{service:'urn:micasaverde-com:serviceId:LightSensor1', variable:'CurrentLevel', format:'{0}' },
 				{service:'urn:micasaverde-com:serviceId:HumiditySensor1', variable:'CurrentLevel', format:'{0}%' },
