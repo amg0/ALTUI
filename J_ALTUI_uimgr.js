@@ -2225,7 +2225,7 @@ var UIManager  = ( function( window, undefined ) {
 				strings.push( ALTUI_Templates.wattTemplate.format(watts,"W") )
 		}
 		if (isNaN(kwh)==false)
-			strings.push( ALTUI_Templates.wattTemplate.format(Math.round(kwh),"kWH") )
+			strings.push( ALTUI_Templates.wattTemplate.format(Math.round(kwh),"kWh") )
 		
 		if (strings.length==0) {
 			$.each(services, function(i,s) {
@@ -6393,7 +6393,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				{service:'urn:upnp-org:serviceId:Dimming1', variable:'LoadLevelStatus', format:'{0}%' },
 				{service:'urn:upnp-org:serviceId:TemperatureSensor1', variable:'CurrentTemperature', format:'{0}&deg;' },
 				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'Watts', format:'{0}W' },
-				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'KWH', format:'{0}kWH' },
+				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'KWH', format:'{0}kWh' },
 				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'LastTrip', format:'<small>{0}</small>', translate:HTMLUtils.enhanceValue },
 				{service:'urn:micasaverde-com:serviceId:LightSensor1', variable:'CurrentLevel', format:'{0}' },
 				{service:'urn:micasaverde-com:serviceId:HumiditySensor1', variable:'CurrentLevel', format:'{0}%' },
