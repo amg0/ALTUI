@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2261 $";
+var ALTUI_revision = "$Revision: 2262 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3434,6 +3434,15 @@ var UIManager  = ( function( window, undefined ) {
 			str.push("{0}: {1} - 0x{2}".format(ALTUI_Manufacturor[ manuf  ] || "Unknown",splits[0],manuf ))
 			str.push("Product Type: {0} - 0x{1}".format(splits[1] , ptype ))
 			str.push("Product ID: {0} - 0x{1}".format(splits[2] , pid ))
+			return "<ul><li>"+str.join("</li><li>")+"</li></ul>"
+		}
+		
+		function _decodeZWDB(value) {
+			var splits = value.split(",")
+			var str=[]
+			var manuf = toHex2(splits[0])
+			var ptype = toHex2(splits[1])
+			var pid = toHex2(splits[2])
 			$.ajax( { 
 				cache:false, 
 				method:'POST', url:"https://us-central1-altui-cloud-function.cloudfunctions.net/helloHttp",
@@ -3443,10 +3452,11 @@ var UIManager  = ( function( window, undefined ) {
 					id: pid
 				}
 			})
-			.done(function(data) { 
-				console.log(data) 
+			.done(function(data) {
+				$("#zwdb").html("<pre>{0}</pre>".format( JSON.stringify(data,null,2) ) )
+				// console.log(data) 
 			})
-			return "<ul><li>"+str.join("</li><li>")+"</li></ul>"
+			return "<div id='zwdb'></div>"
 		}
 		
 		function _drawDeviceZWConfiguration( device ) {
@@ -3461,38 +3471,31 @@ var UIManager  = ( function( window, undefined ) {
 				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"ManufacturerInfo", decode:_decodeManufacturor, help:"http://z-wave.sigmadesigns.com/wp-content/uploads/2016/08/SDS13740-1-Z-Wave-Plus-Device-and-Command-Class-Types-and-Defines-Specification.pdf" },
 				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"VersionInfo", decode:_decodeVersion, help:"http://wiki.micasaverde.com/index.php/ZWave_Protocol_Version" },
 				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"Capabilities", decode:_decodeCapabilities, help:"http://wiki.micasaverde.com/index.php/ZWave_Command_Classes" },
-				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"NodeInfo", decode:_decodeNodeInfo },
+				{ service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"NodeInfo", decode:_decodeNodeInfo},
+				// { service:"urn:micasaverde-com:serviceId:ZWaveDevice1", name:"ManufacturerInfo", decode:_decodeZWDB, help:"http://www.cd-jackson.com/index.php/zwave/zwave-device-database"}
 			];
 			var html = "";
 			html += "<div class='card'><div class='card-body altui-device-keyvariables'>";
-
-			html += "<div class='card-columns altui-zwavecfg-card'>";
-			$.each(variables, function(idx,variable) {
-				var value = null
-				if (variable.service)
-					value = MultiBox.getStatus( device, variable.service, variable.name);
-				else 
-					value = device[variable.name] || "";
-				
-				if ((value !=null) && (value !="")) {
-					html += "<div class='card'><div class='card-body'>"
-					if ($.isFunction(variable.decode)) {
-						var help = (variable.help) ? "<a href='{0}' target='_blank'>{1}</a>".format(variable.help,_T("Help")) : ""
-						html += "<div ><b>{0}</b>:{2} {1}</div>".format(variable.name,(variable.decode)(value,device),help)
+				html += "<div class='card-columns altui-zwavecfg-card'>";
+				$.each(variables, function(idx,variable) {
+					var value = null
+					if (variable.service)
+						value = MultiBox.getStatus( device, variable.service, variable.name);
+					else 
+						value = device[variable.name] || "";
+					
+					if ((value !=null) && (value !="")) {
+						html += "<div class='card'><div class='card-body'>"
+						if ($.isFunction(variable.decode)) {
+							var help = (variable.help) ? "<a href='{0}' target='_blank'>{1}</a>".format(variable.help,_T("Help")) : ""
+							html += "<div ><b>{0}</b>:{2} {1}</div>".format(variable.name,(variable.decode)(value,device),help)
+						}
+						else
+							html += "<div ><b>{0}</b>: {1}</div>".format(variable.name,HTMLUtils.enhanceValue(value));
+						html += "</div></div>"
 					}
-					else
-						html += "<div ><b>{0}</b>: {1}</div>".format(variable.name,HTMLUtils.enhanceValue(value));
-					html += "</div></div>"
-				}
-			});
-			html += "</div>";
-
-			var nodeinfo = MultiBox.getStatus(device,"urn:micasaverde-com:serviceId:ZWaveDevice1","NodeInfo")
-			if (nodeinfo) {
-				var splits = nodeinfo.split(",")
-			}
-			html += "<div class='row'>";
-			html += "</div>";
+				});
+				html += "</div>";
 			html +="</div></div>";		// panel
 			return html;
 		};
@@ -3712,6 +3715,19 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 				dom.toggle(visible);
 			}
 		}
+		function _deviceDrawZWDB(device,container) {
+			var devid = device.altuiid;
+			var value = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "ManufacturerInfo");
+			var html ="";
+			html+="<div class='row'>";
+			html += "<div id='altui-device-zwdb-"+devid+"' class='col-12 altui-device-zwdb collapse'>"
+			html += "<div class='card'><div class='card-body'>"
+			html += _decodeZWDB(value)
+			html += "</div></div>"
+			html += "</div>"
+			html += "</div>"
+			$(container).append( html );
+		}
 		function _deviceDrawControlPanelAttributes(device, container ) {
 			var devid = device.altuiid;
 			// Draw hidding attribute panel
@@ -3874,6 +3890,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		_deviceDrawControlPanelAttributes( device, container );					// row for attributes
 		_deviceDrawDeviceConfig( device, container );
 		_deviceRefreshDevicePanel(device, container)
+		_deviceDrawZWDB(device, container)
 		// row for device 'config' info
 		_deviceDrawWireFrame(device,container);
 		$(".altui-device-controlpanel-container")
@@ -6281,6 +6298,7 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		html += "<button type='button' class='btn btn-light' id='altui-device-config' data-toggle='collapse' data-target='.altui-device-config' >"+_T("Configuration")+"<span class='caret'></span></button>";
 		html += "<button type='button' class='btn btn-light' id='altui-device-usedin' data-toggle='collapse' data-target='.altui-device-usedin' >{0}<span class='caret'></span></button>".format(_T("Used in"));
 		html += "<button type='button' class='btn btn-light' id='altui-device-triggers' data-toggle='collapse' data-target='.altui-device-triggers' >"+_T("Notification")+"<span class='caret'></span></button>";
+		html += "<button type='button' class='btn btn-light' id='altui-device-zwdb' data-toggle='collapse' data-target='.altui-device-zwdb' >"+_T("zWave DB")+"<span class='caret'></span></button>";
 		if (AltuiDebug.IsDebug())
 			html +=	 buttonDebugHtml;
 		html += "</div>";
@@ -6307,8 +6325,8 @@ http://192.168.1.16/port_3480/data_request?id=lu_reload&rand=0.7390809273347259&
 		// Manage interactions
 		//
 		$(".altui-mainpanel")
-			.off('click','#altui-toggle-attributes,#altui-device-config,#altui-device-usedin,#altui-device-triggers')
-			.on('click','#altui-toggle-attributes,#altui-device-config,#altui-device-usedin,#altui-device-triggers',function() {
+			.off('click','#altui-toggle-attributes,#altui-device-config,#altui-device-usedin,#altui-device-triggers,#altui-device-zwdb')
+			.on('click','#altui-toggle-attributes,#altui-device-config,#altui-device-usedin,#altui-device-triggers,#altui-device-zwdb',function() {
 				$(this).toggleClass("btn-light btn-info")
 			})
 		$(".altui-debug-div").toggle(false);						// hide
