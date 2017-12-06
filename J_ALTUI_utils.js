@@ -137,6 +137,16 @@ function uuidv4() {
   });
 }
 
+function toHex2(d) {
+	return  ("000"+(Number(d).toString(16))).slice(-4).toUpperCase()
+}
+function toHex(d) {
+	return  ("0"+(Number(d).toString(16))).slice(-2).toUpperCase()
+}
+function fromHex(v) {
+	return parseInt(v, 16).toString(10)
+}
+		
 function Altui_SelectText(element) {
 	var doc = document;
 	var text = doc.getElementById(element);    

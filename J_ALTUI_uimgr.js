@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2260 $";
+var ALTUI_revision = "$Revision: 2261 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3351,15 +3351,6 @@ var UIManager  = ( function( window, undefined ) {
 	function _deviceDrawControlPanel( device, container ) {
 		var controller = MultiBox.controllerOf(device.altuiid).controller;
 		
-		function toHex2(d) {
-			return  ("000"+(Number(d).toString(16))).slice(-4).toLowerCase()
-		}
-		function toHex(d) {
-			return  ("0"+(Number(d).toString(16))).slice(-2).toLowerCase()
-		}
-		function fromHex(v) {
-			return parseInt(v, 16).toString(10)
-		}
 		function _decodeVersion(s) {
 			//There are 5 values: Z-Wave Library Type, Z-Wave Protocol Version, Z-Wave Protocol Sub Version, Application Version, Application Sub Version
 			var splits = s.split(",")
@@ -3433,12 +3424,28 @@ var UIManager  = ( function( window, undefined ) {
 			strings.push("Extra:"+parts[1])
 			return "<ul><li>"+strings.join("</li><li>")+"</li></ul>"
 		}
+		
 		function _decodeManufacturor(value) {
 			var splits = value.split(",")
 			var str=[]
-			str.push("{0} ({1})".format(ALTUI_Manufacturor[ toHex2(splits[0]) ] || "Unknown",splits[0])) 
-			str.push("Product Type: {0}".format(splits[1]))
-			str.push("Product ID: {0}".format(splits[2]))
+			var manuf = toHex2(splits[0])
+			var ptype = toHex2(splits[1])
+			var pid = toHex2(splits[2])
+			str.push("{0}: {1} - 0x{2}".format(ALTUI_Manufacturor[ manuf  ] || "Unknown",splits[0],manuf ))
+			str.push("Product Type: {0} - 0x{1}".format(splits[1] , ptype ))
+			str.push("Product ID: {0} - 0x{1}".format(splits[2] , pid ))
+			$.ajax( { 
+				cache:false, 
+				method:'POST', url:"https://us-central1-altui-cloud-function.cloudfunctions.net/helloHttp",
+				data: {
+					manufacturer: manuf,
+					type: ptype,
+					id: pid
+				}
+			})
+			.done(function(data) { 
+				console.log(data) 
+			})
 			return "<ul><li>"+str.join("</li><li>")+"</li></ul>"
 		}
 		
