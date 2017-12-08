@@ -1972,9 +1972,6 @@ var HTMLUtils = (function() {
 			var label = (btn.img) ? "<img class='{2}' src='{0}' alt='{1}'></img>".format(btn.img,btn.label||'',btn.imgcls||'' ) : (btn.label||'')
 			html += "<button id='{2}' type='button' class='btn {0} {1}'>{3}</button>".format(btn.background || 'btn-light',btn.cls||'',btn.id||'',label)
 		})
-		// <button type='button' class='btn btn-light'>Left</button>
-		// <button type='button' class='btn btn-light'>Middle</button>
-		// <button type='button' class='btn btn-light'>Right</button>
 		html += "</div>";
 		return html;
 	};
