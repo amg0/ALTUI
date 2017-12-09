@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2265 $";
+var ALTUI_revision = "$Revision: 2267 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3350,6 +3350,27 @@ var UIManager  = ( function( window, undefined ) {
 	};
 	function _deviceDrawControlPanel( device, container ) {
 		var controller = MultiBox.controllerOf(device.altuiid).controller;
+		var zwdbdata = null;
+		if (MultiBox.isDeviceZwave(device)) {
+			var value = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "ManufacturerInfo");
+			var splits = value.split(",")
+			var manuf = toHex2(splits[0])
+			var ptype = toHex2(splits[1])
+			var pid = toHex2(splits[2])
+			$.ajax( { 
+				cache:false, 
+				method:'POST', url:"https://us-central1-altui-cloud-function.cloudfunctions.net/helloHttp",
+				data: {
+					manufacturer: manuf,
+					type: ptype,
+					id: pid
+				}
+			})
+			.done(function(data) {
+				_decodeZWDB( device,cloneObject(data) )
+			})			
+		}
+		
 		function _decodeVersion(s) {
 			//There are 5 values: Z-Wave Library Type, Z-Wave Protocol Version, Z-Wave Protocol Sub Version, Application Version, Application Sub Version
 			var splits = s.split(",")
@@ -3432,29 +3453,75 @@ var UIManager  = ( function( window, undefined ) {
 			str.push("Product ID: {0} - 0x{1}".format(splits[2] , pid ))
 			return "<ul><li>"+str.join("</li><li>")+"</li></ul>"
 		}
-		function _decodeZWDB(value) {
-			if (MultiBox.isDeviceZwave(device)) {
-				var splits = value.split(",")
-				var str=[]
-				var manuf = toHex2(splits[0])
-				var ptype = toHex2(splits[1])
-				var pid = toHex2(splits[2])
-				$.ajax( { 
-					cache:false, 
-					method:'POST', url:"https://us-central1-altui-cloud-function.cloudfunctions.net/helloHttp",
-					data: {
-						manufacturer: manuf,
-						type: ptype,
-						id: pid
+		function _decodeZWDB(device,zwdbdata) {
+			var devid = device.altuiid;
+			var html = "";
+			html += "<form class='form form-row'>";
+			var longfields = ["decription","overview","inclusion","exclusion"]
+			$.each( zwdbdata, function(key,val) {
+				if ((val!=undefined) && ($.inArray(key,longfields)==-1)) {
+					var typ = Object.prototype.toString.call(val);
+					if ((typ!="[object Object]") && (typ!="[object Array]")){
+						html += "<div class='col-sm-6 col-md-4 col-lg-3 col-xl-2'>";
+						html += "<div class='form-group'>";
+						html += "<label class='font-weight-bold' for='"+key+"'>"+key+"</label>";
+						html += _enhanceEditorValue(key,val,devid)
+						// html += "<input id='"+key+"' data-altuiid='"+devid+"' class='form-control' value='"+val+"'></input>";
+						html += "</div>"
+						html += "</div>"
 					}
-				})
-				.done(function(data) {
-					$("#zwdb").html("<pre>{0}</pre>".format( JSON.stringify(data,null,2) ) )
-					// console.log(data) 
-				})
-				return "<div id='zwdb'></div>"
-			}
-			return ""
+				}
+			});
+			$.each(longfields, function(key,val) {
+				if (zwdbdata[val]!=undefined) {
+					html += "<div class='col-12'>";
+					html += `
+					<div class="card">
+					  <div class="card-body">
+						<h4 class="card-title">{0}</h4>
+						<p class="card-text">{1}</p>
+					  </div>
+					</div>`.format(val,zwdbdata[val])
+					html += "</div>"
+				}
+			})
+			$.each(zwdbdata.parameters,function(key,param) {
+				html += "<div class='col-12'>";
+				html += `
+				<div class="card">
+				  <div class="card-body">
+					<h4 class="card-title">Param #{0} - {1}</h4>
+					<p class="card-text">`.format( param.id, param.label )
+				$.each(param, function(key,val) {
+					if ($.inArray(key,["id","label"])==-1) {
+						var typ = Object.prototype.toString.call(val);
+						if ((typ!="[object Object]") && (typ!="[object Array]")){
+							html += "<div><b>{0}</b>: {1}</div>".format( key,val)
+						}
+					}
+				});
+				if (param.options) {
+					html += "<b>Allowed Values:</b>"
+					$.each(param.options, function(key,val) {
+						html += "<li>{0} - {1}</li>".format(val.value, val.label)
+					});
+				}
+				html += `</p>
+				  </div>
+				</div>`
+				html += "</div>"
+			});
+			html += `
+					<div class='col-12'>
+					<div class="card">
+					  <div class="card-body">
+						<h4 class="card-title">{0}</h4>
+						<p class="card-text"><pre>{1}</pre></p>
+					  </div>
+					</div>
+					</div>`.format("DB raw data",JSON.stringify(zwdbdata,null,2))
+			html += "</form>";
+			$("#zwdb").html( html )
 		}
 		function _drawDeviceZWConfiguration( device ) {
 			var variables = [
@@ -3658,7 +3725,7 @@ var UIManager  = ( function( window, undefined ) {
 			html+="<div class='row'>";
 			html += "<div id='altui-device-zwdb-"+devid+"' class='col-12 altui-device-zwdb '>"
 			html += "<div class='card'><div class='card-body'>"
-			html += _decodeZWDB(value)
+			html += "<div id='zwdb'></div>"
 			html += "</div></div>"
 			html += "</div>"
 			html += "</div>"
@@ -3782,10 +3849,6 @@ var UIManager  = ( function( window, undefined ) {
 
 			}
 		};
-		function _deviceRefreshDevicePanel(device, container) {
-			// _deviceDrawDeviceUsedIn( device, container );							// row for device 'used in' info
-			// _deviceDrawDeviceTriggers( device, container );							// row for device triggers info
-		};
 
 		var html = `<div class="col-12">{0}</div>`
 		var altuiid = device.altuiid
@@ -3796,9 +3859,13 @@ var UIManager  = ( function( window, undefined ) {
 			{id:'altui-device-actions', label:_T("Actions"), },
 			{id:'altui-device-usedin', label:_T("Used in"), href:'altui-device-usedin', tab: _deviceDrawDeviceUsedIn },
 			{id:'altui-device-triggers', label:_T("Notification"), href:'altui-device-triggers', tab: _deviceDrawDeviceTriggers},
-			{id:'altui-device-config', label:_T("Configuration"), href:'altui-device-config', tab: _deviceDrawDeviceConfig},
-			{id:'altui-device-zwdb', label:_T("zWave DB"), href:'altui-device-zwdb', tab: _deviceDrawZWDB},
 		]
+		if (MultiBox.isDeviceZwave(device)) {
+			buttons = buttons.concat([			
+				{id:'altui-device-config', label:_T("Configuration"), href:'altui-device-config', tab: _deviceDrawDeviceConfig},
+				{id:'altui-device-zwdb', label:_T("zWave DB"), href:'altui-device-zwdb', tab: _deviceDrawZWDB},
+			])
+		}
 		var str = []
 		str.push('<ul class="nav nav-pills mb-2" id="myTab" role="tablist">')
 			$.each(buttons, function(idx,model) {
