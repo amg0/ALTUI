@@ -138,10 +138,10 @@ function uuidv4() {
 }
 
 function toHex2(d) {
-	return  ("000"+(Number(d).toString(16))).slice(-4).toUpperCase()
+	return  ("000"+(parseInt(d).toString(16))).slice(-4).toUpperCase()
 }
 function toHex(d) {
-	return  ("0"+(Number(d).toString(16))).slice(-2).toUpperCase()
+	return  ("0"+(parseInt(d).toString(16))).slice(-2).toUpperCase()
 }
 function fromHex(v) {
 	return parseInt(v, 16).toString(10)
@@ -202,8 +202,8 @@ var ALTUI_Templates_Factory= function() {
 	_dropdownTemplate += "<button class='btn btn-light btn-sm dropdown-toggle altui-device-command' type='button' data-toggle='dropdown' aria-expanded='false'>"; 
 	_dropdownTemplate += "</button>";
 	_dropdownTemplate += "<div class='dropdown-menu dropdown-menu-right' role='menu'>";
-	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-variables' href='#' role='menuitem'>Variables</a>";
-	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-actions' href='#' role='menuitem'>Actions</a>";
+	_dropdownTemplate += "<a id='altui-device-variables' class='dropdown-item' data-altuiid='{0}' href='#' role='menuitem'>Variables</a>";
+	_dropdownTemplate += "<a id='altui-device-actions' class='dropdown-item ' data-altuiid='{0}' href='#' role='menuitem'>Actions</a>";
 	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-controlpanelitem' href='#' role='menuitem'>Control Panel</a>";
 	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-hideshowtoggle' href='#' role='menuitem'>{1}</a>";
 	_dropdownTemplate += "</div></div>";

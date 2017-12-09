@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2264 $";
+var ALTUI_revision = "$Revision: 2265 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3367,7 +3367,7 @@ var UIManager  = ( function( window, undefined ) {
 				if (v!="") {
 					var cap_ver = v.split(':')
 					var key = toHex(cap_ver[0])
-					if ( (cap_ver.length>1) && (cap_ver[1]!="0") )
+					if ( (cap_ver.length>1) && (cap_ver[1]!="0") && (cap_ver[1]!="1") )
 						key += ("_V"+cap_ver[1])
 					strings.push("<li>0x{1}-{0}</li>".format(ALTUI_zWaveCommandClass[key] || _T("Unknown Class") , key))
 				}
@@ -3554,7 +3554,7 @@ var UIManager  = ( function( window, undefined ) {
 			var usedin_objects = MultiBox.getDeviceDependants(device);
 			var html ="";
 			html +="<div class='row altui-device-usedin '>";
-			html += "<div id='altui-device-usedin-"+device.altuiid+"' class='col-12'>"
+			html += "<div id='altui-device-usedin-"+device.altuiid+"' class='col-12'><div class='card'><div class='card-body'>"
 			html += "<ul>";
 			var smallbuttonTemplate ="<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}'>{2}</button>";;
 			if (usedin_objects.length>0)
@@ -3610,7 +3610,7 @@ var UIManager  = ( function( window, undefined ) {
 				html += "<li>{0}</li>".format(_T("Not used in scenes or workflows"));
 			html += "</ul>";
 			// html +=	"<span><pre>{0}</pre></span>".format( JSON.stringify(usedin_objects) );
-			html += "</div>";
+			html += "</div></div></div>";
 			html += "</div>";	// row
 			return html
 		};
@@ -3619,7 +3619,7 @@ var UIManager  = ( function( window, undefined ) {
 			var users = MultiBox.getUsersSync(devicecontroller);
 			var html ="";
 			html +="<div class='row altui-device-triggers'>";
-			html += "<div id='altui-device-triggers-"+device.altuiid+"' class='col-12'>"
+			html += "<div id='altui-device-triggers-"+device.altuiid+"' class='col-12'><div class='card'><div class='card-body'>"
 			html += "<ul>";
 			var scenes = $.grep(MultiBox.getScenesSync(), function(scene) {
 				var scenecontroller = MultiBox.controllerOf(scene.altuiid).controller;
@@ -3647,7 +3647,7 @@ var UIManager  = ( function( window, undefined ) {
 			}
 			html += "<li>{0}</li>".format(buttonTemplate.format( 'altui-device-createtrigger', 'altui-device-createtrigger', plusGlyph+_T("Create"),'secondary',_T("Create") ));
 			html += "</ul>";
-			html += "</div>";
+			html += "</div></div></div>";
 			html += "</div>";	// row
 			return html
 		}
@@ -3669,7 +3669,7 @@ var UIManager  = ( function( window, undefined ) {
 			// Draw hidding attribute panel
 			var html ="";
 			html+="<div class='row'>";
-			html += "<div id='altui-device-attributes-"+devid+"' class='col-12 altui-device-attributes '>"
+			html += "<div id='altui-device-attributes-"+devid+"' class='col-12 altui-device-attributes '><div class='card'><div class='card-body'>"
 			html += "<form class='form form-row'>";
 			$.each( device, function(key,val) {
 				if (val!=undefined) {
@@ -3687,7 +3687,7 @@ var UIManager  = ( function( window, undefined ) {
 			});
 			html += "</form>";
 			html += "</div>";
-			html += "</div>";	// row
+			html += "</div></div></div>";	// row
 			return html;
 
 		};
@@ -3792,8 +3792,8 @@ var UIManager  = ( function( window, undefined ) {
 		var buttons = [
 			{id:'altui-toggle-control-panel', label:_T("Control Panel"), href:'altui-device-attributes' , tab:_deviceDrawWireFrame },
 			{id:'altui-toggle-attributes', label:_T("Attributes"), href:'altui-device-attributes' , tab:_deviceDrawControlPanelAttributes},
-			// {id:'altui-device-variables', label:_T("Variables"), href:''},
-			// {id:'altui-device-actions', label:_T("Actions"), href:''},
+			{id:'altui-device-variables', label:_T("Variables") },
+			{id:'altui-device-actions', label:_T("Actions"), },
 			{id:'altui-device-usedin', label:_T("Used in"), href:'altui-device-usedin', tab: _deviceDrawDeviceUsedIn },
 			{id:'altui-device-triggers', label:_T("Notification"), href:'altui-device-triggers', tab: _deviceDrawDeviceTriggers},
 			{id:'altui-device-config', label:_T("Configuration"), href:'altui-device-config', tab: _deviceDrawDeviceConfig},
@@ -3803,21 +3803,26 @@ var UIManager  = ( function( window, undefined ) {
 		str.push('<ul class="nav nav-pills mb-2" id="myTab" role="tablist">')
 			$.each(buttons, function(idx,model) {
 				str.push('<li class="nav-item">')
-				str.push('<a class="nav-link" id="pill-{0}" data-toggle="pill" href="#{1}" role="tab" aria-controls="home" aria-selected="true">{2}</a>'.format(
-					model.id,
-					model.id,
-					model.label
-				))
+				if (model.href) {
+					str.push('<a class="nav-link" id="pill-{0}" data-toggle="pill" href="#{1}" role="tab" aria-controls="home" aria-selected="true">{2}</a>'.format(
+						model.id,
+						model.id,
+						model.label))
+				} else {
+					str.push('<a class="nav-link" id="{0}" href="#" data-altuiid="{2}" >{1}</a>'.format(model.id, model.label,altuiid))
+				}
 				str.push('</li>')
 			});
 			if (AltuiDebug.IsDebug())	str.push(buttonDebugHtml);
 		str.push('</ul>')
 		str.push('<div class="tab-content" id="pills-tabContent">')
 			$.each(buttons, function(idx,model) {
-				str.push('<div class="tab-pane fade" id="{0}" role="tabpanel" aria-labelledby="pills-profile-tab">{1}</div>'.format(
-					model.id,
-					(model.tab)(device)
-				))
+				if ($.isFunction(model.tab)) {
+					str.push('<div class="tab-pane fade" id="{0}" role="tabpanel" aria-labelledby="pills-profile-tab">{1}</div>'.format(
+						model.id,
+						(model.tab)(device)
+					))
+				}
 			})
 		str.push('</div>')
 		html = html.format(str.join("\n"))
@@ -3923,7 +3928,7 @@ var UIManager  = ( function( window, undefined ) {
 				var scene = MultiBox.getSceneByAltuiID(altuiid);
 				MultiBox.deleteScene(scene);
 				// _deviceRefreshDevicePanel(device, container)
-				//$(this).closest("li").remove();
+				$(this).closest("li").remove();
 			})
 			.on('click',".altui-device-createtrigger",function(){
 				var info = MultiBox.controllerOf(device.altuiid);
@@ -14122,13 +14127,13 @@ var UIManager  = ( function( window, undefined ) {
 					$(".altui-debug-div").toggle();
 					$("#altui-debug-btn span.caret").toggleClass( "caret-reversed" );
 				})
-				.on("click",".altui-device-variables",function(){
-					var altuiid = $(this).prop('id');
+				.on("click","#altui-device-variables",function(){
+					var altuiid = $(this).data('altuiid');
 					var device = MultiBox.getDeviceByAltuiID(altuiid);
 					UIManager.deviceDrawVariables(device);
 				})
-				.on("click",".altui-device-actions",function(){
-					var altuiid = $(this).prop('id');
+				.on("click","#altui-device-actions",function(){
+					var altuiid = $(this).data('altuiid');
 					var device = MultiBox.getDeviceByAltuiID(altuiid);
 					UIManager.deviceDrawActions(device);
 				})
