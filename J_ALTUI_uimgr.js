@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2267 $";
+var ALTUI_revision = "$Revision: 2270 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1880,8 +1880,7 @@ var UIManager  = ( function( window, undefined ) {
 			var body = buildDeviceVariableBody(deviceVariableLineTemplate,model);
 			DialogManager.registerDialog('deviceModal',deviceModalTemplate.format( body, device.name, device.altuiid ));
 			$("button.altui-variable-push").click( function() {
-				function _getPushFromDialog(frm)
-				{
+				function _getPushFromDialog(frm) {
 					var push = {
 						service : state.service,
 						variable : state.variable,
@@ -1889,10 +1888,8 @@ var UIManager  = ( function( window, undefined ) {
 						provider : $("#altui-provider-"+varid).val(),
 						params : []
 					};
-					// var len="datapush_".length;
+
 					frm.find("input").each(function(idx,elem) {
-						// var id = $(elem).prop('id').substring(len);
-						// push[id] = $(elem).val();
 						push.params.push($(elem).val());
 					});
 					return push;
@@ -1905,7 +1902,7 @@ var UIManager  = ( function( window, undefined ) {
 				if (form.length==0) {
 					var that = $(this);
 					// change color
-					that.removeClass("btn-light").removeClass("btn-info").addClass("btn-danger");
+					that.removeClass("btn-light btn-info").addClass("btn-danger");
 					MultiBox.getDataProviders(function(providers) {
 						//
 						// get this push parameters if they exist
@@ -12153,7 +12150,8 @@ var UIManager  = ( function( window, undefined ) {
 			function _createChartRoutes2(data) {
 				linkcolor = d3.scaleQuantize()
 					.domain( [d3.max(data.links, function(d) {return d.quality;} ),d3.min(data.links, function(d) {return d.quality;} )] )
-					.range(["red","orange","yellow","green"]);
+					.range(["green","yellow","orange","red"]);
+					// .range(["red","orange","yellow","green"]);
 
 				// color = d3.scale.category20();
 				color = d3.scaleOrdinal(d3.schemeCategory20);
