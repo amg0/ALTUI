@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2270 $";
+var ALTUI_revision = "$Revision: 2271 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1779,10 +1779,17 @@ var UIManager  = ( function( window, undefined ) {
 					$(this).replaceWith(HTMLUtils.enhanceValue(val));
 				});
 		};
-		function _pushFormFields(providers,provider, varid, pushData) {
+		function _pushFormFields(parameters, provider, varid, pushData) {
 			var tempPushData = (pushData) ? cloneObject(pushData) : [];
+			var template = `
+				<div class="altui-provider-card card mt-2" data-altuiprovider="{0}">
+				  <div class="card-body">
+					<h4 class="card-title text-capitalize">{0}</h4>
+					{1}
+				  </div>
+				</div>`
 			var html ="";
-			var parameters = ( provider && providers[ provider ] ) ? providers[ provider ].parameters : [];
+
 			for (var i=0 ; i<parameters.length ; i++) {
 				var defvalue = parameters[i].default || "";
 				var value = (pushData!=null) ? (pushData.params[i] || defvalue) : '';
@@ -1807,33 +1814,33 @@ var UIManager  = ( function( window, undefined ) {
 				}
 
 			}
-			return html;
+			return template.format(provider,html);
 		};
 		function buildPushForm(providers,pushData,device,varid) {
 			var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 			var state = MultiBox.getStateByID( device.altuiid, varid );
-
 			var html = "";
-			html += "<div class='card xxx'> <div class='card-body'>";
-			html += "<div class='row'>";
-				html += "<div class='checkbox col-12 form-inline'>"
-					html += "<label><input type='checkbox' id='altui-enablePush-{0}' {1}>Enable Push to : </label>".format(
-						varid,
-						(pushData!=null) ? 'checked' : ''
-					);
-					html += '<select id="altui-provider-{0}" class="form-control">'.format(varid);
+					selectedProviders = $.map(pushData,function(pd,idx) {return pd.provider})
+					htmlProviders = []
 					$.each(providers,function(key,provider) {
-						html += '<option {1}>{0}</option>'.format(key,((pushData!=null) && (pushData.provider==key)) ? 'selected' : '');
+						htmlProviders.push('<option {1}>{0}</option>'.format(
+							key,
+							($.inArray(key,selectedProviders)!=-1) ? 'selected' : ''
+						));
 					});
-					html += '</select>';
-				html += "</div>"
+					
+					html = `
+						<label for="altui-provider-{0}" class="align-middle d-inline w-25">Enable Push to :</label>
+						<select multiple id="altui-provider-{0}" class="align-middle form-control d-inline w-75" >
+							{1}
+						</select>`.format( varid, htmlProviders.join("\n") )
+				html += "</div>"	//row
 
-				html += "<form id='form-{0}' class='col-12 form'>".format(varid);
-					html += _pushFormFields(providers, (pushData!=null) ? pushData.provider : null ,varid, pushData );
+				html += "<form id='form-{0}' class='form mt-2'>".format(varid);
+				$.each(pushData, function(idx,pushDataOneProvider) {
+					html += _pushFormFields( providers[ pushDataOneProvider.provider ].parameters, pushDataOneProvider.provider, varid, pushDataOneProvider );
+				});
 				html += "</form>"
-			html += "</div>";	//row
-			html += "</div>";	//card-body
-			html += "</div>";	//panel
 			return html;
 		};
 
@@ -1861,9 +1868,10 @@ var UIManager  = ( function( window, undefined ) {
 		};
 
 		// 0: variable , 1: value , 2: service
-		var deviceVariableLineTemplate = ALTUI_Templates.deviceVariableLineTemplate;
-		var model = {};
 		if (device!=null) {
+			
+			// Get Saved Watches
+			var model = {};
 			var watches = {};
 			var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 			$.each(MultiBox.getWatches("VariablesToSend",function(watch) { return (watch.deviceid == device.altuiid); }), function(i,watch) {
@@ -1876,23 +1884,29 @@ var UIManager  = ( function( window, undefined ) {
 				}
 			});
 
-			// update modal with new text
+			// Generate the device variable dialog
+			var deviceVariableLineTemplate = ALTUI_Templates.deviceVariableLineTemplate;
 			var body = buildDeviceVariableBody(deviceVariableLineTemplate,model);
 			DialogManager.registerDialog('deviceModal',deviceModalTemplate.format( body, device.name, device.altuiid ));
+
+			// Manages the interactivity
 			$("button.altui-variable-push").click( function() {
 				function _getPushFromDialog(frm) {
-					var push = {
-						service : state.service,
-						variable : state.variable,
-						deviceid : device.altuiid,
-						provider : $("#altui-provider-"+varid).val(),
-						params : []
-					};
-
-					frm.find("input").each(function(idx,elem) {
-						push.params.push($(elem).val());
+					var pushes = []
+					$(".altui-provider-card").each( function(idx,card) {
+						var push = {
+							service : state.service,
+							variable : state.variable,
+							deviceid : device.altuiid,
+							provider : $(card).data("altuiprovider"),
+							params : []
+						};
+						$(card).find("input").each(function(idx,elem) {
+							push.params.push($(elem).val());
+						});
+						pushes.push(push)
 					});
-					return push;
+					return pushes;
 				}
 
 				var tr = $(this).closest("tr");
@@ -1907,49 +1921,48 @@ var UIManager  = ( function( window, undefined ) {
 						//
 						// get this push parameters if they exist
 						//
-						var pushes = MultiBox.getWatches("VariablesToSend",function(push) { return ((device.altuiid == push.deviceid) && (state.variable==push.variable) && (state.service==push.service)) });
-						console.assert(pushes.length<=1)
-						var pushData = (pushes.length==0) ? null : pushes[0];
-
+						var pushData = MultiBox.getWatches("VariablesToSend",function(push) { return ((device.altuiid == push.deviceid) && (state.variable==push.variable) && (state.service==push.service)) });
 						var html = buildPushForm(providers,pushData,device,varid);
 						tr.after("<tr><td colspan='3'>"+html+"</td></tr>");
 
-						// display form if needed
-						var checked = $("#altui-enablePush-"+varid).is(':checked');
-						$("#form-"+varid).toggle(checked);
-
-						//create a default pushData with a default provider if needed
-						pushData = $.extend({
-							provider:$("#altui-provider-"+varid).val(),
-							params:[]
-						},pushData);
-
-
-						$("#altui-enablePush-"+varid).change(function() {
-							$("#form-"+varid).html( _pushFormFields(providers,pushData.provider,varid,pushData) ) ;
-							// display form if needed
-							var checked = $("#altui-enablePush-"+varid).is(':checked');
-							$("#form-"+varid).toggle(checked);
-						});
-
 						$("#altui-provider-"+varid).change(function() {
-							pushData.provider = $("#altui-provider-"+varid).val();
-							pushData.params=[];
-							$("#form-"+varid).html( _pushFormFields(providers,pushData.provider,varid,pushData) ) ;
+							function _searchPushForProvider(provider) {
+								for(var i=0; i<pushData.length; i++) {
+									if (pushData[i].provider == provider)
+										return pushData[i]
+								}
+								return {
+									provider:provider,
+									params:[]
+								}
+							}
+							var selected_providers = $('select#altui-provider-{0}'.format(varid)).val()
+							var html = ""
+							$.each(selected_providers, function(idx,provider) {
+								var pushData = _searchPushForProvider(provider)
+								html += _pushFormFields( providers[ provider ].parameters, provider, varid, pushData);
+							});
+							$("#form-"+varid).html( html  ) ;
 						});
 
 						$("#form-"+varid+" input").change( function() {
-							var url = $("#datapush-graphicurl-"+varid).val();
-							var push = _getPushFromDialog( $("#form-"+varid) );
-							url = String.prototype.format.apply(url,push.params);
-							if (url.indexOf("{")==-1)
-								$(".altui-thingspeak-chart").attr("src",url);
+							var pushes = _getPushFromDialog( $("#form-"+varid) );
+							var cardbody = $(this).closest(".altui-provider-card")
+							var provider = $(cardbody).data("altuiprovider")
+							for (var i=0; i<pushes.length; i++) {
+								if( pushes[i].provider == provider) {
+									var url = $(cardbody).find("#datapush-graphicurl-"+varid).val();
+									url = String.prototype.format.apply(url,pushes[i].params);
+									if (url.indexOf("{")==-1)
+										$(cardbody).find(".altui-thingspeak-chart").attr("src",url);
+								}
+							}
 						});
 					});
 				} else {
 					// CLOSING the form : change color
 					var nexttr = tr.next("tr");
-					var pushEnabled = nexttr.find("input#altui-enablePush-"+varid).prop('checked');
+					var pushEnabled = ( $("#altui-provider-"+varid).val().length > 0 )
 					var cls = (pushEnabled==true) ? "btn-info" : "btn-light"
 					$(this).addClass(cls).removeClass("btn-danger");
 					var push = null;
@@ -1957,26 +1970,18 @@ var UIManager  = ( function( window, undefined ) {
 					// find all watches for this device
 					var previousWatches = MultiBox.getWatches("VariablesToSend",function(watch) { return (watch.service == state.service) && (watch.variable == state.variable)	 && (watch.deviceid == device.altuiid) });
 
-
 					// add a new one unless it is already there
-					if (pushEnabled ==true ) {
-						push = _getPushFromDialog(form);
-						differentWatches = previousWatches.filter( function(watch) {
-							return _differentWatch(watch,push);
-						});
-						// delete all old ones
-						$.each(differentWatches , function(i,w) {
-							MultiBox.delWatch( w )
-						});
-						// add new one if it was not there before
-						if (differentWatches.length==previousWatches.length)
-							MultiBox.addWatch( push ) ;
-					} else {
-						// delete all watches that are in the VERA variable and not any more in the scenewatches
-						$.each(previousWatches , function(i,w) {
-							MultiBox.delWatch( w )
-						});
-					}
+					var pushes = _getPushFromDialog(form);
+					var todelete = _.differenceWith(previousWatches, pushes, function(a,b) { return _differentWatch(a,b)==false });
+					var toadd = _.differenceWith(pushes, previousWatches, function(a,b) { return _differentWatch(a,b)==false });
+
+					// delete all old ones
+					$.each(todelete , function(i,w) {
+						MultiBox.delWatch( w )
+					});
+					$.each(toadd , function(i,w) {
+						MultiBox.addWatch( w )
+					});
 					form.closest("tr").remove();
 				}
 			});
@@ -2027,7 +2032,14 @@ var UIManager  = ( function( window, undefined ) {
 				});
 			});
 			$(".altui-variable-value").click( _clickOnValue );
+
 			// show the modal
+			$('#deviceModal button.btn-primary')
+			.off('click')
+			.on('click', function(e) {
+				// force the closure of Push Parameter dialogs
+				$(".altui-variable-push.btn-danger").click()
+			})
 			$('#deviceModal').modal();
 		}
 	};
@@ -13115,7 +13127,7 @@ var UIManager  = ( function( window, undefined ) {
 		model = {
 			domcontainer : $(".altui-mainpanel"),
 			data : watches,
-			default_viscols: [ 'service','variable'],
+			default_viscols: [ 'service','variable','provider'],
 			cols: [
 				{ name:'service', type:'string', identifier:false,	},
 				{ name:'variable', type:'string', identifier:false, width:80 },
@@ -13642,7 +13654,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		// Add CSV export button
 		var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
-		var csvButtonHtml = buttonTemplate.format( 'altui-grid-btn-'+htmlid, 'altui-tbl2csv', glyph,'light');
+		var csvButtonHtml = buttonTemplate.format( 'altui-grid-btn-'+htmlid, 'altui-tbl2csv', glyph,'d');
 		$('#'+htmlid+'-header').find('.actions.btn-group').append(csvButtonHtml);
 		$("#altui-grid-btn-"+htmlid).click( function() {
 			if ($('#altui-aftertable-'+htmlid).find('form').length==0) {
@@ -14318,7 +14330,8 @@ $(function() {
 		deviceModalTemplate += "	  </div>";	// row
 		deviceModalTemplate += "	  </div>";	// body
 		deviceModalTemplate += "	  <div class='modal-footer'>";
-		deviceModalTemplate += "		<button type='button' class='btn btn-primary' data-dismiss='modal'>"+_T("Close")+"</button>";
+		deviceModalTemplate += "		<button type='button' class='btn btn-default' data-dismiss='modal'>"+_T("Close")+"</button>";
+		deviceModalTemplate += "		<button type='button' class='btn btn-primary' data-dismiss='modal'>"+_T("Save")+"</button>";
 		// deviceModalTemplate += "		   <button type='button' class='btn btn-primary'>Save changes</button>";
 		deviceModalTemplate += "	  </div>";
 		deviceModalTemplate += "	</div><!-- /.modal-content -->";
