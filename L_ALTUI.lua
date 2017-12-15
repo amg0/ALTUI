@@ -206,6 +206,44 @@ local function table2params(workflowaltuiid,args)
 	return result
 end
 
+
+Queue = {
+	new = function(self,o)
+		o = o or {}   -- create object if user does not provide one
+		setmetatable(o, self)
+		self.__index = self
+		return o
+	end,
+	size = function(self)
+		return tablelength(self)
+	end,
+	add = function(self,e)
+		return table.insert(self,e)
+	end,
+	getHead = function(self)
+		local elem = self[1]
+		return elem
+	end,
+	removeHead = function(self)
+		table.remove(self,1)
+	end,
+	removeItem = function(self, idx)
+		table.remove(self,idx)
+	end,
+	list = function(self)
+		local i = 0
+		return function()
+			if (i<#self) then
+			    i=i+1
+			    return i,self[i]
+		    end
+		end
+	end,
+}
+
+local Thingspeak_Queue = Queue:new()
+local IFTTT_Queue = Queue:new()
+
 ------------------------------------------------
 -- Device Properties Utils
 ------------------------------------------------
@@ -3036,14 +3074,6 @@ end
 function myhttpget(url)
 	debug(string.format("myhttpget(%s)",url))
 	response,content = luup.inet.wget(url,10)   -- note that 0 is a successful status return for this call
-	-- local response_body = {}
-	-- local response, status, headers = http.request{
-		-- method="GET",
-		-- url=url,
-		-- -- source = ltn12.source.string(data),
-		-- sink = ltn12.sink.table(response_body)
-	-- }
-	-- debug("https Response=" .. json.encode({res=response,sta=status,hea=headers}) )	
 	return (response==0)
 end
 
@@ -3086,10 +3116,10 @@ local function sendValuetoUrlStorage(url,watch_description,lul_device, lul_servi
 end
 
 --https://api.thingspeak.com/update?key=U1F7T31MHB5O8HZI&field1=0
-local function sendValueToStorage_toto(watch_description,lul_device, lul_service, lul_variable,old, new, lastupdate, provider_params)
-	debug(string.format("sendValueToStorage_toto(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
-	debug(string.format("watch_description:%s",json.encode(watch_description)))
-end
+-- local function sendValueToStorage_toto(watch_description,lul_device, lul_service, lul_variable,old, new, lastupdate, provider_params)
+	-- debug(string.format("sendValueToStorage_toto(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
+	-- debug(string.format("watch_description:%s",json.encode(watch_description)))
+-- end
 
 local function sendValueToStorage_emoncms(watch_description,lul_device, lul_service, lul_variable,old, new, lastupdate, provider_params)
 	debug(string.format("sendValueToStorage_emoncms(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
@@ -3116,90 +3146,62 @@ local function sendValueToStorage_emoncms(watch_description,lul_device, lul_serv
 	return nil
 end
 
+function _deferredPostIFTTT()
+	debug(string.format("_deferredPostIFTTT : entering... IFTTT_Queue size=%d",IFTTT_Queue:size()))
+	local obj = IFTTT_Queue:getHead()
+	if (obj~=nil) then
+		IFTTT_Queue:removeItem(1)
+		local url = string.format("https://maker.ifttt.com/trigger/%s/with/key/%s",
+			obj.event_name,	
+			obj.webhook_key)
+		local result = {}
+		local response, status, headers = https.request({
+			method="POST",
+			url = url,
+			source= ltn12.source.string(obj.body),
+			headers = {
+				["Content-Type"] = "application/json",
+				["Content-Length"] = obj.body:len(),
+			},
+			sink = ltn12.sink.table(result)
+		})
+		debug(string.format("response:%s",response))
+		debug(string.format("status:%s",status))
+		if (response==1) then
+			local completestring = table.concat(result)
+			debug(string.format("ALTUI: Succeed to POST to %s , result=%s",url,completestring))
+		else
+			debug(string.format("ALTUI: Failed to POST to %s ",url))
+		end
+	else
+		warning("_deferredPostIFTTT engine has nothing to do, ignoring call")
+	end
+	
+	if (IFTTT_Queue:size() >0) then
+		debug(string.format("Arming _deferredPostIFTTT engine. _deferredPostIFTTT size=%d",IFTTT_Queue:size()))
+		luup.call_delay("_deferredPostIFTTT", 5, url)
+	else
+		debug(string.format("No need to rearm _deferredPostIFTTT engine. _deferredPostIFTTT size=%d",IFTTT_Queue:size()))
+	end
+end
+
 local function sendValueToStorage_ifttt(watch_description,lul_device, lul_service, lul_variable,old, new, lastupdate, provider_params)
 	debug(string.format("sendValueToStorage_ifttt(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
 	debug(string.format("watch_description:%s",json.encode(watch_description)))
-	local providerparams = json.decode( watch_description['Data'] )
 
-	local url = string.format("https://maker.ifttt.com/trigger/%s/with/key/%s",
-		providerparams[2],	-- event name
-		providerparams[1]	-- web hook key
-	)
 	local body = string.format('{"value1":"%s","value2":"%s","value3":"%s"}',
 		lul_device,
 		lul_service..":"..lul_variable,
 		new
 	)
-	local result = {}
-	local response, status, headers = https.request({
-		method="POST",
-		url = url,
-		source= ltn12.source.string(body),
-		headers = {
-			-- ["Host"]="192.168.1.5",
-			-- ["Connection"]= "keep-alive",
-			-- ["Origin"]="http://192.168.1.5",
-			-- ["User-Agent"]="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36",
-			["Content-Type"] = "application/json",
-			["Content-Length"] = body:len(),
-			-- ["Accept"]="text/plain, */*; q=0.01",
-			-- ["Accept-Encoding"]="gzip, deflate",
-			-- ["Accept-Language"]= "fr,fr-FR;q=0.8,en;q=0.6,en-US;q=0.4",
-		},
-		sink = ltn12.sink.table(result)
-	})
-	
-	debug(string.format("response:%s",response))	
-	debug(string.format("status:%s",status))	
-
-	-- everything looks good
-	if (response==1) then
-		local completestring = table.concat(result)
-		debug(string.format("ALTUI: Succeed to POST to %s , result=%s",url,completestring))
-	else
-	-- fail to connect
-		debug(string.format("ALTUI: Failed to POST to %s ",url))
-		return 0
+	local providerparams = json.decode( watch_description['Data'] )
+	IFTTT_Queue:add( {event_name=providerparams[2], webhook_key=providerparams[1], body=body} )
+	if (IFTTT_Queue:size() == 1) then
+		debug("Starting _deferredPostIFTTT engine")
+		luup.call_delay("_deferredPostIFTTT", 1, null)
 	end
-	
 	return 1
 end
-
-Queue = {
-	new = function(self,o)
-		o = o or {}   -- create object if user does not provide one
-		setmetatable(o, self)
-		self.__index = self
-		return o
-	end,
-	size = function(self)
-		return tablelength(self)
-	end,
-	add = function(self,e)
-		return table.insert(self,e)
-	end,
-	getHead = function(self)
-		local elem = self[1]
-		return elem
-	end,
-	removeHead = function(self)
-		table.remove(self,1)
-	end,
-	removeItem = function(self, idx)
-		table.remove(self,idx)
-	end,
-	list = function(self)
-		local i = 0
-		return function()
-			if (i<#self) then
-			    i=i+1
-			    return i,self[i]
-		    end
-		end
-	end,
-}
-
-local Thingspeak_Queue = Queue:new()
 
 function prepareThingspeakUrl( todo ) 
 	local url = string.format("https://api.thingspeak.com/update?api_key=%s",todo.api_key)
@@ -3259,6 +3261,7 @@ local function _CallThingspeakAPI(api_key,field_num,value)
 		debug("Starting _deferredWgetThingspeak engine")
 		luup.call_delay("_deferredWgetThingspeak", 1, null)
 	end
+	return 200,""
 end
 
 local function sendValueToStorage_thingspeak(watch_description,lul_device, lul_service, lul_variable,old, new, lastupdate, provider_params)

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2271 $";
+var ALTUI_revision = "$Revision: 2272 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13758,7 +13758,7 @@ var UIManager  = ( function( window, undefined ) {
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
 					html += "</div>";
 				} else {
-					html +=_T("No Graphic available")
+					html +="<p>{0}</p>".format(_T("No Graphic available"))
 				}
 				$("span#altui-watch-placeholder-"+idx).html(html);
 			}
@@ -13769,13 +13769,7 @@ var UIManager  = ( function( window, undefined ) {
 				return splits[ splits.length-1 ];
 			}
 			var model = model;
-			var panels = [
-				// {id:'Header', title:_T("Header"), html:_displayHeader()},
-				// {id:'Triggers', title:_T("Triggers"), html:_displayTriggersAndWatches()},
-				// {id:'Timers', title:_T("Timers"), html:_displayTimers()},
-				// {id:'Lua', title:_T("Lua"), html:_displayLua()},
-				// {id:'Actions', title:_T("Actions"), html:_displayActions()},
-			];
+			var panels = [];
 			$.each(model.watches, function(idx,watch) {
 				var html = "";
 				if (watch.url && watch.url!=NO_URL) {
