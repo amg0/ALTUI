@@ -1,0 +1,10 @@
+{
+  "name": "zwdb",
+  "version": "0.0.1",
+  "description": "ZW DB for ALTUI",
+  "private": true,
+  "dependencies": {
+  },
+  "author": "amg0",
+  "license": "ISC"
+}
