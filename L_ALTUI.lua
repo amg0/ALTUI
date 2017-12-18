@@ -1281,7 +1281,7 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 	if (blocked==true) then
 		if (evalstartcond==true) then
 			-- remains as it is
-			log(string.format("Wkflow - Workflow: %s, is blocked in start state , ID:%s", Workflows[workflow_idx].altuiid,start.id))
+			debug(string.format("Wkflow - Workflow: %s, is blocked in start state , ID:%s", Workflows[workflow_idx].altuiid,start.id))
 			return false	-- do not evaluate outgoing transitions
 		else
 			-- TODO restart the workflow so it could progress
@@ -1343,7 +1343,7 @@ function workflowTimerCB(lul_data)
 		-- is workflow paused ?
 		local start = findStartState(workflow_idx) 
 		if ( (Workflows[workflow_idx].paused==true) or (Workflows[workflow_idx].blocked==true) or (evaluateStateTransition(lul_device,start,workflow_idx,nil)) ) then
-			log(string.format("Wkflow - %s paused or blocked in start state or start conditions evaluates to true => ignoring timer",Workflows[workflow_idx].name))
+			debug(string.format("Wkflow - %s paused or blocked in start state or start conditions evaluates to true => ignoring timer",Workflows[workflow_idx].name))
 			return
 		end
 		

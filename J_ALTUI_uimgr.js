@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2272 $";
+var ALTUI_revision = "$Revision: 2273 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3902,17 +3902,6 @@ var UIManager  = ( function( window, undefined ) {
 			})
 		str.push('</div>')
 		html = html.format(str.join("\n"))
-		// var html = "<div class='form-inline col-12'>";
-			// html += "<button type='button' class='btn btn-light' id='altui-toggle-attributes' data-toggle='collapse' data-target='#altui-device-attributes-{0}'>{1}</button>".format(altuiid,_T("Attributes"));
-			// html += "<button type='button' class='btn btn-light altui-device-variables' id='"+altuiid+"'>"+_T("Variables")+"</button>";
-			// html += "<button type='button' class='btn btn-light altui-device-actions' id='"+altuiid+"' >"+_T("Actions")+"</button>";
-			// html += "<button type='button' class='btn btn-light' id='altui-device-usedin' data-toggle='collapse' data-target='.altui-device-usedin' >{0}<span class='caret'></span></button>".format(_T("Used in"));
-			// html += "<button type='button' class='btn btn-light' id='altui-device-triggers' data-toggle='collapse' data-target='.altui-device-triggers' >"+_T("Notification")+"<span class='caret'></span></button>";
-			// if (MultiBox.isDeviceZwave(device)) {
-				// html += "<button type='button' class='btn btn-light' id='altui-device-config' data-toggle='collapse' data-target='.altui-device-config' >"+_T("Configuration")+"<span class='caret'></span></button>";
-				// html += "<button type='button' class='btn btn-light' id='altui-device-zwdb' data-toggle='collapse' data-target='.altui-device-zwdb' >"+_T("zWave DB")+"<span class='caret'></span></button>";
-			// }
-		// html += "</div>";
 		$(container).html(html)
 		$('#myTab a:first').tab('show') // Select first tab
 		var _toLoad = 0;
