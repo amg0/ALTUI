@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2273 $";
+var ALTUI_revision = "$Revision: 2277 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3359,27 +3359,6 @@ var UIManager  = ( function( window, undefined ) {
 	};
 	function _deviceDrawControlPanel( device, container ) {
 		var controller = MultiBox.controllerOf(device.altuiid).controller;
-		var zwdbdata = null;
-		if (MultiBox.isDeviceZwave(device)) {
-			var value = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "ManufacturerInfo");
-			var splits = value.split(",")
-			var manuf = toHex2(splits[0])
-			var ptype = toHex2(splits[1])
-			var pid = toHex2(splits[2])
-			$.ajax( { 
-				cache:false, 
-				method:'POST', url:"https://us-central1-altui-cloud-function.cloudfunctions.net/helloHttp",
-				data: {
-					manufacturer: manuf,
-					type: ptype,
-					id: pid
-				}
-			})
-			.done(function(data) {
-				_decodeZWDB( device,cloneObject(data) )
-			})			
-		}
-		
 		function _decodeVersion(s) {
 			//There are 5 values: Z-Wave Library Type, Z-Wave Protocol Version, Z-Wave Protocol Sub Version, Application Version, Application Sub Version
 			var splits = s.split(",")
@@ -3465,7 +3444,7 @@ var UIManager  = ( function( window, undefined ) {
 		function _decodeZWDB(device,zwdbdata) {
 			var devid = device.altuiid;
 			var html = "";
-			html += "<form class='form form-row'>";
+			html += "<form class='form form-row' id='altui-zwdb-form'>";
 			var longfields = ["decription","overview","inclusion","exclusion"]
 			$.each( zwdbdata, function(key,val) {
 				if ((val!=undefined) && ($.inArray(key,longfields)==-1)) {
@@ -3734,7 +3713,7 @@ var UIManager  = ( function( window, undefined ) {
 			html+="<div class='row'>";
 			html += "<div id='altui-device-zwdb-"+devid+"' class='col-12 altui-device-zwdb '>"
 			html += "<div class='card'><div class='card-body'>"
-			html += "<div id='zwdb'></div>"
+			html += "<div id='zwdb'>{0}</div>".format(_T("Loading..."))
 			html += "</div></div>"
 			html += "</div>"
 			html += "</div>"
@@ -3876,7 +3855,7 @@ var UIManager  = ( function( window, undefined ) {
 			])
 		}
 		var str = []
-		str.push('<ul class="nav nav-pills mb-2" id="myTab" role="tablist">')
+		str.push('<ul class="nav nav-pills mb-2" id="altui-control-panel-tabs" role="tablist">')
 			$.each(buttons, function(idx,model) {
 				str.push('<li class="nav-item">')
 				if (model.href) {
@@ -3903,8 +3882,32 @@ var UIManager  = ( function( window, undefined ) {
 		str.push('</div>')
 		html = html.format(str.join("\n"))
 		$(container).html(html)
-		$('#myTab a:first').tab('show') // Select first tab
+		$('#altui-control-panel-tabs a:first').tab('show') // Select first tab
+
 		var _toLoad = 0;
+		
+		// last child is the ZWDB tab
+		$('#altui-control-panel-tabs li:last-child').on("shown.bs.tab", function(e) {
+			if (MultiBox.isDeviceZwave(device) && ($("#altui-zwdb-form").length==0) ) {
+				var value = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "ManufacturerInfo");
+				var splits = value.split(",")
+				var manuf = toHex2(splits[0])
+				var ptype = toHex2(splits[1])
+				var pid = toHex2(splits[2])
+				$.ajax( { 
+					cache:false, 
+					method:'POST', url:"https://us-central1-altui-cloud-function.cloudfunctions.net/helloHttp",
+					data: {
+						manufacturer: manuf,
+						type: ptype,
+						id: pid
+					}
+				})
+				.done(function(data) {
+					_decodeZWDB( device,cloneObject(data) )
+				})			
+			}
+		});
 
 		// CONTROL PANEL WIRE FRAME
 		$("#altui-room-list").change( function() {
@@ -4840,7 +4843,7 @@ var UIManager  = ( function( window, undefined ) {
 		language = language.substring(0, 2);
 		var len = $('script[src="J_ALTUI_b_lua_compressed.js"]').length;
 		if (len==0) {
-			show_loading(_T("Loading script") )
+			show_loading(_T("Loading...") )
 			_loadScript("J_ALTUI_b_blockly_compressed.js",function() {
 				_loadScript("J_ALTUI_b_blocks_compressed.js",function() {
 					_loadScript("J_ALTUI_b_"+language+".js",function() {
