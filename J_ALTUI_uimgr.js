@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2277 $";
+var ALTUI_revision = "$Revision: 2278 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1809,7 +1809,7 @@ var UIManager  = ( function( window, undefined ) {
 					if (url && url!=NO_URL) {
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}' width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(url,i,varid,height);
 					} else {
-						html +=_T("No Graphic available")
+						html +=_T("No Graphic available for this data storage provider")
 					}
 				}
 
@@ -13750,7 +13750,7 @@ var UIManager  = ( function( window, undefined ) {
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
 					html += "</div>";
 				} else {
-					html +="<p>{0}</p>".format(_T("No Graphic available"))
+					html +="<p>{0}: {1}</p>".format(watch.provider,_T("No Graphic Url available"))
 				}
 				$("span#altui-watch-placeholder-"+idx).html(html);
 			}
@@ -13763,15 +13763,6 @@ var UIManager  = ( function( window, undefined ) {
 			var model = model;
 			var panels = [];
 			$.each(model.watches, function(idx,watch) {
-				var html = "";
-				if (watch.url && watch.url!=NO_URL) {
-					html += "<div class='col-12'>";
-						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
-					html += "</div>";
-				} else {
-					html +=_T("No Graphic available")
-				}
-
 				panels.push({
 						id:'watchidx_'+idx,
 						title:"<span>{0} - {1} - <small title='{3}'>{2}</small></span>".format(watch.devicename,watch.variable,_lastPart(watch.service),watch.service),
@@ -13817,6 +13808,7 @@ var UIManager  = ( function( window, undefined ) {
 					if (device && providers[watch.provider] ) {
 						var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
 						model.watches.push( {
+							provider:watch.provider,
 							service:watch.service,
 							variable:watch.variable,
 							devicename: device.name,
