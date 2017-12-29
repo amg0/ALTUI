@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.07"
+local version = "v2.08"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3340,9 +3340,13 @@ function registerDataProvider(name, funcname, func, url, parameters)
 	end
 end
 
-function resetDevice(lul_device,norepeat)
+function resetDevice(lul_device,reload)
 	lul_device = tonumber(lul_device)
-	log(string.format("resetDevice(%d,%s)",lul_device, tostring(norepeat or "nil")))
+	log(string.format("resetDevice(%d,%s)",lul_device, tostring(reload or "nil")))
+
+	if (reload ~= true) then
+		reload = false
+	end
 
 	-- reset the config
 	local tbl = getDefaultConfig()
@@ -3358,10 +3362,14 @@ function resetDevice(lul_device,norepeat)
 	Timers = {}
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
-	luup.variable_set(ALTUI_SERVICE,  "Timers", "", lul_device)
+	luup.variable_set(ALTUI_SERVICE, "Timers", "", lul_device)
+	luup.variable_set(ALTUI_SERVICE, "EmonCmsUrl", "emoncms.org", lul_device) 
+	setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
 
-	debug("Forcing a Luup reload")
-	local httpcode,data = luup.inet.wget("http://localhost:3480/data_request?id=reload",10)
+	if (reload==true) then
+		debug("Forcing a Luup reload")
+		local httpcode,data = luup.inet.wget("http://localhost:3480/data_request?id=reload",10)
+	end
 end
 
 local function createMP3file(lul_device,newMessage)
@@ -4123,7 +4131,8 @@ function startupDeferred(lul_device)
 	local ctrlOptions = getSetVariable(ALTUI_SERVICE, "CtrlOptions", lul_device, "1500,60")
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "") 
 	local custompages = getSetVariable(ALTUI_SERVICE, "Data_CustomPages_0", lul_device, "[]") 
-
+	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "emoncms.org") 
+	
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleUserCode", lul_device, "")
@@ -4144,9 +4153,6 @@ function startupDeferred(lul_device)
 		end
 	end
 	
-	-- clean tmp area from our files
-	-- os.execute('rm /tmp/altui_*');
-	
 	if (debugmode=="1") then
 		DEBUG_MODE = true
 		UserMessage("Enabling debug mode for device:"..lul_device,TASK_BUSY)
@@ -4163,20 +4169,19 @@ function startupDeferred(lul_device)
 		newmajor,newminor = tonumber(newmajor),tonumber(newminor)
 		debug ("Device's New Version is major:"..newmajor.." minor:"..newminor)
 		
-		local defconfigjson = json.encode( getDefaultConfig() )
-		local config = getSetVariable(ALTUI_SERVICE, "PluginConfig", lul_device, defconfigjson )
-		
 		-- force the default in case of upgrade
 		if ( (newmajor>major) or ( (newmajor==major) and (newminor>minor) ) ) then
 			log ("Version upgrade => Reseting Plugin config to default")
-			setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
-			setVariableIfChanged(ALTUI_SERVICE, "PluginConfig", defconfigjson, lul_device)		
+			resetDevice(lul_device,false)
 			if (newmajor<1) or ((newmajor == 1) and (newminor <= 1)) then
 				setVariableIfChanged(ALTUI_SERVICE, "ServerOptions", "[]", lul_device)
 			end
 			if (newmajor<1) or ((newmajor == 1) and (newminor <= 2)) then
 				fixWatches_V_1_2(lul_device)
 			end
+		else
+			local defconfigjson = json.encode( getDefaultConfig() )
+			local config = getSetVariable(ALTUI_SERVICE, "PluginConfig", lul_device, defconfigjson )		
 		end
 		
 		luup.variable_set(ALTUI_SERVICE, "Version", version, lul_device)
@@ -4197,7 +4202,7 @@ function startupDeferred(lul_device)
 		[2] 	= { ["key"]= "feedid", ["label"]="Feed ID", ["type"]="number" },
 		[3]		= { ["key"]= "inputkey", ["label"]="Input Key name", ["type"]="text" },
 		[4] 	= { ["key"]= "readwritekey", ["label"]="Read/Write API Key", ["type"]="text" },
-		[5] 	= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]="http://emoncms.org/vis/realtime?feedid={1}&embed=1&apikey={3}"}
+		[5] 	= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]="http://".. emoncmsurl .. "/vis/realtime?feedid={1}&embed=1&apikey={3}"}
 	})
 	
 	registerDataProvider("IFTTT","sendValueToStorage_ifttt",sendValueToStorage_ifttt, "", {
