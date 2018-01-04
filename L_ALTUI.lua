@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.08"
+local version = "v2.09"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3048,6 +3048,10 @@ local function getDefaultConfig()
 	tbl["urn:schemas-arduino-cc:device:arduino:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMySensors"
+	}
+	tbl["urn:schemas-micasaverde-com:device:DistanceSensor:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMySensorsExt"
 	}
 	tbl["urn:schemas-micasaverde-com:device:Keypad:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",

@@ -31,6 +31,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-temperature-minor  {font-size: 8px;}";
 		style += ".altui-humidity, .altui-light  {font-size: 18px;}";
 		style += ".altui-motion {font-size: 22px;}";
+		style += ".altui-mysensorsext {font-size: 16px;}";
 		style += ".altui-keypad-status {font-size: 14px;}";
 		style += ".altui-weather-text, .altui-lasttrip-text, .altui-vswitch-text {font-size: 11px;}";
 		style += ".altui-red , .btn.altui-red { color:red;}";
@@ -991,6 +992,14 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
         return html;
     };
+	function _drawMySensorsExt( device) {
+		var html = "";
+		var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:DistanceSensor1', 'CurrentDistance' ); 
+		if (status) {
+			html += ("<span class='altui-mysensorsext' >{0}</span>".format(status));
+		}
+		return html;
+	};
 	function _drawTempLeak( device ) {
         var html = "";
         var armed = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Armed' )); 
@@ -1725,6 +1734,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawPnPProxy	: _drawPnPProxy,
 	drawProgLogicTimerSwitch: _drawProgLogicTimerSwitch,
 	drawMySensors   : _drawMySensors,
+	drawMySensorsExt   : _drawMySensorsExt,
 	drawSmoke 	   	: _drawSmoke,
 	drawFlood		: _drawFlood,
 	drawHumidity   : _drawHumidity,

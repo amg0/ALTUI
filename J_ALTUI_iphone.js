@@ -22,6 +22,8 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		style += ".altui-ipx  { margin-top: 10px; margin-right: 10px; }";	
 		style += ".altui-ksenia  { margin-top: 10px; margin-right: 10px; }";	
 		style += ".altui-wes  { margin-top: 10px; margin-right: 10px; }";	
+		style += ".altui-ksenia-info  { font-size: 12px; }";	
+		style += ".altui-version  { font-size: 10px; }";	
 		style += "\
 			.spin {\
 				animation: spinAround 10s linear infinite;\
@@ -126,7 +128,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 			html += " $('button#altui-ipx-{0}').on('click', function() { window.open('http://{1}','_blank'); } );".format(device.altuiid,ip);
 			html += "</script>";
 		}
-		html += "<div class='pull-left'>{0}</div>".format(version);
+		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:wes1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
@@ -145,7 +147,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 			html += " $('button#altui-ipx-{0}').on('click', function() { window.open('http://{1}','_blank'); } );".format(device.altuiid,ip);
 			html += "</script>";
 		}
-		html += "<div class='pull-left'>{0}</div>".format(version);
+		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:IPX8001','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
@@ -186,7 +188,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		if (nActive>0) {
 			html += "<div class='altui-ksenia-info' '><span class='glyphicon glyphicon-flash text-danger' aria-hidden='true'></span>{0}</div>".format((nActive>0) ? _T("{0} partition(s) active(s)").format(nActive) :  "" );
 		}
-		html += "<div class='pull-left'>{0}</div>".format(version);
+		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:ksenia1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";

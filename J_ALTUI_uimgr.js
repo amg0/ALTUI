@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2279 $";
+var ALTUI_revision = "$Revision: 2282 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5952,7 +5952,7 @@ var UIManager  = ( function( window, undefined ) {
 				return ''
 
 			var onclick_prop = (page.htmlid) ? ("onclick='UIControler.onClickHtml(\"{0}\");return false;'".format(page.htmlid)) : ''
-			var thisline = "<li class='breadcrumb-item'><a class='altui-breadcrumd-item' id='{0}' href='javascript:void(0);' {1} >{2}</a></li>".format(page.id,onclick_prop,_T(page.title));
+			var thisline = "<li class='breadcrumb-item'><a class='altui-breadcrumd-item' id='altui-breadcrumb-{0}' href='javascript:void(0);' {1} >{2}</a></li>".format(page.id,onclick_prop,_T(page.title));
 			var parent = UIControler.getParentPage(page);
 			return ( (parent) ? _parentsOf(parent) : '' ) + thisline
 		};
@@ -6573,7 +6573,7 @@ var UIManager  = ( function( window, undefined ) {
 						&& ( (search.length==0) || (roomname.toUpperCase().contains(search)==true) || (device.name.toUpperCase().contains(search)==true) ) 
 						&& ( (filteredDeviceTypes.length==0) || ($.inArray(device.device_type , filteredDeviceTypes)!=-1) )
 			});
-			var arr = $.map( devices, function(d,i) { return {id:d.altuiid, name:d.name, " ":_deviceIcon(d), val:_deviceInfo(d)} } )
+			var arr = $.map( devices, function(d,i) { return {id:d.altuiid, name:d.name, action:_deviceIcon(d), val:_deviceInfo(d)} } )
 			return (arr.length>0) ? HTMLUtils.array2Table(arr,'id',[],null,'altui-myhome-devices','htmlid',false) : null
 		}
 		
@@ -13677,7 +13677,7 @@ var UIManager  = ( function( window, undefined ) {
 					cols: [
 						{ name:'id', type:'numeric', identifier:false, width:50 },
 						{ name:'altuiid', type:'string', identifier:true, width:80 },
-						{ name:'altid', type:'string', identifier:false, width:50 },
+						{ name:'altid', type:'string', identifier:false, width:60 },
 						{ name:'id_parent', type:'numeric', identifier:false, width:80 },
 						{ name:'manufacturer', type:'string', identifier:false, width:120 },
 						{ name:'model', type:'string', identifier:false, width:150 },
