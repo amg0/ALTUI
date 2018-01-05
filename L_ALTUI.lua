@@ -3049,6 +3049,18 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMySensors"
 	}
+	tbl["urn:schemas-micasaverde-com:device:BarometerSensor:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMySensorsExt"
+	}
+	tbl["urn:schemas-micasaverde-com:device:WindSensor:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMySensorsExt"
+	}
+	tbl["urn:schemas-micasaverde-com:device:ScaleSensor:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMySensorsExt"
+	}
 	tbl["urn:schemas-micasaverde-com:device:DistanceSensor:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawMySensorsExt"

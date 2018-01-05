@@ -994,9 +994,19 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
     };
 	function _drawMySensorsExt( device) {
 		var html = "";
-		var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:DistanceSensor1', 'CurrentDistance' ); 
-		if (status) {
-			html += ("<span class='altui-mysensorsext' >{0}</span>".format(status));
+		var arr = [
+			{service:'urn:upnp-org:serviceId:DistanceSensor1', variable:'CurrentDistance'},
+			{service:'urn:micasaverde-com:serviceId:ScaleSensor1', variable:'Weight'},
+			{service:'urn:upnp-org:serviceId:WindSensor1', variable:'AvgSpeed', template:'{0} km/h'},
+			{service:'urn:upnp-org:serviceId:WindSensor1', variable:'Direction'},
+			{service:'urn:upnp-org:serviceId:BarometerSensor1', variable:'CurrentPressure', template:'{0} hPa'},
+		]
+		for(var i=0; i<arr.length; i++) {
+			var status = MultiBox.getStatus( device, arr[i].service, arr[i].variable ); 
+			if (status) {
+				var template = arr[i].template || '{0}'
+				html += ("<span class='altui-mysensorsext' >{0}</span>".format(  template.format(status) ));
+			}
 		}
 		return html;
 	};
