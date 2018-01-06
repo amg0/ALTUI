@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.09"
+local version = "v2.10"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3141,8 +3141,10 @@ local function sendValueToStorage_emoncms(watch_description,lul_device, lul_serv
 	debug(string.format("sendValueToStorage_emoncms(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
 	debug(string.format("watch_description:%s",json.encode(watch_description)))
 	local providerparams = json.decode( watch_description['Data'] )
+	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "emoncms.org") 
 	if (isempty(providerparams[1])==false) and (isempty(providerparams[2])==false) and (isempty(providerparams[3])==false) then
-		local url = string.format("http://emoncms.org/input/post.json?node=%d&json={%s:%s}&apikey=%s",
+		local url = string.format("http://%s/input/post.json?node=%d&json={%s:%s}&apikey=%s",
+			emoncmsurl,
 			providerparams[1],	-- nodeid
 			providerparams[3],	-- inputkey
 			tostring(new),		-- new value
