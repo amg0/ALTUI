@@ -992,7 +992,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
         return html;
     };
-	function _drawMySensorsExt( device) {
+	function _drawMySensorsExt( device ) {
 		var html = "";
 		var arr = [
 			{service:'urn:upnp-org:serviceId:DistanceSensor1', variable:'CurrentDistance'},

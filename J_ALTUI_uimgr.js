@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2283 $";
+var ALTUI_revision = "$Revision: 2284 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4350,6 +4350,12 @@ var UIManager  = ( function( window, undefined ) {
 		if (isNaN(watts)==false)
 			html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
 		switch(device.device_type) {
+			case "urn:schemas-micasaverde-com:device:BarometerSensor:1":
+			case "urn:schemas-micasaverde-com:device:WindSensor:1":
+			case "urn:schemas-micasaverde-com:device:ScaleSensor:1":
+			case "urn:schemas-micasaverde-com:device:DistanceSensor:1":
+				html += ALTUI_PluginDisplays.drawMySensorsExt( device ).replace('altui-mysensorsext','altui-favorites-mysensorsext')
+				break;
 			case "urn:schemas-micasaverde-com:device:Sonos:1":
 				var src = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:AVTransport', 'CurrentAlbumArt');
 				html += "<img class='altui-sonos-tile-img' src='{0}' ></img>".format(src)
@@ -6490,6 +6496,10 @@ var UIManager  = ( function( window, undefined ) {
 			function _firstelem(str) { return (str || "").split(",")[0] }
 			function _daynight(str) { return (str==1) ? 'Day' : 'Night' }
 			var arr= [
+				{service:'urn:upnp-org:serviceId:DistanceSensor1', variable:'CurrentDistance'},
+				{service:'urn:micasaverde-com:serviceId:ScaleSensor1', variable:'Weight'},
+				{service:'urn:upnp-org:serviceId:WindSensor1', variable:'AvgSpeed,Direction', format:'{0}km/h {1}&deg;'},
+				{service:'urn:upnp-org:serviceId:BarometerSensor1', variable:'CurrentPressure', format:'{0} hPa'},
 				{service:'urn:upnp-org:serviceId:IPhoneLocator1', variable:'Distance,Unit', format:'{0} {1}' },
 				{service:'urn:upnp-org:serviceId:Dimming1', variable:'LoadLevelStatus', format:'{0}%' },
 				{service:'urn:upnp-org:serviceId:TemperatureSensor1', variable:'CurrentTemperature', format:'{0}&deg;' },
