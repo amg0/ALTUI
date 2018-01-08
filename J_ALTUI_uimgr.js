@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2285 $";
+var ALTUI_revision = "$Revision: 2286 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -10935,7 +10935,7 @@ var UIManager  = ( function( window, undefined ) {
 		language = language.substring(0, 2).toUpperCase();
 		var html = "";
 		if (1) {
-			html += "<form class='form' action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top'>";
+			html += "<form class='form' action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_blank'>";
 			html += "<input type='hidden' name='cmd' value='_xclick'>";
 			html += "<input type='hidden' name='business' value='Z5KFCB3VH6MCQ'>";
 			html += "<input type='hidden' name='lc' value='"+language+"'>";
@@ -10968,7 +10968,7 @@ var UIManager  = ( function( window, undefined ) {
 			html += "<img alt='' border='0' src='https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif' width='1' height='1'>";
 			html += "</form>"
 		} else {
-			html+="<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_top'>";
+			html+="<form action='https://www.paypal.com/cgi-bin/webscr' method='post' target='_blank'>";
 			html+="<input type='hidden' name='cmd' value='_donations'>";
 			html+="<input type='hidden' name='business' value='Z5KFCB3VH6MCQ'>";
 			html+= "<input type='hidden' name='lc' value='"+language+"'>";
