@@ -1937,15 +1937,6 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 	
 	function _runLua(code, cbfunc) {
-		// used to be MCV facility , now replaced with ALTUI facility
-		// return _upnpHelper.UPnPRunLua(code, function(result) {
-			// var res = "Fail";
-			// if ((result!=null ) && (result.indexOf("<OK>OK</OK>") !=-1))
-				// res ="Passed";
-			// if ($.isFunction( cbfunc )) 
-				// cbfunc(res);
-		// });
-		// var jqxhr = _httpGet( "?id=lr_ALTUI_Handler&command=run_lua&lua={0}".format( encodeURIComponent(code) ), {}, function(data, textStatus, jqXHR) {
 		var jqxhr = _httpGet( "?id=lr_ALTUI_LuaRunHandler&command=run_lua&lua={0}".format( encodeURIComponent(code) ), {}, function(data, textStatus, jqXHR) {
 			if (data!=null) {
 				var lines = data.split('||');

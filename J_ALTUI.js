@@ -357,14 +357,6 @@ function saveVar(deviceID,  service, varName, varVal, reload)
 //-------------------------------------------------------------
 // Helper functions to build URLs to call VERA code from JS
 //-------------------------------------------------------------
-function buildVeraURL( deviceID, fnToUse, varName, varValue)
-{
-	var urlHead = '' + ip_address + 'id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code=';
-	if (varValue != null)
-		return urlHead + fnToUse + '("' + altui_Svs + '", "' + varName + '", "' + varValue + '", ' + deviceID + ')';
-
-	return urlHead + fnToUse + '("' + altui_Svs + '", "' + varName + '", "", ' + deviceID + ')';
-}
 
 function buildVariableSetUrl( deviceID, varName, varValue)
 {

@@ -103,11 +103,11 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		};
 		return _proxify(url);
 	};
-	function _buildUPnPRunLua(code) {
 	//http://192.168.1.5/port_3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&DeviceNum=81&Code=getMapUrl(81)
-		var url = _getUrlHead()+'?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code='+encodeURIComponent(code);
-		return _proxify(url);	
-	};
+	// function _buildUPnPRunLua(code) {
+		// var url = _getUrlHead()+'?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code='+encodeURIComponent(code);
+		// return _proxify(url);	
+	// };
 	
 	function _buildHAGSoapUrl()
 	{
@@ -304,10 +304,10 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		return _exec( _buildUPnPUpdatePlugin( pluginid), cbfunc );
 	};
 
-	function _UPnPRunLua( code, cbfunc )
-	{
-		return _exec( _buildUPnPRunLua( code), cbfunc );
-	};
+	// function _UPnPRunLua( code, cbfunc )
+	// {
+		// return _exec( _buildUPnPRunLua( code), cbfunc );
+	// };
 
 	function _reloadEngine(cbfunc)
 	{
@@ -647,7 +647,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		UPnPUpdatePlugin: _UPnPUpdatePlugin,
 		UPnPUpdatePlugin2: _UPnPUpdatePlugin2,
 		UPnPDeletePlugin: _UPnPDeletePlugin,
-		UPnPRunLua 		: _UPnPRunLua,
+		// UPnPRunLua 		: _UPnPRunLua,
 		UPnPGetJobStatus: _UPnPGetJobStatus,
 		ModifyUserData	: _ModifyUserData,
 		renameDevice 	: _renameDevice,		// ( device, newname, roomid )
