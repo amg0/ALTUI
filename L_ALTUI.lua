@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.10"
+local version = "v2.11"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -1713,7 +1713,7 @@ end
 local function getMode() 
 	debug("HouseMode, getMode()")
 	-- local url_req = "http://" .. getIP() .. ":3480/data_request?id=variableget&DeviceNum=0&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&Variable=Mode"
-	local url_req = "http://127.0.0.1:3480/data_request?id=variableget&DeviceNum=0&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&Variable=Mode"
+	local url_req = "http://127.0.0.1/port_3480/data_request?id=variableget&DeviceNum=0&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&Variable=Mode"
 	local req_status, req_result = luup.inet.wget(url_req)
 	-- ISSUE WITH THIS CODE=> ONLY WORKS WITHIN GLOBAL SCOPE LUA, not in PLUGIN context
 	-- debug("calling getMode()...")
@@ -1743,7 +1743,7 @@ end
 ------------------------------------------------
 local function getScriptContent( filename )
 	log("getScriptContent("..filename..")")
-	local url_req = "http://127.0.0.1:3480/"..filename
+	local url_req = "http://127.0.0.1/port_3480/"..filename
 	local req_status, req_result = luup.inet.wget(url_req)
 	-- debug(string.format("getScriptContent(%s) returns: %s",filename,req_result))
 	if (req_status~=0) then
@@ -3386,7 +3386,7 @@ function resetDevice(lul_device,reload)
 
 	if (reload==true) then
 		debug("Forcing a Luup reload")
-		local httpcode,data = luup.inet.wget("http://localhost:3480/data_request?id=reload",10)
+		local httpcode,data = luup.inet.wget("http://localhost/port_3480/data_request?id=reload",10)
 	end
 end
 
@@ -3966,7 +3966,7 @@ end
 -- STARTUP Sequence
 ------------------------------------------------
 function loadCode( code , lul_device)
-	local req = "http://127.0.0.1:3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code="
+	local req = "http://127.0.0.1/port_3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code="
 	-- code = "require 'L_ALTUI_LuaRunHandler'\n"
 	code = "local altui_device = "..lul_device.."\n"..code
 	req = req .. modurl.escape(code)
