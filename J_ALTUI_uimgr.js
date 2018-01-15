@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2286 $";
+var ALTUI_revision = "$Revision: 2288 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2255,13 +2255,14 @@ var UIManager  = ( function( window, undefined ) {
 			if (dl1 != null)
 				html += $("<div class='altui-"+v+"'></div>").text(dl1).wrap( "<div></div>" ).parent().html()
 		});
-		return html!="" ? html : optHorGlyph;
+		return html
 	};
 	
 	function _defaultDeviceDraw( device ) {
-		var html = _defaultDeviceDrawWatts(device);
-		html += _defaultDeviceDrawAltuiStrings(device);
-		return html;
+		var html = _defaultDeviceDrawAltuiStrings(device);
+		if (html=="")
+			html = _defaultDeviceDrawWatts(device);
+		return html!="" ? html : optHorGlyph;
 	};
 
 	function _hasObjectProperty( obj )
