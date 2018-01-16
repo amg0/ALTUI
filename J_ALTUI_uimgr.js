@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2288 $";
+var ALTUI_revision = "$Revision: 2290 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -11093,11 +11093,11 @@ var UIManager  = ( function( window, undefined ) {
 
 		var template = 
 		`<div class="card" >
-		  <div class="card-header">{1}</div>
+		  <div class="card-header">{0}</div>
 		  <div class="card-body">
-			<h4 data-name="{0}" class="card-title">{0}</h4>
+			<div data-name="{0}" class="card-title"></div>
 			<p class="card-text">{2}</p>
-			<a href="{1}" target="_blank" class="card-link">{0}</a>
+			<a href="{1}" target="_blank" class="card-link">{1}</a>
 		  </div>
 		</div>`
 		html = '<div class="col-12 card-columns">';
@@ -11108,8 +11108,8 @@ var UIManager  = ( function( window, undefined ) {
 		$(".altui-mainpanel").append(html);
 
 		$(".altui-leftnav a").on('click', function(e) {
-			$(".card").removeClass("bg-success text-white")
-			$(".card-title[data-name='"+$(this).html()+"']").parents(".card").addClass("bg-success text-white")
+			$(".card-header").removeClass("bg-success text-white")
+			$(".card-title[data-name='"+$(this).html()+"']").parents(".card").find(".card-header").addClass("bg-success text-white")
 			return false;
 		});
 	},

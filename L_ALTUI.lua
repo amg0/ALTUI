@@ -935,8 +935,9 @@ end
 -- get workflow description from the store variables
 -- prepare the watches
 -- 
-local function initWorkflows(lul_device)
-	debug(string.format("Wkflow - initWorkflows(%s)",lul_device))
+local function initWorkflows(lul_device,pendingReset)
+	debug(string.format("Wkflow - initWorkflows(%s,%s)",lul_device,pendingReset))
+	pendingReset = tonumber(pendingReset) or 0
 	
 	-- get active states for persistency
 	WorkflowsActiveState = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "") ) or {}
@@ -962,20 +963,27 @@ local function initWorkflows(lul_device)
 		end
 		
 		-- try the  stored active state
-		local last_known_active = WorkflowsActiveState[ Workflows[k].altuiid ]
-		if ( (last_known_active == nil) or ( isValidState(Workflows[k],last_known_active)==false ) ) then
-			-- try the one stored in the workflow descr
-			last_known_active = Workflows[k]["graph_json"].active_state
-			if ( (last_known_active == nil) or ( isValidState(Workflows[k],last_known_active)==false ) ) then
-				-- if no active state or state is unknown, start from START
-				local state = findStartState(k)
-				setWorkflowActiveState(lul_device,k,state)
-			else
-				WorkflowsActiveState[ Workflows[k].altuiid ]= last_known_active
-			end
+		if (pendingReset==1) then
+			-- RESET normal start, resume from start state
+			local state = findStartState(k)
+			setWorkflowActiveState(lul_device,k,state)
 		else
-			-- also save it in workflow descr
-			Workflows[k]["graph_json"].active_state = last_known_active
+			-- normal start, resume current active state
+			local last_known_active = WorkflowsActiveState[ Workflows[k].altuiid ]
+			if ( (last_known_active == nil) or ( isValidState(Workflows[k],last_known_active)==false ) ) then
+				-- try the one stored in the workflow descr
+				last_known_active = Workflows[k]["graph_json"].active_state
+				if ( (last_known_active == nil) or ( isValidState(Workflows[k],last_known_active)==false ) ) then
+					-- if no active state or state is unknown, start from START
+					local state = findStartState(k)
+					setWorkflowActiveState(lul_device,k,state)
+				else
+					WorkflowsActiveState[ Workflows[k].altuiid ]= last_known_active
+				end
+			else
+				-- also save it in workflow descr
+				Workflows[k]["graph_json"].active_state = last_known_active
+			end
 		end
 	end
 	
@@ -1058,12 +1066,12 @@ local function triggerTransition(lul_device,workflowAltuiid,transitionId)
 	end
 end
 
-local function enableWorkflows(lul_device,newWorkflowMode)
-	log(string.format("Wkflow - enableWorkflows(%d,%d)",lul_device,newWorkflowMode))
+local function enableWorkflows(lul_device,newWorkflowMode,pendingReset)
+	log(string.format("Wkflow - enableWorkflows(%d,%d,%s)",lul_device,newWorkflowMode,pendingReset))
 	lul_device = tonumber(lul_device)
 	newWorkflowMode = tonumber(newWorkflowMode) or 0
-
-	local currentMode = luup.variable_get(ALTUI_SERVICE, "EnableWorkflows",  lul_device)
+	
+	-- local currentMode = luup.variable_get(ALTUI_SERVICE, "EnableWorkflows",  lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "EnableWorkflows", newWorkflowMode, lul_device)
 	WFLOW_MODE = (newWorkflowMode == 1)
 	
@@ -1079,7 +1087,7 @@ local function enableWorkflows(lul_device,newWorkflowMode)
 	end
 	
 	-- init Workflows
-	initWorkflows(lul_device)	
+	initWorkflows(lul_device,pendingReset)	
 	
 	-- schedule execution
 	if (WFLOW_MODE == true) then
@@ -3399,6 +3407,7 @@ function resetDevice(lul_device,reload)
 
 	if (reload==true) then
 		debug("Forcing a Luup reload")
+		luup.variable_set(ALTUI_SERVICE, "PendingReset", 1, lul_device)
 		local httpcode,data = luup.inet.wget("http://127.0.0.1"..port3480.."/data_request?id=reload",10)
 	end
 end
@@ -4164,6 +4173,7 @@ function startupDeferred(lul_device)
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "") 
 	local custompages = getSetVariable(ALTUI_SERVICE, "Data_CustomPages_0", lul_device, "[]") 
 	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "emoncms.org") 
+	local pendingReset = getSetVariable(ALTUI_SERVICE, "PendingReset", lul_device, 0) 
 	
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
@@ -4255,7 +4265,7 @@ function startupDeferred(lul_device)
 	initTimers(lul_device)
 
 	-- init Workflows
-	enableWorkflows(lul_device,worfklowmode)	-- will trigger start if mode is true
+	enableWorkflows( lul_device,worfklowmode,pendingReset )	-- will trigger start if mode is true
 	
 	-- start handlers
 	registerHandlers(lul_device)
@@ -4263,13 +4273,15 @@ function startupDeferred(lul_device)
 	-- process old timers
 	processTimers(lul_device)
 
+	-- clear the RESET flag
+	luup.variable_set(ALTUI_SERVICE, "PendingReset", 0, lul_device)
+
 	-- NOTHING to start 
 	if( luup.version_branch == 1 and luup.version_major == 7) then
 		luup.set_failure(0,lul_device)	-- should be 0 in UI7
 	else
 		luup.set_failure(false,lul_device)	-- should be 0 in UI7
 	end
-
 	log("startup completed")
 end
 		
