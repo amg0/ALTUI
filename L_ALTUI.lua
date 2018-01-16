@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI" 
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.11"
+local version = "v2.12"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -35,6 +35,7 @@ local lzw = compress.new "LZW2"
 
 local tmpprefix = "/tmp/altui_"		-- prefix for tmp files
 local hostname = ""
+local port3480 = "/port_3480"		-- should be :3480 on openluup
 
 local DataProviders={}				-- DataProviders database
 local DataProvidersCallbacks={}		-- map names to functions in the local context, only for embedded providers registered within this module in LUA
@@ -243,6 +244,16 @@ Queue = {
 
 local Thingspeak_Queue = Queue:new()
 local IFTTT_Queue = Queue:new()
+
+local function isOpenLuup()
+	local openLuup = luup.attr_get "openLuup"
+	if openLuup then
+		-- openLuup
+		return true
+	end
+	-- vera
+	return false
+end
 
 ------------------------------------------------
 -- Device Properties Utils
@@ -559,8 +570,9 @@ local function _addWatch( service, variable, devid, scene, expression, xml, prov
 			local extraController= getSetVariable(ALTUI_SERVICE, "ExtraController", lul_device, "")
 			local controllers = extraController:split(",")
 			local ipaddr =  controllers [ tonumber(parts[1]) ]:trim()
-			local url = string.format("http://%s/port_3480/data_request?id=lr_ALTUI_Handler&command=addRemoteWatch&device=%s&variable=%s&service=%s&ctrlid=%s&ipaddr=%s",
+			local url = string.format("http://%s%s/data_request?id=lr_ALTUI_Handler&command=addRemoteWatch&device=%s&variable=%s&service=%s&ctrlid=%s&ipaddr=%s",
 				ipaddr,		-- remote ctrl ip addr
+				port3480,
 				parts[2],	-- pure vera device id on remote controller
 				variable,	 
 				service,	
@@ -1713,7 +1725,7 @@ end
 local function getMode() 
 	debug("HouseMode, getMode()")
 	-- local url_req = "http://" .. getIP() .. ":3480/data_request?id=variableget&DeviceNum=0&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&Variable=Mode"
-	local url_req = "http://127.0.0.1/port_3480/data_request?id=variableget&DeviceNum=0&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&Variable=Mode"
+	local url_req = "http://127.0.0.1".. port3480 .."/data_request?id=variableget&DeviceNum=0&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&Variable=Mode"
 	local req_status, req_result = luup.inet.wget(url_req)
 	-- ISSUE WITH THIS CODE=> ONLY WORKS WITHIN GLOBAL SCOPE LUA, not in PLUGIN context
 	-- debug("calling getMode()...")
@@ -1743,7 +1755,7 @@ end
 ------------------------------------------------
 local function getScriptContent( filename )
 	log("getScriptContent("..filename..")")
-	local url_req = "http://127.0.0.1/port_3480/"..filename
+	local url_req = "http://127.0.0.1".. port3480 .."/"..filename
 	local req_status, req_result = luup.inet.wget(url_req)
 	-- debug(string.format("getScriptContent(%s) returns: %s",filename,req_result))
 	if (req_status~=0) then
@@ -2070,8 +2082,9 @@ function remoteVariableWatchCallback(lul_device, lul_service, lul_variable, lul_
 	local altuiid = "0-"..lul_device
 	local watch = remoteWatches[altuiid][lul_service][lul_variable]
 	if (watch~=nil) then
-		local url = string.format("http://%s/port_3480/data_request?id=lr_ALTUI_Handler&command=remoteWatchCB&service=%s&variable=%s&device=%d&old=%s&new=%s&ctrlid=%s",
+		local url = string.format("http://%s%s/data_request?id=lr_ALTUI_Handler&command=remoteWatchCB&service=%s&variable=%s&device=%d&old=%s&new=%s&ctrlid=%s",
 			watch["ipaddr"],
+			port3480,
 			lul_service,
 			lul_variable,
 			lul_device,
@@ -3386,7 +3399,7 @@ function resetDevice(lul_device,reload)
 
 	if (reload==true) then
 		debug("Forcing a Luup reload")
-		local httpcode,data = luup.inet.wget("http://localhost/port_3480/data_request?id=reload",10)
+		local httpcode,data = luup.inet.wget("http://127.0.0.1"..port3480.."/data_request?id=reload",10)
 	end
 end
 
@@ -3786,8 +3799,9 @@ function _delWatch(service, variable, deviceid, sceneid, expression, xml, provid
 		local extraController= getSetVariable(ALTUI_SERVICE, "ExtraController", lul_device, "")
 		local controllers = extraController:split(",")
 		local ipaddr =  controllers [ tonumber(parts[1]) ]:trim()
-		local url = string.format("http://%s/port_3480/data_request?id=lr_ALTUI_Handler&command=delRemoteWatch&device=%s&variable=%s&service=%s&ctrlid=%s&ipaddr=%s",
+		local url = string.format("http://%s%s/data_request?id=lr_ALTUI_Handler&command=delRemoteWatch&device=%s&variable=%s&service=%s&ctrlid=%s&ipaddr=%s",
 			ipaddr,		-- remote ctrl ip addr
+			port3480,
 			parts[2],	-- pure vera device id on remote controller
 			variable,	 
 			service,	
@@ -3966,7 +3980,7 @@ end
 -- STARTUP Sequence
 ------------------------------------------------
 function loadCode( code , lul_device)
-	local req = "http://127.0.0.1/port_3480/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code="
+	local req = "http://127.0.0.1".. port3480 .."/data_request?id=lu_action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunLua&Code="
 	-- code = "require 'L_ALTUI_LuaRunHandler'\n"
 	code = "local altui_device = "..lul_device.."\n"..code
 	req = req .. modurl.escape(code)
@@ -4131,7 +4145,7 @@ function startupDeferred(lul_device)
 	
 	local debugmode = getSetVariable(ALTUI_SERVICE, "Debug", lul_device, "0")
 	local oldversion = getSetVariable(ALTUI_SERVICE, "Version", lul_device, version)
-	local url_req = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home"
+	local url_req = port3480 .. "/data_request?id=lr_ALTUI_Handler&command=home"
 	local localurl = getSetVariableIfEmpty(ALTUI_SERVICE,"LocalHome", lul_device, url_req)
 	local present = getSetVariable(ALTUI_SERVICE,"Present", lul_device, 0)
 	-- local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://vera-ui.strongcubedfitness.com/Veralogin.php")
@@ -4263,6 +4277,9 @@ function initstatus(lul_device)
 	lul_device = tonumber(lul_device)
 	this_device = lul_device
 	log("initstatus("..lul_device..") starting version: "..version)	
+	if (isOpenLuup() == true) then
+		port3480 = ":3480"
+	end
 	checkVersion(lul_device)
 	hostname = getIP()
 	local delay = 1		-- delaying first refresh by x seconds
