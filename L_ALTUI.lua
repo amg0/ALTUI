@@ -936,8 +936,8 @@ end
 -- prepare the watches
 -- 
 local function initWorkflows(lul_device,pendingReset)
-	debug(string.format("Wkflow - initWorkflows(%s,%s)",lul_device,pendingReset))
 	pendingReset = tonumber(pendingReset) or 0
+	debug(string.format("Wkflow - initWorkflows(%s,%d)",lul_device,pendingReset))
 	
 	-- get active states for persistency
 	WorkflowsActiveState = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "") ) or {}
@@ -1067,7 +1067,7 @@ local function triggerTransition(lul_device,workflowAltuiid,transitionId)
 end
 
 local function enableWorkflows(lul_device,newWorkflowMode,pendingReset)
-	log(string.format("Wkflow - enableWorkflows(%d,%d,%s)",lul_device,newWorkflowMode,pendingReset))
+	log(string.format("Wkflow - enableWorkflows(%d,%d,%s)",lul_device,newWorkflowMode,pendingReset or "0"))
 	lul_device = tonumber(lul_device)
 	newWorkflowMode = tonumber(newWorkflowMode) or 0
 	
