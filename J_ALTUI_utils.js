@@ -2,13 +2,13 @@
 // "use strict";
 // http://192.168.1.16:3480/data_request?id=lr_ALTUI_Handler&command=home
 // This program is free software: you can redistribute it and/or modify
-// it under the condition that it is for private or home useage and 
+// it under the condition that it is for private or home useage and
 // this whole comment is reproduced in the source code file.
 // Commercial utilisation is not authorized without the appropriate
 // written agreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 //
 // jQuery plugin amg0: dynamic pagination
@@ -105,9 +105,9 @@
 		onend: null,
 		onpage: null
 	};
-	$.fn.Pager.settings = { };	
-	
-	
+	$.fn.Pager.settings = { };
+
+
 	// Private functions.
 	function myFunc()
 	{
@@ -121,10 +121,10 @@
 })(jQuery);
 
 
-function getQueryStringValue (key) {  
-  return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
-} 
-	
+function getQueryStringValue (key) {
+  return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+}
+
 function isIE11() {
 	var ie11andabove = navigator.userAgent.indexOf('Trident') != -1 && navigator.userAgent.indexOf('MSIE') == -1 // IE11 or above Boolean
 	return ie11andabove;
@@ -132,24 +132,24 @@ function isIE11() {
 
 function uuidv4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
+	var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+	return v.toString(16);
   });
 }
 
 function toHex2(d) {
-	return  ("000"+(parseInt(d).toString(16))).slice(-4).toUpperCase()
+	return	("000"+(parseInt(d).toString(16))).slice(-4).toUpperCase()
 }
 function toHex(d) {
-	return  ("0"+(parseInt(d).toString(16))).slice(-2).toUpperCase()
+	return	("0"+(parseInt(d).toString(16))).slice(-2).toUpperCase()
 }
 function fromHex(v) {
 	return parseInt(v, 16).toString(10)
 }
-		
+
 function Altui_SelectText(element) {
 	var doc = document;
-	var text = doc.getElementById(element);    
+	var text = doc.getElementById(element);
 	if (doc.body.createTextRange) { // ms
 		var range = doc.body.createTextRange();
 		range.moveToElementText(text);
@@ -171,16 +171,16 @@ function Altui_LoadStyle(styleFunctionName) {
 	// var css = Altui_ExecuteFunctionByName(styleFunctionName, window);
 	// style.appendChild(document.createTextNode(css));
 	// head.appendChild(style);
-	
+
 	var title = document.getElementsByTagName('title')[0];
 	var style = document.createElement('style');
-	style.type = 'text/css';	
-	// var css = $.isFunction(styleFunctionNameOrCss) ?  Altui_ExecuteFunctionByName(styleFunctionName, window) : styleFunctionNameOrCss;
-	var css =  Altui_ExecuteFunctionByName(styleFunctionName, window) 
+	style.type = 'text/css';
+	// var css = $.isFunction(styleFunctionNameOrCss) ?	 Altui_ExecuteFunctionByName(styleFunctionName, window) : styleFunctionNameOrCss;
+	var css =  Altui_ExecuteFunctionByName(styleFunctionName, window)
 	style.appendChild(document.createTextNode(css));
-	title.parentNode.insertBefore(style,title);	
+	title.parentNode.insertBefore(style,title);
 };
-	
+
 function Altui_ExecuteFunctionByName(functionName, context , device, extraparam) {
 	var namespaces = functionName.split(".");
 	var func = namespaces.pop();
@@ -189,17 +189,17 @@ function Altui_ExecuteFunctionByName(functionName, context , device, extraparam)
 	}
 	return context[func].call(context, device, extraparam);
 };
-	
+
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
 var houseModeButtonTemplate = "	 <button type='button' class='btn btn-light altui-housemode'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>";
 var leftNavButtonTemplate = "<button id='{0}' data-altuiid='{1}' type='button' class='altui-leftbutton btn btn-light'>{2}</button>";
-var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>' 
+var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>'
 
 var ALTUI_Templates = null;
 var ALTUI_Templates_Factory= function() {
-	var _dropdownTemplate =  "";		
+	var _dropdownTemplate =	 "";
 	_dropdownTemplate +=  "<div class='btn-group pull-right'>";
-	_dropdownTemplate += "<button class='btn btn-light btn-sm dropdown-toggle altui-device-command' type='button' data-toggle='dropdown' aria-expanded='false'>"; 
+	_dropdownTemplate += "<button class='btn btn-light btn-sm dropdown-toggle altui-device-command' type='button' data-toggle='dropdown' aria-expanded='false'>";
 	_dropdownTemplate += "</button>";
 	_dropdownTemplate += "<div class='dropdown-menu dropdown-menu-right' role='menu'>";
 	_dropdownTemplate += "<a id='altui-device-variables' class='dropdown-item' data-altuiid='{0}' href='#' role='menuitem'>Variables</a>";
@@ -208,48 +208,48 @@ var ALTUI_Templates_Factory= function() {
 	_dropdownTemplate += "<a id='{0}' class='dropdown-item altui-device-hideshowtoggle' href='#' role='menuitem'>{1}</a>";
 	_dropdownTemplate += "</div></div>";
 	_dropdownTemplate += "<div class='pull-right text-muted'><small>#{0} </small></div>";
-	
+
 	var _batteryHtmlTemplate="";
 	_batteryHtmlTemplate+="<div class='altui-battery progress pull-right' style='width: 35px; height: 15px;'>";
-	_batteryHtmlTemplate+="  <div class='progress-bar {1}' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='min-width: 0.1em; width: {0}%;'>";
-	_batteryHtmlTemplate+="    {0}%";
-	_batteryHtmlTemplate+="  </div>";
+	_batteryHtmlTemplate+="	 <div class='progress-bar {1}' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='min-width: 0.1em; width: {0}%;'>";
+	_batteryHtmlTemplate+="	   {0}%";
+	_batteryHtmlTemplate+="	 </div>";
 	_batteryHtmlTemplate+="</div>";
-	
+
 	var _devicecontainerTemplate	= "<div class='card altui-device' data-altuiid='{5}' id='{0}'>"
 		_devicecontainerTemplate	+=		"<div class='card-header bg-{4} altui-device-heading'>{6} {7}<div class='card-title altui-device-title' data-toggle='tooltip' data-placement='left' title='{2}'>{1}</div></div>";
-		_devicecontainerTemplate	+=  	"<div class='card-body altui-device-body'>";
-		_devicecontainerTemplate	+= 	  	"{8}{3}";
-		_devicecontainerTemplate	+= 	  	"</div>";
-	_devicecontainerTemplate	+= 	  "</div>";
-	
+		_devicecontainerTemplate	+=		"<div class='card-body altui-device-body'>";
+		_devicecontainerTemplate	+=		"{8}{3}";
+		_devicecontainerTemplate	+=		"</div>";
+	_devicecontainerTemplate	+=	  "</div>";
+
 	var _deviceEmptyContainerTemplate="<div class=' {2} '>";
-		_deviceEmptyContainerTemplate	+= 		"<div class='card xxx altui-device' data-altuiid='{1}' id='{0}'>"
-		_deviceEmptyContainerTemplate	+= 	  	"</div>";
-		_deviceEmptyContainerTemplate	+= 	"</div>";		
-		
+		_deviceEmptyContainerTemplate	+=		"<div class='card xxx altui-device' data-altuiid='{1}' id='{0}'>"
+		_deviceEmptyContainerTemplate	+=		"</div>";
+		_deviceEmptyContainerTemplate	+=	"</div>";
+
 	// 0: variable , 1: value , 2: service , 3: id, 4: push btn color class, 5: watch provider name
-	var _deviceVariableLineTemplate = "  <tr>";
-		// deviceVariableLineTemplate += "         <th scope='row'>1</th>";
-		_deviceVariableLineTemplate += "         <td class='altui-variable-title'><span title='{2}'>{0}</span></td>";
-		_deviceVariableLineTemplate += 	("<td class='altui-variable-buttons'>"+
+	var _deviceVariableLineTemplate = "	 <tr>";
+		// deviceVariableLineTemplate += "		   <th scope='row'>1</th>";
+		_deviceVariableLineTemplate += "		 <td class='altui-variable-title'><span title='{2}'>{0}</span></td>";
+		_deviceVariableLineTemplate +=	("<td class='altui-variable-buttons'>"+
 			smallbuttonTemplate.format( '{3}', 'm-1 altui-variable-history', glyphTemplate.format( "calendar", _T("History"), "" ),_T('History'))+
 			smallbuttonTemplate.replace('btn-light','').format( '{3}', 'm-1 altui-variable-push {4}', glyphTemplate.format( "signal", _T("Push to {5}"), "" ),_T("Push to {5}"))+
 			smallbuttonTemplate.format( '{3}', 'm-1 altui-variable-delete', deleteGlyph,_T('Delete'))+
 			"</td>");
-		_deviceVariableLineTemplate += "         <td id='{3}' class='altui-variable-value' >{1}</td>";
-		_deviceVariableLineTemplate += "     </tr>";
+		_deviceVariableLineTemplate += "		 <td id='{3}' class='altui-variable-value' >{1}</td>";
+		_deviceVariableLineTemplate += "	 </tr>";
 
 	// 0:bootgrid classes 1:altuiid 2:htmlid 3: name 4:right header buttons 5:panel body 6:left header buttons
 	var _workflowContainerTemplate=		"<div class='{0} '>";
-		_workflowContainerTemplate	+= 		"<div class='card xxx altui-workflow' data-altuiid='{1}' id='{2}'>"
-		_workflowContainerTemplate	+= 		"<div class='card-header altui-workflow-heading'>{6} {4}<div class='text-muted pull-right'> <small>#{1}</small></div> <span class='altui-workflow-title-name'><small>{3}</small></span>"
-		_workflowContainerTemplate	+= 	  	"</div>";
-		_workflowContainerTemplate	+= 		"<div class='card-body altui-workflow-body'>{5}"
-		_workflowContainerTemplate	+= 	  	"<div class='altui-active-state-name'></div>";
-		_workflowContainerTemplate	+= 	  	"</div>";
-		_workflowContainerTemplate	+= 	  	"</div>";
-		_workflowContainerTemplate	+= 	"</div>";		
+		_workflowContainerTemplate	+=		"<div class='card xxx altui-workflow' data-altuiid='{1}' id='{2}'>"
+		_workflowContainerTemplate	+=		"<div class='card-header altui-workflow-heading'>{6} {4}<div class='text-muted pull-right'> <small>#{1}</small></div> <span class='altui-workflow-title-name'><small>{3}</small></span>"
+		_workflowContainerTemplate	+=		"</div>";
+		_workflowContainerTemplate	+=		"<div class='card-body altui-workflow-body'>{5}"
+		_workflowContainerTemplate	+=		"<div class='altui-active-state-name'></div>";
+		_workflowContainerTemplate	+=		"</div>";
+		_workflowContainerTemplate	+=		"</div>";
+		_workflowContainerTemplate	+=	"</div>";
 
 	var _wattTemplate="<div class='altui-watts '>{0} <span class='altui-watts-unit'>{1}</span></div>";
 	return {
@@ -280,7 +280,7 @@ var Localization = ( function (undefined) {
 		_terms = $.extend(_terms,terms);
 		_unknown_terms = {};
 	};
-	
+
 	var _dumpTerms = function() {
 		var text = "browser query:{3} userlanguage:{0} language:{1}\n Unknown terms:{2}".format(
 			window.navigator.userLanguage || "",
@@ -304,19 +304,19 @@ var Localization = ( function (undefined) {
 		dump : _dumpTerms,
 		setTitle : _setTitle,	// (str)
 		forceOption : _forceOption,	// (name, value)
-		setBrandingCallback : function(cb) { _brandingCallback =  $.isFunction(cb) ? cb : null  },	// func
+		setBrandingCallback : function(cb) { _brandingCallback =  $.isFunction(cb) ? cb : null	},	// func
 		setRegistration : function(b) { ALTUI_registered = b;	},
-		doBranding : function() { 
-			if ($.isFunction(_brandingCallback)) { (_brandingCallback)() } 
-		} 
+		doBranding : function() {
+			if ($.isFunction(_brandingCallback)) { (_brandingCallback)() }
+		}
 	}
 })();
 
 var _T = Localization._T;
 
-//=====================================================================		
+//=====================================================================
 // Scene Editor
-//=====================================================================		
+//=====================================================================
 //action "{"device":4,"service":"urn:upnp-org:serviceId:altui1","action":"SetDebug","arguments":[{"name":"newDebugMode","value":"1"}]}"
 //helper formatting functions
 function _displayDeviceName(controller,deviceid) {
@@ -364,7 +364,7 @@ function _formatTrigger(controller,trigger)
 	line.descr = event.label.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>");
 	line.condition = "";
 	line.lastrun = trigger.last_run ? _toIso(new Date(trigger.last_run*1000)," ") : "";
-	
+
 	if (trigger.arguments && event.argumentList)  {
 		$.each(trigger.arguments, function( idx,argument) {
 			var id = argument.id;
@@ -377,7 +377,7 @@ function _formatTrigger(controller,trigger)
 						$.each(eventarg.allowedValueList,function(j,possiblevalue) {
 							$.each(possiblevalue,function(k,v) {
 								if (k != "HumanFriendlyText") {
-									if  ( (v == value) && (possiblevalue.HumanFriendlyText!=undefined) ) {
+									if	( (v == value) && (possiblevalue.HumanFriendlyText!=undefined) ) {
 										value = possiblevalue.HumanFriendlyText.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>").replace("_ARGUMENT_VALUE_",value)
 									}
 								}
@@ -388,16 +388,16 @@ function _formatTrigger(controller,trigger)
 					line.condition +="{0} {1} {2}".format(
 						eventarg.name,
 						eventarg.comparisson,
-						value );	
+						value );
 					return false;	// we had a match
-				}				
+				}
 			});
 		});
 	} else {
 		var lines = [];
 		if (event.serviceStateTable)
 			$.each(event.serviceStateTable, function(key,serviceState){
-				lines.push("{0} {1} {2}".format( key, serviceState.comparisson, serviceState.value));					
+				lines.push("{0} {1} {2}".format( key, serviceState.comparisson, serviceState.value));
 			});
 		line.condition += lines.join(" AND ");
 	}
@@ -430,7 +430,7 @@ var HouseModeEditor = (function() {
 	function _runActions( domroot, onclickCB ) {
 		$(domroot)
 			.off("click",".altui-housemode")
-			.on("click",".altui-housemode",function(){ 
+			.on("click",".altui-housemode",function(){
 				var div = $(this).find("div.housemode");
 				if (div.hasClass("preset_selected"))
 					div.removeClass("preset_selected").addClass("preset_unselected");
@@ -441,10 +441,10 @@ var HouseModeEditor = (function() {
 			})
 	};
 	function _getSelectedLabels() {
-		var html = $.map( $("div.housemode.preset_selected") , function(elem,idx) {	
+		var html = $.map( $("div.housemode.preset_selected") , function(elem,idx) {
 			var id = parseInt( $(elem).prop('id').substring("altui-mode".length) ) - 1;
 			return _HouseModes[ id ].text;
-		}).join(",");		
+		}).join(",");
 		return html;
 	};
 	function _getSelectedModes() {
@@ -458,7 +458,7 @@ var HouseModeEditor = (function() {
 	return {
 		displayModes : _displayModes,
 		displayModes2 : _displayModes2,
-		runActions : _runActions,					// ( domroot, onclickCB ) 
+		runActions : _runActions,					// ( domroot, onclickCB )
 		getSelectedLabels : _getSelectedLabels,
 		getSelectedModes : _getSelectedModes
 	}
@@ -472,7 +472,7 @@ var SpeechManager = (function() {
 	var _rules = null;
 	var timer = null;
 	var timer_duration = 3000;
-	
+
 	function _clearTimer() {
 		if (timer) {
 			clearTimeout(timer)
@@ -486,7 +486,7 @@ var SpeechManager = (function() {
 				recognition.stop();
 		},timer_duration);
 	}
-	
+
 	if (typeof(webkitSpeechRecognition) !=undefined ) {
 		// Save a reference to the global object (window in the browser)
 		var root = this;
@@ -505,17 +505,17 @@ var SpeechManager = (function() {
 			recognition.continuous = true;
 			recognition.interimResults = true;
 
-			recognition.onstart = function() { 
+			recognition.onstart = function() {
 				$("#altui-speech-button").addClass('btn-danger').removeClass('btn-light');
 				started = true;
 				_setTimer();
 			}
-			recognition.onerror = function(event) { 
-				PageMessage.message(_T("HTML5 Speech Recognition reported an error: "+event.error),"info");		
+			recognition.onerror = function(event) {
+				PageMessage.message(_T("HTML5 Speech Recognition reported an error: "+event.error),"info");
 				started = false;
 				_clearTimer();
 			}
-			recognition.onend = function() { 
+			recognition.onend = function() {
 				started = false;
 				_clearTimer();
 				$("#altui-speech-button").removeClass('btn-danger').addClass('btn-light');
@@ -523,7 +523,7 @@ var SpeechManager = (function() {
 				//onExecuteResults();
 				final_transcript = [];
 			}
-			recognition.onresult = function(event) { 
+			recognition.onresult = function(event) {
 				_clearTimer();
 				var interim_transcript = '';
 				for (var i = event.resultIndex; i < event.results.length; ++i) {
@@ -539,12 +539,12 @@ var SpeechManager = (function() {
 				_setTimer();
 			}
 		} else {
-			console.log("ALTUI:HTML5 Speech Recognition (xxxSpeechRecognition) not supported in this browser");		
-		}			
+			console.log("ALTUI:HTML5 Speech Recognition (xxxSpeechRecognition) not supported in this browser");
+		}
 	} else {
-			console.log("ALTUI:HTML5 Speech Recognition (webkitSpeechRecognition) not supported in this browser");		
+			console.log("ALTUI:HTML5 Speech Recognition (webkitSpeechRecognition) not supported in this browser");
 	};
-	
+
 	function onExecuteResults(cmd) {
 
 		var name2AltuiID = {
@@ -558,7 +558,7 @@ var SpeechManager = (function() {
 					{ name:_T("Custom Pages"), page:"pageUsePages" },
 				]
 		};
-		
+
 		function _spochen(stringToReplace) {
 			stringToReplace = stringToReplace.toLowerCase();
 			stringToReplace = stringToReplace.replace(/[_-]/g, ' ');
@@ -566,7 +566,7 @@ var SpeechManager = (function() {
 			// stringToReplace = stringToReplace.replace(/[^\w\s]/gi, '');
 			return stringToReplace;
 		}
-		
+
 		function _onExecuteCommand(command) {
 			var execution_done = false;
 			// search for a rule that matches
@@ -633,7 +633,7 @@ var SpeechManager = (function() {
 			_execute_callback = execute_callback;
 		},
 		getGlyph: function() {
-			return '<i class="fa fa-volume-up" aria-hidden="true"></i>';		
+			return '<i class="fa fa-volume-up" aria-hidden="true"></i>';
 		},
 		getHtml: function() {
 			if (recognition==null) return "";
@@ -653,7 +653,7 @@ var SpeechManager = (function() {
 				else
 					recognition.start();
 			} catch ( e ) {
-				PageMessage.message(_T("HTML5 Speech Recognition raised an exception"),"warning");						
+				PageMessage.message(_T("HTML5 Speech Recognition raised an exception"),"warning");
 			}
 		}
 	}
@@ -662,30 +662,30 @@ var SpeechManager = (function() {
 var LuaEditor = (function () {
 	//0: title // 1: Lua code to edit
 	var luaEditorModalTemplate = "<div id='luaEditorModal' class='modal fade'>";
-	luaEditorModalTemplate += "  <div class='modal-dialog modal-lg'>";
-	luaEditorModalTemplate += "    <div class='modal-content'>";
-	luaEditorModalTemplate += "      <div class='modal-header'>";
-	luaEditorModalTemplate += "        <h5 class='modal-title'>{0}</h5>";
-	luaEditorModalTemplate += "        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-	luaEditorModalTemplate += "      </div>";
-	luaEditorModalTemplate += "      <div class='modal-body'>";
-	luaEditorModalTemplate += "      	<div class='form-group'>";
-	luaEditorModalTemplate += "      		<label for='altui-editor-text'>{0}</label>";
-	// luaEditorModalTemplate += "      		<textarea id='altui-luacode-text' rows='10' class='form-control' placeholder='enter code here'>{0}</textarea>";
-	luaEditorModalTemplate += "      		<div id='altui-editor-text'>{1}</div>";
-	luaEditorModalTemplate += "      	</div>";
-	luaEditorModalTemplate += "      </div>";
-	luaEditorModalTemplate += "      <div class='modal-footer'>";
-	// luaEditorModalTemplate += "        <button type='button' class='btn btn-light' data-dismiss='modal'>"+_T("Close")+"</button>";
-	// luaEditorModalTemplate += "        <button type='button' class='btn btn-light altui-luacode-test' >"+_T("Test Code")+"</button>";
-	// luaEditorModalTemplate += "        <button type='button' class='btn btn-primary altui-luacode-save' data-dismiss='modal'>"+_T("Save Changes")+"</button>";
-	luaEditorModalTemplate += "      </div>";
-	luaEditorModalTemplate += "    </div><!-- /.modal-content -->";
-	luaEditorModalTemplate += "  </div><!-- /.modal-dialog -->";
+	luaEditorModalTemplate += "	 <div class='modal-dialog modal-lg'>";
+	luaEditorModalTemplate += "	   <div class='modal-content'>";
+	luaEditorModalTemplate += "		 <div class='modal-header'>";
+	luaEditorModalTemplate += "		   <h5 class='modal-title'>{0}</h5>";
+	luaEditorModalTemplate += "		   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
+	luaEditorModalTemplate += "		 </div>";
+	luaEditorModalTemplate += "		 <div class='modal-body'>";
+	luaEditorModalTemplate += "			<div class='form-group'>";
+	luaEditorModalTemplate += "				<label for='altui-editor-text'>{0}</label>";
+	// luaEditorModalTemplate += "				<textarea id='altui-luacode-text' rows='10' class='form-control' placeholder='enter code here'>{0}</textarea>";
+	luaEditorModalTemplate += "				<div id='altui-editor-text'>{1}</div>";
+	luaEditorModalTemplate += "			</div>";
+	luaEditorModalTemplate += "		 </div>";
+	luaEditorModalTemplate += "		 <div class='modal-footer'>";
+	// luaEditorModalTemplate += "		  <button type='button' class='btn btn-light' data-dismiss='modal'>"+_T("Close")+"</button>";
+	// luaEditorModalTemplate += "		  <button type='button' class='btn btn-light altui-luacode-test' >"+_T("Test Code")+"</button>";
+	// luaEditorModalTemplate += "		  <button type='button' class='btn btn-primary altui-luacode-save' data-dismiss='modal'>"+_T("Save Changes")+"</button>";
+	luaEditorModalTemplate += "		 </div>";
+	luaEditorModalTemplate += "	   </div><!-- /.modal-content -->";
+	luaEditorModalTemplate += "	 </div><!-- /.modal-dialog -->";
 	luaEditorModalTemplate += "</div><!-- /.modal -->";
 
 	// $(".altui-mainpanel").append(luaEditorModalTemplate);
-	
+
 	return {
 		openDialog: function(luacode, onSaveCB, language, options ) {
 			// Set Proper defaults
@@ -731,13 +731,13 @@ var LuaEditor = (function () {
 						(options.onDisplay)(editor);
 					}
 				})
-				.on("click touchend",".altui-luacode-test",function(){ 
+				.on("click touchend",".altui-luacode-test",function(){
 					var lua = (editor) ? editor.getValue() : $("#altui-editor-text textarea").text();
 					MultiBox.runLua(0,lua, function(result) {
 						alert(JSON.stringify(result));
 					});
 				})
-				.on("click touchend",".altui-luacode-save",function(){ 
+				.on("click touchend",".altui-luacode-save",function(){
 					// Save Callback
 					var code = (editor) ? editor.getValue() : $("#altui-editor-text textarea").val();
 					onSaveCB(code);
@@ -748,19 +748,19 @@ var LuaEditor = (function () {
 })();
 
 var DialogManager = ( function() {
-	var helpGlyph = '<i class="fa fa-question text-primary" aria-hidden="true" title="Help"></i>' 
+	var helpGlyph = '<i class="fa fa-question text-primary" aria-hidden="true" title="Help"></i>'
 	// this method assumes htmlDialog id property is equal to 'name'
 	function _registerDialog( name, htmlDialog ) {
 		var dialog = $("div#dialogs div#"+name);
-		if (dialog.length ==0) 
+		if (dialog.length ==0)
 			$("div#dialogs").append(htmlDialog);
 		else
 			$(dialog).replaceWith(htmlDialog);
 		dialog = $("div#dialogs div#"+name);
 		// remove all callbacks for now
-		$(dialog).off();			
+		$(dialog).off();
 		$("div#dialogs").off();
-		return  dialog;
+		return	dialog;
 	};
 	function _clearDialog( name ) {
 		$("div#dialogs div#"+name).remove();
@@ -790,7 +790,7 @@ var DialogManager = ( function() {
 			});
 		}
 	};
-	
+
 	function _getDeviceServiceVariableSelect(device, service, variable, filterByServiceID) {
 		// var device = MultiBox.getDeviceByID( deviceid );
 		var select = $("<select id='altui-select-variable' class='form-control'></select>");
@@ -804,7 +804,7 @@ var DialogManager = ( function() {
 				}
 			});
 		}
-		return select.wrap( "<div></div>" ).parent().html();			
+		return select.wrap( "<div></div>" ).parent().html();
 	};
 
 	function _getDeviceActionSelect(id, device, actiondescriptor, filterByServiceID, cbfunc) {
@@ -833,24 +833,24 @@ var DialogManager = ( function() {
 			});
 		});
 	};
-		
+
 	function _createSpinningDialog(message,glyph) {
 				// 0: title, 1: body
 		var glyph2 = glyph || '<i class="fa fa-spinner fa-pulse fa-3x fa-fw text-warning"></i><span class="sr-only">Loading...</span>'
-		
+
 		var defaultSpinDialogModalTemplate="";
 		defaultSpinDialogModalTemplate = "<div id='dialogModal' class='modal' data-backdrop='static' data-keyboard='false'>";
-		defaultSpinDialogModalTemplate += "  <div class='modal-dialog modal-sm'>";
-		defaultSpinDialogModalTemplate += "    <div class='modal-content'>";
-		defaultSpinDialogModalTemplate += "      <div class='modal-body'>";
-		defaultSpinDialogModalTemplate += "      <div class='row justify-content-between'>";
-		defaultSpinDialogModalTemplate += "      <div class='col-2'>{0}</div> <div class='col-9'>{1}</div>";
-		defaultSpinDialogModalTemplate += "      </div>";
-		defaultSpinDialogModalTemplate += "      </div>";
-		defaultSpinDialogModalTemplate += "    </div><!-- /.modal-content -->";
-		defaultSpinDialogModalTemplate += "  </div><!-- /.modal-dialog -->";
+		defaultSpinDialogModalTemplate += "	 <div class='modal-dialog modal-sm'>";
+		defaultSpinDialogModalTemplate += "	   <div class='modal-content'>";
+		defaultSpinDialogModalTemplate += "		 <div class='modal-body'>";
+		defaultSpinDialogModalTemplate += "		 <div class='row justify-content-between'>";
+		defaultSpinDialogModalTemplate += "		 <div class='col-2'>{0}</div> <div class='col-9'>{1}</div>";
+		defaultSpinDialogModalTemplate += "		 </div>";
+		defaultSpinDialogModalTemplate += "		 </div>";
+		defaultSpinDialogModalTemplate += "	   </div><!-- /.modal-content -->";
+		defaultSpinDialogModalTemplate += "	 </div><!-- /.modal-dialog -->";
 		defaultSpinDialogModalTemplate += "</div><!-- /.modal -->";
-		return DialogManager.registerDialog('dialogModal',defaultSpinDialogModalTemplate.format( 
+		return DialogManager.registerDialog('dialogModal',defaultSpinDialogModalTemplate.format(
 			glyph2,
 			message || "")
 		);
@@ -859,16 +859,16 @@ var DialogManager = ( function() {
 		var result = false;
 		var dialog = DialogManager.registerDialog('dialogModal',
 						defaultDialogModalTemplate.format( 'dialogModal',
-								title, 		// title
+								title,		// title
 								message,	// body
 								size,		// size
 								glyph));		// icon
 		$.each(buttons,function(i,button) {
 			DialogManager.dlgAddDialogButton(dialog, button.isdefault, button.label, '', button.id , { 'data-dismiss':'modal'} );
 		});
-		
+
 		// buttons
-		$('div#dialogs')		
+		$('div#dialogs')
 			.off('click',"div#dialogModal button.btn-primary")
 			.on( 'click',"div#dialogModal button.btn-primary", function() {
 				result = true;
@@ -880,10 +880,10 @@ var DialogManager = ( function() {
 					(cbfunc)(result);
 			});
 
-		dialog.modal({                    // wire up the actual modal functionality and show the dialog
+		dialog.modal({					  // wire up the actual modal functionality and show the dialog
 		  "backdrop"  : "static",
 		  "keyboard"  : true,
-		  "show"      : true                     // ensure the modal is shown immediately
+		  "show"	  : true					 // ensure the modal is shown immediately
 		});
 		return result;
 	}
@@ -907,8 +907,8 @@ var DialogManager = ( function() {
 		var dialog = DialogManager.createPropertyDialog(_T('Trigger'));
 		var device = MultiBox.getDeviceByID( controller ,trigger.device);
 		var event = _findEventFromTriggerTemplate( device, trigger.template );
-		DialogManager.dlgAddLine( dialog , "TriggerName", _T("TriggerName"), trigger.name, "", {required:''} ); 
-		DialogManager.dlgAddDevices( dialog , '', device ? device.altuiid : NULL_DEVICE, 
+		DialogManager.dlgAddLine( dialog , "TriggerName", _T("TriggerName"), trigger.name, "", {required:''} );
+		DialogManager.dlgAddDevices( dialog , '', device ? device.altuiid : NULL_DEVICE,
 			function() {			// callback
 				DialogManager.dlgAddEvents( dialog, "Events", "altui-select-events",device ? device.altuiid : NULL_DEVICE , trigger.template, trigger.arguments );
 				$('div#dialogModal').modal();
@@ -917,7 +917,7 @@ var DialogManager = ( function() {
 				return (MultiBox.controllerOf(device.altuiid).controller == controller);
 			}
 		);
-		$('div#dialogs').on( 'submit',"div#dialogModal form",  function( event ) {	
+		$('div#dialogs').on( 'submit',"div#dialogModal form",  function( event ) {
 			trigger.name = $("#altui-widget-TriggerName").val();
 			trigger.enabled = 1;
 			trigger.device = parseInt(MultiBox.controllerOf( $("#altui-select-device").val() ).id) ;
@@ -929,10 +929,10 @@ var DialogManager = ( function() {
 				trigger.arguments.push( {id:id, value: $(elem).val() } );
 			});
 			// on UI7 10, for motion sensor which have no argument list in their  eventlist definition
-			// it seems that passing at least {id:1} is mandatory 
+			// it seems that passing at least {id:1} is mandatory
 			if (trigger.arguments.length==0)
 				trigger.arguments.push( {id:1} );
-			
+
 			if ((trigger.device>0) && (trigger.template>0))
 			{
 				$('div#dialogModal').modal('hide');
@@ -942,17 +942,17 @@ var DialogManager = ( function() {
 			}
 		});
 	}
-	
+
 	function _triggerUsersDialog(trigger,controller,cbfunc) {
 		var dialog = DialogManager.createPropertyDialog(_T('Notify Users'));
 		var users = MultiBox.getUsersSync(controller);
 		var selectedusers = (trigger.users || "").toString().split(",");
 		$.each(users, function(idx,user){
-			var inarray  = $.inArray(user.id.toString(),selectedusers);
+			var inarray	 = $.inArray(user.id.toString(),selectedusers);
 			DialogManager.dlgAddCheck(dialog,'user-'+user.id,(inarray!=-1),user.Name,'altui-notify-user');
 		});
 		$('div#dialogModal').modal();
-		$('div#dialogs')	
+		$('div#dialogs')
 			.off('submit',"div#dialogModal form")
 			.on( 'submit',"div#dialogModal form", function(event) {
 				var lines=[];
@@ -972,15 +972,15 @@ var DialogManager = ( function() {
 					(cbfunc)(event);
 			});
 	};
-	
+
 	function _createPropertyDialog(title)
 	{
 		var dialog =  DialogManager.registerDialog('dialogModal',
 						defaultDialogModalTemplate.format( 'dialogModal',
-								title, 			// title
+								title,			// title
 								"",				// body
 								"modal-lg",	// size
-								""	// glyph icon		
+								""	// glyph icon
 							));
 		DialogManager.dlgAddDialogButton(dialog, true, _T("Save Changes"));
 		$("div#dialogModal").off('click', '.altui-help-button')
@@ -991,11 +991,11 @@ var DialogManager = ( function() {
 				alert(text);
 				return false;
 			});
-		return dialog; 
+		return dialog;
 	};
-	
+
 	function _dlgAddDialogButton(dialog, bSubmit, label, extraclass, id, extraattrs) {
-		var html = "<button type='{0}' class='btn {2} {3}' {4} id='{5}'>{1}</button>".format( 
+		var html = "<button type='{0}' class='btn {2} {3}' {4} id='{5}'>{1}</button>".format(
 			(bSubmit ? 'submit' : 'button'),
 			label,
 			'btn-'+(bSubmit ? 'primary' : 'default'),
@@ -1005,7 +1005,7 @@ var DialogManager = ( function() {
 			)
 		$(dialog).find(".modal-footer").append(html);
 	};
-	
+
 	function _dlgAddCheck(dialog, name, value, label, extraclass)
 	{
 		var propertyline = "";
@@ -1023,7 +1023,7 @@ var DialogManager = ( function() {
 		var selected_days = value.split(',');
 		var propertyline = "";
 		propertyline += "<div class='form-group' id='altui-widget-"+name+"'>";
-		propertyline += "	<label  title='"+name+"'>"+label+": </label>";
+		propertyline += "	<label	title='"+name+"'>"+label+": </label>";
 		$.each(_timerDOW, function(idx,element) {
 			// propertyline += "<div class='checkbox'>";
 			propertyline +="<label class='checkbox-inline'>";
@@ -1050,7 +1050,7 @@ var DialogManager = ( function() {
 			});
 		});
 	};
-	
+
 	function _dlgAddColorPicker(dialog, name, label, help, value, options)
 	{
 		var optstr = HTMLUtils.optionsToString(options);
@@ -1065,8 +1065,8 @@ var DialogManager = ( function() {
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 		$("#altui-widget-{0}".format(name)).spectrum({
-			preferredFormat: 'hex',			
-			replacerClassName: 'altui-colorpicker-replacer',	
+			preferredFormat: 'hex',
+			replacerClassName: 'altui-colorpicker-replacer',
 		});
 	};
 
@@ -1081,7 +1081,7 @@ var DialogManager = ( function() {
 		propertyline += "	<label for='altui-widget-"+name+"' title='"+(help || '')+"'>"+label+"</label>";
 		if (help)
 			propertyline += "	<button data-toggle='tooltip' data-placement='top' title='{0}' type='button' class='btn btn-light btn-sm altui-help-button' data-text='{0}'>{1}</button>".format(help||'' , helpGlyph);
-		
+
 		propertyline += "<div class='input-group'>";
 			propertyline += "<textarea rows='1' cols='50' id='altui-widget-"+name+"' class='form-control' "+optstr+"  "+placeholder+" >"+value.escapeXml()+"</textarea>";
 			propertyline += "<input type='hidden' id='altui-xml-"+name+"' class='form-control' value='"+xml.escapeXml()+"' ></input>";
@@ -1089,10 +1089,10 @@ var DialogManager = ( function() {
 		propertyline += "</div>";
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
-		
+
 		// init Ace editor
 		// var id = 'altui-widget-'+name
-		// var init =	MyLocalStorage.getSettings("EditorTheme") || "monokai";		
+		// var init =	MyLocalStorage.getSettings("EditorTheme") || "monokai";
 		// var editor = ace.edit( id );
 		// editor.getSession().setMode( "ace/mode/lua" );
 		// editor.setTheme( "ace/theme/"+init );
@@ -1107,12 +1107,12 @@ var DialogManager = ( function() {
 				// }
 			// });
 		// },500);
-				
+
 		$("#altui-widget-LuaExpression").on("change",function() {
 			$("#altui-xml-LuaExpression").val( "" );
 		});
 	}
-	function _dlgAddHtml(dialog,html) 
+	function _dlgAddHtml(dialog,html)
 	{
 		$(dialog).find(".altui-dialog-row").append(html);
 	}
@@ -1147,22 +1147,22 @@ var DialogManager = ( function() {
 		)
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
-		
+
 		// init ACE editor
 		var editor = null;
 		editor = ace.edit( "altui-editor-text-"+name );
 		editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
 		editor.getSession().setMode( "ace/mode/"+language);
 		editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
-		
+
 		setTimeout(function() {
 			var parentwidth = $("#altui-editor-text-"+name).parent().width()
 			$("#altui-editor-text-"+name).resizable({
 				// containment: "parent",
 				maxWidth:parentwidth,
-				stop: function( event, ui ) { 
-					if (editor) 
-						editor.resize(); 
+				stop: function( event, ui ) {
+					if (editor)
+						editor.resize();
 				}
 			});
 		},500);
@@ -1200,7 +1200,7 @@ var DialogManager = ( function() {
 		propertyline += "</select>";
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
-	};	
+	};
 	function _dlgAddSelectGlyph(dialog, name, label, value, lines, htmloptions) {
 		var optstr = HTMLUtils.optionsToString(htmloptions);
 		value = (value==undefined) ? '' : value ;
@@ -1243,7 +1243,7 @@ var DialogManager = ( function() {
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 	};
-	
+
 	function _dlgAddTime(dialog, name, value, _timerRelative)
 	{
 		function _decomposeTimer( value ) {
@@ -1287,11 +1287,11 @@ var DialogManager = ( function() {
 						newvalue = value;
 					}
 				}
-			}	
-			return 	{ value: newvalue, iKind: iKind };
+			}
+			return	{ value: newvalue, iKind: iKind };
 		};
-		
-		var pattern = "^[0-2][0-9][:]{1}[0-5][0-9][:][0-5][0-9]$"; 
+
+		var pattern = "^[0-2][0-9][:]{1}[0-5][0-9][:][0-5][0-9]$";
 		var res = _decomposeTimer((value==undefined) ? '00:00:00' : value );
 		var propertyline = "";
 		propertyline += "<div class='form-group'>";
@@ -1308,7 +1308,7 @@ var DialogManager = ( function() {
 		propertyline += "</div>";	// form group
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 	};
-	
+
 	function _dlgAddTimer(dialog, name, label, value, htmloptions )
 	{
 		var optstr = HTMLUtils.optionsToString(htmloptions);
@@ -1319,7 +1319,7 @@ var DialogManager = ( function() {
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 	};
-	
+
 	function _dlgAddDateTime(dialog, name, value )
 	{
 		var propertyline = "";
@@ -1329,7 +1329,7 @@ var DialogManager = ( function() {
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 	};
-	
+
 	function _dlgAddHouseMode(dialog, name, label, modes ) {
 		var propertyline = "";
 		propertyline += "<div class='form-group'>";
@@ -1348,19 +1348,19 @@ var DialogManager = ( function() {
 			var device = MultiBox.getDeviceByAltuiID(widget.properties.deviceid);
 			$("#altui-select-variable").replaceWith( _getDeviceServiceVariableSelect( device , widget.properties.service, widget.properties.variable, serviceId ) );
 		});
-		
+
 		//service & variables
 		widget.properties.deviceid = $(htmlDeviceName).val();
 		var device = MultiBox.getDeviceByAltuiID(widget.properties.deviceid);
 		var propertyline = "";
 		propertyline += "<div class='form-group'>";
 		propertyline += "	<label for='altui-widget-servicevariable'>Variable</label>";
-		propertyline +=     _getDeviceServiceVariableSelect( device , widget.properties.service, widget.properties.variable, serviceId );
+		propertyline +=		_getDeviceServiceVariableSelect( device , widget.properties.service, widget.properties.variable, serviceId );
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 		cbfunc();
 	};
-	
+
 	function _pickDevice(devices,deviceid,name) {
 		var select = $("<select id='{0}' class='form-control'></select>".format(name));
 		select.append("<option value='0' {0}>Select ...</option>".format( deviceid==NULL_DEVICE ? 'selected' : ''));
@@ -1377,22 +1377,22 @@ var DialogManager = ( function() {
 			$.each(rooms[name], function(idx,device) {
 				select.append('<option value={0} {3}>&nbsp;&nbsp;&nbsp;&nbsp;#{2} {1}</option>'.format( device.altuiid, device.name, device.altuiid, deviceid==device.altuiid ? 'selected' : ''));
 			});
-		});		
+		});
 		return select.wrap( "<div></div>" ).parent().html();
 	};
-	
+
 	function _dlgAddDevices2(dialog, name, deviceid, title, devices) {
 		// all devices are enumarated
 		var name = name || 'altui-select-device';
 		var propertyline = "";
 		propertyline += "<div class='form-group'>";
 		propertyline += "	<label for='altui-widget-device'>"+title+"</label>";
-		propertyline +=     _pickDevice(devices,deviceid,name);
+		propertyline +=		_pickDevice(devices,deviceid,name);
 		propertyline += "</div>";
-		
+
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 };
-	
+
 	function _dlgAddDevices(dialog, name, deviceid, cbfunc, filterfunc)
 	{
 		var name = name || 'altui-select-device';
@@ -1404,21 +1404,21 @@ var DialogManager = ( function() {
 				var propertyline = "";
 				propertyline += "<div class='form-group'>";
 				propertyline += "	<label for='altui-select-device'>"+_T("Device")+"</label>";
-				propertyline +=     _pickDevice(devices,deviceid,name);
+				propertyline +=		_pickDevice(devices,deviceid,name);
 				propertyline += "</div>";
-				
+
 				$(dialog).find(".altui-dialog-row").append(propertyline);
 				cbfunc(devices);
 			}
 		);
 	};
-	
+
 	function _dlgAddWorkflowStates(dialog,name,label,exclusion_altuiid,waitforState) {
 		var name = name || 'altui-select-workflowstate';
 		var workflows = WorkflowManager.getWorkflows()
 		var propertyline = "";
 		propertyline += " <div class='form-group'>";
-		propertyline += "	<label  for='{0}' title='{0}'>{1}: </label>".format(name,label);
+		propertyline += "	<label	for='{0}' title='{0}'>{1}: </label>".format(name,label);
 
 		propertyline += "<select required id='"+name+"' class='form-control'>"
 		$.each(workflows, function(i,workflow) {
@@ -1436,25 +1436,25 @@ var DialogManager = ( function() {
 		propertyline += "</select>"
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 	};
-	
+
 	function _dlgAddScenes(dialog, widget, cbfunc)
 	{
 		var select = $("<select id='altui-widget-sceneid' class='form-control'></select>");
 		select.append("<option value='0' {0}>Select ...</option>".format( widget.properties.sceneid==NULL_SCENE ? 'selected' : ''));
-		MultiBox.getScenes( 
+		MultiBox.getScenes(
 			function(idx, scene) {
-				select.append('<option value={0} {2}>{1}</option>'.format( scene.altuiid, scene.name, widget.properties.sceneid==scene.altuiid ? 'selected' : ''));				
-			}, 
-			null, 
+				select.append('<option value={0} {2}>{1}</option>'.format( scene.altuiid, scene.name, widget.properties.sceneid==scene.altuiid ? 'selected' : ''));
+			},
+			null,
 			function(scenes) {
 				var propertyline = "";
-				propertyline += "      	<div class='form-group'>";
-				propertyline += "      		<label for='altui-widget-sceneid'>Scene to Run</label>";
-				propertyline += 			select.wrap( "<div></div>" ).parent().html();
-				propertyline += "      	</div>";
+				propertyline += "		<div class='form-group'>";
+				propertyline += "			<label for='altui-widget-sceneid'>Scene to Run</label>";
+				propertyline +=				select.wrap( "<div></div>" ).parent().html();
+				propertyline += "		</div>";
 				$(dialog).find(".altui-dialog-row").append(propertyline);
 				cbfunc();
-			} 
+			}
 		);
 	};
 
@@ -1469,7 +1469,7 @@ var DialogManager = ( function() {
 			action: val[1]
 		};
 	};
-	
+
 	function _dlgAddEvents(dialog, label, htmlid, deviceid, eventid, args)
 	{
 		var selected_event = null;
@@ -1478,13 +1478,13 @@ var DialogManager = ( function() {
 			var value='';
 			$.each(args,function(idx,arg) {
 				if (arg.id==id) {
-					value = (arg.value!=undefined) ? arg.value : defaultValue; 
+					value = (arg.value!=undefined) ? arg.value : defaultValue;
 					return false;
 				}
 			});
 			return value;
 		};
-		
+
 		function _getSelectForEvents( events ) {
 			var select = $("<select required id='"+htmlid+"' class='form-control'></select>");
 			select.append("<option value='0' {0}>Select ...</option>".format( eventid==0 ? 'selected' : ''));
@@ -1516,7 +1516,7 @@ var DialogManager = ( function() {
 				return ret;
 			};
 			var propertyline="";
-			if ((selected_event!=null) && (selected_event.argumentList)) 
+			if ((selected_event!=null) && (selected_event.argumentList))
 			{
 				$.each(selected_event.argumentList, function(idx,eventarg) {
 					propertyline += "<div class='form-group'>";
@@ -1534,14 +1534,14 @@ var DialogManager = ( function() {
 						propertyline += "	<input required id='altui-event-param{0}' type='text' class='form-control' value='{1}' placeholder='default to {2}'></input>"
 							.format(eventarg.id, selectedvalue, eventarg.defaultValue || '' );
 					}
-						
+
 					propertyline += "</div>";
-					// (argument.value !=undefined) ? argument.value : eventarg.defaultValue );	
+					// (argument.value !=undefined) ? argument.value : eventarg.defaultValue );
 				});
-			} 
+			}
 			return propertyline;
 		}
-		
+
 		//callback, if select device changes, we need to update actions
 		$("#altui-select-device").on("change",function() {
 			deviceid = $(this).val();
@@ -1553,7 +1553,7 @@ var DialogManager = ( function() {
 			$("select#"+htmlid).replaceWith( _getSelectForEvents( events ) );
 			$(".altui-arguments").html( _getEventArguments(selected_event, args) );
 		});
-		
+
 		$('div#dialogModal').on("change","#"+htmlid,function() {
 			args=[];
 			eventid=$(this).val();
@@ -1567,22 +1567,22 @@ var DialogManager = ( function() {
 			});
 			$(".altui-arguments").html( _getEventArguments(selected_event, args) );
 		});
-		
+
 		var device = MultiBox.getDeviceByAltuiID( deviceid );
 		var events = MultiBox.getDeviceEvents(device);
 		var propertyline = "";
 		propertyline += "<div class='form-group'>";
 		propertyline += "	<label for='"+htmlid+"'>"+label+"</label>";
-		propertyline +=     _getSelectForEvents(events);
+		propertyline +=		_getSelectForEvents(events);
 		propertyline += "</div>";
-		
+
 		propertyline += "<div class='altui-arguments'>";
 		propertyline += _getEventArguments( selected_event , args );
 		propertyline += "</div>";
-		
+
 		$(dialog).find(".altui-dialog-row").append(propertyline);
 	};
-	
+
 	function _dlgAddActions(id, dialog,widget,actiondescriptor,label, cbfunc, filterByServiceID)
 	{
 		// callback when select of actions is changed
@@ -1591,17 +1591,17 @@ var DialogManager = ( function() {
 			var id = $(this).prop('id');
 			$.extend( actiondescriptor , _getDialogActionValue(id) );
 			widget.properties.deviceid = $("#altui-select-device").val();
-			_getActionParameterHtml( 
+			_getActionParameterHtml(
 				id+"-parameters",
-				MultiBox.getDeviceByAltuiID(widget.properties.deviceid), 
-				actiondescriptor.action, 
-				actiondescriptor, 
+				MultiBox.getDeviceByAltuiID(widget.properties.deviceid),
+				actiondescriptor.action,
+				actiondescriptor,
 				function(html) {
 					$("."+id+"-parameters").replaceWith(html);
 				}
 			);
 		};
-		
+
 		//callback, if select device changes, we need to update actions
 		$("#altui-select-device").on("change",function() {
 			widget.properties.deviceid = $("#altui-select-device").val();
@@ -1614,7 +1614,7 @@ var DialogManager = ( function() {
 				$("#"+id).on("change", _onChangeAction );
 			});
 		});
-			
+
 		// get actions for the selected device
 		var device = MultiBox.getDeviceByAltuiID(widget.properties.deviceid);
 		_getDeviceActionSelect( id, device , actiondescriptor, filterByServiceID, function (result) {
@@ -1622,18 +1622,18 @@ var DialogManager = ( function() {
 			var propertyline = "";
 			propertyline += "<div class='form-group'>";
 			propertyline += "	<label for='"+id+"'>"+label+"</label>";
-			propertyline +=     result;
+			propertyline +=		result;
 			propertyline += "</div>";
-			
+
 			$(dialog).find(".altui-dialog-row").append(propertyline);
-			
+
 			//callback, if select action changes, we need to update parameters
 			$("#"+id).on("change", _onChangeAction );
 			cbfunc();
 		});
 	};
 
-		
+
 	return {
 		registerDialog : _registerDialog,		// name, html
 		clearDialog : _clearDialog,				// name
@@ -1655,12 +1655,12 @@ var DialogManager = ( function() {
 		dlgAddSelect: _dlgAddSelect,
 		dlgAddSelectGlyph: _dlgAddSelectGlyph,
 		dlgAddVariables:_dlgAddVariables,
-		pickDevice : _pickDevice,					//(devices,devideid,name) 
+		pickDevice : _pickDevice,					//(devices,devideid,name)
 		dlgAddDevices:_dlgAddDevices,
 		dlgAddDevices2: _dlgAddDevices2,	// (dialog, deviceid, devices)
 		dlgAddScenes:_dlgAddScenes,
 		dlgAddActions:_dlgAddActions,
-		dlgAddEvents:_dlgAddEvents,		
+		dlgAddEvents:_dlgAddEvents,
 		dlgAddDayOfWeek:_dlgAddDayOfWeek,
 		dlgAddTimer: _dlgAddTimer,
 		dlgAddTimeInterval: _dlgAddTimeInterval,
@@ -1708,14 +1708,14 @@ if (typeof String.prototype.toHHMMSS != 'function') {
 		var sec_num = parseInt(this, 10); // don't forget the second param
 		if ( isNaN(sec_num) )
 			sec_num=0;
-		var hours   = Math.floor(sec_num / 3600);
+		var hours	= Math.floor(sec_num / 3600);
 		var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
 		var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-		if (hours   < 10) {hours   = "0"+hours;}
+		if (hours	< 10) {hours   = "0"+hours;}
 		if (minutes < 10) {minutes = "0"+minutes;}
 		if (seconds < 10) {seconds = "0"+seconds;}
-		var time    = hours+':'+minutes+':'+seconds;
+		var time	= hours+':'+minutes+':'+seconds;
 		return time;
 	}
 	String.prototype.fromHHMMSS = function () {
@@ -1723,7 +1723,7 @@ if (typeof String.prototype.toHHMMSS != 'function') {
 		var a = hms.split(':'); // split it at the colons
 
 		// minutes are worth 60 seconds. Hours are worth 60 minutes.
-		var seconds = (+a[0] || 0) * 60 * 60 + (+a[1] || 0) * 60 + (+a[2] || 0 ); 
+		var seconds = (+a[0] || 0) * 60 * 60 + (+a[1] || 0) * 60 + (+a[2] || 0 );
 		return seconds;
 	}
 };
@@ -1746,13 +1746,13 @@ if (typeof String.prototype.withoutAccent != 'function') {
 			{char: 'C', base: /[\307]/g},
 			{char: 'c', base: /[\347]/g}
 		];
-    return function() {
+	return function() {
 				var content = this;
 				diacritics.forEach(function(letter){
 					content = content.replace(letter.base, letter.char);
 				});
 				return content
-    }
+	}
 	})();
 }
 
@@ -1760,11 +1760,11 @@ if (typeof String.prototype.escapeQuotes != 'function') {
   // see below for better implementation!
   String.prototype.escapeQuotes = function (){
 	var content = this;
-    return content.replace(/'/g, "\\'");
+	return content.replace(/'/g, "\\'");
   };
   String.prototype.escapeDoubleQuotes = function (){
 	var content = this;
-    return content.replace(/"/g, "\\\"");
+	return content.replace(/"/g, "\\\"");
   };
 };
 
@@ -1796,14 +1796,14 @@ if (typeof String.prototype.format == 'undefined') {
 			args[i] = arguments[i];
 		}
 
-		return this.replace(/{(\d+)}/g, function(match, number) { 
+		return this.replace(/{(\d+)}/g, function(match, number) {
 			return typeof args[number] != 'undefined' ? args[number] : match;
 		});
 	   // var content = this;
 	   // for (var i=0; i < arguments.length; i++)
 	   // {
 			// var replacement = new RegExp('\\{' + i + '\\}', 'g');	// regex requires \ and assignment into string requires \\,
-			// content = content.replace(replacement, arguments[i]);  
+			// content = content.replace(replacement, arguments[i]);
 	   // }
 	   // return content;
 	};
@@ -1824,7 +1824,7 @@ if (typeof String.prototype.htmlEncode == 'undefined') {
 	   var value = this;
 	   return $('<div/>').text(value).html();
 	}
-	 
+
 	String.prototype.htmlDecode= function()
 	{
 		var value = this;
@@ -1836,13 +1836,13 @@ if (typeof String.prototype.evalJSON != 'function') {
   // see below for better implementation!
   String.prototype.evalJSON = function (){
 	var content = this;
-    return JSON.parse(content);
+	return JSON.parse(content);
   }
 };
 
 function _format2Digits(d) {
 	return ("0"+d).substr(-2);
-};	
+};
 
 function _toIso(date,sep) {
 	sep = sep || 'T';
@@ -1862,11 +1862,11 @@ var HTMLUtils = (function() {
 	{
 		var tbl=[];
 		options = $.extend( { },options);
-		
+
 		$.each( options, function(key,val) {
 			var typ = Object.prototype.toString.call(val);
 			if ((typ!="[object Object]") && (typ!="[object Array]")){
-				tbl.push("{0}='{1}'".format(key,val)); 
+				tbl.push("{0}='{1}'".format(key,val));
 			}
 		});
 		return tbl.join(' ');
@@ -1888,9 +1888,9 @@ var HTMLUtils = (function() {
 			$.each(keys,function(k,v) {
 				if ($.inArray(v,viscols)==-1) {
 					display_order.push(v);
-				}				
+				}
 			});
-			
+
 			var bFirst=true;
 			html+="<table id='{1}' class='table {2} table-sm table-hover table-striped {0}'>".format(cls || '', htmlid || 'altui-grid' , responsive );
 			if (caption)
@@ -1922,14 +1922,14 @@ var HTMLUtils = (function() {
 				html+="</tr>"
 			});
 			html+="</tbody>"
-			html+="</table>";		
+			html+="</table>";
 		}
 		else
 			html +="<div>{0}</div>".format(_T("No data to display"))
 
 		return html;
 	};
-	
+
 	// var panels = [
 	// {id:'Header', title:_T("Header"), html:_displayHeader()},
 	// {id:'Triggers', title:_T("Triggers"), html:_displayTriggersAndWatches()},
@@ -1943,30 +1943,30 @@ var HTMLUtils = (function() {
 		var id = id||""
 		html += "<div class='{0}' id='accordeon{1}' role='tablist'>".format(cls,id);
 		$.each( panels, function (idx,panel){
-			html += "        <div class='card' id='"+panel.id+"'>";
-			html += "            <div class='card-header p-1' role='tab'>";
+			html += "		 <div class='card' id='"+panel.id+"'>";
+			html += "			 <div class='card-header p-1' role='tab'>";
 			if (button) {
 				html += xsbuttonTemplate.format(button.id, button.class, button.label, button.title);
 			}
-			html += "                <h5 class='mb-0'>";
-			html += "                    <a data-toggle='collapse' href='#collapse"+panel.id+"'>"+panel.title+"</a><span class='altui-hint' id='altui-hint-"+panel.id+"'></span>"
+			html += "				 <h5 class='mb-0'>";
+			html += "					 <a data-toggle='collapse' href='#collapse"+panel.id+"'>"+panel.title+"</a><span class='altui-hint' id='altui-hint-"+panel.id+"'></span>"
 			+ glyphTemplate.format("caret-down");
-			html += "                </h5>";
-			html += "            </div>";
-			html += "            <div id='collapse"+panel.id+"' data-parent='#accordeon"+id+"' class='panel-collapse collapse {0}' role='tabpanel'>".format(bFirst ? 'show':'');
-			html += "                <div class='card-body'>";
-			html += 					panel.html || _T(' ');
-			html += "                </div>";
-			html += "            </div>";
-			html += "        </div>";
+			html += "				 </h5>";
+			html += "			 </div>";
+			html += "			 <div id='collapse"+panel.id+"' data-parent='#accordeon"+id+"' class='panel-collapse collapse {0}' role='tabpanel'>".format(bFirst ? 'show':'');
+			html += "				 <div class='card-body'>";
+			html +=						panel.html || _T(' ');
+			html += "				 </div>";
+			html += "			 </div>";
+			html += "		 </div>";
 			bFirst = false;
 		})
 		html += "</div>";
 		return html
-	};	
+	};
 	function _drawButtonGroup(htmlid,model) {
 		var html="";
-		model = $.extend( true, {cls:'', attr:'', buttons:[] }, model) 
+		model = $.extend( true, {cls:'', attr:'', buttons:[] }, model)
 		html += "<div id='{2}' class='btn-group {0}' {1} role='group' aria-label='group'>".format(model.cls, model.attr,htmlid);
 		$.each(model.buttons, function(i,btn) {
 			var label = (btn.img) ? "<img class='{2}' src='{0}' alt='{1}'></img>".format(btn.img,btn.label||'',btn.imgcls||'' ) : (btn.label||'')
@@ -1993,38 +1993,38 @@ var HTMLUtils = (function() {
 					break;
 				case 'button':
 				default:
-					toolbarHtml+="  <button type='button' class='btn btn-light {3}' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
+					toolbarHtml+="	<button type='button' class='btn btn-light {3}' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
 					var glyph = glyphTemplate.format(tool.glyph,tool.label || tool.title || '');
 					toolbarHtml += glyph;
 					if (tool.label)
 						toolbarHtml+=("&nbsp;" + tool.label);
-					toolbarHtml+="  </button>";			
+					toolbarHtml+="	</button>";
 					break;
 			}
 		});
-		toolbarHtml+="</div>";			
-		toolbarHtml+="<div>";	
+		toolbarHtml+="</div>";
+		toolbarHtml+="<div>";
 		$.each(preareas, function(idx,idPre) {
 			if (idPre.startsWith('#'))
 				idPre = idPre.substr(1)
 			toolbarHtml+="<div class='collapse' id='{0}'></div>".format(idPre);
 		});
-		toolbarHtml+="</div>";	
+		toolbarHtml+="</div>";
 		return "<div class='{0} {1}'>{2}</div>" .format(htmlid,cls,toolbarHtml);
 	};
 	function _drawSelect( model ) {
 		var html ="<select class='form-control {1}' id='{0}'>".format(model.id,model.class)
 		$.each( model.options, function(i,opt) {
-			html += "<option {2} value='{0}'>{1}</option>".format(opt.value, opt.text,((opt.selected==true) || (i==model.selected_idx)) ? 'selected':'')	
+			html += "<option {2} value='{0}'>{1}</option>".format(opt.value, opt.text,((opt.selected==true) || (i==model.selected_idx)) ? 'selected':'')
 		});
 		html += "</select>"
 		return html;
 	};
-	function _drawFormFields( model  ) {
+	function _drawFormFields( model	 ) {
 		var html ="";
 		$.each(model, function(idx,line) {
 			switch(line.type) {
-				case "select": 
+				case "select":
 					html += "<div class='form-group'>"
 					html += "<label for='{0}'>{1}</label>".format(line.id,line.label || "");
 					html += _drawSelect( {id:line.id, options:line.options, selected_idx:line.selected_idx} );
@@ -2048,7 +2048,7 @@ var HTMLUtils = (function() {
 				case "buttonbar":
 					html += "<div class='form-group'>"
 					$.each(line.value, function(idx,btn) {
-						var cls = (btn.type=="submit") ? "primary" : "default"  
+						var cls = (btn.type=="submit") ? "primary" : "default"
 						html += "<button id='{3}' type='{0}' class='btn btn-{1}'>{2}</button>".format(btn.type,cls,btn.label,btn.id);
 					});
 					html += "</div>"
@@ -2099,7 +2099,7 @@ var HTMLUtils = (function() {
 		});
 		return html;
 	};
-	
+
 	function _drawForm( htmlid, title, model, extraattrs ) {
 		var html ="";
 		if (isNullOrEmpty(title) == false)
@@ -2109,8 +2109,8 @@ var HTMLUtils = (function() {
 		html += "</form>"
 		return html;
 	}
-	
-	function _enhanceValue(value) 
+
+	function _enhanceValue(value)
 	{
 		//try to guess what is the value
 		if (value==null)
@@ -2131,14 +2131,14 @@ var HTMLUtils = (function() {
 	function _startTimer(id,ms,callback,data) {
 		if ($(".altui-timers #"+id).length>0) {
 			AltuiDebug.warning("Cannot schedule twice the same timer "+id);
-			return;			
+			return;
 		}
 		var timerdiv = $(".altui-timers");
 		if (timerdiv.length ==0) {
 			$(".altui-mainpanel").after("<div class='altui-timers'></div>");
 			timerdiv = $(".altui-timers");
 		}
-		
+
 		function _timerfunc (id,callback,data) {
 			var timer = $(".altui-timers #"+id);
 			if (timer.length==0) return;
@@ -2146,12 +2146,12 @@ var HTMLUtils = (function() {
 			if ($.isFunction(callback))
 				(callback)(id,data);
 		}
-		
+
 		$(timerdiv).append("<div id='{0}' class='altui-timer-instance'></div>".format(id));
 		var timer = $(".altui-timers #"+id);
 		$(timer).data('timerid', setTimeout(_timerfunc,ms,id,callback,data));
 	};
-	
+
 	function _stopTimer(id) {
 		var timer = $(".altui-timers #"+id);
 		if (timer.length==0)
@@ -2160,7 +2160,7 @@ var HTMLUtils = (function() {
 		clearTimeout(jstimer);
 		$(timer).remove();
 	};
-	
+
 	function _stopAllTimers() {
 		var timers = $(".altui-timer-instance");
 		$.each(timers, function(idx,timer) {
@@ -2168,7 +2168,7 @@ var HTMLUtils = (function() {
 		})
 		$(timers).remove();
 	};
-	
+
 	function _displayRECButton( htmlid ) {
 		var html ="";
 		var bRec = MultiBox.isRecording();
@@ -2179,12 +2179,12 @@ var HTMLUtils = (function() {
 	return {
 		enhanceValue	: _enhanceValue,
 		optionsToString : _optionsToString,
-		array2Table 	: _array2Table,			// (arr,idcolumn,viscols)
+		array2Table		: _array2Table,			// (arr,idcolumn,viscols)
 		createAccordeon : _createAccordeon,		// (panels)
 		drawButtonGroup : _drawButtonGroup,
-		drawToolbar 	: _drawToolbar,
+		drawToolbar		: _drawToolbar,
 		drawSelect		: _drawSelect,
-		drawFormFields	: _drawFormFields,		
+		drawFormFields	: _drawFormFields,
 		drawForm		: _drawForm,
 		startTimer		: _startTimer,
 		stopTimer		: _stopTimer,
@@ -2197,9 +2197,9 @@ function isObject(obj)
 {
 	return (Object.prototype.toString.call(obj)== "[object Object]");
 };
-	
+
 function isInteger(data) {
-    return (data === parseInt(data, 10));
+	return (data === parseInt(data, 10));
 };
 
 function isNullOrEmpty(value) {
@@ -2207,31 +2207,31 @@ function isNullOrEmpty(value) {
 };
 
 function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
+	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? {
+		r: parseInt(result[1], 16),
+		g: parseInt(result[2], 16),
+		b: parseInt(result[3], 16)
+	} : null;
 };
 
 function rgbToHex(r, g, b) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+	return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
 var getCSS = function (prop, fromClass) {
-    var $inspector = $("<div>").css('display', 'none').addClass(fromClass);
-    $("body").append($inspector); // add to DOM, in order to read the CSS property
-    try {
-        return $inspector.css(prop);
-    } finally {
-        $inspector.remove(); // and remove from DOM
-    }
+	var $inspector = $("<div>").css('display', 'none').addClass(fromClass);
+	$("body").append($inspector); // add to DOM, in order to read the CSS property
+	try {
+		return $inspector.css(prop);
+	} finally {
+		$inspector.remove(); // and remove from DOM
+	}
 };
 
 var AltuiDebug = ( function (undefined) {
 	var g_debug = false;
-	
+
 	function _debug(str) {
 		if (g_debug==true)
 			console.log(new Date().toISOString()+": ALTUI "+g_ALTUI.g_DeviceTypes.info["PluginVersion"]+":"+str);
@@ -2239,8 +2239,8 @@ var AltuiDebug = ( function (undefined) {
 	function _warning(str) {
 			console.log(new Date().toISOString()+": ALTUI "+g_ALTUI.g_DeviceTypes.info["PluginVersion"]+":"+str);
 	};
-	function _setDebug(bDebug)	{ 
-		g_debug=bDebug; 
+	function _setDebug(bDebug)	{
+		g_debug=bDebug;
 		if (g_debug==true) {
 			setTimeout(function() {
 				PageMessage.message( "ALTUI in debug mode", "warning");
@@ -2273,29 +2273,29 @@ function formatAjaxErrorMessage(jqXHR, exception) {
 		return ('Uncaught Error.\n' + jqXHR.responseText);
 	}
 };
-	
+
 var MyLocalStorage = ( function (undefined) {
 		function _set(key, item) {
 			if (key==undefined)
 				return null;
-			
+
 			localStorage.setItem( key, JSON.stringify(item) );
 			return item;
 		};
-		
+
 		function _get(key) {
 			if (key==undefined)
 				return null;
 			var json = localStorage.getItem( key );
 			return json != undefined ? JSON.parse(json) : null;
 		};
-		
+
 		function _clear(key) {
 			if (key==undefined)
 				return null;
 			return localStorage.removeItem(key);
 		};
-		
+
 		function _setSettings(key, val) {
 			var settings = _get("ALTUI_Settings");
 			if (settings==null) {
@@ -2304,12 +2304,12 @@ var MyLocalStorage = ( function (undefined) {
 			settings[key] = val;
 			return _set("ALTUI_Settings",settings);
 		};
-		
+
 		function _getSettings(key) {
 			var settings = _get("ALTUI_Settings");
 			return (settings) ? settings[key] : null;
 		};
-		
+
 	return {
 		set: _set,
 		get: _get,
@@ -2322,7 +2322,7 @@ var MyLocalStorage = ( function (undefined) {
 var Favorites = ( function (undefined) {
 	var _favorites = $.extend( {'device':{}, 'scene':{} }, MyLocalStorage.getSettings("Favorites") );
 	MyLocalStorage.setSettings("Favorites",_favorites);
-	
+
 	function _save() {
 		MyLocalStorage.setSettings("Favorites",_favorites);
 	};
@@ -2343,7 +2343,7 @@ var Favorites = ( function (undefined) {
 			}
 		}
 		_save();
-	};		
+	};
 	function _get(type, id) {
 		if (MyLocalStorage.getSettings('UseVeraFavorites')==1) {
 			switch(type) {
@@ -2358,7 +2358,7 @@ var Favorites = ( function (undefined) {
 		}
 		return _favorites[type][id] || false;
 	};
-	
+
 	return {
 		set: _set,
 		get: _get,
@@ -2370,14 +2370,14 @@ var EventBus = ( function (undefined) {
 	var _subscriptions = {
 		// altui specific ones				// parameters
 		"on_altui_deviceTypeLoaded" : [],	// table of { func, object }
-		
-		// global ones 
+
+		// global ones
 		"on_ui_deviceStatusChanged" : [],	// table of { func, object }
 		"on_ui_initFinished": [],
 		"on_ui_userDataFirstLoaded" : [],
 		"on_ui_userDataLoaded" : [],
 		"on_startup_luStatusLoaded" : [],
-		
+
 		// ctrl specific ones , 0 is the master then other are going to be added dynamically
 		"on_ui_userDataFirstLoaded_0" : [],
 		"on_ui_userDataLoaded_0" : [],
@@ -2391,7 +2391,7 @@ var EventBus = ( function (undefined) {
 			return bResult;
 		});
 		return bResult;
-	};	
+	};
 	function _registerEventHandler(eventname, object, funcname ) {
 		if (_subscriptions[eventname] == undefined)
 			_subscriptions[eventname] = [];
@@ -2405,7 +2405,7 @@ var EventBus = ( function (undefined) {
 		if (bFound==false)
 			_subscriptions[eventname].push( {object: object , funcname: funcname} );
 	};
-	
+
 	// event/null/null or just first param, removes all the subscriptions for that event
 	function _unregisterEventHandler(eventname, object, funcname) {
 		if (_subscriptions[eventname] == undefined)
@@ -2415,7 +2415,7 @@ var EventBus = ( function (undefined) {
 			_subscriptions[eventname] = null;
 			return;
 		}
-		
+
 		var iFound=-1;
 		$.each(_subscriptions[eventname], function (idx,sub) {
 			if ((sub.object==object) && (sub.funcname==funcname)) {
@@ -2469,11 +2469,11 @@ var EventBus = ( function (undefined) {
 		}
 	};
 	return {
-		registerEventHandler 	: _registerEventHandler,	//(eventname, object, funcname ) 
-		unregisterEventHandler 	: _unregisterEventHandler,	//(eventname, object, funcname ) 
-		waitForAll 				: _waitForAll,			//(events, object, funcname )
-		publishEvent 			: _publishEvent,			//(eventname, args)
-		
+		registerEventHandler	: _registerEventHandler,	//(eventname, object, funcname )
+		unregisterEventHandler	: _unregisterEventHandler,	//(eventname, object, funcname )
+		waitForAll				: _waitForAll,			//(events, object, funcname )
+		publishEvent			: _publishEvent,			//(eventname, args)
+
 		getEventSupported : function() {
 			return Object.keys(_subscriptions);
 		},
@@ -2513,7 +2513,7 @@ var PageManager = (function() {
 				}
 			});
 	};
-	
+
 	function _debugReset(pages)
 	{
 		_pages = [];
@@ -2522,24 +2522,24 @@ var PageManager = (function() {
 			_pages.push( $.extend( true, {id:0, name:'', background:''}, page) );
 		});
 	};
-	
+
 	function _init(pages) {
-		if (_pages==null)	// otherwise, already initialized 
+		if (_pages==null)	// otherwise, already initialized
 		{
 			AltuiDebug.debug("PageManager.init(), pages="+JSON.stringify(pages));
 			_debugReset(pages);
 		}
 	};
-	
+
 	function _recoverFromStorage() {
 		_pages = MyLocalStorage.get("Pages");
 	};
 	function _clearStorage() {
 		MyLocalStorage.clear("Pages");
 	};
-	
+
 	function _savePages() {
-		
+
 		function _savePage(idx,callback) {
 			if (idx<_pages.length) {
 				var page = _pages[idx];
@@ -2560,11 +2560,11 @@ var PageManager = (function() {
 				});
 			}
 		}
-		
+
 		function _save(i) {
 			_savePage(i, function() {
 				_save(i+1);
-			});			
+			});
 		}
 
 		AltuiDebug.debug("PageManager.savePages(), pages="+JSON.stringify(_pages));
@@ -2579,8 +2579,8 @@ var PageManager = (function() {
 			id = Math.max(id, page.id );
 		});
 		id++;
-		_pages.push({ 
-			id:id, 
+		_pages.push({
+			id:id,
 			name:'page'+id,
 			background: 'rgb(232, 231, 231)'
 		});
@@ -2596,7 +2596,7 @@ var PageManager = (function() {
 		});
 		return _pages;
 	};
-		
+
 	function _getPageFromName( name ) {
 		var result = null;
 		if (name)
@@ -2628,13 +2628,13 @@ var PageManager = (function() {
 						child.zindex = zindex;
 				}
 			});
-	};		
+	};
 
 	function _insertChildrenInPage( page, tool, position, zindex )
 	{
 		var id = 0;
 		if (page !=null) {
-			if (page.children == undefined) 
+			if (page.children == undefined)
 				page.children = new Array();
 			$.each(page.children, function(idx,child) {
 				id = Math.max(id, child.id );
@@ -2647,11 +2647,11 @@ var PageManager = (function() {
 					properties : jQuery.extend(true, {}, tool.properties),	// default values
 					size: jQuery.extend(true, { }, tool.defaultSize),
 					zindex : (zindex || tool.zindex || 0),
-			});				
+			});
 		}
 		return id;	//0 if error
 	};
-		
+
 	function _removeChildrenInPage( page, widgetid )
 	{
 		var widget = null;
@@ -2665,7 +2665,7 @@ var PageManager = (function() {
 		});
 		return widget;
 	};
-		
+
 	function _getWidgetByID( page, widgetid ) {
 		var widget=null;
 		$.each(page.children, function(idx,child) {
@@ -2676,13 +2676,13 @@ var PageManager = (function() {
 		});
 		return widget;
 	};
-	
+
 	function _forEachPage( func ) {
 		if (_pages.length==0)
 			this.addPage()
 		$.each(_pages, func);
 	};
-	
+
 	return {
 		debugReset : _debugReset,
 		init :_init,
@@ -2714,12 +2714,12 @@ var WorkflowLink = function(graph,cell) {
 	};
 	return {
 		get id()					{ return _cell.id },
-		get name() 				{ return _cell.labels[0].attrs.text.text; },
+		get name()				{ return _cell.labels[0].attrs.text.text; },
 		get comment()			{ return _cell.prop.comment || "" },
 		get conditions()	{ return _cell.prop.conditions || [] },
-		get waitFors() 		{ return _cell.prop.workflows || [] },
-		get schedule() 		{ return _cell.prop.schedule  },
-		get timer() 			{ return (_cell.prop.timer!="") ? { name: _cell.prop.timer , duration: _cell.prop.duration } : null },
+		get waitFors()		{ return _cell.prop.workflows || [] },
+		get schedule()		{ return _cell.prop.schedule  },
+		get timer()				{ return (_cell.prop.timer!="") ? { name: _cell.prop.timer , duration: _cell.prop.duration } : null },
 		get source()			{ return new WorkflowState(graph,_stateFromID(_cell.source.id)) },
 		get target()			{ return new WorkflowState(graph,_stateFromID(_cell.target.id)) },
 	}
@@ -2730,22 +2730,22 @@ var WorkflowState = function(graph,cell) {
 	var _graph = graph;
 	return {
 		isStart: function() { return _cell.prop.stateinfo ? _cell.prop.stateinfo.bStart : false },
-		get name() { 
+		get name() {
 			return _cell.attrs.text ? _cell.attrs.text.text : 'Start'
 			},
-		get transitions() { 
+		get transitions() {
 			return $.map( $.grep(_graph.cells, function(e) { return (e.type == "fsa.Arrow") && (e.source.id == _cell.id) }) , function(l) {
 				return new WorkflowLink(_graph,l)
 			});
 		},
 		get id()			{ return _cell.id },
 		get comment()			{ return _cell.prop.comment || "" },
-		get conditions() 	{ return _cell.prop.conditions || [] },
-		get onEnter() 		{ return _cell.prop.onEnter || [] },
+		get conditions()	{ return _cell.prop.conditions || [] },
+		get onEnter()		{ return _cell.prop.onEnter || [] },
 		get onEnterScenes() { return _cell.prop.onEnterScenes || [] },
 		get onEnterLua()	{ return _cell.prop.onEnterLua || "" },
-		get onExit() 		{ return _cell.prop.onExit || [] },
-		get onExitScenes() 	{ return _cell.prop.onExitScenes || [] },
+		get onExit()		{ return _cell.prop.onExit || [] },
+		get onExitScenes()	{ return _cell.prop.onExitScenes || [] },
 		get onExitLua()		{ return _cell.prop.onExitLua || "" }
 	}
 };
@@ -2753,25 +2753,25 @@ var WorkflowState = function(graph,cell) {
 var Workflow = function (altuiid) {
 	var _workflow = WorkflowManager.getWorkflow(altuiid);
 	var _graph = JSON.parse(_workflow.graph_json);
-	
+
 	return {
 		updateGraph: function() {
 			_workflow.graph_json = JSON.stringify(_graph)
 		},
 		get name() {		return _workflow.name },
-		get states() { 
+		get states() {
 			if (_graph==null)
 				return []
 			return $.map( $.grep(_graph.cells, function(e) { return e.type != "fsa.Arrow" }) , function(s) {
 				return new WorkflowState(_graph,s);
 			})
 		},
-		get transitions() { 
+		get transitions() {
 			if (_graph==null)
 				return []
 			return $.map( $.grep(_graph.cells, function(e) { return e.type == "fsa.Arrow" }) , function(s) {
 				return new WorkflowLink(_graph,s);
-			})			
+			})
 		}
 	}
 };
@@ -2804,31 +2804,31 @@ var WorkflowManager = (function() {
 		comment:""					// user comment
 	};
 
-	var _def_TimerLabelAttrs = { 
-		position: 0.8, 
-		attrs: { 
-			rect:{ fill:'white'}, 
-			text: { text: '' , 'font-weight': '100', 'font-size':'0.6em', 'fill':'red' } 
-		} 
+	var _def_TimerLabelAttrs = {
+		position: 0.8,
+		attrs: {
+			rect:{ fill:'white'},
+			text: { text: '' , 'font-weight': '100', 'font-size':'0.6em', 'fill':'red' }
+		}
 	}
-		
+
 	var _workflows = null;
 	var _saveNeeded = false;
-	
+
 	function _findWorkflowIdxByAltuiid(altuiid) {
 		for( var i=0; i<_workflows.length; i++)
 			if (_workflows[i].altuiid==altuiid)
 				return i;
 		return null;
-	};	
-		
+	};
+
 	function _IDToName(id) {
 		for( var idx=0; idx<_workflows.length; idx++) {
 			var workflow = _workflows[idx];
 			if (workflow.graph_json) {
 				var graph = JSON.parse(workflow.graph_json)
 				for (var i = 0 ; i<graph.cells.length ; i++ ) {
-					var cell = graph.cells[i];				
+					var cell = graph.cells[i];
 					if (cell.id==id) {
 						switch( cell.type ) {
 							case "fsa.State":
@@ -2836,7 +2836,7 @@ var WorkflowManager = (function() {
 								return cell.attrs.text ? cell.attrs.text.text : 'Start'
 							case "fsa.Arrow":
 							case "link":
-								return cell.labels[0].attrs.text.text; 
+								return cell.labels[0].attrs.text.text;
 						}
 					}
 				}
@@ -2844,7 +2844,7 @@ var WorkflowManager = (function() {
 		}
 		return null;
 	};
-	
+
 	function _init(workflows) {
 		_workflows = workflows;
 		// fix old data model
@@ -2862,7 +2862,7 @@ var WorkflowManager = (function() {
 				_workflows[i].graph_json = JSON.stringify(w.graph_json)
 		})
 	};
-	
+
 	function _upgradeWorkflowToFsa(workflow) {
 		var bSaveNeeded = false
 		var graph2 =  new joint.dia.Graph();
@@ -2873,11 +2873,11 @@ var WorkflowManager = (function() {
 				var cell = graph.cells[i];
 				switch( cell.type ) {
 					case "devs.Model":
-						var node = (cell.prop.stateinfo.bStart == true ) 
+						var node = (cell.prop.stateinfo.bStart == true )
 											? WorkflowManager.Start()
 											: WorkflowManager.Node( cell.attrs[".label"].text, cell.position.x, cell.position.y )
 						mapIDtoID[ cell.id ] = node;
-						node.prop(  {prop: cell.prop}  )
+						node.prop(	{prop: cell.prop}  )
 						// node.prop = cloneObject( cell.prop );
 						node.addTo(graph2);
 						bSaveNeeded=true
@@ -2916,7 +2916,7 @@ var WorkflowManager = (function() {
 			var workflow = _workflows[idx];
 			if (workflow.graph_json) {
 				var graph = JSON.parse(workflow.graph_json)
-				
+
 				for (var i = 0 ; i<graph.cells.length ; i++ ) {
 					var cell = graph.cells[i];
 					if ( (cell.type=="link") || (cell.type=="fsa.Arrow") ) {
@@ -2979,7 +2979,7 @@ var WorkflowManager = (function() {
 								}
 						})
 						var conditions = cell.prop.conditions;
-						if (conditions)  // only start state has conditions
+						if (conditions)	 // only start state has conditions
 						{
 							for (var j=conditions.length-1; j>=0; j--) {
 								var cond = conditions[j]
@@ -2990,7 +2990,7 @@ var WorkflowManager = (function() {
 								}
 							}
 						}
-					}					
+					}
 				}
 			}
 			if (bSaveNeeded) {
@@ -3017,21 +3017,21 @@ var WorkflowManager = (function() {
 				PageMessage.message("Save Workflows failure", "danger");
 		});
 	};
-	
+
 	function _saveWorkflow(altuiid,bReload) {
 		var dfd = $.Deferred();
 		if (bReload==undefined)
 			bReload = true;
-		
+
 		var idx = _findWorkflowIdxByAltuiid(altuiid);
 		if (_workflows[idx] !=null) {
 			var workflow = _workflows[idx];
-			
+
 			MultiBox.saveData( "Wflow", workflow.altuiid, JSON.stringify(workflow), function(data) {
 			if (data!="") {
 				PageMessage.message("Save for "+workflow.name+" succeeded.", "success");
 				MyLocalStorage.set("Workflows",_workflows);
-				
+
 				// forces ALTUI device to reload workflows
 				if (bReload==true) {
 					_forceReloadWorkflows();
@@ -3042,15 +3042,15 @@ var WorkflowManager = (function() {
 				PageMessage.message( "Save for "+workflow.name+" did not succeed." , "danger");
 				dfd.resolve();
 			});
-		} else 
+		} else
 			dfd.resolve();
 		return dfd.promise()
 	};
-	
+
 	function _saveWorkflows(callback) {
 		AltuiDebug.debug("WorkflowManager.saveWorkflows(), workflows="+JSON.stringify(_workflows));
 		// MyLocalStorage.set("Workflows",_workflows);
-		
+
 		function _saveW(i) {
 			if (i>=_workflows.length) {
 				// this is the end !
@@ -3069,10 +3069,10 @@ var WorkflowManager = (function() {
 				_saveW(i+1)
 			})
 		}
-		
+
 		_saveW(0);
 	};
-	
+
 	function _addWorkflow(workflow) {
 		var altuiid="";
 		if (_workflows.length==0)
@@ -3082,16 +3082,16 @@ var WorkflowManager = (function() {
 			var splits = last.split("-");
 			altuiid = "0-"+(parseInt(splits[1])+1)
 		}
-		if (workflow) 
+		if (workflow)
 			delete workflow.altuiid	// make sure we use the new ALTUIID
-		_workflows.push( $.extend(true, {}, _def_workflow, { altuiid:altuiid, name:'Workflow '+altuiid } , workflow || {}) );		
+		_workflows.push( $.extend(true, {}, _def_workflow, { altuiid:altuiid, name:'Workflow '+altuiid } , workflow || {}) );
 		_saveNeeded = true;
 	};
-	
+
 	function _deleteWorkflow(altuiid) {
 		var idx = _findWorkflowIdxByAltuiid(altuiid);
-		if (idx!=null) {				
-			// delete scenes for this workflow			
+		if (idx!=null) {
+			// delete scenes for this workflow
 			WorkflowManager.deleteScenes(altuiid);
 			_workflows.splice(idx,1);
 			_saveNeeded = true;
@@ -3102,14 +3102,14 @@ var WorkflowManager = (function() {
 
 	function _renameWorkflow(altuiid,name) {
 		var idx = _findWorkflowIdxByAltuiid(altuiid);
-		if (idx!=null) {				
+		if (idx!=null) {
 			if (_workflows[idx].name == name)	return;		// cannot rename with same name
 			var names = $.map(_workflows, function(w) { return w.name } );
 			if ($.inArray(name, names) == -1) {
 				_workflows[idx].name = name;
 				_saveNeeded = true;
 				return true;
-			} 
+			}
 			DialogManager.warningDialog(_T("Workflow Name"),_T("Workflow names must be unique"));
 		}
 		return false;
@@ -3120,7 +3120,7 @@ var WorkflowManager = (function() {
 	};
 	function _pauseWorkflow(altuiid, bPause) {
 		var idx = _findWorkflowIdxByAltuiid(altuiid);
-		if (idx==null)  
+		if (idx==null)
 			return null;
 		_workflows[idx].paused = bPause;
 		return _saveWorkflow(altuiid,true);	// force backend to reload
@@ -3174,12 +3174,12 @@ var WorkflowManager = (function() {
 			if ( (scene.groups) && (scene.groups.length>0) ) {
 				if ( (scene.groups[0].actions) && (scene.groups[0].actions.length>0) ) {
 					var action = scene.groups[0].actions[0];
-					if ( (action.device == g_ALTUI.g_MyDeviceID) 
-						&& (action.service == "urn:upnp-org:serviceId:altui1") 
+					if ( (action.device == g_ALTUI.g_MyDeviceID)
+						&& (action.service == "urn:upnp-org:serviceId:altui1")
 						&& (action.action == "TriggerTransition")
-						&& (action.arguments.length>0) 
+						&& (action.arguments.length>0)
 						&& (action.arguments[0].value == workflow_altuiid)
-						&& (action.arguments[1].value == linkid) ) 
+						&& (action.arguments[1].value == linkid) )
 					{
 							scheduled_scene = scene;
 							return false;
@@ -3244,10 +3244,10 @@ var WorkflowManager = (function() {
 			if ( (scene.groups) && (scene.groups.length>0) ) {
 				if ( (scene.groups[0].actions) && (scene.groups[0].actions.length>0) ) {
 					var action = scene.groups[0].actions[0];
-					if ( (action.device == g_ALTUI.g_MyDeviceID) 
-						&& (action.service == "urn:upnp-org:serviceId:altui1") 
+					if ( (action.device == g_ALTUI.g_MyDeviceID)
+						&& (action.service == "urn:upnp-org:serviceId:altui1")
 						&& (action.action == "TriggerTransition")
-						&& (action.arguments.length>0) 
+						&& (action.arguments.length>0)
 						&& (action.arguments[0].value == workflow_altuiid))
 					{
 						// scene for this workflow but link is not valid
@@ -3265,7 +3265,7 @@ var WorkflowManager = (function() {
 		var workflow = _getWorkflow(workflow_altuiid)
 		if (!workflow)
 			return;
-		
+
 		var graph = JSON.parse(workflow.graph_json);
 		var links = (graph==null) ? [] : $.grep(graph.cells, function(e) { return e.type == "fsa.Arrow" });
 		var maplinks = {}
@@ -3277,24 +3277,24 @@ var WorkflowManager = (function() {
 			maplinks[ link.id ] = link;
 			if (link.prop.schedule) {
 				//Search Create or Edit scene
-				_setLinkScheduleScene(workflow_altuiid, link) 
-			} else  {
+				_setLinkScheduleScene(workflow_altuiid, link)
+			} else	{
 				_clearLinkScheduleScene(workflow_altuiid, link)
 			}
 		})
-		
+
 		// for all the other scenes for this workflow which try to trigger an existant link or a link which does not have a schedule, delete the scene
 		var todel=[];
 		$.each(MultiBox.getScenesSync(), function(i,scene) {
 			if ( (scene.groups) && (scene.groups.length>0) ) {
 				if ( (scene.groups[0].actions) && (scene.groups[0].actions.length>0) ) {
 					var action = scene.groups[0].actions[0];
-					if ( (action.device == g_ALTUI.g_MyDeviceID) 
-						&& (action.service == "urn:upnp-org:serviceId:altui1") 
+					if ( (action.device == g_ALTUI.g_MyDeviceID)
+						&& (action.service == "urn:upnp-org:serviceId:altui1")
 						&& (action.action == "TriggerTransition")
-						&& (action.arguments.length>0) 
+						&& (action.arguments.length>0)
 						&& (action.arguments[0].value == workflow_altuiid)
-						&& (maplinks[ action.arguments[1].value ] == undefined) ) 
+						&& (maplinks[ action.arguments[1].value ] == undefined) )
 					{
 						// scene for this workflow but link is not valid
 						todel.push(scene);
@@ -3311,7 +3311,7 @@ var WorkflowManager = (function() {
 		if (idx!=null) {
 			_workflows[idx].graph_json = jsonstr;
 			return true;
-		}		
+		}
 		return false;
 	};
 	function _Start() {
@@ -3327,7 +3327,7 @@ var WorkflowManager = (function() {
 					// fill: '#000000'
 					// }
 				// }
-			// }, 
+			// },
 			// joint.shapes.fsa.StartState.prototype.defaults)
 		// });
 		var m1 = new joint.shapes.fsa.StartState({
@@ -3351,7 +3351,7 @@ var WorkflowManager = (function() {
 		var m1 = new joint.shapes.fsa.State({
 			position: { x: x, y: y },
 			size: { width: 65, height: 65 },
-			attrs: { 
+			attrs: {
 				text : { text: label , 'font-weight': '200' , 'font-size':'.8em'},
 				'circle': { magnet: true, 'stroke-width': 2 }
 			},
@@ -3384,13 +3384,13 @@ var WorkflowManager = (function() {
 				view.model.label(1,{ attrs: { text: { text: '' } }})
 			} else {
 					var txt = ''
-					if ( val <60 ) 
+					if ( val <60 )
 						txt = val.toString()
 					else {
-						var date = new Date(null); date.setSeconds(val); 
+						var date = new Date(null); date.setSeconds(val);
 						txt = date.toISOString().substr(11, 8)
 					}
-					// if (ALTUI_registered!=true) 
+					// if (ALTUI_registered!=true)
 						// txt=''
 					view.model.label(1,{ attrs: { text: { text: txt } }})
 			}
@@ -3403,7 +3403,7 @@ var WorkflowManager = (function() {
 		Link: _Link,
 		updateLinkTimerLabel: _updateLinkTimerLabel,
 		IDToName: _IDToName,
-		saveNeeded : function() 	{ return _saveNeeded; },
+		saveNeeded : function()		{ return _saveNeeded; },
 		getNodeProperties: function( obj )	{ return $.extend(true,{},_def_nodeprops, obj) },	// insure the defaults evolves
 		getLinkProperties: function( obj )	{ return $.extend(true,{},_def_linkprops, obj) },
 		getWorkflows : function()	{ return _workflows; },
@@ -3438,7 +3438,7 @@ var OAuth = (function() {
 			}
 		});
 	};
-	
+
 	function _getAuthToken() {
 		var url = "data_request?id=lr_ALTUI_Handler&command=get_auth_token";
 		return $.ajax({
@@ -3446,7 +3446,7 @@ var OAuth = (function() {
 			type: "GET",
 		});
 	};
-	
+
 	function _refreshAuthToken() {
 		var url = "data_request?id=lr_ALTUI_Handler&command=refresh_auth_token";
 		return $.ajax({
@@ -3454,45 +3454,45 @@ var OAuth = (function() {
 			type: "GET",
 		});
 	};
-	
+
 	function _OAuthCall( execFunc , param, notifCB , dataCB , failureCB ) {
 		var notifCB = notifCB;
 		var dataCB = dataCB;
 		var failureCB = failureCB;
 		function _tryAuthToken(n, interval) {
 			(notifCB)(2,_T("{0} Tentative #{1}/10").format(glyphTemplate.format( "refresh", _T("Refresh"), "text-warning glyphicon-spin" ),n))
-			_getAuthToken() 
-				.done( function(data, textStatus, jqXHR) {	
+			_getAuthToken()
+				.done( function(data, textStatus, jqXHR) {
 					data = JSON.parse(data)
 					if (data.access_token != undefined ) {
 						(execFunc)(param).done( function(data) {
 							var result = null;
 							if ( typeof data === "string" ) {
 								try {result = JSON.parse( data ) }
-								catch(e) {result={result:false}} 
+								catch(e) {result={result:false}}
 							} else {
 								result = data;
 							}
 							(dataCB)( result );
 						});
-					} else  if ( n<10 ) {
+					} else	if ( n<10 ) {
 						setTimeout( function() { _tryAuthToken(n+1,interval)  } , interval*1000 )
 					} else {
 						(notifCB)(1,_T("Failure after 10 tentatives, try again..."));
 						(failureCB)("");
 					}
-				})				
-				.fail( function(jqXHR, textStatus, errorThrown) {			
-					(failureCB)(textStatus) 
+				})
+				.fail( function(jqXHR, textStatus, errorThrown) {
+					(failureCB)(textStatus)
 				})
 		}
-		
+
 		(execFunc)(param)
 		.done( function(data) {
 			var result = null;
 			if ( typeof data === "string" ) {
 				try {result = JSON.parse( data ) }
-				catch(e) {result={result:false}} 
+				catch(e) {result={result:false}}
 			} else {
 				result = data;
 			}
@@ -3501,42 +3501,42 @@ var OAuth = (function() {
 				(notifCB)(1, _T("Refreshing Token...") )
 				_refreshAuthToken() .done( function(data) {
 					var tokens;
-					try { tokens = JSON.parse(data) } 
+					try { tokens = JSON.parse(data) }
 					catch (e) { tokens = {result:false} }
 					if (tokens.result == false) {
 						// if refresh failed, try the whole process from the start
 						(notifCB)(1,_T("Authenticating client device..."))
-						_getDeviceCode().done( function(data, textStatus, jqXHR) {		
+						_getDeviceCode().done( function(data, textStatus, jqXHR) {
 								data = JSON.parse(data);
 								(notifCB)( 1,_T("Please go to this page <a href='{1}' target='_blank'>{1}</a> and enter this code : <mark>{0}</mark>").format(data.user_code,data.verification_url) )
-								setTimeout( function() { _tryAuthToken( 0 , data.interval )  } , data.interval*1000 ) 
+								setTimeout( function() { _tryAuthToken( 0 , data.interval )	 } , data.interval*1000 )
 							})
-							.fail( function(jqXHR, textStatus, errorThrown) {			
+							.fail( function(jqXHR, textStatus, errorThrown) {
 								(notifCB)( 1,_T("General Failure") )
-								(failureCB)(textStatus) 
+								(failureCB)(textStatus)
 							})
 					} else {
 						// retry from the begining
 						(notifCB)( 1,_T("Token Refreshed") )
 						_OAuthCall( execFunc , param, notifCB , dataCB, failureCB )
-					}							
+					}
 				})
 			} else {
 					// got proper list of plugins
 				(dataCB)(result)
 			}
 		})
-		.fail( function(jqXHR, textStatus, errorThrown) {			
-			(failureCB)(textStatus) 
+		.fail( function(jqXHR, textStatus, errorThrown) {
+			(failureCB)(textStatus)
 		})
 	}
-		
+
 	return {
 		Call : _OAuthCall		// execFunc , param, notifCB , dataCB, failureCB
 	}
 })();
 
-		
+
 var BlocklyArea = (function(htmlid){
 	var _htmlid = htmlid;
 	var _blocklyDiv = null;
@@ -3546,245 +3546,245 @@ var BlocklyArea = (function(htmlid){
 		html += "<div class='altui-blockly-editor' style='display: none;' >";
 			html += "<div class='card xxx'>";
 			html += "  <div class='card-header'>";
-			html += "    <h3 class='card-title'>Watch Expression</h3>";
+			html += "	 <h3 class='card-title'>Watch Expression</h3>";
 			html += "  </div>";
 			html += "  <div class='card-body'>";
 				html+="<xml id='toolbox' style='display: none'>";
-				html+="    <category name='Watch Types'>";
-				html+="      <block type='when'></block>";
-				html+="      <block type='whensince'></block>";
-				html+="    </category>";
-				html+="    <category name='Variable'>";
-					html+="  <block type='new_value'></block>";
-					html+="  <block type='old_value'></block>";
-					// html+="  <block type='variables_get'>";
-					// html+="    <field name='VAR'>new</field>";
-					// html+="  </block>";
-					// html+="  <block type='variables_get'>";
-					// html+="    <field name='VAR'>old</field>";
-					// html+="  </block>";
-				html+="    </category>";
-				html+="    <category name='Time'>";
-					html+="  <block type='now_value'></block>";
-					html+="  <block type='lastupdate_value'></block>";
-					html+="  <block type='duration'></block>";
-					html+="  <block type='duration_value'></block>";
-				html+="    </category>";
-				html+="    <category name='Luup'>";
-					html+="  <block type='device'></block>";
-				html+="    </category>";
-				html+="    <category name='Logic'>";
-				// html+="      <block type='controls_if'></block>";
-				html+="      <block type='logic_compare'></block>";
-				html+="      <block type='logic_operation'></block>";
-				html+="      <block type='logic_negate'></block>";
-				html+="      <block type='logic_boolean'></block>";
-				html+="      <block type='logic_null'></block>";
-				html+="      <block type='logic_ternary'></block>";
-				html+="    </category>";
-				// html+="    <category id='catLoops'>";
-				// html+="      <block type='controls_repeat_ext'>";
-				// html+="        <value name='TIMES'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>10</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='controls_whileUntil'></block>";
-				// html+="      <block type='controls_for'>";
-				// html+="        <value name='FROM'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>1</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="        <value name='TO'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>10</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="        <value name='BY'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>1</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='controls_forEach'></block>";
-				// html+="      <block type='controls_flow_statements'></block>";
-				// html+="    </category>";
-				html+="    <category name='Math'>";
-				html+="      <block type='math_number'></block>";
-				html+="      <block type='math_arithmetic'></block>";
-				html+="      <block type='math_single'></block>";
-				html+="      <block type='math_trig'></block>";
-				html+="      <block type='math_constant'></block>";
-				html+="      <block type='math_number_property'></block>";
-				// html+="      <block type='math_change'>";
-				// html+="        <value name='DELTA'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>1</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				html+="      <block type='math_round'></block>";
-				// html+="      <block type='math_on_list'></block>";
-				html+="      <block type='math_modulo'></block>";
-				// html+="      <block type='math_constrain'>";
-				// html+="        <value name='LOW'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>1</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="        <value name='HIGH'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>100</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='math_random_int'>";
-				// html+="        <value name='FROM'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>1</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="        <value name='TO'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>100</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='math_random_float'></block>";
-				html+="    </category>";
-				html+="    <category name='Text'>";
-				html+="      <block type='text'></block>";
-				html+="      <block type='text_join'></block>";
-				html+="      <block type='text_append'>";
-				html+="        <value name='TEXT'>";
-				html+="          <block type='text'></block>";
-				html+="        </value>";
-				html+="      </block>";
-				html+="      <block type='text_length'></block>";
-				html+="      <block type='text_tonumber'></block>";
-				html+="      <block type='text_isEmpty'></block>";
-				html+="      <block type='text_indexOf'>";
-				html+="        <value name='VALUE'>";
-				html+="          <block type='variables_get'>";
-				html+="            <field name='VAR' class='textVar'>...</field>";
-				html+="          </block>";
-				html+="        </value>";
-				html+="      </block>";
-				html+="      <block type='text_charAt'>";
-				html+="        <value name='VALUE'>";
-				html+="          <block type='variables_get'>";
-				html+="            <field name='VAR' class='textVar'>...</field>";
-				html+="          </block>";
-				html+="        </value>";
-				html+="      </block>";
-				html+="      <block type='text_getSubstring'>";
-				html+="        <value name='STRING'>";
-				html+="          <block type='variables_get'>";
-				html+="            <field name='VAR' class='textVar'>...</field>";
-				html+="          </block>";
-				html+="        </value>";
-				html+="      </block>";
-				html+="      <block type='text_changeCase'></block>";
-				html+="      <block type='text_trim'></block>";
-				// html+="      <block type='text_print'></block>";
-				// html+="      <block type='text_prompt_ext'>";
-				// html+="        <value name='TEXT'>";
-				// html+="          <block type='text'></block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				html+="    </category>";
-				// html+="    <category id='catLists'>";
-				// html+="      <block type='lists_create_empty'></block>";
-				// html+="      <block type='lists_create_with'></block>";
-				// html+="      <block type='lists_repeat'>";
-				// html+="        <value name='NUM'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>5</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='lists_length'></block>";
-				// html+="      <block type='lists_isEmpty'></block>";
-				// html+="      <block type='lists_indexOf'>";
-				// html+="        <value name='VALUE'>";
-				// html+="          <block type='variables_get'>";
-				// html+="            <field name='VAR' class='listVar'>...</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='lists_getIndex'>";
-				// html+="        <value name='VALUE'>";
-				// html+="          <block type='variables_get'>";
-				// html+="            <field name='VAR' class='listVar'>...</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='lists_setIndex'>";
-				// html+="        <value name='LIST'>";
-				// html+="          <block type='variables_get'>";
-				// html+="            <field name='VAR' class='listVar'>...</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='lists_getSublist'>";
-				// html+="        <value name='LIST'>";
-				// html+="          <block type='variables_get'>";
-				// html+="            <field name='VAR' class='listVar'>...</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='lists_split'>";
-				// html+="        <value name='DELIM'>";
-				// html+="          <block type='text'>";
-				// html+="            <field name='TEXT'>,</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="    </category>";
-				// html+="    <category id='catColour'>";
-				// html+="      <block type='colour_picker'></block>";
-				// html+="      <block type='colour_random'></block>";
-				// html+="      <block type='colour_rgb'>";
-				// html+="        <value name='RED'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>100</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="        <value name='GREEN'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>50</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="        <value name='BLUE'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>0</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="      <block type='colour_blend'>";
-				// html+="        <value name='COLOUR1'>";
-				// html+="          <block type='colour_picker'>";
-				// html+="            <field name='COLOUR'>#ff0000</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="        <value name='COLOUR2'>";
-				// html+="          <block type='colour_picker'>";
-				// html+="            <field name='COLOUR'>#3333ff</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="        <value name='RATIO'>";
-				// html+="          <block type='math_number'>";
-				// html+="            <field name='NUM'>0.5</field>";
-				// html+="          </block>";
-				// html+="        </value>";
-				// html+="      </block>";
-				// html+="    </category
-				// html+="    <sep></sep>";
-				// html+="    <category id='catVariables' custom='VARIABLE'></category>";
-				// html+="    <category id='catFunctions' custom='PROCEDURE'></category>";
-				html+="  </xml>";
+				html+="	   <category name='Watch Types'>";
+				html+="		 <block type='when'></block>";
+				html+="		 <block type='whensince'></block>";
+				html+="	   </category>";
+				html+="	   <category name='Variable'>";
+					html+="	 <block type='new_value'></block>";
+					html+="	 <block type='old_value'></block>";
+					// html+="	<block type='variables_get'>";
+					// html+="	  <field name='VAR'>new</field>";
+					// html+="	</block>";
+					// html+="	<block type='variables_get'>";
+					// html+="	  <field name='VAR'>old</field>";
+					// html+="	</block>";
+				html+="	   </category>";
+				html+="	   <category name='Time'>";
+					html+="	 <block type='now_value'></block>";
+					html+="	 <block type='lastupdate_value'></block>";
+					html+="	 <block type='duration'></block>";
+					html+="	 <block type='duration_value'></block>";
+				html+="	   </category>";
+				html+="	   <category name='Luup'>";
+					html+="	 <block type='device'></block>";
+				html+="	   </category>";
+				html+="	   <category name='Logic'>";
+				// html+="		<block type='controls_if'></block>";
+				html+="		 <block type='logic_compare'></block>";
+				html+="		 <block type='logic_operation'></block>";
+				html+="		 <block type='logic_negate'></block>";
+				html+="		 <block type='logic_boolean'></block>";
+				html+="		 <block type='logic_null'></block>";
+				html+="		 <block type='logic_ternary'></block>";
+				html+="	   </category>";
+				// html+="	  <category id='catLoops'>";
+				// html+="		<block type='controls_repeat_ext'>";
+				// html+="		  <value name='TIMES'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>10</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='controls_whileUntil'></block>";
+				// html+="		<block type='controls_for'>";
+				// html+="		  <value name='FROM'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>1</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		  <value name='TO'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>10</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		  <value name='BY'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>1</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='controls_forEach'></block>";
+				// html+="		<block type='controls_flow_statements'></block>";
+				// html+="	  </category>";
+				html+="	   <category name='Math'>";
+				html+="		 <block type='math_number'></block>";
+				html+="		 <block type='math_arithmetic'></block>";
+				html+="		 <block type='math_single'></block>";
+				html+="		 <block type='math_trig'></block>";
+				html+="		 <block type='math_constant'></block>";
+				html+="		 <block type='math_number_property'></block>";
+				// html+="		<block type='math_change'>";
+				// html+="		  <value name='DELTA'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>1</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				html+="		 <block type='math_round'></block>";
+				// html+="		<block type='math_on_list'></block>";
+				html+="		 <block type='math_modulo'></block>";
+				// html+="		<block type='math_constrain'>";
+				// html+="		  <value name='LOW'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>1</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		  <value name='HIGH'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>100</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='math_random_int'>";
+				// html+="		  <value name='FROM'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>1</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		  <value name='TO'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>100</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='math_random_float'></block>";
+				html+="	   </category>";
+				html+="	   <category name='Text'>";
+				html+="		 <block type='text'></block>";
+				html+="		 <block type='text_join'></block>";
+				html+="		 <block type='text_append'>";
+				html+="		   <value name='TEXT'>";
+				html+="			 <block type='text'></block>";
+				html+="		   </value>";
+				html+="		 </block>";
+				html+="		 <block type='text_length'></block>";
+				html+="		 <block type='text_tonumber'></block>";
+				html+="		 <block type='text_isEmpty'></block>";
+				html+="		 <block type='text_indexOf'>";
+				html+="		   <value name='VALUE'>";
+				html+="			 <block type='variables_get'>";
+				html+="			   <field name='VAR' class='textVar'>...</field>";
+				html+="			 </block>";
+				html+="		   </value>";
+				html+="		 </block>";
+				html+="		 <block type='text_charAt'>";
+				html+="		   <value name='VALUE'>";
+				html+="			 <block type='variables_get'>";
+				html+="			   <field name='VAR' class='textVar'>...</field>";
+				html+="			 </block>";
+				html+="		   </value>";
+				html+="		 </block>";
+				html+="		 <block type='text_getSubstring'>";
+				html+="		   <value name='STRING'>";
+				html+="			 <block type='variables_get'>";
+				html+="			   <field name='VAR' class='textVar'>...</field>";
+				html+="			 </block>";
+				html+="		   </value>";
+				html+="		 </block>";
+				html+="		 <block type='text_changeCase'></block>";
+				html+="		 <block type='text_trim'></block>";
+				// html+="		<block type='text_print'></block>";
+				// html+="		<block type='text_prompt_ext'>";
+				// html+="		  <value name='TEXT'>";
+				// html+="			<block type='text'></block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				html+="	   </category>";
+				// html+="	  <category id='catLists'>";
+				// html+="		<block type='lists_create_empty'></block>";
+				// html+="		<block type='lists_create_with'></block>";
+				// html+="		<block type='lists_repeat'>";
+				// html+="		  <value name='NUM'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>5</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='lists_length'></block>";
+				// html+="		<block type='lists_isEmpty'></block>";
+				// html+="		<block type='lists_indexOf'>";
+				// html+="		  <value name='VALUE'>";
+				// html+="			<block type='variables_get'>";
+				// html+="			  <field name='VAR' class='listVar'>...</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='lists_getIndex'>";
+				// html+="		  <value name='VALUE'>";
+				// html+="			<block type='variables_get'>";
+				// html+="			  <field name='VAR' class='listVar'>...</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='lists_setIndex'>";
+				// html+="		  <value name='LIST'>";
+				// html+="			<block type='variables_get'>";
+				// html+="			  <field name='VAR' class='listVar'>...</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='lists_getSublist'>";
+				// html+="		  <value name='LIST'>";
+				// html+="			<block type='variables_get'>";
+				// html+="			  <field name='VAR' class='listVar'>...</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='lists_split'>";
+				// html+="		  <value name='DELIM'>";
+				// html+="			<block type='text'>";
+				// html+="			  <field name='TEXT'>,</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="	  </category>";
+				// html+="	  <category id='catColour'>";
+				// html+="		<block type='colour_picker'></block>";
+				// html+="		<block type='colour_random'></block>";
+				// html+="		<block type='colour_rgb'>";
+				// html+="		  <value name='RED'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>100</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		  <value name='GREEN'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>50</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		  <value name='BLUE'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>0</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="		<block type='colour_blend'>";
+				// html+="		  <value name='COLOUR1'>";
+				// html+="			<block type='colour_picker'>";
+				// html+="			  <field name='COLOUR'>#ff0000</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		  <value name='COLOUR2'>";
+				// html+="			<block type='colour_picker'>";
+				// html+="			  <field name='COLOUR'>#3333ff</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		  <value name='RATIO'>";
+				// html+="			<block type='math_number'>";
+				// html+="			  <field name='NUM'>0.5</field>";
+				// html+="			</block>";
+				// html+="		  </value>";
+				// html+="		</block>";
+				// html+="	  </category
+				// html+="	  <sep></sep>";
+				// html+="	  <category id='catVariables' custom='VARIABLE'></category>";
+				// html+="	  <category id='catFunctions' custom='PROCEDURE'></category>";
+				html+="	 </xml>";
 				html += _T("Watch Formula");
 				html += "<div id='blocklyDiv' style='height: 280px; width: 100%;'></div>";
 				// html += "<div id='blocklyDiv' style='height: 480px; width: 600px;'></div>";
@@ -3797,7 +3797,7 @@ var BlocklyArea = (function(htmlid){
 		html += "</div>";
 		return html
 	};
-	
+
 	function _myUpdateFunction() {
 		var code = Blockly.Lua.workspaceToCode(_workspace);
 		$("#blocklyDivCode").text(code);
@@ -3806,7 +3806,7 @@ var BlocklyArea = (function(htmlid){
 		_blocklyDiv= blocklyDiv;
 		// create if needed, just show otherwise
 		if ((_workspace==null) || ($("#"+blocklyDiv+" SVG").length==0) ){
-			_workspace = Blockly.inject(blocklyDiv,{toolbox: document.getElementById(toolboxid)});	
+			_workspace = Blockly.inject(blocklyDiv,{toolbox: document.getElementById(toolboxid)});
 			_workspace.addChangeListener(_myUpdateFunction);
 			$(".altui-blockly-editor").data('workspace',_workspace);
 		}
@@ -3815,7 +3815,7 @@ var BlocklyArea = (function(htmlid){
 			$(".altui-blockly-editor").toggle(true);
 			$(".blocklyToolboxDiv").toggle(true);
 		}
-		
+
 		// init content
 		if (initxml !="") {
 			var xml = Blockly.Xml.textToDom(initxml || "");
@@ -3824,7 +3824,7 @@ var BlocklyArea = (function(htmlid){
 		else {
 			Blockly.mainWorkspace.clear();
 		}
-		
+
 		// init callback
 		$("#altui-close-blockly").off('click').click( function() {
 			if ($.isFunction(callback)) {
@@ -3837,7 +3837,7 @@ var BlocklyArea = (function(htmlid){
 				var xmlstr = Blockly.Xml.domToText( Blockly.Xml.workspaceToDom(_workspace) );
 				(callback)(txt,xmlstr);
 			}
-		});		
+		});
 	};
 	function _hideEditor() {
 		_workspace.removeChangeListener(_myUpdateFunction);
@@ -3857,7 +3857,7 @@ var BlocklyArea = (function(htmlid){
 
 var IconDB = ( function (window, undefined) {
 	var _dbIcon = null;
-	
+
 	function _getDynamicIcon( controllerid, name , cbfunc ) {
 		if (_dbIcon == null) {
 			_dbIcon = MyLocalStorage.get("IconDB");
@@ -3899,37 +3899,37 @@ var IconDB = ( function (window, undefined) {
 			return name;
 		else if (name.startsWith("data:")) {
 			_dbIcon[name] = name;
-			return name;			
+			return name;
 		}
 
 		// if undefined and not yet started to fetch, then go fetch it
 		if (_dbIcon[name]==undefined) {
 			_dbIcon[name]="pending"
-			MultiBox.getIcon(controllerid,  name, function(data) {
+			MultiBox.getIcon(controllerid,	name, function(data) {
 				// store in cache and call callback
 				_dbIcon[name]=data;
 				if ($.isFunction(cbfunc))
-					cbfunc(data);				
+					cbfunc(data);
 			});
 		}
-		
+
 		// if not yet there, or still pending , return nothing - it will arrive later in a callback
 		return ((_dbIcon[name]!=undefined) && (_dbIcon[name]!="pending"))  ? _dbIcon[name] : "" ;
 	};
-	
+
 	return {
-		getDynamicIcon  : _getDynamicIcon,	// ( controllerid, name , cbfunc ) 
-		getIconContent  : _getIconContent,	// ( controllerid, name , cbfunc ) 
-		isDB			: function()	{ 	return MyLocalStorage.get("IconDB")!=null;			},
-		saveDB			: function() 	{	MyLocalStorage.set("IconDB", _dbIcon);	  	},
-		resetDB			: function() 	{	MyLocalStorage.clear("IconDB"); _dbIcon = {}; }
+		getDynamicIcon	: _getDynamicIcon,	// ( controllerid, name , cbfunc )
+		getIconContent	: _getIconContent,	// ( controllerid, name , cbfunc )
+		isDB			: function()	{	return MyLocalStorage.get("IconDB")!=null;			},
+		saveDB			: function()	{	MyLocalStorage.set("IconDB", _dbIcon);		},
+		resetDB			: function()	{	MyLocalStorage.clear("IconDB"); _dbIcon = {}; }
 	}
 } )( window );
 
 var HtmlResourcesDB = (function (window,undefined) {
 	var _resourceLoaded=[]
 	$.each( document.scripts, function(idx,s) { _resourceLoaded[$(s).attr("src")] = true  });
-	
+
 	var _location = document.location.pathname.replace( "/data_request", "" ) + "/";
 	function _loadResourcesAsync( fileNames ) {
 		var d = $.Deferred();
@@ -3967,7 +3967,7 @@ var HtmlResourcesDB = (function (window,undefined) {
 				}
 				d.resolve();
 			} )
-			.fail( function( jqxhr, textStatus, errorThrown  ) {
+			.fail( function( jqxhr, textStatus, errorThrown	 ) {
 				PageMessage.message( "Load \"" + jqxhr.fileName + "\" : " + textStatus + " - " + errorThrown, "danger");
 				d.reject();
 			} );
@@ -3975,12 +3975,12 @@ var HtmlResourcesDB = (function (window,undefined) {
 	}
 	return {
 		loadResourcesAsync: _loadResourcesAsync	// return a promise
-	}	
+	}
 })();
 
 var FileDB = ( function (window, undefined) {
 	var _dbFile = null;
-	
+
 	function _getFileContent( controllerid, name, cbfunc ) {
 		if (isNullOrEmpty(name))
 			return
@@ -3990,10 +3990,10 @@ var FileDB = ( function (window, undefined) {
 			if (_dbFile==null)
 				_dbFile={}
 		}
-		
+
 		if ($.isFunction(cbfunc)==false)
 			return null;
-		
+
 		if (_dbFile[name]!=undefined)
 			if (_dbFile[name]=="pending")
 			{
@@ -4002,7 +4002,7 @@ var FileDB = ( function (window, undefined) {
 			}
 			else {
 				AltuiDebug.debug("_getFileContent( {0} ) ==> returning content from cache".format(name));
-				cbfunc(_dbFile[name]); 
+				cbfunc(_dbFile[name]);
 			}
 		else {
 			_dbFile[name]="pending";
@@ -4016,15 +4016,15 @@ var FileDB = ( function (window, undefined) {
 		}
 		return 0;
 	};
-	
+
 	return {
-		getFileContent  : _getFileContent,		// ( controllerid, name, cbfunc )
-		isDB			: function()	{ 	return MyLocalStorage.get("FileDB")!=null;			},
-		saveDB			: function(db) 	{	MyLocalStorage.set("FileDB", _dbFile);	  	},
-		resetDB			: function(db) 	{	MyLocalStorage.clear("FileDB"); _dbFile = {}; }
+		getFileContent	: _getFileContent,		// ( controllerid, name, cbfunc )
+		isDB			: function()	{	return MyLocalStorage.get("FileDB")!=null;			},
+		saveDB			: function(db)	{	MyLocalStorage.set("FileDB", _dbFile);		},
+		resetDB			: function(db)	{	MyLocalStorage.clear("FileDB"); _dbFile = {}; }
 	}
 } )( window );
-	
+
 function _sortByVariableName(a,b)
 {
 	if (a.variable > b.variable)
@@ -4034,10 +4034,10 @@ function _sortByVariableName(a,b)
 	// a doit être égale à b
 	return 0;
 };
-	
+
 var WatchManager = (function() {
 	function _sameWatch(watcha,watchb) {
-		return 	watcha.service == watchb.service && 
+		return	watcha.service == watchb.service &&
 				watcha.variable == watchb.variable &&
 				watcha.deviceid == watchb.deviceid &&
 				watcha.sceneid == watchb.sceneid &&
@@ -4130,7 +4130,7 @@ var TimerEditor = (function() {
 		init: function( _timer ) {
 			timer = cloneObject(_timer);
 			var dialog = DialogManager.createPropertyDialog(_T('Timer'));
-			DialogManager.dlgAddLine( dialog , "TimerName", _T("TimerName"), timer.name, "", {required:''} ); 
+			DialogManager.dlgAddLine( dialog , "TimerName", _T("TimerName"), timer.name, "", {required:''} );
 			DialogManager.dlgAddSelect(dialog, "TimerType", _T("TimerType"), timer.type, _timerTypes, {required:''});
 			DialogManager.dlgAddTimeInterval(dialog, "TimerInterval",_T("TimerInterval"),timer.interval, _timerUnits);
 			DialogManager.dlgAddDayOfWeek(dialog, "TimerDayOfWeek", _T("TimerDayOfWeek"), timer.days_of_week || '' , _timerDOW);
@@ -4140,7 +4140,7 @@ var TimerEditor = (function() {
 			});
 			DialogManager.dlgAddTime(dialog, "TimerTime", timer.time  ,_timerRelative);
 			DialogManager.dlgAddDateTime(dialog, "TimerDateTime", _formatRFC3339Date(timer.abstime || ''));
-			if ( _timer.modeStatus && (UIManager.UI7Check()==true))  
+			if ( _timer.modeStatus && (UIManager.UI7Check()==true))
 				DialogManager.dlgAddHouseMode(dialog, "Modes", _T("Only in the following mode(s)")+" : ", _timer.modeStatus);
 			return dialog;
 		},
@@ -4159,7 +4159,7 @@ var TimerEditor = (function() {
 					if (val=='')
 						return null;
 					timer.interval = $(_domparent+" #altui-widget-TimerInterval").val()+$(_domparent+" #altui-widget-TimerIntervalUnit").val();
-					break;						
+					break;
 				case 2:	// day of week
 					var tmp = $(_domparent+" #altui-widget-TimerDayOfWeek input:checked").map( function(idx,elem){ return $(elem).val() });
 					timer.days_of_week = $.makeArray(tmp).join(",");
@@ -4194,7 +4194,7 @@ var TimerEditor = (function() {
 			$(root).off()
 				.on( 'change',_domparent+" #altui-widget-TimerType", function() {
 					_showHideItems( $(this).val() );
-				})			
+				})
 				.on( 'submit',_domparent+" form", function( event ) {
 					var result = that.getResult()
 					if (result==null)
@@ -4238,25 +4238,25 @@ var SceneEditor = function (scene) {
 			var org_group = scene.groups[ ids[0] ];
 			var action = org_group.actions[ ids[1] ];
 			var new_groupid = ui.item.parent().closest(".altui-scene-group").data("group-idx");
-			
+
 			org_group.actions.splice( ids[1], 1 );
 			var arr = $(this).parents("tbody").find("tr[data-group-idx={0}]".format(new_groupid)).find(".altui-scene-group tbody").sortable( "toArray" );
-			// insert new elem at the right position 
+			// insert new elem at the right position
 			var index = $.inArray(ui.item.prop("id"),arr);
 			scene.groups[ new_groupid ].actions.splice(index, 0, action)
 			_showSaveNeeded();
-			
+
 			// now update the UI
 			var tbody = $(this).parents("tbody");
 			_.defer( function() {
-				if (ids[0]  != new_groupid ) {
+				if (ids[0]	!= new_groupid ) {
 					$(tbody).find("tr[data-group-idx={0}]".format(new_groupid)).replaceWith( _displayGroup(scene.groups[ new_groupid ],new_groupid) );
 					$(tbody).find("tr[data-group-idx={0}]".format(new_groupid)).find(".altui-scene-group tbody").sortable(sortable_options);
 				}
 				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).replaceWith( _displayGroup(org_group,ids[0] ) );
-				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group tbody").sortable(sortable_options);				
+				$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group tbody").sortable(sortable_options);
 			});
-			
+
 		}
 	};
 
@@ -4267,7 +4267,7 @@ var SceneEditor = function (scene) {
 	var scenecontroller = MultiBox.controllerOf(scene.altuiid).controller;
 	var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 	var scenewatches = MultiBox.getWatches("VariablesToWatch",function(watch) { return (watch.sceneid == scene.id) && (scenecontroller==0) });
-	
+
 	function _makeAltuiid(controllerid,id) {
 		return controllerid+"-"+id;
 	}
@@ -4277,7 +4277,7 @@ var SceneEditor = function (scene) {
 			var lines=[];
 			if (trigger.users)
 				$.each(trigger.users.toString().split(","), function(idx,userid) {
-					var user  =  MultiBox.getUserByID(scenecontroller,userid);
+					var user  =	 MultiBox.getUserByID(scenecontroller,userid);
 					lines.push(user.Name);
 				});
 			var html ="";
@@ -4294,7 +4294,7 @@ var SceneEditor = function (scene) {
 				html += ("[{0}-{1}]".format(trigger.start_time,trigger.stop_time));
 			return html;
 		};
-				
+
 		var html="";
 		var triggerinfo = _formatTrigger(scenecontroller,trigger);
 		html +="<tr data-trigger-idx='"+idx+"'>";
@@ -4311,17 +4311,17 @@ var SceneEditor = function (scene) {
 			triggerinfo.descr);
 		html +="<td><small>";
 		html += triggerinfo.condition;
-		html +="</small></td>";		
+		html +="</small></td>";
 
 		html +="<td>";
 		html += smallbuttonTemplate.format( idx, 'altui-triggertimerestrict', glyphTemplate.format("clock-o",_T("Timers"),(trigger.days_of_week ? 'text-success' : '' )),_displayTriggerRestrictions(trigger));
 		html += smallbuttonTemplate.format( idx, 'altui-trigger-users', glyphTemplate.format("user",_T("Users"),(trigger.users ? 'text-success' : '' )),_displayTriggerUsers(trigger));
 		html +="</td>";
-		
+
 		html +="<td>";
 		html += smallbuttonTemplate.format( idx, 'altui-luatrigger', "<i class='fa fa-file-text-o' aria-hidden='true'></i><span> Lua</span>",trigger.lua);
 		html +="</td>";
-		
+
 		html +="<td>";
 		html += smallbuttonTemplate.format( idx, 'altui-deltrigger', deleteGlyph,'Delete trigger');
 		html += smallbuttonTemplate.format( idx, 'altui-edittrigger', editGlyph, 'Edit trigger');
@@ -4332,8 +4332,8 @@ var SceneEditor = function (scene) {
 
 	function _editTrigger( triggeridx , jqButton) {
 		//Object {name: "blw 2", enabled: 1, template: 2, device: 5, arguments: Array[1]…}LastEval: 0arguments: Array[1]device: 5enabled: 1last_run: 1424626243lua: "return false"name: "blw 2"template: 2
-		var trigger = (triggeridx!=-1) 
-		? scene.triggers[ triggeridx ] 
+		var trigger = (triggeridx!=-1)
+		? scene.triggers[ triggeridx ]
 		: {
 			name:'',
 			enabled:1,
@@ -4342,7 +4342,7 @@ var SceneEditor = function (scene) {
 			arguments:[],
 			lua:''
 		};
-		
+
 		DialogManager.triggerDialog( trigger, scenecontroller, function() {
 			// now update the UI
 			if (triggeridx>=0) {
@@ -4350,12 +4350,12 @@ var SceneEditor = function (scene) {
 			} else {
 				scene.triggers.push( trigger );
 				var parent = $(jqButton).closest("tr")
-				parent.before(  _displayTrigger(trigger,scene.triggers.length-1) );
+				parent.before(	_displayTrigger(trigger,scene.triggers.length-1) );
 			}
 			_showSaveNeeded();
 		} );
 	};
-	
+
 	function _editLuaExpression(idxwatch) {
 		var watch = scenewatches[idxwatch];
 		// hide scene & scene editor accordeon
@@ -4365,31 +4365,31 @@ var SceneEditor = function (scene) {
 
 		// show blockly editor
 		$(".altui-blockly-editor").toggle(true);
-		
+
 		// inject Blockly if needed
 		 if ($(".altui-blockly-editor svg").length == 0)  {
 			BlocklyArea.initBlocklyEditor('blocklyDiv','toolbox',watch.xml);
 		 }
 		$(".altui-blockly-editor").data('idxwatch',idxwatch);
 	};
-	
+
 	function _editWatch( idx, jqButton) {
-		var watch =  (idx!=-1) ? scenewatches[idx] : "";
+		var watch =	 (idx!=-1) ? scenewatches[idx] : "";
 		var dialog = DialogManager.createPropertyDialog(_T('Watch'));
 		var device = NULL_DEVICE;
 		if (idx!=-1)
 			device = MultiBox.getDeviceByAltuiID(watch.deviceid) || NULL_DEVICE;
-		
-		DialogManager.dlgAddDevices( dialog , '', device ? device.altuiid : NULL_DEVICE, 
+
+		DialogManager.dlgAddDevices( dialog , '', device ? device.altuiid : NULL_DEVICE,
 			function() {			// callback
 				var widget = {};
 				widget.properties ={
-					deviceid: 	device.altuiid,
+					deviceid:	device.altuiid,
 					service:	watch.service,
 					variable:	watch.variable
 				}
 				DialogManager.dlgAddVariables(dialog, null, widget, function() {
-					DialogManager.dlgAddBlockly( dialog , "LuaExpression", _T("Lua Expression with new=newvalue and old=oldvalue"), watch.luaexpr, watch.xml, _T("Expression with old new as variables and lua operators like <  >  <= >= == ~="), {required:''} ); 
+					DialogManager.dlgAddBlockly( dialog , "LuaExpression", _T("Lua Expression with new=newvalue and old=oldvalue"), watch.luaexpr, watch.xml, _T("Expression with old new as variables and lua operators like <	 >	<= >= == ~="), {required:''} );
 					$('div#dialogModal').modal();
 				});
 			},
@@ -4407,7 +4407,7 @@ var SceneEditor = function (scene) {
 				service:state.service,
 				variable:state.variable,
 				deviceid:altuiid,
-				sceneid:scene.id,  
+				sceneid:scene.id,
 				luaexpr:$("#altui-widget-LuaExpression").val(),
 				xml:$("#altui-xml-LuaExpression").val()
 			};
@@ -4420,13 +4420,13 @@ var SceneEditor = function (scene) {
 			}
 			else {
 				idx = scenewatches.length;
-				scenewatches.push( newwatch );				
+				scenewatches.push( newwatch );
 				var parent = $(jqButton).closest("tr")
-				parent.before(  _displayWatch(idx , newwatch) );
+				parent.before(	_displayWatch(idx , newwatch) );
 			}
 			return idx;
 		};
-		
+
 		$('div#dialogs')
 			.on('click',"#altui-edit-LuaExpression", function(event) {
 				var idxwatch = _getWatchDialogValues();
@@ -4439,13 +4439,13 @@ var SceneEditor = function (scene) {
 				}, 500, idxwatch );
 				return false;
 			})
-			.on( 'submit',"div#dialogModal form",  function( event ) {	
+			.on( 'submit',"div#dialogModal form",  function( event ) {
 				_getWatchDialogValues();
 				_showSaveNeeded();
 				PageMessage.message( "Change in Watches will require a LUUP reload after you save the scene", "info", true);
 			});
 	}
-	
+
 	function _displayWatch(idx,watch) {
 		var device = MultiBox.getDeviceByAltuiID(watch.deviceid);
 		if (device==null)
@@ -4476,7 +4476,7 @@ var SceneEditor = function (scene) {
 	function _findTimerIdxById( scene, timerid ) {
 		var timer = null;
 		if (scene.timers) {
-			$.each(scene.timers, function( idx,_timer) {	
+			$.each(scene.timers, function( idx,_timer) {
 				if (_timer.id == timerid) {
 					timer = idx;
 					return false;
@@ -4485,7 +4485,7 @@ var SceneEditor = function (scene) {
 		}
 		return timer;
 	};
-	
+
 	function _editTriggerUsers( triggeridx, jqButton ) {
 		var trigger = scene.triggers[ triggeridx ];
 		DialogManager.triggerUsersDialog(trigger,scenecontroller,function() {
@@ -4493,9 +4493,9 @@ var SceneEditor = function (scene) {
 			_showSaveNeeded();
 		});
 	};
-	
+
 	function _editTriggerRestrict( triggeridx, jqButton ) {
-		function _hideShowControls(  ) {
+		function _hideShowControls(	 ) {
 			var bViewOthers = $("#altui-widget-RestrictTrigger").prop('checked');
 			$("#altui-widget-StartTime").closest(".form-group").toggle(bViewOthers);
 			$("#altui-widget-StopTime").closest(".form-group").toggle(bViewOthers);
@@ -4515,8 +4515,8 @@ var SceneEditor = function (scene) {
 		DialogManager.dlgAddTimer(dialog, "StopTime", _T("Stop Time"),trigger.stop_time);
 		$('div#dialogModal').modal();
 		_hideShowControls();
-		
-		$('div#dialogs')	
+
+		$('div#dialogs')
 			.off( 'change',"input#altui-widget-RestrictTrigger")
 			.on( 'change',"input#altui-widget-RestrictTrigger", function() {
 				_hideShowControls();
@@ -4527,7 +4527,7 @@ var SceneEditor = function (scene) {
 					trigger.start_time=undefined;
 					trigger.stop_time=undefined;
 					trigger.days_of_week=undefined;
-				} else 
+				} else
 				{
 					var tmp = $("#altui-widget-TimerDayOfWeek input:checked").map( function(idx,elem){ return $(elem).val() });
 					trigger.days_of_week = $.makeArray(tmp).join(",");
@@ -4536,7 +4536,7 @@ var SceneEditor = function (scene) {
 						trigger.stop_time=undefined;
 						trigger.days_of_week=undefined;
 					} else {
-						trigger.start_time  =$("#altui-widget-StartTime").val();
+						trigger.start_time	=$("#altui-widget-StartTime").val();
 						trigger.stop_time  =$("#altui-widget-StopTime").val();
 					}
 				}
@@ -4546,7 +4546,7 @@ var SceneEditor = function (scene) {
 			});
 	};
 
-	function _editTimer( timerid, jqButton ) 	{
+	function _editTimer( timerid, jqButton )	{
 		function _getNewTimerID() {
 			var max = 0;
 			if (scene.timers) {
@@ -4556,7 +4556,7 @@ var SceneEditor = function (scene) {
 			}
 			return ++max;
 		};
-				
+
 		//{"id":1,"name":"Interval","type":1,"enabled":1,"interval":"3h","last_run":1427346180,"next_run":1427363702}
 		var timer = null;
 		var idx = _findTimerIdxById(scene, timerid)
@@ -4583,16 +4583,16 @@ var SceneEditor = function (scene) {
 				parent.before( UIManager.displayTimer(timer) );
 			}
 			_showSaveNeeded();
-		});		
+		});
 	};
-	
+
 	function _displayAction(action,ida,idg) {
 		var actioninfo = _formatAction(scenecontroller,action);
 		var html="";
 		html +="<tr class='altui-scene-action' id='{0}.{1}'>".format(idg,ida);
 		html += "<td>{0}</td><td>{1} (<small class='text-muted'>{2}</small>)</td>".format(
 			actioninfo.device,			// _displayDevice(action.device),
-			actioninfo.action,			// action.action, 
+			actioninfo.action,			// action.action,
 			actioninfo.arguments		//_displayArguments(action.arguments)
 		);
 		html +="<td>";
@@ -4602,12 +4602,12 @@ var SceneEditor = function (scene) {
 		html +="</tr>";
 		return html;
 	};
-	
+
 	function _editAction(scene, action, ida, idg, jqButton) {
 		var dialog = DialogManager.createPropertyDialog(_T('Action'));
 		var device = MultiBox.getDeviceByID(scenecontroller,action.device);
-		DialogManager.dlgAddDevices( dialog , '', device ? device.altuiid : NULL_DEVICE , 
-			function() {		// callback 
+		DialogManager.dlgAddDevices( dialog , '', device ? device.altuiid : NULL_DEVICE ,
+			function() {		// callback
 				var widget = {
 					properties: {
 						deviceid: device ? device.altuiid : NULL_DEVICE,
@@ -4626,9 +4626,9 @@ var SceneEditor = function (scene) {
 				return (MultiBox.controllerOf(device.altuiid).controller == scenecontroller);
 			}
 		);
-		
+
 		$('div#dialogs')
-			.on( 'submit',"div#dialogModal form", 
+			.on( 'submit',"div#dialogModal form",
 			{ scene: scene, button: jqButton },
 			function( event ) {
 				// save for real this time
@@ -4642,11 +4642,11 @@ var SceneEditor = function (scene) {
 						name: $(elem).prop('id').substring( "altui-widget-action-parameters-".length ),
 						value: $(elem).val()
 					});
-				} );		
+				} );
 				if ((action.device>0) && (action.action!=""))
 				{
 					$('div#dialogModal').modal('hide');
-					
+
 					// now update UI
 					// var ids = $(event.data.button).prop("id").split(".");	// groupidx.actionidx
 					var parent = $(event.data.button).closest("tr");
@@ -4664,7 +4664,7 @@ var SceneEditor = function (scene) {
 			}
 		);
 	};
-		
+
 	function _displayGroup(group,idx) {
 		var hours = parseInt( group.delay / 3600 ) % 24;
 		var minutes = parseInt( group.delay / 60 ) % 60;
@@ -4686,7 +4686,7 @@ var SceneEditor = function (scene) {
 			html += smallbuttonTemplate.format( idx, 'altui-delgroup', deleteGlyph, 'Delete group');
 		}
 		html += smallbuttonTemplate.format( idx, 'altui-editgroup', editGlyph, 'Edit group');
-		html +="</td>";			
+		html +="</td>";
 		html += "<td>";
 		html +="<table class='table table-responsive-OFF table-sm altui-scene-group' data-group-idx='"+idx+"'>";
 		html +="<tbody>";
@@ -4716,7 +4716,7 @@ var SceneEditor = function (scene) {
 			step: 1
 		});
 		$('div#dialogs')
-			.on( 'submit',"div#dialogModal form", 
+			.on( 'submit',"div#dialogModal form",
 				{ scene: scene, group:group, button:_button },
 				function( event ) {
 					// save for real this time
@@ -4725,7 +4725,7 @@ var SceneEditor = function (scene) {
 					$.each(scene.groups, function(idxgrp,grp) {
 						if ((idx!=idxgrp) && (grp.delay == duration))	// cannot have twice the same duration
 						{
-							bOK = false; 
+							bOK = false;
 							return false;
 						}
 					});
@@ -4736,7 +4736,7 @@ var SceneEditor = function (scene) {
 					$('div#dialogModal').modal('hide');
 					var group  = event.data.group;
 					group.delay = duration;
-					
+
 					// now update UI
 					var parent = event.data.button.closest("tr");
 					if ($(event.data.button).hasClass("altui-editgroup")) {
@@ -4744,20 +4744,20 @@ var SceneEditor = function (scene) {
 						parent.replaceWith( _displayGroup(group,idx) );
 						root.find("tr[data-group-idx={0}]".format(idx)).find(".altui-scene-group tbody").sortable(sortable_options);
 					} else {
-						// Add 
+						// Add
 						scene.groups.push( group );
 						var newid = scene.groups.length-1
 						parent.before( _displayGroup(group, newid) );
 						parent.parent().find("tr[data-group-idx={0}]".format(newid)).find(".altui-scene-group tbody").sortable(sortable_options);
 					}
-					
+
 					// make it sortable.
 					//$(tbody).find("tr[data-group-idx={0}]".format(ids[0])).find(".altui-scene-group tbody").sortable(sortable_options);
 					_showSaveNeeded();
 				});
 		$('div#dialogModal').modal();
 	};
-		
+
 	function _showSaveNeeded( bSaveNeeded ) { // defaults to "save needed"
 		if (bSaveNeeded == false)
 			$(".altui-scene-editbutton").removeClass("btn-danger").addClass("btn-light");
@@ -4791,13 +4791,13 @@ var SceneEditor = function (scene) {
 		}
 		return html;
 	};
-	
+
 	function _sceneEditDraw() {
 		// var htmlSceneAddButtonTmpl = "  <button type='submit' class='btn btn-light {0}'>"+plusGlyph+"</button>";
 		var rooms = $.grep( MultiBox.getRoomsSync(), function(room,idx) {
 			_roomIDToName[room.altuiid]=room.name;
 			return ( MultiBox.controllerOf(room.altuiid).controller == scenecontroller );
-		});	
+		});
 
 		//scene options room, name, modes
 		var panels = [
@@ -4807,15 +4807,15 @@ var SceneEditor = function (scene) {
 			{id:'Lua', title:_T("Lua"), html:_displayLua()},
 			{id:'Actions', title:_T("Actions"), html:_displayActions()},
 		];
-		
+
 		function _displayHeader() {
 			var htmlRoomSelect = "<select id='altui-room-list' class='form-control'>";
 			var htmlRoomName = "<input id='altui-scene-name-input' type='text' class='form-control' value='"+scene.name+"'></input>";
 			if (rooms) {
-					htmlRoomSelect 	  += "<option value='{1}' {2}>{0}</option>".format(_T("No Room"),0,'');
+					htmlRoomSelect	  += "<option value='{1}' {2}>{0}</option>".format(_T("No Room"),0,'');
 					$.each(rooms, function(idx,room) {
 						var selected = (room.id.toString() == scene.room);
-						htmlRoomSelect 	  += "<option value='{1}' {2}>{0}</option>".format(room.name,room.id,selected ? 'selected' : '');
+						htmlRoomSelect	  += "<option value='{1}' {2}>{0}</option>".format(room.name,room.id,selected ? 'selected' : '');
 					});
 			}
 			htmlRoomSelect += "</select>";
@@ -4837,7 +4837,7 @@ var SceneEditor = function (scene) {
 				html +="<table class='table table-responsive-OFF table-sm'>";
 				html +="<caption>{0}</caption>".format(_T("Device Variable Watches"));
 				html +="<tbody>";
-				$.each( scenewatches, function (idx,watch) {				
+				$.each( scenewatches, function (idx,watch) {
 					html += _displayWatch(idx,watch);
 				});
 				html +=("<tr><td colspan='4'>"
@@ -4883,7 +4883,7 @@ var SceneEditor = function (scene) {
 				html +="<span class='text-danger'>"+str+"</span>";
 				PageMessage.message( str, "danger");
 			}
-			
+
 			html += _displayWatches(scenewatches);
 			return html;
 		}
@@ -4892,22 +4892,22 @@ var SceneEditor = function (scene) {
 			var lua = (scene.lua!=undefined) ? scene.lua : "";
 			// html +="<form class='col-sm-11' role='form' action='javascript:void(0);'>";
 			html +="  <div class='form-group'>";
-			html += ("    <label for='altui-luascene'>Lua scene code:</label>");
-			html +="    <div id='altui-luascene'>"+lua.htmlEncode()+"</div>";
+			html += ("	  <label for='altui-luascene'>Lua scene code:</label>");
+			html +="	<div id='altui-luascene'>"+lua.htmlEncode()+"</div>";
 			html +="  </div>";
 			// html +="</form>";
 			return html;
 		}
 
 		var jsonbutton = {id:'', class:'altui-toggle-json pull-right', label:'json', title:'json' };
-		var htmlSceneEditButton = "  <button type='submit' class='btn btn-primary pull-right altui-scene-editbutton'>"+_T("Submit")+"</button>";
+		var htmlSceneEditButton = "	 <button type='submit' class='btn btn-primary pull-right altui-scene-editbutton'>"+_T("Submit")+"</button>";
 		var html="";
 		html += HTMLUtils.createAccordeon('altui-scene-editor',panels,jsonbutton,scene.altuiid );
 		html += BlocklyArea.createBlocklyArea();
 		html += htmlSceneEditButton;
 		return html;
 	};
-	
+
 	function _updateAccordeonHeaders() {
 		function _countActions(scene) {
 			var n=0;
@@ -4930,24 +4930,24 @@ var SceneEditor = function (scene) {
 		}
 		$("#altui-hint-Header").html( '<span class="text-muted"><small>{0}</small></span>'.format( header ) );
 	};
-	
+
 	function _runActions(  ) {
 		//http://stackoverflow.com/questions/15416275/why-does-the-update-event-in-jquery-sortable-seem-to-run-twice-when-testing-for
 		// $(".altui-scene-action").draggable(draggable_options);
 		$(".altui-scene-group tbody").sortable(sortable_options);
 		// $(".altui-scene-group").droppable(droppable_options);
-		
+
 		var editor = ace.edit( "altui-luascene" );
 		editor.setTheme( "ace/theme/"+ (MyLocalStorage.getSettings("EditorTheme") || "monokai") );
 		editor.getSession().setMode( "ace/mode/lua" )
 		editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") )
-		editor.on("change",function(event) { 
+		editor.on("change",function(event) {
 				var lua = editor.getValue();
 				if ( lua != scene.lua ) {
 					_showSaveNeeded();
 				}
 			});
-			
+
 		$("div#altui-luascene").resizable({
 			// containment: "parent",
 			maxWidth:$("div#altui-luascene").closest(".card").innerWidth()-30, // ugly but easier, padding 15 on each size
@@ -4955,10 +4955,10 @@ var SceneEditor = function (scene) {
 				if (editor)
 					editor.resize();
 			}
-		});			
+		});
 		_updateAccordeonHeaders();
 		$('#blocklyDiv').data("scenecontroller",scenecontroller);	// indicates to Blockly which scene controller to filter on
-		
+
 		$(".altui-json-code").hide();
 		$(".altui-mainpanel")
 			.off("click")
@@ -4966,7 +4966,7 @@ var SceneEditor = function (scene) {
 				$(".altui-trigger-mode").removeClass("active btn-primary");
 				$(this).addClass("active btn-primary");
 			})
-			.on("click",".altui-luatrigger",function() { 
+			.on("click",".altui-luatrigger",function() {
 				var id = parseInt($(this).prop('id'));
 				LuaEditor.openDialog( scene.triggers[id].lua !=undefined ? scene.triggers[id].lua : "" , function(code){
 					scene.triggers[id].lua = code;
@@ -4974,25 +4974,25 @@ var SceneEditor = function (scene) {
 					PageMessage.message( "Event Lua code edited, remember to save your changes", "info");
 					});
 			})
-			.on("click",".altui-trigger-users",function() { 
+			.on("click",".altui-trigger-users",function() {
 				var id = parseInt($(this).prop('id'));
 				_editTriggerUsers( id , $(this) );
 			})
-			.on("click",".altui-triggertimerestrict",function() { 
+			.on("click",".altui-triggertimerestrict",function() {
 				var id = parseInt($(this).prop('id'));
 				_editTriggerRestrict( id , $(this) );
 			})
-			.on("click","#altui-close-blockly",function() { 
+			.on("click","#altui-close-blockly",function() {
 				$(".altui-scene").toggle(true);
 				$(".altui-scene-editor").toggle(true);
-				$(".altui-scene-editbutton").toggle(true);				
+				$(".altui-scene-editbutton").toggle(true);
 				$(".altui-blockly-editor #blocklyDiv").empty();
 				$(".altui-blockly-editor").data('workspace',null);
 				$("#blocklyDivCode").text("");
 				$(".altui-blockly-editor").toggle(false);
 				$(".blocklyToolboxDiv").remove();
 			})
-			.on("click","#altui-save-blockly",function() { 
+			.on("click","#altui-save-blockly",function() {
 				$(".altui-scene").toggle(true);
 				var idxwatch = $(".altui-blockly-editor ").data('idxwatch');
 				var workspace = $(".altui-blockly-editor ").data('workspace');
@@ -5000,7 +5000,7 @@ var SceneEditor = function (scene) {
 				scenewatches[idxwatch].xml = Blockly.Xml.domToText( Blockly.Xml.workspaceToDom(workspace) );
 
 				$(".altui-scene-editor").toggle(true);
-				$(".altui-scene-editbutton").toggle(true);				
+				$(".altui-scene-editbutton").toggle(true);
 				$("tr[data-watch-idx='"+idxwatch+"']").replaceWith( _displayWatch(idxwatch,scenewatches[idxwatch]) );
 				_showSaveNeeded();
 
@@ -5015,12 +5015,12 @@ var SceneEditor = function (scene) {
 				var scene = MultiBox.getSceneByAltuiID(altuiid);
 				MultiBox.runScene( scene );
 			})
-			.on("click",".altui-scene-editbutton",function(){ 
-				scene.lua =  editor.getValue();
+			.on("click",".altui-scene-editbutton",function(){
+				scene.lua =	 editor.getValue();
 				scene.name = $("#altui-scene-name-input").val();
 				if (scene.paused==undefined)
 					scene.paused=0;
-				
+
 				//UI7 only features
 				if (UIManager.UI7Check()==true) {
 					//trigger mode
@@ -5035,7 +5035,7 @@ var SceneEditor = function (scene) {
 
 				// prepare table of old and new watches
 				var previousWatches = MultiBox.getWatches("VariablesToWatch" ,function(watch) { return (watch.sceneid == scene.id) && (scenecontroller==0) });
-				
+
 				var onlyInPrevious = previousWatches.filter(function(current){
 					return scenewatches.filter(function(current_b){
 						return WatchManager.sameWatch(current,current_b);
@@ -5056,20 +5056,20 @@ var SceneEditor = function (scene) {
 				$.each(onlyInNew , function(i,w) {
 					MultiBox.addWatch( w )
 				});
-				
+
 				// save the scene
 				show_loading();
 				$.when(MultiBox.editScene(scene.altuiid,scene)).done( hide_loading );
 				_showSaveNeeded(false);
 			})
-			.on("click",".altui-deltrigger",function(){ 
+			.on("click",".altui-deltrigger",function(){
 				scene.triggers.splice( $(this).prop('id') , 1 );
 				$(this).parents("tr").remove();
 				_showSaveNeeded();
 				PageMessage.message( "Trigger deleted, remember to save your changes", "info");
 				// MultiBox.setScene(sceneid,scene);
 			})
-			.on("click",".altui-delwatch",function(){ 
+			.on("click",".altui-delwatch",function(){
 				var idx = $(this).prop('id');
 				scenewatches.splice( $(this).prop('id') , 1 );
 				$(this).parents("tr").remove();
@@ -5077,7 +5077,7 @@ var SceneEditor = function (scene) {
 				PageMessage.message( "Watch deleted, remember to save your changes", "info");
 				PageMessage.message( "Change in Watches will require a LUUP reload after you save the scene", "info");
 			})
-			.on("click",".altui-deltimer",function(){ 
+			.on("click",".altui-deltimer",function(){
 				var id = parseInt($(this).prop('id'));
 				$.each(scene.timers , function (idx,timer) {
 					if (timer.id ==id) {
@@ -5095,14 +5095,14 @@ var SceneEditor = function (scene) {
 				PageMessage.message( "Timer deleted, remember to save your changes", "info");
 				// MultiBox.setScene(sceneid,scene);
 			})
-			.on("click",".altui-edittimer",function(){ 
+			.on("click",".altui-edittimer",function(){
 				var id = parseInt($(this).prop('id'));
 				_editTimer( id , $(this) );
 			})
-			.on("click",".altui-addtimer",function(){ 
+			.on("click",".altui-addtimer",function(){
 				_editTimer( -1 , $(this) );
 			})
-			.on("click",".altui-delaction",function(){ 
+			.on("click",".altui-delaction",function(){
 				// groupid . actionid
 				var ids = $(this).prop('id').split('.');
 				var group = scene.groups[ ids[0] ];
@@ -5113,13 +5113,13 @@ var SceneEditor = function (scene) {
 				PageMessage.message( "Action deleted, remember to save your changes", "info");
 				// MultiBox.setScene(sceneid,scene);
 			})
-			.on("click",".altui-editaction",function(){ 
+			.on("click",".altui-editaction",function(){
 				var ids = $(this).prop('id').split('.');
 				var group = scene.groups[ ids[0] ];
 				var action = group.actions[ ids[1] ];
 				_editAction(scene,action,ids[1],ids[0],$(this));
 			})
-			.on("click",".altui-button-record",function(){ 
+			.on("click",".altui-button-record",function(){
 				var idg = $(this).parents("table[data-group-idx]").data("group-idx");
 				if (MultiBox.isRecording()) {
 					$(".altui-record-indicator").remove();
@@ -5134,7 +5134,7 @@ var SceneEditor = function (scene) {
 								delete item.type;
 								item.arguments=UIManager.buildArrayFromParams(item.params);
 								delete item.params;
-								// fix the item device number to remove the ALTUIID format 
+								// fix the item device number to remove the ALTUIID format
 								var info = MultiBox.controllerOf(item.device);
 								if (info.controller==scenecontroller) {
 									item.device = info.id;
@@ -5146,7 +5146,7 @@ var SceneEditor = function (scene) {
 							case 'variable_set':
 							case 'scene':
 								break;
-						}						
+						}
 					});
 					var dom = $(this).closest("tr[data-group-idx='{0}']".format(idg));
 					$(dom).replaceWith( _displayGroup(scene.groups[idg],idg) );
@@ -5156,7 +5156,7 @@ var SceneEditor = function (scene) {
 				}
 				$('.altui-button-record').replaceWith( HTMLUtils.displayRECButton( idg ) )
 			})
-			.on("click",".altui-addaction",function(){ 
+			.on("click",".altui-addaction",function(){
 				var newaction = {
 					device:'',
 					service:'',
@@ -5166,55 +5166,55 @@ var SceneEditor = function (scene) {
 				var idg = $(this).parents("table[data-group-idx]").data("group-idx");
 				_editAction(scene,newaction,-1,idg,$(this));
 			})
-			.on("click",".altui-delgroup",function(){ 
+			.on("click",".altui-delgroup",function(){
 				var id = parseInt($(this).prop('id'));
 				$(this).parents("tr").remove();
 				scene.groups.splice( id , 1 );
 				_showSaveNeeded();
 				PageMessage.message( "Group of actions deleted, remember to save your changes", "info");
 			})
-			.on("click",".altui-editgroup",function(){ 
+			.on("click",".altui-editgroup",function(){
 				var groupidx = parseInt($(this).prop('id'));
 				_editGroup( groupidx, scene.groups[ groupidx ] , $(this) );
 			})
-			.on("click",".altui-addgroup",function(){ 
+			.on("click",".altui-addgroup",function(){
 				var group = {"delay":'',"actions":[]};
 				_editGroup( -1 , group , $(this) );
 			})
-			.on("click",".altui-edittrigger",function(){ 
+			.on("click",".altui-edittrigger",function(){
 				var triggeridx = $(this).parents("tr[data-trigger-idx]").data("trigger-idx");
 				_editTrigger( triggeridx , $(this) );
 			})
-			.on("click",".altui-addtrigger",function(){ 
+			.on("click",".altui-addtrigger",function(){
 				_editTrigger( -1 , $(this) );
 			})
-			.on("click",".altui-editwatch",function(){ 
+			.on("click",".altui-editwatch",function(){
 				var idx = $(this).prop('id');
 				_editWatch( idx, $(this) );
 			})
-			.on("click",".altui-addwatch",function(){ 
+			.on("click",".altui-addwatch",function(){
 				if ($(this).closest(".altui-scene-editor").prop('id') != ALTUI_NEW_SCENE_ALTUIID) {
 					_editWatch( -1 , $(this) );
 				} else {
-					DialogManager.warningDialog(_T("Scene"),_T("Save the scene at least once before creating device watches"));					
+					DialogManager.warningDialog(_T("Scene"),_T("Save the scene at least once before creating device watches"));
 				}
 			})
-			.on("click",".altui-pausescene",function(){ 
+			.on("click",".altui-pausescene",function(){
 				scene.paused = (scene.paused==1) ? 0 : 1;
 				$(this).toggleClass("activated paused");
 				_showSaveNeeded();
 			});
 
-			
+
 		$(".altui-toggle-json").click( function() {
 			var id = $(this).closest('.card').prop('id');
 			var type = "#altui-json-"+id;
 			$(type).toggle();
 		});
-		
+
 		$(".altui-mainpanel")
 			.off("change")
-			.on("change","#altui-scene-name-input",function() { 
+			.on("change","#altui-scene-name-input",function() {
 				if ( $("#altui-scene-name-input").val() != scene.name ) {
 					scene.name = $("#altui-scene-name-input").val();
 					_showSaveNeeded();
@@ -5225,19 +5225,19 @@ var SceneEditor = function (scene) {
 		HouseModeEditor.runActions( '.altui-mainpanel', function() {
 			_showSaveNeeded();
 		});
-		
+
 		$("#altui-room-list").change( function() {
 			scene.room = $(this).val();
 			_showSaveNeeded();
 		});
-		
+
 		$(".altui-enable-trigger").click( function() {
 			var checked = $(this).is(':checked');
 			var id = $(this).prop('id');
 			_showSaveNeeded();
 			scene.triggers[ id ].enabled = (checked == true) ? 1 : 0;
 		});
-		
+
 		$(".altui-enable-timer").click( function() {
 			var checked = $(this).is(':checked');
 			var id = $(this).prop('id');
@@ -5250,22 +5250,22 @@ var SceneEditor = function (scene) {
 			});
 		});
 	}
-	
+
 	return {
-		sceneEditDraw 	: _sceneEditDraw,
-		runActions 		: _runActions,
+		sceneEditDraw	: _sceneEditDraw,
+		runActions		: _runActions,
 		// displayActions  : _displayActions
 	}
 };
 
 // ===========================
-//  Page UI pieces helpers
+//	Page UI pieces helpers
 // ===========================
 var PageMessage = (function(window, undefined ) {
 	var _badgeTemplate = '<span class="badge badge-secondary">{0}</span>&nbsp;';
 	var _msgTemplate = '<span class="altui-pagemessage-txt" >{0}</span>';
 	var _pageMessageIdx = 0;
-	
+
 	function _toDataset(dataset) {
 		if (dataset == undefined)
 			return '';
@@ -5274,15 +5274,15 @@ var PageMessage = (function(window, undefined ) {
 			lines.push( "data-{0}='{1}'".format(key,val));
 		});
 		return lines.join(' ');
-	};		
-	
+	};
+
 	// dataset enables to mark messages and find them back later, it is a {} object translated into data-* attributes
 	function _messageRow(_pageMessageIdx, badge, now,txt,html,level,dataset)
 	{
 		var close = "<button class='close altui-pagemessage-close' type='button' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
 		var badgehtml = (badge>1) ? _badgeTemplate.format(badge) : "";
 		var htmlmsg = ("<tr data-idx='{0}' {4} class='table-{3}'><td>"+close+"</td><td>"+badgehtml+"</td><td>{1}</td><td class='altui-pagemessage-txt'>{2}</td><td>{5}</td></tr>")
-		.format( 
+		.format(
 			_pageMessageIdx,
 			now.toLocaleString(),
 			txt.htmlEncode(),
@@ -5290,7 +5290,7 @@ var PageMessage = (function(window, undefined ) {
 			_toDataset(dataset),
 			html || "");
 		return htmlmsg;
-	};	
+	};
 
 	function _updateMessageButtonColor() {
 		var button =$("#altui-toggle-messages");
@@ -5314,18 +5314,18 @@ var PageMessage = (function(window, undefined ) {
 			// button.filter("span").removeClass( "caret-reversed" );
 		}
 	};
-	
+
 	function _clearMessage( msgidx ) {
 		$("div#altui-pagemessage  tr[data-idx='" + msgidx + "']").remove();
 		_updateMessageButtonColor();
 	};
-	
-	function _message(txt,level,bReload,dataset)		
+
+	function _message(txt,level,bReload,dataset)
 	{
 		var html="";
-		
+
 		// level =success, info, warning, danger
-		if ((level!="success") &&  (level!="info" ) &&  (level!="warning") &&  (level!="danger"))	{
+		if ((level!="success") &&  (level!="info" ) &&	(level!="warning") &&  (level!="danger"))	{
 			level = "info";
 		}
 		if (bReload==true) {
@@ -5338,13 +5338,13 @@ var PageMessage = (function(window, undefined ) {
 		// if same message already exists, simply increase the badge count
 		//
 		var now = new Date();
-		var found = null;				
+		var found = null;
 		$("div#altui-pagemessage td.altui-pagemessage-txt").each( function(idx,obj) {
 			if (txt == $(obj).html()) {
 				found = $(obj);
 				return false;
 			}
-		}); 
+		});
 		var idx = _pageMessageIdx;
 		if (found != null)
 		{
@@ -5372,7 +5372,7 @@ var PageMessage = (function(window, undefined ) {
 		_updateMessageButtonColor();
 		return idx;
 	};
-	
+
 	function _jobMessage(device,job)
 	{
 		var now = new Date();
@@ -5383,11 +5383,11 @@ var PageMessage = (function(window, undefined ) {
 			if (tr.length>0) {
 				var idx = $(tr).data('idx');
 				var badge = $(tr).find("span.badge");
-				$(tr).replaceWith( 
+				$(tr).replaceWith(
 					_messageRow(idx, 1, now.toLocaleString(),txt, "", UIManager.jobStatusToColor( job.status ), {
 						devid : device.id,	//device concerned
-						jobid : job.id	 	//message for this job, will replace old one
-					}) 
+						jobid : job.id		//message for this job, will replace old one
+					})
 				);
 				if (job.status==4)
 					setTimeout( function () { _clearMessage( idx ) }, 5000 );
@@ -5398,21 +5398,21 @@ var PageMessage = (function(window, undefined ) {
 				_message(
 					txt,
 					UIManager.jobStatusToColor( job.status ),
-					false, 
+					false,
 					{
 						devid : device.id,	//device concerned
-						jobid : job.id	 	//message for this job, will replace old one
+						jobid : job.id		//message for this job, will replace old one
 					}
 				);
 			}
 		}
 	};
-	
+
 	function _clearJobMessage(device)
 	{
 		var devicemessages = $(".altui-pagemessage[data-devid='"+device.id+"']");
 		setTimeout( function() {
-			$(devicemessages).remove();			
+			$(devicemessages).remove();
 			_updateMessageButtonColor();
 		}, 5000 );
 	};
@@ -5434,8 +5434,8 @@ var PageMessage = (function(window, undefined ) {
 				</div>
 			</div>
 		</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml(),cls||"")
-		
-		$("#altui-pagemessage-span").html(  Html );
+
+		$("#altui-pagemessage-span").html(	Html );
 		// close button for pageMessages
 		$( document )
 			.off( "click", ".altui-pagemessage-close")
@@ -5452,23 +5452,23 @@ var PageMessage = (function(window, undefined ) {
 				SpeechManager.toggle();
 			})
 	};
-	
+
 	function _clear() {
 		$("#altui-pagemessage tbody").empty();
 		_updateMessageButtonColor();
 	};
-	
+
 	return {
 		init			: _init,
 		clear			: _clear,
 		clearMessage	: _clearMessage,
-		message			: _message, // (txt,level,bReload,dataset)	
+		message			: _message, // (txt,level,bReload,dataset)
 		jobMessage		: _jobMessage,
 		clearJobMessage	: _clearJobMessage,
 	};
 })();
 
-				
+
 var HistoryManager = ( function(win) {
 	var _history = []
 	win.onpopstate = function(event) {
@@ -5490,7 +5490,7 @@ var HistoryManager = ( function(win) {
 				} else {
 					window["UIManager"][caller].apply( UIManager, args)
 				}
-			} else 
+			} else
 			{
 				// AltuiDebug.warning("inconsistent History or empty state stack");
 				window.history.go( -window.history.length );
@@ -5510,7 +5510,7 @@ var HistoryManager = ( function(win) {
 				})
 			};
 			_history.push(state);
-			win.history.pushState( _history.length , id, null);				
+			win.history.pushState( _history.length , id, null);
 		}
 	}
 })( window )

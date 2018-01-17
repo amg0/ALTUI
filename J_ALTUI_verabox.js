@@ -2,13 +2,13 @@
 // "use strict";
 // http://192.168.1.16:3480/data_request?id=lr_ALTUI_Handler&command=home
 // This program is free software: you can redistribute it and/or modify
-// it under the condition that it is for private or home useage and 
+// it under the condition that it is for private or home useage and
 // this whole comment is reproduced in the source code file.
 // Commercial utilisation is not authorized without the appropriate
 // written agreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 var ALTUI_NEW_SCENE_ID = -1;
 var ALTUI_NEW_SCENE_ALTUIID = "0--1"
@@ -27,16 +27,16 @@ var ALTUI_zWaveLibraryType = {
 	"0a": "AV Remote",
 	"0b": "AV Device",
 	}
-	
+
 var ALTUI_BasicType = {
 	"01":"BASIC_TYPE_CONTROLLER",
 	"04":"BASIC_TYPE_ROUTING_SLAVE",
 	"03":"BASIC_TYPE_SLAVE",
 	"02":"BASIC_TYPE_STATIC_CONTROLLER",
 	}
-	
+
 var ALTUI_GenericSpecificType = {
-	"03":{gt:"GENERIC_TYPE_AV_CONTROL_POINT", st:{	
+	"03":{gt:"GENERIC_TYPE_AV_CONTROL_POINT", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
 		"12":"SPECIFIC_TYPE_DOORBELL",
 		"04":"SPECIFIC_TYPE_SATELLITE_RECEIVER",
@@ -44,7 +44,7 @@ var ALTUI_GenericSpecificType = {
 	}},
 	"04":{gt:"GENERIC_TYPE_DISPLAY", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
-		"01":"SPECIFIC_TYPE_SIMPLE_DISPLAY",	
+		"01":"SPECIFIC_TYPE_SIMPLE_DISPLAY",
 	}},
 	"40":{gt:"GENERIC_TYPE_ENTRY_CONTROL", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
@@ -72,7 +72,7 @@ var ALTUI_GenericSpecificType = {
 		"00":"SPECIFIC_TYPE_NOT_USED",
 		"01":"SPECIFIC_TYPE_SIMPLE_METER",
 		"02":"SPECIFIC_TYPE_ADV_ENERGY_CONTROL",
-		"03":"SPECIFIC_TYPE_WHOLE_HOME_METER_SIMPLE",		
+		"03":"SPECIFIC_TYPE_WHOLE_HOME_METER_SIMPLE",
 	}},
 	"30":{gt:"GENERIC_TYPE_METER_PULSE", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
@@ -91,7 +91,7 @@ var ALTUI_GenericSpecificType = {
 	}},
 	"50":{gt:"GENERIC_TYPE_SEMI_INTEROPERABLE", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
-		"01":"SPECIFIC_TYPE_ENERGY_PRODUCTION",		
+		"01":"SPECIFIC_TYPE_ENERGY_PRODUCTION",
 	}},
 	"A1":{gt:"GENERIC_TYPE_SENSOR_ALARM", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
@@ -105,11 +105,11 @@ var ALTUI_GenericSpecificType = {
 		"07":"SPECIFIC_TYPE_ROUTING_SMOKE_SENSOR",
 		"04":"SPECIFIC_TYPE_ZENSOR_NET_ALARM_SENSOR",
 		"09":"SPECIFIC_TYPE_ZENSOR_NET_SMOKE_SENSOR",
-		"0B":"SPECIFIC_TYPE_ALARM_SENSOR",		
+		"0B":"SPECIFIC_TYPE_ALARM_SENSOR",
 	}},
 	"20":{gt:"GENERIC_TYPE_SENSOR_BINARY", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
-		"01":"SPECIFIC_TYPE_ROUTING_SENSOR_BINARY",		
+		"01":"SPECIFIC_TYPE_ROUTING_SENSOR_BINARY",
 	}},
 	"21":{gt:"GENERIC_TYPE_SENSOR_MULTILEVEL", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
@@ -134,7 +134,7 @@ var ALTUI_GenericSpecificType = {
 		"05":"SPECIFIC_TYPE_SIREN",
 		"06":"SPECIFIC_TYPE_VALVE_OPEN_CLOSE",
 		"02":"SPECIFIC_TYPE_COLOR_TUNABLE_BINARY",
-		"07":"SPECIFIC_TYPE_IRRIGATION_CONTROLLER",	
+		"07":"SPECIFIC_TYPE_IRRIGATION_CONTROLLER",
 	}},
 	"11":{gt:"GENERIC_TYPE_SWITCH_MULTILEVEL", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
@@ -145,19 +145,19 @@ var ALTUI_GenericSpecificType = {
 		"01":"SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL",
 		"04":"SPECIFIC_TYPE_SCENE_SWITCH_MULTILEVEL",
 		"08":"SPECIFIC_TYPE_FAN_SWITCH",
-		"02":"SPECIFIC_TYPE_COLOR_TUNABLE_MULTILEVEL",		
+		"02":"SPECIFIC_TYPE_COLOR_TUNABLE_MULTILEVEL",
 	}},
 	"12":{gt:"GENERIC_TYPE_SWITCH_REMOTE", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
 		"01":"SPECIFIC_TYPE_SWITCH_REMOTE_BINARY",
 		"02":"SPECIFIC_TYPE_SWITCH_REMOTE_MULTILEVEL",
 		"03":"SPECIFIC_TYPE_SWITCH_REMOTE_TOGGLE_BINARY",
-		"04":"SPECIFIC_TYPE_SWITCH_REMOTE_TOGGLE_MULTILEVEL",		
+		"04":"SPECIFIC_TYPE_SWITCH_REMOTE_TOGGLE_MULTILEVEL",
 	}},
 	"13":{gt:"GENERIC_TYPE_SWITCH_TOGGLE", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
 		"01":"SPECIFIC_TYPE_SWITCH_TOGGLE_BINARY",
-		"02":"SPECIFIC_TYPE_SWITCH_TOGGLE_MULTILEVEL",		
+		"02":"SPECIFIC_TYPE_SWITCH_TOGGLE_MULTILEVEL",
 	}},
 	"08":{gt:"GENERIC_TYPE_THERMOSTAT", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
@@ -166,20 +166,20 @@ var ALTUI_GenericSpecificType = {
 		"04":"SPECIFIC_TYPE_SETPOINT_THERMOSTAT",
 		"02":"SPECIFIC_TYPE_THERMOSTAT_GENERAL",
 		"06":"SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2",
-		"01":"SPECIFIC_TYPE_THERMOSTAT_HEATING",		
+		"01":"SPECIFIC_TYPE_THERMOSTAT_HEATING",
 	}},
 	"16":{gt:"GENERIC_TYPE_VENTILATION", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
-		"01":"SPECIFIC_TYPE_RESIDENTIAL_HRV",		
+		"01":"SPECIFIC_TYPE_RESIDENTIAL_HRV",
 	}},
 	"09":{gt:"GENERIC_TYPE_WINDOW_COVERING", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
-		"01":"SPECIFIC_TYPE_SIMPLE_WINDOW_COVERING",		
+		"01":"SPECIFIC_TYPE_SIMPLE_WINDOW_COVERING",
 	}},
 	"15":{gt:"GENERIC_TYPE_ZIP_NODE", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
 		"02":"SPECIFIC_TYPE_ZIP_ADV_NODE",
-		"01":"SPECIFIC_TYPE_ZIP_TUN_NODE",		
+		"01":"SPECIFIC_TYPE_ZIP_TUN_NODE",
 	}},
 	"18":{gt:"GENERIC_TYPE_WALL_CONTROLLER", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
@@ -187,17 +187,17 @@ var ALTUI_GenericSpecificType = {
 	}},
 	"05":{gt:"GENERIC_TYPE_NETWORK_EXTENDER", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
-		"01":"SPECIFIC_TYPE_SECURE_EXTENDER",		
+		"01":"SPECIFIC_TYPE_SECURE_EXTENDER",
 	}},
 	"06":{gt:"GENERIC_TYPE_APPLIANCE", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
 		"01":"SPECIFIC_TYPE_GENERAL_APPLIANCE",
 		"02":"SPECIFIC_TYPE_KITCHEN_APPLIANCE",
-		"03":"SPECIFIC_TYPE_LAUNDRY_APPLIANCE",		
+		"03":"SPECIFIC_TYPE_LAUNDRY_APPLIANCE",
 	}},
 	"07":{gt:"GENERIC_TYPE_SENSOR_NOTIFICATION", st:{
 		"00":"SPECIFIC_TYPE_NOT_USED",
-		"01":"SPECIFIC_TYPE_NOTIFICATION_SENSOR",		
+		"01":"SPECIFIC_TYPE_NOTIFICATION_SENSOR",
 	}},
 }
 
@@ -799,7 +799,7 @@ var ALTUI_zWaveCommandClass = {
 	"74":"COMMAND_CLASS_INCLUSION_CONTROLLER",
 };
 
-var UserDataHelper = (function(user_data) { 
+var UserDataHelper = (function(user_data) {
 	var _user_data = user_data;
 	return {
 		findSceneIdxByID : function(scid) {
@@ -874,7 +874,7 @@ var UserDataHelper = (function(user_data) {
 		getCategoryTitle : function(catnum) {
 			if (catnum==undefined)
 				return '';
-			
+
 			var found=undefined;
 			$.each(_user_data.category_filter, function(idx,catline) {
 				if ($.inArray(catnum.toString() , catline.categories) !=-1)
@@ -893,7 +893,7 @@ var UserDataHelper = (function(user_data) {
 			function _getStatus(deviceid,service,variable) {
 				if (cache[service] == undefined)
 					cache[service]={}
-				
+
 				if (cache[service] [variable]  !=  undefined)
 					return cache[service] [variable] ;
 
@@ -911,23 +911,23 @@ var UserDataHelper = (function(user_data) {
 						// var val = that.getStatus( deviceid, condition.service, condition.variable );
 						var val = _getStatus( deviceid, condition.service, condition.variable );
 						if (val=="")
-							AltuiDebug.debug( "devid:{0} service:{1} variable:{2} devsubcat:{3} value:'{4}' should not be null".format( 
+							AltuiDebug.debug( "devid:{0} service:{1} variable:{2} devsubcat:{3} value:'{4}' should not be null".format(
 								deviceid,
-								condition.service, 
+								condition.service,
 								condition.variable,
 								devsubcat,
 								val));
 						str = "({0} {1} {2})".format(
 							val || 0,
-							condition.operator, 
-							condition.value 
+							condition.operator,
+							condition.value
 						);
 					}
 					else {
 						str = "('{0}' {1} '{2}')".format(
 							that.getStatus( deviceid, condition.service, condition.variable ),
-							condition.operator, 
-							condition.value 
+							condition.operator,
+							condition.value
 						);
 					}
 					expressions.push(str);
@@ -960,7 +960,7 @@ var UserDataHelper = (function(user_data) {
 				$.each(dt.Services, function (idx,service) {
 					// warning, async call, so result comes later. we need to wait until completion
 					var that = service.Actions;
-					// if (that.length==0) 	// if actions are not already loaded
+					// if (that.length==0)	// if actions are not already loaded
 					// {
 						FileDB.getFileContent(controller,service.SFilename , function( xmlstr ) {
 							var xml = $( $.parseXML( xmlstr ) );
@@ -989,16 +989,16 @@ var UserDataHelper = (function(user_data) {
 							if (todo==0)
 								cbfunc(dt.Services);
 						});
-					// } 
+					// }
 					// else		// actions were already loaded
 					// {
 						// cbfunc(dt.Services);
 					// }
 				});
 				return;
-			} else 
+			} else
 				cbfunc([]);
-			//AltuiDebug.debug("_loadDeviceActions() : no services");	
+			//AltuiDebug.debug("_loadDeviceActions() : no services");
 			return;
 		},
 		getDeviceActions : function (device,cbfunc) {
@@ -1022,7 +1022,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
   // private functions
   //---------------------------------------------------------
 	var ctrlOptions = g_ALTUI.g_CtrlOptions.split(",");
-	var LU_STATUS_MINDELAY=  parseInt(ctrlOptions[0]) || 1500;
+	var LU_STATUS_MINDELAY=	 parseInt(ctrlOptions[0]) || 1500;
 	var LU_STATUS_TIMEOUT= parseInt(ctrlOptions[1]) || 60;
 
 	var _uniqID = uniq_id;								// assigned by Multibox, unique, can be used for Settings & other things
@@ -1042,13 +1042,13 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	var _user_data_LoadTime = null;
 	var _status_data_DataVersion = 1;
 	var _status_data_LoadTime = null;
-	
+
 	// setters to set the data in the cache, cb functions because asynchronous
-	function _setRooms(arr) 		{	_rooms = arr;		};
-	function _setScenes(arr) 		{	_scenes = arr;		};
+	function _setRooms(arr)			{	_rooms = arr;		};
+	function _setScenes(arr)		{	_scenes = arr;		};
 	function _setCategories(arr)	{	_categories = arr;	};
-	function _setDevices(arr) 		{	_devices = arr;		};
-	
+	function _setDevices(arr)		{	_devices = arr;		};
+
 	function _saveChangeCaches( msgidx ) {
 		var promise = _upnpHelper.ModifyUserData( _change_cached_user_data, function() {
 			PageMessage.message("ModifyUserData called & returned, a restart will occur now","success");
@@ -1058,7 +1058,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		user_changes=0;	//UI5 compat
 		return promise;
 	};
-	
+
 	function _updateChangeCache( target ) {
 		$.extend(true, _change_cached_user_data, target);
 		PageMessage.message("You need to save your changes","info", true );
@@ -1082,7 +1082,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					_sysinfo=={};
 				else if ($.isPlainObject( data ))
 					_sysinfo = data;
-				else 
+				else
 					_sysinfo = JSON.parse(data);
 			});
 		})
@@ -1092,21 +1092,21 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		});
 		return _sysinfo;
 	};
-	
+
 	function _initializeJsonp() {
 		jsonp={};
 		jsonp.ud =_user_data;
 		return jsonp;
 	};
-	
+
 	function _httpGet(url,opts,cbfunc) {
-		var options = $.extend( true, 
+		var options = $.extend( true,
 			{
 				url:	_upnpHelper.proxify( _upnpHelper.getUrlHead()+url ),
 				method:	"GET",
 				type: "GET",
 				dataType: "text",
-				cache: 	false
+				cache:	false
 			} , opts);
 
 		var jqxhr = $.ajax( options)
@@ -1123,14 +1123,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				});
 		return jqxhr;
 	};
-	
+
 	function _triggerAltUIUpgrade(newversion,newtracnum) {
 		var url = '?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version={1}&TracRev={0}'.format(newversion,newtracnum);
 		return _httpGet(url,{}).always( function() {
 			PageMessage.message(_T("Upgrade Request succeeded, a Luup reload will happen"),"success");
 		});
 	};
-	
+
 	function _reboot()
 	{
 		return this.runLua("os.execute('reboot')", function(res) {
@@ -1167,15 +1167,15 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			}
 		});
 	};
-	
+
 	function _getFileUrl( filename ) {
 		return _upnpHelper.buildUPnPGetFileUrl(filename)
 	};
-	
+
 	function _getFileContent( filename , cbfunc) {
 		return _upnpHelper.UPnPGetFile( filename, cbfunc);
 	};
-	
+
 	// process the async response function
 	function _asyncResponse( arr, func , filterfunc, endfunc ) {
 		arr = arr || [];
@@ -1188,8 +1188,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				}
 			}
 		};
-		if ( $.isFunction( endfunc ) )  {
-			endfunc(arr);			
+		if ( $.isFunction( endfunc ) )	{
+			endfunc(arr);
 		}
 		return arr;
 	};
@@ -1201,20 +1201,20 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			// });
 		return jqxhr;
 	};
-	
+
 	function _setColor(deviceid, hex) {
-		var rgb = hexToRgb(hex) 
+		var rgb = hexToRgb(hex)
 		_upnpHelper.UPnPAction(deviceid,'urn:micasaverde-com:serviceId:Color1','SetColorRGB', {
 			newColorRGBTarget: "{0},{1},{2}".format(rgb.r,rgb.g,rgb.b)
 		})
 		// http://192.168.1.16/port_3480/data_request?id=lu_action&output_format=json&DeviceNum=231&serviceId=urn:micasaverde-com:serviceId:Color1&action=SetColorRGB&newColorRGBTarget=15,1,249&rand=0.740677387919277
-				
+
 		// var data = '51 5 10 0 0 1 0 2 {0} 3 {1} 4 {2}'.format(rgb.r,rgb.g,rgb.b);
 		// _upnpHelper.UPnPAction( 1, 'urn:micasaverde-com:serviceId:ZWaveNetwork1', 'SendData', {
 			// Node:device.altid,
 			// Data:data
 		// });
-		
+
 		// 51 = Color Control Command Class (0x33)
 		// 5 = Color Set Command
 		// 10 = Size of following data
@@ -1229,26 +1229,26 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		// 4 = Blue colour channel
 		// 125 = ON @ 125
 	};
-	
+
 	function _getWeatherSettings()
 	{
 		var target = {tempFormat: "", weatherCountry: "", weatherCity: ""};
 		$.extend(target, _user_data.weatherSettings);
 		return target;
 	}
-	
+
 	// Get Rooms  , call a callback function asynchronously, or return array of rooms
 	function _getRooms( func , filterfunc, endfunc) {
 		if (_rooms != null ) {
 			return _asyncResponse( _rooms.sort(altuiSortByName), func , filterfunc, endfunc)
 		}
 		else
-			setTimeout(function(){ 
+			setTimeout(function(){
 				_getRooms( func , filterfunc, endfunc);
 			}, 500);
 		return _rooms;
 	};
-	
+
 	function _getRoomByID( roomid ) {
 		var room=null;
 		if ( _rooms ) {
@@ -1261,14 +1261,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		}
 		return room;
 	};
-	
+
 	// Get Rooms  , call a callback function asynchronously, or return array of rooms
 	function _getScenes( func , filterfunc, endfunc ) {
 		if (_scenes != null )
 			return _asyncResponse( _scenes.sort(altuiSortByName), func , filterfunc, endfunc);
 		return _asyncResponse( [], func , filterfunc, endfunc);;
 	};
-	
+
 	function _getUsers(func , filterfunc, endfunc ) {
 		if (_user_data.users !=null )
 			return _asyncResponse( _user_data.users.sort(altuiSortByName2), func , filterfunc, endfunc);
@@ -1294,7 +1294,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			return _asyncResponse( _user_data.InstalledPlugins2, func , null, endfunc);
 		return _user_data.InstalledPlugins2;
 	};
-	
+
 	function _getPluginByID	(id) {
 		var plugin = null;
 		$.each(_user_data.InstalledPlugins2,function(idx,p) {
@@ -1305,7 +1305,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		});
 		return plugin;
 	};
-	
+
 	function _getDevices( func , filterfunc, endfunc ) {
 		if (_devices !=null)
 			return _asyncResponse( _devices.sort(altuiSortByName), func, filterfunc, endfunc )
@@ -1329,22 +1329,22 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				}
 			});
 			return [];
-		} 
+		}
 		return _asyncResponse( _categories.sort(altuiSortByName), cbfunc, filterfunc, endfunc );
 	};
-	
+
 	function _getIconPath(name) {
 		if (_uniqID==0) {
 			return "../cmh/skins/default/img/devices/device_states/{0}".format( name);
 		}
-		return "//{0}/cmh/skins/default/img/devices/device_states/{1}".format( _upnpHelper.getIpAddr(), name);	
+		return "//{0}/cmh/skins/default/img/devices/device_states/{1}".format( _upnpHelper.getIpAddr(), name);
 	};
-	
+
 	function _getIcon( imgpath , cbfunc ) {
 		var jqxhr = _httpGet("?id=lr_ALTUI_Handler&command=image",{ data: { path: imgpath } },cbfunc);
 		return jqxhr;
 	};
-	
+
 	function _isWorkflowEnabled() {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var variable = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "EnableWorkflows" ) || "0";
@@ -1360,7 +1360,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		var jqxhr = _httpGet("?id=lr_ALTUI_Handler&command=getWorkflowsStatus",{dataType: "json",},cbfunc);
 		return jqxhr;
 	};
-	
+
 	function _getWorkflows(cbfunc) {
 		var jqxhr = _httpGet("?id=lr_ALTUI_Handler&command=getWorkflows",{dataType: "json",},cbfunc);
 		return jqxhr;
@@ -1370,13 +1370,13 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		// var cmd = "cat /var/log/cmh/LuaUPnP.log | grep 'Wkflow - nextWorkflowState('".format(altuiid);
 		// var cmd = "tail -n 2000 /var/log/cmh/LuaUPnP.log | grep '[0123456789]: ALTUI: Wkflow - nextWorkflowState(.*, {0},.*==>'".format(altuiid);
 		// Wkflow - Workflow:'Workflow 0-2' nextWorkflowState(0-2, Thingspeak ==> Idle, Timer:Retour)
-		
+
 		var str = (altuiid) ? altuiid : "[0123456789]{1,}-[0123456789]{1,}"
 		var cmd = "cat /var/log/cmh/LuaUPnP.log | grep -E '[0123456789]: ALTUI: Wkflow - Workflow: {0}, Valid Transition found'".format(str);
 		return _osCommand(cmd,true,function(str) {
 			if (str.success==true) {
 				var lines = [];
-				var re = /\d*\t(\d*)\/(\d*)\/(\d*)\s(\d*):(\d*):(\d*).(\d*).*Wkflow - Workflow: (.*), Valid Transition found:(.*), Active State:(.*)=>(.*) /g; 
+				var re = /\d*\t(\d*)\/(\d*)\/(\d*)\s(\d*):(\d*):(\d*).(\d*).*Wkflow - Workflow: (.*), Valid Transition found:(.*), Active State:(.*)=>(.*) /g;
 				var m;
 				while ((m = re.exec(str.result)) !== null) {
 					if (m.index === re.lastIndex) {
@@ -1385,10 +1385,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					// View your result using the m-variable.
 					// eg m[0] etc.
 					lines.push({
-						date:new Date(2000+parseInt(m[3]),parseInt(m[1])-1,m[2],m[4],m[5],m[6],m[7]), 
+						date:new Date(2000+parseInt(m[3]),parseInt(m[1])-1,m[2],m[4],m[5],m[6],m[7]),
 						altuiid:m[8],
 						firing_link:m[9],
-						old_state:m[10], 
+						old_state:m[10],
 						new_state:m[11]
 						});
 				}
@@ -1400,7 +1400,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 	function _getHouseMode(cbfunc) {
 		var jqxhr = _httpGet("?id=variableget&DeviceNum=0&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&Variable=Mode",{},cbfunc);
-		return jqxhr;		
+		return jqxhr;
 	};
 
 	function _setHouseMode(newmode,cbfunc) {
@@ -1417,7 +1417,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 	function _getDeviceByType( device_type , opt_parents_arr) {
 		for (var i=0; i<_user_data.devices.length; i++ ) {
-			if  ( (_user_data.devices[i].device_type==device_type) && (opt_parents_arr==undefined || opt_parents_arr.indexOf(_user_data.devices[i].id_parent)!=-1) )
+			if	( (_user_data.devices[i].device_type==device_type) && (opt_parents_arr==undefined || opt_parents_arr.indexOf(_user_data.devices[i].id_parent)!=-1) )
 				return _user_data.devices[i]
 		}
 		return null;
@@ -1431,10 +1431,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		}
 		return null;
 	};
-	
+
 	function _getDeviceByID( devid ) {
 		if (devid==0)
-			return _hagdevice;		
+			return _hagdevice;
 		return UserDataHelper(_user_data).getDeviceByID(devid);
 	};
 
@@ -1451,11 +1451,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				return _user_data.InstalledPlugins2[i];
 		}
 		return null;
-	};	
+	};
 	function _getNewSceneID() {
 		return ALTUI_NEW_SCENE_ID;
 	};
-	
+
 	function _getStates( deviceid  )
 	{
 		for (var i=0; i<_user_data.devices.length; i++) {
@@ -1464,14 +1464,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				return _user_data.devices[i].states;
 		}
 		return null;
-	};	
-		
+	};
+
 	function _getStatusObject( deviceid, service, variable, bCreate ) {
 		var foundState = null;
 		var device = _getDeviceByID( deviceid );
 		if (device==null)
 			return null;
-		
+
 		if (device.states) {
 			for (var i=0; i<device.states.length ; i++ ) {
 				var state = device.states[i];
@@ -1498,7 +1498,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return UserDataHelper(_user_data).getStatus(deviceid, service, variable);
 	};
 
-	function _getJobStatus( jobid , cbfunc ) 
+	function _getJobStatus( jobid , cbfunc )
 	{
 		return _upnpHelper.UPnPGetJobStatus(jobid, cbfunc );
 	};
@@ -1510,7 +1510,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		if (_isUI5() == true) {
 			return _upnpHelper.UPnPSetAttr(deviceid, attribute, value,cbfunc);
 		} else {
-			return _upnpHelper.UPnPSetAttrUI7(deviceid, attribute, value,cbfunc);			
+			return _upnpHelper.UPnPSetAttrUI7(deviceid, attribute, value,cbfunc);
 		}
 	}
 
@@ -1523,12 +1523,12 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		var promise = null;
 		var statusobj= _getStatusObject( deviceid, service, variable , true ) //bCreate==true
 
-		if (dynamic >= 0 )  {
+		if (dynamic >= 0 )	{
 			statusobj.value=value;	// in memory but lost at next restart
-			
+
 			// if dynamic ==0 permits the user to save
 			if (dynamic==0) {
-				if (_isUI5() ) {	
+				if (_isUI5() ) {
 					// on UI5 cache until the user presses SAVE button
 					var target = {};
 					target.devices={};
@@ -1540,7 +1540,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					_updateChangeCache( target );
 				} else {
 					// on UI7, do it asynchronously
-					promise =  _upnpHelper.UPnPSet( deviceid, service, variable, value );					
+					promise =  _upnpHelper.UPnPSet( deviceid, service, variable, value );
 				}
 			}
 		}
@@ -1550,7 +1550,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		}
 		return promise;
 	};
-	
+
 	function _evaluateConditions(deviceid,devsubcat,conditions) {
 		return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
 	};
@@ -1574,7 +1574,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					{
 						$.each(data.devices, function( idx, device) {
 							var userdata_device_idx = UserDataHelper(_user_data).findDeviceIdxByID(device.id);
-							if (userdata_device_idx!=-1) {								
+							if (userdata_device_idx!=-1) {
 								_user_data.devices[userdata_device_idx].status = device.status;
 								_user_data.devices[userdata_device_idx].Jobs = device.Jobs;
 								_user_data.devices[userdata_device_idx].dirty = true;
@@ -1606,7 +1606,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					}
 					UIManager.refreshUI( false , false );	// partial and not first time
 					EventBus.publishEvent("on_startup_luStatusLoaded_"+_uniqID,data);
-					
+
 					// if user_data has changed, reload it
 					if (_user_data_DataVersion != data.UserData_DataVersion) {
 						// console.log("controller #{0} received  lu_status2 with data.UserData_DataVersion={1} =>requesting new user data".format(_uniqID,data.UserData_DataVersion));
@@ -1622,9 +1622,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				}
 			}
 		);
-		return jqxhr;	
-	}	
-	
+		return jqxhr;
+	}
+
 	function _sanityCheck(udata) {
 		$.each(udata.devices, function(i,device) {
 			var states = {}
@@ -1632,9 +1632,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				if (states[ state.id ] == null )
 					states[ state.id ] = { variable: state.variable, value: state.value }
 				else {
-					var str = "warning device:{0} has duplicate state id {1} for variables: {2} , {3}".format( 
-						device.id, 
-						state.id, 
+					var str = "warning device:{0} has duplicate state id {1} for variables: {2} , {3}".format(
+						device.id,
+						state.id,
 						state.variable,
 						states[ state.id ].variable
 						);
@@ -1644,7 +1644,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			})
 		})
 	}
-	
+
 	function _loadUserData(data) {
 		if ((data) && (data != "NO_CHANGES") && (data != "Exiting") )
 		{
@@ -1652,15 +1652,15 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			if ($.isPlainObject( data )==false)
 				data = JSON.parse(data);
 			$.extend(_user_data, data);
-			// _user_data = cloneObject(data);	
+			// _user_data = cloneObject(data);
 			_user_data_DataVersion = data.DataVersion;
 			_user_data_LoadTime = data.LoadTime;
 			_rooms = data.rooms;
 			_scenes = data.scenes;
 			_devices = data.devices;
-			
+
 			_sanityCheck(data);
-			
+
 			if (data.devices)
 				$.each(data.devices, function(idx,device) {
 					device.altuiid = "{0}-{1}".format(_uniqID,device.id);
@@ -1680,7 +1680,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 							scene.lua = atob(scene.lua);
 						}
 						catch (e){
-							// do not decode 
+							// do not decode
 							AltuiDebug.warning("The scene {0} has the encoded_lua flag but the scene.lua fails to decode. {1}".format(scene.id, scene.lua))
 						}
 						delete scene.encoded_lua;
@@ -1692,7 +1692,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 									trigger.lua = atob(trigger.lua)
 								}
 								catch (e) {
-									// do not decode 
+									// do not decode
 									AltuiDebug.warning("The scene {0} has a trigger with the encoded_lua flag but the trigger.lua fails to decode. {1}".format(scene.id, trigger.lua))
 								}
 								delete trigger.encoded_lua;
@@ -1722,27 +1722,27 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			$.each(_user_data.static_data || [], function(idx,ui_static_data) {
 				var dt = ui_static_data.device_type == undefined ? ui_static_data.DeviceType : ui_static_data.device_type;
 				if (dt!=undefined) {
-					MultiBox.updateDeviceTypeUIDB( _uniqID, dt, ui_static_data);				
+					MultiBox.updateDeviceTypeUIDB( _uniqID, dt, ui_static_data);
 				}
 			});
-			
+
 			// update upnp information
 			$.each(_user_data.devices || [], function(idx,device) {
 				var dt = device.device_type;
 				var df = device.device_file;
 				if (dt && (dt!="") && df && (df!="") )
 					MultiBox.updateDeviceTypeUPnpDB( _uniqID, dt, device.device_file);	// pass device file so UPNP data can be read
-				if (device!=null) {	
-					device.dirty=true; 
+				if (device!=null) {
+					device.dirty=true;
 					EventBus.publishEvent("on_ui_deviceStatusChanged",device);
 				}
-			});		
+			});
 			if (data.devices) {
 				if (bFirst)
 					EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
-				EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);				
+				EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
 			}
-			
+
 			_upnpHelper.setConfig( {
 				isOpenLuup: _isOpenLuup(_user_data),
 				candoPost: _candoPost(_user_data)
@@ -1751,7 +1751,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 
 	function _isUserDataCached() {	return MyLocalStorage.get("VeraBox"+_uniqID)!=null; }
-	
+
 	function _saveEngine() {
 		//AltuiDebug.debug("_saveEngine()");
 		var verabox = {
@@ -1773,12 +1773,12 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				_user_data				= verabox._user_data || {};
 			}
 		}
-		_user_data_DataVersion 	= 1;
-		_user_data_LoadTime 	= null;
-		_user_data.BuildVersion = undefined;		// to keep the "waiting" message for the user			
+		_user_data_DataVersion	= 1;
+		_user_data_LoadTime		= null;
+		_user_data.BuildVersion = undefined;		// to keep the "waiting" message for the user
 		_loadUserData(_user_data);
 	};
-	
+
 	// start the polling loop to get user_data
 	function _initDataEngine() {
 		_dataEngine = null;
@@ -1792,7 +1792,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					_dataEngine = null;
 					_loadUserData(data);
 					UIManager.refreshUI( true ,false  );	// full but not first time
-					_dataEngine = setTimeout( _refreshEngine, 2000 );				
+					_dataEngine = setTimeout( _refreshEngine, 2000 );
 				}
 				else {
 					_dataEngine = setTimeout( _initDataEngine, 2000 );
@@ -1804,13 +1804,13 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			});
 		return jqxhr;
 	};
-	
+
 	function _getBoxFullInfo() {
 		var ordered = {};
 		$.each( Object.keys(_user_data).sort(), function(i,key) {
 			var val = _user_data[key];
 			if (!$.isArray(val) && !$.isPlainObject(val))
-				ordered[key]=val;			
+				ordered[key]=val;
 		});
 		return ordered;
 	};
@@ -1826,14 +1826,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	function _isUI5() {
 		if (_uniqID==0)
 			return (UIManager.UI7Check()==false);
-		
+
 		var bi = _getBoxInfo()
 		return (bi.BuildVersion==undefined) || (bi.BuildVersion.startsWith("*1.5."));
 	};
 	function _candoPost(user_data) {
 		if (_user_data.BuildVersion == undefined)
 			return false;
-		var versioninfo = $.map( _user_data.BuildVersion.match(/\*(\d+)\.(\d+)\.(\d+)\\*/), 
+		var versioninfo = $.map( _user_data.BuildVersion.match(/\*(\d+)\.(\d+)\.(\d+)\\*/),
 			function(e,i) {
 				return parseInt(e)
 			}
@@ -1851,26 +1851,26 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				_user_data.StartupCode = atob(_user_data.StartupCode)
 			}
 			catch (e) {
-				// do not decode 
+				// do not decode
 				AltuiDebug.warning("The StartupCode has the encoded_lua flag but fails to decode properly. {0}".format(_user_data.StartupCode))
 			}
 		}
 		return _user_data.StartupCode || ""
 	};
-	
+
 	function _createDevice( param , cbfunc ) {
 		var target = $.extend( {descr:'default title', dfile:'', ifile:'', roomnum:0 } , param );
 		return _upnpHelper.createDevice( target.descr, target.dfile, target.ifile, target.roomnum , cbfunc );
 	};
-	
+
 	function _createRoom(name,cbfunc)
-	{		
+	{
 		var jqxhr =null;
 		if (name && (name.length>0)) {
 			jqxhr = _httpGet( "?id=room&action=create&name="+name, {}, function(data, textStatus, jqXHR) {
-				if ((data!=null) && (data!="ERROR")) 
+				if ((data!=null) && (data!="ERROR"))
 					PageMessage.message(_T("Create Room succeeded for")+": "+name, "success", _isUI5() );	// need user_data reload on UI5
-				else 
+				else
 					PageMessage.message(_T("Could not create Room")+": "+name, "warning");
 				if ($.isFunction(cbfunc)){
 					(cbfunc)(data);
@@ -1881,11 +1881,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 
 	function _deleteRoom(id)
-	{	
+	{
 		var jqxhr = _httpGet( "?id=room&action=delete&room="+id, {}, function(data, textStatus, jqXHR) {
-			if ((data!=null) && (data!="ERROR")) 
+			if ((data!=null) && (data!="ERROR"))
 				PageMessage.message(_T("Deleted Room")+" "+id, "success", _isUI5());	// need user_data reload on UI5
-			else 
+			else
 				PageMessage.message(_T("Could not delete Room")+" "+id, "warning");
 		});
 		return jqxhr;
@@ -1894,23 +1894,23 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	function _renameRoom(id,name) {
 		//http://ip_address:3480/data_request?id=room&action=rename&room=5&name=Garage
 		var jqxhr = _httpGet( "?id=room&action=rename&name="+name+"&room="+id, {}, function(data, textStatus, jqXHR) {
-			if ((data!=null) && (data!="ERROR")) 
+			if ((data!=null) && (data!="ERROR"))
 				PageMessage.message(_T("Renamed Room")+" "+id, "success", _isUI5());	// need user_data reload on UI5
-			else 
+			else
 				PageMessage.message(_T("Could not rename Room")+" "+id, "warning");
 		});
 		return jqxhr;
 	};
-	
+
 	function _runScene(id)
 	{
 		if ( (id<=0) || ((this.getSceneByID(id) == null)) )
 			return null;
-		
+
 		var jqxhr = _httpGet( "?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=RunScene&SceneNum="+id, {}, function(data, textStatus, jqXHR) {
-			if ((data!=null) && (data!="ERROR")) 
+			if ((data!=null) && (data!="ERROR"))
 				PageMessage.message(_T("Ran Scene #{0} successfully").format(id), "success");
-			else 
+			else
 				PageMessage.message(_T("Could not run Scene #{0}").format(id), "warning");
 		});
 		return jqxhr;
@@ -1924,18 +1924,18 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					if (bSilent!=true) PageMessage.message(_T("Os Command execution succeeded"), "success");
 				else
 					if (bSilent!=true) PageMessage.message( _T("Os Command execution on vera failed.")+"({0})".format(data) , "danger");
-				if ($.isFunction( cbfunc )) 
+				if ($.isFunction( cbfunc ))
 					cbfunc({success:success, result:data.substr(2)},jqXHR);
 			}
 			else {
 				PageMessage.message( _T("Os Command execution request failed. (returned {0})").format(textStatus) , "danger");
-				if ($.isFunction( cbfunc )) 
+				if ($.isFunction( cbfunc ))
 					cbfunc({success:false, result:null},jqXHR);
 			}
 		});
 		return jqxhr;
 	};
-	
+
 	function _runLua(code, cbfunc) {
 		var jqxhr = _httpGet( "?id=lr_ALTUI_LuaRunHandler&command=run_lua&lua={0}".format( encodeURIComponent(code) ), {}, function(data, textStatus, jqXHR) {
 			if (data!=null) {
@@ -1945,23 +1945,23 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					PageMessage.message(_T("Lua execution succeeded"), "success");
 				else
 					PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
-				if ($.isFunction( cbfunc )) 
+				if ($.isFunction( cbfunc ))
 					cbfunc({success:success, result:lines[1], output:lines[2]},jqXHR);
 			}
 			else {
 				PageMessage.message( _T("Lua Command execution request failed. (returned {0})").format(textStatus) , "danger");
-				if ($.isFunction( cbfunc )) 
+				if ($.isFunction( cbfunc ))
 					cbfunc({success:false, result:"", output:""},jqXHR);
 			}
 		});
-		return jqxhr;		
+		return jqxhr;
 	};
 
 	function _renameDevice(device, newname, roomid)
 	{
 		return _upnpHelper.renameDevice(device, newname, roomid);
 	};
-	
+
 	function _deleteDevice(id)
 	{
 		var jqxhr = _httpGet( "?id=device&action=delete&device="+id, {}, function(data, textStatus, jqXHR) {
@@ -1975,12 +1975,12 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		});
 		return jqxhr;
 	};
-	
+
 	function _updateNeighbors(deviceid) {
 		var zwavenet = this.getDeviceByType("urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
 		if (zwavenet==null)
 			return;
-		
+
 		var params={};
 		params[ "Device" ] = deviceid;
 		return upnpHelper.UPnPAction( zwavenet.id, "urn:micasaverde-com:serviceId:ZWaveNetwork1", "UpdateNeighbors", params, function(data) {
@@ -1992,7 +1992,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			}
 		});
 	};
-	
+
 	function _deleteSceneUserData(id)
 	{
 		if (_user_data.scenes) {
@@ -2002,12 +2002,12 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					_index = index;
 					return false;
 				}
-			})			
+			})
 			if (_index!=null )
 				_user_data.scenes.splice(_index, 1);
 		}
 	}
-	
+
 	function _deleteScene(id)
 	{
 		_deleteSceneUserData(id);
@@ -2022,7 +2022,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return jqxhr;
 	};
 
-	function _setStartupCode(newlua) 
+	function _setStartupCode(newlua)
 	{
 		if (_user_data.encoded_lua==1) {
 			newlua = btoa(newlua)
@@ -2034,7 +2034,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	{
 		return UserDataHelper(_user_data).getCategoryTitle(_user_data,catnum);
 	};
-	
+
 	function _updateSceneUserData(scene)
 	{
 		if (_user_data.scenes) {
@@ -2045,7 +2045,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					bFound = true;
 					return false;
 				}
-			})			
+			})
 			if (bFound==false) {
 				_user_data.scenes.push(scene);
 			}
@@ -2079,7 +2079,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					bFound = true;
 					return false;
 				}
-			})			
+			})
 		}
 	};
 	function _renameScene(sceneid,newname)
@@ -2090,14 +2090,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				_renameSceneUserData(sceneid,newname)
 				PageMessage.message(_T("Renamed Scene")+" "+sceneid, "success", _isUI5());	// need user_data reload on UI5
 			}
-			else 
+			else
 				PageMessage.message(_T("Could not rename Scene")+" "+sceneid, "warning");
 		});
 		return jqxhr;
 	};
 
 	function _getDeviceStaticUI(device) {
-		var staticroot=null;		
+		var staticroot=null;
 		if (device!=null) {
 			var devicetype = device.device_type;
 			$.each(_user_data.static_data, function(idx,value) {
@@ -2105,11 +2105,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					staticroot=value;
 					return false;
 				}
-			});			
+			});
 		}
 		return staticroot;
 	};
-	
+
 	function _getDeviceBatteryLevel(device) {
 		var batteryLevel= _getStatus( device.id, "urn:micasaverde-com:serviceId:HaDevice1", "BatteryLevel" );
 		if (batteryLevel==null) {
@@ -2123,11 +2123,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		}
 		return batteryLevel; // Math.floor((Math.random() * 100) + 1);
 	};
-	
+
 	function _clearData(doPost, handle, key, name, npage, cbfunc) {
 		if (_uniqID!=0)	// only supported on master controller
 			return;
-			
+
 		//AltuiDebug.debug("_clearData( {2}, {0}, page:{1} )".format(name,npage,handle));
 		var result = "";
 		var url = "data_request?id=lr_ALTUI_Handler&command=clear_data";//&pages="+encodeURIComponent(JSON.stringify(pages));
@@ -2145,23 +2145,23 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		})
 		.done(function(data) {
 			if ( $.isFunction( cbfunc ) )  {
-				cbfunc(data);			
+				cbfunc(data);
 			}
 		})
 		.fail(function(jqXHR, textStatus) {
 			if ( $.isFunction( cbfunc ) )  {
-				cbfunc("");			
+				cbfunc("");
 			}
 		})
 		.always(function() {
 		});
 	};
-	
+
 	function _saveDataChunk(doPost, handle, key, name, npage, data, cbfunc) {
 		if (_uniqID!=0)	// only supported on master controller
 			return;
 
-		//AltuiDebug.debug("_saveDataChunk( {4},{3}, {0}, page:{1}, data:{2} chars  )".format(name,npage,data.length,key,handle));
+		//AltuiDebug.debug("_saveDataChunk( {4},{3}, {0}, page:{1}, data:{2} chars	)".format(name,npage,data.length,key,handle));
 		var result = "";
 		var url = "data_request?id=lr_ALTUI_Handler&command=save_data";//&pages="+encodeURIComponent(JSON.stringify(pages));
 		var jqxhr = $.ajax( {
@@ -2178,15 +2178,15 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			}
 		})
 		.done(function(data, textStatus, jqXHR) {
-			//AltuiDebug.debug("_saveDataChunk( {5}, {4}, {0}, page:{1}, data:{2} chars  ) => Res:{3}".format(name,npage,data.length,JSON.stringify(data),key,handle));
+			//AltuiDebug.debug("_saveDataChunk( {5}, {4}, {0}, page:{1}, data:{2} chars	 ) => Res:{3}".format(name,npage,data.length,JSON.stringify(data),key,handle));
 			if ( $.isFunction( cbfunc ) )  {
-				cbfunc(data);			
+				cbfunc(data);
 			}
 		})
 		.fail(function(jqXHR, textStatus) {
 			AltuiDebug.debug("_saveDataChunk() failed. textStatus:{0}".format(textStatus))
 			if ( $.isFunction( cbfunc ) )  {
-				cbfunc("");			
+				cbfunc("");
 			}
 		})
 		.always(function() {
@@ -2198,11 +2198,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			// only supported on master controller
 			AltuiDebug.debug("_saveData must only be called on master controller #0");
 			return;
-		}	
+		}
 		//AltuiDebug.debug("_saveData( {0}, {1} chars )".format(name,data.length));
 
 		var bPost = _candoPost(_user_data)
-		
+
 		// we need a workaround to pass data via a POST but for now, all we have is a Get
 		// we know that 5400 char is ok, above it fails
 		var context = {
@@ -2215,7 +2215,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			done: 0,
 			npage: 0
 		};
-		
+
 		// var result="ok";
 		// var todo = data.length;
 		// var maxchar = 2000;
@@ -2228,7 +2228,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				data = context.data;
 				var part = data.substring( context.done, context.done+len);
 				// console.log("doPart() %o from:%d len:%d",context,context.done,len)
-				_saveDataChunk(context.doPost, context.handle, context.key, context.name, context.npage, part,  function(data) {
+				_saveDataChunk(context.doPost, context.handle, context.key, context.name, context.npage, part,	function(data) {
 					if ((data=="") || (data=="-1") || (data=="handler failed"))
 						cbfunc("");	// error
 					else {
@@ -2248,8 +2248,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					cbfunc("ok");
 				});
 			}
-		};	
-		
+		};
+
 		// start and result is asynchronous
 		_doPart(context);
 	};
@@ -2262,7 +2262,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				lines:[],
 				result:str
 			};
-			var re = /\d*\t(\d*\/\d*\/\d*\s\d*:\d*:\d*.\d*).*Scene::RunScene running \d+ (.*) <.*/g; 
+			var re = /\d*\t(\d*\/\d*\/\d*\s\d*:\d*:\d*.\d*).*Scene::RunScene running \d+ (.*) <.*/g;
 			var m;
 			while ((m = re.exec(str.result)) !== null) {
 				if (m.index === re.lastIndex) {
@@ -2272,18 +2272,18 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				// eg m[0] etc.
 				result.lines.push({date:m[1], name:m[2]});
 			}
-			if ($.isFunction(cbfunc)) 
+			if ($.isFunction(cbfunc))
 				(cbfunc)(result);
 		});
 	};
 	function _setSceneMonitorMode(id,mode, cbfunc) {
-		var jqxhr = _httpGet( "?id=change_scene_mode&SceneID={0}&ModeName={1}".format(id,mode), {}, 
+		var jqxhr = _httpGet( "?id=change_scene_mode&SceneID={0}&ModeName={1}".format(id,mode), {},
 			function(data, textStatus, jqXHR) {
 				if ((data!=null) && (data!="ERROR")) {
 					if ($.isFunction(cbfunc))
 						(cbfunc)(data);
 				}
-				else 
+				else
 					PageMessage.message(_T("Could not change scene monitor mode")+" "+sceneid, "warning");
 			}
 		);
@@ -2299,7 +2299,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				lines:[],
 				result:str
 			};
-			var re = /\d*\t(\d*\/\d*\/\d*\s\d*:\d*:\d*.\d*).*was: (.*) now: (.*) #.*/g; 
+			var re = /\d*\t(\d*\/\d*\/\d*\s\d*:\d*:\d*.\d*).*was: (.*) now: (.*) #.*/g;
 			var m;
 			while ((m = re.exec(str.result)) !== null) {
 				if (m.index === re.lastIndex) {
@@ -2308,8 +2308,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				// View your result using the m-variable.
 				// eg m[0] etc.
 				result.lines.push({
-					date:m[1], 
-					oldv:m[2], 
+					date:m[1],
+					oldv:m[2],
 					newv:m[3]
 					});
 			}
@@ -2322,15 +2322,15 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return UserDataHelper(_user_data).getDeviceActions(device,cbfunc);
 	};
 	function _runAction( deviceID, service, action, params, cbfunc ) {
-		return _upnpHelper.UPnPAction(	deviceID, service, action, params, cbfunc );	
+		return _upnpHelper.UPnPAction(	deviceID, service, action, params, cbfunc );
 	};
 	function _xxxWatch( cmd, w ) {
 		// for thingspeak = a table of channelid, readkey, writekey, field, graphicurl
 		var url = "?id=lr_ALTUI_Handler&command={8}&service={0}&variable={1}&device={2}&scene={3}&expression={4}&xml={5}&provider={6}&providerparams={7}".format(
-			w.service, w.variable, w.deviceid, w.sceneid, 
-			encodeURIComponent(w.luaexpr || ''), 
-			encodeURIComponent(w.xml || '' ), 
-			w.provider, 
+			w.service, w.variable, w.deviceid, w.sceneid,
+			encodeURIComponent(w.luaexpr || ''),
+			encodeURIComponent(w.xml || '' ),
+			w.provider,
 			encodeURIComponent( JSON.stringify(w.params || [] ) ),
 			cmd
 		);
@@ -2338,14 +2338,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			if ((data!=null) && (data!="ERROR")) {
 				// PageMessage.message(_T("Success"), "success");	// need user_data reload on UI5
 			}
-			else 
+			else
 				PageMessage.message(_T("Failure"), "warning");
 		});
 		return jqxhr;
 	};
-		
+
 	function _delWatch( w ) {
-		return _xxxWatch( 'delWatch', w  );
+		return _xxxWatch( 'delWatch', w	 );
 	};
 	function _addWatch( w ) {
 		// http://192.168.1.5/port_3480/data_request?id=lr_ALTUI_Handler&command=addRemoteWatch&device=42&variable=Status&service=urn:upnp-org:serviceId:SwitchPower1&data=192.168.1.16
@@ -2385,7 +2385,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	function _getWatchesHistory(cbfunc) {
 		if (_uniqID!=0)	// only supported on master controller
 			return null;
-			
+
 		var dfd = $.Deferred();
 		var bPost = _candoPost(_user_data);
 		var result = "";
@@ -2416,20 +2416,20 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				});
 			});
 			if ( $.isFunction( cbfunc ) )  {
-				cbfunc(result);			
+				cbfunc(result);
 			}
 			dfd.resolve(result)
 		})
 		.fail(function(jqXHR, textStatus) {
 			if ( $.isFunction( cbfunc ) )  {
-				cbfunc("");			
+				cbfunc("");
 			}
 			dfd.resolve("")
 		})
 		return dfd.promise()
 	};
 	function _getWatches(whichwatches , filterfunc) {
-		if ((whichwatches!="VariablesToWatch") && (whichwatches!="VariablesToSend")) 
+		if ((whichwatches!="VariablesToWatch") && (whichwatches!="VariablesToSend"))
 			return null;
 		var linefunc = (whichwatches=="VariablesToWatch") ? _getWatchLineParams : _getPushLineParams
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
@@ -2498,39 +2498,39 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		})
 		return usedin_objects;
 	};
-	
+
 	function _getDeviceEvents(device) {
 		if (device && device.id!=0) {
 			var ui_static_data = MultiBox.getDeviceStaticData(device);
-			if  ((ui_static_data == undefined) || (ui_static_data.eventList2==undefined))
+			if	((ui_static_data == undefined) || (ui_static_data.eventList2==undefined))
 				return [];
 			return ui_static_data.eventList2;
 		}
 		return [];
 	};
-	
+
 	function _resetPollCounters( cbfunc ) {
-		return this.getDevices( 
+		return this.getDevices(
 			function(luaid,device) {
 				var id = device.id;
 				var service="urn:micasaverde-com:serviceId:ZWaveDevice1"
 				var PollNoReply = parseInt(_getStatus(id,service,"PollNoReply"));
 				var PollOk = parseInt(_getStatus(id,service,"PollOk"));
 				if (! isNaN(PollNoReply) ) {
-					_setStatus( id, service, "PollNoReply", 0   );
+					_setStatus( id, service, "PollNoReply", 0	);
 				}
 				if (! isNaN(PollOk) ) {
 					_setStatus( id, service, "PollOk", 0   );
 				}
-			}, 
+			},
 			function(device) {
 				return (device.id_parent==1);
-			}, 
+			},
 			function(devices) {
 				if ($.isFunction(cbfunc))
 					(cbfunc)();
-			} 
-		);		
+			}
+		);
 	};
 	function _getUPnPHelper()	{
 		return _upnpHelper;
@@ -2578,7 +2578,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		// });
 		// return jqxhr;
 	}
-	
+
   // explicitly return public methods when this object is instantiated
   return {
 	//---------------------------------------------------------
@@ -2587,34 +2587,34 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	getUPnPHelper	: _getUPnPHelper,
 	getIpAddr		: _getIpAddr,
 	getUrlHead		: _getUrlHead,
-	getDataProviders    : _getDataProviders,	// (cbfunc)
+	getDataProviders	: _getDataProviders,	// (cbfunc)
 	getFileUrl			: _getFileUrl,			//(filename)
 	getFileContent :  _getFileContent,			//( filename , cbfunc)
-	triggerAltUIUpgrade : _triggerAltUIUpgrade,	// (newversion,newtracnum)  : newrev number in TRAC
+	triggerAltUIUpgrade : _triggerAltUIUpgrade,	// (newversion,newtracnum)	: newrev number in TRAC
 	getIconPath		: _getIconPath,		// ( src )
-	getIcon			: _getIcon, 		// workaround to get image from vera box
+	getIcon			: _getIcon,			// workaround to get image from vera box
 	getWeatherSettings : _getWeatherSettings,
-	isUI5			: _isUI5,				
-	isOpenLuup 		: function() { return _isOpenLuup(_user_data) },
-	candoPost 		: function() { return _candoPost(_user_data) },	
+	isUI5			: _isUI5,
+	isOpenLuup		: function() { return _isOpenLuup(_user_data) },
+	candoPost		: function() { return _candoPost(_user_data) },
 	getBoxInfo		: _getBoxInfo,		//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()
-	getLuaStartup 	: _getLuaStartup,
-    getRooms		: _getRooms,		// in the future getRooms could cache the information and only call _getRooms when needed
-    getRoomsSync	: function() 		{ return _rooms; },
+	getLuaStartup	: _getLuaStartup,
+	getRooms		: _getRooms,		// in the future getRooms could cache the information and only call _getRooms when needed
+	getRoomsSync	: function()		{ return _rooms; },
 	getRoomByID		: _getRoomByID,		// roomid
 	getDevices		: _getDevices,
-    getDevicesSync	: function() 		{ return _devices; },
+	getDevicesSync	: function()		{ return _devices; },
 	getDeviceByType : _getDeviceByType,
 	getDeviceByAltID : _getDeviceByAltID,
-	getDeviceByID 	: _getDeviceByID, 
+	getDeviceByID	: _getDeviceByID,
 	getDeviceBatteryLevel : _getDeviceBatteryLevel,
 	getDeviceStaticUI : _getDeviceStaticUI,
 	getDeviceVariableHistory : _getDeviceVariableHistory,
 	getDeviceActions: _getDeviceActions,
 	getDeviceEvents : _getDeviceEvents,
 	getDeviceDependants : _getDeviceDependants,
-	runAction 		: _runAction,
+	runAction		: _runAction,
 	addWatch		: _addWatch,				// ( lul_device, service, variable, deviceid, sceneid, expression, xml, provider, params)
 	delWatch		: _delWatch,				// ( lul_device, service, variable, deviceid, sceneid, expression, xml, provider, params)
 	getWatches		: _getWatches,				// (whichwatches,filterfunc)
@@ -2624,21 +2624,21 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	isDeviceBT		: function(device) { return UserDataHelper(_user_data).isDeviceBT(device) },
 	getScenes		: _getScenes,
 	getSceneHistory : _getSceneHistory,
-	getScenesSync	: function() 		{ return _scenes; },
-	getSceneByID 	: _getSceneByID,
+	getScenesSync	: function()		{ return _scenes; },
+	getSceneByID	: _getSceneByID,
 	getNewSceneID	: _getNewSceneID,
 	setSceneMonitorMode : _setSceneMonitorMode,
-	
+
 	// pages
 	getCustomPages : _getCustomPages,
-	
+
 	// worklflows
-	getWorkflows 	: _getWorkflows,
+	getWorkflows	: _getWorkflows,
 	getWorkflowStatus : _getWorkflowStatus,
 	getWorkflowHistory: _getWorkflowHistory,
 	isWorkflowEnabled : _isWorkflowEnabled,
 	getPlugins		: _getPlugins,
-	getPluginByID 	: _getPluginByID, 
+	getPluginByID	: _getPluginByID,
 	getUsers		: _getUsers,
 	getUsersSync	: _getUsersSync,
 	getUserByID		: _getUserByID,
@@ -2648,10 +2648,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	setAttr			: _setAttr, //function _setAttr(device, attribute, value,cbfunc) {
 	setStatus		: _setStatus,
 	getStatus		: _getStatus,
-	getJobStatus	: _getJobStatus,	//(jobid, cbfunc) 
+	getJobStatus	: _getJobStatus,	//(jobid, cbfunc)
 	getStates		: _getStates,
 	evaluateConditions : _evaluateConditions,		// evaluate a device condition table ( AND between conditions )
-	
+
 	createDevice	: _createDevice,
 	deleteDevice	: _deleteDevice,
 	renameDevice	: _renameDevice,	// ( device, newname )
@@ -2665,28 +2665,28 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	deleteScene		: _deleteScene,
 	modifyDevice		: _modifyDevice,
 	modifyPlugin		: _modifyPlugin,
-	reloadEngine	: _reloadEngine,	
+	reloadEngine	: _reloadEngine,
 	reboot			: _reboot,
 	setStartupCode	: _setStartupCode,
-	
+
 	getCategoryTitle : _getCategoryTitle,
 	getCategories	 : _getCategories,
-	getDeviceTypes 	: function() 		{	return _devicetypes; },
-	// isRemoteAccess	: function() 	{ 	return window.location.origin.indexOf("mios.com")!=-1; /*return true;*/ },
+	getDeviceTypes	: function()		{	return _devicetypes; },
+	// isRemoteAccess	: function()	{	return window.location.origin.indexOf("mios.com")!=-1; /*return true;*/ },
 
 	// energy
 	getPower		: _getPower,
-	
+
 	// color
 	setColor		: _setColor,
-	
+
 	// stats
 	resetPollCounters : _resetPollCounters,
-	
+
 	// oscommand http://192.168.1.16/port_3480/data_request?id=lr_ALTUI_Handler&command=oscommand&oscommand=df
-	osCommand 		: _osCommand,	//(cmd,bSilent, cbfunc)		
+	osCommand		: _osCommand,	//(cmd,bSilent, cbfunc)
 	runLua			: _runLua,
-	
+
 	// UI5 Compatibility mode: caching user data changes and saving them at user request
 	updateChangeCache : _updateChangeCache,
 	saveChangeCaches  : _saveChangeCaches,
@@ -2694,16 +2694,16 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	initializeSysinfo : _initializeSysinfo,
 
 	// save page data into altui plugin device
-	saveData		: _saveData,		//  name, data , cbfunc
-	saveEngine 		: _saveEngine, 
+	saveData		: _saveData,		//	name, data , cbfunc
+	saveEngine		: _saveEngine,
 	clearEngine		: _clearEngine,
-	loadEngine 		: _loadEngine, 		// optional user_data
+	loadEngine		: _loadEngine,		// optional user_data
 	isUserDataCached	: _isUserDataCached,
 	RequestBackup : _RequestBackup,
-	initEngine		: function( firstuserdata ) 	{
+	initEngine		: function( firstuserdata )		{
 						_loadEngine( firstuserdata );
 						_initDataEngine();				// init the data collection engine
-					},		
+					},
   };
 });	// not invoked, object does not exists
 
@@ -2714,11 +2714,11 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	var _user_data = {};
 	var _dataEngine = null;
 
-	function _todo() { 
+	function _todo() {
 		console.log("TODO called , Call Stack=");
 		var stack = new Error().stack;
 		console.log( stack );
-		return null;  
+		return null;
 	};
 
 	function _refreshEngine() {
@@ -2754,20 +2754,20 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 								// if file found and content != null
 								var json = JSON.parse(jsonstr)
 								_user_data.static_data.push(  json );
-								MultiBox.updateDeviceTypeUIDB( _uniqID, dt, json );				
+								MultiBox.updateDeviceTypeUIDB( _uniqID, dt, json );
 								if (dt!=undefined)
 									MultiBox.updateDeviceTypeUPnpDB( _uniqID, dt, device.device_file);	// pass device file so UPNP data can be read
 							} catch (e) {
-								console.error("Parsing error:", e); 
+								console.error("Parsing error:", e);
 							}
 						}
 					});
-				if (device!=null) {	
-					device.dirty=true; 
+				if (device!=null) {
+					device.dirty=true;
 					EventBus.publishEvent("on_ui_deviceStatusChanged",device);
 				}
-			});	
-			
+			});
+
 			_dataEngine = setTimeout( _refreshEngine, 3000 );
 			if (bFirst)
 				EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
@@ -2782,17 +2782,17 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		.always(function() {
 		});
 	};
-	
+
 	function _initEngine() {
 		_dataEngine = null;
 		_refreshEngine()
 	};
-	
+
 	function _asyncResponse(arr, func , filterfunc, endfunc) {
 		var res=[];
 		if (!arr)
 			return null;
-		
+
 		$.each(arr, function(idx,elem) {
 			if (arr[idx].altuiid==undefined)
 				arr[idx].altuiid="{0}-{1}".format(_uniqID,elem.id);
@@ -2802,13 +2802,13 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 					func(idx+1,elem);	// device id in Lua is idx+1
 			}
 		});
-	
-		if ( $.isFunction( endfunc ) )  {
-			endfunc(res);			
+
+		if ( $.isFunction( endfunc ) )	{
+			endfunc(res);
 		}
 		return res;
 	};
-	
+
 	function _getDevices( func , filterfunc, endfunc ) {
 		if (_user_data.devices!=null) {
 			return _asyncResponse(_user_data.devices, func , filterfunc, endfunc)
@@ -2816,7 +2816,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		return _asyncResponse([], func , filterfunc, endfunc);
 	};
 	function _getWatches(whichwatches , filterfunc) {
-		if ((whichwatches!="VariablesToWatch") && (whichwatches!="VariablesToSend")) 
+		if ((whichwatches!="VariablesToWatch") && (whichwatches!="VariablesToSend"))
 			return null;
 		return [];
 	};
@@ -2833,7 +2833,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		return _asyncResponse([], func , filterfunc, endfunc);
 	};
 	function _getRoomsSync() { return _user_data.rooms };
-	
+
 	function _getCategories( func, filterfunc, endfunc )
 	{
 		if (_user_data.categories!=null) {
@@ -2852,19 +2852,19 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 				return _user_data.devices[i].states;
 		}
 		return null;
-	};	
+	};
 	function _getDeviceBatteryLevel(device) {
 		var batteryLevel=_getStatus( device.id, "urn:micasaverde-com:serviceId:HaDevice1", "BatteryLevel" );
 		return batteryLevel; // Math.floor((Math.random() * 100) + 1);
 	};
-	
+
 	function _getDeviceByID( devid ) {
 		for (var i=0; i<_user_data.devices.length; i++) {
 			if (_user_data.devices[i].id==devid)
 				return _user_data.devices[i];
 		}
 		return null;
-	};	
+	};
 	function _runAction( deviceID, service, action, params, cbfunc ) {
 		var jqxhr = $.ajax( {
 			url: _altuibox_url+"/api/devices/{0}/action/{1}/{2}".format(deviceID,service,action),
@@ -2883,7 +2883,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 				(cbfunc)(null);
 		})
 		.always(function() {
-		});		
+		});
 		return jqxhr;
 	};
 	function _getBoxFullInfo() {
@@ -2891,10 +2891,10 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		$.each( Object.keys(_user_data).sort(), function(i,key) {
 			var val = _user_data[key];
 			if (!$.isArray(val) && !$.isPlainObject(val))
-				ordered[key]=val;			
+				ordered[key]=val;
 		});
 		return ordered;
-	};	
+	};
 	function _getRoomByID( roomid ) {
 		for (var i=0; i<_user_data.rooms.length; i++) {
 			if (_user_data.rooms[i].id == roomid)
@@ -2912,7 +2912,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	function _getNewSceneID() {
 		return ALTUI_NEW_SCENE_ID;
 	};
-	function _getScenesSync() { 
+	function _getScenesSync() {
 		return _user_data.scenes || [];
 	};
 	function _getBoxInfo() {
@@ -2924,7 +2924,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 			Country_description: _user_data.Country_description
 		};
 	};
-	
+
 	function _getUsers(func , filterfunc, endfunc ) {
 		if (_user_data.users !=null )
 			return _asyncResponse( _user_data.users.sort(altuiSortByName2), func , filterfunc, endfunc);
@@ -2945,7 +2945,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		}
 		return user;
 	};
-	
+
 	function _getWeatherSettings()
 	{
 		var target = {tempFormat: "", weatherCountry: "", weatherCity: ""};
@@ -2969,7 +2969,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 				(cbfunc)(null);
 		})
 		.always(function() {
-		});		
+		});
 		return jqxhr;
 	};
 	function _setVariable(variable, value, cbfunc) {
@@ -2990,7 +2990,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 				(cbfunc)(null);
 		})
 		.always(function() {
-		});		
+		});
 		return jqxhr;
 	};
 	function _getHouseMode(cbfunc) {
@@ -3005,8 +3005,8 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		}
 		return null;
 	};
-	function _isUserDataCached() {	
-		return MyLocalStorage.get("AltuiBox"+_uniqID)!=null; 
+	function _isUserDataCached() {
+		return MyLocalStorage.get("AltuiBox"+_uniqID)!=null;
 	};
 	function _getDeviceDependants(device) {
 		var usedin_objects =[];
@@ -3056,7 +3056,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 				(cbfunc)(null);
 		})
 		.always(function() {
-		});		
+		});
 		return jqxhr;
 	};
 	function _getIconPath(iconname) {
@@ -3065,7 +3065,7 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	function _getDeviceActions(device,cbfunc) {
 		return UserDataHelper(_user_data).getDeviceActions(device,cbfunc);
 	};
-	
+
 	function _initializeSysinfo() {
 		return {
 			"installation_number" : "12345678",
@@ -3107,35 +3107,35 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 			// "account": ""
 		}
 	};
-	
+
   // explicitly return public methods when this object is instantiated
   return {
 	//---------------------------------------------------------
 	// PUBLIC  functions
 	//---------------------------------------------------------
 	getFileUrl		: _getFileUrl,			//(filename)
-	getFileContent  : _getFileContent,
-	getUPnPHelper	: function ()   { console.assert(false,"Altuibox controller %s does not have a UPNP interface",_ip_addr); return null; } ,
-	getIpAddr		: function () 	{ return _ip_addr; },
-	getUrlHead		: function ()   { return (_ipaddr=='') ? window.location.pathname : ("http://{0}".format(_ip_addr)); },
-	getDataProviders    : _todo,	// (cbfunc)
-	triggerAltUIUpgrade : _todo,	// (newversion,newtracnum)  : newrev number in TRAC
+	getFileContent	: _getFileContent,
+	getUPnPHelper	: function ()	{ console.assert(false,"Altuibox controller %s does not have a UPNP interface",_ip_addr); return null; } ,
+	getIpAddr		: function ()	{ return _ip_addr; },
+	getUrlHead		: function ()	{ return (_ipaddr=='') ? window.location.pathname : ("http://{0}".format(_ip_addr)); },
+	getDataProviders	: _todo,	// (cbfunc)
+	triggerAltUIUpgrade : _todo,	// (newversion,newtracnum)	: newrev number in TRAC
 	getIconPath		: _getIconPath,		// ( src )
-	getIcon			: _todo, 		// workaround to get image from vera box
+	getIcon			: _todo,		// workaround to get image from vera box
 	getWeatherSettings : _getWeatherSettings,
-	isUI5			: function() 	{return false},				
-	isOpenLuup : function() 	{return false},
+	isUI5			: function()	{return false},
+	isOpenLuup : function()		{return false},
 	getBoxInfo		: _getBoxInfo,				//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()
-	getLuaStartup 	: _todo,
-    getRooms		: _getRooms,	// in the future getRooms could cache the information and only call _getRooms when needed
-    getRoomsSync	: _getRoomsSync,
+	getLuaStartup	: _todo,
+	getRooms		: _getRooms,	// in the future getRooms could cache the information and only call _getRooms when needed
+	getRoomsSync	: _getRoomsSync,
 	getRoomByID		:  _getRoomByID,
 	getDevices		:  _getDevices,
-    getDevicesSync	: function() 	{ return _user_data.devices || []; },
+	getDevicesSync	: function()	{ return _user_data.devices || []; },
 	getDeviceByType : _todo,
 	getDeviceByAltID : _todo,
-	getDeviceByID 	: _getDeviceByID,	// devid
+	getDeviceByID	: _getDeviceByID,	// devid
 	getDeviceBatteryLevel : _getDeviceBatteryLevel,
 	getDeviceStaticUI : _todo,
 	getDeviceVariableHistory : _todo,
@@ -3152,19 +3152,19 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	getScenes		: _getScenes,
 	getSceneHistory : _todo,
 	getScenesSync	: _getScenesSync,
-	getSceneByID 	: _getSceneByID,
+	getSceneByID	: _getSceneByID,
 	getNewSceneID	: _getNewSceneID,
 
 	// pages
 	getCustomPages : _todo,
-	
+
 	// worklflows
-	getWorkflows 	: _todo,
+	getWorkflows	: _todo,
 	getWorkflowStatus : _todo,
 	getWorkflowHistory: _todo,
 	isWorkflowEnabled : function() {return false},
 	getPlugins		: _todo,
-	getPluginByID 	: _todo,
+	getPluginByID	: _todo,
 	getUsers		: _getUsers,
 	getUsersSync	: _getUsersSync,
 	getUserByID		: _getUserByID,
@@ -3176,10 +3176,10 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	getStatus		: _getStatus, //	( deviceid, service, variable )
 	getJobStatus	: _todo,
 	getStates		: _getStates,
-	evaluateConditions : 	function (deviceid,devsubcat,conditions) {
+	evaluateConditions :	function (deviceid,devsubcat,conditions) {
 		return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
 	},
-	
+
 	createDevice	: _todo,
 	deleteDevice	: _todo,
 	renameDevice	: _todo,
@@ -3196,24 +3196,24 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	reloadEngine	: _todo,
 	reboot			: _todo,
 	setStartupCode	: _todo,
-	
+
 	getCategoryTitle : _getCategoryTitle,
 	getCategories	 : _getCategories,	//( cbfunc, filterfunc, endfunc ),
-	getDeviceTypes 	: _todo,
+	getDeviceTypes	: _todo,
 
 	// energy
 	getPower		: function (cbfunc) { (cbfunc)("No devices") },
-	
+
 	// color
 	setColor		: _todo,
-	
+
 	// stats
 	resetPollCounters : _todo,
-	
+
 	// oscommand http://192.168.1.16/port_3480/data_request?id=lr_ALTUI_Handler&command=oscommand&oscommand=df
-	osCommand 		: _todo,
+	osCommand		: _todo,
 	runLua			: _todo,
-	
+
 	// UI5 Compatibility mode: caching user data changes and saving them at user request
 	updateChangeCache : _todo,
 	saveChangeCaches  : _todo,
@@ -3226,11 +3226,11 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 
 	// save page data into altui plugin device
 	saveData		: _todo,
-	saveEngine 		: _todo,
+	saveEngine		: _todo,
 	clearEngine		: _todo,
-	loadEngine 		: _todo,
+	loadEngine		: _todo,
 	isUserDataCached	: _isUserDataCached,
-	initEngine		: 	_initEngine,
+	initEngine		:	_initEngine,
 	RequestBackup : _todo
   };
 });	// not invoked, object does not exists

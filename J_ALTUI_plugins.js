@@ -2,13 +2,13 @@
 "use strict";
 
 // This program is free software: you can redistribute it and/or modify
-// it under the condition that it is for private or home useage and 
+// it under the condition that it is for private or home useage and
 // this whole comment is reproduced in the source code file.
 // Commercial utilisation is not authorized without the appropriate
 // written agreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 // job_None=-1, // no icon
@@ -19,17 +19,17 @@
 // job_Done=4, // green icon
 // job_WaitingForCallback=5 // blue icon - Special case used in certain derived classes
 
-var ALTUI_PluginDisplays= ( function( window, undefined ) {  
+var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 	// return styles needed by this plugin module
 	function _getStyle() {
 		var style="";
-		style += ".altui-watts, .altui-volts, .altui-countdown  {font-size: 16px;}";
+		style += ".altui-watts, .altui-volts, .altui-countdown	{font-size: 16px;}";
 		style += ".altui-watts-unit {font-size: 12px;}";
 		style += ".altui-temperature  {font-size: 16px;}";
-		style += ".altui-temperature-heater  {font-size: 12px; white-space: pre;}";
-		style += ".altui-temperature-minor  {font-size: 8px;}";
-		style += ".altui-humidity, .altui-light  {font-size: 18px;}";
+		style += ".altui-temperature-heater	 {font-size: 12px; white-space: pre;}";
+		style += ".altui-temperature-minor	{font-size: 8px;}";
+		style += ".altui-humidity, .altui-light	 {font-size: 18px;}";
 		style += ".altui-motion {font-size: 22px;}";
 		style += ".altui-mysensorsext {font-size: 16px;}";
 		style += ".altui-keypad-status {font-size: 14px;}";
@@ -38,21 +38,21 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-blue, .btn.altui-blue { color:blue;}";
 		style += ".altui-orange { color:darkorange;}";
 		style += ".altui-magenta { color:magenta;}";
-		style += ".altui-multiswitch-container { position:absolute; left:58px; right:16px; } .altui-multiswitch-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-multiswitch-container .col-3 { padding-left:1px; padding-right:1px; }  .altui-multiswitch-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
+		style += ".altui-multiswitch-container { position:absolute; left:58px; right:16px; } .altui-multiswitch-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-multiswitch-container .col-3 { padding-left:1px; padding-right:1px; }	.altui-multiswitch-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
 		style += ".altui-heater-container { position:absolute; left:71px; right:16px; } .altui-heater-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-heater-container .col-3 { padding-left:1px; padding-right:1px; text-align:center;}  .altui-heater-btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
-		style += ".altui-heater-container select.form-control-sm { height:22px !important; padding:0;}"; 
+		style += ".altui-heater-container select.form-control-sm { height:22px !important; padding:0;}";
 		style += ".altui-weather1-day1 { position:absolute; bottom:0px; right:0px; transform: scale(0.5,0.5); }";
 		style += ".altui-cyan { color:cyan;}";
-		style += ".altui-countdown-btngrp,.altui-countdown-btngrp-mute  { margin-top:13px;}";
+		style += ".altui-countdown-btngrp,.altui-countdown-btngrp-mute	{ margin-top:13px;}";
 		style += ".altui-countdown-btngrp-fav-mute { position:absolute; bottom:0px; right:0px; }";
 		style += ".altui-dimmable  {font-size: 14px; padding-left:16px;}";
-		style += ".altui-dimmable-qubino-btngrp  { display:inline; left:5px;}";
+		style += ".altui-dimmable-qubino-btngrp	 { display:inline; left:5px;}";
 		style += ".altui-dimmable-qubino-btn  { padding: 3px 0px 0px 0px; height:25px;}";
 		style += ".altui-dimmable-qubino-btn-img  { width:100%; height:100% }";
-		style += ".altui-dimmable-slider { margin-left: 60px; margin-right: 70px; margin-top:5px;}";	
-		style += ".altui-colorpicker { margin-top: 2px; width:30px; margin-right: 15px; }";	
-		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";	
-		style += ".altui-infoviewer-pattern { font-size: 14px; }";	
+		style += ".altui-dimmable-slider { margin-left: 60px; margin-right: 70px; margin-top:5px;}";
+		style += ".altui-colorpicker { margin-top: 2px; width:30px; margin-right: 15px; }";
+		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";
+		style += ".altui-infoviewer-pattern { font-size: 14px; }";
 		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";
 //RB Change start
 //		style += "div.altui-windowcover button.btn-sm { width: 2.9em; padding:1px;}";
@@ -60,13 +60,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 //RB Change end
 		style += ".altui-sonos-text, .altui-combsw-text, .altui-sysmon-text, .altui-veraalerts-text {font-size: 11px;}";
 		style += ".altui-multistring-text-div { margin-top: 2px; height: 48px; overflow: hidden; }"
-        style += ".altui-multistring-text-some { font-size: 11px; }";
-        style += ".altui-multistring-text-all { font-size: 7px; }";
+		style += ".altui-multistring-text-some { font-size: 11px; }";
+		style += ".altui-multistring-text-all { font-size: 7px; }";
 		style += ".altui-multistring-text-1, .altui-multistring-text-2 { }";
-// Rene Boer start		
+// Rene Boer start
 //RB Change start
 //		style += ".altui-harmony-controlpanel { left:70px; right:16px; } .altui-harmony-container { position:absolute; left:70px; right:16px; } .altui-harmony-container .row { padding-top:1px; padding-bottom:1px; margin-left:0px; margin-right:0px;} .altui-harmony-col { padding-left:3px; padding-right:3px; }  .altui-harmony-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:0px; padding-right:0px; margin-left:0px; margin-right:0px; width: 100%; max-width: 100% }";
-		style += ".altui-harmony-controlpanel { left:58px; right:16px; } .altui-harmony-container { position:absolute; left:58px; right:16px; } .altui-harmony-container .row { padding:0px !important; margin-left:0px; margin-right:0px;} .altui-harmony-col { padding-left:1px; padding-right:1px; }  .altui-harmony-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding:0px !important; margin:0px !important; width: 100%; max-width: 100% }";
+		style += ".altui-harmony-controlpanel { left:58px; right:16px; } .altui-harmony-container { position:absolute; left:58px; right:16px; } .altui-harmony-container .row { padding:0px !important; margin-left:0px; margin-right:0px;} .altui-harmony-col { padding-left:1px; padding-right:1px; }	 .altui-harmony-open { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding:0px !important; margin:0px !important; width: 100%; max-width: 100% }";
 //RB Change end
 // Rene Boer end
 		style += ".altui-upnpproxy-text { font-size: 11px; margin-left: 2px; margin-top: 22px; }";
@@ -78,26 +78,26 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	{
 		return ( (device.status!=undefined) && (device.status!=-1) && (device.status!=4) && (device.status!=2) );
 	};
-	
+
 	// onoff : 0, 1 or -1 for spinner
 	// csvlabel = "OFF,ON"
 	function _createOnOffButton( onoff , id , csvlabel, extracls)
 	{
-		var str=csvlabel.split(',');		
+		var str=csvlabel.split(',');
 		if (true/*UIManager.UI7Check()*/ /*&& (window.location.origin.indexOf("mios.com")==-1)*/)
 		{
 			var onoffbuttonTemplate = "";
 			onoffbuttonTemplate += "<div class='altui-button-onoff "+(extracls || '')+"'>";
 				onoffbuttonTemplate += "<div id='{2}' class='onoffswitch'>";
-				onoffbuttonTemplate += "    <input type='checkbox' name='onoffswitch' class='onoffswitch-checkbox'  {0}>";
-				onoffbuttonTemplate += "    <label class='onoffswitch-label' for='myonoffswitch'>";
-				onoffbuttonTemplate += "        <span class='onoffswitch-inner'></span>";
-				onoffbuttonTemplate += "        <span class='onoffswitch-switch'></span>";
-				onoffbuttonTemplate += "    </label>";
+				onoffbuttonTemplate += "	<input type='checkbox' name='onoffswitch' class='onoffswitch-checkbox'	{0}>";
+				onoffbuttonTemplate += "	<label class='onoffswitch-label' for='myonoffswitch'>";
+				onoffbuttonTemplate += "		<span class='onoffswitch-inner'></span>";
+				onoffbuttonTemplate += "		<span class='onoffswitch-switch'></span>";
+				onoffbuttonTemplate += "	</label>";
 				onoffbuttonTemplate += "</div>";
 				onoffbuttonTemplate += "<div class='altui-button-stateLabel'>{1}</div>";
 			onoffbuttonTemplate += "</div>";
-			
+
 			// onoffbuttonTemplate += "<div class='altui-button-onoff "+(extracls || '')+"'>";
 			// onoffbuttonTemplate += "<div id='{2}' class='" + (extracls || '') +" on-off-device {0}' ></div>";
 			// onoffbuttonTemplate += "<div class='altui-button-stateLabel'>{1}</div>";
@@ -151,11 +151,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			cbfunc(device, 1-status);
 		}
 	}
-	
+
 	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawCamera( device ) {
 		var video = (MyLocalStorage.getSettings('ShowVideoThumbnail') || 0)==1;
-		var urlHead = MultiBox.getUrlHead(device.altuiid) 
+		var urlHead = MultiBox.getUrlHead(device.altuiid)
 		if ( MultiBox.isRemoteAccess() || (video==false) ) {
 			var img = $("<img class='altui-camera-picture'></img>")
 				.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
@@ -182,7 +182,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 	}
 	function _refreshCameraTile(id,device) {
-		var urlHead = MultiBox.getUrlHead(device.altuiid) 
+		var urlHead = MultiBox.getUrlHead(device.altuiid)
 		var elem = $("img#{0}".format(device.altuiid))
 		if (elem.length>0) {
 			$(elem)
@@ -194,7 +194,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _drawCameraTile(device) {
 		var html="";
 		var video = (MyLocalStorage.getSettings('ShowVideoThumbnail') || 0)==1;
-		var urlHead = MultiBox.getUrlHead(device.altuiid) 
+		var urlHead = MultiBox.getUrlHead(device.altuiid)
 		var devicedom = $(".altui-favorites-device-content[data-altuiid='{0}']".format(device.altuiid)).closest(".altui-favorites-device")
 		if (devicedom.length>0) {
 			devicedom.addClass("altui-norefresh");
@@ -202,7 +202,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				var img = $("<img id='{0}' class='altui-camera-picture'></img>".format(device.altuiid))
 					.attr('src',urlHead+"?id=request_image&res=low&cam="+device.id+"&t="+ new Date().getTime())
 					.css('width','100%')
-				html =  img.wrap( "<div></div>" ).parent().html();
+				html =	img.wrap( "<div></div>" ).parent().html();
 				HTMLUtils.startTimer('altui-camera-tile-timer-'+device.altuiid,3000,_refreshCameraTile,device)
 			} else {
 				var streamurl = "url(http://{0}{1})".format(
@@ -229,26 +229,26 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 		return html;
 	}
-	
+
 	function _drawVswitch( device ) {
 		var html ="";
-		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VSwitch1', 'Status' )); 
+		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VSwitch1', 'Status' ));
 		html += ALTUI_PluginDisplays.createOnOffButton( status,"altui-vswitch-"+device.altuiid, _T("OFF,ON") , "pull-right");
 		$.each( ['Text1','Text2'],function(i,v) {
-			var dl1 = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VSwitch1', v ); 
-			if (dl1 != null) 
+			var dl1 = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VSwitch1', v );
+			if (dl1 != null)
 				html += $("<div class='altui-vswitch-text'></div>").text(dl1).wrap( "<div></div>" ).parent().html()
 		});
-		// on off 
+		// on off
 		html += "<script type='text/javascript'>";
 		html += "$('div#altui-vswitch-{0}').on('click', function() { ALTUI_PluginDisplays.toggleVswitch('{0}','div#altui-vswitch-{0}'); } );".format(device.altuiid);
 		html += "</script>";
 		return html;
 	}
-	
+
 	function _drawGeneric( device) {
 		var html = "";
-		var status = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:GenericSensor1', 'CurrentLevel' ); 
+		var status = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:GenericSensor1', 'CurrentLevel' );
 		if (status!=null) {
 			html += ("<span class='altui-temperature' >"+status+"</span>");
 		}
@@ -264,17 +264,17 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var ws = MultiBox.getWeatherSettings();
 		if (ws.tempFormat==undefined)
 			ws.tempFormat="";
-		
-		var status = parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' )); 
+
+		var status = parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' ));
 		html += ("<span class='altui-temperature' >"+status+"&deg;"+ws.tempFormat+"</span>");
 		return html;
 	}
-		
-	function _internaldrawZoneThermostat( device , userOperatingMode1Items,  userHVACFanOperatingMode1Items, isHeater) {
+
+	function _internaldrawZoneThermostat( device , userOperatingMode1Items,	 userHVACFanOperatingMode1Items, isHeater) {
 		function _button(altuiid, colorclass, glyph, service, action, name, value, incr) {
-//RB Change start			
-//			return ("<button type='button' style='width:50%;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-light btn-sm' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format( 
-			return ("<button type='button' style='width:50%; padding:0px !important;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-light btn-sm' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format( 
+//RB Change start
+//			return ("<button type='button' style='width:50%;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-light btn-sm' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format(
+			return ("<button type='button' style='width:50%; padding:0px !important;' class='altui-heater-btn altui-setpointcontrol-{0} {7} btn btn-light btn-sm' data-service='{2}' data-action='{3}' data-name='{4}' data-value='{5}' data-incr='{6}'>{1}</button>".format(
 //RB Change end
 			altuiid,		// id
 			glyph,	// label
@@ -286,46 +286,46 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			colorclass
 			));
 		};
-		var HVAC_INCREMENT = 0.5;	
+		var HVAC_INCREMENT = 0.5;
 		var controller = MultiBox.controllerOf(device.altuiid).controller;
 		var isUI5 = MultiBox.isUI5(controller);
 		var ws = MultiBox.getWeatherSettings();
 		if (ws.tempFormat==undefined)
 			ws.tempFormat="";
-		
-		var modeStatus = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:HVAC_UserOperatingMode1', 'ModeStatus' ); 
-		var modeFan = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:HVAC_FanOperatingMode1', 'Mode' ); 
-		var curTemp = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' ); 
+
+		var modeStatus = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:HVAC_UserOperatingMode1', 'ModeStatus' );
+		var modeFan = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:HVAC_FanOperatingMode1', 'Mode' );
+		var curTemp = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' );
 		var allsetpoints = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1', 'AllSetpoints' );
-		var heatsetpoint_current = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1_Heat', 'CurrentSetpoint' ); 
-		var heatsetpoint_target = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1_Heat', 'SetpointTarget' ); 
-		var coldsetpoint_current = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1_Cool', 'CurrentSetpoint' ); 
-		var coldsetpoint_target = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1_Cool', 'SetpointTarget' ); 
+		var heatsetpoint_current = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1_Heat', 'CurrentSetpoint' );
+		var heatsetpoint_target = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1_Heat', 'SetpointTarget' );
+		var coldsetpoint_current = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1_Cool', 'CurrentSetpoint' );
+		var coldsetpoint_target = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1_Cool', 'SetpointTarget' );
 		//debug
 		// curTemp = 19;
 		// heatsetpoint_current = 22;
 		// heatsetpoint_target = 24;
 		// coldsetpoint_current = 17;
 		// coldsetpoint_target = 15;
-		// autosetpoint = 21;		
+		// autosetpoint = 21;
 		// currentmodesetpoint=12;
 		// modeFan = "PeriodicOn";
 		// modeStatus = "HeatOn";
 		// allsetpoints = "3,4,5";
-		
+
 		var autosetpoint=null, currentmodesetpoint=null, currentmodesetpoint_target=null;
-		var bNewControl = (isUI5==false ) && (  isNullOrEmpty(allsetpoints)==false );
+		var bNewControl = (isUI5==false ) && (	isNullOrEmpty(allsetpoints)==false );
 		if (bNewControl==true)
 			bNewControl = (MyLocalStorage.getSettings('UseUI7Heater')==1);
-		
+
 		if (bNewControl ==true) {
 			AltuiDebug.debug("Using new form of heater as AllSetpoints is not empty: {0} )".format( allsetpoints));
 			var splits = allsetpoints.split(",");
 			heatsetpoint_current = splits[0] || "";
 			coldsetpoint_current = splits[1] || "";
 			autosetpoint = splits[2] || "";
-			currentmodesetpoint = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1', 'CurrentSetpoint' ); 
-			currentmodesetpoint_target = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1', 'SetpointTarget' ); 
+			currentmodesetpoint = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1', 'CurrentSetpoint' );
+			currentmodesetpoint_target = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSetpoint1', 'SetpointTarget' );
 		}
 
 		var html = "";
@@ -337,7 +337,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 //Rene Boer start better drawing of thermostat for me. Else on large it spills below drawing box fo device
 //				html += "<div class='col-3'>";
 				html += "<div class='col-3 col-lg-4 col-xl-3'>";
-// Rene Boer end				
+// Rene Boer end
 					var heatsetpoint = heatsetpoint_target || parseFloat($("#altui-heatsetpoint-"+device.altuiid).text()) || heatsetpoint_current;
 					if (heatsetpoint!=null) {
 						var v = heatsetpoint_current ? parseFloat(heatsetpoint_current).toFixed(1)+"&deg;"+ws.tempFormat : "";
@@ -350,7 +350,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 //Rene Boer start
 //				html += "<div class='col-3'>";
 				html += "<div class='col-3 col-lg-4 col-xl-3'>";
-// Rene Boer end				
+// Rene Boer end
 					var coldsetpoint = coldsetpoint_target || parseFloat($("#altui-coldsetpoint-"+device.altuiid).text()) || coldsetpoint_current
 					if ((isHeater==false) && (coldsetpoint!=null)) {
 						v = coldsetpoint_current ? parseFloat(coldsetpoint_current).toFixed(1)+"&deg;"+ws.tempFormat : "";
@@ -378,64 +378,64 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 						html +="</select>";
 					}
 				html += "</div>";
-				html += "<div class='col-3'>"; 
+				html += "<div class='col-3'>";
 					if (bNewControl == false) {
 						//UI5
-						html += _button(device.altuiid, "altui-red", upGlyph, 
+						html += _button(device.altuiid, "altui-red", upGlyph,
 									"urn:upnp-org:serviceId:TemperatureSetpoint1_Heat",
 									"SetCurrentSetpoint",
 									"NewCurrentSetpoint",
 									"altui-heatsetpoint-"+device.altuiid,
-									HVAC_INCREMENT	
+									HVAC_INCREMENT
 								);
-						html += _button(device.altuiid, "altui-red", downGlyph, 
+						html += _button(device.altuiid, "altui-red", downGlyph,
 									"urn:upnp-org:serviceId:TemperatureSetpoint1_Heat",
 									"SetCurrentSetpoint",
 									"NewCurrentSetpoint",
 									"altui-heatsetpoint-"+device.altuiid,
 									-HVAC_INCREMENT
-								);	
+								);
 					} else {
 						//currentmodesetpoint
 						//UI7
-						html += _button(device.altuiid, "", upGlyph, 
+						html += _button(device.altuiid, "", upGlyph,
 									"urn:upnp-org:serviceId:TemperatureSetpoint1",
 									"SetCurrentSetpoint",
 									"NewCurrentSetpoint",
 									"altui-autosetpoint-"+device.altuiid,
-									HVAC_INCREMENT	
-								);						
+									HVAC_INCREMENT
+								);
 					}
 				html += "</div>";
 				html += "<div class='col-3' style='padding: 0px !important'>";
 					if (bNewControl == false) {
 						//UI5
 						if (isHeater==false) {
-							html += _button(device.altuiid, "altui-blue", upGlyph, 
+							html += _button(device.altuiid, "altui-blue", upGlyph,
 										"urn:upnp-org:serviceId:TemperatureSetpoint1_Cool",
 										"SetCurrentSetpoint",
 										"NewCurrentSetpoint",
 										"altui-coldsetpoint-"+device.altuiid,
 										HVAC_INCREMENT
 									);
-							html += _button(device.altuiid, "altui-blue", downGlyph, 
+							html += _button(device.altuiid, "altui-blue", downGlyph,
 										"urn:upnp-org:serviceId:TemperatureSetpoint1_Cool",
 										"SetCurrentSetpoint",
 										"NewCurrentSetpoint",
 										"altui-coldsetpoint-"+device.altuiid,
 										-HVAC_INCREMENT
-									);	
+									);
 						}
 					}
 					else {
-						html += _button(device.altuiid, "", downGlyph, 
+						html += _button(device.altuiid, "", downGlyph,
 									"urn:upnp-org:serviceId:TemperatureSetpoint1",
 									"SetCurrentSetpoint",
 									"NewCurrentSetpoint",
 									"altui-autosetpoint-"+device.altuiid,
-									-HVAC_INCREMENT	
-								);						
-					}				
+									-HVAC_INCREMENT
+								);
+					}
 				html += "</div>";
 				html += "<div class='col-3'>";
 					if (userHVACFanOperatingMode1Items.length>0) {
@@ -464,7 +464,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				$('#'+$(selected).data('value')).html( (value+incr).toFixed(1)+'&deg;');
 				function doItNow(obj) {
 					var params = {}; params[obj.name]=obj.value;
-					MultiBox.runActionByAltuiID(obj.altuiid, obj.service, obj.action, params);			
+					MultiBox.runActionByAltuiID(obj.altuiid, obj.service, obj.action, params);
 					// console.log("timer doItNow() :" + JSON.stringify(obj));
 					$(obj.button).data("timer",null);
 				};
@@ -483,16 +483,16 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				});
 				// console.log("set Timeout({0})  params:{1}".format(timer,value+incr));
 				$(this).data("timer",timer);
-			}	
+			}
 		);
 		html += "<script type='text/javascript'>";
-		html += " $('select#altui-heater-select-{0}').on('change', function() { 	".format(device.altuiid);
-		html += " 	var selected = $(this).find(':selected');					";
-		html += "   var service = $(selected).data('service');					";
-		html += "   var action = $(selected).data('action');					";
-		html += "   var name = $(selected).data('name');					";
-		html += "   var value = $(selected).data('value');					";
-		html += "   var params = {}; params[name]=value;				";
+		html += " $('select#altui-heater-select-{0}').on('change', function() {		".format(device.altuiid);
+		html += "	var selected = $(this).find(':selected');					";
+		html += "	var service = $(selected).data('service');					";
+		html += "	var action = $(selected).data('action');					";
+		html += "	var name = $(selected).data('name');					";
+		html += "	var value = $(selected).data('value');					";
+		html += "	var params = {}; params[name]=value;				";
 		html += "	MultiBox.runActionByAltuiID('{0}', service, action, params);".format(device.altuiid);
 		html += "});"
 		html += "</script>";
@@ -512,29 +512,29 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			{label:"On", value:"ContinuousOn", service:"urn:upnp-org:serviceId:HVAC_FanOperatingMode1", action:"SetMode", name:"NewMode"},
 			{label:"Cycle", value:"PeriodicOn", service:"urn:upnp-org:serviceId:HVAC_FanOperatingMode1", action:"SetMode", name:"NewMode"}
 		];
-		return  _internaldrawZoneThermostat( device , userOperatingMode1Items,  userHVACFanOperatingMode1Items, false );
+		return	_internaldrawZoneThermostat( device , userOperatingMode1Items,	userHVACFanOperatingMode1Items, false );
 	};
-	
+
 	function _drawHeater( device) {
 		var userOperatingMode1Items = [
 			{label:"Off", value:"Off" , service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewMode" },
 			{label:"Heat", value:"HeatOn", service:"urn:upnp-org:serviceId:HVAC_UserOperatingMode1", action:"SetModeTarget", name:"NewMode"}
 		];
 		var userHVACFanOperatingMode1Items = [];
-		return  _internaldrawZoneThermostat( device , userOperatingMode1Items,  userHVACFanOperatingMode1Items, true );
+		return	_internaldrawZoneThermostat( device , userOperatingMode1Items,	userHVACFanOperatingMode1Items, true );
 	};
-		
+
 	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawHumidity( device) {
 		var html = "";
-		var status = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' )); 
+		var status = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' ));
 		html += ("<span class='altui-humidity' >"+status+" % </span>");
 		return html;
 	};
-	
+
 	function _drawLight( device) {
 		var html = "";
-		var status = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' )); 
+		var status = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' ));
 		var unit = "lux";	//(status>100) ? "lux" : "% or lux";
 		html += ("<span class='altui-light' >{0} {1}</span>".format(status,unit));
 		return html;
@@ -547,7 +547,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		// http://192.168.1.16/port_3480/data_request?id=action&DeviceNum=26&serviceId=urn:upnp-org:serviceId:WindowCovering1&action=Stop
 		var altuiid = e.closest(".altui-device").data("altuiid");
 		var actionname = e.prop('id').substr("altui-window-".length);
-		if (actionname=="Stop") 
+		if (actionname=="Stop")
 			MultiBox.runActionByAltuiID( altuiid, "urn:upnp-org:serviceId:WindowCovering1", "Stop", {} );
 		else
 			MultiBox.runActionByAltuiID( altuiid, "urn:upnp-org:serviceId:Dimming1", "SetLoadLevelTarget", {newLoadlevelTarget: ((actionname=="Up") ? 100 : 0) } );
@@ -558,16 +558,16 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		var html = "";
 		html += "<div class='pull-right'><div id='altui-wc-"+device.altuiid+"' class='btn-group altui-windowcover' role='group' aria-label='...'>";
-		html += ("  <button id ='altui-window-Up' type='button' class='altui-window-btn btn btn-light btn-sm {0}'>"+_T("Up")+"</button>").format( (status==100) ? 'active' : '' );
-		html += ("  <button id ='altui-window-Stop' type='button' class='altui-window-btn btn btn-light btn-sm'>"+_T("Stop")+"</button>");
-		html += ("  <button id ='altui-window-Down' type='button' class='altui-window-btn btn btn-light btn-sm {0}'>"+_T("Down")+"</button>").format( (status==0) ? 'active' : '' );
+		html += ("	<button id ='altui-window-Up' type='button' class='altui-window-btn btn btn-light btn-sm {0}'>"+_T("Up")+"</button>").format( (status==100) ? 'active' : '' );
+		html += ("	<button id ='altui-window-Stop' type='button' class='altui-window-btn btn btn-light btn-sm'>"+_T("Stop")+"</button>");
+		html += ("	<button id ='altui-window-Down' type='button' class='altui-window-btn btn btn-light btn-sm {0}'>"+_T("Down")+"</button>").format( (status==0) ? 'active' : '' );
 		html += "</div>";
 		html += "</div>";
-		
+
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-wc-{0} button').on('click', function() { ALTUI_PluginDisplays.onClickWindowCoverButton($(this)); } );".format(device.altuiid);
 		html += "</script>";
-		
+
 		return html;
 	};
 
@@ -579,11 +579,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	// return the html string inside the .card-body of the .altui-device#id panel
 	function _onColorPicker(e,altuiid,color) {
 		var device = MultiBox.getDeviceByAltuiID(altuiid);
-		MultiBox.setColor(device,color.toHexString());		
-		var currentColor = '0=0,1=0,2={0},3={1},4={2}'.format(parseInt(color._r),parseInt(color._g),parseInt(color._b));	
-		MultiBox.setStatus(device,'urn:micasaverde-com:serviceId:Color1','CurrentColor',currentColor); 		
+		MultiBox.setColor(device,color.toHexString());
+		var currentColor = '0=0,1=0,2={0},3={1},4={2}'.format(parseInt(color._r),parseInt(color._g),parseInt(color._b));
+		MultiBox.setStatus(device,'urn:micasaverde-com:serviceId:Color1','CurrentColor',currentColor);
 	};
-	
+
 // cybermag contributions for Hue2
 // helper functions
 	function _clamp( x, min, max ) {
@@ -620,29 +620,29 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		// if (colorpicker!=true)
 			// html += UIManager.defaultDeviceDrawWatts(device);
 		// load level
-		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelTarget' )); 
-		if (isNaN(level)==true) 
-			level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' )); 
-		
+		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelTarget' ));
+		if (isNaN(level)==true)
+			level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' ));
+
 		html += ("<span id='slider-val-"+device.altuiid+"' class='altui-dimmable' >"+level+"% </span>");
 
 
 		// var onebody = $(".altui-device-body:first");
 
 		// on off button
-		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' )); 
-		if (_isBusyStatus(device))  {  
+		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
+		if (_isBusyStatus(device))	{
 			status = -1;
 		}
 		html += _createOnOffButton( status,"altui-onoffbtn-"+device.altuiid , _T("OFF,ON") , "pull-right");
 		var current = "#ffffff";
-		if (colorpicker)// color picker 
+		if (colorpicker)// color picker
 		{
-			// Cybermag's contribution 
+			// Cybermag's contribution
 			// UI7 implementation no longer seems to use the "x=" part and also uses:
 			// "w,c"  - w = warm white value, c = cool white value
 			// "r,g,b" - r,g,b = RGB color values
-			// "w,c,r,g,b"  - w = warm white value, c = cool white value
+			// "w,c,r,g,b"	- w = warm white value, c = cool white value
 			// "ct" - ct = color temperature value in Kelvin (integer between 2000 and 9000)
 
 			// try Target then Current
@@ -685,11 +685,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			// html+=("<input id='altui-colorpicker-{0}' class='altui-colorpicker pull-right' type='color' value='{1}'></input>".format(device.altuiid,current));
 			html+=("<div class='altui-colorpicker pull-right'><input id='altui-colorpicker-{0}' value='{1}'></input></div>".format(device.altuiid,current));
 		}
-		
+
 		// dimming
 		html+=("<div id='slider-{0}' class='altui-dimmable-slider' ></div>").format(device.altuiid);
-				
-		// on off 
+
+		// on off
 		$('#altui-colorpicker-{0}'.format(device.altuiid,current)).spectrum('destroy');
 		html += "<script type='text/javascript'>";
 		html +="$('#altui-colorpicker-{0}').spectrum({		\
@@ -697,25 +697,25 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			preferredFormat: 'hex',				 \
 			replacerClassName: 'altui-colorpicker-replacer',		 \
 			show: function(color) {	\
-				$(this).closest('.altui-device').toggleClass('altui-norefresh'); 	\
+				$(this).closest('.altui-device').toggleClass('altui-norefresh');	\
 			},	\
 			hide: function(color) {	\
-				$(this).closest('.altui-device').toggleClass('altui-norefresh'); 	\
+				$(this).closest('.altui-device').toggleClass('altui-norefresh');	\
 			}	\
 		});".format(device.altuiid,current);
 		html += "$('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleOnOffButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "$('div#slider-{0}.altui-dimmable-slider').slider({ max:100,min:0,value:{1},change:ALTUI_PluginDisplays.onSliderChange });".format(device.altuiid,level);
-		if (colorpicker) { // color picker 
+		if (colorpicker) { // color picker
 			html += "$('div#slider-{0}.altui-dimmable-slider').css('margin-right','120px');".format(device.altuiid)
-			html += "$('input#altui-colorpicker-{0}').on('change', function(e,color) {  ALTUI_PluginDisplays.onColorPicker(e,'{0}',color); });".format(device.altuiid);
+			html += "$('input#altui-colorpicker-{0}').on('change', function(e,color) {	ALTUI_PluginDisplays.onColorPicker(e,'{0}',color); });".format(device.altuiid);
 		}
 		html += "</script>";
-		$(".altui-mainpanel").off("slide","#slider-"+device.altuiid).on("slide","#slider-"+device.altuiid,function( event, ui ){ 
+		$(".altui-mainpanel").off("slide","#slider-"+device.altuiid).on("slide","#slider-"+device.altuiid,function( event, ui ){
 			$("#slider-val-"+device.altuiid).text( ui.value+'%');
 		});
 		return html;
 	};
-	
+
 	var QuibinoLevels = [
 		{cmd:"stop",value:0},
 		{cmd:"frost",value:11},
@@ -725,9 +725,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		{cmd:"confort",value:51}
 	];
 	function _onclickQubinoBtn( e ) {
-		
+
 	};
-	
+
 	function _drawDimmableQubinoFlushPilotWire(device) {
 		var controller = MultiBox.controllerOf(device.altuiid).controller;
 		var iconpath = MultiBox.getIconPath(controller,"../../other/");
@@ -739,8 +739,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		};
 		$.each(QuibinoLevels , function(i,level) {
 			var extracls = "altui-dimmable-qubino-btn";
-			var background = (i == currentLevel) ? "btn-success" : "btn-light" 
-			model.buttons.push( 				
+			var background = (i == currentLevel) ? "btn-success" : "btn-light"
+			model.buttons.push(
 				{background:background, cls:extracls, id:"qubflw_"+device.altuiid+"_"+level.cmd+"_"+level.value , img:iconpath+"qubino-"+level.cmd+"-icon.png", label:level.cmd, imgcls:'altui-dimmable-qubino-btn-img'}
 			);
 		});
@@ -759,11 +759,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return html;
 	};
 	// return the html string inside the .card-body of the .altui-device#id panel
-	function _drawDoorLock( device) { 
+	function _drawDoorLock( device) {
 		var status = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:DoorLock1', 'Status' );
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("Unlock,Lock") , "pull-right");
-		
+
 		var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
 		if (lasttrip != null) {
 			var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
@@ -778,13 +778,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var status = MultiBox.getStatus( device, 'urn:rts-services-com:serviceId:ProgramLogicEG', 'Armed' );
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("Bypass,Arm") , "pull-right");
-		
+
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.togglePLEG('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
 		return html;
 	};
-	
+
 	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawDoorSensor( device) {
 		return _drawMotion( device);
@@ -798,200 +798,200 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _drawFlood( device) {
 		return _drawMotion( device);
 	};
-	
+
 	function _drawGCal( device) {
 		return _drawMotion( device);
 	};
-	
-    function _drawCombinationSwitch( device ) {
-        var html = "";
-        
-        html += ("<button id='altui-pokebtn-{0}' type='button' class='pull-right altui-window-btn btn btn-light btn-sm '>{1}</button>" .format( device.altuiid,_T("Poke") )) ;
 
-        var label = MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CombinationSwitch1', 'Label' );
-        if (label != null) {
-            html += "<div class='altui-combsw-text text-muted'><br>Watched Items: {0}</div>".format(label);
-        }
+	function _drawCombinationSwitch( device ) {
+		var html = "";
 
-        html += "<script type='text/javascript'>";
-        html += " $('button#altui-pokebtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:futzle-com:serviceId:CombinationSwitch1', 'Trigger', {}); } );".format(device.altuiid);
-        html += "</script>";
+		html += ("<button id='altui-pokebtn-{0}' type='button' class='pull-right altui-window-btn btn btn-light btn-sm '>{1}</button>" .format( device.altuiid,_T("Poke") )) ;
 
-        return html;
-    };
+		var label = MultiBox.getStatus( device, 'urn:futzle-com:serviceId:CombinationSwitch1', 'Label' );
+		if (label != null) {
+			html += "<div class='altui-combsw-text text-muted'><br>Watched Items: {0}</div>".format(label);
+		}
+
+		html += "<script type='text/javascript'>";
+		html += " $('button#altui-pokebtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:futzle-com:serviceId:CombinationSwitch1', 'Trigger', {}); } );".format(device.altuiid);
+		html += "</script>";
+
+		return html;
+	};
 	function _drawHouseMode( device ) {
-        var html = "";
-        var mode = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HouseModes1', 'HMode' ) || '');
+		var html = "";
+		var mode = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HouseModes1', 'HMode' ) || '');
 		for (var i=0; i<_HouseModes.length; i++ ) {
 			if (_HouseModes[i].id==mode)
 				html +=_HouseModes[i].text;
 		}
-        return html;
+		return html;
 	};
 	function _drawDayTime( device ) {
 		var html = "";
-        
-		var status = parseInt(MultiBox.getStatus( device, 'urn:rts-services-com:serviceId:DayTime', 'Status' )); 
+
+		var status = parseInt(MultiBox.getStatus( device, 'urn:rts-services-com:serviceId:DayTime', 'Status' ));
 		html += _createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("Night,Day") , "pull-right");
-		
+
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleDayTimeButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
 		return html;
-    }
+	}
 
-    function _drawSonos( device ) {
-        var html = "";
-        var status = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:AVTransport', 'TransportState'); // may return: PLAYING, PAUSED_PLAYBACK, STOPPED
-        var title = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:AVTransport', 'CurrentTitle'); // could also get CurrentAlbum, CurrentArtist, CurrentStatus
-        var playstatus = ""; var playtitle = ""; var playbtn = "Play"; var stopbtn = "Stop"; var playbtnstyle = ""; var stopbtnstyle = "";
-        if (title != null) {
-            if (status == "PLAYING") {
-                playstatus = "Playing..."; playtitle = title; playbtn = "Pause";
-            } else {
-                if (status == "PAUSED_PLAYBACK") {
-                    playstatus = "<br>Paused...<br>Press Play to continue";
-                } else if (status == "STOPPED") {
-                    playstatus = "<br>Stopped";
-                } else {
-                    playstatus = "";
-                }
-            }
-        }        
-        html += "<button id='altui-Stopbtn-{0}' type='button' class='pull-right altui-window-btn btn btn-light btn-sm {1}'>{2}</button>" .format(device.altuiid, stopbtnstyle, _T(stopbtn)) ;
-        html += "<button id='altui-{2}btn-{0}' type='button' class='pull-right altui-window-btn btn btn-light btn-sm {1}'>{2}</button>" .format(device.altuiid, playbtnstyle, _T(playbtn)) ;
-        if (title != null) {
-            html += "<div class='altui-sonos-text text-muted' style='height: 48px; overflow: hidden'>{0}<br>{1}</div>".format(playstatus, playtitle);
-        }
-        html += "<script type='text/javascript'>";
-        html += " $('button#altui-Playbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:micasaverde-com:serviceId:MediaNavigation1', 'Play', {}); } );".format(device.altuiid);
-        html += " $('button#altui-Pausebtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:micasaverde-com:serviceId:MediaNavigation1', 'Pause', {}); } );".format(device.altuiid);
-        html += " $('button#altui-Stopbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:micasaverde-com:serviceId:MediaNavigation1', 'Stop', {}); } );".format(device.altuiid);
-        html += "</script>";
-        return html;
-    }
-	
-    function _drawSysMonitor( device ) {
-        var html = "";
-        var memoryavail = MultiBox.getStatus(device, 'urn:cd-jackson-com:serviceId:SystemMonitor', 'memoryAvailable');
-        var cpuload = MultiBox.getStatus(device, 'urn:cd-jackson-com:serviceId:SystemMonitor', 'cpuLoad5');
-        if (memoryavail != null && cpuload != null) {
-            html += "<div class='altui-sysmon-text text-muted'><br>Memory Available: {0}<br>CPU Load (5 minute): {1}</div>".format(memoryavail, cpuload);
-        }
-        return html;
-    }
-	
-    function _drawVeraAlerts( device ) {
-        var html = "";
-        var lastmsgsent = MultiBox.getStatus(device, 'urn:richardgreen:serviceId:VeraAlert1', 'LastMsgSent');
-        var lastrecipient = MultiBox.getStatus(device, 'urn:richardgreen:serviceId:VeraAlert1', 'LastRecipient');
-        if (lastmsgsent != null && lastrecipient != null) {
-            html += "<div class='altui-sysmon-text text-muted' style='padding-left: 52px'><br>Last Msg Sent: {0}<br>Profile Used: {1}</div>".format(lastmsgsent, lastrecipient);
-        }
-        return html;
-    }
-	
-    // return the html string inside the .card-body of the .altui-device#id panel
-    function _drawMultiString( device ) {
-        var html = ""; var sAll = _T("All"); var sMore = _T("More"); var sLess = _T("Less");
-        if ($('button#altui-morebtn-'+device.altuiid).html() == undefined) {
-            var initstate = {}; initstate['devicestate'] = 0;
-            MyLocalStorage.setSettings("MULTISTRINGUISTATE"+device.altuiid, initstate);
-        }        
-        var state = MyLocalStorage.getSettings("MULTISTRINGUISTATE"+device.altuiid);
-        var display = state != null ? state['devicestate'] : 0;
-        html += "<div class='btn-group pull-right'>";
-        html += " <button id='altui-allbtn-{0}' type='button' class='altui-window-btn btn btn-light btn-sm'>{1}</button>".format( device.altuiid,sAll);
-        html += " <button id='altui-morebtn-{0}' type='button' class='altui-window-btn btn btn-light btn-sm'>{1}</button>".format( device.altuiid,(display != 2 ? sMore : sLess));
-        html += "</div>";
-        html += "<div class='altui-multistring-text-div'>";
-        for (var v = 1; v <= 5 ; v++) {
-            var label = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VContainer1', "VariableName" + v ); 
-            var value = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VContainer1', "Variable" + v );
-            var style = "";
-            if (v <= 3) { style = "class='" + (display != 2 ? "altui-multistring-text-some" : "altui-multistring-text-all") + " altui-multistring-text-1 text-muted'"; }
-            else {
-                style = "class='" + (display != 2 ? "altui-multistring-text-some" : "altui-multistring-text-all") + " altui-multistring-text-2 text-muted'";
-                if (display != 2) { style += " style='display: none;'"; } 
-            }            
-            if (label != null && value != null) {
-                html += $(" <div " + style + "></div>").text(label + ": " + value).wrap( "<div></div>" ).parent().html();
-            }
-        }
-        html += "</div>";
-        html += "<script type='text/javascript'>";
-        html += " var state = MyLocalStorage.getSettings('MULTISTRINGUISTATE{0}');".format(device.altuiid);
-        html += " if (state['devicestate'] == 1) { $('.altui-multistring-text-1').toggle(); $('.altui-multistring-text-2').toggle(); }";
-        html += " $('button#altui-allbtn-{0}').on('click', function() { $('.altui-multistring-text-some').removeClass('altui-multistring-text-some').addClass('altui-multistring-text-all').show(); $('#altui-morebtn-{0}').html('{1}'); state['devicestate'] = 2; MyLocalStorage.setSettings('MULTISTRINGUISTATE{0}', state); });".format(device.altuiid,sLess);            
-        html += " $('button#altui-morebtn-{0}').on('click', function() { if ($(this).html() == '{1}') { $('.altui-multistring-text-all').removeClass('altui-multistring-text-all').addClass('altui-multistring-text-some'); $('.altui-multistring-text-2').hide(); $('#altui-morebtn-{0}').html('{2}'); state['devicestate'] = 0; MyLocalStorage.setSettings('MULTISTRINGUISTATE{0}', state); } else { $('.altui-multistring-text-1').toggle(); $('.altui-multistring-text-2').toggle(); state['devicestate'] = state['devicestate'] == 0 ? 1 : 0; MyLocalStorage.setSettings('MULTISTRINGUISTATE{0}', state); } });".format(device.altuiid,sLess,sMore);            
-        html += "</script>";
-        return html;
-    }
-	
-    // return the html string inside the .card-body of the .altui-device#id panel
-    function _drawPnPProxy( device ) {
-        var html = "";
-        var status = MultiBox.getStatus( device, 'urn:futzle-com:serviceId:UPnPProxy1', 'StatusText' );
-        if (status != null) {
-            html += "<div class='altui-upnpproxy-text text-muted'>Status: {0}</div>".format(status);
-        }
-        return html;
-    }
-    function _drawProgLogicTimerSwitch( device ) {
-        var html = "";
-        var onoff = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'Status');
-        var armed = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'Armed');
-        var state = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'State');
-        var rtime = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'TimeRemaining');
-        html += "<div class='pull-right altui-plts-btn-div'>";
-        html += " <div class='btn-group'>";
-        html += "  <button id='altui-armbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Arm"), armed==1?'btn-info':'');
-        html += "  <button id='altui-bypassbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Bypass"), armed==0?'btn-info':'');
-        html += "  <button id='altui-triggerbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm'>{1}</button>".format(device.altuiid, _T("Trigger"));
-        html += "  <button id='altui-restartbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm'>{1}</button>".format(device.altuiid, _T("Restart"));
-        html += " </div><br>";
-        html += " <div class='btn-group'>";
-        html += "  <button id='altui-onbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("On"), onoff==1?'btn-info':'');
-        html += "  <button id='altui-offbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Off"), onoff==0?'btn-info':'');
-        html += "  <button id='altui-resetbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Reset"), state==0?'btn-info':'');
-        if (state == 3 && rtime != null) {
-            var h = '00'; var m = '00'; var s = '00'; var hms = rtime.split(':');
-            if ( hms.length == 3) { h = hms[0]; m = hms[1]; s = hms[2] } else if ( hms.length == 2) { m = hms[0]; s = hms[1] } else { s = hms[0] }
-            html += "<div id='altui-plts-rtime' class='altui-plts-time-text-div text-muted'>" + "{0}:{1}:{2}".format(h,m,s) + "</div>";            
-        }
-        html += " </div>";
-        html += "</div>";
-        html += "<script type='text/javascript'>";
-        html += " function resizepltbtn() { var w = $('div.altui-device-body').width(); w=w<250?(w-50)/4:50; $('button.altui-plts-btn').css('width', w); $('#altui-plts-rtime').css('width', w-8).css('overflow', 'hidden'); }; resizepltbtn();";
-        html += " $(window).resize(function(){ resizepltbtn(); });"
-        html += " $('button#altui-restartbtn-{0}').on('click', function() { var device = MultiBox.getDeviceByAltuiID('{0}'); var state = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'State'); if (state==3) { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetState',{'newStateValue':'2'}); $('button#altui-restartbtn-{0}').addClass('btn-info'); } });".format(device.altuiid);
-        html += " $('button#altui-triggerbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetState',{'newStateValue':'1'}); $('button#altui-triggerbtn-{0}').addClass('btn-info'); });".format(device.altuiid);
-        html += " $('button#altui-bypassbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetArmed',{'newArmedValue':'0'}); $('button#altui-bypassbtn-{0}').addClass('btn-info'); $('button#altui-armbtn-{0}').removeClass('btn-info'); });".format(device.altuiid);
-        html += " $('button#altui-armbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetArmed',{'newArmedValue':'1'}); $('button#altui-armbtn-{0}').addClass('btn-info'); $('button#altui-bypassbtn-{0}').removeClass('btn-info'); });".format(device.altuiid);
-        html += " $('button#altui-resetbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetState',{'newStateValue':'0'}); $('button#altui-resetbtn-{0}').addClass('btn-info'); });".format(device.altuiid);
-        html += " $('button#altui-offbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetTarget',{'newTargetValue':'0'}); $('button#altui-offbtn-{0}').addClass('btn-info'); $('button#altui-onbtn-{0}').removeClass('btn-info'); });".format(device.altuiid);
-        html += " $('button#altui-onbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetTarget',{'newTargetValue':'1'}); $('button#altui-onbtn-{0}').addClass('btn-info'); $('button#altui-offbtn-{0}').removeClass('btn-info'); });".format(device.altuiid);
-        html += "</script>";
-        return html;
-    };
+	function _drawSonos( device ) {
+		var html = "";
+		var status = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:AVTransport', 'TransportState'); // may return: PLAYING, PAUSED_PLAYBACK, STOPPED
+		var title = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:AVTransport', 'CurrentTitle'); // could also get CurrentAlbum, CurrentArtist, CurrentStatus
+		var playstatus = ""; var playtitle = ""; var playbtn = "Play"; var stopbtn = "Stop"; var playbtnstyle = ""; var stopbtnstyle = "";
+		if (title != null) {
+			if (status == "PLAYING") {
+				playstatus = "Playing..."; playtitle = title; playbtn = "Pause";
+			} else {
+				if (status == "PAUSED_PLAYBACK") {
+					playstatus = "<br>Paused...<br>Press Play to continue";
+				} else if (status == "STOPPED") {
+					playstatus = "<br>Stopped";
+				} else {
+					playstatus = "";
+				}
+			}
+		}
+		html += "<button id='altui-Stopbtn-{0}' type='button' class='pull-right altui-window-btn btn btn-light btn-sm {1}'>{2}</button>" .format(device.altuiid, stopbtnstyle, _T(stopbtn)) ;
+		html += "<button id='altui-{2}btn-{0}' type='button' class='pull-right altui-window-btn btn btn-light btn-sm {1}'>{2}</button>" .format(device.altuiid, playbtnstyle, _T(playbtn)) ;
+		if (title != null) {
+			html += "<div class='altui-sonos-text text-muted' style='height: 48px; overflow: hidden'>{0}<br>{1}</div>".format(playstatus, playtitle);
+		}
+		html += "<script type='text/javascript'>";
+		html += " $('button#altui-Playbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:micasaverde-com:serviceId:MediaNavigation1', 'Play', {}); } );".format(device.altuiid);
+		html += " $('button#altui-Pausebtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:micasaverde-com:serviceId:MediaNavigation1', 'Pause', {}); } );".format(device.altuiid);
+		html += " $('button#altui-Stopbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:micasaverde-com:serviceId:MediaNavigation1', 'Stop', {}); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	}
+
+	function _drawSysMonitor( device ) {
+		var html = "";
+		var memoryavail = MultiBox.getStatus(device, 'urn:cd-jackson-com:serviceId:SystemMonitor', 'memoryAvailable');
+		var cpuload = MultiBox.getStatus(device, 'urn:cd-jackson-com:serviceId:SystemMonitor', 'cpuLoad5');
+		if (memoryavail != null && cpuload != null) {
+			html += "<div class='altui-sysmon-text text-muted'><br>Memory Available: {0}<br>CPU Load (5 minute): {1}</div>".format(memoryavail, cpuload);
+		}
+		return html;
+	}
+
+	function _drawVeraAlerts( device ) {
+		var html = "";
+		var lastmsgsent = MultiBox.getStatus(device, 'urn:richardgreen:serviceId:VeraAlert1', 'LastMsgSent');
+		var lastrecipient = MultiBox.getStatus(device, 'urn:richardgreen:serviceId:VeraAlert1', 'LastRecipient');
+		if (lastmsgsent != null && lastrecipient != null) {
+			html += "<div class='altui-sysmon-text text-muted' style='padding-left: 52px'><br>Last Msg Sent: {0}<br>Profile Used: {1}</div>".format(lastmsgsent, lastrecipient);
+		}
+		return html;
+	}
+
+	// return the html string inside the .card-body of the .altui-device#id panel
+	function _drawMultiString( device ) {
+		var html = ""; var sAll = _T("All"); var sMore = _T("More"); var sLess = _T("Less");
+		if ($('button#altui-morebtn-'+device.altuiid).html() == undefined) {
+			var initstate = {}; initstate['devicestate'] = 0;
+			MyLocalStorage.setSettings("MULTISTRINGUISTATE"+device.altuiid, initstate);
+		}
+		var state = MyLocalStorage.getSettings("MULTISTRINGUISTATE"+device.altuiid);
+		var display = state != null ? state['devicestate'] : 0;
+		html += "<div class='btn-group pull-right'>";
+		html += " <button id='altui-allbtn-{0}' type='button' class='altui-window-btn btn btn-light btn-sm'>{1}</button>".format( device.altuiid,sAll);
+		html += " <button id='altui-morebtn-{0}' type='button' class='altui-window-btn btn btn-light btn-sm'>{1}</button>".format( device.altuiid,(display != 2 ? sMore : sLess));
+		html += "</div>";
+		html += "<div class='altui-multistring-text-div'>";
+		for (var v = 1; v <= 5 ; v++) {
+			var label = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VContainer1', "VariableName" + v );
+			var value = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VContainer1', "Variable" + v );
+			var style = "";
+			if (v <= 3) { style = "class='" + (display != 2 ? "altui-multistring-text-some" : "altui-multistring-text-all") + " altui-multistring-text-1 text-muted'"; }
+			else {
+				style = "class='" + (display != 2 ? "altui-multistring-text-some" : "altui-multistring-text-all") + " altui-multistring-text-2 text-muted'";
+				if (display != 2) { style += " style='display: none;'"; }
+			}
+			if (label != null && value != null) {
+				html += $(" <div " + style + "></div>").text(label + ": " + value).wrap( "<div></div>" ).parent().html();
+			}
+		}
+		html += "</div>";
+		html += "<script type='text/javascript'>";
+		html += " var state = MyLocalStorage.getSettings('MULTISTRINGUISTATE{0}');".format(device.altuiid);
+		html += " if (state['devicestate'] == 1) { $('.altui-multistring-text-1').toggle(); $('.altui-multistring-text-2').toggle(); }";
+		html += " $('button#altui-allbtn-{0}').on('click', function() { $('.altui-multistring-text-some').removeClass('altui-multistring-text-some').addClass('altui-multistring-text-all').show(); $('#altui-morebtn-{0}').html('{1}'); state['devicestate'] = 2; MyLocalStorage.setSettings('MULTISTRINGUISTATE{0}', state); });".format(device.altuiid,sLess);
+		html += " $('button#altui-morebtn-{0}').on('click', function() { if ($(this).html() == '{1}') { $('.altui-multistring-text-all').removeClass('altui-multistring-text-all').addClass('altui-multistring-text-some'); $('.altui-multistring-text-2').hide(); $('#altui-morebtn-{0}').html('{2}'); state['devicestate'] = 0; MyLocalStorage.setSettings('MULTISTRINGUISTATE{0}', state); } else { $('.altui-multistring-text-1').toggle(); $('.altui-multistring-text-2').toggle(); state['devicestate'] = state['devicestate'] == 0 ? 1 : 0; MyLocalStorage.setSettings('MULTISTRINGUISTATE{0}', state); } });".format(device.altuiid,sLess,sMore);
+		html += "</script>";
+		return html;
+	}
+
+	// return the html string inside the .card-body of the .altui-device#id panel
+	function _drawPnPProxy( device ) {
+		var html = "";
+		var status = MultiBox.getStatus( device, 'urn:futzle-com:serviceId:UPnPProxy1', 'StatusText' );
+		if (status != null) {
+			html += "<div class='altui-upnpproxy-text text-muted'>Status: {0}</div>".format(status);
+		}
+		return html;
+	}
+	function _drawProgLogicTimerSwitch( device ) {
+		var html = "";
+		var onoff = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'Status');
+		var armed = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'Armed');
+		var state = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'State');
+		var rtime = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'TimeRemaining');
+		html += "<div class='pull-right altui-plts-btn-div'>";
+		html += " <div class='btn-group'>";
+		html += "  <button id='altui-armbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Arm"), armed==1?'btn-info':'');
+		html += "  <button id='altui-bypassbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Bypass"), armed==0?'btn-info':'');
+		html += "  <button id='altui-triggerbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm'>{1}</button>".format(device.altuiid, _T("Trigger"));
+		html += "  <button id='altui-restartbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm'>{1}</button>".format(device.altuiid, _T("Restart"));
+		html += " </div><br>";
+		html += " <div class='btn-group'>";
+		html += "  <button id='altui-onbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("On"), onoff==1?'btn-info':'');
+		html += "  <button id='altui-offbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Off"), onoff==0?'btn-info':'');
+		html += "  <button id='altui-resetbtn-{0}' type='button' class='altui-plts-btn btn btn-light btn-sm {2}'>{1}</button>".format(device.altuiid, _T("Reset"), state==0?'btn-info':'');
+		if (state == 3 && rtime != null) {
+			var h = '00'; var m = '00'; var s = '00'; var hms = rtime.split(':');
+			if ( hms.length == 3) { h = hms[0]; m = hms[1]; s = hms[2] } else if ( hms.length == 2) { m = hms[0]; s = hms[1] } else { s = hms[0] }
+			html += "<div id='altui-plts-rtime' class='altui-plts-time-text-div text-muted'>" + "{0}:{1}:{2}".format(h,m,s) + "</div>";
+		}
+		html += " </div>";
+		html += "</div>";
+		html += "<script type='text/javascript'>";
+		html += " function resizepltbtn() { var w = $('div.altui-device-body').width(); w=w<250?(w-50)/4:50; $('button.altui-plts-btn').css('width', w); $('#altui-plts-rtime').css('width', w-8).css('overflow', 'hidden'); }; resizepltbtn();";
+		html += " $(window).resize(function(){ resizepltbtn(); });"
+		html += " $('button#altui-restartbtn-{0}').on('click', function() { var device = MultiBox.getDeviceByAltuiID('{0}'); var state = MultiBox.getStatus(device, 'urn:rts-services-com:serviceId:ProgramLogicTS', 'State'); if (state==3) { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetState',{'newStateValue':'2'}); $('button#altui-restartbtn-{0}').addClass('btn-info'); } });".format(device.altuiid);
+		html += " $('button#altui-triggerbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetState',{'newStateValue':'1'}); $('button#altui-triggerbtn-{0}').addClass('btn-info'); });".format(device.altuiid);
+		html += " $('button#altui-bypassbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetArmed',{'newArmedValue':'0'}); $('button#altui-bypassbtn-{0}').addClass('btn-info'); $('button#altui-armbtn-{0}').removeClass('btn-info'); });".format(device.altuiid);
+		html += " $('button#altui-armbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetArmed',{'newArmedValue':'1'}); $('button#altui-armbtn-{0}').addClass('btn-info'); $('button#altui-bypassbtn-{0}').removeClass('btn-info'); });".format(device.altuiid);
+		html += " $('button#altui-resetbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetState',{'newStateValue':'0'}); $('button#altui-resetbtn-{0}').addClass('btn-info'); });".format(device.altuiid);
+		html += " $('button#altui-offbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetTarget',{'newTargetValue':'0'}); $('button#altui-offbtn-{0}').addClass('btn-info'); $('button#altui-onbtn-{0}').removeClass('btn-info'); });".format(device.altuiid);
+		html += " $('button#altui-onbtn-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}','urn:rts-services-com:serviceId:ProgramLogicTS','SetTarget',{'newTargetValue':'1'}); $('button#altui-onbtn-{0}').addClass('btn-info'); $('button#altui-offbtn-{0}').removeClass('btn-info'); });".format(device.altuiid);
+		html += "</script>";
+		return html;
+	};
 	function _drawMySensors( device) {
-        var including = MultiBox.getStatus(device, 'urn:upnp-arduino-cc:serviceId:arduino1', 'InclusionMode');
+		var including = MultiBox.getStatus(device, 'urn:upnp-arduino-cc:serviceId:arduino1', 'InclusionMode');
 
-        var html = "";
-        html += "<div class='text-muted'>Press Start to include"
+		var html = "";
+		html += "<div class='text-muted'>Press Start to include"
 
-        html += "<div class='pull-right'>";
-        html += ("<button id ='altui-arduino-include-start-{0}' type='button' class='altui-window-btn btn btn-light btn-sm {1}'>"+_T("Start")+"</button>").format(device.altuiid, (including==1) ? 'active' : '' );
-        html += ("<button id ='altui-arduino-include-stop-{0}'  type='button' class='altui-window-btn btn btn-light btn-sm {1}'>"+_T("Stop") +"</button>").format(device.altuiid, (including==0) ? 'active' : '' );
-        html += "</div></div>";
+		html += "<div class='pull-right'>";
+		html += ("<button id ='altui-arduino-include-start-{0}' type='button' class='altui-window-btn btn btn-light btn-sm {1}'>"+_T("Start")+"</button>").format(device.altuiid, (including==1) ? 'active' : '' );
+		html += ("<button id ='altui-arduino-include-stop-{0}'	type='button' class='altui-window-btn btn btn-light btn-sm {1}'>"+_T("Stop") +"</button>").format(device.altuiid, (including==0) ? 'active' : '' );
+		html += "</div></div>";
 
-        html += "<script type='text/javascript'>";
-        html += "$('button#altui-arduino-include-start-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:upnp-arduino-cc:serviceId:arduino1', 'StartInclusion', {}); } );".format(device.altuiid);
-        html += "$('button#altui-arduino-include-stop-{0}').on ('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:upnp-arduino-cc:serviceId:arduino1', 'StopInclusion',  {}); } );".format(device.altuiid);
-        html += "</script>";
+		html += "<script type='text/javascript'>";
+		html += "$('button#altui-arduino-include-start-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:upnp-arduino-cc:serviceId:arduino1', 'StartInclusion', {}); } );".format(device.altuiid);
+		html += "$('button#altui-arduino-include-stop-{0}').on ('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:upnp-arduino-cc:serviceId:arduino1', 'StopInclusion',	 {}); } );".format(device.altuiid);
+		html += "</script>";
 
-        return html;
-    };
+		return html;
+	};
 	function _drawMySensorsExt( device ) {
 		var html = "";
 		var arr = [
@@ -1002,20 +1002,20 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			{service:'urn:upnp-org:serviceId:BarometerSensor1', variable:'CurrentPressure', template:'{0} hPa'},
 		]
 		for(var i=0; i<arr.length; i++) {
-			var status = MultiBox.getStatus( device, arr[i].service, arr[i].variable ); 
+			var status = MultiBox.getStatus( device, arr[i].service, arr[i].variable );
 			if (status) {
 				var template = arr[i].template || '{0}'
-				html += ("<span class='altui-mysensorsext' >{0}</span>".format(  template.format(status) ));
+				html += ("<span class='altui-mysensorsext' >{0}</span>".format(	 template.format(status) ));
 			}
 		}
 		return html;
 	};
 	function _drawTempLeak( device ) {
-        var html = "";
-        var armed = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Armed' )); 
+		var html = "";
+		var armed = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Armed' ));
 		html += _createOnOffButton( armed,"altui-onoffbtn-"+device.altuiid, _T("Bypass,Arm"), "pull-right" );
-        html += _drawTempSensor(device);
-        var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
+		html += _drawTempSensor(device);
+		var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
 		if (lasttrip != null) {
 			var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
 			html+= "<div class='altui-lasttrip-text text-muted'>{0} {1} </div>".format( timeGlyph,lasttripdate );
@@ -1023,21 +1023,21 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleArmed('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
-        return html;
-    }
-	
+		return html;
+	}
+
 	// return the html string inside the .card-body of the .altui-device#id panel
 	function _drawMotion( device) {
 		var html = "";
-		
+
 		// armed button
-		// var status = parseInt(MultiBox.oldgetStatus( devid, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' )); 
-		// if ( ( ( device.Jobs != null ) && ( device.Jobs.length>0) ) || (device.status==1) || (device.status==5) ) {  
+		// var status = parseInt(MultiBox.oldgetStatus( devid, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
+		// if ( ( ( device.Jobs != null ) && ( device.Jobs.length>0) ) || (device.status==1) || (device.status==5) ) {
 			// status = -1;
 		// }
-		var armed = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Armed' )); 
+		var armed = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Armed' ));
 		html += _createOnOffButton( armed,"altui-onoffbtn-"+device.altuiid, _T("Bypass,Arm"), "pull-right" );
-		
+
 		var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
 		if (lasttrip != null) {
 			var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
@@ -1045,7 +1045,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 
 		// armed, tripped
-		var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' )); 
+		var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' ));
 		html += ("<span class='altui-motion' >{0}</span>".format( (tripped==true) ? "<i class='fa fa-bolt text-danger' aria-hidden='true'></i>" : ""));
 
 		// armed
@@ -1054,13 +1054,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "</script>";
 		return html;
 	};
-	
+
 	function _drawKeypad(device) {
 		var html = "";
-		
-		var status = parseInt(MultiBox.getStatus( device, 'urn:schemas-micasaverde-com:device:Keypad:1', 'Status' )); 
-		var sl_UserCode = MultiBox.getStatus( device, 'urn:schemas-micasaverde-com:device:Keypad:1', 'sl_UserCode' ); 
-		var sl_PinFailed = MultiBox.getStatus( device, 'urn:schemas-micasaverde-com:device:Keypad:1', 'sl_PinFailed' ); 
+
+		var status = parseInt(MultiBox.getStatus( device, 'urn:schemas-micasaverde-com:device:Keypad:1', 'Status' ));
+		var sl_UserCode = MultiBox.getStatus( device, 'urn:schemas-micasaverde-com:device:Keypad:1', 'sl_UserCode' );
+		var sl_PinFailed = MultiBox.getStatus( device, 'urn:schemas-micasaverde-com:device:Keypad:1', 'sl_PinFailed' );
 		html += _createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("Unlock,Lock") , "pull-right");
 		if (sl_PinFailed=="1") {
 			html += "<div class='text-danger'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i> Invalid PIN Entered</div>";
@@ -1098,30 +1098,30 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		// html +="<div id='altui-cplus-divcontainer' class='pull-left'>";
 		// html +="</div>";
 		$(domparent).append(html);
-		
+
 		// also display the default
 		// UIManager.defaultDeviceDrawControlPanel(devid, device, domparent.find("div#altui-cplus-divcontainer").width(400));
-		
+
 		$(".altui-cplus-button").click( function() {
 			var id = $(this).prop('id');
 			// MultiBox.runAction( device, 'urn:upnp-org:serviceId:cplus1', 'SendKey', {keyStream:id} );
 		});
-	};	
-	
+	};
+
 	// return the html string inside the .card-body of the .altui-device#id panel
-	
+
 	function _drawBinaryLight( device) {
 		var html ="";
 
-		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' )); 
-		// if ( ( ( device.Jobs != null ) && ( device.Jobs.length>0) ) || (device.status==1) || (device.status==5) ) {  
-		// if ( (device.status==1) || (device.status==5))  {  
-		if ( _isBusyStatus(device) )  {  
+		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
+		// if ( ( ( device.Jobs != null ) && ( device.Jobs.length>0) ) || (device.status==1) || (device.status==5) ) {
+		// if ( (device.status==1) || (device.status==5))  {
+		if ( _isBusyStatus(device) )  {
 			status = -1;
 		}
 		html += _createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("OFF,ON") , "pull-right");
 		html += UIManager.defaultDeviceDrawWatts( device);
-		
+
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleOnOffButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
@@ -1138,16 +1138,16 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				// found a match for last button id
 				if ((parts.length>0) && (parts[0]==last)) {
 					var scene_mode = parts[1].split("-");
-					// was it a scene or a mode ? 
+					// was it a scene or a mode ?
 					if (scene_mode.length>1) {
-						if (scene_mode[0]!="0")  {
+						if (scene_mode[0]!="0")	 {
 							// scene
 							var controller = MultiBox.controllerOf(device.altuiid).controller;
 							var scene = MultiBox.getSceneByID(controller,scene_mode[0])
 							if (scene!=null)
 								html += "<div class='altui-lasttrip-text text-muted'><small>{0}</small></div>".format(scene.name)
-						}	
-						if (scene_mode[1]!="0") 	// mode
+						}
+						if (scene_mode[1]!="0")		// mode
 							html += "<div class='altui-lasttrip-text text-muted'>{0}:{1}</div>".format(_T("Last Mode"),_HouseModes[ parseInt(scene_mode[1])-1 ].text)
 					}
 				}
@@ -1155,34 +1155,34 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 		return html;
 	};
-	
+
 	function _drawPowerMeter( device) {
 		var html ="";
-		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' )); 
-		if (isNaN(watts)==false) 
+		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' ));
+		if (isNaN(watts)==false)
 			html += ALTUI_Templates.wattTemplate.format(watts,"Watts");
 
 		var volts = parseFloat(MultiBox.getStatus( device, 'urn:brultech-com:serviceId:PowerMeter1', 'Volts' ));
-		if (isNaN(volts)==false) 
+		if (isNaN(volts)==false)
 			html += ALTUI_Templates.wattTemplate.format(volts,"Volts");
 
 		if (html=="") {
 			html += UIManager.defaultDeviceDrawAltuiStrings( device );
 		}
-		// var pulse = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Pulse' )); 
-		// if (isNaN(pulse)==false) 
+		// var pulse = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Pulse' ));
+		// if (isNaN(pulse)==false)
 			// html += ALTUI_Templates.wattTemplate.format(pulse,"Pulse");
 		return html;
 	};
 
-	var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>' 
+	var glyphTemplate = '<i class="fa fa-{0} {2}" aria-hidden="true" title="{1}"></i>'
 	var CD_start = glyphTemplate.format( "play", _T("Start") , "");
 	var CD_restart = glyphTemplate.format( "fast-backward", _T("Restart") , "");
 	var CD_cancel = glyphTemplate.format( "stop", _T("Cancel") , "");
 	var CD_force = glyphTemplate.format( "bell", _T("Force") , "");
 	var CD_mute = glyphTemplate.format( "microphone-slash", _T("Muted") , "");
 	var CD_unmute = glyphTemplate.format( "bullhorn", _T("Unmuted") , "");
-		
+
 	function _drawMuteButton(device,cls) {
 		var model2 = {
 			cls:'pull-right '+cls,
@@ -1218,7 +1218,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += _drawMuteButton(device,'altui-countdown-btngrp-mute');
 		html += HTMLUtils.drawButtonGroup("altui-CntDown-{0}".format(device.altuiid), model );
 		html+= _drawCountDownRemaining(device);
-		
+
 		$(".altui-mainpanel")
 			.off('click','.altui-countdown-btngrp button')
 			.on('click','.altui-countdown-btngrp button', function(e) {
@@ -1238,9 +1238,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		return html;
 	};
-	
+
 	function _drawCountDownTile(device) {
-		var html =  UIManager.drawDefaultFavoriteDevice(device);
+		var html =	UIManager.drawDefaultFavoriteDevice(device);
 		html += _drawMuteButton(device,'altui-countdown-btngrp-fav-mute');
 		html+= _drawCountDownRemaining(device);
 		$(".altui-mainpanel")
@@ -1257,14 +1257,14 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		});
 		return html;
 	};
-	
+
 	function _drawVacation( device) {
 		var html ="";
 		var status = parseInt( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status') );
 		var expiryDate =  MultiBox.getStatus( device, 'urn:futzle-com:serviceId:HolidayVirtualSwitch1', 'OverrideExpiryDate') || "";
 		if (expiryDate.length>0)
 			expiryDate = "("+expiryDate+")"
-		var name =  MultiBox.getStatus( device, 'urn:futzle-com:serviceId:HolidayVirtualSwitch1', 'Name');
+		var name =	MultiBox.getStatus( device, 'urn:futzle-com:serviceId:HolidayVirtualSwitch1', 'Name');
 		html+= "<div class='altui-watts '>{0} <small> {1}</small></div>".format( (status==1) ? _T("Holiday") : _T("Working") , expiryDate );
 		html+= "<div class='text-info'>{0}</div>".format( name || "");
 		return html;
@@ -1283,16 +1283,16 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html+= ("<div class='altui-weather-text'>"+_T("Wind")+": {0}</div>").format( wind );
 		return html;
 	};
-	
+
 	function _drawWeatherIcon( device) {
 		var html ="";
 		var conditionGroup = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'ConditionGroup');
 		var newsrc = (conditionGroup!=null) ? "http://icons.wxug.com/i/c/i/"+conditionGroup+".gif" : defaultIconSrc;
 		return "<img class='altui-device-icon pull-left rounded' src='"+newsrc+"' alt='"+conditionGroup+"' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 	};
-	
+
 	function _drawWeatherFavorite(device) {
-		var html =  UIManager.drawDefaultFavoriteDevice(device);
+		var html =	UIManager.drawDefaultFavoriteDevice(device);
 		var ForecastConditionGroup = MultiBox.getStatus( device, 'urn:upnp-micasaverde-com:serviceId:Weather1', 'Forecastday1ConditionGroup');
 		if (ForecastConditionGroup!=null) {
 			var newsrc = (ForecastConditionGroup!=null) ? "http://icons.wxug.com/i/c/i/"+ForecastConditionGroup+".gif" : defaultIconSrc;
@@ -1300,7 +1300,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 		return html;
 	};
-	
+
 	function _drawDataMine( device) {
 		var html ="";
 		var url = "";
@@ -1324,8 +1324,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += " $('button#altui-datamine-{0}.altui-datamine-open').on('click', function() { window.open('{1}','_blank'); } );".format(device.altuiid,url);
 		html += "</script>";
 		return html;
-	};	
-	
+	};
+
 	function _drawMultiswitch(device) {
 		var btnid = 0;
 		var html ="";
@@ -1341,7 +1341,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				var status = parseInt(MultiBox.getStatus(device,"urn:dcineco-com:serviceId:MSwitch1","Status"+(btnid+1)));
 
 				html += "<div class='col-3'>";
-				html+= ("<button id='{0}' data-btnid='{0}' type='button' class='m-0 p-0 altui-multiswitch-open altui-multiswitch-open-{3} btn btn-light btn-sm {2}' >{1}</button>".format( 
+				html+= ("<button id='{0}' data-btnid='{0}' type='button' class='m-0 p-0 altui-multiswitch-open altui-multiswitch-open-{3} btn btn-light btn-sm {2}' >{1}</button>".format(
 					btnid ,
 					name  ,
 //RB Change start
@@ -1352,23 +1352,23 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					)) ;
 				// html+= "x";
 				html += "</div>";
-				
+
 				btnid ++;
 			}
 			html += "</div>";
 		}
 		html += "</div>";
 		html += "<script type='text/javascript'>";
-		html += " $('button.altui-multiswitch-open-{0}').on('click', function() { 	".format(device.altuiid);
-		html += " 	var btnid = parseInt($(this).prop('id'))+1;					";
-		html += "   var action = 'SetStatus'+btnid; 							";
-		html += "   var params = {}; params['newStatus'+btnid]=-1;				";
+		html += " $('button.altui-multiswitch-open-{0}').on('click', function() {	".format(device.altuiid);
+		html += "	var btnid = parseInt($(this).prop('id'))+1;					";
+		html += "	var action = 'SetStatus'+btnid;								";
+		html += "	var params = {}; params['newStatus'+btnid]=-1;				";
 		html += "	MultiBox.runActionByAltuiID('{0}', 'urn:dcineco-com:serviceId:MSwitch1', action, params);".format(device.altuiid);
 		html += "});"
 		html += "</script>";
 		return html;
 	};
-	
+
 	function _drawInfoViewer( device) {
 		var html ="";
 		var pattern = MultiBox.getStatus( device, 'urn:a-lurker-com:serviceId:InfoViewer1', 'LuaPattern');
@@ -1386,8 +1386,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += " $('button.altui-infoviewer-log-btn').on('click', function() { window.open('{1}?id=lr_al_info&fnc=getLog&app=localapp','_blank'); } );".format(device.altuiid,urlhead);
 		html += "</script>";
 		return html;
-	};	
-	
+	};
+
 	function _draw_Paradox_IP150_wps( device) {
 		var html ="";
 		var urlhead = MultiBox.getUrlHead(device.altuiid);
@@ -1398,8 +1398,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += " $('button.altui-Paradox_IP150_wps-btn').on('click', function() { window.open('{0}?id=lr_al_paradox_wps_info','_blank'); } );".format(urlhead);
 		html += "</script>";
 		return html;
-	};	
-	
+	};
+
 	function _drawBinLightControlPanel(device, domparent) {
 
 		var html = "Any thing can go here<hr>";
@@ -1415,7 +1415,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _drawHarmony(device) {
 		var html = "";
 		try {
-			var activity  = parseInt(MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'CurrentActivityID')); 
+			var activity  = parseInt(MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'CurrentActivityID'));
 			var actBtns = [];
 			for (var i=1; i<=25; i++) {
 				var actID = parseInt(MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'ActivityID'+i));
@@ -1423,10 +1423,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				if (actID !== '' && actDesc !== '' && actID !== null && actDesc !== null) {
 					actBtns.push({'value':actID,'label':actDesc});
 				}
-			}	
+			}
 			if (actBtns.length === 0) {
 				html += "<span>No activities defined yet.</span>";
-			}	
+			}
 			else {	if (actBtns.length <= 6) {
 				var btnid = 0;
 				var colCls = 'col-4';
@@ -1450,7 +1450,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 //RB Change end
 							html += "</div>";
 							btnid ++;
-						}	
+						}
 					}
 					html += "</div>";
 				}
@@ -1464,13 +1464,13 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				html += "});";
 				html += "</script>";
 			} else {
-				var status = parseInt(MultiBox.getStatus(device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status')); 
+				var status = parseInt(MultiBox.getStatus(device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status'));
 				html += ALTUI_PluginDisplays.createOnOffButton(status,"altui-onoffbtn-"+device.altuiid, _T("OFF,ON") , "pull-right");
 				for (i=0; i<actBtns.length; i++) {
 					if (actBtns[i].value === activity) {
 						html += "<div>Activity : "+actBtns[i].label+"</div>";
 						break;
-					}	
+					}
 				}
 				html += "<div class='altui-harmony-container pull-right'>";
 				html += "<div id='altui-harmony-act-group-{0}' class='btn-group'>".format(device.altuiid);
@@ -1501,12 +1501,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 		return html;
 	};
-	
+
 	// Draw the Control panel buttons dynamically to eliminate dependency on static json as that will get out of sync for bridged devices.
 	function _drawHarmonyControlPanel(device, domparent) {
 		var html = "";
 		try {
-			var activity  = parseInt(MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'CurrentActivityID')); 
+			var activity  = parseInt(MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'CurrentActivityID'));
 			var actBtns = [];
 			for (var i=1; i<=25; i++) {
 				var actID = parseInt(MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'ActivityID'+i));
@@ -1514,11 +1514,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				if (actID !== '' && actDesc !== '' && actID !== null && actDesc !== null) {
 					actBtns.push({'value':actID,'label':actDesc});
 				}
-			}              
+			}
 			if (actBtns.length === 0) {
 				html += "<span>No activities defined yet.</span>";
-			} else {     
-				html += "<div class='altui-harmony-controlpanel'>"+  //  pull-right
+			} else {
+				html += "<div class='altui-harmony-controlpanel'>"+	 //	 pull-right
 					"<div style='height: 20px;'>&nbsp;</div>"+
 					"<div class='container-fluid'>"+
 					" <div class='row'>";
@@ -1527,7 +1527,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 						html += "<div class='altui-harmony-col col-6 col-sm-3 col-md-2 col-lg-1'>";
 						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-cp-act-{3} btn btn-{2} btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'primary' : 'default',device.altuiid);
 						html += "</div>";
-					}              
+					}
 				}
 				html += " </div>"+
 					"</div>";
@@ -1581,8 +1581,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			}
 			if (actBtns.length === 0) {
 				html += "<span>No commands defined yet.</span>";
-			}	
-			else { 
+			}
+			else {
 				html += "<div class='altui-harmony-container pull-right'>";
 				if (actBtns.length <= 6) {
 					var btnid = 0;
@@ -1603,7 +1603,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 								html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cmd-{2} btn btn-light btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
 								html += "</div>";
 								btnid ++;
-							}	
+							}
 						}
 						html += "</div>";
 					}
@@ -1644,7 +1644,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		}
 		return html;
 	};
-	
+
 	// Draw the Control panel buttons dynamically to eliminate dependency on static json as that will get out of sync for bridged devices.
 	function _drawHarmonyDeviceControlPanel(device, domparent) {
 		var html = "";
@@ -1659,8 +1659,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			}
 			if (actBtns.length === 0) {
 				html += "<span>No commands defined yet.</span>";
-			} else {  
-				html += "<div class='altui-harmony-controlpanel'>"+  //  pull-right
+			} else {
+				html += "<div class='altui-harmony-controlpanel'>"+	 //	 pull-right
 					"<div style='height: 20px;'>&nbsp;</div>"+
 					"<div class='container-fluid'>"+
 					" <div class='row'>";
@@ -1669,7 +1669,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 						html += "<div class='altui-harmony-col col-6 col-sm-3 col-md-2 col-lg-1'>";
 						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cp-cmd-{2} btn btn-light btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
 						html += "</div>";
-					}              
+					}
 				}
 				html += " </div>"+
 					"</div>";
@@ -1717,57 +1717,57 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawTempSensor : _drawTempSensor,
 	drawHeater	   : _drawHeater,
 	drawZoneThermostat : _drawZoneThermostat,
-	drawCamera     : _drawCamera,
-	drawCameraTile     : _drawCameraTile,
+	drawCamera	   : _drawCamera,
+	drawCameraTile	   : _drawCameraTile,
 	drawVswitch	   : _drawVswitch,
 	onSliderChange : _onSliderChange,
 	drawDoorSensor : _drawDoorSensor,
 	drawDoorLock   : _drawDoorLock,
-	drawPLEG 	   : _drawPLEG,
+	drawPLEG	   : _drawPLEG,
 	drawDimmable   : _drawDimmable,
 	drawDimmableQubinoFlushPilotWire : _drawDimmableQubinoFlushPilotWire,
 	onclickQubinoBtn : _onclickQubinoBtn,
 	onColorPicker  : _onColorPicker,
-	drawDimmableRGB   : _drawDimmableRGB,
+	drawDimmableRGB	  : _drawDimmableRGB,
 	drawKeypad		: _drawKeypad,
 	drawKeypadControlPanel : _drawKeypadControlPanel,
-	drawMotion 	   : _drawMotion,
-	drawGCal       : _drawGCal,
+	drawMotion	   : _drawMotion,
+	drawGCal	   : _drawGCal,
 	drawCombinationSwitch	: _drawCombinationSwitch,
 	drawHouseMode: _drawHouseMode,
 	drawDayTime		: _drawDayTime,
 	drawSonos		: _drawSonos,
 	drawTempLeak	: _drawTempLeak,
 	drawSysMonitor : _drawSysMonitor,
-	drawVeraAlerts  : _drawVeraAlerts,
+	drawVeraAlerts	: _drawVeraAlerts,
 	drawMultiString : _drawMultiString,
 	drawPnPProxy	: _drawPnPProxy,
 	drawProgLogicTimerSwitch: _drawProgLogicTimerSwitch,
-	drawMySensors   : _drawMySensors,
+	drawMySensors	: _drawMySensors,
 	drawMySensorsExt   : _drawMySensorsExt,
-	drawSmoke 	   	: _drawSmoke,
+	drawSmoke		: _drawSmoke,
 	drawFlood		: _drawFlood,
 	drawHumidity   : _drawHumidity,
-	drawLight   	: _drawLight,
+	drawLight		: _drawLight,
 	drawWindowCover : _drawWindowCover,
-	drawPowerMeter  : _drawPowerMeter,
-	drawVacation    : _drawVacation,
-	drawCountDown    : _drawCountDown,
+	drawPowerMeter	: _drawPowerMeter,
+	drawVacation	: _drawVacation,
+	drawCountDown	 : _drawCountDown,
 	drawCountDownTile : _drawCountDownTile,
-	drawWeather     : _drawWeather,
+	drawWeather		: _drawWeather,
 	drawWeatherIcon : _drawWeatherIcon,
 	drawWeatherFavorite : _drawWeatherFavorite,
-	drawInfoViewer  : _drawInfoViewer,
+	drawInfoViewer	: _drawInfoViewer,
 	draw_Paradox_IP150_wps : _draw_Paradox_IP150_wps,
-	drawDataMine 	: _drawDataMine,
+	drawDataMine	: _drawDataMine,
 	drawMultiswitch : _drawMultiswitch,		// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
 // Rene Boer start
-	drawHarmony     : _drawHarmony,			// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
+	drawHarmony		: _drawHarmony,			// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
 	drawHarmonyDevice : _drawHarmonyDevice,		// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
-	drawHarmonyControlPanel        : _drawHarmonyControlPanel,
+	drawHarmonyControlPanel		   : _drawHarmonyControlPanel,
 	drawHarmonyDeviceControlPanel  : _drawHarmonyDeviceControlPanel,
 // Rene Boer end
-	toggleButton    : _toggleButton,
+	toggleButton	: _toggleButton,
 	toggleOnOffButton : function (altuiid,htmlid) {
 		_toggleButton(altuiid, htmlid, 'urn:upnp-org:serviceId:SwitchPower1', 'Status', function(id,newval) {
 			MultiBox.setOnOff( altuiid, newval);
@@ -1800,8 +1800,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	},
 	toggleDayTimeButton : function (altuiid,htmlid) {
 		ALTUI_PluginDisplays.toggleButton(altuiid, htmlid, 'urn:rts-services-com:serviceId:DayTime', 'Status', function(id,newval) {
-            MultiBox.runActionByAltuiID( altuiid, 'urn:rts-services-com:serviceId:DayTime', 'SetTarget', {newTargetValue:newval} );
-        });
-    },
+			MultiBox.runActionByAltuiID( altuiid, 'urn:rts-services-com:serviceId:DayTime', 'SetTarget', {newTargetValue:newval} );
+		});
+	},
   };
 })( window );
