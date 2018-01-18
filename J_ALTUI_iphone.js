@@ -235,7 +235,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( present,"altui-onoffbtn-"+device.altuiid, _T("OFF,ON"), "pull-right" );
 		if (channel.length>=2)
-			html+=("<div class='altui-canalplus' >{0}</div><span><small>{1}</small></span>".format(channel[1],channel[0]));
+			html+=("<div class='altui-canalplus' >{0}<div><small>{1}</small></div></div>".format(channel[1],channel[0]));
 
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleCplusOnOff('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
