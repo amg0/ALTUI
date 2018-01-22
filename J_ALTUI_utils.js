@@ -1085,7 +1085,7 @@ var DialogManager = ( function() {
 		propertyline += "<div class='input-group'>";
 			propertyline += "<textarea rows='1' cols='50' id='altui-widget-"+name+"' class='form-control' "+optstr+"  "+placeholder+" >"+value.escapeXml()+"</textarea>";
 			propertyline += "<input type='hidden' id='altui-xml-"+name+"' class='form-control' value='"+xml.escapeXml()+"' ></input>";
-			propertyline += buttonTemplate.format( "altui-edit-"+name, 'btn-light input-group-addon', "Blockly "+editGlyph,'default',_T('Edit Watch Expression'));
+			propertyline += "<div class='input-group-append'>{0}</div>".format(buttonTemplate.format( "altui-edit-"+name, 'btn-secondary ', "Blockly "+editGlyph,'default',_T('Edit Watch Expression')));
 		propertyline += "</div>";
 		propertyline += "</div>";
 		$(dialog).find(".altui-dialog-row").append(propertyline);
@@ -1208,7 +1208,7 @@ var DialogManager = ( function() {
 		propertyline += "<div class='form-group'>";
 		propertyline += "	<label for='altui-widget-"+name+"' title='"+name+"'>"+label+"</label>";
 			propertyline += "<div class='input-group'>"
-			propertyline += glyphTemplate.format(value,value,'input-group-addon')
+			propertyline += "<div class='input-group-prepend'>{0}</div>".format(glyphTemplate.format(value,value,'input-group-text'))
 			propertyline += "	<select id='altui-widget-"+name+"' class='form-control' "+optstr+">";
 			$.each(lines, function(idx,line){
 				propertyline += "<option value='{0}' {2}>{1}</option>".format(line.value, line.text, (value==line.value)?'selected':'');
@@ -1221,7 +1221,7 @@ var DialogManager = ( function() {
 			.off("change","select#altui-widget-"+name)
 			.on('change', "select#altui-widget-"+name,function(ui,event) {
 				var v= $(this).val()
-				$(this).prev(".input-group-addon").attr("title",v).attr("class","input-group-addon fa fa-"+v)
+				$(this).prev(".input-group-prepend").find(".input-group-text").attr("title",v).attr("class","input-group-text fa fa-"+v)
 			})
 	}
 

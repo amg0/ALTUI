@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2294 $";
+var ALTUI_revision = "$Revision: 2295 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2105,7 +2105,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		// 0:name 1:name
 		var deviceActionParamTemplate = "<div class='input-group input-group-sm'>";
-		deviceActionParamTemplate +=	"  <span class='input-group-addon' id='sizing-addon3'>{0}</span>";
+		deviceActionParamTemplate +=	"  <div class='input-group-prepend'><span class='input-group-text' id='sizing-addon3'>{0}</span></div>";
 		deviceActionParamTemplate +=	"  <input type='text' class='form-control' placeholder='{1}' aria-describedby='sizing-addon3'>";
 		deviceActionParamTemplate +=	"</div>";
 
@@ -6233,7 +6233,7 @@ var UIManager  = ( function( window, undefined ) {
 		formHtml+=" <div class='ml-2 form-group '>";
 		formHtml+=" <div class='input-group '>";
 		formHtml+="		<input id='altui-create-room-name' type='text' class='form-control' placeholder='Room name...'>";
-		formHtml+="		<button id='altui-create-room' class='input-group-addon btn btn-light' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button>";
+		formHtml+="		<div class='input-group-append'><button id='altui-create-room' class='btn btn-primary' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button></div>";
 		formHtml+="	</div><!-- /input-group -->";
 		formHtml+="	</div><!-- /form-group -->";
 
@@ -6884,15 +6884,17 @@ var UIManager  = ( function( window, undefined ) {
 			filterHtml+="  <div class='card-body'>";
 				filterHtml+="<form class='form-inline'>";
 					$.each(_checks, function(idx,check) {
-						filterHtml+="<div class='form-group'><div class='checkbox'>";
-							filterHtml+="<label><input type='checkbox' value='' id='{0}'>{1}</label>".format(check.id,_T(check.label));
-						filterHtml+="</div></div>";
+						filterHtml+="<div class='form-check'>";
+							filterHtml+="<input type='checkbox' class='form-check-input' value='' id='{0}'><label class='form-check-label'>{1}</label>".format(check.id,_T(check.label));
+						filterHtml+="</div>";
 					});
 				filterHtml+="</form>";
 
 				filterHtml+="<div id='altui-device-name-filter' class='input-group'>";
-				filterHtml+="<span class='input-group-addon' id='altui-device-search-btn'>"+searchGlyph+"</span>";
-				filterHtml+="<span class='input-group-addon' id='altui-device-remove-btn'>"+removeGlyph+"</span>";
+				filterHtml+="<div class='input-group-prepend'>"
+				filterHtml+="<span class='input-group-text' id='altui-device-search-btn'>"+searchGlyph+"</span>";
+				filterHtml+="<span class='input-group-text' id='altui-device-remove-btn'>"+removeGlyph+"</span>";
+				filterHtml+="</div>"
 				filterHtml+="<input type='text' class='form-control' placeholder='Device Name' aria-describedby='sizing-addon2'>";
 				filterHtml+="</div>";
 
@@ -9853,7 +9855,7 @@ var UIManager  = ( function( window, undefined ) {
 				html += "<div class='col-10'>"
 					html += "<div class='row'>";
 						html+="<div id='altui-plugin-name-filter' class='col-12 input-group'>";
-							html+="<span class='input-group-addon' id='altui-plugin-search-btn'>"+searchGlyph+"</span>";
+							html+="<div class='input-group-prepend'><span class='input-group-text' id='altui-plugin-search-btn'>"+searchGlyph+"</span></div>";
 							html+="<input id='altui-plugin-name-filter-input' type='text' class='form-control' placeholder='Plugin Name' aria-describedby='name' value=''>";
 						html += "</div>";
 					html += "</div>";
