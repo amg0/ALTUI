@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2293 $";
+var ALTUI_revision = "$Revision: 2294 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6505,6 +6505,7 @@ var UIManager  = ( function( window, undefined ) {
 				{service:'urn:upnp-org:serviceId:TemperatureSensor1', variable:'CurrentTemperature', format:'{0}&deg;' },
 				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'Watts', format:'{0} W' },
 				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'KWH', format:'{0} kWh' },
+				{service:'urn:micasaverde-com:serviceId:EnergyMetering1', variable:'Daily', format:'{0}' },
 				{service:'urn:micasaverde-com:serviceId:SecuritySensor1', variable:'LastTrip', format:'<small>{0}</small>', translate:HTMLUtils.enhanceValue },
 				{service:'urn:micasaverde-com:serviceId:LightSensor1', variable:'CurrentLevel', format:'{0}' },
 				{service:'urn:micasaverde-com:serviceId:HumiditySensor1', variable:'CurrentLevel', format:'{0}%' },
@@ -6516,6 +6517,7 @@ var UIManager  = ( function( window, undefined ) {
 				{service:'urn:dcineco-com:serviceId:MSwitch1', variable:'Text1,Text2', format:'<small>{0} {1}</small>'},
 				{service:'urn:a-lurker-com:serviceId:InfoViewer1', variable:'LuaPattern' },
 				{service:'urn:rts-services-com:serviceId:DayTime', variable:'Status', translate:_daynight },
+				{service:'urn:upnp-org:serviceId:AVTransport', variable:'CurrentStatus', format:'<small>{0}</small>'},
 				{service:'urn:micasaverde-com:serviceId:GenericSensor1', variable:'CurrentLevel', format:'{0}' },
 			]
 			var tpl = "<span class='altui-device-info'>{0}</span>"
@@ -13847,13 +13849,13 @@ var UIManager  = ( function( window, undefined ) {
 		html +="</div>";	//panel
 		html +="</div>";	//col-12
 		$(".altui-mainpanel").append(html);
-		$.getJSON( "https://bootswatch.com/api/3.json", function( data ) {
+		$.getJSON( "https://bootswatch.com/api/4.json", function( data ) {
 			$.each(data.themes,function(idx,theme) {
 				var html ="";
-				theme.cssCdn = theme.cssCdn.replace("maxcdn.bootstrapcdn.com/bootswatch/latest/","bootswatch.com/4/")
+				// theme.cssCdn = theme.cssCdn.replace("maxcdn.bootstrapcdn.com/bootswatch/latest/","bootswatch.com/4/")
 				theme.preview = theme.preview.replace("bootswatch.com/","bootswatch.com/")
 				theme.thumbnail = theme.thumbnail.replace("bootswatch.com/","bootswatch.com/")
-				html += "<div class='altui-theme-thumbnail col-6 col-md-4 col-lg-3 col-xl-2' data-preview='{1}' data-href='{0}'>".format(theme.cssCdn,theme.preview);
+				html += "<div class='altui-theme-thumbnail col-6 col-md-4 col-lg-3 col-xl-2' data-preview='{1}' data-href='{0}'>".format(theme.cssMin,theme.preview);
 				html += "<label class='altui-theme-label'>{0} {1}</label>".format(
 					theme.description,
 					xsbuttonTemplate.format( '', 'altui-theme-preview', eyeOpenGlyph,_T('Preview'))
