@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2295 $";
+var ALTUI_revision = "$Revision: 2296 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4238,7 +4238,7 @@ var UIManager  = ( function( window, undefined ) {
 					var timer = setTimeout( function() {
 						_unregisteredFooter(footerstr);
 						UIManager.googleScript('{"license":{"name":"'+footerMap.curusername+'","valid":false,"date":""},"update":{"valid":false,"forced":false,"newVersion":0,"newTrac":0,"newFeatures":[]}}');
-					}, 10000 );
+					}, 20000 );
 
 					// prepare extra info, remove undeeded info
 					footerMap.footerstr = footerstr.replace("<span>"+footerMap.paypal+"</span>",'').replace("<span id='registration'></span>",'')
