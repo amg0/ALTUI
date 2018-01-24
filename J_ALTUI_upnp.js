@@ -115,6 +115,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		if (_cfg.isOpenLuup==true)
 			url = _getUrlHead().replace('/data_request','/upnp/control/hag');
 		else
+			// url = _getUrlHead().replace('/port_3480/data_request','/port_3480/upnp/control/hag');
 			url = _getUrlHead().replace('/port_3480/data_request','/port_49451/upnp/control/hag');
 		return url;
 	}
@@ -250,43 +251,6 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	{
 		AltuiDebug.debug("_UPnPDeletePlugin( {0} )".format( pluginid));
 		return _exec( _buildUPnPDeletePlugin( pluginid ), cbfunc );
-/*
-		var xml = "";
-		xml +="<s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/' s:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'>";
-		xml +="   <s:Body>";
-			xml +="<u:DeletePlugin xmlns:u='urn:schemas-micasaverde-org:service:HomeAutomationGateway:1'>";
-				xml +="<PluginNum>{0}</PluginNum>";
-			xml +="</u:DeletePlugin>";
-		xml +="   </s:Body>";
-		xml +="</s:Envelope>";
-
-		var url = _buildHAGSoapUrl();
-		return $.ajax({
-			url: url,
-			type: "POST",
-			dataType: "text",
-			contentType: "text/xml;charset=UTF-8",
-			processData: false,
-			data:  xml.format( pluginid  ),
-			headers: {
-				"SOAPACTION":'"urn:schemas-micasaverde-org:service:HomeAutomationGateway:1#DeletePlugin"'
-			},
-		})
-		.done(function(data, textStatus, jqXHR) {
-			_unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
-				if ($.isFunction( cbfunc ))
-				{
-					var re = /<OK>(.+)<\/OK>/; 
-					var result = data.match(re);
-					cbfunc( ( result != null) && (result.length>=2) ? result[1] : null );		// device ID in call back
-				}
-			});
-		})
-		.fail(function(jqXHR, textStatus, errorThrown) {
-			if ($.isFunction( cbfunc ))
-				cbfunc(null);
-		});
-*/
 	};
 
 	function _UPnPUpdatePluginVersion( pluginid, version, cbfunc )
@@ -463,27 +427,56 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		var url = _buildHAGSoapUrl();
 		if (_ipaddr=='') {
 			// local mode
-			return $.ajax({
-				url: url,
-				type: "POST",
-				dataType: "text",
-				contentType: "text/xml;charset=UTF-8",
-				processData: false,
-				data:  xml,
-				headers: {
-					"SOAPACTION":'"urn:schemas-micasaverde-org:service:HomeAutomationGateway:1#ModifyUserData"'
-				},
-			})
-			.done(function(data, textStatus, jqXHR) {
-				_unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
+			if (0) {
+				//old firmware mode based on SOAP message / XML
+				return $.ajax({
+					url: url,
+					type: "POST",
+					dataType: "text",
+					contentType: "text/xml;charset=UTF-8",
+					processData: false,
+					data:  xml,
+					headers: {
+						"SOAPACTION":'"urn:schemas-micasaverde-org:service:HomeAutomationGateway:1#ModifyUserData"'
+					},
+				})
+				.done(function(data, textStatus, jqXHR) {
+					_unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
+						if ($.isFunction( cbfunc ))
+							cbfunc(data, jqXHR);
+					});
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
 					if ($.isFunction( cbfunc ))
-						cbfunc(data, jqXHR);
+						cbfunc(null, jqXHR);
 				});
-			})
-			.fail(function(jqXHR, textStatus, errorThrown) {
-				if ($.isFunction( cbfunc ))
-					cbfunc(null, jqXHR);
-			});
+			} else {
+				// JSON like recent UI7 are doing
+				// override url to use ModifyUserData action
+				url = _getUrlHead()
+				return $.ajax({
+					url: url,
+					type: "POST",
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					data:  {
+						id:'lu_action',
+						serviceId:'urn:micasaverde-com:serviceId:HomeAutomationGateway1',
+						action:'ModifyUserData',
+						DataFormat:'json',
+						inUserData: JSON.stringify(target)
+					}
+				})
+				.done(function(data, textStatus, jqXHR) {
+					_unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
+						if ($.isFunction( cbfunc ))
+							cbfunc(data, jqXHR);
+					});
+				})
+				.fail(function(jqXHR, textStatus, errorThrown) {
+					if ($.isFunction( cbfunc ))
+						cbfunc(null, jqXHR);
+				});
+			}
 		} else {
 			// proxy mode
 			var url2 = _proxifySoap(url).format(
@@ -523,8 +516,6 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		
 		// check the length of the scene to choose between GET or POST method
 		var json = JSON.stringify(newscene)
-		// if (0) {
-		// if (_ipaddr=='') {
 		if (json.length >= 3000) {
 			// Local mode
 			var id = newscene.id;	
@@ -546,12 +537,6 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 			_ModifyUserData( target, function(result,jqXHR) {
 				if ($.isFunction(cbfunc))
 					(cbfunc)(result,jqXHR);
-				// if (result==null) {
-					// PageMessage.message( "Scene action failed!", "warning" );				
-				// }
-				// else {
-					// PageMessage.message( "Scene action succeeded! a LUUP reload will happen now, be patient", "success" );			
-				// }
 			});		
 		} else {
 			if (newscene.id==ALTUI_NEW_SCENE_ID)
