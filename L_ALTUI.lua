@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.12"
+local version = "v2.13"
 local SWVERSION = "3.2.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -897,11 +897,16 @@ local function armLinkTransitions(lul_device,workflow_idx,curstate)
 					-- workflowTimerCB(table.concat(tbl, "#"))
 				end
 			else
-				-- min, max generates a random
-				local parts = link.prop.duration:split("-")
-				local randduration = math.random(parts[1],parts[2])
-				debug(string.format("Wkflow - arming timer with random duration %d",randduration))
-				setTimer( lul_device, "workflowTimerCB",randduration,table.concat(tbl, "#")	 )
+				if (link.prop.duration:starts("Bag")==true) then
+					debug(string.format("Wkflow - arming timer with Bag value %s",link.prop.duration))
+					duration = _evalCode(link.prop.duration,workflow_idx)
+				else
+					-- min, max generates a random
+					local parts = link.prop.duration:split("-")
+					duration = math.random(parts[1],parts[2])
+				end
+				debug(string.format("Wkflow - arming timer with random duration %d",duration))
+				setTimer( lul_device, "workflowTimerCB",duration,table.concat(tbl, "#")	 )
 			end
 		end
 
@@ -3524,6 +3529,23 @@ end
 function timeOf(timestamp)
   local t2= midnight(timestamp)
   return os.difftime(timestamp,t2)
+end
+
+function _evalCode(str,opt_wkflowidx)
+	debug(string.format("_evalCode(%s , %d)",str,opt_wkflowidx))
+	local result = nil
+	local code = "return "..str
+	local f,msg = loadstring(code,"ALTUI - _evalCode")
+	if (f==nil) then
+		error(string.format("loadstring %s failed to compile, msg=%s",code,msg))
+	else
+		-- set Environment
+		local env = { ALTUI=ALTUI, Bag = WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] , WorkflowsVariableBag=WorkflowsVariableBag}
+		setfenv(f, setmetatable (env, {__index = _G, __newindex = _G}))
+		result = f()
+	end
+	-- debug(string.format("_evalCode returns %s",result))
+	return result
 end
 
 function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,old,new,lastupdate,expr,opt_wkflowidx)

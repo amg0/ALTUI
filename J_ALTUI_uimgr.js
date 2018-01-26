@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2296 $";
+var ALTUI_revision = "$Revision: 2298 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8357,7 +8357,7 @@ var UIManager  = ( function( window, undefined ) {
 							{id:'Schedules', title:_T("Schedules"), html: _displaySchedule( 'altui-schedule', Model.prop.schedule ) },
 							{id:'Timers', title:_T("Timers"), html:HTMLUtils.drawFormFields( [
 								{ id:"altui-timername", label:_T("Timer Name"), type:"input", value: Model.prop.timer, opt:null },
-								{ id:"altui-duration", label:_T("Duration (sec or min-max)"), type:"input",	 pattern:"(\\d+(\-\\d+)?)$", value: Model.prop.duration, opt:null },
+								{ id:"altui-duration", label:_T("Duration (sec or min-max)"), type:"input",	 pattern:"(^\\d+(-\\d+)?|^Bag\\[\"\\S+\"\\])$", value: Model.prop.duration, opt:{placeholder:'duration, or min-max, or Bag["varname"]'} },
 							])},
 						]},
 						{ id:"altui-btn-bar", type:"buttonbar", value:[
