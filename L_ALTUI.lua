@@ -900,6 +900,7 @@ local function armLinkTransitions(lul_device,workflow_idx,curstate)
 				if (link.prop.duration:starts("Bag")==true) then
 					debug(string.format("Wkflow - arming timer with Bag value %s",link.prop.duration))
 					duration = _evalCode(link.prop.duration,workflow_idx)
+					if (duration == nil) then duration = 10 end
 				else
 					-- min, max generates a random
 					local parts = link.prop.duration:split("-")
@@ -3407,7 +3408,8 @@ function resetDevice(lul_device,reload)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "Timers", "", lul_device)
-	luup.variable_set(ALTUI_SERVICE, "EmonCmsUrl", "emoncms.org", lul_device)
+	setVariableIfChanged(ALTUI_SERVICE, "EmonCmsUrl", "emoncms.org", lul_device)
+	setVariableIfChanged((ALTUI_SERVICE,"RemoteAccess", "https://remotevera.000webhostapp.com/veralogin.php", lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
 
 	if (reload==true) then
@@ -4179,7 +4181,6 @@ function startupDeferred(lul_device)
 	local url_req = port3480 .. "/data_request?id=lr_ALTUI_Handler&command=home"
 	local localurl = getSetVariableIfEmpty(ALTUI_SERVICE,"LocalHome", lul_device, url_req)
 	local present = getSetVariable(ALTUI_SERVICE,"Present", lul_device, 0)
-	-- local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://vera-ui.strongcubedfitness.com/Veralogin.php")
 	local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://remotevera.000webhostapp.com/veralogin.php")
 	local css = getSetVariable(ALTUI_SERVICE,"ThemeCSS", lul_device, "")
 	local imgpath = getSetVariable(ALTUI_SERVICE,"ImagePath", lul_device, "")

@@ -7677,7 +7677,7 @@ var UIManager  = ( function( window, undefined ) {
 											if (link.schedule )
 												html += "<li>Schedule: {0}</li>".format(UIManager.displayTimers( [ link.schedule ] , { only_text:true, add_button:false, add_json:false }).replace('table table-responsive-OFF table-sm','table altui-workflow-schedule'));
 											if (link.timer)
-												html += "<li>Timer: '{0}' expiration {1}s</li>".format(link.timer.name,link.timer.duration);
+												html += "<li>Timer: '{0}' Duration: {1} seconds</li>".format(link.timer.name,link.timer.duration);
 											html += _displayConditions(link.conditions)
 											html += _displayWaitForState(link.waitFors)
 										html += "</ul>";
