@@ -856,20 +856,18 @@ var UserDataHelper = (function(user_data) {
 			return false;
 		},
 		getStatus : function( deviceid, service, variable ) {
-			var val = null;
 			for ( var idx=0; idx<_user_data.devices.length; idx++) {
 				var device = _user_data.devices[idx];
 				if (device.id==deviceid) {
 					for (var stateidx=0; stateidx<device.states.length; stateidx++) {
 						var state = device.states[stateidx];
 						if ((state.service==service) && (state.variable==variable)) {
-							val= state.value;
-							return val;
+							return state.value;
 						}
 					}
 				}
 			}
-			return val;
+			return null;
 		},
 		getCategoryTitle : function(catnum) {
 			if (catnum==undefined)
@@ -1044,10 +1042,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	var _status_data_LoadTime = null;
 
 	// setters to set the data in the cache, cb functions because asynchronous
-	function _setRooms(arr)			{	_rooms = arr;		};
-	function _setScenes(arr)		{	_scenes = arr;		};
-	function _setCategories(arr)	{	_categories = arr;	};
-	function _setDevices(arr)		{	_devices = arr;		};
+	function _setRooms(arr)			{	_rooms = arr ? arr.sort(altuiSortByName) : arr;		};
+	function _setScenes(arr)		{	_scenes = arr ? arr.sort(altuiSortByName) : arr;		};
+	function _setCategories(arr)	{	_categories = arr ? arr.sort(altuiSortByName) : arr;	};
+	function _setDevices(arr)		{	_devices = arr ? arr.sort(altuiSortByName) : arr;		};
 
 	function _saveChangeCaches( msgidx ) {
 		var promise = _upnpHelper.ModifyUserData( _change_cached_user_data, function() {
@@ -1240,7 +1238,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	// Get Rooms  , call a callback function asynchronously, or return array of rooms
 	function _getRooms( func , filterfunc, endfunc) {
 		if (_rooms != null ) {
-			return _asyncResponse( _rooms.sort(altuiSortByName), func , filterfunc, endfunc)
+			return _asyncResponse( _rooms, func , filterfunc, endfunc)
 		}
 		else
 			setTimeout(function(){
@@ -1265,7 +1263,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	// Get Rooms  , call a callback function asynchronously, or return array of rooms
 	function _getScenes( func , filterfunc, endfunc ) {
 		if (_scenes != null )
-			return _asyncResponse( _scenes.sort(altuiSortByName), func , filterfunc, endfunc);
+			return _asyncResponse( _scenes, func , filterfunc, endfunc);
 		return _asyncResponse( [], func , filterfunc, endfunc);;
 	};
 
@@ -1308,7 +1306,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 	function _getDevices( func , filterfunc, endfunc ) {
 		if (_devices !=null)
-			return _asyncResponse( _devices.sort(altuiSortByName), func, filterfunc, endfunc )
+			return _asyncResponse( _devices, func, filterfunc, endfunc )
 		return _asyncResponse( [], func, filterfunc, endfunc );
 	};
 	function _getCategories( cbfunc, filterfunc, endfunc )
@@ -1318,19 +1316,19 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			var jqxhr = _httpGet("?id=sdata&output_format=json",{},function(data, textStatus, jqXHR) {
 				if (data) {
 					var arr = JSON.parse(data);
-					_categories = arr.categories;
+					_setCategories(arr.categories)
 					if ( $.isFunction( cbfunc ) )  {
-						_asyncResponse( _categories.sort(altuiSortByName), cbfunc, filterfunc, endfunc );
+						_asyncResponse( _categories, cbfunc, filterfunc, endfunc );
 					}
 				} else {
-					_categories = null;
+					_setCategories(null);
 					_asyncResponse( [], cbfunc, filterfunc, endfunc );
 					// PageMessage.message( _T("Controller {0} is busy, be patient.").format(_upnpHelper.getIpAddr()) , "warning");
 				}
 			});
 			return [];
 		}
-		return _asyncResponse( _categories.sort(altuiSortByName), cbfunc, filterfunc, endfunc );
+		return _asyncResponse( _categories, cbfunc, filterfunc, endfunc );
 	};
 
 	function _getIconPath(name) {
@@ -1655,9 +1653,9 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			// _user_data = cloneObject(data);
 			_user_data_DataVersion = data.DataVersion;
 			_user_data_LoadTime = data.LoadTime;
-			_rooms = data.rooms;
-			_scenes = data.scenes;
-			_devices = data.devices;
+			_setRooms(data.rooms);
+			_setScenes(data.scenes);
+			_setDevices(data.devices);
 
 			_sanityCheck(data);
 

@@ -5,7 +5,7 @@
 -- // written agreement from amg0 / alexis . mermet @ gmail . com
 -- // This program is distributed in the hope that it will be useful,
 -- // but WITHOUT ANY WARRANTY; without even the implied warranty of
--- // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+-- // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
@@ -245,13 +245,11 @@ Queue = {
 local Thingspeak_Queue = Queue:new()
 local IFTTT_Queue = Queue:new()
 
-local function isOpenLuup()
+function isOpenLuup()
 	local openLuup = luup.attr_get "openLuup"
 	if openLuup then
-		-- openLuup
 		return true
 	end
-	-- vera
 	return false
 end
 
@@ -900,7 +898,9 @@ local function armLinkTransitions(lul_device,workflow_idx,curstate)
 				if (link.prop.duration:starts("Bag")==true) then
 					debug(string.format("Wkflow - arming timer with Bag value %s",link.prop.duration))
 					duration = _evalCode(link.prop.duration,workflow_idx)
-					if (duration == nil) then duration = 10 end
+					if (duration == nil) then
+						duration = 10
+					end
 				else
 					-- min, max generates a random
 					local parts = link.prop.duration:split("-")
@@ -3409,7 +3409,7 @@ function resetDevice(lul_device,reload)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "Timers", "", lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "EmonCmsUrl", "emoncms.org", lul_device)
-	setVariableIfChanged((ALTUI_SERVICE,"RemoteAccess", "https://remotevera.000webhostapp.com/veralogin.php", lul_device)
+	setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", "https://remotevera.000webhostapp.com/veralogin.php", lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
 
 	if (reload==true) then
