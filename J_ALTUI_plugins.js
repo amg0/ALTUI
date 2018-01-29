@@ -141,15 +141,18 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _toggleButton(altuiid, htmlselector, service, variable, cbfunc) {
 		//'#altui-onoffbtn-'+devid
 		var device = MultiBox.getDeviceByAltuiID(altuiid);
-		var status = MultiBox.getStatus( device, service, variable );
-		if ($.isNumeric(status))
-		{
-			status = parseInt( status );
-			if (status>0)		// special case of dimmer
-				status=1;
-			$(htmlselector).find("input").prop('checked', (status==0)); // invert
-			cbfunc(device, 1-status);
-		}
+		// var status = MultiBox.getStatus( device, service, variable );
+		var checked = $(htmlselector).find("input").prop('checked')
+		$(htmlselector).find("input").prop('checked', !checked)
+		cbfunc(device, (checked==false) ? 1 : 0 );
+		// if ($.isNumeric(status))
+		// {
+			// status = parseInt( status );
+			// if (status>0)		// special case of dimmer
+				// status=1;
+			// $(htmlselector).find("input").prop('checked', (status==0)); // invert
+			// cbfunc(device, 1-status);
+		// }
 	}
 
 	// return the html string inside the .card-body of the .altui-device#id panel

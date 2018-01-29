@@ -245,7 +245,7 @@ Queue = {
 local Thingspeak_Queue = Queue:new()
 local IFTTT_Queue = Queue:new()
 
-function isOpenLuup()
+local function isOpenLuup()
 	local openLuup = luup.attr_get "openLuup"
 	if openLuup then
 		return true

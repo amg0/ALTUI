@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2299 $";
+var ALTUI_revision = "$Revision: 2302 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2852,7 +2852,7 @@ var UIManager  = ( function( window, undefined ) {
 					var value2 = MultiBox.getStatus( device, control.states[1].Display.Service, control.states[1].Display.Variable );
 					var armedValue1 = control.states[0].Display.Value;
 					var armedValue2 = control.states[1].Display.Value;
-					var bInverted = (armedValue2>armedValue1);
+					var bInverted = false; //(armedValue2>armedValue1);
 					var csvlabel = (bInverted ? "{1},{0}" : "{0},{1}").format( control.states[1].Label.text,control.states[0].Label.text);
 					var onoff = (bInverted ? (value2==armedValue2): (value1==armedValue1) );
 					if (device.device_type == "urn:schemas-upnp-org:device:DimmableLight:1")		// special case ! VERA is not following the JSON file here
