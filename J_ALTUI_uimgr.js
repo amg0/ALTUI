@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2302 $";
+var ALTUI_revision = "$Revision: 2303 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3195,6 +3195,46 @@ var UIManager  = ( function( window, undefined ) {
 					}
 					break;
 				};
+				case 'spinner_horizontal':
+					var val = MultiBox.getStatus( device, control.Display.Service, control.Display.Variable );
+					var symbol = MultiBox.getStatus( device, control.Display.Service, control.Display.Variable );
+					var uniqid = devid+"-"+idx;
+					var symbol = control.LabelSymbol ? control.LabelSymbol.text : '';
+					var html = `
+					<div id='altui-spinner_horizontal-{0}' class=''>
+						<div id='altui-spinner_horizontal-val-{0}'>{1}</div>
+						<div class="btn-group btn-group-sm" role="group" aria-label="Set Buttons">
+						  <button type="button" class="btn btn-outline-secondary" id='altui-spinner_horizontal-down-{0}'>{2}</button>
+						  <button type="button" class="btn btn-outline-secondary" id='altui-spinner_horizontal-up-{0}'>{3}</button>
+						</div>
+					</div>`.format(uniqid, val+symbol, downGlyph, upGlyph)
+					$(html)
+						.appendTo( $(domparent) )
+						.css({
+							top: paddingtop + control.Display.Top,
+							left:  paddingleft + control.Display.Left,
+							position:'absolute'})
+						.width(control.Display.Width)
+						.height(control.Display.Height);
+					$("#altui-spinner_horizontal-down-"+uniqid).click( function() {
+						var val = parseFloat(MultiBox.getStatus( device, control.Display.Service, control.Display.Variable ));
+						val = Math.max(control.Display.MinValue, val-control.Display.Step);
+						var parameters = {}
+						parameters[ control.Command.ActionArgumentName ] = val;
+						MultiBox.runAction( device, control.Command.Service, control.Command.Action, parameters, null );
+						$('#altui-spinner_horizontal-val-'+uniqid).html(val+symbol);
+						// alert('down');
+					});
+					$("#altui-spinner_horizontal-up-"+uniqid).click( function() {
+						var val = parseFloat(MultiBox.getStatus( device, control.Display.Service, control.Display.Variable ));
+						val = Math.min(control.Display.MaxValue,val+control.Display.Step);
+						var parameters = {}
+						parameters[ control.Command.ActionArgumentName ] = val;
+						MultiBox.runAction( device, control.Command.Service, control.Command.Action, parameters, null );
+						$('#altui-spinner_horizontal-val-'+uniqid).html(val+symbol);
+						// alert('up');
+					});
+					break;
 				default: {
 					if (AltuiDebug.IsDebug())
 						$(domparent).append("<pre class='altui-err-msg'>Unknown control type:"+control.ControlType+". See Debug</pre>");
@@ -10315,8 +10355,8 @@ var UIManager  = ( function( window, undefined ) {
 
 		// https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css
 		UIManager.clearPage('Timeline',_T("Timeline"),UIManager.oneColumnLayout);
-		_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/', function() {
-			_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/',function() {
+		_loadCssIfNeeded('vis.min.css','//cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/', function() {
+			_loadScriptIfNeeded('vis.min.js','//cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/',function() {
 				_loadCSSText("div.vis-label , div.vis-text { color: "+getCSS('color','text-primary')+" !important;	}")
 				items = new vis.DataSet();			// Create a DataSet (allows two way data-binding)
 				// itemsview = new vis.DataView( items , {
