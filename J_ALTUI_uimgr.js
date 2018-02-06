@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2304 $";
+var ALTUI_revision = "$Revision: 2305 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3200,6 +3200,7 @@ var UIManager  = ( function( window, undefined ) {
 					var symbol = MultiBox.getStatus( device, control.Display.Service, control.Display.Variable );
 					var uniqid = devid+"-"+idx;
 					var symbol = control.LabelSymbol ? control.LabelSymbol.text : '';
+					$.extend( true, control.Display, {MinValue:-10, MaxValue:100, Step:0.5}, control.Display )	// ensure defaults
 					var html = `
 					<div id='altui-spinner_horizontal-{0}' class=''>
 						<div id='altui-spinner_horizontal-val-{0}'>{1}</div>
@@ -3216,6 +3217,21 @@ var UIManager  = ( function( window, undefined ) {
 							position:'absolute'})
 						.width(control.Display.Width)
 						.height(control.Display.Height);
+					$("#altui-spinner_horizontal-"+uniqid).off()
+					.on("click", 'div#altui-spinner_horizontal-val-'+uniqid, function() {
+						var txt = parseFloat($(this).text())
+						$(this).replaceWith("<input id='altui-spinner_horizontal-val-{0}' class='form-control form-control-sm' value='{1}' type='number' pattern='[0-9]+([\.,][0-9]+)?' step='{2}' min='{3}' max='{4}'></input>"
+							.format(uniqid,txt,control.Display.Step,control.Display.MinValue ,control.Display.MaxValue)
+						)
+						$("#altui-spinner_horizontal-val-"+uniqid).focus()
+					})
+					.on('focusout',"input#altui-spinner_horizontal-val-"+uniqid, function() {
+						var val = parseFloat($(this).val())
+						$(this).replaceWith("<div id='altui-spinner_horizontal-val-{0}'>{1}</div>".format(uniqid,val+symbol))
+						var parameters = {}
+						parameters[ control.Command.ActionArgumentName ] = val;
+						MultiBox.runAction( device, control.Command.Service, control.Command.Action, parameters, null );
+					});
 					$("#altui-spinner_horizontal-down-"+uniqid).click( function() {
 						var val = parseFloat(MultiBox.getStatus( device, control.Display.Service, control.Display.Variable ));
 						val = Math.max(control.Display.MinValue, val-control.Display.Step);
@@ -5918,10 +5934,10 @@ var UIManager  = ( function( window, undefined ) {
 		// });
 	};
 
-	function _createControllerSelect(htmlid) {
+	function _createControllerSelect(htmlid,cls) {
 		var html = "";
-		html += "<form class='form-inline col-12 mb-2'>";
-			html += "<div class='form-group'>";
+		// html += "<form class='form-inline col-12 mb-2'>";
+			html += "<div class='form-group {0}'>".format(cls||'');
 				html += "<label class='col-form-label ' for='altui-controller-select' >"+_T("Controller")+":</label>";
 				html += "<select id='"+htmlid+"' class='form-control'>";
 				$.each(MultiBox.getControllers(), function( idx, controller) {
@@ -5929,10 +5945,9 @@ var UIManager  = ( function( window, undefined ) {
 				});
 				html += "</select>";
 			html += "</div>";
-		html += "</form>";
+		// html += "</form>";
 		return html;
 	};
-
 
 	var bUIReady = false;
 	var bEngineReady = false;
@@ -6270,22 +6285,22 @@ var UIManager  = ( function( window, undefined ) {
 
 		UIManager.clearPage('Rooms',_T("Rooms"),UIManager.oneColumnLayout);
 		var formHtml="";
-		formHtml+=" <div class='ml-2 form-group '>";
-		formHtml+=" <div class='input-group '>";
-		formHtml+="		<input id='altui-create-room-name' type='text' class='form-control' placeholder='Room name...'>";
-		formHtml+="		<div class='input-group-append'><button id='altui-create-room' class='btn btn-primary' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button></div>";
-		formHtml+="	</div><!-- /input-group -->";
-		formHtml+="	</div><!-- /form-group -->";
+		formHtml+=" <form class='col-12'>";
+			formHtml+=" <div class='form-row'>";
+				formHtml+= _createControllerSelect('altui-controller-select','col-sm-4');
+				formHtml+=" <div class='form-group col-sm-8'>";
+					formHtml+=' <label class="col-form-label " for="altui-create-room-name">'+_T("Room")+'</label>'
+					formHtml+=" <div class='input-group'>";
+					formHtml+="		<input id='altui-create-room-name' type='text' class='form-control' placeholder='Room name...'>";
+					formHtml+="		<div class='input-group-append'><button id='altui-create-room' class='btn btn-primary' type='button'>"+plusGlyph+"&nbsp;"+_T("Create")+"</button></div>";
+					formHtml+="	</div><!-- /input-group -->";
+				formHtml+=" </div>";
+			formHtml+=" </div>";
+		formHtml+="	</div>";
 
-		// on the left nav
-		// nothing
-
-		// on the main panel
-		// table of rooms
 		$(".altui-mainpanel")
-			.append( _createControllerSelect('altui-controller-select'))
+			.append( formHtml )
 			.append($("<div class='col-12'><table id='table' class='table table-responsive-OFF table-sm'><thead><tr><th>ID</th><th>Name</th><th>Devices</th><th>Scenes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>"));
-		$("#altui-controller-select").closest(".form-group").append(formHtml);
 
 		var roomListTemplate = "<tr data-altuiid='{0}'><td style='white-space: nowrap'>{0}</td><td style='white-space: nowrap'><span class='altui-room-name' id='{0}'>{1}</span></td><td>{2}</td><td>{3}</td><td style='white-space: nowrap'>{4}</td></tr>";
 		MultiBox.getRooms( null,null,function( rooms) {
@@ -8069,7 +8084,8 @@ var UIManager  = ( function( window, undefined ) {
 			var init =	MyLocalStorage.getSettings("EditorTheme") || "monokai";
 			$(".altui-ace-editor").each( function(idx,elem) {
 				var editor = ace.edit( $(elem).prop('id') );
-				editor.getSession().setMode( "ace/mode/lua" );
+				editor.session.setMode("ace/mode/lua");
+				// editor.getSession().setMode( "ace/mode/lua" );
 				editor.setTheme( "ace/theme/"+init );
 				editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
 				// resize
@@ -11320,7 +11336,7 @@ var UIManager  = ( function( window, undefined ) {
 				return (matchmode==null)
 		});
 		matchmode = (matchmode || "lua").toLowerCase()
-		editor.getSession().setMode( "ace/mode/"+matchmode );
+		editor.session.setMode( "ace/mode/"+matchmode );
 		// resize
 		$("div#altui-editor-text").resizable({
 			stop: function( event, ui ) {
@@ -11482,13 +11498,16 @@ var UIManager  = ( function( window, undefined ) {
 		UIManager.clearPage('OsCommand',_T("OS Command"),UIManager.oneColumnLayout);
 
 		var html = "";
-		html+="<div class='col-12'><form>";
+		html+="<div class='col-12'>";
+		html+="<form>";
 		html+=	"<p>"+_T("Enter a Vera OS ( Unix ) command, the stdout will be returned and displayed below")+"</p>";
 		html += _drawFrequentCommandBar(commands);
-		html += _createControllerSelect('altui-controller-select');
-		html+="	 <div class='form-group'>";
-		html+="	   <label for='oscommand'>"+_T("OS Command")+"</label>";
+		html+="	 <div class='form-row'>";
+		html += _createControllerSelect('altui-controller-select','col-sm-4');
+		html+="	 <div class='form-group col-sm-8''>";
+		html+="	   <label class='col-form-label' for='oscommand'>"+_T("OS Command")+"</label>";
 		html+="	   <input type='text' class='form-control' id='oscommand' placeholder='Type your OS command like: df '>";
+		html+="	 </div>";
 		html+="	 </div>";
 		html+="</form>";
 		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-primary'>"+_T("Run")+"</button>";
@@ -11524,7 +11543,7 @@ var UIManager  = ( function( window, undefined ) {
 								"modal-lg",	// size
 								""	// glyph icon
 							));
-				var lastOne = MyLocalStorage.getSettings("LastOne_"+'param0') || "";
+				var lastOne = MyLocalStorage.getSettings("LastOne_param0") || "";
 				DialogManager.dlgAddLine(dialog, 'param0', _T('Parameter'), lastOne,"", {required:''} );
 				DialogManager.dlgAddDialogButton(dialog, true, _T("Run"));
 				$('div#dialogModal').modal();
@@ -11533,7 +11552,7 @@ var UIManager  = ( function( window, undefined ) {
 					.on( 'submit',"div#dialogModal", function() {
 							$('div#dialogModal').modal('hide');
 							var val = $("#altui-widget-param0").val();
-							MyLocalStorage.setSettings("LastOne_"+'param0'+name,val);
+							MyLocalStorage.setSettings("LastOne_param0",val);
 							oscmd = oscmd.format( val );
 							$("#oscommand").val( oscmd );
 							setTimeout(function() {
@@ -11609,10 +11628,7 @@ var UIManager  = ( function( window, undefined ) {
 		}
 
 		UIManager.clearPage('LuaStart',_T("Lua Startup"),UIManager.oneColumnLayout);
-
-		// DOES NOT WORK on other ctrl as the url gets too long
-
-		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select'));
+		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select','col-6'));
 		$("#altui-controller-select").change(function(){
 			$(".altui-editor-form").remove();
 			_prepareUI( parseInt($("#altui-controller-select").val()) );
@@ -12283,7 +12299,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		UIManager.clearPage('Quality',_T("Network Quality"),UIManager.oneColumnLayout);
 
-		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select'));
+		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select','col-6'));
 		$("#altui-controller-select").change(function() {
 			$(".altui-route-d3chart").html("");
 			MultiBox.getDevices(null,function(d) {	return MultiBox.controllerOf(d.altuiid).controller==parseInt($("#altui-controller-select").val()); },function(arr) {
@@ -12895,7 +12911,7 @@ var UIManager  = ( function( window, undefined ) {
 		UIManager.clearPage('zWaveRoutes',_T("zWave Routes"),UIManager.oneColumnLayout);
 		PageMessage.message(_T("Drag and Drop to fix the position of a node. Simple Click to open or collapse a parent node, Shift Click to free a fixed node"),"info");
 
-		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select'));
+		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select','col-6'));
 		$("#altui-controller-select").change(function() {
 			$(".altui-route-d3chart").html("");
 			MultiBox.getDevices(
@@ -14122,7 +14138,7 @@ var UIManager  = ( function( window, undefined ) {
 		$(".altui-mainpanel").append(html);
 		// ACE
 		var editor = ace.edit( "altui-editor-sample" );
-		editor.getSession().setMode( "ace/mode/lua" );
+		editor.session.setMode( "ace/mode/lua" );
 		var init =	MyLocalStorage.getSettings("EditorTheme") || "monokai";
 		editor.setTheme( "ace/theme/"+init );
 		editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
