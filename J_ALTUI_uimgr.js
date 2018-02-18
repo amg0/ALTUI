@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2305 $";
+var ALTUI_revision = "$Revision: 2307 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -89,10 +89,17 @@ var glyphList = []
 
 //https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less
 var tmp = ""
-$.get("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less",function(data) {
+// $.ajax({
+	// crossDomain :true,
+	// url:"https://github.com/FortAwesome/Font-Awesome/blob/master/web-fonts-with-css/less/_variables.less",	// prod
+	// dataType: "jsonp",
+// }).done( function (data, textStatus, jqXHR) {
+	// glyphList = $.map( data.split('\n').filter( function(line) {return line.substr(0,7)=="@fa-var"} ), function(line,idx) { return line.split(':')[0].substr(8) } )
+// })
+						
+$.get("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/web-fonts-with-css/less/_variables.less",function(data) {
 	glyphList = $.map( data.split('\n').filter( function(line) {return line.substr(0,7)=="@fa-var"} ), function(line,idx) { return line.split(':')[0].substr(8) } )
 })
-
 
 var xsbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}' {4}>{2}</button>";
 var smallbuttonTemplate = "<button id='{0}' type='button' class='{1} btn btn-light btn-sm' aria-label='tbd' title='{3}' {4}>{2}</button>";
