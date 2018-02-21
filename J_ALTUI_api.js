@@ -580,6 +580,11 @@ var application = (function(undefined) {
 				Utils.logError('Application.getDeviceChildenIdList(): ' + err)
 			}
 			return childrenIdList
+		},
+		getDeviceChildenIdList: function(deviceId) { return this.getDeviceChildrenIdList(deviceId) },
+		getUserDataStateVariable : function(deviceId, service, variable ) {
+			var device = MultiBox.getDeviceByID(_JSAPI_ctx.controllerid,deviceId);
+			return MultiBox.getStatus(device,service,variable)
 		}
 	}
 })();
@@ -993,9 +998,17 @@ var ALARM_PARTITION_ARMED='Armed';
 var ALARM_PARTITION_STAYARMED='StayArmed';
 var ALARM_PARTITION_DISARMED='Disarmed';
 var ALARM_PARTITION_BREACH='Breach';
+
+var View = {
+    idForWizardTemplate6PluginConfigurationContainer: function(inView) {
+        var id = "plugin_wizard_configuration_step_container";
+        return inView ? id : "#" + id
+    },
+};
+
 var api = {
 	version: "UI7",
-	API_VERSION: 6,
+	API_VERSION: 13,
 	ui: myInterface,
 //	ui: {
 //		// should be myInterface object??

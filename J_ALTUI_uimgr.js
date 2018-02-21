@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2307 $";
+var ALTUI_revision = "$Revision: 2309 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -88,6 +88,8 @@ var tagsGlyph = "";
 var glyphList = []
 
 //https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less
+// new 4.7.0 location "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/less/variables.less"
+// new 5.0 location "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/web-fonts-with-css/less/_variables.less"
 var tmp = ""
 // $.ajax({
 	// crossDomain :true,
@@ -97,7 +99,7 @@ var tmp = ""
 	// glyphList = $.map( data.split('\n').filter( function(line) {return line.substr(0,7)=="@fa-var"} ), function(line,idx) { return line.split(':')[0].substr(8) } )
 // })
 						
-$.get("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/web-fonts-with-css/less/_variables.less",function(data) {
+$.get("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/less/variables.less",function(data) {
 	glyphList = $.map( data.split('\n').filter( function(line) {return line.substr(0,7)=="@fa-var"} ), function(line,idx) { return line.split(':')[0].substr(8) } )
 })
 
