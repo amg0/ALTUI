@@ -24,6 +24,37 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	// return styles needed by this plugin module
 	function _getStyle() {
 		var style="";
+		style += `
+			.hueSceneListTableContainer .device_unpinned.favorite {
+				background: url("/cmh/skins/default/img/other/pinned_device.png") center center no-repeat;
+			}
+			.icon-create_scene_trigger_button_remove {
+				background-image: url("/cmh/skins/default/img/other/scene-sprite.png");
+				background-position-x: -10x;
+				background-position-y: -191px;
+				width: 32px;
+				height: 32px;
+			}
+			.icon-scene_edit_button {
+				background-image: url("/cmh/skins/default/img/other/scene-sprite.png");
+				background-position: -136px -151px;
+				width: 32px;
+				height: 32px;
+			}
+			.scenes_scene_play_button {
+			  background: url("/cmh/skins/default/img/scenes/staticSceneBtn.png") no-repeat;
+			  width: 45px;
+			  height: 68px;
+			  cursor: pointer;
+			  background-position: center center;
+			}
+			.scenes_scene_play_button::after, .icon-scene_edit_button::after, .icon-create_scene_trigger_button_remove::after, .hueSceneListTableContainer .device_unpinned.favorite::after {
+				content: "       ";
+				white-space: pre;
+			}
+			`
+		style += ".boldLabel {    font-weight: bold; }";	// Hue plugin compat
+		style += ".cpanelSection {  border-bottom: 1px dashed #000; }";		// Hue plugin compat
 		style += ".altui-watts, .altui-volts, .altui-countdown	{font-size: 16px;}";
 		style += ".altui-watts-unit {font-size: 12px;}";
 		style += ".altui-temperature  {font-size: 16px;}";

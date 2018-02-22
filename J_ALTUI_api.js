@@ -343,6 +343,9 @@ var Ajax = (function(window,undefined) {
 // J_Harmony , J_Harmony_UI7.ss
 var Utils = ( function (undefined) {
 	return {
+		int: function(i) { return parseInt(i) },
+		inArray: function(item,arr) { return ($.inArray(item,arr)!=-1) },
+		trim: function(s) { return s.trim() },
 		logDebug: function (message) {
 			if ($.isPlainObject(window.AltuiDebug)) {
 				AltuiDebug.debug(message);
@@ -567,9 +570,21 @@ var application = (function(undefined) {
 		luReload : function() { 
 			MultiBox.reloadEngine(_JSAPI_ctx.controllerid); 
 		},
+		getLuStatusStateVariable: function(deviceId, service, variable ) {
+			var device = MultiBox.getDeviceByID(_JSAPI_ctx.controllerid,deviceId);
+			return MultiBox.getStatus(device,service,variable)
+		},
 		getSceneObject : function(SceneID) {
 			var scene = MultiBox.getSceneByID(_JSAPI_ctx.controllerid,SceneID);
 			return scene;
+		},
+		getDeviceById : function(deviceId) {
+			deviceId = parseInt(deviceId)
+			for (var i = 0; i < application.userData.devices.length; i++) {
+				if (deviceId == parseInt(application.userData.devices[i].id))
+					return application.userData.devices[i]
+			}
+			return
 		},
 		getDeviceChildrenIdList : function(deviceId) {
 			var childrenIdList = [];
@@ -591,6 +606,7 @@ var application = (function(undefined) {
 
 
 // extract from constant.js
+var MessageCategory = {"SUCCESS":0,"NOTIFICATION":1,"ERROR":2,"WAITING":3,"CONFIRMATION":4};
 var DEVICETYPE_HOME_AUTO_GATEWAY = "urn:schemas-micasaverde-com:device:HomeAutomationGateway:1";
 var DEVICETYPE_BINARY_LIGHT = "urn:schemas-upnp-org:device:BinaryLight:1";
 var DEVICETYPE_DIMMABLE_LIGHT = "urn:schemas-upnp-org:device:DimmableLight:1";
