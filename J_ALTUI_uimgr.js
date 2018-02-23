@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2310 $";
+var ALTUI_revision = "$Revision: 2311 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1576,7 +1576,7 @@ var UIManager  = ( function( window, undefined ) {
 		var subst = 'btn-secondary';
 		code = code.replace(re, subst);
 		// UI7 classes - some plugin uses them
-		if (name=="J_PhilipsHue2.js") {
+		if ((name=="J_PhilipsHue2.js") || (name=="J_PhilipsHueLamp2.js")) {
 			re = /setup_wizard_button/g;
 			subst = 'btn btn-primary setup_wizard_button'
 			code = code.replace(re, subst);
@@ -1591,6 +1591,9 @@ var UIManager  = ( function( window, undefined ) {
 			code = code.replace(re, subst);
 			re = /devices_add_device_control_container/g;
 			subst = 'devices_add_device_control_container btn btn-secondary'
+			code = code.replace(re, subst);
+			re = /console\.log/g;
+			subst = '\/\/console.log'
 			code = code.replace(re, subst);
 		}
 

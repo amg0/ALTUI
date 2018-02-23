@@ -25,6 +25,73 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _getStyle() {
 		var style="";
 		style += `
+			#luminositySlider {
+			  margin: 20px 0;
+			  height: 10px;
+			  border-radius: 10px;
+			  width: 270px;
+			}
+			#luminositySlider .ui-slider-handle.ui-state-default.ui-corner-all {
+			  width: 42px;
+			  height: 42px;
+			  background: url("/cmh/skins/default/img/other/slider_horizontal_cursor.png?") no-repeat left;
+			  cursor: pointer;
+			  top: -16px;
+			  border: 0;
+			}
+			.luminositySliderLabel {
+			  line-height: 40px;
+			  font-weight: bold;
+			  font-size: 20px;
+			  margin-right: 10px;
+			}
+			.luminosityIntensity {
+			  font-size: 30px;
+			  margin-right: 10px;
+			  width: 100px;
+			  text-align: center;
+			}
+			.luminositySliderContainer {
+			  padding: 20px 0;
+			}
+			.philips_hue_2_lightness_slider {
+			  margin: 15px 0;
+			  height: 15px !important;
+			  border-radius: 10px;
+			  width: 300px;
+			}
+			.philips_hue_2_lightness_slider .ui-slider-handle.ui-state-default.ui-corner-all {
+			  width: 42px;
+			  height: 42px;
+			  background: url("/cmh/skins/default/img/other/slider_horizontal_cursor.png?") no-repeat left;
+			  cursor: pointer;
+			  top: -16px;
+			}
+			.philips_hue_2_lightness_label {
+			  line-height: 40px;
+			  font-weight: bold;
+			  font-size: 14px;
+			  margin-right: 7px;
+			}
+			.philips_hue_2_lightness_value {
+			  font-size: 17px;
+			  width: 100px;
+			  text-align: center;
+			  line-height: 40px;
+			}
+			.philips_hue_2_lightness_container {
+			  padding: 20px 0;
+			}
+			.color_temperature_preset {
+				border-radius: 50%;
+				background-color: #c9c9c9;
+				position: absolute;
+				width: 12px;
+				height: 12px;
+				z-index: 2;
+				border: solid 1px #a9a9a9;
+				cursor: pointer;
+			}
 			.hueSceneListTableContainer .device_unpinned.favorite {
 				background: url("/cmh/skins/default/img/other/pinned_device.png") center center no-repeat;
 			}

@@ -151,7 +151,10 @@ function show_loading(message) {
 };
 
 function hide_loading() {
-	_spinDialog.modal('hide');
+	if (_spinDialog) {
+		_spinDialog.modal('hide');
+		_spinDialog = null;
+	}
 };
 
 //
