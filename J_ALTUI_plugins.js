@@ -25,6 +25,25 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _getStyle() {
 		var style="";
 		style += `
+			.hueLightsContainer .create_scene_select_mode_row_check {
+				cursor: pointer;
+			}
+			.create_scene_select_mode_row_check:hover {
+				background: url(/cmh/skins/default/img/other/button_unchecked_hover.png) no-repeat center center;
+			}
+			.create_scene_select_mode_row_check {
+				background: url(/cmh/skins/default/img/other/button_unchecked.png) no-repeat center center;
+				width: 32px;
+				height: 70px;
+				margin-right: 0.5em;
+			}
+			.create_scene_select_mode_row_check.checked:hover {
+				background: url(/cmh/skins/default/img/other/button_checked_hover.png) no-repeat center center;
+			}
+			.create_scene_select_mode_row_check.checked {
+				background: url(/cmh/skins/default/img/other/button_checked.png) no-repeat center center;
+			}
+
 			#luminositySlider {
 			  margin: 20px 0;
 			  height: 10px;

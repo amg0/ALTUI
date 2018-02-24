@@ -346,6 +346,44 @@ var Ajax = (function(window,undefined) {
 // J_Harmony , J_Harmony_UI7.ss
 var Utils = ( function (undefined) {
 	return {
+		xmlEncode: function(str) {
+			try {
+				return "undefined" == typeof str ? void Utils.logDebug("Error in Utils.xmlEncode: input is undefined") : (str = Utils.trim(str),
+				str = str.replace(new RegExp("[&]","g"), "&amp;"),
+				str = str.replace(new RegExp("[<]","g"), "&lt;"),
+				str = str.replace(new RegExp("[>]","g"), "&gt;"),
+				str = str.replace(new RegExp('["]',"g"), "&quot;"),
+				str = str.replace(new RegExp("[']","g"), "&apos;"),
+				str = str.replace(/%/gi, "&#37;"))
+			} catch (e) {
+				Utils.logDebug("Error in Utils.xmlEncode(): " + e)
+			}
+		},
+		xmlDecode: function(str) {
+			try {
+				return "undefined" == typeof str ? void Utils.logDebug("Error in Utils.xmlDecode: input undefined") : (str = Utils.trim(str),
+				str = str.replace(new RegExp("&amp;","g"), "&"),
+				str = str.replace(new RegExp("&lt;","g"), "<"),
+				str = str.replace(new RegExp("&gt;","g"), ">"),
+				str = str.replace(new RegExp("&quot;","g"), '"'),
+				str = str.replace(new RegExp("&apos;","g"), "'"))
+			} catch (e) {
+				Utils.logDebug("Error in Utils.xmlDecode(): " + e)
+			}
+		},
+		getUpnpOutput: function(str, outputParm) {
+			try {
+				var reg = new RegExp("<" + outputParm + ">([\\s\\S]*)</" + outputParm + ">")
+				  , patternMatches = reg.exec(str);
+				if (patternMatches && patternMatches.length > 1)
+					return this.xmlDecode(patternMatches[1])
+			} catch (e) {
+				this.logError("Error in Utils.getUpnpOutput(): " + e)
+			}
+			return ""
+		},	
+		cutStringAtLength: function(s,n) { return s.substr(0,n) },
+		cloneObject: function(o) { return cloneObject(o) },
 		int: function(i) { return parseInt(i) },
 		inArray: function(item,arr) { return ($.inArray(item,arr)!=-1) },
 		trim: function(s) { return s.trim() },
@@ -448,7 +486,7 @@ var Interface = function (undefined) {
 						btnTitle = "Ok";
 						break;
 				}
-				console.log("showMessagePopup: dialog title = ",label);
+				// console.log("showMessagePopup: dialog title = ",label);
 				if ("undefined" != typeof options && "confirm" == options.category) {
 					displayConfirmationPopup = !0;
 					label = "Confirmation Required";
@@ -501,7 +539,7 @@ var Interface = function (undefined) {
 						e.stopPropagation();
 						var retval = false
 						if (displayConfirmationPopup == !0) {
-							console.log("showMessagePopup: submit button clicked");
+							// console.log("showMessagePopup: submit button clicked");
 							if (("undefined" != typeof options) && ("function" == typeof options.onFailure)) {
 								AltuiDebug.debug("firing onFailure");
 								options.onFailure();
@@ -509,7 +547,7 @@ var Interface = function (undefined) {
 							retval = false;
 							AltuiDebug.debug("showMessagePopup: returning FALSE");
 						} else {
-							console.log("showMessagePopup: close/ok button clicked");
+							// console.log("showMessagePopup: close/ok button clicked");
 							if (("undefined" != typeof options) && ("function" == typeof options.onSuccess)) {
 								AltuiDebug.debug("firing onSuccess");
 								options.onSuccess();
