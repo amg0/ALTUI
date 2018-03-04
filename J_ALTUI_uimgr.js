@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2315 $";
+var ALTUI_revision = "$Revision: 2316 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -11526,36 +11526,7 @@ var UIManager  = ( function( window, undefined ) {
 			return str;
 		};
 
-		UIManager.clearPage('OsCommand',_T("OS Command"),UIManager.oneColumnLayout);
-
-		var html = "";
-		html+="<div class='col-12'>";
-		html+="<form>";
-		html+=	"<p>"+_T("Enter a Vera OS ( Unix ) command, the stdout will be returned and displayed below")+"</p>";
-		html += _drawFrequentCommandBar(commands);
-		html+="	 <div class='form-row'>";
-		html += _createControllerSelect('altui-controller-select','col-sm-4');
-		html+="	 <div class='form-group col-sm-8''>";
-		html+="	   <label class='col-form-label' for='oscommand'>"+_T("OS Command")+"</label>";
-		html+="	   <input type='text' class='form-control' id='oscommand' placeholder='Type your OS command like: df '>";
-		html+="	 </div>";
-		html+="	 </div>";
-		html+="</form>";
-		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-primary'>"+_T("Run")+"</button>";
-		html+="<hr>";
-		html+="<h3>"+_T("Output")+"</h3>";
-		html+="<pre id='altui-oscommand-result' class='border border-secondary bg-light pre-scrollable'> </pre>";
-		html+="</div>";
-		$(".altui-mainpanel").append( html );
-
-		$(".altui-mainpanel").on("click",".altui-oscommand-button",function(e){
-			// e.stopPropagation();
-			var val = $(this).data("cmd");
-			$("#oscommand").val( val );
-			setTimeout( function() { $("#altui-oscommand-exec-button").click() } ,100 );
-		});
-
-		$(".altui-mainpanel").on("click","#altui-oscommand-exec-button",function(e){
+		function _onExecCommand(e) {
 			function _execCmd(cmd) {
 				show_loading();
 				MultiBox.osCommand( parseInt($("#altui-controller-select").val()), oscmd, false, function(res) {
@@ -11593,6 +11564,46 @@ var UIManager  = ( function( window, undefined ) {
 			}
 			else
 				_execCmd(oscmd);
+		};
+		
+		UIManager.clearPage('OsCommand',_T("OS Command"),UIManager.oneColumnLayout);
+
+		var html = "";
+		html+="<div class='col-12'>";
+		html+="<form action='javascript:void(0);'>";
+		html+=	"<p>"+_T("Enter a Vera OS ( Unix ) command, the stdout will be returned and displayed below")+"</p>";
+		html += _drawFrequentCommandBar(commands);
+		html+="	 <div class='form-row'>";
+		html += _createControllerSelect('altui-controller-select','col-sm-4');
+		html+="	 <div class='form-group col-sm-8''>";
+		html+="	   <label class='col-form-label' for='oscommand'>"+_T("OS Command")+"</label>";
+		html+="	   <input type='text' class='form-control' id='oscommand' placeholder='Type your OS command like: df '>";
+		html+="	 </div>";
+		html+="	 </div>";
+		html+="<button type='button' id='altui-oscommand-exec-button' class='btn btn-primary'>"+_T("Run")+"</button>";
+		html+="</form>";
+		html+="<hr>";
+		html+="<h3>"+_T("Output")+"</h3>";
+		html+="<pre id='altui-oscommand-result' class='border border-secondary bg-light pre-scrollable'> </pre>";
+		html+="</div>";
+		$(".altui-mainpanel").append( html );
+
+		$(".altui-mainpanel").on("click",".altui-oscommand-button",function(e){
+			// e.stopPropagation();
+			var val = $(this).data("cmd");
+			$("#oscommand").val( val );
+			setTimeout( function() { $("#altui-oscommand-exec-button").click() } ,100 );
+		});
+		
+		$("input#oscommand").keypress(function(event) {
+			if (event.which == 13) {
+				event.preventDefault();
+				_onExecCommand(event);
+			}
+		});
+
+		$(".altui-mainpanel").on("click","#altui-oscommand-exec-button",function(e){
+			_onExecCommand(e);
 		});
 
 		// SHOW EDIT TABLE
