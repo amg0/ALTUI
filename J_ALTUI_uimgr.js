@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2311 $";
+var ALTUI_revision = "$Revision: 2315 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14276,10 +14276,7 @@ var UIManager  = ( function( window, undefined ) {
 						$(".navbar-collapse").collapse('hide');
 				} )
 				.on ("click touchend", ".imgLogo", function() { UIControler.changePage('Home') })
-				// .on( "click", "#altui-reload", UIManager.reloadEngine )
-				// .on( "click", "#altui-reboot", UIManager.reboot )
-				// .on( "click", "#altui-remoteaccess", UIManager.pageRemoteAccess )
-				// .on( "click", "#altui-checkupdate", UIManager.pageCheckUpdate)
+
 				.on( "click", "#altui-debug-btn", function() {
 					$(".altui-debug-div").toggle();
 					$("#altui-debug-btn span.caret").toggleClass( "caret-reversed" );

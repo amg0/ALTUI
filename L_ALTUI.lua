@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.15"
+local version = "v2.16"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -4180,6 +4180,9 @@ function startupDeferred(lul_device)
 	local debugmode = getSetVariable(ALTUI_SERVICE, "Debug", lul_device, "0")
 	local oldversion = getSetVariable(ALTUI_SERVICE, "Version", lul_device, version)
 	local url_req = port3480 .. "/data_request?id=lr_ALTUI_Handler&command=home"
+	if (isOpenLuup() == true) then
+		url_req = "/data_request?id=lr_ALTUI_Handler&command=home"
+	end
 	local localurl = getSetVariableIfEmpty(ALTUI_SERVICE,"LocalHome", lul_device, url_req)
 	local present = getSetVariable(ALTUI_SERVICE,"Present", lul_device, 0)
 	-- local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://remotevera.000webhostapp.com/veralogin.php")
