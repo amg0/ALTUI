@@ -26,6 +26,7 @@ var user_changes=0;		// for PLEG
 
 
 var data_request_url = window.location.pathname+'?';
+var data_command_url = data_request_url;
 var command_url = window.location.pathname.replace('/port_3480/data_request','/port_49451');
 var send_command_url = window.location.pathname.replace('/port_3480/data_request','/port_3480');
 var _JSAPI_ctx={};

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2316 $";
+var ALTUI_revision = "$Revision: 2317 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4673,8 +4673,14 @@ var UIManager  = ( function( window, undefined ) {
 					if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
 						ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride');
 					var html_meteo="";
-					html_meteo +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
-					html_meteo +=('</a><div id="awcc1439296613816" class="aw-widget-current"  data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
+					if (1) {
+						html_meteo +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
+						html_meteo +=('</a><div id="awcc1439296613816" class="aw-widget-current"  data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
+					} else {
+						html_meteo +=`
+<div id="cont_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"><div id="spa_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"><a id="a_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx" href="http://www.meteocity.com/france/meylan_v38229/" target="_blank" style="color:#333;text-decoration:none;">Météo Meylan</a> ©<a href="http://www.meteocity.com">meteocity.com</a></div><script type="text/javascript" src="http://widget.meteocity.com/js/MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"></script></div>
+`
+					}
 					html +=(meteoTemplate.format("meteo",html_meteo))
 
 				} else if (fav.name == "housemode" ) {
@@ -10700,7 +10706,7 @@ var UIManager  = ( function( window, undefined ) {
 			});
 		};
 
-		$(".altui-mainpanel").append($("<div class='col-12'><table id='table' class='table table-responsive-OFF table-sm'><thead><tr><th></th><th>"+_T("Name")+"</th><th>"+_T("Version")+"</th><th>"+_T("Update")+"</th><th>"+_T("Files")+"</th><th>Actions</th><th>"+_T("Update")+"</th><th>"+_T("Uninstall")+"</th></tr></thead><tbody></tbody></table></div>"));
+		$(".altui-mainpanel").append($("<div class='col-12'><table id='table' class='table table-responsive-OFF table-sm'><thead><tr><th></th><th>"+_T("Name")+"</th><th>"+_T("Version")+"</th><th>"+_T("Auto")+"</th><th>"+_T("Files")+"</th><th>Actions</th><th>"+_T("Update")+"</th><th>"+_T("Uninstall")+"</th></tr></thead><tbody></tbody></table></div>"));
 		MultiBox.getPlugins( drawPlugin , endDrawPlugin);
 	},
 
