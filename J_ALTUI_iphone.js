@@ -115,6 +115,25 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 			_displayOneDevice( altuiid )
 		});
 	};
+
+	function _drawALTHue(device) {
+		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:althue1', 'Debug' ); 
+		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:althue1', 'Version' ); 
+		var html ="";
+		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
+		var ip = device.ip;
+		if (ip) {
+			html+= ("<button id='altui-ipx-{0}' type='button' class='pull-right altui-wes btn btn-light btn-sm '>{1}</button>" .format( device.altuiid,_T("Open") )) ;
+			html += "<script type='text/javascript'>";
+			html += " $('button#altui-ipx-{0}').on('click', function() { window.open('http://{1}','_blank'); } );".format(device.altuiid,ip);
+			html += "</script>";
+		}
+		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
+		html += "<script type='text/javascript'>";
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:althue1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	};
 	
 	function _drawWES(device) {
 		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:wes1', 'Debug' ); 
@@ -299,6 +318,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	drawCanalplus : _drawCanalplus,
 	drawCanaplusControlPanel : _drawCanaplusControlPanel,
 	drawWES : _drawWES,
+	drawALTHue : _drawALTHue,
 	
 	// drawControlPanel : _drawControlPanel,
 	toggleDebug : function (service,devid,htmlid) {
