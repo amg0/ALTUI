@@ -772,12 +772,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					var part = (parts[i].split("=").length!==2)?parseInt(parts[i]):(parts[i].split("=")[1]!=="")?parseInt(parts[i].split("=")[1]):undefined;
 					parts[i] = part;
 				}
-				if (parts[2] && parts[3] && parts[4] && (((parts[0] === 0) && (parts[1] === 0)) || ((parts[0] === undefined) && (parts[1] === undefined)))) {
+				if ( (parts[2]!=undefined) && (parts[3]!=undefined) && (parts[4]!=undefined) ){
 					// all five parameters are specified - color temperature values are both zero
 					current = rgbToHex(parts[2],parts[3],parts[4]);
-				} else if (parts[0] && parts[1] && parts[2] && !parts[3] && !parts[4]) {
+				} else if ( (parts[0]!=undefined) && (parts[1]!=undefined) && (parts[2]!=undefined) && (parts[3]==undefined) && (parts[4]==undefined) ) {
 					current = rgbToHex(parts[0],parts[1],parts[2]);
-				} else if (parts[0] || parts[1]) {
+				} else if ((parts[0]!=undefined) || (parts[1]!=undefined)) {
 					// color temperature
 					var Kelvin = 0;
 					if ((parts[0] > 0) && ((parts[1] === 0)||(!parts[1]))) {
