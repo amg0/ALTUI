@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2317 $";
+var ALTUI_revision = "$Revision: 2320 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2455,8 +2455,10 @@ var UIManager  = ( function( window, undefined ) {
 							str = "icons/generic_sensor.png";
 						}
 						str = str.replace(".swf",".png");
-						if ( (str == "icons/generic_sensor.png") || (str == "icons/Light_Sensor.png"))
+						if ( (str == "icons/generic_sensor.png") /*|| (str == "icons/Light_Sensor.png")*/)
 							str = defaultIconSrc;
+						else if (str == "icons/Light_Sensor.png")
+							str = "light_sensor_default.png"
 						else if (str == "icons/Window_Covering.png")
 							str = (MultiBox.isUI5( controller ) ? "../../../icons/Window_Covering.png" : "../../icons/Window_Covering.png");
 						// //192.168.1.16/cmh/skins/default/img/devices/device_states/../../icons/Window_Covering.png
