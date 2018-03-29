@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2320 $";
+var ALTUI_revision = "$Revision: 2321 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14672,10 +14672,6 @@ var UIControler = (function(win) {
 			'Publish App':			{ id:37, title:'Publish App',			onclick:UIManager.pageAppPublish, parent:36 },
 			'Timeline':					{ id:38, title:'Timeline',				htmlid:"#menu_timeline", onclick:UIManager.pageTimeline, parent:0 },
 			'My Home':					{ id:39, title:'My Home',				htmlid:"#menu_myhome", onclick:UIManager.pageMyHome, args:[], parent:0 },
-			// 'My Scenes':				{ id:41, title:'My Scenes',				htmlid:"#menu_myscenes", onclick:UIManager.pageMyHome, args:["Scene"], parent:39 },
-			// 'My Covers':				{ id:40, title:'My Covers',				onclick:UIManager.pageMyHome, args:["Cover"], parent:39 },
-			// 'My Sensors':				{ id:41, title:'My Sensors',			onclick:UIManager.pageMyHome, args:["Sensor"], parent:39 },
-			// 'My Devices':				{ id:42, title:'My Devices',			onclick:UIManager.pageMyHome, args:["Other"], parent:39 },
 			'Clone Workflow':		{ id:43, title:'Clone Workflow',			onclick:UIManager.pageCloneWorkflow, parent:31 },
 			'Remote Access':		{ id:44, title:'Remote Access Login', htmlid:"#altui-remoteaccess", onclick:UIManager.pageRemoteAccess, parent:0 },
 			'Reload':		{ id:45, title:'Reload Luup Engine', htmlid:"#altui-reload", onclick:UIManager.reloadEngine, parent:0 },
