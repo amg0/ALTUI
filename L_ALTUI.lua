@@ -466,10 +466,10 @@ local function _addWatch( service, variable, devid, scene, expression, xml, prov
 	local data = json.encode(providerparams)
 	local result = 1
 	devidstr = tostring(devid)	 -- to inssure it is not a indexed array , but hash table
-	local parts = devidstr:split("-")
+	local parts = devidstr:altui_split("-")
 	if (parts[2]==nil) then
 		devidstr = "0-"..devidstr
-		parts = devidstr:split("-")
+		parts = devidstr:altui_split("-")
 	end
 	local bDuplicateWatch = false
 	if (registeredWatches[devidstr] == nil) then
@@ -566,7 +566,7 @@ local function _addWatch( service, variable, devid, scene, expression, xml, prov
 		else
 			-- Secondary Controller
 			local extraController= getSetVariable(ALTUI_SERVICE, "ExtraController", lul_device, "")
-			local controllers = extraController:split(",")
+			local controllers = extraController:altui_split(",")
 			local ipaddr =	controllers [ tonumber(parts[1]) ]:trim()
 			local url = string.format("http://%s%s/data_request?id=lr_ALTUI_Handler&command=addRemoteWatch&device=%s&variable=%s&service=%s&ctrlid=%s&ipaddr=%s",
 				ipaddr,		-- remote ctrl ip addr
@@ -682,7 +682,7 @@ local function cancelTimer(lul_data)
 	debug(string.format("Timer - cancelTimer(%s)",lul_data))
 	local idx = findTimerIdx( lul_data )
 	if (idx>0) then
-		local parts = lul_data:split('#')
+		local parts = lul_data:altui_split('#')
 		local timer = Timers[idx]
 		--- remove the timer from the database
 		debug( string.format("Timer - cancelling Timer:%s",json.encode(timer) ) )
@@ -696,7 +696,7 @@ local function cancelWorkflowTimers(lul_device,workflow_idx)
 	debug( string.format("Wkflow - cancelling all timers for workflow idx:%d",tonumber(workflow_idx) ) )
 	local to_remove={}
 	for k,v in pairs(Timers) do
-		local parts = v["data"]:split('#')	-- {lul_device,workflow_idx,stateid,targetstate,link.id}
+		local parts = v["data"]:altui_split('#')	-- {lul_device,workflow_idx,stateid,targetstate,link.id}
 		if (tostring(workflow_idx) == parts[2]) then	-- same workflow
 			--- remove the timer from the database after this loop
 			debug( string.format("Timer - cancelling Timer:%s",json.encode(v) ) )
@@ -714,7 +714,7 @@ local function cancelStateTimers(lul_device,workflow_idx,stateid)
 	debug( string.format("Wkflow - cancelling all timers for workflow idx:%d state:%s",tonumber(workflow_idx) ,stateid) )
 	local to_remove={}
 	for k,v in pairs(Timers) do
-		local parts = v["data"]:split('#')	-- {lul_device,workflow_idx,stateid,targetstate,link.id}
+		local parts = v["data"]:altui_split('#')	-- {lul_device,workflow_idx,stateid,targetstate,link.id}
 		if (tostring(workflow_idx) == parts[2]) and ( parts[3] == stateid )	 then	-- same workflow and state
 			--- remove the timer from the database after this loop
 			debug( string.format("Timer - cancelling Timer:%s",json.encode(v) ) )
@@ -734,7 +734,7 @@ function TimerManagerCallback(lul_data)
 	--- find the timer in the database
 	local idx = findTimerIdx( lul_data )
 	if (idx>0) then
-		local parts = lul_data:split('#')
+		local parts = lul_data:altui_split('#')
 		local timer = Timers[idx]
 		local now=os.time()
 		debug(string.format("Timer - now:%s timer.expireson:%s",tostring(now),tostring(timer.expireson)))
@@ -903,7 +903,7 @@ local function armLinkTransitions(lul_device,workflow_idx,curstate)
 					end
 				else
 					-- min, max generates a random
-					local parts = link.prop.duration:split("-")
+					local parts = link.prop.duration:altui_split("-")
 					duration = math.random(parts[1],parts[2])
 				end
 				debug(string.format("Wkflow - arming timer with random duration %d",duration))
@@ -1126,7 +1126,7 @@ local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent
 		-- conditions
 		for k,cond in pairs(link.prop.conditions) do
 			local bMatchingWatch = false
-			local parts = cond.device:split("-");
+			local parts = cond.device:altui_split("-");
 			local devid = tonumber(parts[2]);
 			local new,old,lastupdate = nil,nil,nil
 
@@ -1227,7 +1227,7 @@ local function executeStateScenes(lul_device,workflow_idx,state,label)
 	debug(string.format("Wkflow - Workflow:'%s' executeStateScenes(%s, %s) ",Workflows[workflow_idx].name, getCellName(state),label))
 	debug(string.format("state.prop %s",json.encode(state.prop)))
 	for k,scene in pairs( state.prop[label] or {} ) do
-		local parts = scene.altuiid:split("-")
+		local parts = scene.altuiid:altui_split("-")
 		local scene_res =run_scene(parts[2])
 		if (scene_res==-1) then
 			error(string.format("Failed to run the scene %s",scene.altuiid))
@@ -1239,7 +1239,7 @@ local function executeStateActions(lul_device,workflow_idx,state,label)
 	debug(string.format("Wkflow - Workflow:'%s' executeStateActions(%s, %s) ", Workflows[workflow_idx].name, getCellName(state),label))
 	debug(string.format("state.prop %s",json.encode(state.prop)))
 	for k,action in pairs( state.prop[label] or {} ) do
-		local parts = action.device:split("-")
+		local parts = action.device:altui_split("-")
 		local params = table2params(Workflows[workflow_idx].altuiid, action.arguments)
 		call_action(action.service,action.action,params,tonumber(parts[2]))
 	end
@@ -1363,7 +1363,7 @@ end
 function workflowTimerCB(lul_data)
 	if (WFLOW_MODE==true) then
 		log(string.format("Wkflow - workflowTimerCB(%s)",lul_data))
-		local parts = lul_data:split('#')
+		local parts = lul_data:altui_split('#')
 		local lul_device,workflow_idx,timerstateid,targetstateid,linkid = parts[1],tonumber(parts[2]),parts[3],parts[4],parts[5]
 
 		-- is workflow paused ?
@@ -1626,12 +1626,8 @@ local function Split(str, delim, maxNb)
 	return result
 end
 
-function string:split(sep) -- from http://lua-users.org/wiki/SplitJoin	 : changed as consecutive delimeters was not returning empty strings
+function string:altui_split(sep) -- from http://lua-users.org/wiki/SplitJoin	 : changed as consecutive delimeters was not returning empty strings
 	return Split(self, sep)
-	-- local sep, fields = sep or ":", {}
-	-- local pattern = string.format("([^%s]+)", sep)
-	-- self:gsub(pattern, function(c) fields[#fields+1] = c end)
-	-- return fields
 end
 
 
@@ -1997,7 +1993,7 @@ local function setWatchParams(service,variable,deviceid,sceneid,lua,xml)
 end
 
 local function getWatchParams(str)
-	local params = str:split("#")
+	local params = str:altui_split("#")
 	return params[1],params[2],params[3],tonumber(params[4]),params[5],params[6]
 end
 
@@ -2007,7 +2003,7 @@ end
 
 --local service,variable,devid,ctrlid,ipaddr = getRemoteWatchParams(str)
 local function getRemoteWatchParams(str)
-	local params = str:split("#")
+	local params = str:altui_split("#")
 	return params[1],params[2],params[3],params[4],params[5]
 end
 
@@ -2019,7 +2015,7 @@ local function setPushParams(service,variable,deviceid,provider,providerparams)
 end
 
 local function getPushParams(str)
-	local params = str:split("#")
+	local params = str:altui_split("#")
 	local providerparams={}
 	for i=5,#params do
 		providerparams[i-4]=params[i]
@@ -2032,7 +2028,7 @@ local function saveRemoteWatch(lul_device,service,variable,devid,ctrlid,ipaddr)
 	local watchline = setRemoteWatchParams(service,variable,devid,ctrlid,ipaddr)
 	local variableWatch = getSetVariable(ALTUI_SERVICE, "RemoteVariablesToWatch", lul_device, "")
 	local bFound=false;
-	for k,v	 in pairs(variableWatch:split(';')) do
+	for k,v	 in pairs(variableWatch:altui_split(';')) do
 		if (watchline==v) then
 			bFound = true;
 		end
@@ -2069,7 +2065,7 @@ local function delRemoteWatch(lul_device,service,variable,devid,ctrlid,ipaddr)
 	local watchline = setRemoteWatchParams(service,variable,devid,ctrlid,ipaddr)
 	local variableWatch = getSetVariable(ALTUI_SERVICE, "RemoteVariablesToWatch", lul_device, "")
 	local toKeep = {}
-	for k,v	 in pairs(variableWatch:split(';')) do
+	for k,v	 in pairs(variableWatch:altui_split(';')) do
 		if (v ~= watchline) then
 			table.insert(toKeep,v)
 		end
@@ -2081,7 +2077,7 @@ end
 local function addRemoteWatch(lul_device,service,variable,devid,ctrlid,ipaddr)
 	debug(string.format("addRemoteWatch(%s,%s,%s,%s,%s,%s)",lul_device,service,variable,devid,ctrlid,ipaddr))
 	if (setRemoteWatch(service,variable,devid,ctrlid,ipaddr)==true) then
-		local parts = devid:split("-");
+		local parts = devid:altui_split("-");
 		luup.variable_watch("remoteVariableWatchCallback", service,variable,tonumber(parts[2]))
 		saveRemoteWatch(lul_device,service,variable,devid,ctrlid,ipaddr)
 	else
@@ -2122,7 +2118,7 @@ end
 
 function watchTimerCB(lul_data)
 	debug(string.format("watchTimerCB(%s)",lul_data))
-	local tbl = lul_data:split('#')
+	local tbl = lul_data:altui_split('#')
 
 	-- if the timer was cancelled,	ignore
 	local watch = findWatch( tbl[1], tbl[2], tbl[3] )
@@ -3140,7 +3136,7 @@ local function sendValuetoUrlStorage(url,watch_description,lul_device, lul_servi
 	end
 
 	-- adding device
-	local parts = lul_device:split("-")
+	local parts = lul_device:altui_split("-")
 	local devicename = luup.attr_get ('name', tonumber(parts[2] or lul_device ))
 	params[#params+1] = ("name" .. "=" .. modurl.escape(devicename or ''))
 	-- if finish by ? or by & just add to it
@@ -3735,7 +3731,7 @@ function addWatch( lul_device, service, variable, deviceid, sceneid, expression,
 		debug(string.format("searching if watchline already exists: %s",watchline))
 		local variableWatch = getSetVariable(ALTUI_SERVICE, "VariablesToWatch", lul_device, "")
 		local bFound = false;
-		for k,v	 in pairs(variableWatch:split(';')) do
+		for k,v	 in pairs(variableWatch:altui_split(';')) do
 			local wservice,wvariable,wdevice,wscene,wexpression,wxml  = getWatchParams(v)
 			if (service==wservice) and (variable==wvariable) and (deviceid==wdevice) and (sceneid==wscene) and (expression==wexpression) and (xml==wxml) then
 				bFound = true;
@@ -3758,7 +3754,7 @@ function addWatch( lul_device, service, variable, deviceid, sceneid, expression,
 		debug(string.format("searching if watchline already exists: %s",watchline))
 		local variableWatch= getSetVariable(ALTUI_SERVICE, "VariablesToSend", lul_device, "")
 		local bFound = false;
-		for k,v	 in pairs(variableWatch:split(';')) do
+		for k,v	 in pairs(variableWatch:altui_split(';')) do
 			if (v==watchline) or (((v..'#')==watchline) ) then
 				debug(string.format("watch line already exist:%s",v))
 				bFound = true;
@@ -3777,10 +3773,10 @@ function _delWatch(service, variable, deviceid, sceneid, expression, xml, provid
 	debug(string.format("_delWatch(%s,%s,%s,%s,%s,%s,%s,%s)",service, variable, deviceid, sceneid, expression, xml or "", provider or "", json.encode(providerparams)))
 	local data = json.encode(providerparams)
 	local devidstr = tostring(deviceid)	 -- to inssure it is not a indexed array , but hash table
-	local parts = devidstr:split("-")
+	local parts = devidstr:altui_split("-")
 	if (parts[2]==nil) then
 		devidstr = "0-"..devidstr
-		parts = devidstr:split("-")
+		parts = devidstr:altui_split("-")
 	end
 	-- registeredWatches[devidstr][service][variable]['Expressions'][expression][n+1]
 	-- local n = tablelength(registeredWatches[devidstr][service][variable]['Expressions'][expression])
@@ -3835,7 +3831,7 @@ function _delWatch(service, variable, deviceid, sceneid, expression, xml, provid
 	if (parts[1] ~= "0") then
 		-- Remote Watch
 		local extraController= getSetVariable(ALTUI_SERVICE, "ExtraController", lul_device, "")
-		local controllers = extraController:split(",")
+		local controllers = extraController:altui_split(",")
 		local ipaddr =	controllers [ tonumber(parts[1]) ]:trim()
 		local url = string.format("http://%s%s/data_request?id=lr_ALTUI_Handler&command=delRemoteWatch&device=%s&variable=%s&service=%s&ctrlid=%s&ipaddr=%s",
 			ipaddr,		-- remote ctrl ip addr
@@ -3870,7 +3866,7 @@ function delWatch( lul_device, service, variable, deviceid, sceneid, expression,
 		debug(string.format("Watch to delete: %s",watchline))
 		local variableWatch = getSetVariable(ALTUI_SERVICE, "VariablesToWatch", lul_device, "")
 		local toKeep = {}
-		for k,v	 in pairs(variableWatch:split(';')) do
+		for k,v	 in pairs(variableWatch:altui_split(';')) do
 			-- local wservice,wvariable,wdevice,wscene,wexpression,wxml	 = getWatchParams(v)
 			-- if (service~=wservice) or (variable~=wvariable) or (deviceid~=wdevice) or (sceneid~=wscene) or (expression~=wexpression) or (xml~=wxml) then
 			if (v~=watchline) and (( (v..'#')~=watchline)) then
@@ -3885,7 +3881,7 @@ function delWatch( lul_device, service, variable, deviceid, sceneid, expression,
 		debug(string.format("Watch to delete: %s",watchline))
 		local variableWatch= getSetVariable(ALTUI_SERVICE, "VariablesToSend", lul_device, "")
 		local toKeep = {}
-		for k,v	 in pairs(variableWatch:split(';')) do
+		for k,v	 in pairs(variableWatch:altui_split(';')) do
 			if (string.starts(v,watchline) == true) then
 			-- if (v == watchline) then
 				debug(string.format("Going to delete this watch: %s",v))
@@ -3905,9 +3901,9 @@ function fixWatches_V_1_2(lul_device)
 	debug(string.format("fixWatches_V_1_2(%s)",lul_device ))
 	local tosend = getSetVariable(ALTUI_SERVICE, "VariablesToSend", lul_device, "")
 	if (tosend~="") then
-		local watches = tosend:split(";")
+		local watches = tosend:altui_split(";")
 		for k,watch in pairs(watches) do
-			local parts = watch:split('#')
+			local parts = watch:altui_split('#')
 			-- part 7 = key=U1F7T31MHB5O8HZI&field3=%s
 			local key,field = string.match(parts[7],"^key=(.-)&field(.-)=.-$")
 			parts[9]=parts[8]
@@ -3927,10 +3923,10 @@ function fixVariableWatchesDeviceID( lul_device )
 		["RemoteVariablesToWatch"]=getSetVariable(ALTUI_SERVICE, "RemoteVariablesToWatch", lul_device, "")
 	}
 	for k,v in pairs(strings) do
-		local watches = v:split(";")
+		local watches = v:altui_split(";")
 		for k2,v2 in pairs(watches) do
 			if (v2 ~= "" ) then
-				local parts = v2:split('#')
+				local parts = v2:altui_split('#')
 				local deviceid = parts[3]
 				if (string.find(deviceid,"-") == nil) then
 					deviceid = "0-"..deviceid
@@ -3938,7 +3934,7 @@ function fixVariableWatchesDeviceID( lul_device )
 				end
 				if (string.starts(deviceid,"0-") ==true) then
 					-- make sure the device id exists
-					local veraid = deviceid:split("-")[2]
+					local veraid = deviceid:altui_split("-")[2]
 					if ( luup.devices[ tonumber(veraid) ] == nil ) then
 						warning(string.format("Inexistant device %s in watch %s. Deleting watch",veraid,v2))
 						parts={}
@@ -3957,7 +3953,7 @@ function initVariableWatches( lul_device )
 	local dataPushString= getSetVariable(ALTUI_SERVICE, "VariablesToSend", lul_device, "")	-- service#variable#deviceid#providername; ...
 	local remoteVariableWatch = getSetVariable(ALTUI_SERVICE, "RemoteVariablesToWatch", lul_device, "")
 
-	local watches = variableWatchString:split(";")
+	local watches = variableWatchString:altui_split(";")
 	-- local toKeep = {}
 	for k,v	 in pairs(watches) do
 		if (v~="") then
@@ -3968,7 +3964,7 @@ function initVariableWatches( lul_device )
 	end
 
 	-- urn:micasaverde-com:serviceId:SceneController1#LastSceneID#208#thingspeak#key=U1F7T31MHB5O8HZI&field1=0
-	watches = dataPushString:split(";")
+	watches = dataPushString:altui_split(";")
 	-- toKeep = {}
 	for k,v	 in pairs(watches) do
 		if (v~="") then
@@ -3977,7 +3973,7 @@ function initVariableWatches( lul_device )
 		end
 	end
 
-	watches = remoteVariableWatch:split(";")
+	watches = remoteVariableWatch:altui_split(";")
 	for k,v	 in pairs(watches) do
 		if (v~="") then
 			local service,variable,device,ctrlid,ipaddr = getRemoteWatchParams(v)
