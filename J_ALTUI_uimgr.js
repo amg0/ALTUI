@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2322 $";
+var ALTUI_revision = "$Revision: 2325 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -5973,14 +5973,15 @@ var UIManager  = ( function( window, undefined ) {
 		// });
 	};
 
-	function _createControllerSelect(htmlid,cls) {
+	function _createControllerSelect(htmlid,cls,required_feature) {
 		var html = "";
 		// html += "<form class='form-inline col-12 mb-2'>";
 			html += "<div class='form-group {0}'>".format(cls||'');
 				html += "<label class='col-form-label ' for='altui-controller-select' >"+_T("Controller")+":</label>";
 				html += "<select id='"+htmlid+"' class='form-control'>";
-				$.each(MultiBox.getControllers(), function( idx, controller) {
-					html += "<option value='{0}'>{1}</option>".format( idx , controller.ip=='' ? window.location.hostname : controller.ip  );
+				$.each(MultiBox.getControllers(required_feature), function( idx, controller) {
+					// var name = controller.ip=='' ? window.location.hostname : controller.ip
+					html += "<option value='{0}'>{1}</option>".format( idx , controller.name);
 				});
 				html += "</select>";
 			html += "</div>";
@@ -6281,11 +6282,14 @@ var UIManager  = ( function( window, undefined ) {
 			// devices of the room
 			var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
 			var selectedscenes=[];
-			var scenes =$.grep(_AllScenes,function(s) {
+			var possiblescenes = $.grep(_AllScenes,function(s) {
 				var scontroller = MultiBox.controllerOf(s.altuiid).controller;
-				if ( scontroller==rcontroller ) {
-					if (s.room == room.id)
-						selectedscenes.push(s.altuiid);	// is in this room
+				return (scontroller==rcontroller)
+			});
+			var scenes =$.grep(possiblescenes,function(s) {
+				var scontroller = MultiBox.controllerOf(s.altuiid).controller;
+				if ( (scontroller==rcontroller ) && (s.room == room.id) ) {
+					selectedscenes.push(s.altuiid);	// is in this room
 					return true;	// same controller room
 				}
 				return false;
@@ -6293,7 +6297,7 @@ var UIManager  = ( function( window, undefined ) {
 
 			var Html="";
 			Html+='<select class="altui-scenes-room" id="{0}" multiple="multiple">'.format(room.altuiid);
-			$.each(_AllScenes , function(i,scene){
+			$.each(possiblescenes , function(i,scene){
 				Html+='<option value="{0}" {2}>{1}</option>'.format( scene.altuiid,scene.name, ($.inArray(scene.altuiid,selectedscenes)!=-1) ? 'selected':'' );
 			});
 			Html+='</select>';
@@ -6303,11 +6307,14 @@ var UIManager  = ( function( window, undefined ) {
 			// devices of the room
 			var rcontroller = MultiBox.controllerOf(room.altuiid).controller;
 			var selecteddevices=[];
-			var devices =$.grep(_AllDevices,function(d) {
+			var possibledevices = $.grep(_AllDevices,function(d) {
 				var dcontroller = MultiBox.controllerOf(d.altuiid).controller;
-				if ( dcontroller==rcontroller ) {
-					if (d.room == room.id)
-						selecteddevices.push(d.altuiid);	// is in this room
+				return (dcontroller==rcontroller)
+			});
+			var devices =$.grep(possibledevices,function(d) {
+				var dcontroller = MultiBox.controllerOf(d.altuiid).controller;
+				if (( dcontroller==rcontroller ) && (d.room == room.id)) {
+					selecteddevices.push(d.altuiid);	// is in this room
 					return true;	// same controller device
 				}
 				return false;
@@ -6315,7 +6322,7 @@ var UIManager  = ( function( window, undefined ) {
 
 			var Html="";
 			Html+='<select class="altui-devices-room" id="{0}" multiple="multiple">'.format(room.altuiid);
-			$.each(_AllDevices , function(i,device){
+			$.each(possibledevices , function(i,device){
 				Html+='<option value="{0}" {2}>{1}</option>'.format( device.altuiid,device.name || "*no name*", ($.inArray(device.altuiid,selecteddevices)!=-1) ? 'selected':'' );
 			});
 			Html+='</select>';
@@ -6326,7 +6333,7 @@ var UIManager  = ( function( window, undefined ) {
 		var formHtml="";
 		formHtml+=" <form class='col-12'>";
 			formHtml+=" <div class='form-row'>";
-				formHtml+= _createControllerSelect('altui-controller-select','col-sm-4');
+				formHtml+= _createControllerSelect('altui-controller-select','col-sm-4', "createRoom");
 				formHtml+=" <div class='form-group col-sm-8'>";
 					formHtml+=' <label class="col-form-label " for="altui-create-room-name">'+_T("Room")+'</label>'
 					formHtml+=" <div class='input-group'>";
@@ -6405,20 +6412,25 @@ var UIManager  = ( function( window, undefined ) {
 							 // put the device in NO room
 							 MultiBox.renameDevice(device, device.name, 0);
 						 } else {
-							 // put the device in that room
+							 // put the device in that room if the ctrl of the device and the ctrl of the room matches
 							 var room_altuiid = $(element).closest(".altui-devices-room").prop("id")
 							 var roominfo = MultiBox.controllerOf(room_altuiid);
-							 MultiBox.renameDevice(device, device.name, roominfo.id );
+							 var deviceinfo = MultiBox.controllerOf(device.altuiid);
+							 if (deviceinfo.controller == roominfo.controller) {
+								 MultiBox.renameDevice(device, device.name, roominfo.id );
 
-							 // unselect from other rooms
-							 $("tr").each(function(i,tr) {
-								 var altuiid = $(tr).data("altuiid")
-								 if ( (altuiid!="") && (altuiid != room_altuiid) ) {
-									 // deselect the selected device from other menu
-									 var multiselect = $(tr).find(".altui-devices-room");
-									 $(multiselect).multiselect('deselect',device.altuiid);
-								 }
-							 })
+								 // unselect from other rooms
+								 $("tr").each(function(i,tr) {
+									 var altuiid = $(tr).data("altuiid")
+									 if ( (altuiid!="") && (altuiid != room_altuiid) ) {
+										 // deselect the selected device from other menu
+										 var multiselect = $(tr).find(".altui-devices-room");
+										 $(multiselect).multiselect('deselect',device.altuiid);
+									 }
+								 })
+							 } else {
+								 alert('mismatch')
+							 }
 						 }
 					},
 				});
@@ -11584,7 +11596,7 @@ var UIManager  = ( function( window, undefined ) {
 		html+=	"<p>"+_T("Enter a Vera OS ( Unix ) command, the stdout will be returned and displayed below")+"</p>";
 		html += _drawFrequentCommandBar(commands);
 		html+="	 <div class='form-row'>";
-		html += _createControllerSelect('altui-controller-select','col-sm-4');
+		html += _createControllerSelect('altui-controller-select','col-sm-4',"osCommand");
 		html+="	 <div class='form-group col-sm-8''>";
 		html+="	   <label class='col-form-label' for='oscommand'>"+_T("OS Command")+"</label>";
 		html+="	   <input type='text' class='form-control' id='oscommand' placeholder='Type your OS command like: df '>";
@@ -11680,7 +11692,7 @@ var UIManager  = ( function( window, undefined ) {
 		}
 
 		UIManager.clearPage('LuaStart',_T("Lua Startup"),UIManager.oneColumnLayout);
-		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select','col-6'));
+		$(".altui-mainpanel").append( _createControllerSelect('altui-controller-select','col-6',"getLuaStartup"));
 		$("#altui-controller-select").change(function(){
 			$(".altui-editor-form").remove();
 			_prepareUI( parseInt($("#altui-controller-select").val()) );
@@ -11876,11 +11888,6 @@ var UIManager  = ( function( window, undefined ) {
 		var width=0, height=0, chart=null, orders=null;
 		var razbdevice = MultiBox.getDeviceByType(0,"urn:schemas-upnp-org:device:razb:1")
 		var data = $.grep( MultiBox.getDevicesSync() , function(d) {
-				// console.log("device %s",d.altuiid)
-				// console.log("(d.id_parent==1) :%s",(d.id_parent==1))
-				// console.log("((d.id_parent==razbdevice.id) && (MultiBox.controllerOf(d.altuiid).controller==0)) :%s",
-									// ((d.id_parent==razbdevice.id) && (MultiBox.controllerOf(d.altuiid).controller==0)) )
-				// console.log("result :%s",(d.id_parent==1) || ((d.id_parent==razbdevice.id) && (MultiBox.controllerOf(d.altuiid).controller==0)))
 				return (d.id_parent==1) || ((razbdevice) && (d.id_parent==razbdevice.id) && (MultiBox.controllerOf(d.altuiid).controller==0))
 			}
 		);
@@ -13332,7 +13339,7 @@ var UIManager  = ( function( window, undefined ) {
 		var controllers = MultiBox.getControllers();
 		var bFirst=true;
 		$.each(controllers, function( idx, controller) {
-			var name  = (controller.ip == "" ) ? "Main" : controller.ip ;
+			var name  = controller.name || controller.ip ;
 			html+="	   <li role='presentation' class='nav-item'><a class='nav-link {2}' href='#altui_ctrl_{0}' aria-controls='home' role='tab' data-toggle='tab'>{1}</a></li>".format(
 				idx,name,
 				(bFirst==true ? 'active' : ''));

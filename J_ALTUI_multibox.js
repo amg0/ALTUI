@@ -19,10 +19,6 @@ var MultiBox = ( function( window, undefined ) {
 	var _controllers = [
 		// { ip:''			  ,	 controller:null },		// no IP = primary box on which we opened the web page
 		// { ip:'192.168.1.5',	controller:null }		// no IP = primary box on which we opened the web page
-		//http://192.168.1.16:3480/luvd/S_IPhone.xml
-		//http://192.168.1.16:3480/data_request?id=device
-		//http://192.168.1.16/port_3480/data_request?id=action&output_format=json&DeviceNum=162&serviceId=urn:upnp-org:serviceId:altui1&action=ProxyGet&newUrl=http://192.168.1.5/port_3480/data_request?id=lu_status2&output_format=json&DataVersion=1&Timeout=60&MinimumDelay=1500&resultName=alexis
-		//http://192.168.1.5/port_3480/data_request?id=lu_status2&output_format=json&DataVersion=1&Timeout=60&MinimumDelay=1500
 	];
 
 	function _controllerOf(altuiid) {
@@ -38,8 +34,11 @@ var MultiBox = ( function( window, undefined ) {
 	function _makeAltuiid(ctrlid, devid) {
 		return "{0}-{1}".format(ctrlid,devid);
 	};
-	function _getControllers() {
-		return $.map(_controllers,function(c) { return {	ip:c.ip , box_info:c.controller.getBoxFullInfo(), controller: c.controller } });
+	function _getControllers(required_feature) {
+		var arr = _controllers.filter( function(c) {
+			return (required_feature==null ) || ( $.isFunction(c.controller[required_feature])==true )
+		})
+		return $.map(arr,function(c) { return {	ip:c.ip , name:c.name, box_info:c.controller.getBoxFullInfo(), controller: c.controller } });
 	};
 	function _initDB(devicetypes) {
 		$.extend(true,_devicetypesDB[0],devicetypes);	// data received initially comes from ctrl 0
@@ -178,6 +177,7 @@ var MultiBox = ( function( window, undefined ) {
 		var newcontroller = {
 			ip:'',
 			type:maincontrollertype,
+			name:'Main',
 			controller:null
 		};
 		switch(newcontroller.type) {
@@ -188,25 +188,36 @@ var MultiBox = ( function( window, undefined ) {
 			default:
 				newcontroller.controller = new VeraBox(0,'');		// create the main controller
 		}
-		_controllers.push(newcontroller);
+
+		_controllers.push(newcontroller);		// default controller
+		if (g_ALTUI.g_MachineLearning == '1') {
+			_controllers.push( {
+				ip:'',
+				type:"Z",				// machine learning controller
+				name:'Machine Learning',
+				controller:new LearnBox(1)
+			});
+		}
 
 		// add the extra controllers
 		if (extraController.trim().length>0)
 			$.each(extraController.split(','), function(idx,ctrlinfo) {
 				ctrlinfo = ctrlinfo;
 				var splits = ctrlinfo.trim().split("-");
+				var len = _controllers.length;
 				var newcontroller = {
 					ip:splits[0],
+					name:splits[0],
 					type:splits[1] || 'V',
 					controller:null
 				}
 				switch (newcontroller.type) {
 					case 'A':
-						newcontroller.controller = new AltuiBox(1+idx,newcontroller.ip);
+						newcontroller.controller = new AltuiBox(len+idx,newcontroller.ip);
 						break;
 					case 'V':
 					default:
-						newcontroller.controller = new VeraBox(1+idx,newcontroller.ip);
+						newcontroller.controller = new VeraBox(len+idx,newcontroller.ip);
 				}
 				_controllers.push(newcontroller);
 
@@ -525,6 +536,7 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = device.altuiid.split("-");
+		EventBus.publishEvent("on_deviceAction",device.altuiid, service, action, params)
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runAction( elems[1], service, action, params, cbfunc )
 	};
 	function _runActionByAltuiID(altuiid, service, action, params,cbfunc) {
@@ -533,6 +545,7 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = altuiid.split("-");
+		EventBus.publishEvent("on_deviceAction",altuiid, service, action, params)
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runAction(elems[1], service, action, params,cbfunc);
 		// return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPAction(elems[1], service, action, params,cbfunc);
 	};
@@ -678,6 +691,7 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = scene.altuiid.split("-");
+		EventBus.publishEvent("on_sceneRun",scene.altuiid)
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runScene(elems[1]);
 	};
 	function _runSceneByAltuiID(altuiid) {
@@ -686,6 +700,7 @@ var MultiBox = ( function( window, undefined ) {
 			return;
 		}
 		var elems = altuiid.split("-");
+		EventBus.publishEvent("on_sceneRun",altuiid)
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runScene(elems[1]);
 	};
 	function _setSceneMonitorMode(scene,mode,cbfunc) {
@@ -738,7 +753,7 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _getPlugins( func , endfunc ) {
 		var arr=[];
-		$.each(_controllers, function( i,c) {
+		$.each(_getControllers("getPlugins"), function( i,c) {
 			arr = arr.concat(c.controller.getPlugins( func , null ));
 		});
 		if ($.isFunction(endfunc))
@@ -778,8 +793,9 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _getPower(cbfunc) {
 		var lines=[];
-		var todo = _controllers.length;
-		$.each(_controllers, function( idx,c) {
+		var ctrls = _getControllers("getPower");
+		var todo = ctrls.length;
+		$.each(ctrls, function( idx,c) {
 			var idx = idx;
 			c.controller.getPower(function(data) {
 				if (data != "No devices")
@@ -795,8 +811,9 @@ var MultiBox = ( function( window, undefined ) {
 	};
 	function _resetPollCounters() {
 		var dfd = $.Deferred();
-		var todo  = _controllers.length;
-		$.each(_controllers, function(i,c) {
+		var ctrls = _getControllers("resetPollCounters");
+		var todo  = ctrls.length;
+		$.each(ctrls, function(i,c) {
 			c.controller.resetPollCounters(function() {
 				todo--;
 				if (todo==0)

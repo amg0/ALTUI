@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.17"
+local version = "v2.18"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -1966,6 +1966,7 @@ local htmlLayout = [[
 			 g_Options : '@ServerOptions@',
 			 g_CtrlOptions : '@ctrloptions@',
 			 g_DeviceTypes :  JSON.parse('@devicetypes@'),
+			 g_MachineLearning : '@machinelearning@',
 			 //g_CustomPages : @custompages@,
 			 //g_Workflows : @workflows@
 		}
@@ -2366,6 +2367,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local localcdn = getSetVariable(ALTUI_SERVICE, "LocalCDN", deviceID, "")
 				local swversion = getSetVariable(ALTUI_SERVICE, "SWVersion", deviceID, SWVERSION)
 				local favicon = getSetVariable(ALTUI_SERVICE, "FavIcon", deviceID, "/favicon.ico")
+				local machinelearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
 				local localbootstrap = getSetVariable(ALTUI_SERVICE, "LocalBootstrap", deviceID, "")
 				if (localbootstrap == "") then
 					localbootstrap=defaultBootstrapPath
@@ -2375,6 +2377,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				variables["localcdn"] = localcdn
 				variables["swversion"] = swversion
 				variables["favicon"] = favicon
+				variables["machinelearning"] = machinelearning
 				variables["localbootstrap"] = localbootstrap
 				variables["devicetypes"] = json.encode(tbl)
 				-- variables["custompages"] = "["..table.concat(result_tbl, ",").."]"
@@ -4202,6 +4205,7 @@ function startupDeferred(lul_device)
 	local custompages = getSetVariable(ALTUI_SERVICE, "Data_CustomPages_0", lul_device, "[]")
 	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "emoncms.org")
 	local pendingReset = getSetVariable(ALTUI_SERVICE, "PendingReset", lul_device, 0)
+	local machineLearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
 
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
