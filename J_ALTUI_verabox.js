@@ -1602,7 +1602,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 							}
 						})
 					}
-					UIManager.refreshUI( false , false );	// partial and not first time
+					UIManager.refreshUI( false );	// partial and not first time
 					EventBus.publishEvent("on_startup_luStatusLoaded_"+_uniqID,data);
 
 					// if user_data has changed, reload it
@@ -1789,7 +1789,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				if (data!=null) {
 					_dataEngine = null;
 					_loadUserData(data);
-					UIManager.refreshUI( true ,false  );	// full but not first time
+					UIManager.refreshUI( true );	// full but not first time
 					_dataEngine = setTimeout( _refreshEngine, 2000 );
 				}
 				else {
@@ -2724,12 +2724,39 @@ var LearnBox = ( function( uniq_id ) {
 		}]
 	}
 	
-	// Event Callback : on_deviceAction
+	// Event Callbacks
+	function _onDeviceChange(event,device) {
+		if (_user_data.devices[0] && (device.altuiid == _user_data.devices[0].realdevice.altuiid)) {
+			_user_data.devices[0].dirty = true;
+			_user_data.devices[0].states = null;
+			_user_data.devices[0].states= device.states.slice();	// clone array
+			UIManager.refreshUI(false);
+		}
+	};
+	
 	function _onUserAction(evt, Altuiid, service, action, params) {
 		console.log(evt, Altuiid, service, action, JSON.stringify(params));
+		if (evt == "on_deviceAction") {
+			var device = MultiBox.getDeviceByAltuiID(Altuiid);
+			var newdevice = jQuery.extend(true, {}, device , {
+				room: "1",
+				altuiid: MultiBox.makeAltuiid(_uniqID, 1),
+				realdevice: device,
+				id:1,
+				id_parent:0,
+			} );
+			// newdevice.states=[];	//clear this, we do not need them
+			_user_data.devices[0] = newdevice
+			
+			// copy device static data and device UPNP
+			var devstaticdata = MultiBox.getDeviceStaticData(device);
+			MultiBox.updateDeviceTypeUIDB( _uniqID, device.device_type, devstaticdata);
+			MultiBox.updateDeviceTypeUPnpDB( _uniqID, device.device_type, device.device_file);	// pass device file so UPNP data can be read			
+		}
 	};
 	
 	function _initEngine() {
+		EventBus.registerEventHandler("on_ui_deviceStatusChanged",this,this.onDeviceChange)
 		EventBus.registerEventHandler("on_deviceAction",this,this.onUserAction);
 		EventBus.registerEventHandler("on_sceneRun",this,this.onUserAction);
 		EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
@@ -2776,36 +2803,37 @@ var LearnBox = ( function( uniq_id ) {
 	function _getRooms( func , filterfunc, endfunc ) {
 		return _asyncResponse(_user_data.rooms, func , filterfunc, endfunc)
 	};
-	function _getRoomsSync() { return _user_data.rooms };
+	function _getRoomsSync() { 
+		return _user_data.rooms 
+	};
 	function _getRoomByID( roomid ) {
-		for (var i=0; i<_user_data.rooms.length; i++) {
-			if (_user_data.rooms[i].id == roomid)
-				return _user_data.rooms[i];
-		}
-		return null;
+		return _user_data.rooms[parseInt(roomid)-1];
 	};
 	function _getCategories( func, filterfunc, endfunc )
 	{
 		return _asyncResponse([], func , filterfunc, endfunc);
 	};
 	function _getStatus( deviceid, service, variable ) {
-		return null;
+		var device = _user_data.devices[parseInt(deviceid)-1]
+		return MultiBox.getStatus(device.realdevice, service, variable )
+	};
+	function _setStatus( deviceid, service, variable, value, dynamic ) {
+		var device = _user_data.devices[parseInt(deviceid)-1]
+		return MultiBox.setStatus(device.realdevice, service, variable, value, dynamic)
 	};
 	function _getStates( deviceid  ) {
-		return null;
+		var device = _user_data.devices[parseInt(deviceid)-1]
+		return MultiBox.getStates(device.realdevice)
 	};
 	function _getDeviceBatteryLevel(device) {
 		return null;
 	};
-	function _getDeviceByID( devid ) {
-		for (var i=0; i<_user_data.devices.length; i++) {
-			if (_user_data.devices[i].id==devid)
-				return _user_data.devices[i];
-		}
-		return null;
+	function _getDeviceByID( deviceID ) {
+		return _user_data.devices[parseInt(deviceID)-1]
 	};
 	function _runAction( deviceID, service, action, params, cbfunc ) {
-		return null;
+		var device = _user_data.devices[parseInt(deviceID)-1]
+		return MultiBox.runAction(device.realdevice, service, action, params,cbfunc)
 	};
 	function _getSceneByID(sceneid) {
 		for (var i=0;i<_user_data.scenes.length;i++) {
@@ -2838,24 +2866,23 @@ var LearnBox = ( function( uniq_id ) {
 		return null;
 	};
 	function _getDeviceDependants(device) {
-		return null;
+		return MultiBox.getDeviceDependants(device.realdevice)
 	};
 	function _getCategoryTitle(catnum)
 	{
 		return null;
-
 	};
 	function _getFileUrl( filename) {
 		return null;
 	};
 	function _getFileContent( filename , cbfunc) {
-		return null;
+		return MultiBox.getFileContent( 0, filename, cbfunc )
 	};
 	function _getIconPath(iconname) {
-		return "";
+		return MultiBox.getIconPath(0, iconname)
 	};
 	function _getDeviceActions(device,cbfunc) {
-		return null;
+		MultiBox.getDeviceActions(device.realdevice,cbfunc)
 	};
 	
 	function _initializeSysinfo() {
@@ -2866,6 +2893,7 @@ var LearnBox = ( function( uniq_id ) {
 
 	// explicitly return public methods when this object is instantiated
 	return {
+		onDeviceChange : _onDeviceChange,
 		onUserAction : _onUserAction,	// event callback
 		
 		//---------------------------------------------------------
@@ -2928,7 +2956,7 @@ var LearnBox = ( function( uniq_id ) {
 		getUsersSync	: _getUsersSync,
 		getUserByID		: _getUserByID,
 		setAttr			: _todo,
-		setStatus		: _todo,
+		setStatus		: _setStatus,
 		getStatus		: _getStatus, //	( deviceid, service, variable )
 		getJobStatus	: _todo,
 		getStates		: _getStates,

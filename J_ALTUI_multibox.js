@@ -107,34 +107,11 @@ var MultiBox = ( function( window, undefined ) {
 		if (ui_definitions.device_json && (_devicetypesDB[controllerid]['json'][ui_definitions.device_json]==undefined)) {
 			_devicetypesDB[controllerid]['json'][ui_definitions.device_json]= { ui_static_data : ui_definitions }
 		}
-		// var json = ui_definitions.device_json || 'nil';
-		// if (_devicetypesDB[controllerid][devtype][json]==null)
-			// _devicetypesDB[controllerid][devtype][json]={};
-		// _devicetypesDB[controllerid][devtype][json].ui_static_data = ui_definitions;
 		_devicetypesDB[controllerid][devtype].ui_static_data = ui_definitions;
 	};
 	function _getDeviceStaticData(device) {
 		var elems = device.altuiid.split("-");
-		/*
-		function _getDeviceStaticDataByType(device) {
-			var elems = device.altuiid.split("-");
-			var json = device.device_json || 'nil'; // fallback as on UI5 device_json is not defined
-			if (_devicetypesDB[elems[0]][device.device_type] == undefined)
-				return null;
 
-			if ( (_devicetypesDB[elems[0]][device.device_type][json]==undefined) ) {
-				// try with nil and use this if ok
-				if (_devicetypesDB[elems[0]][device.device_type]['nil']!=undefined) {
-					return _devicetypesDB[elems[0]][device.device_type]['nil'].ui_static_data
-				}
-				// really not there
-				AltuiDebug.debug("_getDeviceStaticData({0}) does not find static data".format(device.altuiid));
-				AltuiDebug.debug("_devicetypesDB[{0}][{1}]=".format(elems[0],device.device_type)+JSON.stringify(_devicetypesDB[elems[0]][device.device_type]));
-				return null;
-			 }
-			return _devicetypesDB[elems[0]][device.device_type][json].ui_static_data;
-		}
-		*/
 		function _getDeviceStaticDataByType(device) {
 			if (_devicetypesDB[elems[0]][device.device_type] == undefined) {
 				AltuiDebug.debug("_getDeviceStaticData({0}) does not find static data".format(device.altuiid));

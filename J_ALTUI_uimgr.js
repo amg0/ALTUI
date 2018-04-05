@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2325 $";
+var ALTUI_revision = "$Revision: 2327 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1883,7 +1883,8 @@ var UIManager  = ( function( window, undefined ) {
 				}
 			*/
 			var lines = [];
-			$.each(device.states.sort(_sortByVariableName), function(idx,state) {
+			var states = MultiBox.getStates( device )
+			$.each(states.sort(_sortByVariableName), function(idx,state) {
 				var row = model[state.id];
 				var str = deviceVariableLineTemplate.format(
 						state.variable,
@@ -1908,7 +1909,8 @@ var UIManager  = ( function( window, undefined ) {
 			$.each(MultiBox.getWatches("VariablesToSend",function(watch) { return (watch.deviceid == device.altuiid); }), function(i,watch) {
 				watches[watch.service+'_'+watch.variable] = watch;
 			});
-			$.each(device.states.sort(_sortByVariableName), function(idx,state) {
+			var states = MultiBox.getStates( device )
+			$.each(states.sort(_sortByVariableName), function(idx,state) {
 				model[state.id] = {
 					val:HTMLUtils.enhanceValue(state.value),
 					sendWatch: watches[state.service+'_'+state.variable]
@@ -2602,7 +2604,6 @@ var UIManager  = ( function( window, undefined ) {
 					batteryHtml,
 					iconHtml
 					);
-				device.dirty=false;
 			}
 		}
 		function  _internalCatch(e) {
@@ -4813,7 +4814,7 @@ var UIManager  = ( function( window, undefined ) {
 		}
 	};
 
-	function _refreshUI( bFull, bFirstTime ) {
+	function _refreshUI( bFull ) {
 		// refresh rooms
 		// refresh devices
 		//AltuiDebug.debug("_refreshUI( {0}, {1} )".format(bFull,bFirstTime));
@@ -4828,6 +4829,7 @@ var UIManager  = ( function( window, undefined ) {
 
 				// get HTML for device and draw it
 				var Html = _deviceDraw(device);
+				device.dirty=false;
 				$(this).replaceWith(  Html );
 
 				// draw job information.
@@ -6132,7 +6134,7 @@ var UIManager  = ( function( window, undefined ) {
 		else
 			HistoryManager.pushState( breadcrumb, null, args, method,context_obj);
 
-		EventBus.unregisterEventHandler("on_ui_deviceStatusChanged");
+		// EventBus.unregisterEventHandler("on_ui_deviceStatusChanged");
 		UIManager.stoprefreshModes();
 		HTMLUtils.stopAllTimers();
 		$(".navbar-collapse").collapse('hide');
@@ -6968,7 +6970,7 @@ var UIManager  = ( function( window, undefined ) {
 		}
 
 		function endDrawDevice(devices) {
-			UIManager.refreshUI(true,false);
+			UIManager.refreshUI(true);
 		};
 
 		function drawDeviceEmptyContainer(idx, device) {
@@ -14282,7 +14284,7 @@ var UIManager  = ( function( window, undefined ) {
 			$(window).on('resize', function () {
 			  /*if (window.innerWidth > tabletSize) */
 			  $(".navbar-collapse").collapse('hide');
-			  UIManager.refreshUI( true ,false	);	// full but not first time
+			  UIManager.refreshUI( true );
 			  UIManager.refreshFooter();
 			});
 
