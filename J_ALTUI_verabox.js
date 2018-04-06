@@ -1304,7 +1304,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return plugin;
 	};
 
-	function _getDevices( func , filterfunc, endfunc ) {
+	function _getDevices( func , filterfunc, endfunc) {
 		if (_devices !=null)
 			return _asyncResponse( _devices, func, filterfunc, endfunc )
 		return _asyncResponse( [], func, filterfunc, endfunc );
@@ -2895,7 +2895,9 @@ var LearnBox = ( function( uniq_id ) {
 	function _getDeviceActions(device,cbfunc) {
 		MultiBox.getDeviceActions(device.realdevice,cbfunc)
 	};
-	
+	function _getDeviceEvents(device) {
+		return MultiBox.getDeviceEvents(device.realdevice)
+	};
 	function _initializeSysinfo() {
 		return {
 			"learningcontroller" : "@amg0",
@@ -2937,7 +2939,7 @@ var LearnBox = ( function( uniq_id ) {
 		getDeviceStaticUI : _todo,
 		getDeviceVariableHistory : _todo,
 		getDeviceActions: _getDeviceActions,
-		getDeviceEvents : _todo,
+		getDeviceEvents : _getDeviceEvents,
 		getDeviceDependants: _getDeviceDependants,
 		runAction : _runAction,
 		addWatch			: _todo,

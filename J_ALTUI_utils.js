@@ -1409,7 +1409,8 @@ var DialogManager = ( function() {
 
 				$(dialog).find(".altui-dialog-row").append(propertyline);
 				cbfunc(devices);
-			}
+			},
+			"createDevice"		// request only from controller managing real devices
 		);
 	};
 

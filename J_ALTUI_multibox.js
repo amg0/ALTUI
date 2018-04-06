@@ -376,14 +376,15 @@ var MultiBox = ( function( window, undefined ) {
 		var elems = device.altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.deleteDevice(elems[1]);
 	};
-	function _getDevices( func , filterfunc, endfunc ) {
+	function _getDevices( func , filterfunc, endfunc, required_feature ) {
 		var arr=[];
 		var answers = 0;
-		$.each(_controllers, function( i,c) {
+		var ctrls = (required_feature==null) ?  _controllers : _getControllers(required_feature)		// only controllers which can create devices		
+		$.each(ctrls, function( i,c) {
 			c.controller.getDevices( func , filterfunc, function(devices){
 				arr = arr.concat(devices);
 				answers++;
-				if ((answers == _controllers.length) && ($.isFunction(endfunc)) ){
+				if ((answers == ctrls.length) && ($.isFunction(endfunc)) ){
 					(endfunc)( arr );
 				};
 			});
