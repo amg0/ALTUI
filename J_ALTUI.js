@@ -66,6 +66,7 @@ var ALTUI_VeraUtils = (function(){
 	};
 	
 	return {
+		altui_format:altui_format,
 		findDeviceIdx:findDeviceIdx,
 		findRootDeviceIdx:findRootDeviceIdx,
 		findRootDevice:findRootDevice,
