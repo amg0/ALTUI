@@ -34,6 +34,11 @@ var MultiBox = ( function( window, undefined ) {
 	function _makeAltuiid(ctrlid, devid) {
 		return "{0}-{1}".format(ctrlid,devid);
 	};
+	function _isControllerFeature(altuiid,required_feature) {
+		var info = MultiBox.controllerOf(altuiid)
+		var c = _controllers[ info.controller ]
+		return (required_feature==null ) || ( $.isFunction(c.controller[required_feature])==true )
+	};
 	function _getControllers(required_feature) {
 		var arr = _controllers.filter( function(c) {
 			return (required_feature==null ) || ( $.isFunction(c.controller[required_feature])==true )
@@ -862,6 +867,7 @@ var MultiBox = ( function( window, undefined ) {
 	makeAltuiid	 : _makeAltuiid,
 	isAltuiid	 : _isAltuiid,
 	getControllers : _getControllers,
+	isControllerFeature: _isControllerFeature,
 
 	// Device Type DB
 	getALTUITypesDB			: _getALTUITypesDB,			// no param

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2327 $";
+var ALTUI_revision = "$Revision: 2331 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3934,10 +3934,14 @@ var UIManager  = ( function( window, undefined ) {
 			{id:'altui-toggle-control-panel', label:_T("Control Panel"), href:'altui-device-attributes' , tab:_deviceDrawWireFrame },
 			{id:'altui-toggle-attributes', label:_T("Attributes"), href:'altui-device-attributes' , tab:_deviceDrawControlPanelAttributes},
 			{id:'altui-device-variables', label:_T("Variables") },
-			{id:'altui-device-actions', label:_T("Actions"), },
-			{id:'altui-device-usedin', label:_T("Used in"), href:'altui-device-usedin', tab: _deviceDrawDeviceUsedIn },
-			{id:'altui-device-triggers', label:_T("Notification"), href:'altui-device-triggers', tab: _deviceDrawDeviceTriggers},
+			{id:'altui-device-actions', label:_T("Actions"), }
 		]
+		if (MultiBox.isControllerFeature(device.altuiid,"createDevice")==true) {
+			buttons = buttons.concat( [
+				{id:'altui-device-usedin', label:_T("Used in"), href:'altui-device-usedin', tab: _deviceDrawDeviceUsedIn },
+				{id:'altui-device-triggers', label:_T("Notification"), href:'altui-device-triggers', tab: _deviceDrawDeviceTriggers}
+			])
+		}
 		if (MultiBox.isDeviceZwave(device)) {
 			buttons = buttons.concat([
 				{id:'altui-device-config', label:_T("Configuration"), href:'altui-device-config', tab: _deviceDrawDeviceConfig},
