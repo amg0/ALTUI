@@ -2720,7 +2720,7 @@ var LearnBox = ( function( uniq_id ) {
 		scenes:[],
 		rooms:[ {
 			id:1,
-			name:_T("*Suggest")
+			name:_T("- Auto -")
 		}]
 	}
 	
@@ -2738,20 +2738,24 @@ var LearnBox = ( function( uniq_id ) {
 		console.log(evt, Altuiid, service, action, JSON.stringify(params));
 		if (evt == "on_deviceAction") {
 			var device = MultiBox.getDeviceByAltuiID(Altuiid);
-			var newdevice = jQuery.extend(true, {}, device , {
-				room: "1",
-				altuiid: MultiBox.makeAltuiid(_uniqID, 1),
-				realdevice: device,
-				id:1,
-				id_parent:0,
-			} );
-			// newdevice.states=[];	//clear this, we do not need them
-			_user_data.devices[0] = newdevice
-			
-			// copy device static data and device UPNP
-			var devstaticdata = MultiBox.getDeviceStaticData(device);
-			MultiBox.updateDeviceTypeUIDB( _uniqID, device.device_type, devstaticdata);
-			MultiBox.updateDeviceTypeUPnpDB( _uniqID, device.device_type, device.device_file);	// pass device file so UPNP data can be read			
+			var controller = MultiBox.controllerOf(Altuiid).controller
+			// avoid infinite loop
+			if (controller != _uniqID) {
+				var newdevice = jQuery.extend(true, {}, device , {
+					room: "1",
+					altuiid: MultiBox.makeAltuiid(_uniqID, 1),
+					realdevice: device,
+					id:1,
+					id_parent:0,
+				} );
+				// newdevice.states=[];	//clear this, we do not need them
+				_user_data.devices[0] = newdevice
+				
+				// copy device static data and device UPNP
+				var devstaticdata = MultiBox.getDeviceStaticData(device);
+				MultiBox.updateDeviceTypeUIDB( _uniqID, device.device_type, devstaticdata);
+				MultiBox.updateDeviceTypeUPnpDB( _uniqID, device.device_type, device.device_file);	// pass device file so UPNP data can be read			
+			}
 		}
 	};
 	
@@ -2791,6 +2795,13 @@ var LearnBox = ( function( uniq_id ) {
 		return res;
 	};
 
+	function _deleteDevice(id) {
+		var device = _user_data.devices[parseInt(deviceid)-1]
+		return MultiBox.deleteDevice(device.realdevice)
+	};
+	function _renameDevice(device, newname, roomid) {
+		return MultiBox.renameDevice(device.realdevice,newname,roomid)
+	};
 	function _getDevices( func , filterfunc, endfunc ) {
 		return _asyncResponse(_user_data.devices, func , filterfunc, endfunc)
 	};
@@ -2914,7 +2925,6 @@ var LearnBox = ( function( uniq_id ) {
 		candoPost		: function() 	{return false},
 		getBoxInfo		: _getBoxInfo,				//()
 		getBoxFullInfo	: _getBoxFullInfo,		//()
-		// getLuaStartup	: _todo,
 		getRooms		: _getRooms,	// in the future getRooms could cache the information and only call _getRooms when needed
 		getRoomsSync	: _getRoomsSync,
 		getRoomByID		:  _getRoomByID,
@@ -2952,6 +2962,7 @@ var LearnBox = ( function( uniq_id ) {
 		// isWorkflowEnabled : function()	{ return false },
 		// getPlugins		: _todo,
 		// getPluginByID	: _todo,
+		modifyPlugin	: _todo,
 		getUsers		: _getUsers,
 		getUsersSync	: _getUsersSync,
 		getUserByID		: _getUserByID,
@@ -2964,22 +2975,22 @@ var LearnBox = ( function( uniq_id ) {
 			return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
 		},
 
-		createDevice	: _todo,
-		deleteDevice	: _todo,
-		renameDevice	: _todo,
+		// createDevice	: _todo,			// not supported on other controller than 0
+		deleteDevice	: _deleteDevice,
+		renameDevice	: _renameDevice,
+		modifyDevice	: _todo,
 		updateNeighbors	: _todo,
 		// createRoom		: _todo,
 		// deleteRoom		: _todo,
 		// renameRoom		: _todo,
 		runScene		: _todo,
-		editScene		: _todo,
-		renameScene		: _todo,
-		deleteScene		: _todo,
-		modifyDevice	: _todo,
-		modifyPlugin	: _todo,
-		reloadEngine	: _todo,
-		reboot			: _todo,
-		setStartupCode	: _todo,
+		// editScene		: _todo,
+		// renameScene		: _todo,
+		// deleteScene		: _todo,
+		// reloadEngine	: _todo,		// not allowed
+		// reboot			: _todo,	// not allowed
+		// getLuaStartup	: _todo,	// not allowed
+		// setStartupCode	: _todo,	// not allowed
 
 		getCategoryTitle : _getCategoryTitle,
 		getCategories	: _getCategories,	//( cbfunc, filterfunc, endfunc ),
