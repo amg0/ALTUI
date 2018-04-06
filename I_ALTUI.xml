@@ -9,7 +9,7 @@
 	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 	 <name>SetDebug</name>
 	  <run>
-			return setDebugMode(lul_device,lul_settings.newDebugMode)
+			setDebugMode(lul_device,lul_settings.newDebugMode)
 	  </run>
 	</action>
     <action>

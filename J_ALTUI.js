@@ -17,12 +17,13 @@ var altui_api = (typeof api === 'undefined') ? null :  api;
 
 //-------------------------------------------------------------
 // Utilities Javascript
+// Utilities for searching Vera devices
 //-------------------------------------------------------------
-if (typeof String.prototype.format == 'undefined') {
-	String.prototype.format = function()
+var ALTUI_VeraUtils = (function(){
+	function altui_format(str)
 	{
-	   var content = this;
-	   for (var i=0; i < arguments.length; i++)
+	   var content = str;
+	   for (var i=1; i < arguments.length; i++)
 	   {
 			var replacement = new RegExp('\\{' + i + '\\}', 'g');	// regex requires \ and assignment into string requires \\,
 			// if ($.type(arguments[i]) === "string")
@@ -31,59 +32,46 @@ if (typeof String.prototype.format == 'undefined') {
 	   }
 	   return content;
 	};
-};
-
-
-String.prototype.htmlEncode = function()
-{
-   var value = this;
-   return $('<div/>').text(value).html();
-}
- 
-String.prototype.htmlDecode= function()
-{
-	var value = this;
-    return $('<div/>').html(value).text();
-}
-
-function isFunction(x) {
-  return Object.prototype.toString.call(x) == '[object Function]';
-}
-
-//-------------------------------------------------------------
-// Utilities for searching Vera devices
-//-------------------------------------------------------------
-function findDeviceIdx(deviceID) 
-{
-	//jsonp.ud.devices
-    for(var i=0; i<jsonp.ud.devices.length; i++) {
-        if (jsonp.ud.devices[i].id == deviceID) 
-			return i;
-    }
-	return null;
-}
-
-function findRootDeviceIdx(deviceID) 
-{
-	var idx = findDeviceIdx(deviceID);
-	while (jsonp.ud.devices[idx].id_parent != 0)
+	
+	function findDeviceIdx(deviceID) 
 	{
-		idx = findDeviceIdx(jsonp.ud.devices[idx].id_parent);
+		//jsonp.ud.devices
+		for(var i=0; i<jsonp.ud.devices.length; i++) {
+			if (jsonp.ud.devices[i].id == deviceID) 
+				return i;
+		}
+		return null;
+	};
+
+	function findRootDeviceIdx(deviceID) 
+	{
+		var idx = ALTUI_VeraUtils.findDeviceIdx(deviceID);
+		while (jsonp.ud.devices[idx].id_parent != 0)
+		{
+			idx = ALTUI_VeraUtils.findDeviceIdx(jsonp.ud.devices[idx].id_parent);
+		}
+		return idx;
+	};
+
+	function findRootDevice(deviceID)
+	{
+		var idx = ALTUI_VeraUtils.findRootDeviceIdx(deviceID) ;
+		return jsonp.ud.devices[idx].id;
+	};
+
+	function findDeviceIP(deviceID)
+	{
+		var idx = ALTUI_VeraUtils.findRootDeviceIdx(deviceID) ;
+		return jsonp.ud.devices[idx].ip;
+	};
+	
+	return {
+		findDeviceIdx:findDeviceIdx,
+		findRootDeviceIdx:findRootDeviceIdx,
+		findRootDevice:findRootDevice,
+		findDeviceIP:findDeviceIP
 	}
-	return idx;
-}
-
-function findRootDevice(deviceID)
-{
-	var idx = findRootDeviceIdx(deviceID) ;
-	return jsonp.ud.devices[idx].id;
-}
-
-function findDeviceIP(deviceID)
-{
-	var idx = findRootDeviceIdx(deviceID) ;
-	return jsonp.ud.devices[idx].ip;
-}
+})()
 
 //-------------------------------------------------------------
 // Device TAB : Donate
@@ -107,9 +95,9 @@ function altui_onOpenLocalButton(deviceId) {
 function altui_buildUrlOptions(deviceID) {
 	function _buildSelect(name,options,init) {
 		var html ="";
-		html += "<label for='{0}'>{1}</label><select class='form-control' id='{0}'>".format('altui_'+name,name+":");
+		html += ALTUI_VeraUtils.altui_format("<label for='{0}'>{1}</label><select class='form-control' id='{0}'>",'altui_'+name,name+":");
 		jQuery.each( options, function(i,opt) {
-			html += '<option {1}>{0}</option>'.format(opt,(opt==init) ? 'selected' : '')
+			html +=  ALTUI_VeraUtils.altui_format('<option {1}>{0}</option>',opt,(opt==init) ? 'selected' : '')
 		});
 		html += "</select>"
 		return html;
@@ -132,7 +120,7 @@ function altui_buildUrlOptions(deviceID) {
 	return "<div class='form-inline' id='altui_urloptions'>"+_buildSelect("home",home,inits.home)
 	+_buildSelect("lang",lang,inits.lang)
 	+_buildSelect("layout",layout,inits.layout)
-	+'<label for="altui_nPage">Page Number:</label><input class="form-control" type="number" id="altui_nPage" min="0" max="15" value="{0}"></input>'.format(inits.nPage||"")
+	+ALTUI_VeraUtils.altui_format('<label for="altui_nPage">Page Number:</label><input class="form-control" type="number" id="altui_nPage" min="0" max="15" value="{0}"></input>',inits.nPage||"")
 	+"</div>";
 }
 
@@ -142,7 +130,7 @@ function altui_Settings(deviceID) {
 	//var debug  = get_device_state(deviceID,  altui_Svs, 'Debug',1);
 	//var root = (device!=null) && (jsonp.ud.devices[device].id_parent==0);
   var present  = get_device_state(deviceID,  altui_Svs, 'Present',1);
-	var ipaddr = findDeviceIP(deviceID);
+	var ipaddr = ALTUI_VeraUtils.findDeviceIP(deviceID);
 	var config = get_device_state(deviceID,  altui_Svs, 'PluginConfig',1);
 	var themecss = get_device_state(deviceID,  altui_Svs, 'ThemeCSS',1);
 	var background = get_device_state(deviceID,  altui_Svs, 'BackgroundImg',1);
@@ -242,7 +230,7 @@ function altui_Settings(deviceID) {
 			if (id) {
 				var val = $(item).val();
 				if (val !="")
-					options.push("{0}={1}".format(id,val));
+					options.push(ALTUI_VeraUtils.altui_format("{0}={1}",id,val));
 			}
 		});
 		var url = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&"+options.join('&')

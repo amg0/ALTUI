@@ -7,13 +7,13 @@
     <serviceStateTable>
         <stateVariable sendEvents="yes">
             <name>Present</name>
-            <dataType>boolean</dataType>
+            <dataType>ui2</dataType>
             <defaultValue>0</defaultValue>
             <shortCode>present</shortCode>
         </stateVariable>
         <stateVariable sendEvents="no">
             <name>Debug</name>
-            <dataType>boolean</dataType>
+            <dataType>ui2</dataType>
             <defaultValue>0</defaultValue>
             <shortCode>debug</shortCode>
         </stateVariable>
@@ -25,7 +25,7 @@
         </stateVariable>
         <stateVariable sendEvents="no">
             <name>WorkflowMode</name>
-            <dataType>boolean</dataType>
+            <dataType>ui2</dataType>
             <defaultValue>0</defaultValue>
             <shortCode>workflowmode</shortCode>
         </stateVariable>

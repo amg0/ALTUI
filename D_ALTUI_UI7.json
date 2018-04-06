@@ -28,7 +28,7 @@
 		"AfterInit": {
 			"ScriptName": "J_ALTUI.js",
 			"Function": "altui_AfterInit"
-		} ,
+		},
 		"SceneGroup": [
 			{
 				"id": "1",
