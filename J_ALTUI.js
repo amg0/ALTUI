@@ -25,7 +25,7 @@ var ALTUI_VeraUtils = (function(){
 	   var content = str;
 	   for (var i=1; i < arguments.length; i++)
 	   {
-			var replacement = new RegExp('\\{' + i + '\\}', 'g');	// regex requires \ and assignment into string requires \\,
+			var replacement = new RegExp('\\{' + (i-1) + '\\}', 'g');	// regex requires \ and assignment into string requires \\,
 			// if ($.type(arguments[i]) === "string")
 				// arguments[i] = arguments[i].replace(/\$/g,'$');
 			content = content.replace(replacement, arguments[i]);  
