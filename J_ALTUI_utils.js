@@ -2345,16 +2345,28 @@ var Favorites = ( function (undefined) {
 		}
 		_save();
 	};
+
 	function _get(type, id) {
 		if (MyLocalStorage.getSettings('UseVeraFavorites')==1) {
 			switch(type) {
 				case "device":
 					var device = MultiBox.getDeviceByAltuiID( id );
-					_favorites[type][id] = (device.onDashboard==1);
+					if (device && device.onDashboard) {
+						_favorites[type][id] = (device.onDashboard==1);
+					} 
+					else {
+						delete _favorites[type][id] 
+						_save();
+					}
 					break;
 				case "scene":
 					var scene = MultiBox.getSceneByAltuiID( id );
-					_favorites[type][id] = ( scene.onDashboard==1);
+					if (scene && scene.onDashboard) {
+						_favorites[type][id] = ( scene.onDashboard==1);
+					} else {
+						delete _favorites[type][id]
+						_save();
+					}
 			}
 		}
 		return _favorites[type][id] || false;
