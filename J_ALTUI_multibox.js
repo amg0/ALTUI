@@ -172,17 +172,9 @@ var MultiBox = ( function( window, undefined ) {
 		}
 
 		_controllers.push(newcontroller);		// default controller
-		if (g_ALTUI.g_MachineLearning == '1') {
-			_controllers.push( {
-				ip:'',
-				type:"Z",				// machine learning controller
-				name:'Machine Learning',
-				controller:new LearnBox(1)
-			});
-		}
 
 		// add the extra controllers
-		if (extraController.trim().length>0)
+		if (extraController.trim().length>0) {
 			$.each(extraController.split(','), function(idx,ctrlinfo) {
 				ctrlinfo = ctrlinfo;
 				var splits = ctrlinfo.trim().split("-");
@@ -207,6 +199,16 @@ var MultiBox = ( function( window, undefined ) {
 				if (_devicetypesDB[idx]==null)
 					_devicetypesDB[idx]={};
 			});
+		}
+
+		if (g_ALTUI.g_MachineLearning == '1') {
+			_controllers.push( {
+				ip:'',
+				type:"Z",				// machine learning controller
+				name:'Machine Learning',
+				controller:new LearnBox(_controllers.length)
+			});
+		}
 
 		// prepare to wait for proper initialization
 		EventBus.waitForAll( "on_ui_userDataFirstLoaded", _getAllEvents("on_ui_userDataFirstLoaded"), this, _AllLoaded );
