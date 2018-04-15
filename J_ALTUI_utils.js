@@ -2387,12 +2387,12 @@ var EventBus = ( function (undefined) {
 		// global ones
 		"on_ui_deviceStatusChanged" : [],	// table of { func, object }
 		"on_ui_initFinished": [],
-		"on_ui_userDataFirstLoaded" : [],
+		// "on_ui_userDataFirstLoaded" : [],
 		"on_ui_userDataLoaded" : [],
 		"on_startup_luStatusLoaded" : [],
 
 		// ctrl specific ones , 0 is the master then other are going to be added dynamically
-		"on_ui_userDataFirstLoaded_0" : [],
+		// "on_ui_userDataFirstLoaded_0" : [],
 		"on_ui_userDataLoaded_0" : [],
 		"on_startup_luStatusLoaded_0" : [],
 	};
@@ -2464,7 +2464,8 @@ var EventBus = ( function (undefined) {
 	};
 
 	function _publishEvent(eventname/*, args */) {
-		// console.log(eventname);
+		// if (eventname != "on_ui_deviceStatusChanged")
+			// console.log("publish event:",eventname);
 		if (_subscriptions[eventname]) {
 			// var theArgs = [].slice.call(arguments, 1);	// remove first argument
 			var theArgs = arguments;

@@ -1736,8 +1736,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				}
 			});
 			if (data.devices) {
-				if (bFirst)
-					EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
+				// if (bFirst)
+					// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
 				EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
 			}
 
@@ -2763,7 +2763,7 @@ var LearnBox = ( function( uniq_id ) {
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",this,this.onDeviceChange)
 		EventBus.registerEventHandler("on_deviceAction",this,this.onUserAction);
 		EventBus.registerEventHandler("on_sceneRun",this,this.onUserAction);
-		EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
+		// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
 		EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
 		return false;
 	};
@@ -3081,13 +3081,13 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 			});
 
 			_dataEngine = setTimeout( _refreshEngine, 3000 );
-			if (bFirst)
-				EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
+			// if (bFirst)
+				// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
 			EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {
-			if (_user_data == {})
-				EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
+			// if (_user_data == {})
+				// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
 			_user_data = {};
 			_dataEngine = setTimeout( _refreshEngine, 2000 );
 		})

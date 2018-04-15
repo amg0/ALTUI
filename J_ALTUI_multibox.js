@@ -143,14 +143,9 @@ var MultiBox = ( function( window, undefined ) {
 	function _initEngine(extraController,firstuserdata, maincontrollertype) {
 
 		function _AllLoaded(eventname) {
-			switch(eventname) {
-				case "on_ui_userDataLoaded":
-						// UIManager.refreshUI( true , true );	// full & first time full display
-						break;
-				case "on_ui_userDataFirstLoaded":
-					break;
-			}
-			// console.log(eventname);
+			// case "on_ui_userDataLoaded":
+			// case "on_ui_userDataFirstLoaded":
+			// console.log("All loaded : ",eventname);
 			EventBus.publishEvent(eventname);
 		};
 
@@ -178,7 +173,6 @@ var MultiBox = ( function( window, undefined ) {
 			$.each(extraController.split(','), function(idx,ctrlinfo) {
 				ctrlinfo = ctrlinfo;
 				var splits = ctrlinfo.trim().split("-");
-				var len = _controllers.length;
 				var newcontroller = {
 					ip:splits[0],
 					name:splits[0],
@@ -187,11 +181,11 @@ var MultiBox = ( function( window, undefined ) {
 				}
 				switch (newcontroller.type) {
 					case 'A':
-						newcontroller.controller = new AltuiBox(len+idx,newcontroller.ip);
+						newcontroller.controller = new AltuiBox(1+idx,newcontroller.ip);
 						break;
 					case 'V':
 					default:
-						newcontroller.controller = new VeraBox(len+idx,newcontroller.ip);
+						newcontroller.controller = new VeraBox(1+idx,newcontroller.ip);
 				}
 				_controllers.push(newcontroller);
 
@@ -211,7 +205,7 @@ var MultiBox = ( function( window, undefined ) {
 		}
 
 		// prepare to wait for proper initialization
-		EventBus.waitForAll( "on_ui_userDataFirstLoaded", _getAllEvents("on_ui_userDataFirstLoaded"), this, _AllLoaded );
+		// EventBus.waitForAll( "on_ui_userDataFirstLoaded", _getAllEvents("on_ui_userDataFirstLoaded"), this, _AllLoaded );
 		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, _AllLoaded );
 
 		// now start the engine
