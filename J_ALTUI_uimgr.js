@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2333 $";
+var ALTUI_revision = "$Revision: 2334 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6792,7 +6792,13 @@ var UIManager  = ( function( window, undefined ) {
 		}
 
 		function _setInteractivity() {
+			// register action click
 			_registerFavoriteClickHandlers("altui-myhomedevice-icon")
+			// then register icon replacement by a spinner
+			$(".altui-mainpanel").on("click",".altui-myhomedevice-icon",function(e) {
+				var altuiid = $(this).data("altuiid")
+				$(this).replaceWith('<i data-altuiid="{0}" class="altui-myhomedevice-icon fa fa-spinner fa-2x fa-spin" aria-hidden="true"></i>'.format(altuiid ))
+			});
 			$(".altui-mainpanel")
 				.off("click",".altui-myhome-devices tr")
 				.on("click",".altui-myhome-devices tr",function(d) {
