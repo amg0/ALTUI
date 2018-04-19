@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2334 $";
+var ALTUI_revision = "$Revision: 2335 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2810,21 +2810,137 @@ var UIManager  = ( function( window, undefined ) {
 				case "spacer":
 					// no action to do for control panel, only for UI7 dashboard
 					break;
+				case 'color_temperature_picker':
+
+					function _clamp( x, min, max ) {
+						if(x<min){ return min; }
+						if(x>max){ return max; }
+						return Math.floor(x);
+					};
+
+					function _colorTemperatureToHex(kelvin){
+						if (kelvin == 0) return null;
+						var temp = kelvin / 100;
+						var red, green, blue;
+						if( temp <= 66 ){
+							red = 255;
+							green = temp;
+							green = 99.4708025861 * Math.log(green) - 161.1195681661;
+							if( temp <= 19){
+								blue = 0;
+							} else {
+								blue = temp-10;
+								blue = 138.5177312231 * Math.log(blue) - 305.0447927307;
+							}
+						} else {
+							red = temp - 60;
+							red = 329.698727446 * Math.pow(red, -0.1332047592);
+							green = temp - 60;
+							green = 288.1221695283 * Math.pow(green, -0.0755148492 );
+							blue = 255;
+						}
+						return rgbToHex(_clamp(red,0,255),_clamp(green,0, 255),_clamp(blue,0,255));
+					}
+
+					function CT(kelvin){
+						return _colorTemperatureToHex(kelvin);
+					}
+
+					function _getWDfromRGB(color) {
+						var kelvin = 0;
+						var selected = color;
+						for (i=2000; i < 6550; i+=100) {
+							if (CT(i) == selected) {
+								kelvin = i;
+								break;
+							}
+						}
+						if (kelvin > 0) {
+							var w = (kelvin < 5450)?Math.floor((kelvin-2000)/13.72):0;
+							var d = (5450 < kelvin)?Math.floor((kelvin-5500)/13.72):0;
+							var tgt = (w>0)?"W"+w:"D"+d;
+							return {kelvin: kelvin, target: tgt, W: w, D: d};
+						}
+						return {target: 0, W: 0, D: 0};
+					}
+
+					if (control.ControlCode == "color_warm") break;
+
+					var current = MultiBox.getStatus(device,'urn:micasaverde-com:serviceId:Color1','TargetColor') || MultiBox.getStatus(device,'urn:micasaverde-com:serviceId:Color1','CurrentColor');
+					if (current!=null) {
+						var parts = current.split(",");	// 0=0,1=0,2=0,3=0,4=255
+						var p0 = parseInt(parts[0].substring(2))||0;
+						var p1 = parseInt(parts[1].substring(2))||0;
+						if (p0>0) {
+							current = Math.floor((((2000 + (13.5 * p0)) / 100) + 0.5)) * 100;
+						} else if (p1>0) {
+							current = Math.floor((((5500 + (13.5 * p1)) / 100) + 0.5)) * 100;
+							if (current > 6500) current = 6500;
+						} else
+							current = 0;
+					} else
+						current=0;
+
+					var top = paddingtop + (control.Display.Top || 0);
+					var left = paddingleft	+ (control.Display.Left || 0);
+					var domobj = $("<div class='' style='top:{2}px; left:{3}px;' ><input title='{4}' id='altui-colorpicker-{0}'	 value='{1}'></input></div>"
+						.format(device.altuiid,current,top,left,control.Label && control.Label.text || ""))
+						.appendTo( $(domparent) );
+
+					$(domobj).find("input").spectrum({
+						showPaletteOnly: true,
+						showPalette:true,
+						hideAfterPaletteSelect:true,
+						color: CT(current),
+						palette: [
+							[CT(2000), CT(2100), CT(2200),CT(2300), CT(2400),
+							CT(2500), CT(2600), CT(2700),CT(2800), CT(2900),
+							CT(3000), CT(3100), CT(3200),CT(3300), CT(3400),
+							CT(3500), CT(3600), CT(3700),CT(3800), CT(3900),
+							CT(4000), CT(4100), CT(4200),CT(4300), CT(4400),
+							CT(4500), CT(4600), CT(4700),CT(4800), CT(4900),
+							CT(5000), CT(5100), CT(5200),CT(5300), CT(5400),
+							CT(5500), CT(5600), CT(5700),CT(5800), CT(5900),
+							CT(6000), CT(6100), CT(6200),CT(6300), CT(6400),
+							CT(6500)]
+						],
+						preferredFormat: 'hex',
+						replacerClassName: 'altui-colorpicker-replacer',
+					});
+					$(domobj).css({
+							top: top,
+							left: left,
+							position:'absolute'})
+						// .width(control.Display.Width)
+						// .height(control.Display.Height);
+					$(domobj).on('change',"input", function(e,color) {
+						var params={};
+						var CT = _getWDfromRGB(color);
+						params[control.Command.ActionArgumentName]="{0}".format(CT.target)
+						MultiBox.runAction( device, control.Command.Service, control.Command.Action, params, null );
+						// MultiBox.setColor(device,val);
+						var currentColor = '0={0},1={1},2=0,3=0,4=0'.format(CT.W,CT.D);
+						MultiBox.setStatus(device,'urn:micasaverde-com:serviceId:Color1','CurrentColor',currentColor);
+					});
+					break;
 				case 'color_picker': {
 					var current = MultiBox.getStatus(device,'urn:micasaverde-com:serviceId:Color1','TargetColor') || MultiBox.getStatus(device,'urn:micasaverde-com:serviceId:Color1','CurrentColor');
 					if (current!=null) {
 						var parts = current.split(",");	// 0=0,1=0,2=0,3=0,4=255
+						var p2 = parseInt(parts[2].substring(2))||0;
+						var p3 = parseInt(parts[3].substring(2))||0;
+						var p4 = parseInt(parts[4].substring(2))||0;
 						current = rgbToHex(
-							parseInt(parts[2].substring(2)),
-							parseInt(parts[3].substring(2)),
-							parseInt(parts[4].substring(2))
+							parseInt(p2),
+							parseInt(p3),
+							parseInt(p4)
 							);
 					} else
 						current="#ffffff";
 					var top = paddingtop + (control.Display.Top || 0);
 					var left = paddingleft	+ (control.Display.Left || 0);
 					var domobj = $("<div class='' style='top:{2}px; left:{3}px;' ><input title='{4}' id='altui-colorpicker-{0}'	 value='{1}'></input></div>"
-						.format(device.altuiid,current,top,left,control.Label.text))
+						.format(device.altuiid,current,top,left,control.Label && control.Label.text || ""))
 						.appendTo( $(domparent) );
 
 					$(domobj).find("input").spectrum({
