@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2335 $";
+var ALTUI_revision = "$Revision: 2336 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2858,7 +2858,7 @@ var UIManager  = ( function( window, undefined ) {
 						if (kelvin > 0) {
 							var w = (kelvin < 5450)?Math.floor((kelvin-2000)/13.72):0;
 							var d = (5450 < kelvin)?Math.floor((kelvin-5500)/13.72):0;
-							var tgt = (w>0)?"W"+w:"D"+d;
+							var tgt = (w>0)? ("W"+w) : ( (d>0) ? ("D"+d) : "W0");
 							return {kelvin: kelvin, target: tgt, W: w, D: d};
 						}
 						return {target: 0, W: 0, D: 0};
@@ -2915,7 +2915,7 @@ var UIManager  = ( function( window, undefined ) {
 						// .height(control.Display.Height);
 					$(domobj).on('change',"input", function(e,color) {
 						var params={};
-						var CT = _getWDfromRGB(color);
+						var CT = _getWDfromRGB(color.toHexString());
 						params[control.Command.ActionArgumentName]="{0}".format(CT.target)
 						MultiBox.runAction( device, control.Command.Service, control.Command.Action, params, null );
 						// MultiBox.setColor(device,val);
