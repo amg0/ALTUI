@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.18"
+local version = "v2.19"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3026,6 +3026,10 @@ local function getDefaultConfig()
 	tbl["urn:schemas-upnp-org:device:IPX800:1"]= {
 		["ScriptFile"]="J_ALTUI_iphone.js",
 		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawIPX"
+	}
+	tbl["urn:schemas-upnp-org:device:flipr:1"]= {
+		["ScriptFile"]="J_ALTUI_iphone.js",
+		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawFLIPR"
 	}
 	tbl["urn:schemas-rts-services-com:device:ProgramLogicEG:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
