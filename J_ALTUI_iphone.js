@@ -20,10 +20,11 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		style += "#altui-cplus-keytbl td {text-align:center;     vertical-align:middle;}";
 		style += ".altui-cplus-button { width: 70px; font-size:12px;}";
 		style += ".altui-ipx  { margin-top: 10px; margin-right: 10px; }";	
+		style += ".altui-flipr-text	{	font-size: 12px;     padding-left:55px;	}";
 		style += ".altui-ksenia  { margin-top: 10px; margin-right: 10px; }";	
 		style += ".altui-wes  { margin-top: 10px; margin-right: 10px; }";	
 		style += ".altui-ksenia-info  { font-size: 12px; }";	
-		style += ".altui-version  { font-size: 10px; }";	
+		style += ".altui-version  { font-size: 10px; padding-left:5px;	}";	
 		style += "\
 			.spin {\
 				animation: spinAround 10s linear infinite;\
@@ -174,12 +175,26 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	};
 
 	function _drawFLIPR(device) {
+		var iconcode = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'IconCode' ); 
 		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'Debug' ); 
 		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'Version' ); 
+		var ph =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'PH' ) || ""; 
+		var Desinfectant_Deviation = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'Desinfectant_Deviation' ) || ""; 
+		var ox = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'OxydoReduction' ) || ""; 
+		var temp =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' ) || ""; 
+		temp = Math.round(temp*10)/10
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
-
+		if (iconcode!="0") {
+			html += "<div class='altui-flipr-text'><b>PH:</b> {0} <b>Cl:</b> {1}%</div><div class='altui-flipr-text'><b>T&deg;:</b> {2} <b>OX:</b> {3} mV</div>".format(
+				ph,
+				Math.floor( parseFloat(Desinfectant_Deviation)*100 ),
+				temp,
+				ox
+				)
+		}
 		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
+
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:flipr1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
