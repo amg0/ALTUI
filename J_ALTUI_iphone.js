@@ -20,7 +20,10 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		style += "#altui-cplus-keytbl td {text-align:center;     vertical-align:middle;}";
 		style += ".altui-cplus-button { width: 70px; font-size:12px;}";
 		style += ".altui-ipx  { margin-top: 10px; margin-right: 10px; }";	
-		style += ".altui-flipr-text	{	font-size: 12px;     padding-left:55px;	}";
+		style += ".altui-flipr-text	{	font-size: 12px;     margin-left:54px;}";
+		style += ".altui-flipr-container {	margin-left:54px; margin-right:55px; }";
+		style += ".altui-flipr-tbl	{	font-size: 0.8em;  width:100%}";
+		style += ".altui-flipr-tbl	td {	padding:1px;}";
 		style += ".altui-ksenia  { margin-top: 10px; margin-right: 10px; }";	
 		style += ".altui-wes  { margin-top: 10px; margin-right: 10px; }";	
 		style += ".altui-ksenia-info  { font-size: 12px; }";	
@@ -178,20 +181,42 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		var iconcode = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'IconCode' ); 
 		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'Debug' ); 
 		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'Version' ); 
-		var ph =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'PH' ) || ""; 
-		var Desinfectant_Deviation = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'Desinfectant_Deviation' ) || ""; 
+		var ph =  parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'PH' ) || ""); 
+		var Desinfectant_Deviation = parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'Desinfectant_Deviation' ) || ""); 
 		var ox = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:flipr1', 'OxydoReduction' ) || ""; 
 		var temp =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' ) || ""; 
 		temp = Math.round(temp*10)/10
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
 		if (iconcode!="0") {
-			html += "<div class='altui-flipr-text'><b>PH:</b> {0} <b>Cl:</b> {1}%</div><div class='altui-flipr-text'><b>T&deg;:</b> {2} <b>OX:</b> {3} mV</div>".format(
-				ph,
-				Math.floor( parseFloat(Desinfectant_Deviation)*100 ),
-				temp,
-				ox
-				)
+			var model = [
+				[
+					{label:"", value:ph, cls:(Math.abs( ph-7) >1) ? "text-danger" : ""},
+					{label:"", suffix:'&deg;', value:temp, cls:""},
+				],
+				[
+					{label:"", suffix:'%', value:Math.floor( Desinfectant_Deviation*100 ), cls:(Math.abs( Desinfectant_Deviation ) >0.5) ? "text-danger" : ""},
+					{label:"", suffix:'mV', value:ox, cls:""},
+				]
+			]
+			html += "<div class='altui-flipr-container'><table class='altui-flipr-tbl'>"
+			html += "<tbody>"
+			$.each(model, function(l,line) {
+				html += '<tr>'
+				$.each(line, function(c,cell) {
+					cell = $.extend({label:"", value:0, cls:"", suffix:""}, cell)
+					html += '<td>'
+					html +='<span class="{0}"><b>{1}</b>{2}{3}</span>'.format(
+						cell.cls,
+						cell.label,
+						cell.value,
+						cell.suffix)
+					html += '</td>'
+				})
+				html += '</tr>'
+			})
+			html += "</tbody>"
+			html += "</table></div>"
 		}
 		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
 

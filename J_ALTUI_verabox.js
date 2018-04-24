@@ -1554,6 +1554,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 
 	function _refreshEngine() {
+		// console.log("controller #%s refreshEngine %s",_uniqID, "?id=lu_status2&output_format=json&DataVersion="+_status_data_DataVersion)
 		var jqxhr = _httpGet("?id=lu_status2&output_format=json&DataVersion="+_status_data_DataVersion+"&Timeout={0}&MinimumDelay={1}".format(
 				(_uniqID==0 ? LU_STATUS_TIMEOUT : 5 ),			// cannot afford to wait 60 sec in the Lua handler for Proxied units
 				LU_STATUS_MINDELAY
@@ -1567,7 +1568,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 						data=JSON.parse(data);
 					_status_data_DataVersion = data.DataVersion;
 					_status_data_LoadTime = data.LoadTime;
-					// console.log("controller #{0} received  lu_status2 with data.UserData_DataVersion={1} ".format(_uniqID,data.UserData_DataVersion));
+					// console.log("controller #{0} received lu_status2 with data.UserData_DataVersion={1} ".format(_uniqID,data.UserData_DataVersion));
 					if (data.devices != undefined)
 					{
 						$.each(data.devices, function( idx, device) {
@@ -1607,7 +1608,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 					// if user_data has changed, reload it
 					if (_user_data_DataVersion != data.UserData_DataVersion) {
-						// console.log("controller #{0} received  lu_status2 with data.UserData_DataVersion={1} =>requesting new user data".format(_uniqID,data.UserData_DataVersion));
+						 // console.log("controller #{0} received  lu_status2 with data.UserData_DataVersion={1} =>requesting new user data".format(_uniqID,data.UserData_DataVersion));
 						_initDataEngine();
 					}
 					else {
@@ -1615,8 +1616,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					}
 				}
 				else {
-						// PageMessage.message( _T("Controller {0} is busy, be patient.").format(_upnpHelper.getIpAddr()) , "warning");
-						setTimeout( _refreshEngine, 1000 );
+					// console.log( _T("Controller {0} is busy, be patient.").format(_upnpHelper.getIpAddr()) , "warning");
+					setTimeout( _refreshEngine, 1000 );
 				}
 			}
 		);
@@ -1649,10 +1650,16 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			var bFirst = (_user_data_DataVersion==1);
 			if ($.isPlainObject( data )==false)
 				data = JSON.parse(data);
+			// console.log("controller #{0} is loading user_data with New DataVersion={1}".format(_uniqID,data.DataVersion));
+			// if (bFirst==true) {
+				// console.log("controller %s bfirst==true",_uniqID)
+			// }
 			$.extend(_user_data, data);
 			// _user_data = cloneObject(data);
 			_user_data_DataVersion = data.DataVersion;
 			_user_data_LoadTime = data.LoadTime;
+			_user_data.BuildVersion = data.BuildVersion;
+			_user_data.SvnVersion = data.SvnVersion;
 			_setRooms(data.rooms);
 			_setScenes(data.scenes);
 			_setDevices(data.devices);
@@ -1745,6 +1752,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				isOpenLuup: _isOpenLuup(_user_data),
 				candoPost: _candoPost(_user_data)
 			});
+		} else {
+			// console.log("controller #{0} wrong data : {1}".format(_uniqID,data || ""));
 		}
 	};
 
@@ -1763,14 +1772,16 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 	function _loadEngine( user_data ) {
 		//AltuiDebug.debug("_loadEngine()");
+/*
 		if (user_data) {	// if received in parameter ( like pre-prepared by Lua module )
 			_user_data	= user_data;
 		} else {	// or try to get from cache
 			var verabox = MyLocalStorage.get("VeraBox"+_uniqID);
 			if (verabox) {
-				_user_data				= verabox._user_data || {};
+				_user_data = verabox._user_data || {};
 			}
 		}
+*/
 		_user_data_DataVersion	= 1;
 		_user_data_LoadTime		= null;
 		_user_data.BuildVersion = undefined;		// to keep the "waiting" message for the user
@@ -1781,11 +1792,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	function _initDataEngine() {
 		_dataEngine = null;
 		//AltuiDebug.debug("_initDataEngine()");
-		// console.log("controller #{0} is requesting user_data with _user_data_DataVersion={1}".format(_uniqID,_user_data_DataVersion));
+		// console.log("controller #{0} is requesting user_data with _DataVersion={1}".format(_uniqID,_user_data_DataVersion));
 		var jqxhr = _httpGet( "?id=user_data&output_format=json&DataVersion="+_user_data_DataVersion,
 			{beforeSend: function(xhr) { xhr.overrideMimeType('text/plain'); }},
 			function(data, textStatus, jqXHR) {
-				// console.log("controller #{0} received user_data _user_data_DataVersion={1}".format(_uniqID,_user_data_DataVersion));
+				// console.log("controller #{0} received old _DataVersion={1}".format(_uniqID,_user_data_DataVersion));
 				if (data!=null) {
 					_dataEngine = null;
 					_loadUserData(data);
@@ -1794,7 +1805,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				}
 				else {
 					_dataEngine = setTimeout( _initDataEngine, 2000 );
-					// PageMessage.message( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr() ) + ", textStatus: " + textStatus , "danger");
+					// console.log( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr() ) + ", textStatus: " + textStatus , "danger");
 				}
 			})
 			.always(function() {
