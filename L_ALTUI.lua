@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.19"
+local version = "v2.19b"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -1832,15 +1832,14 @@ local htmlScripts = [[
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.js" ></script>
-	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" ></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.0/ace.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
-	<script type="text/javascript"
-	  src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
+	<script type="text/javascript" src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>
 	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
 	<script src="J_ALTUI_utils.js" ></script>
@@ -1865,7 +1864,7 @@ local htmlStyle = [[
 	</style>
 ]]
 
-local defaultBootstrapPath = "//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+local defaultBootstrapPath = "//maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
 
 -- WARNING: put the proper class name to work with the UIManager preload check. '.' are replaced by '_'
 local htmlLocalCSSlinks = [[

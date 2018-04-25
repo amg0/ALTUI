@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2339 $";
+var ALTUI_revision = "$Revision: 2342 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -953,6 +953,12 @@ var styles =`
 	}
 	.altui-plugin-reviews {
 		cursor: pointer;
+	}
+	.altui-graph-content {
+		// overflow-x: scroll;
+	}
+	.altui-graph-card {
+		padding:0px;
 	}
 `;
 
@@ -13999,10 +14005,9 @@ var UIManager  = ( function( window, undefined ) {
 				height:null
 			}
 		};
-		function _displayWatchGraph(idx,model,force) {
+		function _olddisplayWatchGraph(idx,watch,force) {
 			if ( (force==true) || ($("span#altui-watch-placeholder-"+idx).text() =="loading..." ) ) {
 				var html = "";
-				var watch = model.watches[idx];
 				if (watch.url && watch.url!=NO_URL) {
 					html += "<div class='col-12'>";
 						html += "<iframe id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(watch.url,idx,idx,watch.height);
@@ -14013,14 +14018,74 @@ var UIManager  = ( function( window, undefined ) {
 				$("span#altui-watch-placeholder-"+idx).html(html);
 			}
 		};
+		
+		function _getWatchGraphHtml(idx,entry) {
+			var html = ""
+			var watch = entry.watch
+			if (entry.url && entry.url!=NO_URL) {
+				//scrolling='no'
+				html += "<iframe  id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(entry.url,idx,idx,entry.height);
+			} else {
+				html +="<p>{0}: {1}</p>".format(watch.provider,_T("No Graphic Url available"))
+			}
+			return html
+		};
+		
 		function _displayWatchList(domparent, model) {
+			var card_template = `
+				<div class="altui-graph-card card col-sm-6 col-xl-4" >
+				  <div class="card-body">
+					<h5 class="card-title">{0}<button type="button" id="closeidx_{2}" class="altui-graph-card-close close push-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h5>
+					<h6 class="card-subtitle mb-2 text-muted">{5}</h6>
+					<div class="altui-graph-content">{4}</div>
+					<button class="btn btn-secondary {1}" id="watchidx_{2}">{3}</button>
+				  </div>
+				</div>
+			`
+			var panels=[];
+			$.each(model.watches, function(idx,entry) {
+				var watch = entry.watch;
+				if (entry.url && entry.url!=NO_URL) {
+					panels.push( card_template.format( 
+						"<span>{0} - {1}".format(entry.devicename,watch.variable),
+						'altui-graph-refresh', //refresh btn class
+						idx, //refresh btn id
+						refreshGlyph+' '+_T('Refresh'), // refresh btn label
+						_getWatchGraphHtml(idx,entry), // body
+						watch.service,		// subtitle
+					))
+				}
+			})
+			var html = "<div class='row'>{0}</div>"
+			$(domparent).append( html.format(panels.join(" ")) );
+			$('.altui-graph-refresh').click( function() {
+				var panel = $(this).closest(".altui-graph-card")
+				var idx = $(this).prop('id').substr("watchidx_".length);
+				var watch = model.watches[idx].watch
+				$(panel).find(".altui-graph-content").html( _getWatchGraphHtml(idx,model.watches[idx]) )
+			})
+			$('.altui-graph-card-close').click( function() {
+				var idx = $(this).prop('id').substr("closeidx_".length);
+				var panel = $(this).closest(".altui-graph-card")
+				var watch = model.watches[idx].watch
+				$(panel).remove()
+				DialogManager.confirmDialog(_T("Do you ALSO want to delete the data push configuration for this variable"),function(result) {
+					if (result==true) {
+						MultiBox.delWatch( watch );
+					}
+				})
+			})
+		};
+		
+		function _olddisplayWatchList(domparent, model) {
 			function _lastPart(service) {
 				var splits = service.split(":");
 				return splits[ splits.length-1 ];
 			}
-			var model = model;
+			// var model = model;
 			var panels = [];
-			$.each(model.watches, function(idx,watch) {
+			$.each(model.watches, function(idx,w) {
+				var watch = w.watch;
 				panels.push({
 						id:'watchidx_'+idx,
 						title:"<span>{0} - {1} - <small title='{3}'>{2}</small></span>".format(watch.devicename,watch.variable,_lastPart(watch.service),watch.service),
@@ -14037,17 +14102,17 @@ var UIManager  = ( function( window, undefined ) {
 			// editor.getSession().setMode( "ace/mode/lua" );
 			// editor.setFontSize( MyLocalStorage.getSettings("EditorFontSize") );
 
-			_displayWatchGraph(0,model);
+			_displayWatchGraph(0,model.watches[0],model);
 			$('.card').on('shown.bs.collapse', function (e) {
 				e.stopPropagation();
 				var idx = parseInt(e.currentTarget.id.substring("watchidx_".length));
-				_displayWatchGraph(idx,model);
+				_displayWatchGraph(idx,model.watches[idx],model);
 			});
 			$('.altui-graph-refresh').click( function() {
 				var panel = $(this).parent().parent()
 				var id = $(panel).prop('id').substr("watchidx_".length);
 				// var placeholder = $(panel).find("span#altui-watch-placeholder-"+id);
-				_displayWatchGraph(id,model,true);
+				_displayWatchGraph(id,model.watches[id],model,true);
 			})
 
 		}
@@ -14066,9 +14131,7 @@ var UIManager  = ( function( window, undefined ) {
 					if (device && providers[watch.provider] ) {
 						var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
 						model.watches.push( {
-							provider:watch.provider,
-							service:watch.service,
-							variable:watch.variable,
+							watch: watch,
 							devicename: device.name,
 							url:urlinfo.url,
 							height:urlinfo.height || 260
@@ -14301,10 +14364,6 @@ var UIManager  = ( function( window, undefined ) {
 						html += "<button class='btn btn-light altui-save-FileDB' type='submit'>"+saveGlyph+" Save File DB</button>";
 						html += "<button class='btn btn-light altui-clear-FileDB' type='submit'>"+okGlyph2+" Clear File DB</button>";
 					html += "</div>";
-					html += "<div class='btn-group' role='group' aria-label='User Data DB'>";
-						html += "<button class='btn btn-light altui-save-userdata' type='submit'>"+saveGlyph+"Save UserData</button>";
-						html += "<button class='btn btn-light altui-clear-userdata' type='submit'>"+okGlyph3+" Clear UserData</button>";
-					html += "</div>";
 				html += "</div>";
 			html +="</div>";
 		html +="</div>";
@@ -14362,14 +14421,6 @@ var UIManager  = ( function( window, undefined ) {
 		});
 		$(".altui-clear-FileDB").click( function() {
 			FileDB.resetDB();
-			UIControler.changePage('Options',[ ]);
-		});
-		$(".altui-save-userdata").click( function() {
-			MultiBox.saveEngine();
-			UIControler.changePage('Options',[ ]);
-		});
-		$(".altui-clear-userdata").click( function() {
-			MultiBox.clearEngine();
 			UIControler.changePage('Options',[ ]);
 		});
 		$(".altui-save-userpage").click( function() {

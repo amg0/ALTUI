@@ -191,12 +191,12 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		if (iconcode!="0") {
 			var model = [
 				[
-					{label:"", value:ph, cls:(Math.abs( ph-7) >1) ? "text-danger" : ""},
-					{label:"", suffix:'&deg;', value:temp, cls:""},
+					{label:"PH", value:ph, cls:(Math.abs( ph-7) >1) ? "text-danger" : ""},
+					{label:"Temp", suffix:'&deg;', value:temp, cls:""},
 				],
 				[
-					{label:"", suffix:'%', value:Math.floor( Desinfectant_Deviation*100 ), cls:(Math.abs( Desinfectant_Deviation ) >0.5) ? "text-danger" : ""},
-					{label:"", suffix:'mV', value:ox, cls:""},
+					{label:"Cl-Br", suffix:'%', value:Math.floor( Desinfectant_Deviation*100 ), cls:(Math.abs( Desinfectant_Deviation ) >0.5) ? "text-danger" : ""},
+					{label:"OxyRed", suffix:'mV', value:ox, cls:""},
 				]
 			]
 			html += "<div class='altui-flipr-container'><table class='altui-flipr-tbl'>"
@@ -206,7 +206,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 				$.each(line, function(c,cell) {
 					cell = $.extend({label:"", value:0, cls:"", suffix:""}, cell)
 					html += '<td>'
-					html +='<span class="{0}"><b>{1}</b>{2}{3}</span>'.format(
+					html +='<span class="{0}" title="{1}"><b></b>{2}{3}</span>'.format(
 						cell.cls,
 						cell.label,
 						cell.value,
