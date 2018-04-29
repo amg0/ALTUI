@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2349 $";
+var ALTUI_revision = "$Revision: 2351 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13970,12 +13970,27 @@ var UIManager  = ( function( window, undefined ) {
 		var watches = null;
 		var providers = null;
 		var save_needed = false;
-		
+		var sortable_options = {
+				// containment: "parent",
+				handle: ".card-title",
+				// cursor: "move",
+				// forceHelperSize: true,
+				// forcePlaceholderSize: true,
+				helper: "original",
+				item: ".altui-graph-card",
+				// delay: 150,
+				// distance: 5,
+				// opacity: 0.5,
+				// revert: true,
+				// tolerance: "pointer"
+			}
+			
 		function _calculateLastPageID(pages) {
-			var arr = $.map(pages, function(page,key) {
-				return parseInt(page.id.substring( "altui-watchpage-page".length ));
+			var max = 0;
+			$.each(pages, function(key,page) {
+				max = Math.max( max, parseInt(page.id.substring( "altui-watchpage-page".length )));
 			})
-			return Math.max(...arr)	// decomposition operator
+			return max
 		};
 		function _buildWatchUrl(watch,provider) {
 			if (provider) {
@@ -14059,7 +14074,7 @@ var UIManager  = ( function( window, undefined ) {
 		function _prepareToolbarModel(active_page,pages) {
 			var model_pills = [];
 			$.each(pages,function(idx,page) {
-				model_pills.push({id:page.id, label:page.name, glyph:"", cls:(idx==active_page) ? 'altui-watchpage-page active' : 'altui-watchpage-page'})
+				model_pills.push({id:page.id, label:page.name, glyph:"", cls:'btn-light altui-watchpage-page {0}'.format( (idx==active_page) ? 'active' : '')})
 			})				
 			model_pills.push({id:'altui-watchpage-edit', label:_T("Edit"), glyph:"pencil", cls:"btn-secondary"})
 			model_pills.push({id:'altui-watchpage-add', label:_T("Add"), glyph:"plus", cls:"btn-secondary"})
@@ -14107,32 +14122,23 @@ var UIManager  = ( function( window, undefined ) {
 
 			if ($(".altui-graph-row[data_pageidx='"+active_page+"']").length==0) {
 				$(".altui-mainpanel").append( _getWatchListHtml(model_watchlist,active_page) );
+				$('.altui-graph-row .row').sortable( sortable_options );
 			}					
 			$(".altui-graph-row[data_pageidx!='"+active_page+"']").addClass("d-none")		
 			$(".altui-graph-row[data_pageidx='"+active_page+"']").removeClass("d-none")		
 		}
 		
 		function _interactivity() {
-			$('.altui-graph-row').sortable({
-				containment: "parent",
-				handle: ".card-title",
-				cursor: "move",
-				forceHelperSize: true,
-				forcePlaceholderSize: true,
-				helper: "original",
-				delay: 150,
-				distance: 5,
-				opacity: 0.5,
-				revert: true,
-				tolerance: "pointer"
-			});
-			$('.altui-graph-refresh').click( function() {
+			$(".altui-mainpanel")
+			.off('click','.altui-graph-refresh')
+			.on('click','.altui-graph-refresh',function() {
 				var panel = $(this).closest(".altui-graph-card")
 				var idx = $(this).prop('id').substr("watchidx_".length);
 				var watch = model.watches[idx].watch
 				$(panel).find(".altui-graph-content").html( _getWatchGraphHtml(idx,model.watches[idx]) )
 			})
-			$('.altui-graph-card-close').click( function() {
+			.off('click','.altui-graph-card-close')
+			.on('click','.altui-graph-card-close',function() {
 				var idx = $(this).prop('id').substr("closeidx_".length);
 				var panel = $(this).closest(".altui-graph-card")
 				var watch = model.watches[idx].watch
@@ -14142,8 +14148,7 @@ var UIManager  = ( function( window, undefined ) {
 						MultiBox.delWatch( watch );
 					}
 				})
-			})
-			$(".altui-mainpanel")
+			})			
 			.off('click','.altui-watchpage-page')
 			.on('click','.altui-watchpage-page',function() {
 				active_page = $(this).prop('id');
@@ -14250,6 +14255,7 @@ var UIManager  = ( function( window, undefined ) {
 					id:'altui-watchpage-page1', 
 					watches: []
 				}
+				active_page = firstpage.id;
 				pages[active_page] = firstpage
 			}
 			
@@ -14503,6 +14509,18 @@ var UIManager  = ( function( window, undefined ) {
 		html +="  </div>";
 		html +="</div>";
 
+		html += "<div class='col-12 mb-2'>";
+		html +="<div class='card xxx'>";
+		html +="  <div class='card-header'>"+_T("Graph Pages Control")+"</div>";
+		html +="  <div class='card-body'>";
+			// html += "<div class='btn-group' role='group' aria-label='User Pages DB'>";
+			html += "<button class='btn btn-light altui-clear-graphpage' type='submit'>"+glyphTemplate.format( "check-circle", "OK" , "text-danger" )+" Clear Graph Pages Settings</button>";
+			// html += "</div>";
+		html += "</div>";
+		html +="  </div>";
+		html +="</div>";
+
+		
 		$(".altui-mainpanel").append(html);
 		// ACE
 		var editor = ace.edit( "altui-editor-sample" );
@@ -14556,6 +14574,15 @@ var UIManager  = ( function( window, undefined ) {
 			PageManager.clearStorage();
 			UIControler.changePage('Options',[ ]);
 		});
+		$(".altui-clear-graphpage").click( function() {
+			DialogManager.confirmDialog(_T("This is not reversible, Are you sure you want to do it?"),function(result) {
+				if (result==true) {
+					MyLocalStorage.setSettings("WatchPages",null);
+					UIControler.changePage('Options',[ ]);
+				}
+			})
+		});
+		
 	},
 	reloadEngine: function() {
 		MultiBox.reloadEngine(0).done(function(){
@@ -14774,29 +14801,32 @@ $(function() {
 		deviceActionModalTemplate += "</div><!-- /.modal -->";
 
 		// 0:id 1: title, 2: body, 3: class size 4:icon
-		defaultDialogModalTemplate =
-			`<div id='{0}' class='modal fade'>
-				 <div class='modal-dialog {3}'>
-				   <form name='{0}' class='form'  onsubmit='return false;'>
-				   <div class='modal-content'>
-					 <div class='modal-header'>
-					   <div class='modal-title'><div class='altui-dialog-icon pull-left'>{4} </div><h5 class='d-inline-block'>{1}</h5> </div>
-					   <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+		defaultDialogModalTemplate =`
+<div id='{0}' class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+		<form name='{0}' id='form_{0}' class='form' onsubmit='return false;'>
+			  <div class="modal-header">
+				<div class="modal-title"><div class='altui-dialog-icon pull-left'>{4} </div><h5 class='d-inline-block'>{1}</h5></div>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="modal-body">
+				 <div class='container-fluid'>
+					 <div class='altui-dialog-row'>
+					 {2}
 					 </div>
-					 <div class='modal-body'>
-						 <div class='container-fluid'>
-							 <div class='altui-dialog-row'>
-							 {2}
-							 </div>
-						 </div>
-					 </div>
-					 <div class='modal-footer'>
-					   <button type='button' class='btn btn-light' data-dismiss='modal'>`+_T("Close")+`</button>
-					 </div>
-				   </div><!-- /.modal-content -->
-				   </form>
-				 </div><!-- /.modal-dialog -->
-			</div><!-- /.modal -->`
+				 </div>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">`+_T("Close")+`</button>
+			  </div>
+		  </form>
+    </div>
+  </div>
+</div>
+`
 
 		staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );
 		starGlyph = glyphTemplate.format( "star", _T("Favorite"), "altui-favorite text-warning" );

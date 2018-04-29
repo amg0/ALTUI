@@ -855,6 +855,7 @@ var DialogManager = ( function() {
 			message || "")
 		);
 	};
+	
 	function _genericDialog(message,glyph,title,size,buttons,cbfunc) {
 		var result = false;
 		var dialog = DialogManager.registerDialog('dialogModal',
@@ -864,27 +865,32 @@ var DialogManager = ( function() {
 								size,		// size
 								glyph));		// icon
 		$.each(buttons,function(i,button) {
-			DialogManager.dlgAddDialogButton(dialog, button.isdefault, button.label, '', button.id , { 'data-dismiss':'modal'} );
+			DialogManager.dlgAddDialogButton(dialog, button.isdefault, button.label, '', button.id , {  } );
+		});
+
+		$('div#dialogModal').modal({				// wire up the actual modal functionality and show the dialog
+		  // "backdrop"  : "static",
+		  "keyboard"  : true,
+		  "focus"	: true,
+		  "show"	: true		// ensure the modal is shown immediately
 		});
 
 		// buttons
-		$('div#dialogs')
-			.off('click',"div#dialogModal button.btn-primary")
-			.on( 'click',"div#dialogModal button.btn-primary", function() {
+		$('form#form_dialogModal')
+			.off('submit')
+			.on( 'submit', function() {
 				result = true;
-				// dialog.modal('hide');
-			})
-			.off('hidden.bs.modal',"div#dialogModal")
-			.on( 'hidden.bs.modal',"div#dialogModal", function() {
+				dialog.modal('hide');
+				// return false;
+			});
+			
+		$('div#dialogModal')
+			.off('hidden.bs.modal')
+			.on( 'hidden.bs.modal', function() {
 				if ($.isFunction(cbfunc))
 					(cbfunc)(result);
 			});
 
-		dialog.modal({					  // wire up the actual modal functionality and show the dialog
-		  "backdrop"  : "static",
-		  "keyboard"  : true,
-		  "show"	  : true					 // ensure the modal is shown immediately
-		});
 		return result;
 	}
 	function _confirmDialog(message,cbfunc,buttons) {
