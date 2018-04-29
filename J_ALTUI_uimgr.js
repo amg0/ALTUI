@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2355 $";
+var ALTUI_revision = "$Revision: 2356 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14221,9 +14221,14 @@ var UIManager  = ( function( window, undefined ) {
 				})
 				html += "<div id='watches' class='form-group'>{0}</div>".format( HTMLUtils.drawFormFields(  model ) )
 				var dialog = DialogManager.registerDialog('dialogModal', defaultDialogModalTemplate.format( 'dialogModal', 'Page Properties', html, 'modal-lg',''))
-				DialogManager.dlgAddDialogButton($('div#dialogModal'), true, _T("Save Changes"));
+				DialogManager.dlgAddCheck(dialog,'CheckAll',false,_T("Check /Uncheck all"));
+				DialogManager.dlgAddDialogButton(dialog, true, _T("Save Changes"));
 				$('div#dialogModal').modal();
 				$("div#dialogModal")
+					.on('change','#altui-widget-CheckAll', function() {
+						var checked = $(this).prop('checked')
+						$("div#dialogModal").find("input[type='checkbox']").prop('checked',checked)
+					})
 					.off('submit',"form")
 					.on( 'submit',"form", function() {
 						save_needed = true;
@@ -14236,6 +14241,7 @@ var UIManager  = ( function( window, undefined ) {
 								page.watches.push( watches[idx] ) 
 							}
 						})
+						page.order = null
 						$(dialog).modal('hide');
 						
 						// redraw page
