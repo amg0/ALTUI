@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2354 $";
+var ALTUI_revision = "$Revision: 2355 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13982,7 +13982,11 @@ var UIManager  = ( function( window, undefined ) {
 				distance: 5,
 				opacity: 0.5,
 				revert: true,
-				tolerance: "pointer"
+				tolerance: "pointer",
+				stop: function(ui,event) { 
+					save_needed=true;
+					$("#altui-watchpage-save").removeClass('btn-success').addClass('btn-danger')
+				}
 			}
 			
 		function isWatchInPage( watch , page ) {
@@ -14044,7 +14048,7 @@ var UIManager  = ( function( window, undefined ) {
 		
 		function _getWatchListHtml(model,pageidx) {
 			var card_template = `
-				<div class="altui-graph-card card col-sm-6 col-xl-4" >
+				<div class="altui-graph-card card col-sm-6 col-xl-4" data-watchidx="{1}">
 				  <div class="card-body">
 					<h5 class="card-title">{0}<button type="button" id="closeidx_{1}" class="altui-graph-card-close close push-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h5>
 					<h6 class="card-subtitle mb-2 text-muted">{3}{4}</h6>
@@ -14064,21 +14068,30 @@ var UIManager  = ( function( window, undefined ) {
 					""
 				))
 			} else {
-				$.each(model.watches, function(idx,entry) {
+				var arr = []
+				if ( model.order ) {
+					$.each(model.order, function(idx,elem) {
+						arr.push(model.watches[elem])
+					})
+				} else {
+					arr = model.watches
+				}
+				$.each(arr, function(idx,entry) {
 					var watch = entry.watch;
 					if (entry.url && entry.url!=NO_URL) {					
 						var refreshbtn = refresh_template.format(idx);
+						var realidx =  (model.order) ? model.order[idx] : idx
 						panels.push( card_template.format( 
 							"<span>{0} - {1}</span>".format(entry.devicename,watch.variable),
-							idx, //btn id
-							_getWatchGraphHtml(idx,entry), // body
+							realidx, //btn id
+							_getWatchGraphHtml(realidx,entry), // body
 							watch.service,		// subtitle
 							refreshbtn
 						))
 					}
 				})
 			}
-			var html = "<div data_pageidx='{1}' class='col-12 altui-graph-row'><div class='row'>{0}</div></div>"
+			var html = "<div data-pageidx='{1}' class='col-12 altui-graph-row'><div class='row'>{0}</div></div>"
 			return html.format(panels.join(" "),pageidx) ;
 		};
 		
@@ -14110,6 +14123,8 @@ var UIManager  = ( function( window, undefined ) {
 					}
 				});
 			}
+			if (page.order)
+				model_watchlist.order = page.order
 			return model_watchlist
 		};
 
@@ -14129,14 +14144,14 @@ var UIManager  = ( function( window, undefined ) {
 		function _refreshWatchList(active_page,bRedraw) {
 			var model_watchlist = _prepareWatchListModel(pages[active_page])	
 			if (bRedraw==true)
-				$(".altui-graph-row[data_pageidx='"+active_page+"']").remove()
+				$(".altui-graph-row[data-pageidx='"+active_page+"']").remove()
 
-			if ($(".altui-graph-row[data_pageidx='"+active_page+"']").length==0) {
+			if ($(".altui-graph-row[data-pageidx='"+active_page+"']").length==0) {
 				$(".altui-mainpanel").append( _getWatchListHtml(model_watchlist,active_page) );
 				$('.altui-graph-row .row').sortable( sortable_options );
 			}					
-			$(".altui-graph-row[data_pageidx!='"+active_page+"']").addClass("d-none")		
-			$(".altui-graph-row[data_pageidx='"+active_page+"']").removeClass("d-none")		
+			$(".altui-graph-row[data-pageidx!='"+active_page+"']").addClass("d-none")		
+			$(".altui-graph-row[data-pageidx='"+active_page+"']").removeClass("d-none")		
 		}
 		
 		function _interactivity() {
@@ -14252,6 +14267,14 @@ var UIManager  = ( function( window, undefined ) {
 			})
 			.off('click','#altui-watchpage-save')
 			.on('click','#altui-watchpage-save',function() {
+				$(".altui-graph-row").each( function(i,row) {
+					var pageidx = $(row).data("pageidx")
+					var order = $.map( 
+						$(row).find(".row").sortable( "toArray" , {attribute:'data-watchidx'} ),
+						function(item,i) {return parseInt(item)} 
+					)
+					pages[pageidx].order = order;
+				});
 				MyLocalStorage.setSettings("WatchPages",pages)
 				save_needed = false;
 				_refreshWatchPills(active_page,true)
