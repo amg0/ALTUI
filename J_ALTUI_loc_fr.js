@@ -389,7 +389,7 @@ Localization.init( {
 	"Bag":"Panier",
 	"Import/Export":"Import/Export",
 	"Variables Bag":"Panier de Variables",
-	"No data to display":"Pas de donnée a afficher",
+	"No data to display":"Pas de donnée à afficher",
 	"Schedules":"Programmes",
 	"Duration (sec)":"Durée (sec)",
 	"None":"Rien",

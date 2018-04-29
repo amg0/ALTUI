@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2346 $";
+var ALTUI_revision = "$Revision: 2349 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13965,11 +13965,18 @@ var UIManager  = ( function( window, undefined ) {
 	},
 	// optional idx in watches VariablesToSend
 	pageWatchDisplay: function( event, watchidx ) {
-		var active_page = 0;
+		var active_page = null;
 		var pages = null;
 		var watches = null;
 		var providers = null;
+		var save_needed = false;
 		
+		function _calculateLastPageID(pages) {
+			var arr = $.map(pages, function(page,key) {
+				return parseInt(page.id.substring( "altui-watchpage-page".length ));
+			})
+			return Math.max(...arr)	// decomposition operator
+		};
 		function _buildWatchUrl(watch,provider) {
 			if (provider) {
 				var url_param_idx = -1;
@@ -14005,11 +14012,11 @@ var UIManager  = ( function( window, undefined ) {
 			return html
 		};
 		
-		function _displayWatchPills(model) {
+		function _getWatchPillsHtml(model) {
 			return HTMLUtils.drawToolbar('altui-watch-toolbar',model,'col-12');
 		};
 		
-		function _displayWatchList(model,pageidx) {
+		function _getWatchListHtml(model,pageidx) {
 			var card_template = `
 				<div class="altui-graph-card card col-sm-6 col-xl-4" >
 				  <div class="card-body">
@@ -14022,24 +14029,88 @@ var UIManager  = ( function( window, undefined ) {
 			// var refresh_template = '<button class="btn btn-secondary {0}" id="watchidx_{1}">{2}</button>'
 			var refresh_template = '<span class="altui-graph-refresh pull-right" id="watchidx_{0}">'+refreshGlyph+'</span>'
 			var panels=[];
-			$.each(model.watches, function(idx,entry) {
-				var watch = entry.watch;
-				if (entry.url && entry.url!=NO_URL) {
-					
-					var refreshbtn = refresh_template.format(idx);
-					
-					panels.push( card_template.format( 
-						"<span>{0} - {1}".format(entry.devicename,watch.variable),
-						idx, //btn id
-						_getWatchGraphHtml(idx,entry), // body
-						watch.service,		// subtitle
-						refreshbtn
-					))
-				}
-			})
+			if (model.watches.length==0) {
+				panels.push( card_template.format( 
+					_T("No data to display"),
+					0, //btn id
+					_T("Use Edit button above to set the graphic page parameters"), // body
+					"",		// subtitle
+					""
+				))
+			} else {
+				$.each(model.watches, function(idx,entry) {
+					var watch = entry.watch;
+					if (entry.url && entry.url!=NO_URL) {					
+						var refreshbtn = refresh_template.format(idx);
+						panels.push( card_template.format( 
+							"<span>{0} - {1}</span>".format(entry.devicename,watch.variable),
+							idx, //btn id
+							_getWatchGraphHtml(idx,entry), // body
+							watch.service,		// subtitle
+							refreshbtn
+						))
+					}
+				})
+			}
 			var html = "<div data_pageidx='{1}' class='col-12 altui-graph-row'><div class='row'>{0}</div></div>"
 			return html.format(panels.join(" "),pageidx) ;
 		};
+		
+		function _prepareToolbarModel(active_page,pages) {
+			var model_pills = [];
+			$.each(pages,function(idx,page) {
+				model_pills.push({id:page.id, label:page.name, glyph:"", cls:(idx==active_page) ? 'altui-watchpage-page active' : 'altui-watchpage-page'})
+			})				
+			model_pills.push({id:'altui-watchpage-edit', label:_T("Edit"), glyph:"pencil", cls:"btn-secondary"})
+			model_pills.push({id:'altui-watchpage-add', label:_T("Add"), glyph:"plus", cls:"btn-secondary"})
+			model_pills.push({id:'altui-watchpage-del', label:_T("Delete"), glyph:"trash-o", cls:"btn-secondary"})
+			model_pills.push({id:'altui-watchpage-save', label:_T("Save"), glyph:"floppy-o", cls:"btn-primary {0}".format(save_needed==true ? 'btn-danger' : 'btn-success')})
+			return model_pills
+		};
+		
+		function _prepareWatchListModel(page) {
+			var model_watchlist={ watches:[] };
+			if (page.watches) {
+				$.each(page.watches,function(idx,watch) {
+					var device = MultiBox.getDeviceByAltuiID(watch.deviceid);
+					if (device && providers[watch.provider] ) {
+						var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
+						model_watchlist.watches.push( {
+							watch: watch,
+							devicename: device.name,
+							url:urlinfo.url,
+							height:urlinfo.height || 260
+						})
+					}
+				});
+			}
+			return model_watchlist
+		};
+
+		function _refreshWatchPills(active_page,bRedraw){
+			var model = _prepareToolbarModel(active_page,pages);
+			var html = _getWatchPillsHtml(model)
+			if (bRedraw==true)
+				$(".altui-watch-toolbar").remove()
+			
+			if ($(".altui-watch-toolbar").length==0) {
+				$(".altui-mainpanel").prepend( html );
+			} else {
+				$(".altui-watch-toolbar").replaceWith(  html );
+			}
+		}
+
+		function _refreshWatchList(active_page,bRedraw) {
+			var model_watchlist = _prepareWatchListModel(pages[active_page])	
+			if (bRedraw==true)
+				$(".altui-graph-row[data_pageidx='"+active_page+"']").remove()
+
+			if ($(".altui-graph-row[data_pageidx='"+active_page+"']").length==0) {
+				$(".altui-mainpanel").append( _getWatchListHtml(model_watchlist,active_page) );
+			}					
+			$(".altui-graph-row[data_pageidx!='"+active_page+"']").addClass("d-none")		
+			$(".altui-graph-row[data_pageidx='"+active_page+"']").removeClass("d-none")		
+		}
 		
 		function _interactivity() {
 			$('.altui-graph-row').sortable({
@@ -14075,17 +14146,10 @@ var UIManager  = ( function( window, undefined ) {
 			$(".altui-mainpanel")
 			.off('click','.altui-watchpage-page')
 			.on('click','.altui-watchpage-page',function() {
-				var id = $(this).prop('id').substring( "altui-watchpage-page".length );
+				active_page = $(this).prop('id');
 				$('.altui-watchpage-page').removeClass('active')
 				$(this).addClass('active')
-				active_page = parseInt(id)-1
-				var model_watchlist = _prepareWatchlist(pages[active_page])	
-				if ($(".altui-graph-row[data_pageidx='"+active_page+"']").length==0) {
-					$(".altui-mainpanel").append( _displayWatchList(model_watchlist,active_page) );
-				}					
-				$(".altui-graph-row[data_pageidx!='"+active_page+"']").addClass("d-none")		
-				$(".altui-graph-row[data_pageidx='"+active_page+"']").removeClass("d-none")		
-				// $(".altui-graph-row").replaceWith( _displayWatchList(model_watchlist,active_page) );
+				_refreshWatchList(active_page)
 			})
 			.off('click','#altui-watchpage-edit')
 			.on('click','#altui-watchpage-edit',function() {
@@ -14106,14 +14170,20 @@ var UIManager  = ( function( window, undefined ) {
 				];
 				var html = HTMLUtils.drawFormFields(  model );
 				model = []
-				$.each(watches, function(idx,watch) {
-					model.push({
-						id:'watch_'+idx,
-						label:"{0} {1} ({2})".format(watch.deviceid, watch.variable, watch.service),
-						type:'input',
-						inputtype:'checkbox',
-						value: isWatchInPage( watch, page )
-					})
+				$.each(watches.sort(altuiSortByWatchAltuiID), function(idx,watch) {
+					var device = MultiBox.getDeviceByAltuiID(watch.deviceid)
+					if (device) {
+						var urlinfo = _buildWatchUrl(watch,providers[watch.provider])
+						if (urlinfo && urlinfo.url && urlinfo.url!=NO_URL) {
+							model.push({
+								id:'watch_'+idx,
+								label:"<b>{0}</b> <small>({1})</small> <b>{2}</b> <small>({3})</small>".format(device.name, watch.deviceid, watch.variable, watch.service),
+								type:'input',
+								inputtype:'checkbox',
+								value: isWatchInPage( watch, page )
+							})
+						}
+					}
 				})
 				html += "<div id='watches' class='form-group'>{0}</div>".format( HTMLUtils.drawFormFields(  model ) )
 				var dialog = DialogManager.registerDialog('dialogModal', defaultDialogModalTemplate.format( 'dialogModal', 'Page Properties', html, 'modal-lg',''))
@@ -14122,6 +14192,7 @@ var UIManager  = ( function( window, undefined ) {
 				$("div#dialogModal")
 					.off('submit',"form")
 					.on( 'submit',"form", function() {
+						save_needed = true;
 						page.name = $("#name").val();
 						// todo : update page watches based on the user selection
 						page.watches=[]
@@ -14132,94 +14203,65 @@ var UIManager  = ( function( window, undefined ) {
 							}
 						})
 						$(dialog).modal('hide');
-						// redraw page
-						var model = _prepareToolbarModel(pages);
-						$(".altui-watch-toolbar").replaceWith(  _displayWatchPills(model) );
 						
-						var model_watchlist = _prepareWatchlist(pages[active_page])	
-						var html = _displayWatchList(model_watchlist,active_page)
-						$(".altui-graph-row[data_pageidx!='"+active_page+"']").addClass("d-none")		
-						$(".altui-graph-row[data_pageidx='"+active_page+"']").removeClass("d-none").replaceWith(html)
+						// redraw page
+						_refreshWatchPills(active_page,true)						
+						_refreshWatchList(active_page,true)
 					});			
 			})
 			.off('click','#altui-watchpage-add')
 			.on('click','#altui-watchpage-add',function() {
-				var l = pages.length+1;
+				var id = _calculateLastPageID(pages)+1;
 				var page = {
-					name:'Page'+l, 
-					id:'altui-watchpage-page'+l, 
+					name:'Page'+id, 
+					id:'altui-watchpage-page'+id, 
 					watches: []
 				}
-				pages.push(page);
-				var model = _prepareToolbarModel(pages);
-				$(".altui-watch-toolbar").replaceWith(  _displayWatchPills(model) );
+				pages[page.id]=page;
+				save_needed = true;
+				_refreshWatchPills(active_page)
 			})
 			.off('click','#altui-watchpage-del')
 			.on('click','#altui-watchpage-del',function() {
-				if (pages.length>1) {
-					pages.splice( active_page, 1 );
-					var model = _prepareToolbarModel(pages);
-					$(".altui-watch-toolbar").replaceWith(  _displayWatchPills(model) );
-					var model_watchlist = _prepareWatchlist(pages[active_page])	
-					var html = _displayWatchList(model_watchlist,active_page)
-					$(".altui-graph-row[data_pageidx!='"+active_page+"']").addClass("d-none")		
-					$(".altui-graph-row[data_pageidx='"+active_page+"']").removeClass("d-none").replaceWith(html)
+				if (Object.keys(pages).length>1) {
+					delete pages[active_page] 
+					active_page = 'altui-watchpage-page'+ _calculateLastPageID(pages)
+					save_needed = true;
+					_refreshWatchPills(active_page,true)
+					_refreshWatchList(active_page,true)
 				}
 			})
-		};
-
-		function _prepareToolbarModel(pages) {
-			var model_pills = [];
-			$.each(pages,function(idx,page) {
-				model_pills.push({id:page.id, label:page.name, glyph:"", cls:(idx==active_page) ? 'altui-watchpage-page active' : 'altui-watchpage-page'})
-			})				
-			model_pills.push({id:'altui-watchpage-edit', label:_T("Edit"), glyph:"pencil", cls:"btn-secondary"})
-			model_pills.push({id:'altui-watchpage-add', label:_T("Add"), glyph:"plus", cls:"btn-secondary"})
-			model_pills.push({id:'altui-watchpage-del', label:_T("Delete"), glyph:"trash-o", cls:"btn-primary"})
-			return model_pills
-		};
-		
-		function _prepareWatchlist(page) {
-			var model_watchlist={ watches:[] };
-			if (page.watches) {
-				$.each(page.watches,function(idx,watch) {
-					var device = MultiBox.getDeviceByAltuiID(watch.deviceid);
-					if (device && providers[watch.provider] ) {
-						var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
-						model_watchlist.watches.push( {
-							watch: watch,
-							devicename: device.name,
-							url:urlinfo.url,
-							height:urlinfo.height || 260
-						})
-					}
-				});
-			}
-			return model_watchlist
+			.off('click','#altui-watchpage-save')
+			.on('click','#altui-watchpage-save',function() {
+				MyLocalStorage.setSettings("WatchPages",pages)
+				save_needed = false;
+				_refreshWatchPills(active_page,true)
+			})			
 		};
 
 		UIManager.clearPage('WatchDisplay',_T("Watch Display"),UIManager.oneColumnLayout);
 		MultiBox.getDataProviders(function(result) {
 			providers = result
-			pages = MyLocalStorage.getSettings("WatchPages") || []
+			pages = MyLocalStorage.getSettings("WatchPages") || {}
 			watches = MultiBox.getWatches("VariablesToSend", null)
-			if (pages.length==0) {
+			if (Object.keys(pages).length==0) {
 				var firstpage = {
 					name:'Page1', 
 					id:'altui-watchpage-page1', 
-					watches: watches
+					watches: []
 				}
-				pages.push(firstpage)
+				pages[active_page] = firstpage
 			}
+			
+			active_page = Object.keys(pages)[0]; 
 
 			// Display Pages Pills
-			var model_pills = _prepareToolbarModel(pages);
-			$(".altui-mainpanel").append( _displayWatchPills(model_pills) );
+			_refreshWatchPills(active_page)
 
 			// Display Page's Watches
-			var model_watchlist = _prepareWatchlist(pages[active_page])			
-			$(".altui-mainpanel").append( _displayWatchList(model_watchlist,active_page) );
+			_refreshWatchList(active_page)
 			
+			// Display Page's Watches
 			_interactivity() 
 		});
 	},

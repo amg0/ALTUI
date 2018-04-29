@@ -174,6 +174,12 @@ function altuiSortByName2(a, b) {
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 };
 
+function altuiSortByWatchAltuiID(a, b) {
+    var x = a.deviceid;
+    var y = b.deviceid;
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+};
+
 function get_device_index(deviceID){
     var devicesCount=jsonp.ud.devices.length;
     for(var i=0;i<devicesCount;i++){

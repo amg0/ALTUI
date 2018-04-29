@@ -1994,7 +1994,7 @@ var HTMLUtils = (function() {
 					break;
 				case 'button':
 				default:
-					toolbarHtml+="	<button type='button' class='btn {3} btn-light ' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
+					toolbarHtml+="	<button type='button' class='btn {3} ' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'btn-light');
 					var glyph = glyphTemplate.format(tool.glyph,tool.label || tool.title || '');
 					toolbarHtml += glyph;
 					if (tool.label)
