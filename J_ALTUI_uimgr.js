@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2351 $";
+var ALTUI_revision = "$Revision: 2352 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13985,6 +13985,17 @@ var UIManager  = ( function( window, undefined ) {
 				// tolerance: "pointer"
 			}
 			
+		function isWatchInPage( watch , page ) {
+			var result = false;
+			$.each(page.watches, function( idx, w) {
+				if ((w.deviceid == watch.deviceid) && (w.variable==watch.variable) && (w.service==watch.service) && (w.provider==watch.provider)) {
+					result = true;
+					return false;
+				}
+			})
+			return result;
+		};
+		
 		function _calculateLastPageID(pages) {
 			var max = 0;
 			$.each(pages, function(key,page) {
@@ -14133,20 +14144,31 @@ var UIManager  = ( function( window, undefined ) {
 			.off('click','.altui-graph-refresh')
 			.on('click','.altui-graph-refresh',function() {
 				var panel = $(this).closest(".altui-graph-card")
-				var idx = $(this).prop('id').substr("watchidx_".length);
-				var watch = model.watches[idx].watch
-				$(panel).find(".altui-graph-content").html( _getWatchGraphHtml(idx,model.watches[idx]) )
+				var idx = parseInt($(this).prop('id').substr("watchidx_".length));
+				var page = pages[active_page];
+				var watch = page.watches[idx]
+				var device = MultiBox.getDeviceByAltuiID(watch.deviceid)
+				var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
+				$(panel).find(".altui-graph-content").html( _getWatchGraphHtml(idx,{
+							watch: watch,
+							devicename: device.name,
+							url:urlinfo.url,
+							height:urlinfo.height || 260
+						}) )
 			})
 			.off('click','.altui-graph-card-close')
 			.on('click','.altui-graph-card-close',function() {
-				var idx = $(this).prop('id').substr("closeidx_".length);
+				var idx = parseInt($(this).prop('id').substr("closeidx_".length));
 				var panel = $(this).closest(".altui-graph-card")
-				var watch = model.watches[idx].watch
+				var page = pages[active_page];
+				var watch = page.watches[idx]
 				$(panel).remove()
 				DialogManager.confirmDialog(_T("Do you ALSO want to delete the data push configuration for this variable"),function(result) {
 					if (result==true) {
 						MultiBox.delWatch( watch );
+						UIControler.changePage("WatchDisplay",[])
 					}
+					page.watches.splice(idx,1)
 				})
 			})			
 			.off('click','.altui-watchpage-page')
@@ -14158,16 +14180,6 @@ var UIManager  = ( function( window, undefined ) {
 			})
 			.off('click','#altui-watchpage-edit')
 			.on('click','#altui-watchpage-edit',function() {
-				function isWatchInPage( watch , page ) {
-					var result = false;
-					$.each(page.watches, function( idx, w) {
-						if ((w.deviceid == watch.deviceid) && (w.variable==watch.variable) && (w.service==watch.service) && (w.provider==watch.provider)) {
-							result = true;
-							return false;
-						}
-					})
-					return result;
-				}
 				var page = pages[active_page]
 				var model = [
 					{ id:'name',		label:_T('Name'),			type:"input",	value:page['name'], pattern:"[^_]+", placeholder:'enter name' , opt:{required:true}, invalidfeedback:_T('Please provide a name without a _ character') },
@@ -14825,9 +14837,7 @@ $(function() {
 		  </form>
     </div>
   </div>
-</div>
-`
-
+</div>`
 		staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );
 		starGlyph = glyphTemplate.format( "star", _T("Favorite"), "altui-favorite text-warning" );
 		questionGlyph=glyphTemplate.format( "question", _T("Question"), "text-warning" );
