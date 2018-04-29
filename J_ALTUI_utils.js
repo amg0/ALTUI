@@ -1994,7 +1994,7 @@ var HTMLUtils = (function() {
 					break;
 				case 'button':
 				default:
-					toolbarHtml+="	<button type='button' class='btn btn-light {3}' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
+					toolbarHtml+="	<button type='button' class='btn {3} btn-light ' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'');
 					var glyph = glyphTemplate.format(tool.glyph,tool.label || tool.title || '');
 					toolbarHtml += glyph;
 					if (tool.label)
@@ -2065,6 +2065,7 @@ var HTMLUtils = (function() {
 							HTMLUtils.optionsToString(line.opt),
 							checked
 							);
+						html += '</div>'
 					} else {
 						html += "<div class='form-group'>"
 						html += "<label for='{0}' '>{1}</label>".format(line.id,line.label);
@@ -2078,12 +2079,12 @@ var HTMLUtils = (function() {
 							type,
 							pattern,
 							checked);
+						html += "</div>"
 					}
 					html += '<div class="invalid-feedback">{0}</div>'.format(line.invalidfeedback || _T("Please enter a valid element"))
 					if (line.helptext) {
 						html +='<small id="passwordHelpBlock" class="form-text text-muted">{0}</small>'.format( line.helptext )
 					}
-					html += "</div>"
 					break;
 				case "accordeon":
 					html += "<div class='form-group'>"
