@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2352 $";
+var ALTUI_revision = "$Revision: 2353 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13973,16 +13973,16 @@ var UIManager  = ( function( window, undefined ) {
 		var sortable_options = {
 				// containment: "parent",
 				handle: ".card-title",
-				// cursor: "move",
-				// forceHelperSize: true,
-				// forcePlaceholderSize: true,
+				cursor: "move",
+				forceHelperSize: true,
+				forcePlaceholderSize: true,
 				helper: "original",
 				item: ".altui-graph-card",
-				// delay: 150,
-				// distance: 5,
-				// opacity: 0.5,
-				// revert: true,
-				// tolerance: "pointer"
+				delay: 150,
+				distance: 5,
+				opacity: 0.5,
+				revert: true,
+				tolerance: "pointer"
 			}
 			
 		function isWatchInPage( watch , page ) {
