@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2364 $";
+var ALTUI_revision = "$Revision: 2366 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14016,11 +14016,14 @@ var UIManager  = ( function( window, undefined ) {
 			})
 			return result;
 		};
-		
+		function isValidPage( page ) {
+			return ( page.id && (page.id != " " ))
+		};
+
 		function _calculateLastPageID(pages) {
 			var max = 0;
 			$.each(pages, function(key,page) {
-				if ( page.id && (page.id != " "))	// special case to store the order
+				if (isValidPage(page))
 					max = Math.max( max, parseInt(page.id.substring( "altui-watchpage-page".length )));
 			})
 			return max
@@ -14118,7 +14121,7 @@ var UIManager  = ( function( window, undefined ) {
 			var order = ( pages[" "] && pages[" "].order  ) ?  pages[" "].order : Object.keys(pages)
 			$.each(order,function(i,idx) {
 				var page = pages[idx]
-				if (page.id != " ")	// special case to store the order
+				if (isValidPage(page))	// special case to store the order
 					model_pills.push({type: 'a', id:page.id, label:page.name, glyph:"area-chart", cls:'btn-light altui-watchpage-page {0}'.format( (idx==active_page) ? 'active' : '')})
 			})				
 			model_pills.push({id:'altui-watchpage-edit', label:_T("Edit"), glyph:"pencil", cls:"btn-secondary"})
@@ -14291,7 +14294,7 @@ var UIManager  = ( function( window, undefined ) {
 			})
 			.off('click','#altui-watchpage-del')
 			.on('click','#altui-watchpage-del',function() {
-				if (Object.keys(pages).length>1) {
+				if (Object.keys(pages).length> 1 + ((pages[" "]!=null) ? 1 : 0) ) {
 					if (pages[" "] && pages[" "].order) 
 						pages[" "].order = pages[" "].order.filter( function(item) { return item !== active_page } )
 					delete pages[active_page] 
