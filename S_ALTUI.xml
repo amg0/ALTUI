@@ -48,6 +48,12 @@
             <shortCode>result</shortCode>
         </stateVariable>
         <stateVariable sendEvents="no">
+            <name>PluginConfig</name>
+            <dataType>string</dataType>
+            <defaultValue></defaultValue>
+            <shortCode>pluginConfig</shortCode>
+        </stateVariable>
+        <stateVariable sendEvents="no">
             <name>DeviceType</name>
             <dataType>string</dataType>
             <defaultValue></defaultValue>
@@ -228,6 +234,13 @@
         </action>
         <action>
             <name>Reset</name>
+            <argumentList>
+				<argument>
+				  <name>PluginConfig</name>
+				  <direction>out</direction>
+				  <relatedStateVariable>PluginConfig</relatedStateVariable>
+				</argument>
+            </argumentList>
         </action>
 		<action>
             <name>SayTTS</name>

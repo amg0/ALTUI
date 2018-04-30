@@ -20,6 +20,11 @@ var altui_api = (typeof api === 'undefined') ? null :  api;
 // Utilities for searching Vera devices
 //-------------------------------------------------------------
 var ALTUI_VeraUtils = (function(){
+	function beautify(str) {
+		var val = JSON.stringify(JSON.parse(str),null,2)
+		return val
+	};
+	
 	function altui_format(str)
 	{
 	   var content = str;
@@ -66,6 +71,7 @@ var ALTUI_VeraUtils = (function(){
 	};
 	
 	return {
+		beautify:beautify,
 		altui_format:altui_format,
 		findDeviceIdx:findDeviceIdx,
 		findRootDeviceIdx:findRootDeviceIdx,
@@ -174,7 +180,6 @@ function altui_Settings(deviceID) {
 	var htmlEmonCMS = '<input id="altui-emoncms" class="altui-ui-input form-control" placeholder="default url : emoncms.org"></input>'
 	var htmlSetConfig= '<button class="btn btn-secondary btn-sm" id="altui-setconfig">Set Configuration</button>';
 	var htmlResetConfig= '<button class="btn btn-secondary btn-sm" id="altui-resetconfig">Default Configuration</button>';
-	var htmlViewJson = '<button class="btn btn-secondary btn-sm" id="altui-viewconfig">View Configuration</button>';
 	var htmlUrlOptions = altui_buildUrlOptions(deviceID)
 	var html =
 		style+
@@ -193,7 +198,7 @@ function altui_Settings(deviceID) {
 		'<tr><td>Local CDN ?</td><td> '+htmlCDN+' </td></tr>' +
 		'<tr><td>EmonCMS Url</td><td> '+htmlEmonCMS+' </td></tr>' +
 		'<tr><td>Config</td><td> '+htmlConfig+' </td></tr>' +
-		'<tr><td>Actions</td><td> '+htmlViewJson+htmlSetConfig+htmlResetConfig+' </td></tr>' +
+		'<tr><td>Actions</td><td> '+htmlSetConfig+htmlResetConfig+' </td></tr>' +
 		'</table>'+
 		'</div>' ;
 
@@ -211,7 +216,7 @@ function altui_Settings(deviceID) {
 	//
 	// test isregistered
 	//
-	jQuery( "#altui-config" ).text( config );
+	jQuery( "#altui-config" ).text( ALTUI_VeraUtils.beautify(config) );
 	jQuery( "#altui-theme" ).text( themecss ).change( function() {
 		var themecss = jQuery(this).val()+' ';
 		saveVar(deviceID,  altui_Svs, "ThemeCSS", themecss, true);
@@ -275,22 +280,14 @@ function altui_Settings(deviceID) {
 		saveVar(deviceID,  altui_Svs, 'EmonCmsUrl', varVal, true)
 	});
 
-	jQuery( "#altui-viewconfig" ).click(function() {
-		var varVal = jQuery( "#altui-config" ).val();
-		var url = "http://jsoneditoronline.org/?json="+varVal;
-		window.open(url,'_blank');
-	});
 	jQuery( "#altui-resetconfig" ).click(function() {
 		var url = buildUPnPActionUrl(deviceID,altui_Svs,'Reset');
 		jQuery.ajax({
 			type: "GET",
 			url: url,
 			cache: false,
-		}).done(function() {
-			setTimeout( function() {
-				var config = get_device_state(deviceID,  altui_Svs, 'PluginConfig',1);
-				jQuery( "#altui-config" ).val(config)			
-			}, 2000 );
+		}).done(function(data) {
+			jQuery( "#altui-config" ).val( ALTUI_VeraUtils.beautify( data["u:ResetResponse"].PluginConfig ) )
 		}).fail(function() {
 			alert('Reset Failed!');
 		});

@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.20"
+local version = "v2.20b"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3440,6 +3440,7 @@ function resetDevice(lul_device,reload)
 		luup.variable_set(ALTUI_SERVICE, "PendingReset", 1, lul_device)
 		local httpcode,data = luup.inet.wget("http://127.0.0.1"..port3480.."/data_request?id=reload",10)
 	end
+	return default
 end
 
 local function createMP3file(lul_device,newMessage)

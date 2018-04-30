@@ -55,10 +55,9 @@
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>Reset</name>
-		<job>
-			resetDevice(lul_device,true)
-			return 4,0
-		</job>    
+		<run>
+			return resetDevice(lul_device,true)
+		</run>    
 	</action>
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
