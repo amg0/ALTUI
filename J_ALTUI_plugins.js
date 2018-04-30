@@ -1577,26 +1577,26 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var sched = MultiBox.getStatus(device,"urn:ecobee-com:serviceId:Ecobee1","currentEventType");
 		var html = "";
 		html += "<div class='pull-right'><div id='altui-wc-"+device.altuiid+"' class='btn-group altui-ecobee-btngrp' role='group' aria-label='...'>";
-		html += ("	<button id ='altui-ecobee-home' type='button' class='btn btn-light btn-sm {0}'>"+_T("Home")+"</button>").format( (status=='home') ? 'active' : '' );
-		html += ("	<button id ='altui-ecobee-away' type='button' class='btn btn-light btn-sm {0}'>"+_T("Away")+"</button>").format( (status=='away') ? 'active' : '' );
-		html += ("	<button id ='altui-ecobee-sleep' type='button' class='btn btn-light btn-sm {0}'>"+_T("Night")+"</button>").format( (status=='sleep') ? 'active' : '' );
-		html += ("	<button id ='altui-ecobee-smart1' type='button' class='btn btn-light btn-sm {0}'>"+_T("Vacation")+"</button>").format( (status=='smart1') ? 'active' : '' );
-		html += ("	<button id ='altui-ecobee-resume' type='button' class='btn btn-light btn-sm {0}'>"+_T("Resume")+"</button>").format( (sched=='none') ? 'active' : '' );
+		html += ("	<button id ='home' type='button' class='btn btn-light btn-sm {0}'>"+_T("Home")+"</button>").format( (status=='home') ? 'active' : '' );
+		html += ("	<button id ='away' type='button' class='btn btn-light btn-sm {0}'>"+_T("Away")+"</button>").format( (status=='away') ? 'active' : '' );
+		html += ("	<button id ='sleep' type='button' class='btn btn-light btn-sm {0}'>"+_T("Night")+"</button>").format( (status=='sleep') ? 'active' : '' );
+		html += ("	<button id ='smart1' type='button' class='btn btn-light btn-sm {0}'>"+_T("Vacation")+"</button>").format( (status=='smart1') ? 'active' : '' );
+		html += ("	<button id ='resume' type='button' class='btn btn-light btn-sm {0}'>"+_T("Resume")+"</button>").format( (sched=='none') ? 'active' : '' );
 		html += "</div>";
 		html += "</div>";
 		$(".altui-mainpanel")
 			.on('click','.altui-ecobee-btngrp button', function(e) {
 				var action = $(this).prop('id');
 				var altuiid = $(this).closest('.altui-device').data("altuiid")
-		if (action=="Home") {
+		if (action=="home") {
 			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "SetClimateHold", {HoldClimateRef: "home"} )};
-	        if (action=="Away") {
+	        if (action=="away") {
 			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "SetClimateHold", {HoldClimateRef: "away"} )};
-		if (action=="Night") {
+		if (action=="sleep") {
 			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "SetClimateHold", {HoldClimateRef: "sleep"} )};
-		if (action=="Vacation") {
+		if (action=="smart1") {
 			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "SetClimateHold", {HoldClimateRef: "smart1"} )};
-		if (action=="Resume") {
+		if (action=="resume") {
 			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "ResumeProgram", {} )};
 			});
 		return html;
