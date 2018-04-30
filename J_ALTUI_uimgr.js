@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2358 $";
+var ALTUI_revision = "$Revision: 2359 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14098,7 +14098,7 @@ var UIManager  = ( function( window, undefined ) {
 		function _prepareToolbarModel(active_page,pages) {
 			var model_pills = [];
 			$.each(pages,function(idx,page) {
-				model_pills.push({id:page.id, label:page.name, glyph:"", cls:'btn-light altui-watchpage-page {0}'.format( (idx==active_page) ? 'active' : '')})
+				model_pills.push({id:page.id, label:page.name, glyph:"area-chart", cls:'btn-light altui-watchpage-page {0}'.format( (idx==active_page) ? 'active' : '')})
 			})				
 			model_pills.push({id:'altui-watchpage-edit', label:_T("Edit"), glyph:"pencil", cls:"btn-secondary"})
 			model_pills.push({id:'altui-watchpage-add', label:_T("Add"), glyph:"plus", cls:"btn-secondary"})
@@ -14251,6 +14251,10 @@ var UIManager  = ( function( window, undefined ) {
 			})
 			.off('click','#altui-watchpage-add')
 			.on('click','#altui-watchpage-add',function() {
+				if (( Object.keys(pages).length>=1) && (ALTUI_registered!=true) ) {
+					PageMessage.message( _T("Creating more than one graph page is limited to registered users"), "danger");
+					return
+				}
 				var id = _calculateLastPageID(pages)+1;
 				var page = {
 					name:'Page'+id, 
