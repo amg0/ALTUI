@@ -1998,6 +1998,10 @@ var HTMLUtils = (function() {
 					toolbarHtml+='<select id="{0}" class="{1}" multiple="multiple">'.format(tool.id,tool.cls||'');
 					toolbarHtml+='</select>'
 					break;
+				case 'a':
+					var glyph = glyphTemplate.format(tool.glyph,tool.label || tool.title || '');
+					toolbarHtml+="	<a class='btn {2} ' href='#' role='button' title='{1}' id='{0}' >{3}{4}</a>".format(tool.id||'',tool.title||'',tool.cls||'btn-light',glyph,tool.label || '');
+					break;
 				case 'button':
 				default:
 					toolbarHtml+="	<button type='button' class='btn {3} ' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'btn-light');
@@ -2010,13 +2014,15 @@ var HTMLUtils = (function() {
 			}
 		});
 		toolbarHtml+="</div>";
-		toolbarHtml+="<div>";
-		$.each(preareas, function(idx,idPre) {
-			if (idPre.startsWith('#'))
-				idPre = idPre.substr(1)
-			toolbarHtml+="<div class='collapse' id='{0}'></div>".format(idPre);
-		});
-		toolbarHtml+="</div>";
+		if (preareas.length>0) {
+			toolbarHtml+="<div>";
+			$.each(preareas, function(idx,idPre) {
+				if (idPre.startsWith('#'))
+					idPre = idPre.substr(1)
+				toolbarHtml+="<div class='collapse' id='{0}'></div>".format(idPre);
+			});
+			toolbarHtml+="</div>";
+		}
 		return "<div class='{0} {1}'>{2}</div>" .format(htmlid,cls,toolbarHtml);
 	};
 	function _drawSelect( model ) {

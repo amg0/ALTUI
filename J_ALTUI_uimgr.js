@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2359 $";
+var ALTUI_revision = "$Revision: 2364 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13971,24 +13971,41 @@ var UIManager  = ( function( window, undefined ) {
 		var providers = null;
 		var save_needed = false;
 		var sortable_options = {
-				// containment: "parent",
-				handle: ".card-title",
-				cursor: "move",
-				forceHelperSize: true,
-				forcePlaceholderSize: true,
-				helper: "original",
-				item: ".altui-graph-card",
-				delay: 150,
-				distance: 5,
-				opacity: 0.5,
-				revert: true,
-				tolerance: "pointer",
-				stop: function(ui,event) { 
-					save_needed=true;
-					$("#altui-watchpage-save").removeClass('btn-success').addClass('btn-danger')
-				}
+			// containment: "parent",
+			handle: ".card-title",
+			cursor: "move",
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			helper: "original",
+			items: ".altui-graph-card",
+			delay: 150,
+			distance: 5,
+			opacity: 0.5,
+			revert: true,
+			tolerance: "pointer",
+			stop: function(ui,event) { 
+				save_needed=true;
+				$("#altui-watchpage-save").removeClass('btn-success').addClass('btn-danger')
 			}
-			
+		};
+		var sortable_options_toolbar = {
+			cursor: "move",
+			containment: "parent",
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			helper: "original",
+			items: "a.altui-watchpage-page",
+			cancel: "button",
+			delay: 150,
+			distance: 5,
+			opacity: 0.5,
+			revert: true,
+			tolerance: "pointer",
+			stop:function(ui,event) {
+				save_needed=true;
+				$("#altui-watchpage-save").removeClass('btn-success').addClass('btn-danger')
+			}
+		};
 		function isWatchInPage( watch , page ) {
 			var result = false;
 			$.each(page.watches, function( idx, w) {
@@ -14003,7 +14020,8 @@ var UIManager  = ( function( window, undefined ) {
 		function _calculateLastPageID(pages) {
 			var max = 0;
 			$.each(pages, function(key,page) {
-				max = Math.max( max, parseInt(page.id.substring( "altui-watchpage-page".length )));
+				if ( page.id && (page.id != " "))	// special case to store the order
+					max = Math.max( max, parseInt(page.id.substring( "altui-watchpage-page".length )));
 			})
 			return max
 		};
@@ -14097,8 +14115,11 @@ var UIManager  = ( function( window, undefined ) {
 		
 		function _prepareToolbarModel(active_page,pages) {
 			var model_pills = [];
-			$.each(pages,function(idx,page) {
-				model_pills.push({id:page.id, label:page.name, glyph:"area-chart", cls:'btn-light altui-watchpage-page {0}'.format( (idx==active_page) ? 'active' : '')})
+			var order = ( pages[" "] && pages[" "].order  ) ?  pages[" "].order : Object.keys(pages)
+			$.each(order,function(i,idx) {
+				var page = pages[idx]
+				if (page.id != " ")	// special case to store the order
+					model_pills.push({type: 'a', id:page.id, label:page.name, glyph:"area-chart", cls:'btn-light altui-watchpage-page {0}'.format( (idx==active_page) ? 'active' : '')})
 			})				
 			model_pills.push({id:'altui-watchpage-edit', label:_T("Edit"), glyph:"pencil", cls:"btn-secondary"})
 			model_pills.push({id:'altui-watchpage-add', label:_T("Add"), glyph:"plus", cls:"btn-secondary"})
@@ -14136,6 +14157,7 @@ var UIManager  = ( function( window, undefined ) {
 			
 			if ($(".altui-watch-toolbar").length==0) {
 				$(".altui-mainpanel").prepend( html );
+				$(".altui-watch-toolbar > div").sortable( sortable_options_toolbar )
 			} else {
 				$(".altui-watch-toolbar").replaceWith(  html );
 			}
@@ -14150,8 +14172,8 @@ var UIManager  = ( function( window, undefined ) {
 				$(".altui-mainpanel").append( _getWatchListHtml(model_watchlist,active_page) );
 				$('.altui-graph-row .row').sortable( sortable_options );
 			}					
-			$(".altui-graph-row[data-pageidx!='"+active_page+"']").addClass("d-none")		
-			$(".altui-graph-row[data-pageidx='"+active_page+"']").removeClass("d-none")		
+			$(".altui-graph-row[data-pageidx!='"+active_page+"']").hide()		
+			$(".altui-graph-row[data-pageidx='"+active_page+"']").show()		
 		}
 		
 		function _interactivity() {
@@ -14262,13 +14284,18 @@ var UIManager  = ( function( window, undefined ) {
 					watches: []
 				}
 				pages[page.id]=page;
+				if (pages[" "] && pages[" "].order) 
+					pages[" "].order.push(page.id)
 				save_needed = true;
 				_refreshWatchPills(active_page)
 			})
 			.off('click','#altui-watchpage-del')
 			.on('click','#altui-watchpage-del',function() {
 				if (Object.keys(pages).length>1) {
+					if (pages[" "] && pages[" "].order) 
+						pages[" "].order = pages[" "].order.filter( function(item) { return item !== active_page } )
 					delete pages[active_page] 
+					$(".altui-graph-row[data-pageidx='"+active_page+"']").remove()
 					active_page = 'altui-watchpage-page'+ _calculateLastPageID(pages)
 					save_needed = true;
 					_refreshWatchPills(active_page,true)
@@ -14285,6 +14312,9 @@ var UIManager  = ( function( window, undefined ) {
 					)
 					pages[pageidx].order = order;
 				});
+				pages[" "]= {
+					order:$(".altui-watch-toolbar > div").sortable( "toArray" , {attribute:'id'} )
+				}
 				MyLocalStorage.setSettings("WatchPages",pages)
 				save_needed = false;
 				_refreshWatchPills(active_page,true)
