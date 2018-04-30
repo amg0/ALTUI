@@ -3117,19 +3117,19 @@ local function getDefaultConfig()
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawHarmonyDevice",
 		["ControlPanelFunc"]=",ALTUI_PluginDisplays.drawHarmonyDeviceControlPanel"
 	}
-	tbl["urn:schemas-rboer-com:device:avreceiver:1"]= {
+	tbl["urn:schemas-shward1-com:device:avreceiver:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawPioneer"
 	}
-	tbl["urn:schemas-rboer-com:device:VRainSensor:1"]= {
+	tbl["urn:schemas-upnp-org:device:VRainSensor:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawVRain"
 	}
-	tbl["urn:schemas-rboer-com:device:PlantLink:1"]= {
+	tbl["urn:schemas-airedalez-net:device:PlantLink:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawPlantlink"
 	}
-	tbl["urn:schemas-rboer-com:device:EcobeeHouse:1"]= {
+	tbl["urn:schemas-ecobee-com:device:EcobeeHouse:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawEcobeeH"
 	}
