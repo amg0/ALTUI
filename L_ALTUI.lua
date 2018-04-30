@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.19b"
+local version = "v2.20"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3116,6 +3116,22 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawHarmonyDevice",
 		["ControlPanelFunc"]=",ALTUI_PluginDisplays.drawHarmonyDeviceControlPanel"
+	}
+	tbl["urn:schemas-rboer-com:device:avreceiver:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawPioneer"
+	}
+	tbl["urn:schemas-rboer-com:device:VRainSensor:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawVRain"
+	}
+	tbl["urn:schemas-rboer-com:device:PlantLink:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawPlantlink"
+	}
+	tbl["urn:schemas-rboer-com:device:EcobeeHouse:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawEcobeeH"
 	}
 	return tbl
 end

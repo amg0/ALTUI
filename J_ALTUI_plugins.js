@@ -1538,7 +1538,6 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
 		html += ALTUI_PluginDisplays.createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("OFF,ON") , "pull-right");
 
-
 		html += ("<div id='slider-{0}' class='altui-dimmable-slider' ></div>").format(device.altuiid);
 
 		html += "<script type='text/javascript'>";
@@ -1555,9 +1554,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var status = MultiBox.getStatus(device, 'urn:airedalez-net:serviceId:PlantLink', 'Status');
 		var water = MultiBox.getStatus(device, 'urn:airedalez-net:serviceId:PlantLink', 'WaterDay');
 		if (status != null && water != null) {
-                	html += '<div style="font-size: 2.0em;">';
+			html += '<div style="font-size: 2.0em;">';
 			html += "<div class='altui-sysmon-text text-muted'><br>Status: {0}<br>WaterDay: {1}</div>".format(status, water);
-               		html += "</div>";
+			html += "</div>";
 		}
 		return html;
 	};
@@ -1566,9 +1565,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var par1 = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:VRainSensor', 'PrecipitationTotal');
 		var par2 = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:VRainSensor', 'Threshold');
 		if (par1 != null && par2 != null) {
-                	html += '<div style="font-size: 2.0em;">';
+			html += '<div style="font-size: 2.0em;">';
 			html += "<div class='altui-sysmon-text text-muted'><br>Precipitation: {0}<br>Threshold: {1}</div>".format(par1, par2);
-                	html += "</div>";
+			html += "</div>";
 		}
 		return html;
 	};
