@@ -1529,6 +1529,79 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		$(domparent).append(html);
 	};
+// Rafale77 start
+	function _drawPioneer( device ) {
+		var html ="";
+		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:RenderingControl1', 'Volume' ));
+		html += ("<span id='slider-val-"+device.altuiid+"' class='altui-dimmable' >"+level+"% </span>");
+
+		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
+		html += ALTUI_PluginDisplays.createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("OFF,ON") , "pull-right");
+
+
+		html += ("<div id='slider-{0}' class='altui-dimmable-slider' ></div>").format(device.altuiid);
+
+		html += "<script type='text/javascript'>";
+		html += "$('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleOnOffButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "$('div#slider-{0}.altui-dimmable-slider').slider({ max:100,min:0,value:{1},change:ALTUI_PluginDisplays.onSliderChange });".format(device.altuiid,level);
+		html += "</script>";
+		$(".altui-mainpanel").off("slide","#slider-"+device.altuiid).on("slide","#slider-"+device.altuiid,function( event, ui ){
+			$("#slider-val-"+device.altuiid).text( ui.value+'%');
+		});
+		return html;
+        };
+	function _drawPlantlink( device ) {
+		var html = "";
+		var status = MultiBox.getStatus(device, 'urn:airedalez-net:serviceId:PlantLink', 'Status');
+		var water = MultiBox.getStatus(device, 'urn:airedalez-net:serviceId:PlantLink', 'WaterDay');
+		if (status != null && water != null) {
+                	html += '<div style="font-size: 2.0em;">';
+			html += "<div class='altui-sysmon-text text-muted'><br>Status: {0}<br>WaterDay: {1}</div>".format(status, water);
+               		html += "</div>";
+		}
+		return html;
+	};
+	function _drawVRain( device ) {
+		var html = "";
+		var par1 = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:VRainSensor', 'PrecipitationTotal');
+		var par2 = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:VRainSensor', 'Threshold');
+		if (par1 != null && par2 != null) {
+                	html += '<div style="font-size: 2.0em;">';
+			html += "<div class='altui-sysmon-text text-muted'><br>Precipitation: {0}<br>Threshold: {1}</div>".format(par1, par2);
+                	html += "</div>";
+		}
+		return html;
+	};
+	function _drawEcobeeH( device ) {
+		var status = MultiBox.getStatus(device,"urn:ecobee-com:serviceId:Ecobee1","currentClimateRef");
+		var sched = MultiBox.getStatus(device,"urn:ecobee-com:serviceId:Ecobee1","currentEventType");
+		var html = "";
+		html += "<div class='pull-right'><div id='altui-wc-"+device.altuiid+"' class='btn-group altui-ecobee-btngrp' role='group' aria-label='...'>";
+		html += ("	<button id ='home' type='button' class='btn btn-light btn-sm {0}'>"+_T("Home")+"</button>").format( (status=='home') ? 'active' : '' );
+		html += ("	<button id ='away' type='button' class='btn btn-light btn-sm {0}'>"+_T("Away")+"</button>").format( (status=='away') ? 'active' : '' );
+		html += ("	<button id ='sleep' type='button' class='btn btn-light btn-sm {0}'>"+_T("Night")+"</button>").format( (status=='sleep') ? 'active' : '' );
+		html += ("	<button id ='smart1' type='button' class='btn btn-light btn-sm {0}'>"+_T("Vacation")+"</button>").format( (status=='smart1') ? 'active' : '' );
+		html += ("	<button id ='resume' type='button' class='btn btn-light btn-sm {0}'>"+_T("Resume")+"</button>").format( (sched=='none') ? 'active' : '' );
+		html += "</div>";
+		html += "</div>";
+		$(".altui-mainpanel")
+			.on('click','.altui-ecobee-btngrp button', function(e) {
+				var action = $(this).prop('id');
+				var altuiid = $(this).closest('.altui-device').data("altuiid")
+		if (action=="home") {
+			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "SetClimateHold", {HoldClimateRef: "home"} )};
+	        if (action=="away") {
+			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "SetClimateHold", {HoldClimateRef: "away"} )};
+		if (action=="sleep") {
+			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "SetClimateHold", {HoldClimateRef: "sleep"} )};
+		if (action=="smart1") {
+			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "SetClimateHold", {HoldClimateRef: "smart1"} )};
+		if (action=="resume") {
+			MultiBox.runActionByAltuiID( altuiid, "urn:ecobee-com:serviceId:Ecobee1", "ResumeProgram", {} )};
+			});
+		return html;
+	};
+// Rafale77 end
 // Rene Boer start
 	function _drawHarmony(device) {
 		var html = "";
@@ -1879,6 +1952,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	draw_Paradox_IP150_wps : _draw_Paradox_IP150_wps,
 	drawDataMine	: _drawDataMine,
 	drawMultiswitch : _drawMultiswitch,		// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
+// Rafale77 start
+	drawPioneer     : _drawPioneer, 
+	drawPlantlink	: _drawPlantlink,
+	drawVRain	: _drawVRain,
+	drawEcobeeH	: _drawEcobeeH,
+// Rafale77 end
 // Rene Boer start
 	drawHarmony		: _drawHarmony,			// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
 	drawHarmonyDevice : _drawHarmonyDevice,		// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
