@@ -702,6 +702,14 @@ var styles =`
 		position: absolute;
 		right: 0px;
 	}
+	.altui-favorites-kwh {
+		float: left;
+		text-align: left;
+		font-size: 14px;
+		bottom: 0px;
+		position: absolute;
+		left: 0px;
+	}
 	.btn.altui-housemode{
 		padding-left: 0px;
 		padding-right: 0px;
@@ -4548,7 +4556,11 @@ var UIManager  = ( function( window, undefined ) {
 		html += "<div class='{1}' data-altuiid='{0}'><div>".format(device.altuiid,cls);
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' ));
 		if (isNaN(watts)==false)
-			html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
+			if (watts > 0) {
+				html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
+			} else {
+				html += "<div class='bg-success altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
+			}
 		switch(device.device_type) {
 			case "urn:schemas-micasaverde-com:device:BarometerSensor:1":
 			case "urn:schemas-micasaverde-com:device:WindSensor:1":
@@ -4620,6 +4632,16 @@ var UIManager  = ( function( window, undefined ) {
 				var watts = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' );
 				watts = Math.round(parseFloat(watts)*10)/10
 				html += "<span>{0}</span> <span class='altui-favorites-mediumtext'>W</span>".format(watts || "-");
+				break;
+			case "urn:schemas-smartmeter-han:device:SmartMeterHAN1:1":
+				var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
+				if (isNaN(kwh)==false)
+					if (kwh > 0) {
+						html += "<div class='bg-danger altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+					} else {
+						html += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+					}
+				html += _drawDefaultFavoriteDevice(device);
 				break;
 			default:
 				var _altuitypesDB = MultiBox.getALTUITypesDB();	// Master controller

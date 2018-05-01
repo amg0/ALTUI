@@ -921,6 +921,16 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		return _drawMotion( device);
 	};
 
+	function _drawGCal3( device) {
+		var html ="";
+		$.each( ['gc_NextEvent','gc_NextEventTime'],function(i,v) {
+			var dl1 = MultiBox.getStatus( device, 'urn:srs-com:serviceId:GCalIII', v );
+			if (dl1 != null)
+				html += $("<div class='altui-vswitch-text'></div>").text(dl1).wrap( "<div></div>" ).parent().html()
+		});
+		return html;
+	}
+
 	function _drawCombinationSwitch( device ) {
 		var html = "";
 
@@ -1923,6 +1933,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawKeypadControlPanel : _drawKeypadControlPanel,
 	drawMotion	   : _drawMotion,
 	drawGCal	   : _drawGCal,
+	drawGCal3	   : _drawGCal3,
 	drawCombinationSwitch	: _drawCombinationSwitch,
 	drawHouseMode: _drawHouseMode,
 	drawDayTime		: _drawDayTime,

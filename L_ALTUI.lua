@@ -3038,6 +3038,10 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawGCal"
 	}
+	tbl["urn:schemas-srs-com:device:GCal:3"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawGCal3"
+	}
 	tbl["urn:schemas-futzle-com:device:CombinationSwitch:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawCombinationSwitch"
