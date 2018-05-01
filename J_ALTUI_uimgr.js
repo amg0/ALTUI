@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2366 $";
+var ALTUI_revision = "$Revision: 2368 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -955,7 +955,9 @@ var styles =`
 		cursor: pointer;
 	}
 	.altui-graph-content {
-		// overflow-x: scroll;
+		margin-left: -15px;
+		margin-right: -15px;
+		overflow: hidden;
 	}
 	.altui-graph-card {
 		padding:0px;
@@ -13849,6 +13851,7 @@ var UIManager  = ( function( window, undefined ) {
 					actionDropDown: "<div class=\"{{css.dropDownMenu}}\"><button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"><span class=\"{{css.dropDownMenuText}}\">{{ctx.content}}</span> <span class=\"caret\"></span></button><ul class=\"{{css.dropDownMenuItems}}\" role=\"menu\"></ul></div>",
 					actionDropDownItem: "<li><a data-action=\"{{ctx.action}}\" class=\"{{css.dropDownItem}} {{css.dropDownItemButton}}\">{{ctx.text}}</a></li>",
 					paginationItem: "<li class=\"page-item {{ctx.css}}\"><a data-page=\"{{ctx.page}}\" class=\"page-link {{css.paginationButton}}\">{{ctx.text}}</a></li>",
+					search: "<div class=\"{{css.search}}\"><div class=\"input-group\"><div class=\"input-group-prepend\"><span class=\"{{css.icon}} input-group-text {{css.iconSearch}}\"></span> </div><input type=\"text\" class=\"{{css.searchField}}\" placeholder=\"{{lbl.search}}\" /></div></div>",
 				},
 				css: {
 					icon: "icon fa",
@@ -14339,7 +14342,7 @@ var UIManager  = ( function( window, undefined ) {
 				pages[active_page] = firstpage
 			}
 			
-			active_page = Object.keys(pages)[0]; 
+			active_page = ( pages[" "] && pages[" "].order ) ? pages[" "].order[0] : Object.keys(pages)[0]; 
 
 			// Display Pages Pills
 			_refreshWatchPills(active_page)
