@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2370 $";
+var ALTUI_revision = "$Revision: 2371 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4422,7 +4422,7 @@ var UIManager  = ( function( window, undefined ) {
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 				var footerTemplate =  MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "FooterBranding" )
-					|| "<span>${appname} ${luaversion}.${jsrevision}, ${copyright} 2017 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></span><span>${paypal}</span><span id='altui-osstats'></span>";
+					|| "<span>${appname} ${luaversion}.${jsrevision}, ${copyright} 2018 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></span><span>${paypal}</span><span id='altui-osstats'></span>";
 				var tmpl = _.template(footerTemplate.trim());
 				var footerstr =tmpl( footerMap )
 
