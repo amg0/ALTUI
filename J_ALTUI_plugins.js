@@ -154,7 +154,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-motion {font-size: 22px;}";
 		style += ".altui-mysensorsext {font-size: 16px;}";
 		style += ".altui-keypad-status {font-size: 14px;}";
-		style += ".altui-weather-text, .altui-lasttrip-text, .altui-vswitch-text {font-size: 11px;}";
+		style += ".altui-weather-text, .altui-lasttrip-text, .altui-vswitch-text, .altui-gcal3-text {font-size: 11px;}";
 		style += ".altui-red , .btn.altui-red { color:red;}";
 		style += ".altui-blue, .btn.altui-blue { color:blue;}";
 		style += ".altui-orange { color:darkorange;}";
@@ -926,7 +926,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		$.each( ['gc_NextEvent','gc_NextEventTime'],function(i,v) {
 			var dl1 = MultiBox.getStatus( device, 'urn:srs-com:serviceId:GCalIII', v );
 			if (dl1 != null)
-				html += $("<div class='altui-vswitch-text'></div>").text(dl1).wrap( "<div></div>" ).parent().html()
+				html += $("<div class='altui-gcal3-text'></div>").text(dl1).wrap( "<div></div>" ).parent().html()
 		});
 		return html;
 	}
