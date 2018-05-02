@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2374 $";
+var ALTUI_revision = "$Revision: 2375 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4555,13 +4555,11 @@ var UIManager  = ( function( window, undefined ) {
 		cls = cls || 'altui-favorites-device-content'
 		html += "<div class='{1}' data-altuiid='{0}'><div>".format(device.altuiid,cls);
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' ));
-		if (isNaN(watts)==false)
+		if (isNaN(watts)==false) {
 			// Envoy has positive power, but it's really "green" since it is a generator (normally negative), not a consumer
-			if (watts > 0 && device.device_type != "urn:schemas-rboer-com:device:Envoy:1") {
-				html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
-			} else {
-				html += "<div class='bg-success altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
-			}
+			var cls =  (watts > 0 && device.device_type != "urn:schemas-rboer-com:device:Envoy:1") ? 'bg-danger' : 'bg-success'
+			html += "<div class='{1} altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 , cls );
+		}
 		switch(device.device_type) {
 			case "urn:schemas-micasaverde-com:device:BarometerSensor:1":
 			case "urn:schemas-micasaverde-com:device:WindSensor:1":
