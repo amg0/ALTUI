@@ -4556,7 +4556,8 @@ var UIManager  = ( function( window, undefined ) {
 		html += "<div class='{1}' data-altuiid='{0}'><div>".format(device.altuiid,cls);
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' ));
 		if (isNaN(watts)==false)
-			if (watts > 0) {
+			// Envoy has positive power, but it's really "green" since it is a generator (normally negative), not a consumer
+			if (watts > 0 && device.device_type != "urn:schemas-rboer-com:device:Envoy:1") {
 				html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
 			} else {
 				html += "<div class='bg-success altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
@@ -4641,6 +4642,12 @@ var UIManager  = ( function( window, undefined ) {
 					} else {
 						html += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
 					}
+				html += _drawDefaultFavoriteDevice(device);
+				break;
+			case "urn:schemas-rboer-com:device:Envoy:1":
+				var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
+				if (isNaN(kwh)==false)
+					html += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
 				html += _drawDefaultFavoriteDevice(device);
 				break;
 			default:
