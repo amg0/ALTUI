@@ -9,11 +9,12 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.22"
+local version = "v2.23"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
 local NMAX_IN_VAR	= 4000
+local THINGSPEAK_PUSH_SEC = 15	-- thingspeak limits
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
@@ -207,7 +208,6 @@ local function table2params(workflowaltuiid,args)
 	return result
 end
 
-
 Queue = {
 	new = function(self,o)
 		o = o or {}	  -- create object if user does not provide one
@@ -218,18 +218,23 @@ Queue = {
 	size = function(self)
 		return tablelength(self)
 	end,
+	push = function(self,e)
+		return table.insert(self,1,e)
+	end,
+	pull = function(self)
+	    local elem = self[1]
+		table.remove(self,1)
+		return elem
+	end,
 	add = function(self,e)
 		return table.insert(self,e)
+	end,
+	removeItem = function(self, idx)
+		table.remove(self,idx)
 	end,
 	getHead = function(self)
 		local elem = self[1]
 		return elem
-	end,
-	removeHead = function(self)
-		table.remove(self,1)
-	end,
-	removeItem = function(self, idx)
-		table.remove(self,idx)
 	end,
 	list = function(self)
 		local i = 0
@@ -237,6 +242,16 @@ Queue = {
 			if (i<#self) then
 				i=i+1
 				return i,self[i]
+			end
+		end
+	end,
+	listReverse = function(self)
+		local i = #self
+		return function()
+			if (i>0) then
+				local j = i
+				i = i-1
+				return j,self[j]
 			end
 		end
 	end,
@@ -3219,9 +3234,8 @@ end
 
 function _deferredPostIFTTT()
 	debug(string.format("_deferredPostIFTTT : entering... IFTTT_Queue size=%d",IFTTT_Queue:size()))
-	local obj = IFTTT_Queue:getHead()
+	local obj = IFTTT_Queue:pull()
 	if (obj~=nil) then
-		IFTTT_Queue:removeItem(1)
 		local url = string.format("https://maker.ifttt.com/trigger/%s/with/key/%s",
 			obj.event_name,
 			obj.webhook_key)
@@ -3236,8 +3250,7 @@ function _deferredPostIFTTT()
 			},
 			sink = ltn12.sink.table(result)
 		})
-		debug(string.format("response:%s",response))
-		debug(string.format("status:%s",status))
+		log(string.format("IFTTT POST url:%s body:%s => status:%s response:%s",url,obj.body or '', status or '',response or ''))
 		if (response==1) then
 			local completestring = table.concat(result)
 			debug(string.format("ALTUI: Succeed to POST to %s , result=%s",url,completestring))
@@ -3286,51 +3299,61 @@ end
 
 function _deferredWgetThingspeak()
 	debug(string.format("_deferredWgetThingspeak : entering... Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
-	local cb_obj = Thingspeak_Queue:getHead()
-	if (cb_obj~=nil) then
-		debug(string.format("_deferredWgetThingspeak calls cb_obj:%s",json.encode(cb_obj)))
-		-- find all pending calls for the same channel and different fields
-		local todo = {
-			api_key = cb_obj.api_key,
-			fields = {
-				[cb_obj.field_num] = cb_obj.value
-			},
-			indexes = { 1 }
-		}
-		for k,v in Thingspeak_Queue:list() do
-			if (k>1) and (v.api_key == cb_obj.api_key) and (todo.fields[ v.field_num ]==nil) then
-				todo.fields[ v.field_num ] = v.value
-				table.insert( todo.indexes, 1, k )
+	if (true) then
+		local cb_obj = Thingspeak_Queue:getHead()
+		if (cb_obj~=nil) then
+			local channels = {}
+			for k,v in Thingspeak_Queue:listReverse() do	-- from older to newer
+				channels[ v.api_key ] = ( channels[ v.api_key ] or 0 ) +1
 			end
-		end
-		debug( string.format("_deferredWgetThingspeak is preparing to update => %s",json.encode(todo)) )
-		local url = prepareThingspeakUrl( todo )
-		local httpcode,data = luup.inet.wget(url)
-		debug(string.format("_deferredWgetThingspeak(url=%s) ==> httpcode=%s data=%s",url, httpcode,data ))
-		if (data~="0") then
-			for k,v in ipairs(todo.indexes) do
-				Thingspeak_Queue:removeItem(v)
+			debug(string.format("Channels to update: %s",json.encode(channels)))
+			
+			for apikey,v in pairs(channels) do
+				local todo = { fields = {}, indexes = {}, api_key=apikey }
+				debug(string.format("Check for channels %s",apikey))
+				
+				for k,v in Thingspeak_Queue:listReverse() do	-- from older to newer
+					-- debug(string.format("ELEM k:#%s v:%s",k,json.encode(v)))
+					if (v.api_key == todo.api_key) then
+						todo.fields[ v.field_num ] = v.value	-- most recent is kept
+						table.insert( todo.indexes, k )			-- mark index k as to be deleted
+					end
+				end
+				
+				-- debug( string.format("_deferredWgetThingspeak is preparing to update => %s",json.encode(todo)) )
+				local url = prepareThingspeakUrl( todo )
+				local httpcode,data = luup.inet.wget(url)
+				log(string.format("_deferredWgetThingspeak(url=%s) ==> httpcode=%s data=%s",url, httpcode,data ))
+				
+				if (data~="0") then
+					-- clean up the queue now
+					debug(string.format("Clean up indexes:%s for %s",json.encode(todo.indexes),todo.api_key))
+					for k,v in ipairs(todo.indexes) do
+						-- debug(string.format("remove ELEM k:#%s v:%s",v,json.encode(Thingspeak_Queue[v])))
+						Thingspeak_Queue:removeItem(v)
+					end
+				else
+					debug("_deferredWgetThingspeak failed to update thingspeak, will retry the same url next time")
+				end
 			end
 		else
-			debug("_deferredWgetThingspeak failed to update thingspeak, will retry the same url next time")
+			warning("_deferredWgetThingspeak engine has nothing to do, ignoring call")
 		end
-	else
-		warning("_deferredWgetThingspeak engine has nothing to do, ignoring call")
-	end
-	if (Thingspeak_Queue:size() >0) then
-		debug(string.format("Arming _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
-		luup.call_delay("_deferredWgetThingspeak", 5, url)
-	else
-		debug(string.format("No need to rearm _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+		if (Thingspeak_Queue:size() >0) then
+			debug(string.format("Arming _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+			luup.call_delay("_deferredWgetThingspeak", THINGSPEAK_PUSH_SEC * 2, url)	-- twice the threshold
+		else
+			debug(string.format("No need to rearm _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+		end
 	end
 end
 
 local function _CallThingspeakAPI(api_key,field_num,value)
 	local cb_obj = { api_key=api_key, field_num=field_num, value= tostring(value) }
-	Thingspeak_Queue:add(cb_obj)
+	Thingspeak_Queue:push(cb_obj)
 	if (Thingspeak_Queue:size() == 1) then
-		debug("Starting _deferredWgetThingspeak engine")
-		luup.call_delay("_deferredWgetThingspeak", 1, null)
+		debug("new entry , Queue size==1 , Starting _deferredWgetThingspeak engine")
+		luup.call_delay("_deferredWgetThingspeak", THINGSPEAK_PUSH_SEC , null)		-- likelyhood to hit a conflict , this is why /2
 	end
 	return 200,""
 end

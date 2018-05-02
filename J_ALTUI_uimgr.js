@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2373 $";
+var ALTUI_revision = "$Revision: 2374 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9845,7 +9845,7 @@ var UIManager  = ( function( window, undefined ) {
 		var nMaxPerPage = 20;
 		var nPage = 1;
 		var arr = ["abc","def","ghi","jkl","mno","pqr","stu","vwx","yz "];
-		var installglyph = glyphTemplate.format( "cloud-download", _T("Install"), "" );
+		var installglyph = glyphTemplate.format( "cloud-download", "", "" );
 		var pageGlyphs = {
 			// "forward" : glyphTemplate.format( "forward", _T("Next Page"), "" ),
 			// "backward" : glyphTemplate.format( "backward", _T("Prev Page"), "" ),
@@ -9981,9 +9981,9 @@ var UIManager  = ( function( window, undefined ) {
 			var repositories = (versionid != undefined) ? UIManager._findRepositories(plugin,versionid) : plugin.Repositories
 			$.each(repositories,function(i,repo) {
 				if (repo.type=="GitHub")
-					html += "<button class='pull-left altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"))
+					html += "<button title='{2}' class='pull-left altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"),_T("Install from Github with Alt App Store"))
 				if (repo.type=="Vera")
-					html += "<button class='pull-left altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"))
+					html += "<button title='{2}' class='pull-left altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"),_T("Install from the Vera App Store"))
 			});
 			html += "</div>"
 			return html;
@@ -9992,11 +9992,12 @@ var UIManager  = ( function( window, undefined ) {
 			var reviews = $.extend({average_rating:0,nb:0},plugin.reviews)
 			var html ="";
 			var stars = "";
+			var title = (_T("Review this plugin!")+" ({0})").format(reviews.average_rating)
 			for( var i=1 ; i<= Math.round(reviews.average_rating); i++) {
-				stars += glyphTemplate.format("star",reviews.average_rating,"text-warning")
+				stars += glyphTemplate.format("star",title,"text-warning")
 			}
 			for( var i=1+Math.round(reviews.average_rating); i<=5; i++) {
-				stars += glyphTemplate.format("star-o",reviews.average_rating,"")
+				stars += glyphTemplate.format("star-o",title,"")
 			}
 			html +="<div class='{2}'>{0} <span class='badge badge-secondary'>{1}</span></div>".format(stars, reviews.nb,cls)
 			return html;
