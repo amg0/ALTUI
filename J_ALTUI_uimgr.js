@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2375 $";
+var ALTUI_revision = "$Revision: 2377 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14102,14 +14102,15 @@ var UIManager  = ( function( window, undefined ) {
 			var card_template = `
 				<div class="altui-graph-card card col-sm-6 col-xl-4" data-watchidx="{1}">
 				  <div class="card-body">
-					<h5 class="card-title">{0}<button type="button" id="closeidx_{1}" class="altui-graph-card-close close push-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h5>
+					<h5 class="card-title">{0}<button type="button" id="closeidx_{1}" class="altui-graph-card-close close float-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h5>
 					<h6 class="card-subtitle mb-2 text-muted">{3}{4}</h6>
 					<div class="altui-graph-content">{2}</div>
 				  </div>
 				</div>
 			`
 			// var refresh_template = '<button class="btn btn-secondary {0}" id="watchidx_{1}">{2}</button>'
-			var refresh_template = '<span class="altui-graph-refresh pull-right" id="watchidx_{0}">'+refreshGlyph+'</span>'
+			var refresh_template = '<button class="altui-graph-refresh pull-right" id="watchidx_{0}">'+refreshGlyph+'</button>'
+			var editbtn = '<button class="altui-graph-edit float-right">{0}</button>'.format(editGlyph)
 			var panels=[];
 			if (model.watches.length==0) {
 				panels.push( card_template.format( 
@@ -14123,7 +14124,8 @@ var UIManager  = ( function( window, undefined ) {
 				var arr = []
 				if ( model.order ) {
 					$.each(model.order, function(idx,elem) {
-						arr.push(model.watches[elem])
+						if (model.watches[elem])
+							arr.push(model.watches[elem])
 					})
 				} else {
 					arr = model.watches
@@ -14138,7 +14140,7 @@ var UIManager  = ( function( window, undefined ) {
 							realidx, //btn id
 							_getWatchGraphHtml(realidx,entry), // body
 							watch.service,		// subtitle
-							refreshbtn
+							refreshbtn + editbtn
 						))
 					}
 				})
@@ -14250,6 +14252,15 @@ var UIManager  = ( function( window, undefined ) {
 				$('.altui-watchpage-page').removeClass('active')
 				$(this).addClass('active')
 				_refreshWatchList(active_page)
+			})
+			.off('click','.altui-graph-edit')
+			.on('click','.altui-graph-edit',function() {
+				var card = $(this).closest('.altui-graph-card')
+				var idx = card.data('watchidx')
+				var page = pages[active_page];
+				var watch = page.watches[idx];
+				var device = MultiBox.getDeviceByAltuiID( watch.deviceid );
+				UIManager.deviceDrawVariables(device);
 			})
 			.off('click','#altui-watchpage-edit')
 			.on('click','#altui-watchpage-edit',function() {
