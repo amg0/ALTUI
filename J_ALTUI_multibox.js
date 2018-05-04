@@ -589,9 +589,11 @@ var MultiBox = ( function( window, undefined ) {
 	function _getCategoryTitle(catnum) {
 		return _controllers[0].controller.getCategoryTitle(catnum);	//returns (found !=undefined) ? found : '';
 	};
-	function _evaluateConditions(device,devsubcat,conditions) {
+	function _evaluateConditions(device,conditions) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.evaluateConditions(elems[1],devsubcat,conditions);
+		var cat = device.category_num || 0
+		var subcat = device.subcategory_num || 0
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.evaluateConditions(elems[1],cat,subcat,conditions);
 	};
 	function _getWeatherSettings() {
 		return _controllers[0].controller.getWeatherSettings();

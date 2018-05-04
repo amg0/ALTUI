@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2377 $";
+var ALTUI_revision = "$Revision: 2378 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2320,7 +2320,6 @@ var UIManager  = ( function( window, undefined ) {
 		var id = device.altuiid;
 		var controller = MultiBox.controllerOf(id).controller;
 		var ui5 = MultiBox.isUI5( controller );
-		// var _devicetypesDB = MultiBox.getDeviceTypesDB(controller);
 		var icon='';
 		switch( device.device_type ) {
 			case 'urn:schemas-futzle-com:device:CountdownTimer:1':
@@ -2330,8 +2329,6 @@ var UIManager  = ( function( window, undefined ) {
 				var src = defaultIconSrc;
 				var ui_static_data = MultiBox.getDeviceStaticData(device);
 				var str = (ui_static_data && ui_static_data.default_icon ) ? ui_static_data.default_icon : "" ;
-				// var dt = _devicetypesDB[ device.device_type ];
-				//AltuiDebug.debug("Icon for device altuiid:"+device.altuiid+"	device.type:"+device.device_type);
 				if (ui_static_data!=null)
 				{
 					//dt.ui_static_data.DisplayStatus
@@ -2347,9 +2344,8 @@ var UIManager  = ( function( window, undefined ) {
 							var bFound = false;
 							$.each( si , function(key,obj) {
 								if (isObject(obj) && (obj.img!=undefined) ) {
-									// obj.conditions is an array
-									// obj.img s the icon
-									if (MultiBox.evaluateConditions(device, device.subcategory_num || -1, obj.conditions))
+									// obj.conditions is an array, obj.img s the icon
+									if (MultiBox.evaluateConditions(device, obj.conditions))
 									{
 										bFound = true;
 										str = obj.img;
@@ -2408,7 +2404,7 @@ var UIManager  = ( function( window, undefined ) {
 									// obj.parameters is an array (id,arguement,value) of values to change in the svg
 									// obj.conditions is an array
 									// obj.img s the icon
-									if (MultiBox.evaluateConditions(device, device.subcategory_num || -1, obj.conditions))
+									if (MultiBox.evaluateConditions(device, obj.conditions))
 									{
 										bFound = true;
 										str = obj.img;

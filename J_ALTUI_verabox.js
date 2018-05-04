@@ -883,11 +883,34 @@ var UserDataHelper = (function(user_data) {
 			});
 			return (found !=undefined) ? found : '';
 		},
-		evaluateConditions : function(deviceid,devsubcat,conditions) {
+		evaluateConditions : function(deviceid,devcat,devsubcat,conditions) {
 			var bResult = false;
 			var expressions=[];
 			var that = this;
 			var cache = {}
+			
+			function _matchCondition( condition, devcat, devsubcat ) {
+				function _matchCat( condition, devcat ) {
+					return  (condition.category_num==undefined) || 
+							// (condition.category_num==0) ||
+							// (devcat==0) ||
+							(condition.category_num==devcat)
+				}
+				function _matchSubCat( condition, devsubcat ) {
+					return  (condition.subcategory_num==undefined) || 
+							// (condition.subcategory_num==0) ||
+							// (devsubcat==0) ||
+							(condition.subcategory_num==devsubcat)
+				}
+				if (condition.service==null || condition.variable==null) 
+					return false;
+				if (condition.subcategory_num==undefined && condition.category_num==undefined )
+					return true;
+				if (_matchCat( condition, devcat ))
+					return _matchSubCat( condition, devsubcat )
+				return false;
+			}
+			
 			function _getStatus(deviceid,service,variable) {
 				if (cache[service] == undefined)
 					cache[service]={}
@@ -898,15 +921,14 @@ var UserDataHelper = (function(user_data) {
 				cache[service] [variable] = that.getStatus( deviceid, service,variable )
 				return cache[service] [variable] ;
 			}
+			
 			for (var i=0; i<conditions.length; i++) {
 				var condition = conditions[i];
 				// strange device JSON sometime ... ex zWave repeater, condition is not defined
-				if ( (condition.service!=undefined) && (condition.variable!=undefined) &&
-					 ( (condition.subcategory_num==undefined) || (condition.subcategory_num==0) || (devsubcat==-1) || (condition.subcategory_num==devsubcat) ) )
+				if ( _matchCondition(condition,devcat,devsubcat) )
 				{
 					var str = "";
 					if (isInteger( condition.value )) {
-						// var val = that.getStatus( deviceid, condition.service, condition.variable );
 						var val = _getStatus( deviceid, condition.service, condition.variable );
 						if (val=="")
 							AltuiDebug.debug( "devid:{0} service:{1} variable:{2} devsubcat:{3} value:'{4}' should not be null".format(
@@ -935,7 +957,6 @@ var UserDataHelper = (function(user_data) {
 				}
 			}
 			var str = expressions.join(" && ");
-			//AltuiDebug.debug("_evaluateConditions(deviceid:{0} devsubcat:{1} str:{2} conditions:{3})".format(deviceid,devsubcat,str,JSON.stringify(conditions)));
 			var bResult = eval(str) ;
 			return (bResult==undefined) ? false : bResult ;
 		},
@@ -1549,8 +1570,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return promise;
 	};
 
-	function _evaluateConditions(deviceid,devsubcat,conditions) {
-		return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
+	function _evaluateConditions(deviceid,cat,subcat,conditions) {
+		return UserDataHelper(_user_data).evaluateConditions(deviceid,cat,subcat,conditions);
 	};
 
 	function _refreshEngine() {
@@ -2984,8 +3005,8 @@ var LearnBox = ( function( uniq_id ) {
 		getStatus		: _getStatus, //	( deviceid, service, variable )
 		getJobStatus	: _todo,
 		getStates		: _getStates,
-		evaluateConditions : function (deviceid,devsubcat,conditions) {
-			return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
+		evaluateConditions : function (deviceid,cat,subcat,conditions) {
+			return UserDataHelper(_user_data).evaluateConditions(deviceid,cat,subcat,conditions);
 		},
 
 		// createDevice	: _todo,			// not supported on other controller than 0
@@ -3499,8 +3520,8 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	getStatus		: _getStatus, //	( deviceid, service, variable )
 	getJobStatus	: _todo,
 	getStates		: _getStates,
-	evaluateConditions :	function (deviceid,devsubcat,conditions) {
-		return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
+	evaluateConditions :	function (deviceid,cat,subcat,conditions) {
+		return UserDataHelper(_user_data).evaluateConditions(deviceid,cat,subcat,conditions);
 	},
 
 	createDevice	: _todo,
