@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2378 $";
+var ALTUI_revision = "$Revision: 2381 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13992,11 +13992,14 @@ var UIManager  = ( function( window, undefined ) {
 	},
 	// optional idx in watches VariablesToSend
 	pageWatchDisplay: function( event, watchidx ) {
+		var ORDER = " "
+		var WATCH_ID = "{0}/{1}/{2}/{3}"
 		var active_page = null;
 		var pages = null;
 		var watches = null;
 		var providers = null;
 		var save_needed = false;
+		var mapID2Watch = {};
 		var sortable_options = {
 			// containment: "parent",
 			handle: ".card-title",
@@ -14033,13 +14036,18 @@ var UIManager  = ( function( window, undefined ) {
 				$("#altui-watchpage-save").removeClass('btn-success').addClass('btn-danger')
 			}
 		};
-		function isWatchInPage( watch , page ) {
+		function isWatchInPage( id , page ) {
 			var result = false;
-			$.each(page.watches, function( idx, w) {
-				if ((w.deviceid == watch.deviceid) && (w.variable==watch.variable) && (w.service==watch.service) && (w.provider==watch.provider)) {
+			$.each(page.watches, function( idx, widx) {
+				if (id == widx) {
 					result = true;
-					return false;
+					return false
 				}
+				// var w = mapID2Watch[widx]
+				// if ((w.deviceid == watch.deviceid) && (w.variable==watch.variable) && (w.service==watch.service) && (w.provider==watch.provider)) {
+					// result = true;
+					// return false;
+				// }
 			})
 			return result;
 		};
@@ -14078,12 +14086,12 @@ var UIManager  = ( function( window, undefined ) {
 			}
 		};
 		
-		function _getWatchGraphHtml(idx,entry) {
+		function _getWatchGraphHtml(entry) {
 			var html = ""
-			var watch = entry.watch
+			var watch = mapID2Watch[ entry.id ]
 			if (entry.url && entry.url!=NO_URL) {
 				//scrolling='no'
-				html += "<iframe  id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(entry.url,idx,idx,entry.height);
+				html += "<iframe  id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-watchidx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(entry.url,entry.id,entry.id,entry.height);
 			} else {
 				html +="<p>{0}: {1}</p>".format(watch.provider,_T("No Graphic Url available"))
 			}
@@ -14117,24 +14125,23 @@ var UIManager  = ( function( window, undefined ) {
 					""
 				))
 			} else {
-				var arr = []
-				if ( model.order ) {
-					$.each(model.order, function(idx,elem) {
-						if (model.watches[elem])
-							arr.push(model.watches[elem])
-					})
-				} else {
-					arr = model.watches
-				}
-				$.each(arr, function(idx,entry) {
-					var watch = entry.watch;
+				// var arr = []
+				// if ( model.order ) {
+					// $.each(model.order, function(idx,elem) {
+						// if (model.watches[elem])
+							// arr.push(model.watches[elem])
+					// })
+				// } else {
+					// arr = model.watches
+				// }
+				$.each(model.watches, function(idx,entry) {
+					var watch = mapID2Watch[entry.id]
 					if (entry.url && entry.url!=NO_URL) {					
-						var refreshbtn = refresh_template.format(idx);
-						var realidx =  (model.order) ? model.order[idx] : idx
+						var refreshbtn = refresh_template.format(entry.id);
 						panels.push( card_template.format( 
 							"<span>{0} - {1}</span>".format(entry.devicename,watch.variable),
-							realidx, //btn id
-							_getWatchGraphHtml(realidx,entry), // body
+							entry.id, //btn id
+							_getWatchGraphHtml(entry), // body
 							watch.service,		// subtitle
 							refreshbtn + editbtn
 						))
@@ -14147,7 +14154,7 @@ var UIManager  = ( function( window, undefined ) {
 		
 		function _prepareToolbarModel(active_page,pages) {
 			var model_pills = [];
-			var order = ( pages[" "] && pages[" "].order  ) ?  pages[" "].order : Object.keys(pages)
+			var order = ( pages[ORDER] && pages[ORDER].order  ) ?  pages[ORDER].order : Object.keys(pages)
 			$.each(order,function(i,idx) {
 				var page = pages[idx]
 				if (isValidPage(page))	// special case to store the order
@@ -14163,12 +14170,14 @@ var UIManager  = ( function( window, undefined ) {
 		function _prepareWatchListModel(page) {
 			var model_watchlist={ watches:[] };
 			if (page.watches) {
-				$.each(page.watches,function(idx,watch) {
+				$.each(page.watches,function(idx,watchid) {
+					var watch = mapID2Watch[watchid]
 					var device = MultiBox.getDeviceByAltuiID(watch.deviceid);
 					if (device && providers[watch.provider] ) {
 						var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
 						model_watchlist.watches.push( {
-							watch: watch,
+							id: watchid,
+							// watch: watch,
 							devicename: device.name,
 							url:urlinfo.url,
 							height:urlinfo.height || 260
@@ -14176,8 +14185,8 @@ var UIManager  = ( function( window, undefined ) {
 					}
 				});
 			}
-			if (page.order)
-				model_watchlist.order = page.order
+			// if (page.order)
+				// model_watchlist.order = page.order
 			return model_watchlist
 		};
 
@@ -14209,17 +14218,25 @@ var UIManager  = ( function( window, undefined ) {
 		}
 		
 		function _interactivity() {
+			function sortByDevice(a,b) {
+				var devicea = MultiBox.getDeviceByAltuiID(a.deviceid)
+				var deviceb = MultiBox.getDeviceByAltuiID(b.deviceid)
+				if (devicea.name == deviceb.name)
+					return 0
+				return (devicea.name < deviceb.name) ? -1 : 1
+			}
+			
 			$(".altui-mainpanel")
 			.off('click','.altui-graph-refresh')
 			.on('click','.altui-graph-refresh',function() {
 				var panel = $(this).closest(".altui-graph-card")
-				var idx = parseInt($(this).prop('id').substr("watchidx_".length));
+				var watchid = $(this).prop('id').substr("watchidx_".length);
 				var page = pages[active_page];
-				var watch = page.watches[idx]
+				var watch = mapID2Watch[ watchid ]
 				var device = MultiBox.getDeviceByAltuiID(watch.deviceid)
 				var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
-				$(panel).find(".altui-graph-content").html( _getWatchGraphHtml(idx,{
-							watch: watch,
+				$(panel).find(".altui-graph-content").html( _getWatchGraphHtml({
+							// watch: watch,
 							devicename: device.name,
 							url:urlinfo.url,
 							height:urlinfo.height || 260
@@ -14227,19 +14244,22 @@ var UIManager  = ( function( window, undefined ) {
 			})
 			.off('click','.altui-graph-card-close')
 			.on('click','.altui-graph-card-close',function() {
-				var idx = parseInt($(this).prop('id').substr("closeidx_".length));
+				var watchid = $(this).prop('id').substr("closeidx_".length);
 				var panel = $(this).closest(".altui-graph-card")
 				var page = pages[active_page];
-				var watch = page.watches[idx]
 				$(panel).remove()
 				DialogManager.confirmDialog(_T("Do you ALSO want to delete the data push configuration for this variable"),function(result) {
 					if (result==true) {
+						var watch = mapID2Watch[ watchid ]
 						MultiBox.delWatch( watch );
-						UIControler.changePage("WatchDisplay",[])
+						delete mapID2Watch[ watchid ]
 					}
-					page.watches.splice(idx,1)
-					MyLocalStorage.setSettings("WatchPages",pages)
-					UIControler.changePage("WatchDisplay",[])
+
+					// remove watchid from array
+					page.watches = $.grep( page.watches, function(value) { return value != watchid  });
+					save_needed = true;
+					_refreshWatchPills(active_page,true)
+					_refreshWatchList(active_page)
 				})
 			})			
 			.off('click','.altui-watchpage-page')
@@ -14252,9 +14272,9 @@ var UIManager  = ( function( window, undefined ) {
 			.off('click','.altui-graph-edit')
 			.on('click','.altui-graph-edit',function() {
 				var card = $(this).closest('.altui-graph-card')
-				var idx = card.data('watchidx')
+				var watchid = card.data('watchidx')
 				var page = pages[active_page];
-				var watch = page.watches[idx];
+				var watch = mapID2Watch[ watchid ]
 				var device = MultiBox.getDeviceByAltuiID( watch.deviceid );
 				UIManager.deviceDrawVariables(device);
 			})
@@ -14267,17 +14287,19 @@ var UIManager  = ( function( window, undefined ) {
 				];
 				var html = HTMLUtils.drawFormFields(  model );
 				model = []
-				$.each(watches.sort(altuiSortByWatchAltuiID), function(idx,watch) {
+				var arrwatch = $.map(mapID2Watch,function(val,key) { return val })
+				$.each(arrwatch.sort(sortByDevice), function(key,watch) {
+					var id = WATCH_ID.format(watch.provider, watch.deviceid, watch.service, watch.variable)
 					var device = MultiBox.getDeviceByAltuiID(watch.deviceid)
 					if (device) {
 						var urlinfo = _buildWatchUrl(watch,providers[watch.provider])
 						if (urlinfo && urlinfo.url && urlinfo.url!=NO_URL) {
 							model.push({
-								id:'watch_'+idx,
+								id:'watch_'+id,
 								label:"<b>{0}</b> <small>({1})</small> <b>{2}</b> <small>({3})</small>".format(device.name, watch.deviceid, watch.variable, watch.service),
 								type:'input',
 								inputtype:'checkbox',
-								value: isWatchInPage( watch, page )
+								value: isWatchInPage( id, page )
 							})
 						}
 					}
@@ -14300,8 +14322,8 @@ var UIManager  = ( function( window, undefined ) {
 						page.watches=[]
 						$("#watches input").each(function(idx,elem){
 							if ($(elem).prop('checked')==true) {
-								var idx = $(elem).prop('id').substring( 'watch_'.length )
-								page.watches.push( watches[idx] ) 
+								var id = $(elem).prop('id').substring( 'watch_'.length )
+								page.watches.push( id ) // watch ID in the mapID2Watch 
 							}
 						})
 						page.order = null
@@ -14325,16 +14347,16 @@ var UIManager  = ( function( window, undefined ) {
 					watches: []
 				}
 				pages[page.id]=page;
-				if (pages[" "] && pages[" "].order) 
-					pages[" "].order.push(page.id)
+				if (pages[ORDER] && pages[ORDER].order) 
+					pages[ORDER].order.push(page.id)
 				save_needed = true;
 				_refreshWatchPills(active_page)
 			})
 			.off('click','#altui-watchpage-del')
 			.on('click','#altui-watchpage-del',function() {
-				if (Object.keys(pages).length> 1 + ((pages[" "]!=null) ? 1 : 0) ) {
-					if (pages[" "] && pages[" "].order) 
-						pages[" "].order = pages[" "].order.filter( function(item) { return item !== active_page } )
+				if (Object.keys(pages).length> 1 + ((pages[ORDER]!=null) ? 1 : 0) ) {
+					if (pages[ORDER] && pages[ORDER].order) 
+						pages[ORDER].order = pages[ORDER].order.filter( function(item) { return item !== active_page } )
 					delete pages[active_page] 
 					$(".altui-graph-row[data-pageidx='"+active_page+"']").remove()
 					active_page = 'altui-watchpage-page'+ _calculateLastPageID(pages)
@@ -14349,11 +14371,11 @@ var UIManager  = ( function( window, undefined ) {
 					var pageidx = $(row).data("pageidx")
 					var order = $.map( 
 						$(row).find(".row").sortable( "toArray" , {attribute:'data-watchidx'} ),
-						function(item,i) {return parseInt(item)} 
+						function(item,i) {return item} 
 					)
-					pages[pageidx].order = order;
+					pages[pageidx].watches = order;
 				});
-				pages[" "]= {
+				pages[ORDER]= {
 					order:$(".altui-watch-toolbar > div").sortable( "toArray" , {attribute:'id'} )
 				}
 				MyLocalStorage.setSettings("WatchPages",pages)
@@ -14367,6 +14389,10 @@ var UIManager  = ( function( window, undefined ) {
 			providers = result
 			pages = MyLocalStorage.getSettings("WatchPages") || {}
 			watches = MultiBox.getWatches("VariablesToSend", null)
+			$.each(watches, function(idx,watch) {
+				var id = WATCH_ID.format(watch.provider, watch.deviceid, watch.service, watch.variable)
+				mapID2Watch[id]=watch
+			})
 			if (Object.keys(pages).length==0) {
 				var firstpage = {
 					name:'Page1', 
@@ -14376,8 +14402,8 @@ var UIManager  = ( function( window, undefined ) {
 				active_page = firstpage.id;
 				pages[active_page] = firstpage
 			}
-			
-			active_page = ( pages[" "] && pages[" "].order ) ? pages[" "].order[0] : Object.keys(pages)[0]; 
+
+			active_page = ( pages[ORDER] && pages[ORDER].order ) ? pages[ORDER].order[0] : Object.keys(pages)[0]; 
 
 			// Display Pages Pills
 			_refreshWatchPills(active_page)
