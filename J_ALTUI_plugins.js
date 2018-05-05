@@ -1565,6 +1565,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html = "";
 		var par1 = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:VRainSensor', 'PrecipitationTotal');
 		var par2 = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:VRainSensor', 'Threshold');
+		var armed = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:SecuritySensor1", "Armed");
+		html += _createOnOffButton( armed,"altui-onoffbtn-"+device.altuiid, _T("Bypass,Arm"), "pull-right" );
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleArmed('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		if (par1 != null && par2 != null) {
                 	html += '<div style="font-size: 2.0em;">';
 			html += "<div class='altui-sysmon-text text-muted'><br>Precipitation: {0}<br>Threshold: {1}</div>".format(par1, par2);
@@ -1575,7 +1578,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _drawEcobeeH( device ) {
 		var status = MultiBox.getStatus(device,"urn:ecobee-com:serviceId:Ecobee1","currentClimateRef");
 		var sched = MultiBox.getStatus(device,"urn:ecobee-com:serviceId:Ecobee1","currentEventType");
-		var html = "";
+		var html = "";		    
 		html += "<div class='pull-right'><div id='altui-wc-"+device.altuiid+"' class='btn-group altui-ecobee-btngrp' role='group' aria-label='...'>";
 		html += ("	<button id ='home' type='button' class='btn btn-light btn-sm {0}'>"+_T("Home")+"</button>").format( (status=='home') ? 'active' : '' );
 		html += ("	<button id ='away' type='button' class='btn btn-light btn-sm {0}'>"+_T("Away")+"</button>").format( (status=='away') ? 'active' : '' );
