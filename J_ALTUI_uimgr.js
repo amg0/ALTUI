@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2381 $";
+var ALTUI_revision = "$Revision: 2383 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1781,6 +1781,8 @@ var UIManager  = ( function( window, undefined ) {
 	};
 
 	function _deviceDrawVariables(device) {
+		var dfd = $.Deferred();
+		
 		function _clickOnValue() {
 			var id = $(this).prop('id');	// idx in variable state array
 			var state =	 MultiBox.getStateByID( device.altuiid, id );
@@ -2069,10 +2071,23 @@ var UIManager  = ( function( window, undefined ) {
 			.off('click')
 			.on('click', function(e) {
 				// force the closure of Push Parameter dialogs
-				$(".altui-variable-push.btn-danger").click()
+				// $(".altui-variable-push.btn-danger").click()
+				if ($(".altui-variable-push.btn-danger").length>0) {
+					alert(_T("Please close the watch information first"))
+					e.preventDefault();
+					e.stopPropagation()
+					return false;
+				}
 			})
 			$('#deviceModal').modal();
+			$('#deviceModal').on('hidden.bs.modal', function (e) {
+			  // do something...
+			  dfd.resolve("hidden.bs.modal")
+			})
+		} else {
+			dfd.reject()
 		}
+		return dfd.promise();
 	};
 
 	function _deviceCreate() {
@@ -14107,7 +14122,7 @@ var UIManager  = ( function( window, undefined ) {
 				<div class="altui-graph-card card col-sm-6 col-xl-4" data-watchidx="{1}">
 				  <div class="card-body">
 					<h5 class="card-title">{0}<button type="button" id="closeidx_{1}" class="altui-graph-card-close close float-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h5>
-					<h6 class="card-subtitle mb-2 text-muted">{3}{4}</h6>
+					<small><p class="card-subtitle mb-2 text-muted">{3}{4}</p></small>
 					<div class="altui-graph-content">{2}</div>
 				  </div>
 				</div>
@@ -14276,7 +14291,14 @@ var UIManager  = ( function( window, undefined ) {
 				var page = pages[active_page];
 				var watch = mapID2Watch[ watchid ]
 				var device = MultiBox.getDeviceByAltuiID( watch.deviceid );
-				UIManager.deviceDrawVariables(device);
+				$.when(UIManager.deviceDrawVariables(device))
+				.done(function(txt) {
+					$.when( _initGraphPage(active_page) ).done(function (active_page) {
+						// Display Page's Watches
+						_refreshWatchPills(active_page,true)
+						_refreshWatchList(active_page,true)
+					})
+				})
 			})
 			.off('click','#altui-watchpage-edit')
 			.on('click','#altui-watchpage-edit',function() {
@@ -14384,36 +14406,46 @@ var UIManager  = ( function( window, undefined ) {
 			})			
 		};
 
-		UIManager.clearPage('WatchDisplay',_T("Watch Display"),UIManager.oneColumnLayout);
-		MultiBox.getDataProviders(function(result) {
-			providers = result
-			pages = MyLocalStorage.getSettings("WatchPages") || {}
-			watches = MultiBox.getWatches("VariablesToSend", null)
-			$.each(watches, function(idx,watch) {
-				var id = WATCH_ID.format(watch.provider, watch.deviceid, watch.service, watch.variable)
-				mapID2Watch[id]=watch
-			})
-			if (Object.keys(pages).length==0) {
-				var firstpage = {
-					name:'Page1', 
-					id:'altui-watchpage-page1', 
-					watches: []
+		function _initGraphPage(init_active_page) {
+			var dfd = $.Deferred();
+			MultiBox.getDataProviders(function(result) {
+				providers = result
+				pages = MyLocalStorage.getSettings("WatchPages") || {}
+				watches = MultiBox.getWatches("VariablesToSend", null)
+				$.each(watches, function(idx,watch) {
+					var id = WATCH_ID.format(watch.provider, watch.deviceid, watch.service, watch.variable)
+					mapID2Watch[id]=watch
+				})
+				if (Object.keys(pages).length==0) {
+					var firstpage = {
+						name:'Page1', 
+						id:'altui-watchpage-page1', 
+						watches: []
+					}
+					active_page = firstpage.id;
+					pages[active_page] = firstpage
 				}
-				active_page = firstpage.id;
-				pages[active_page] = firstpage
-			}
 
-			active_page = ( pages[ORDER] && pages[ORDER].order ) ? pages[ORDER].order[0] : Object.keys(pages)[0]; 
-
+				active_page = (init_active_page!=null) ? init_active_page : (( pages[ORDER] && pages[ORDER].order ) ? pages[ORDER].order[0] : Object.keys(pages)[0]);
+				dfd.resolve(active_page);
+			})
+			return dfd.promise();
+		}
+		
+		function _refreshScreen() {
 			// Display Pages Pills
 			_refreshWatchPills(active_page)
 
 			// Display Page's Watches
 			_refreshWatchList(active_page)
-			
+		}
+		
+		UIManager.clearPage('WatchDisplay',_T("Watch Display"),UIManager.oneColumnLayout);
+		$.when( _initGraphPage(null) ).done(function (active_page) {
 			// Display Page's Watches
-			_interactivity() 
-		});
+			_refreshScreen();
+			_interactivity();
+		})
 	},
 	pageThemes: function() {
 		UIManager.clearPage('Themes',_T("Themes"),UIManager.oneColumnLayout);
