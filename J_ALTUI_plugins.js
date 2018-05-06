@@ -1579,6 +1579,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html = "";
 		var par1 = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:VRainSensor', 'PrecipitationTotal');
 		var par2 = MultiBox.getStatus(device, 'urn:upnp-org:serviceId:VRainSensor', 'Threshold');
+		var armed = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:SecuritySensor1", "Armed");
+ 		html += ALTUI_PluginDisplays.createOnOffButton( armed,"altui-onoffbtn-"+device.altuiid, _T("Bypass,Arm"), "pull-right" );
+                html += "<script type='text/javascript'>";
+ 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleArmed('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+                html += "</script>";
 		if (par1 != null && par2 != null) {
 			html += '<div style="font-size: 2.0em;">';
 			html += "<div class='altui-sysmon-text text-muted'><br>Precipitation: {0}<br>Threshold: {1}</div>".format(par1, par2);
