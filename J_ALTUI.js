@@ -95,7 +95,7 @@ function altui_License(deviceID) {
 
 function altui_onOpenLocalButton(deviceId) {
 	// var url = window.location.origin + "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&" + jQuery( "#altui-home" ).val()
-	var url = window.location.origin +  get_device_state(deviceId, altui_Svs, "LocalHome", 0)
+	var url = data_command_url + get_device_state(deviceId, altui_Svs, "LocalHome", 0).replace('/data_request?','')
 	window.open( url, '_blank');
 }
 

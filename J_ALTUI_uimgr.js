@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2383 $";
+var ALTUI_revision = "$Revision: 2386 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -702,13 +702,19 @@ var styles =`
 		position: absolute;
 		right: 0px;
 	}
-	.altui-favorites-kwh {
+	.altui-favorites-kwh  {
 		float: left;
 		text-align: left;
 		font-size: 14px;
 		bottom: 0px;
 		position: absolute;
 		left: 0px;
+	}
+	.altui-favorites-netmontxt {
+		font-size: 16px;
+		position: absolute;
+		bottom: 0px;
+		right: 0px;
 	}
 	.btn.altui-housemode{
 		padding-left: 0px;
@@ -4659,6 +4665,19 @@ var UIManager  = ( function( window, undefined ) {
 					html += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
 				html += _drawDefaultFavoriteDevice(device);
 				break;
+			case "urn:schemas-upnp-org:device:netmon:1":
+				var targets = JSON.parse( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Targets' ) );
+				var info = MultiBox.controllerOf(device.altuiid)
+				var url = MultiBox.getUrlHead(device.altuiid) + "?id=lr_NETMON_Handler&command=getStatus&DeviceNum="+info.id
+				html += "<div class='altui-favorites-netmontxt'><span class='text-danger' id='netmon-{0}'></span> / <span>{1}</span></div>".format( device.altuiid,targets.length )
+				var altuiid = device.altuiid
+				$.get(url).done( function(data) {
+					var result = $.grep(data, function(e) {return e.tripped=="1"})
+					$("#netmon-"+altuiid).text( _T("{0} Offline").format(result.length) )
+				});
+				html += _drawDefaultFavoriteDevice(device);
+				return html;
+				break;
 			default:
 				var _altuitypesDB = MultiBox.getALTUITypesDB();	// Master controller
 				var dt = _altuitypesDB[_getDeviceDrawMapping(device)];
@@ -6326,7 +6345,7 @@ var UIManager  = ( function( window, undefined ) {
 	//window.open("data_request?id=lr_ALTUI_Handler&command=home","_self");
 	pageDefault : function() {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
-		var defurl = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalHome" );
+		var defurl = data_command_url + MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalHome" ).replace('/data_request?','')
 		if ( (defurl=="") || (defurl=="/port_3480/data_request?id=lr_ALTUI_Handler&command=home") )
 			UIManager.pageHome()
 		else
