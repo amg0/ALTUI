@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2386 $";
+var ALTUI_revision = "$Revision: 2387 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6770,6 +6770,7 @@ var UIManager  = ( function( window, undefined ) {
 			function _locked(str) { return (str==1) ? 'Locked' : '' }
 			function _firstelem(str) { return (str || "").split(",")[0] }
 			function _daynight(str) { return (str==1) ? 'Day' : 'Night' }
+			function _targetscount(str) { return JSON.parse(str).length }
 			var arr= [
 				{service:'urn:toggledbits-com:serviceId:AutoVirtualThermostat1', variable:'DisplayTemperature'},
 				{service:'urn:upnp-org:serviceId:DistanceSensor1', variable:'CurrentDistance'},
@@ -6795,6 +6796,7 @@ var UIManager  = ( function( window, undefined ) {
 				{service:'urn:rts-services-com:serviceId:DayTime', variable:'Status', translate:_daynight },
 				{service:'urn:upnp-org:serviceId:AVTransport', variable:'CurrentStatus', format:'<small>{0}</small>'},
 				{service:'urn:micasaverde-com:serviceId:GenericSensor1', variable:'CurrentLevel', format:'{0}' },
+				{service:'urn:upnp-org:serviceId:netmon1', variable:'Targets', format:'<small>{0} Devices</small>', translate:_targetscount },
 			]
 			var tpl = "<span class='altui-device-info'>{0}</span>"
 			for (var i=0 ; i<arr.length ; i++) {
