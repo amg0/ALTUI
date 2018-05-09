@@ -46,21 +46,17 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 
 	function _drawNETMON( device) {
 		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Debug' ); 
+		var offline = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'DevicesOfflineCount' ));
 		var targets = JSON.parse( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Targets' ) );
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
 		html += "<span>{0} Devices</span>".format(targets.length)
-		html += "<div><span class='text-danger altui-netmon-offline'>{0}</span> Offline</div>"
+		if (offline>0) {
+			html += "<div><span class='text-danger altui-netmon-offline'>{0} Offline</span></div>".format(offline)
+		}
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:netmon1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
-		var info = MultiBox.controllerOf(device.altuiid)
-		var url = MultiBox.getUrlHead(device.altuiid)
-		url += "?id=lr_NETMON_Handler&command=getStatus&DeviceNum="+info.id
-		$.get(url).done( function(data) {
-			var result = $.grep(data, function(e) {return e.tripped=="1"})
-			$(".altui-netmon-offline").text(result.length)
-		});
 		return html;
 	};
 	

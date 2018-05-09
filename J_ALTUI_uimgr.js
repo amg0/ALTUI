@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2387 $";
+var ALTUI_revision = "$Revision: 2389 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4667,14 +4667,8 @@ var UIManager  = ( function( window, undefined ) {
 				break;
 			case "urn:schemas-upnp-org:device:netmon:1":
 				var targets = JSON.parse( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Targets' ) );
-				var info = MultiBox.controllerOf(device.altuiid)
-				var url = MultiBox.getUrlHead(device.altuiid) + "?id=lr_NETMON_Handler&command=getStatus&DeviceNum="+info.id
-				html += "<div class='altui-favorites-netmontxt'><span class='text-danger' id='netmon-{0}'></span> / <span>{1}</span></div>".format( device.altuiid,targets.length )
-				var altuiid = device.altuiid
-				$.get(url).done( function(data) {
-					var result = $.grep(data, function(e) {return e.tripped=="1"})
-					$("#netmon-"+altuiid).text( _T("{0} Offline").format(result.length) )
-				});
+				var offline = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'DevicesOfflineCount' ));
+				html += "<div class='altui-favorites-netmontxt'><span class='text-danger' id='netmon-{0}'>{2}</span> / <span>{1}</span></div>".format( device.altuiid,targets.length,offline)
 				html += _drawDefaultFavoriteDevice(device);
 				return html;
 				break;
@@ -6770,7 +6764,12 @@ var UIManager  = ( function( window, undefined ) {
 			function _locked(str) { return (str==1) ? 'Locked' : '' }
 			function _firstelem(str) { return (str || "").split(",")[0] }
 			function _daynight(str) { return (str==1) ? 'Day' : 'Night' }
-			function _targetscount(str) { return JSON.parse(str).length }
+			function _netmonstats(str) { 
+				var arr = JSON.parse(str)
+				var c = arr.length;
+				var offline = $.grep(arr, function(item) {return item.tripped=="1"} ).length
+				return "<span class='text-danger'>{0}</span>/{1}".format(offline,c);
+			}
 			var arr= [
 				{service:'urn:toggledbits-com:serviceId:AutoVirtualThermostat1', variable:'DisplayTemperature'},
 				{service:'urn:upnp-org:serviceId:DistanceSensor1', variable:'CurrentDistance'},
@@ -6796,7 +6795,7 @@ var UIManager  = ( function( window, undefined ) {
 				{service:'urn:rts-services-com:serviceId:DayTime', variable:'Status', translate:_daynight },
 				{service:'urn:upnp-org:serviceId:AVTransport', variable:'CurrentStatus', format:'<small>{0}</small>'},
 				{service:'urn:micasaverde-com:serviceId:GenericSensor1', variable:'CurrentLevel', format:'{0}' },
-				{service:'urn:upnp-org:serviceId:netmon1', variable:'Targets', format:'<small>{0} Devices</small>', translate:_targetscount },
+				{service:'urn:upnp-org:serviceId:netmon1', variable:'DevicesStatus', format:'{0}', translate:_netmonstats },
 			]
 			var tpl = "<span class='altui-device-info'>{0}</span>"
 			for (var i=0 ; i<arr.length ; i++) {
