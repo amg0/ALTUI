@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.25"
+local version = "v2.26"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -1822,13 +1822,19 @@ local htmlLocalScripts = [[
 	<script src="@localcdn@/ace.js"></script>
 	<script src="@localcdn@/justgage.min.js"></script>
 	<script src="@localcdn@/jsapi.js"></script>
-	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
-	<script src="J_ALTUI_utils.js" ></script>
-	<script src="J_ALTUI_api.js" ></script>
-	<script src="J_ALTUI_upnp.js" ></script>
-	<script src="J_ALTUI_verabox.js" ></script>
-	<script src="J_ALTUI_multibox.js" ></script>
-	<script src="J_ALTUI_uimgr.js" defer ></script>
+]]
+
+local htmlAltuiScripts = [[
+	<script type="text/javascript" data-src='J_ALTUI_jquery.ui.touch-punch.min.js' src="@altuipath@J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_utils.js' src="@altuipath@J_ALTUI_utils.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_api.js' src="@altuipath@J_ALTUI_api.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_upnp.js' src="@altuipath@J_ALTUI_upnp.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_verabox.js' src="@altuipath@J_ALTUI_verabox.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_multibox.js'  src="@altuipath@J_ALTUI_multibox.js" ></script>
+
+	<script type='text/javascript' data-src='J_ALTUI_plugins.js' src='@altuipath@J_ALTUI_plugins.js'></script>
+	<script type='text/javascript' data-src='J_ALTUI_iphone.js' src='@altuipath@J_ALTUI_iphone.js'></script>
+	<script type="text/javascript" data-src='J_ALTUI_uimgr.js' src="@altuipath@J_ALTUI_uimgr.js"	></script>
 ]]
 	-- <script src="@localcdn@/d3.min.js"></script>
 
@@ -1856,16 +1862,7 @@ local htmlScripts = [[
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
 	<script type="text/javascript" src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>
-	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
-	<script src="J_ALTUI_utils.js" ></script>
-	<script src="J_ALTUI_api.js" ></script>
-	<script src="J_ALTUI_upnp.js" ></script>
-	<script src="J_ALTUI_verabox.js" ></script>
-	<script src="J_ALTUI_multibox.js" ></script>
 
-	<script type='text/javascript' data-src='J_ALTUI_plugins.js' src='J_ALTUI_plugins.js'></script>
-	<script type='text/javascript' data-src='J_ALTUI_iphone.js' src='J_ALTUI_iphone.js'></script>
-	<script src="J_ALTUI_uimgr.js"	></script>
 ]]
 
 	-- <script src="J_ALTUI_b_blockly_compressed.js" defer ></script>
@@ -1960,7 +1957,8 @@ local htmlLayout = [[
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- Latest compiled and minified JavaScript -->
 	@mandatory_scripts@
-
+	@altui_scripts@
+	
 	<!-- <script src="J_ALTUI_jquery.ui.touch-punch.min.js"></script> -->
 	@optional_scripts@
 	<script type='text/javascript' defer >
@@ -2235,8 +2233,6 @@ local function _helperGoogleAuthCallback(url,lul_device)
 			local url = headers["location"]
 			return _helperGoogleAuthCallback(url,lul_device)
 		end
-		-- normally
-		-- {"access_token":"ya29.Ci_-AuoRcj7luXViyJZL7AGDH5kXY9UdKBYxtSXT9SgZOKuubPHx5EWhQduxwfZxbg","token_type":"Bearer","expires_in":3600,"refresh_token":"1/vK4ZH9fqxH_dJ3azlkHcGqX6Ghnbpp3iOZwkpqLtxUk","id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjVjMzEwYWY5Y2E1MjNkOTFkZjQ0ZjU1ZTgyYjI3YjcwMGI4N2U2ZWMifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoiOExFbTRBUlMtOGFkMmNMVkZWOGdsUSIsImF1ZCI6IjExNTI1Njc3MzMzNi1lOHFkbmNzNWFjNWNmbW9kaGx0c2gyY2d2azZqZHI2NS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODcxMDUwOTAwNjczODcyOTA4NCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiIxMTUyNTY3NzMzMzYtZThxZG5jczVhYzVjZm1vZGhsdHNoMmNndms2amRyNjUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6ImFsZXhpcy5tZXJtZXRAZ21haWwuY29tIiwiaWF0IjoxNDY1NjgyNjU5LCJleHAiOjE0NjU2ODYyNTksIm5hbWUiOiJBbGV4aXMgTWVybWV0IiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tQ2N6U1NtemtEUk0vQUFBQUFBQUFBQUkvQUFBQUFBQUFOOXMvT3pCaHl1TjhGa0Evczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkFsZXhpcyIsImZhbWlseV9uYW1lIjoiTWVybWV0IiwibG9jYWxlIjoiZnIifQ.IKlNBp-DP9Vmf-SQmD_Z_APADXUk23JTtv0CnN7C5f6q4UfAAsQ7UBcPAOkOsifbd_YGOmu5yG-j4iSyvGgG90dr5oYdzyNRt9Bzdp7HyXcMqPztWP7rfI5nm7ru3pvL7AgTsOqoEMt7LMPesWIF_EGBs-NyFrFfh8tRPQEGjyt1ojKZGHMhUgCK8zXCSfY4-VGqsS88h5cNNKNpaXOGDeHh3zrXM6ZBfnA_tK9UltRaItrU_J-Dw-rkoH6FWB4UwMD6ciIqq5ZZKAefTeCTiv9D2SLNx2s7esSHC0uZDV6-ynhyt0TZHwUky1QyZ5xLyEKPofbrDiqUQi8M8B7aIA"}
 		local obj = json.decode(content)
 		if ( (obj==nil) or (obj.error ~= nil) ) then
 			luup.variable_set(ALTUI_SERVICE, "GoogleLastError", content or "" , tonumber(lul_device))
@@ -2379,6 +2375,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				-- custompages = string.gsub(custompages,"\"","\\x22")
 				local serverOptions= getSetVariable(ALTUI_SERVICE, "ServerOptions", deviceID, "")
 				local localcdn = getSetVariable(ALTUI_SERVICE, "LocalCDN", deviceID, "")
+				local altuipath = getSetVariable(ALTUI_SERVICE, "ALTUIPath", deviceID, "")
 				local swversion = getSetVariable(ALTUI_SERVICE, "SWVersion", deviceID, SWVERSION)
 				local favicon = getSetVariable(ALTUI_SERVICE, "FavIcon", deviceID, "/favicon.ico")
 				local machinelearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
@@ -2386,9 +2383,13 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				if (localbootstrap == "") then
 					localbootstrap=defaultBootstrapPath
 				end
+				if (localcdn ~= "") then
+					altuipath = localcdn + "/"
+				end
 				local variables={}
 				variables["hostname"] = hostname
 				variables["localcdn"] = localcdn
+				variables["altuipath"] = altuipath
 				variables["swversion"] = swversion
 				variables["favicon"] = favicon
 				variables["machinelearning"] = machinelearning
@@ -2413,6 +2414,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				else
 					variables["csslinks"] = htmlCSSlinks:template(variables)
 					variables["mandatory_scripts"] = htmlScripts:template(variables)
+					variables["altui_scripts"] = htmlAltuiScripts:template(variables)
 				end
 				-- " becomes \x22
 				variables["optional_scripts"] = optional_scripts
@@ -4247,6 +4249,7 @@ function startupDeferred(lul_device)
 	local extraController= getSetVariable(ALTUI_SERVICE, "ExtraController", lul_device, "")
 	local serverOptions= getSetVariable(ALTUI_SERVICE, "ServerOptions", lul_device, "")
 	local localcdn = getSetVariable(ALTUI_SERVICE, "LocalCDN", lul_device, "")
+	local altuipath = getSetVariable(ALTUI_SERVICE, "ALTUIPath", deviceID, "")
 	local localbootstrap = getSetVariable(ALTUI_SERVICE, "LocalBootstrap", lul_device, "")
 	local worfklowmode = getSetVariable(ALTUI_SERVICE, "EnableWorkflows", lul_device, "0")
 	local worfklowactivestates = getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "")

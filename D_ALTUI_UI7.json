@@ -1,6 +1,6 @@
 {
-  "flashicon": "http://code.mios.com/trac/mios_alternate_ui/export/12/iconALTUI.png",
-  "default_icon": "http://code.mios.com/trac/mios_alternate_ui/export/12/iconALTUI.png",
+  "flashicon": "https://cdn.rawgit.com/amg0/ALTUI/c3393a3e/iconALTUI.png",
+  "default_icon": "https://cdn.rawgit.com/amg0/ALTUI/c3393a3e/iconALTUI.png",
   "halloIconsDir": "pics\/hallo",
   "x": "2",
   "y": "4",
