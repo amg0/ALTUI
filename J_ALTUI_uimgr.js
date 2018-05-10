@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2389 $";
+var ALTUI_revision = "$Revision: 2391 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14204,24 +14204,29 @@ var UIManager  = ( function( window, undefined ) {
 		
 		function _prepareWatchListModel(page) {
 			var model_watchlist={ watches:[] };
+			var todelete = []
 			if (page.watches) {
-				$.each(page.watches,function(idx,watchid) {
+				for (var i = page.watches.length -1 ; i>=0 ; i--) {
+					var watchid = page.watches[i]
 					var watch = mapID2Watch[watchid]
-					var device = MultiBox.getDeviceByAltuiID(watch.deviceid);
-					if (device && providers[watch.provider] ) {
-						var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
-						model_watchlist.watches.push( {
-							id: watchid,
-							// watch: watch,
-							devicename: device.name,
-							url:urlinfo.url,
-							height:urlinfo.height || 260
-						})
+					if (watch) {
+						var device = MultiBox.getDeviceByAltuiID(watch.deviceid);
+						if (device && providers[watch.provider] ) {
+							var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
+							model_watchlist.watches.push( {
+								id: watchid,
+								// watch: watch,
+								devicename: device.name,
+								url:urlinfo.url,
+								height:urlinfo.height || 260
+							})
+						}
+					} else {
+						// watch must have been deleted
+						page.watches.splice(i, 1);
 					}
-				});
+				}
 			}
-			// if (page.order)
-				// model_watchlist.order = page.order
 			return model_watchlist
 		};
 
@@ -14432,6 +14437,7 @@ var UIManager  = ( function( window, undefined ) {
 				providers = result
 				pages = MyLocalStorage.getSettings("WatchPages") || {}
 				watches = MultiBox.getWatches("VariablesToSend", null)
+				mapID2Watch = {};
 				$.each(watches, function(idx,watch) {
 					var id = WATCH_ID.format(watch.provider, watch.deviceid, watch.service, watch.variable)
 					mapID2Watch[id]=watch
