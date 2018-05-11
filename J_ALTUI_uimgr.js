@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2391 $";
+var ALTUI_revision = "$Revision: 2392 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -974,6 +974,7 @@ var styles =`
 		overflow: hidden;
 	}
 	.altui-graph-card {
+		background: lightcyan;
 		padding:0px;
 	}
 	.altui-graph-card .card-title {
@@ -14141,7 +14142,7 @@ var UIManager  = ( function( window, undefined ) {
 			var card_template = `
 				<div class="altui-graph-card card col-sm-6 col-xl-4" data-watchidx="{1}">
 				  <div class="card-body">
-					<h5 class="card-title">{0}<button type="button" id="closeidx_{1}" class="altui-graph-card-close close float-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h5>
+					<h6 class="card-title">{0}<button type="button" id="closeidx_{1}" class="altui-graph-card-close close float-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h6>
 					<small><p class="card-subtitle mb-2 text-muted">{3}{4}</p></small>
 					<div class="altui-graph-content">{2}</div>
 				  </div>
@@ -15005,7 +15006,7 @@ $(function() {
 		// 0:id 1: title, 2: body, 3: class size 4:icon
 		defaultDialogModalTemplate =`
 <div id='{0}' class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog {3}" role="document">
     <div class="modal-content">
 		<form name='{0}' id='form_{0}' class='form' onsubmit='return false;'>
 			  <div class="modal-header">
