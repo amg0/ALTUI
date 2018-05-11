@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2392 $";
+var ALTUI_revision = "$Revision: 2393 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -11605,6 +11605,8 @@ var UIManager  = ( function( window, undefined ) {
 		});
 		$("#altui-luaform-button-"+htmlid).click( function() {
 			var code = editor.getValue();
+			$('#altui-editor-result').text("")
+			$('#altui-editor-output').text("")
 			onClickCB(code,$(this));
 		});
 	},
@@ -11626,8 +11628,10 @@ var UIManager  = ( function( window, undefined ) {
 		var lastOne = MyLocalStorage.getSettings("LastOne_LuaTest") || "return true";
 		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Test Code"),lastOne,true,_T("Submit"),function(lua) {
 			MyLocalStorage.setSettings("LastOne_LuaTest",lua);
+			$("#altui-luaform-button-altui-page-editor").addClass("disabled")
 			MultiBox.runLua(0,lua, function(res) {
 				res = $.extend({success:false, result:"",output:""},res);
+				$("#altui-luaform-button-altui-page-editor").removeClass("disabled")
 				$("#altui-editor-result").text(res.result+"\n");
 				$("#altui-editor-output").text(res.output+"\n");
 				if ( res.success ==true )

@@ -3328,8 +3328,8 @@ function _deferredWgetThingspeak()
 				
 				-- debug( string.format("_deferredWgetThingspeak is preparing to update => %s",json.encode(todo)) )
 				local url = prepareThingspeakUrl( todo )
-				local httpcode,data = luup.inet.wget(url)
-				log(string.format("_deferredWgetThingspeak(url=%s) ==> httpcode=%s data=%s",url, httpcode,data ))
+				local code,data,httpcode = luup.inet.wget(url)
+				log(string.format("_deferredWgetThingspeak(url=%s) ==> code=%s httpcode=%s data=%s",url, code,httpcode,data ))
 				
 				if (data~="0") then
 					-- clean up the queue now
