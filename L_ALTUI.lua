@@ -3347,7 +3347,7 @@ function _deferredWgetThingspeak()
 		end
 		if (Thingspeak_Queue:size() >0) then
 			debug(string.format("Arming _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
-			luup.call_delay("_deferredWgetThingspeak", THINGSPEAK_PUSH_SEC * 2, url)	-- twice the threshold
+			luup.call_delay("_deferredWgetThingspeak", THINGSPEAK_PUSH_SEC, url)	
 		else
 			debug(string.format("No need to rearm _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
 		end
@@ -3359,7 +3359,7 @@ local function _CallThingspeakAPI(api_key,field_num,value)
 	Thingspeak_Queue:push(cb_obj)
 	if (Thingspeak_Queue:size() == 1) then
 		debug("new entry , Queue size==1 , Starting _deferredWgetThingspeak engine")
-		luup.call_delay("_deferredWgetThingspeak", THINGSPEAK_PUSH_SEC , null)		-- likelyhood to hit a conflict , this is why /2
+		luup.call_delay("_deferredWgetThingspeak", 1 , null)		-- there is something to do immediately
 	end
 	return 200,""
 end
