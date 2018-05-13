@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2395 $";
+var ALTUI_revision = "$Revision: 2396 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14452,7 +14452,9 @@ var UIManager  = ( function( window, undefined ) {
 				mapID2Watch = {};
 				$.each(watches, function(idx,watch) {
 					var id = WATCH_ID.format(watch.provider, watch.deviceid, watch.service, watch.variable)
-					mapID2Watch[id]=watch
+					var device = MultiBox.getDeviceByAltuiID(watch.deviceid)
+					if (device)
+						mapID2Watch[id]=watch
 				})
 				if (Object.keys(pages).length==0) {
 					var firstpage = {
