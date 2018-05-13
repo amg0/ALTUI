@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2393 $";
+var ALTUI_revision = "$Revision: 2395 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -979,6 +979,11 @@ var styles =`
 	}
 	.altui-graph-card .card-title {
 		cursor:move;
+	}
+	.iframe-wrapper {
+		-webkit-overflow-scrolling: touch;
+	}
+	.iframe-wrapper iframe {
 	}
 `;
 
@@ -14130,8 +14135,10 @@ var UIManager  = ( function( window, undefined ) {
 			var html = ""
 			var watch = mapID2Watch[ entry.id ]
 			if (entry.url && entry.url!=NO_URL) {
-				//scrolling='no'
+				var style = (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) ? "overflow-y: scroll;" : ""
+				html += "<div class='iframe-wrapper' style='{0}'>".format(style)
 				html += "<iframe  id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-watchidx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(entry.url,entry.id,entry.id,entry.height);
+				html += "</div>"
 			} else {
 				html +="<p>{0}: {1}</p>".format(watch.provider,_T("No Graphic Url available"))
 			}
