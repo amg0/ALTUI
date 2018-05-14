@@ -17,40 +17,31 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		isOpenLuup: false,
 		candoPost: false
 	};
-	var _ipaddr = (ip_addr.trim()) || '';
 	var _veraidx = veraidx || 0;
+	var _ipaddr = (ip_addr.trim()) || '';
+	var _directCallPossible = (_ipaddr=='') || (_ipaddr.indexOf(":3480")!=-1)
 	var _urlhead = (_ipaddr=='') ? window.location.pathname : ("http://{0}/port_3480/data_request".format(_ipaddr));
 	var _proxyhead = "?id=lr_ALTUI_Handler&command=proxyget&resultName=none&newUrl=";
 
-	function _directCallPossible() {
-		return (_ipaddr=='') || (_ipaddr.indexOf(":3480")!=-1)
-	}
 	function _proxify(url) {
-		var url = _directCallPossible() ? url : (_proxyhead + encodeURIComponent( url ));
+		var url = _directCallPossible ? url : (_proxyhead + encodeURIComponent( url ));
 		return url;
 	}
 	
 	function _proxifySoap(url) {
-		var url = _directCallPossible() ? url : "?id=lr_ALTUI_Handler&command=proxysoap&action={0}&newUrl={1}&envelop={2}&body={3}";
+		var url = _directCallPossible ? url : "?id=lr_ALTUI_Handler&command=proxysoap&action={0}&newUrl={1}&envelop={2}&body={3}";
 		return url;
 	}
 	
 	function _unproxifyResult(data, textStatus, jqXHR, cbfunc) {
-		if ( _directCallPossible() ) {
+		if ( _directCallPossible ) {
 			if ($.isFunction( cbfunc ))
 				(cbfunc)(data,  textStatus, jqXHR );
 		}
 		else {
 			var success = (data[0]=="1");
-			if (success) {
-				if ($.isFunction( cbfunc )) {
-					cbfunc(data.substr(2),textStatus,jqXHR);
-				}
-			}
-			else {
-				if ($.isFunction( cbfunc )) {
-					cbfunc(null,textStatus,jqXHR);
-				}
+			if ($.isFunction( cbfunc )) {
+				cbfunc(success ? data.substr(2) : null ,textStatus,jqXHR);
 			}
 		}
 	};
