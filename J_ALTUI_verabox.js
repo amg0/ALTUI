@@ -1666,6 +1666,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	}
 
 	function _loadUserData(data) {
+		var result = false;
 		if ((data) && (data != "NO_CHANGES") && (data != "Exiting") )
 		{
 			var bFirst = (_user_data_DataVersion==1);
@@ -1763,19 +1764,16 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					EventBus.publishEvent("on_ui_deviceStatusChanged",device);
 				}
 			});
-			if (data.devices) {
-				// if (bFirst)
-					// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
-				EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
-			}
-
 			_upnpHelper.setConfig( {
 				isOpenLuup: _isOpenLuup(_user_data),
 				candoPost: _candoPost(_user_data)
 			});
-		} else {
+			result = (data.devices != null);
+		} 
+		return result
+		// else {
 			// console.log("controller #{0} wrong data : {1}".format(_uniqID,data || ""));
-		}
+		// }
 	};
 
 	function _isUserDataCached() {	return MyLocalStorage.get("VeraBox"+_uniqID)!=null; }
@@ -1791,18 +1789,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return MyLocalStorage.clear("VeraBox"+_uniqID);
 	};
 
-	function _loadEngine( user_data ) {
-		//AltuiDebug.debug("_loadEngine()");
-/*
-		if (user_data) {	// if received in parameter ( like pre-prepared by Lua module )
-			_user_data	= user_data;
-		} else {	// or try to get from cache
-			var verabox = MyLocalStorage.get("VeraBox"+_uniqID);
-			if (verabox) {
-				_user_data = verabox._user_data || {};
-			}
-		}
-*/
+	function _loadEngine( /*user_data*/ ) {
 		_user_data_DataVersion	= 1;
 		_user_data_LoadTime		= null;
 		_user_data.BuildVersion = undefined;		// to keep the "waiting" message for the user
@@ -1820,14 +1807,21 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				// console.log("controller #{0} received old _DataVersion={1}".format(_uniqID,_user_data_DataVersion));
 				if (data!=null) {
 					_dataEngine = null;
-					_loadUserData(data);
+					if (_loadUserData(data) == true ) {
+						// if (bFirst)
+						// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
+						EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
+					}
 					UIManager.refreshUI( true );	// full but not first time
 					_dataEngine = setTimeout( _refreshEngine, 2000 );
 				}
 				else {
+					console.log( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr() ))
 					_dataEngine = setTimeout( _initDataEngine, 2000 );
-					// console.log( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr() ) + ", textStatus: " + textStatus , "danger");
 				}
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				// alert("fail 2");
 			})
 			.always(function() {
 				//AltuiDebug.debug("_initDataEngine() (user_data) returned.");
