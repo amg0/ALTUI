@@ -5288,6 +5288,18 @@ var SceneEditor = function (scene) {
 // ===========================
 //	Page UI pieces helpers
 // ===========================
+var Clock = (function(window) {
+	function _updateClock() {
+		$(".altui-clock").replaceWith( Clock.getClockHtml() )
+	}
+	var _timer = setInterval(_updateClock, 1000);
+	return {
+		getClockHtml: function() {
+			return "<span class='altui-clock d-none d-sm-block shadow-sm m-0 p-1 bg-white rounded'>{0} <small>{1}</small></span>".format(timeGlyph , new Date().toLocaleString())
+		}
+	}
+})(window)
+
 var PageMessage = (function(window, undefined ) {
 	var _badgeTemplate = '<span class="badge badge-secondary">{0}</span>&nbsp;';
 	var _msgTemplate = '<span class="altui-pagemessage-txt" >{0}</span>';
@@ -5445,6 +5457,8 @@ var PageMessage = (function(window, undefined ) {
 	};
 
 	function _init(breadcrumb,cls) {
+		// hidden on xs
+		var clock = "<span class='altui-clock'></span>"
 		var Html=`
 		<div id='altui-pagemessage' class='{3}'>
 			<form class='form-inline'>
@@ -5453,6 +5467,7 @@ var PageMessage = (function(window, undefined ) {
 			{1} <i class="fa fa-caret-down" aria-hidden="true"></i>
 			</button>
 			{2}
+			{4}
 			</form>
 			<div class="collapse" id="altui-pagemessage-panel">
 				<div class="card card-body">
@@ -5460,7 +5475,7 @@ var PageMessage = (function(window, undefined ) {
 				<tbody></tbody>
 				</div>
 			</div>
-		</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml(),cls||"")
+		</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml(),cls||"",clock)
 
 		$("#altui-pagemessage-span").html(	Html );
 		// close button for pageMessages
@@ -5493,7 +5508,7 @@ var PageMessage = (function(window, undefined ) {
 		jobMessage		: _jobMessage,
 		clearJobMessage	: _clearJobMessage,
 	};
-})();
+})(window);
 
 
 var HistoryManager = ( function(win) {
