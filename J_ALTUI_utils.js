@@ -5458,7 +5458,7 @@ var PageMessage = (function(window, undefined ) {
 
 	function _init(breadcrumb,cls) {
 		// hidden on xs
-		var clock = "<span class='altui-clock'></span>"
+		var clock = Clock.getClockHtml()
 		var Html=`
 		<div id='altui-pagemessage' class='{3}'>
 			<form class='form-inline'>

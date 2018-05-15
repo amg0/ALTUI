@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2397 $";
+var ALTUI_revision = "$Revision: 2400 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -141,6 +141,8 @@ var styles =`
 	}
 	.nav-link {
 		white-space: nowrap;
+	}
+	.altui-clock {
 	}
 	.multiselect-container>li>a>label {
 		padding: 3px 3px 3px 3px !important;
@@ -11650,6 +11652,7 @@ var UIManager  = ( function( window, undefined ) {
 	pageOsCommand: function ()
 	{
 		var defaultCommands = [
+			{label:_T("Time"), command:'date' },
 			{label:_T("Disk Usage"), command:'du -h' },
 			{label:_T("Free Space"), command:'df -h' },
 			{label:_T("Plugin Files"), command:'ls -l /etc/cmh-ludl' },
