@@ -1563,11 +1563,6 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var html = "";
 		var status = MultiBox.getStatus(device, 'urn:airedalez-net:serviceId:PlantLink', 'Status');
 		var water = MultiBox.getStatus(device, 'urn:airedalez-net:serviceId:PlantLink', 'WaterDay');
-		var armed = MultiBox.getStatus( device, "urn:micasaverde-com:serviceId:SecuritySensor1", "Armed");
-		html += ALTUI_PluginDisplays.createOnOffButton( armed,"altui-onoffbtn-"+device.altuiid, _T("Bypass,Arm"), "pull-right" );
-                html += "<script type='text/javascript'>";
-		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleArmed('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
-                html += "</script>";
 		if (status != null && water != null) {
 			html += '<div style="font-size: 2.0em;">';
 			html += "<div class='altui-sysmon-text text-muted'><br>Status: {0}<br>WaterDay: {1}</div>".format(status, water);
