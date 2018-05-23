@@ -206,7 +206,11 @@ var MultiBox = ( function( window, undefined ) {
 
 		// prepare to wait for proper initialization
 		// EventBus.waitForAll( "on_ui_userDataFirstLoaded", _getAllEvents("on_ui_userDataFirstLoaded"), this, _AllLoaded );
-		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, _AllLoaded );
+		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, null , 2000 )
+		.always( function(data) {
+			// check data , if a controller is missing, disable it
+			_AllLoaded( "on_ui_userDataLoaded" )
+		})
 
 		// now start the engine
 		$.each(_controllers, function(idx,box) {

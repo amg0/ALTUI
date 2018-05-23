@@ -2726,8 +2726,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	RequestBackup : _RequestBackup,
 	initEngine		: function( firstuserdata )		{
 						_loadEngine( firstuserdata );
-						_initDataEngine();				// init the data collection engine
-					},
+						return _initDataEngine();				// init the data collection engine
+	},
   };
 });	// not invoked, object does not exists
 
@@ -2786,12 +2786,14 @@ var LearnBox = ( function( uniq_id ) {
 	};
 	
 	function _initEngine() {
+		var deferred  = $.Deferred()
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",this,this.onDeviceChange)
 		EventBus.registerEventHandler("on_deviceAction",this,this.onUserAction);
 		EventBus.registerEventHandler("on_sceneRun",this,this.onUserAction);
 		// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
 		EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
-		return false;
+		deferred.resolve(true)
+		return deferred;
 	};
 
 	function _getBoxFullInfo() {
@@ -3119,11 +3121,12 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		})
 		.always(function() {
 		});
+		return jqxhr;
 	};
 
 	function _initEngine() {
 		_dataEngine = null;
-		_refreshEngine()
+		return _refreshEngine()
 	};
 
 	function _asyncResponse(arr, func , filterfunc, endfunc) {

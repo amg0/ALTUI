@@ -2453,27 +2453,41 @@ var EventBus = ( function (undefined) {
 				_subscriptions[eventname].splice(iFound , 1);
 		}
 	};
-	function _waitForAll(event, eventtbl, object, funcname ) {
+	function _waitForAll(event, eventtbl, object, funcname , maxwaitms) {
+		var defered = $.Deferred();
 		var _state = {};
+		var timeout = (maxwaitms==undefined ) 
+			? null 
+			: setTimeout(function() {  
+				timeout=null;
+				defered.resolve(_state);
+			} , maxwaitms );
+		
 		function _signal(eventname/*, args */) {
 			var theArgs = arguments;
 			_state[eventname] = true;
 			// if all are true, call the object,funcname
 			if (_allSet(_state)) {
 				theArgs[0] = event;
-				if ($.isFunction(funcname)) {
-					(funcname).apply(object,theArgs);
-				} else {
-					// theArgs.unshift(eventname);
-					var func = object[funcname];
-					func.apply( object , theArgs );
+				if (funcname) {
+					if ($.isFunction(funcname)) {
+						(funcname).apply(object,theArgs);
+					} else {
+						// theArgs.unshift(eventname);
+						var func = object[funcname];
+						func.apply( object , theArgs );
+					}
 				}
+				if (timeout) clearTimeout(timeout); 
+				timeout=null;
+				defered.resolve(_state)
 			}
 		};
 		$.each(eventtbl , function( idx, event) {
 			_state[event] = false;
 			_registerEventHandler(event, this, _signal );
 		})
+		return defered;
 	};
 
 	function _publishEvent(eventname/*, args */) {
@@ -2506,11 +2520,6 @@ var EventBus = ( function (undefined) {
 		},
 	}
 })();
-// function myFunc(device) {
-	// console.log("Device {0} state changed".format(device.id));
-// }
-//on_ui_initFinished
-// EventBus.registerEventHandler("on_ui_deviceStatusChanged",window,"myFunc");
 
 var PageManager = (function() {
 	var _pages = null;
@@ -5295,7 +5304,7 @@ var Clock = (function(window) {
 	var _timer = setInterval(_updateClock, 1000);
 	return {
 		getClockHtml: function() {
-			return "<span class='altui-clock d-none d-sm-block shadow-sm m-0 p-1 bg-white rounded'>{0} <small>{1}</small></span>".format(timeGlyph , new Date().toLocaleString())
+			return "<span class='altui-clock d-none d-sm-block shadow-sm m-0 p-1 bg-light rounded'>{0} <small>{1}</small></span>".format(timeGlyph , new Date().toLocaleString())
 		}
 	}
 })(window)
