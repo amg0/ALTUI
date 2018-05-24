@@ -209,6 +209,22 @@ var MultiBox = ( function( window, undefined ) {
 		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, null , 2000 )
 		.always( function(data) {
 			// check data , if a controller is missing, disable it
+			var todel=[]
+			$.each(data, function(key,elem) {
+				if (elem==false) {
+					todel.push(key.substring("on_ui_userDataLoaded_".length))
+				}
+			})
+			$.each(todel.reverse(), function(idx,val) {
+				// delete controller val
+				var msg = _T("controller {0} did not respond. disabling it").format(_controllers[val].name)
+				console.log(msg)
+				MultiBox.stopEngine(val)
+				_controllers.splice(val, 1)
+				setTimeout(function(msg){
+					PageMessage.message( msg, "warning");
+				}, 1000, msg)
+			})
 			_AllLoaded( "on_ui_userDataLoaded" )
 		})
 
@@ -218,6 +234,15 @@ var MultiBox = ( function( window, undefined ) {
 		});
 
 	};
+	
+	function _stopEngine(controller) {
+		return _controllers[controller].controller.stopEngine();
+	};
+
+	function _initializeJsonp(controller) {
+		return _controllers[controller].controller.initializeJsonp();
+	};
+
 	function _saveEngine() {
 		$.each(_controllers, function(idx,box) {
 			box.controller.saveEngine();
@@ -859,6 +884,7 @@ var MultiBox = ( function( window, undefined ) {
 	//static info per device type
 	initDB					: _initDB,	// (devicetypes)
 	initEngine				: _initEngine,
+	stopEngine				: _stopEngine,
 	reloadEngine			: _reloadEngine,
 	reboot					: _reboot,
 	saveEngine				: _saveEngine,	//()

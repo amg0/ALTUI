@@ -1045,6 +1045,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	var LU_STATUS_TIMEOUT= parseInt(ctrlOptions[1]) || 60;
 
 	var _uniqID = uniq_id;								// assigned by Multibox, unique, can be used for Settings & other things
+	var _bStopEngine = true;
 	var _hagdevice = { id: 0, altuiid:"{0}-0".format(_uniqID) };							// special device for HAG, service=S_HomeAutomationGateway1.xml
 	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id);			// for common UPNP ajax
 	var _dataEngine = null;
@@ -1778,6 +1779,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 	function _isUserDataCached() {	return MyLocalStorage.get("VeraBox"+_uniqID)!=null; }
 
+	function _stopEngine() {
+		_bStopEngine = true
+	};
+	
 	function _saveEngine() {
 		//AltuiDebug.debug("_saveEngine()");
 		var verabox = {
@@ -1813,11 +1818,13 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 						EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
 					}
 					UIManager.refreshUI( true );	// full but not first time
-					_dataEngine = setTimeout( _refreshEngine, 2000 );
+					if (_bStopEngine==false)
+						_dataEngine = setTimeout( _refreshEngine, 2000 );
 				}
 				else {
 					console.log( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr() ))
-					_dataEngine = setTimeout( _initDataEngine, 2000 );
+					if (_bStopEngine==false)
+						_dataEngine = setTimeout( _initDataEngine, 2000 );
 				}
 			})
 			.fail(function(jqXHR, textStatus, errorThrown) {
@@ -2719,12 +2726,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 	// save page data into altui plugin device
 	saveData		: _saveData,		//	name, data , cbfunc
+	stopEngine		: _stopEngine,
 	saveEngine		: _saveEngine,
 	clearEngine		: _clearEngine,
 	loadEngine		: _loadEngine,		// optional user_data
 	isUserDataCached	: _isUserDataCached,
 	RequestBackup : _RequestBackup,
 	initEngine		: function( firstuserdata )		{
+						_bStopEngine = false;
 						_loadEngine( firstuserdata );
 						return _initDataEngine();				// init the data collection engine
 	},
@@ -3045,6 +3054,7 @@ var LearnBox = ( function( uniq_id ) {
 
 		// save page data into altui plugin device
 		saveData		: _todo,
+		stopEngine		: _todo,
 		saveEngine		: _todo,
 		clearEngine		: _todo,
 		loadEngine		: _todo,
