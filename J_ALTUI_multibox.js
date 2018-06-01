@@ -206,7 +206,7 @@ var MultiBox = ( function( window, undefined ) {
 
 		// prepare to wait for proper initialization
 		// EventBus.waitForAll( "on_ui_userDataFirstLoaded", _getAllEvents("on_ui_userDataFirstLoaded"), this, _AllLoaded );
-		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, null , 2000 )
+		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, null , g_ALTUI.g_CtrlTimeout )
 		.always( function(data) {
 			// check data , if a controller is missing, disable it
 			var todel=[]
