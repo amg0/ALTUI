@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2405 $";
+var ALTUI_revision = "$Revision: 2408 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1004,6 +1004,7 @@ var UIManager  = ( function( window, undefined ) {
 		{ id:'ShowMyHomeImages', type:'checkbox', label:"Show Images in MyHome page", _default:1, help:'Show Images headers in MyHome page cards' },
 		{ id:'UseMasonryInMyHome', type:'checkbox', label:"Use Masonry layout in MyHome page", _default:0, help:'Use Masonry layout for cards in MyHome page' },
 		{ id:'ShowVideoThumbnail', type:'checkbox', label:"Show Video Thumbnail in Local mode", _default:1, help:'In Local access mode, show camera in video stream mode' },
+		{ id:'ShowClock', type:'checkbox', label:"Show Clock in Message bar", _default:1, help:'The local clock time is displayed in the message bar' },
 		//{ id:'FixedLeftButtonBar', type:'checkbox', label:"Left Buttons are fixed on the page", _default:1, help:'choose whether or not the selection Buttons on the left are scrolling with the page' },
 		{ id:'ShowWeather', type:'checkbox', label:"Show Weather on home page", _default:1, help:'display or not the weather widget on home page' },
 		{ id:'ShowHouseMode', type:'checkbox', label:"Show House Mode on home page", _default:1, help:'display or not the House mode widget on home page' },

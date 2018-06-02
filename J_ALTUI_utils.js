@@ -5297,17 +5297,6 @@ var SceneEditor = function (scene) {
 // ===========================
 //	Page UI pieces helpers
 // ===========================
-var Clock = (function(window) {
-	function _updateClock() {
-		$(".altui-clock").replaceWith( Clock.getClockHtml() )
-	}
-	var _timer = setInterval(_updateClock, 1000);
-	return {
-		getClockHtml: function() {
-			return "<span class='altui-clock d-none d-sm-block shadow-sm m-0 p-1 bg-light rounded'>{0} <small>{1}</small></span>".format(timeGlyph , new Date().toLocaleString())
-		}
-	}
-})(window)
 
 var PageMessage = (function(window, undefined ) {
 	var _badgeTemplate = '<span class="badge badge-secondary">{0}</span>&nbsp;';
@@ -5467,7 +5456,7 @@ var PageMessage = (function(window, undefined ) {
 
 	function _init(breadcrumb,cls) {
 		// hidden on xs
-		var clock = Clock.getClockHtml()
+		var clock = Clock ? Clock.getClockHtml() : ""
 		var Html=`
 		<div id='altui-pagemessage' class='{3}'>
 			<form class='form-inline'>
@@ -5564,5 +5553,18 @@ var HistoryManager = ( function(win) {
 			win.history.pushState( _history.length , id, null);
 		}
 	}
-})( window )
+})( window );
 
+if ((MyLocalStorage.getSettings('ShowClock') || 0)==1) {
+	var Clock = (function(window) {
+		function _updateClock() {
+			$(".altui-clock").replaceWith( Clock.getClockHtml() )
+		}
+		var _timer = setInterval(_updateClock, 1000)
+		return {
+			getClockHtml: function() {
+				return "<span class='altui-clock d-none d-sm-block shadow-sm m-0 p-1 bg-light rounded'>{0} <small>{1}</small></span>".format(timeGlyph , new Date().toLocaleString())
+			}
+		}
+	})(window);
+}
