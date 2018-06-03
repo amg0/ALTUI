@@ -217,13 +217,18 @@ var MultiBox = ( function( window, undefined ) {
 			})
 			$.each(todel.reverse(), function(idx,val) {
 				// delete controller val
-				var msg = _T("controller {0} did not respond. disabling it").format(_controllers[val].name)
+				var msg = _T("controller {0} did not respond.").format(_controllers[val].name)
 				console.log(msg)
-				MultiBox.stopEngine(val)
-				_controllers.splice(val, 1)
-				setTimeout(function(msg){
-					PageMessage.message( msg, "warning");
-				}, 1000, msg)
+				if (val!=0) {
+					console.log(_T("disabling this secondary controller now"))
+					MultiBox.stopEngine(val)
+					_controllers.splice(val, 1)
+					setTimeout(function(msg){
+						PageMessage.message( msg, "warning");
+					}, 1000, msg)
+				} else {
+					console.log("Cannot disable main controller, trying to continue...")
+				}
 			})
 			_AllLoaded( "on_ui_userDataLoaded" )
 		})

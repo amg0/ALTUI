@@ -5563,7 +5563,8 @@ if ((MyLocalStorage.getSettings('ShowClock') || 0)==1) {
 		var _timer = setInterval(_updateClock, 1000)
 		return {
 			getClockHtml: function() {
-				return "<span class='altui-clock d-none d-sm-block shadow-sm m-0 p-1 bg-light rounded'>{0} <small>{1}</small></span>".format(timeGlyph , new Date().toLocaleString())
+				var glyph = (typeof(timeGlyph)!="undefined") ? timeGlyph : ""
+				return "<span class='altui-clock d-none d-sm-block shadow-sm m-0 p-1 bg-light rounded'>{0} <small>{1}</small></span>".format(glyph , new Date().toLocaleString())
 			}
 		}
 	})(window);
