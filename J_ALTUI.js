@@ -95,7 +95,8 @@ function altui_License(deviceID) {
 
 function altui_onOpenLocalButton(deviceId) {
 	// var url = window.location.origin + "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&" + jQuery( "#altui-home" ).val()
-	var url = data_command_url + get_device_state(deviceId, altui_Svs, "LocalHome", 0).replace('/data_request?','')
+	// var url = data_command_url + get_device_state(deviceId, altui_Svs, "LocalHome", 0).replace('/data_request?','')
+	var url = get_device_state(deviceId, altui_Svs, "LocalHome", 0)
 	window.open( url, '_blank');
 }
 
@@ -114,6 +115,7 @@ function altui_buildUrlOptions(deviceID) {
 	var home=["","pageHome","pageMyHome","pageRooms","pageDevices","pageScenes","pageSceneEdit","pagePlugins","pageUsePages","pageEditPages","pageCredits","pageLuaTest","pageLuaStart","pageOptions","pageEditor","pageZwave","pageLocalization","pagePower","pageChildren","pageRoutes","pageQuality","pageTblDevices","pageOsCommand"];
 	var lang=["","en","fr","it"];
 	var prefix = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&";
+	
 	var LocalHome = get_device_state(deviceID,  altui_Svs, 'LocalHome',1);
 	if (LocalHome.startsWith(prefix) != true )
 		LocalHome=prefix;
@@ -239,14 +241,10 @@ function altui_Settings(deviceID) {
 					options.push(ALTUI_VeraUtils.altui_format("{0}={1}",id,val));
 			}
 		});
-		var url = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&"+options.join('&')
+		var url = data_command_url + "id=lr_ALTUI_Handler&command=home&"+options.join('&')
 		saveVar(deviceID,  altui_Svs, "LocalHome", url, true)
 		jQuery("#altui-home").text(url)
 	});
-	// jQuery( "#altui-home" ).change( function() {
-		// var home = jQuery(this).val()+' ';
-		// saveVar(deviceID,  altui_Svs, "LocalHome", home, true);
-	// });
 	jQuery( "#altui-cdn" ).change( function() {
 		var cdn = jQuery(this).val();
 		saveVar(deviceID,  altui_Svs, "LocalCDN", cdn, true);

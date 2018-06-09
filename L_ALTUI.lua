@@ -4233,9 +4233,7 @@ end
 function startupDeferred(lul_device)
 	lul_device = tonumber(lul_device)
 	log("startupDeferred, called on behalf of device:"..lul_device)
-
 	-- testCompress()
-
 	local debugmode = getSetVariable(ALTUI_SERVICE, "Debug", lul_device, "0")
 	local oldversion = getSetVariable(ALTUI_SERVICE, "Version", lul_device, version)
 	local url_req = port3480 .. "/data_request?id=lr_ALTUI_Handler&command=home"
