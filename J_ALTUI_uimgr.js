@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2412 $";
+var ALTUI_revision = "$Revision: 2413 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -9293,7 +9293,7 @@ var UIManager  = ( function( window, undefined ) {
 		function _drawWorkflows(workflows) {
 			var html = "";
 			$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
-			$.each(workflows, function(idx,workflow) {
+			$.each(workflows.sort(altuiSortByName), function(idx,workflow) {
 				// 0:bootgrid classes 1:altuiid 2:htmlid 3: heading 4:panel body
 				var body =
 					buttonTemplate.format( workflow.altuiid, 'altui-editworkflow pull-left', wrenchGlyph,'light',_T("Settings")) +
