@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2413 $";
+var ALTUI_revision = "$Revision: 2414 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13912,6 +13912,7 @@ var UIManager  = ( function( window, undefined ) {
 		(model.domcontainer).append( html );
 
 		var options = (MyLocalStorage.getSettings('ShowAllRows')==1) ? {rowCount:-1	} : {};
+
 		var id = htmlid;
 		var grid = $("#"+htmlid).bootgrid(
 			$.extend({
@@ -13950,6 +13951,10 @@ var UIManager  = ( function( window, undefined ) {
 			var settings = $("#"+htmlid).bootgrid("getColumnSettings");
 			viscols = $.map($.grep(settings, function (obj) { return obj.visible == true }),function(obj){ return obj.id;});
 			MyLocalStorage.setSettings(type+"VisibleCols",viscols);
+
+			var sortDict = $("#"+htmlid).bootgrid("getSortDictionary");
+			MyLocalStorage.setSettings(type+'SortDictionary',sortDict);
+
 			/* your code goes here */
 			if (model.commands) {
 				$.each(model.commands, function(cmd,descr) {
@@ -13964,8 +13969,11 @@ var UIManager  = ( function( window, undefined ) {
 					});
 				});
 			}
-		});
-
+		})
+		
+		var sortDict = MyLocalStorage.getSettings(type+'SortDictionary')
+		$("#"+htmlid).bootgrid("sort",sortDict || {});
+		
 		// Add CSV export button
 		var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
 		var csvButtonHtml = buttonTemplate.format( 'altui-grid-btn-'+htmlid, 'altui-tbl2csv', glyph,'d');
