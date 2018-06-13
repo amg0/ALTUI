@@ -1968,24 +1968,60 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 
 	function _runLua(code, cbfunc) {
-		var jqxhr = _httpGet( "?id=lr_ALTUI_LuaRunHandler&command=run_lua&lua={0}".format( encodeURIComponent(code) ), {}, function(data, textStatus, jqXHR) {
-			if (data!=null) {
-				var lines = data.split('||');
-				var success = (lines[0]=="1");
-				if (success)
-					PageMessage.message(_T("Lua execution succeeded"), "success");
-				else
-					PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
-				if ($.isFunction( cbfunc ))
-					cbfunc({success:success, result:lines[1], output:lines[2]},jqXHR);
-			}
-			else {
-				PageMessage.message( _T("Lua Command execution request failed. (returned {0})").format(textStatus) , "danger");
-				if ($.isFunction( cbfunc ))
-					cbfunc({success:false, result:"", output:""},jqXHR);
-			}
-		});
-		return jqxhr;
+		if (1) {
+			var doPost = _candoPost(_user_data)
+			var url = "data_request?id=lr_ALTUI_LuaRunHandler";
+			var jqxhr = $.ajax( {
+				url: url,
+				type: (doPost==true) ? "POST" : "GET",
+				data: {
+					command:'run_lua',
+					lua:code
+				}
+			})
+			.done(function(data, textStatus, jqXHR) {
+				if (data!=null) {
+					var lines = data.split('||');
+					var success = (lines[0]=="1");
+					if (success)
+						PageMessage.message(_T("Lua execution succeeded"), "success");
+					else
+						PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
+					if ($.isFunction( cbfunc ))
+						cbfunc({success:success, result:lines[1], output:lines[2]},jqXHR);
+				}
+				else {
+					PageMessage.message( _T("Lua Command execution request failed. (returned {0})").format(textStatus) , "danger");
+					if ($.isFunction( cbfunc ))
+						cbfunc({success:false, result:"", output:""},jqXHR);
+				}
+			})
+			.fail(function(jqXHR, textStatus) {
+				PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
+			})
+			.always(function() {
+			});
+			return jqxhr;
+		} else {
+			var jqxhr = _httpGet( "?id=lr_ALTUI_LuaRunHandler&command=run_lua&lua={0}".format( encodeURIComponent(code) ), {}, function(data, textStatus, jqXHR) {
+				if (data!=null) {
+					var lines = data.split('||');
+					var success = (lines[0]=="1");
+					if (success)
+						PageMessage.message(_T("Lua execution succeeded"), "success");
+					else
+						PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
+					if ($.isFunction( cbfunc ))
+						cbfunc({success:success, result:lines[1], output:lines[2]},jqXHR);
+				}
+				else {
+					PageMessage.message( _T("Lua Command execution request failed. (returned {0})").format(textStatus) , "danger");
+					if ($.isFunction( cbfunc ))
+						cbfunc({success:false, result:"", output:""},jqXHR);
+				}
+			});
+			return jqxhr;
+		}
 	};
 
 	function _renameDevice(device, newname, roomid)
