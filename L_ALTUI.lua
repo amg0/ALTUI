@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.27"
+local version = "v2.28"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3218,16 +3218,16 @@ local function sendValueToStorage_emoncms(watch_description,lul_device, lul_serv
 	debug(string.format("sendValueToStorage_emoncms(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
 	debug(string.format("watch_description:%s",json.encode(watch_description)))
 	local providerparams = json.decode( watch_description['Data'] )
-	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "emoncms.org")
+	local lul_device = tonumber(lul_device)
+	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "https://emoncms.org")
 	if (isempty(providerparams[1])==false) and (isempty(providerparams[2])==false) and (isempty(providerparams[3])==false) then
-		local url = string.format("http://%s/input/post.json?node=%d&json={%s:%s}&apikey=%s",
+		local url = string.format("%s/input/post.json?node=%d&json={%s:%s}&apikey=%s",
 			emoncmsurl,
 			providerparams[1],	-- nodeid
 			providerparams[3],	-- inputkey
 			tostring(new),		-- new value
 			providerparams[4]	-- readwritekey
 		)
-
 		local response,response_body = luup.inet.wget(url,10)
 		-- local response_body = {}
 		-- local response, status, headers = http.request({
@@ -3466,7 +3466,7 @@ function resetDevice(lul_device,reload)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "Timers", "", lul_device)
-	setVariableIfChanged(ALTUI_SERVICE, "EmonCmsUrl", "emoncms.org", lul_device)
+	setVariableIfChanged(ALTUI_SERVICE, "EmonCmsUrl", "https://emoncms.org", lul_device)
 	-- setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", "https://remotevera.000webhostapp.com/veralogin.php", lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", "https://hirwatech.com/veralogin/Veralogin.php", lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
@@ -4258,7 +4258,7 @@ function startupDeferred(lul_device)
 	local ctrlOptions = getSetVariable(ALTUI_SERVICE, "CtrlOptions", lul_device, "1500,60")
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "")
 	local custompages = getSetVariable(ALTUI_SERVICE, "Data_CustomPages_0", lul_device, "[]")
-	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "emoncms.org")
+	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "https://emoncms.org")
 	local pendingReset = getSetVariable(ALTUI_SERVICE, "PendingReset", lul_device, 0)
 	local machineLearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
 	local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, 3000)
@@ -4332,7 +4332,7 @@ function startupDeferred(lul_device)
 		[2]		= { ["key"]= "feedid", ["label"]="Feed ID", ["type"]="number" },
 		[3]		= { ["key"]= "inputkey", ["label"]="Input Key name", ["type"]="text" },
 		[4]		= { ["key"]= "readwritekey", ["label"]="Read/Write API Key", ["type"]="text" },
-		[5]		= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]="http://".. emoncmsurl .. "/vis/realtime?feedid={1}&embed=1&apikey={3}"}
+		[5]		= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]=emoncmsurl .. "/vis/realtime?feedid={1}&embed=1&apikey={3}"}
 	})
 
 	registerDataProvider("IFTTT","sendValueToStorage_ifttt",sendValueToStorage_ifttt, "", {
