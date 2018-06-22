@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.28"
+local version = "v2.29"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -261,11 +261,11 @@ local Thingspeak_Queue = Queue:new()
 local IFTTT_Queue = Queue:new()
 
 local function isOpenLuup()
-	local openLuup = luup.attr_get "openLuup"
-	if openLuup then
-		return true
+	local openLuup = luup.attr_get("openLuup")
+	if (openLuup == '' ) then
+		return false
 	end
-	return false
+	return true
 end
 
 ------------------------------------------------
