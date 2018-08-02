@@ -4998,6 +4998,16 @@ var SceneEditor = function (scene) {
 		$(".altui-json-code").hide();
 		$(".altui-mainpanel")
 			.off("click")
+			.on("click",".altui-delscene",function() {
+				var altuiid = $(this).closest(".altui-scene").data('altuiid');
+				var scene = MultiBox.getSceneByAltuiID(altuiid);
+				DialogManager.confirmDialog(_T("Are you sure you want to delete scene ({0})").format(altuiid),function(result) {
+					if (result==true) {
+						MultiBox.deleteScene( scene );
+						window.history.go(-1)
+					}
+				});
+			})
 			.on("click",".altui-trigger-mode",function(e) {
 				$(".altui-trigger-mode").removeClass("active btn-primary");
 				$(this).addClass("active btn-primary");
