@@ -1175,6 +1175,8 @@ local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent
 				new,old,lastupdate = luup.variable_get(cond.service, cond.variable, devid ) , "" , os.time()
 			end
 
+			old = old or ""
+			new = new or ""
 			local results = _evaluateUserExpression(lul_device,devid, cond.service, cond.variable,old,new,lastupdate,cond.luaexpr,workflow_idx)
 			-- if (bMatchingWatch==true) then
 				-- watchevent.watch['Expressions']['results'][cond.luaexpr]["LastEval"] = results[1]
@@ -3611,7 +3613,8 @@ function _evalCode(str,opt_wkflowidx)
 end
 
 function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,old,new,lastupdate,expr,opt_wkflowidx)
-	debug(string.format("_evaluateUserExpression(%s,%s,%s,%s,%s,%s,%s,%s)",lul_device, devid, lul_service, lul_variable,old,new,tostring(lastupdate),expr))
+	new = new or ""
+	debug(string.format("_evaluateUserExpression(%s,%s,%s,%s,%s,%s,%s,%s)",lul_device, devid, lul_service, lul_variable,old or "", new,tostring(lastupdate),expr))
 	local results = {}
 	local code = [[
 		return function(devid, lul_service, lul_variable, expr)
@@ -3686,6 +3689,8 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 end
 
 function evaluateExpression(watch,lul_device, lul_service, lul_variable,expr,old, new, lastupdate, exp_index, scene)
+	old = old or ""
+	new = new or ""
 	debug(string.format("evaluateExpression(%s,%s,%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,expr,old, new, tostring(lastupdate),exp_index,scene))
 	-- local watch = findWatch( lul_device, lul_service, lul_variable )
 	if (watch==nil) then

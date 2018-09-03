@@ -70,13 +70,25 @@ var ALTUI_VeraUtils = (function(){
 		return jsonp.ud.devices[idx].ip;
 	};
 	
+	function buildUPnPActionUrl(deviceID,service,action,params)
+	{
+		var urlHead = ip_address +'id=action&output_format=json&DeviceNum='+deviceID+'&serviceId='+service+'&action='+action;//'&newTargetValue=1';
+		if (params != undefined) {
+			jQuery.each(params, function(index,value) {
+				urlHead = urlHead+"&"+index+"="+value;
+			});
+		}
+		return urlHead;
+	};
+	
 	return {
 		beautify:beautify,
 		altui_format:altui_format,
 		findDeviceIdx:findDeviceIdx,
 		findRootDeviceIdx:findRootDeviceIdx,
 		findRootDevice:findRootDevice,
-		findDeviceIP:findDeviceIP
+		findDeviceIP:findDeviceIP,
+		buildUPnPActionUrl:buildUPnPActionUrl
 	}
 })()
 
@@ -279,7 +291,7 @@ function altui_Settings(deviceID) {
 	});
 
 	jQuery( "#altui-resetconfig" ).click(function() {
-		var url = buildUPnPActionUrl(deviceID,altui_Svs,'Reset');
+		var url = ALTUI_VeraUtils.buildUPnPActionUrl(deviceID,altui_Svs,'Reset');
 		jQuery.ajax({
 			type: "GET",
 			url: url,
@@ -318,45 +330,9 @@ function saveVar(deviceID,  service, varName, varVal, reload)
 {
 	//set_device_state (deviceID, service, varName, varVal, 0);	// only updated at time of luup restart
 	set_device_state (deviceID, altui_Svs, varName, varVal, (reload==true) ? 0 : 1);	// lost in case of luup restart
-	
-	// 3rd method : updated immediately but not reflected !
-	/*
-	var url = buildVariableSetUrl( deviceID, varName, varVal)
-	var jqxhr = jQuery.ajax({
-		url:url,
-		async:false		// important to be in synchronous mode in that case
-	})  
-	.done(function() {
-		// success, remove pending save for this variable
-
-	})
-	.fail(function() {
-		// error, keep track of error, keep entry in DB for next save
-
-	});
-	*/
 }
 
 
-//-------------------------------------------------------------
-// Helper functions to build URLs to call VERA code from JS
-//-------------------------------------------------------------
 
-function buildVariableSetUrl( deviceID, varName, varValue)
-{
-	var urlHead = '' + ip_address + 'id=variableset&DeviceNum='+deviceID+'&serviceId='+altui_Svs+'&Variable='+varName+'&Value='+varValue;
-	return urlHead;
-}
-
-function buildUPnPActionUrl(deviceID,service,action,params)
-{
-	var urlHead = ip_address +'id=action&output_format=json&DeviceNum='+deviceID+'&serviceId='+service+'&action='+action;//'&newTargetValue=1';
-	if (params != undefined) {
-		jQuery.each(params, function(index,value) {
-			urlHead = urlHead+"&"+index+"="+value;
-		});
-	}
-	return urlHead;
-}
 
 
