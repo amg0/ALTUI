@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2418 $";
+var ALTUI_revision = "$Revision: 2422 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -113,8 +113,10 @@ var _timerTypes = [];
 var _timerDOW = [];
 var _timerRelative = [];
 var _timerUnits = [
-	{value:'h',text:'h'},
-	{value:'m',text:'m'}
+	{value:'d',text:'days'},
+	{value:'h',text:'hours'},
+	{value:'m',text:'minutes'},
+	{value:'s',text:'seconds'}
 ];
 
 var styles =`
@@ -1724,7 +1726,7 @@ var UIManager  = ( function( window, undefined ) {
 			html +="<input type='checkbox' {0} class='altui-enable-timer' id='{1}'></input>".format( timer.enabled==true ? 'checked' : '', timer.id);
 		html +="</td>";
 		html +="<td>";
-		html +="<b>{0}</b>".format(timer.name);
+		html +="<b>{0}</b>".format(timer.name || "");
 		html +="</td>";
 		html +="<td>";
 		switch( parseInt(timer.type) ) {

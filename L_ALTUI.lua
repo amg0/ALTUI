@@ -3520,13 +3520,15 @@ function sayTTS(lul_device,newMessage,volume,groupDevices)
 	resultCode = -1
 	if (uri ~= nil) then
 		local sonos = findSONOSDevice()
-		local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3}
-		if (groupDevices ~= "") then
-			params["GroupDevices"]= groupDevices
-		else
-			params["GroupZones"]= "ALL"
+		if (sonos~=-1) then
+			local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3}
+			if (groupDevices ~= "") then
+				params["GroupDevices"]= groupDevices
+			else
+				params["GroupZones"]= "ALL"
+			end
+			resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 		end
-		resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 	end
 	return resultCode
 end

@@ -4166,7 +4166,7 @@ var TimerEditor = (function() {
 		init: function( _timer ) {
 			timer = cloneObject(_timer);
 			var dialog = DialogManager.createPropertyDialog(_T('Timer'));
-			DialogManager.dlgAddLine( dialog , "TimerName", _T("TimerName"), timer.name, "", {required:''} );
+			DialogManager.dlgAddLine( dialog , "TimerName", _T("TimerName"), timer.name , "", {required:''} );
 			DialogManager.dlgAddSelect(dialog, "TimerType", _T("TimerType"), timer.type, _timerTypes, {required:''});
 			DialogManager.dlgAddTimeInterval(dialog, "TimerInterval",_T("TimerInterval"),timer.interval, _timerUnits);
 			DialogManager.dlgAddDayOfWeek(dialog, "TimerDayOfWeek", _T("TimerDayOfWeek"), timer.days_of_week || '' , _timerDOW);
