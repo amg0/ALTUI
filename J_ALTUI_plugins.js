@@ -145,6 +145,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			`
 		style += ".boldLabel {    font-weight: bold; }";	// Hue plugin compat
 		style += ".cpanelSection {  border-bottom: 1px dashed #000; }";		// Hue plugin compat
+		style += ".altui-storage-info {font-size: 14px;}";
 		style += ".altui-watts, .altui-volts, .altui-countdown	{font-size: 16px;}";
 		style += ".altui-watts-unit {font-size: 12px;}";
 		style += ".altui-temperature  {font-size: 16px;}";
@@ -1237,7 +1238,6 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	};
 
 	// return the html string inside the .card-body of the .altui-device#id panel
-
 	function _drawBinaryLight( device) {
 		var html ="";
 
@@ -1255,7 +1255,17 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "</script>";
 		return html;
 	};
-
+	function _drawVeraSecure( device ) {
+		var html = "";
+		var json = MultiBox.getStatus( device, 'urn:micasaverde-com:G550Siren1', 'StorageInfo' );
+		if (json) {
+			json = JSON.parse(json)
+			var total = Math.round(json.total/1024)
+			var used = Math.round(json.used/1024*100)/100
+			html = "<div>Storage</div><div class='altui-storage-info'><span class='text-info'>{0}MB</span> / {1}MB</div>".format(used,total)
+		}
+		return html
+	};
 	function _drawSceneController(device) {
 		var html="";
 		var map = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SceneController1', 'SceneShortcuts' );
@@ -1916,6 +1926,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	onClickWindowCoverButton : _onClickWindowCoverButton,
 	createOnOffButton : _createOnOffButton,
 	drawBinaryLight : _drawBinaryLight,
+	drawVeraSecure : _drawVeraSecure,
 	drawBinLightControlPanel : _drawBinLightControlPanel,
 	drawSceneController: _drawSceneController,
 	drawGeneric		: _drawGeneric,
