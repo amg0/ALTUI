@@ -517,7 +517,8 @@ Localization.init( {
 	"TopStats: Show OS statistics in the footer":"TopStats: Affiche les statistiques OS dans le footer",
 	"Menu2ColumnLimit: if a menu has more entries than this number then show the menu entries in 2 columns":"Menu2ColumnLimit: affiche le menu en 2 colonnes si le nombre de lignes est superieur à cette limite",
 	"TempUnitOverride: Unit for temperature":"TempUnitOverride: Unité pour la température",
-	"EditorFontSize: Editor font size in pixels":"EditorFontSize: taille des caractères en pixel"
+	"EditorFontSize: Editor font size in pixels":"EditorFontSize: taille des caractères en pixel",
+	"Paused":"Pause"
 });
 
 // override rules with localized version

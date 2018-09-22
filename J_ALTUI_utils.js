@@ -233,10 +233,11 @@ var ALTUI_Templates_Factory= function() {
 		// deviceVariableLineTemplate += "		   <th scope='row'>1</th>";
 		_deviceVariableLineTemplate += "		 <td class='altui-variable-title'><span title='{2}'>{0}</span></td>";
 		_deviceVariableLineTemplate +=	("<td class='altui-variable-buttons'>"+
-			smallbuttonTemplate.format( '{3}', 'm-1 altui-variable-history', glyphTemplate.format( "calendar", _T("History"), "" ),_T('History'))+
-			smallbuttonTemplate.replace('btn-light','').format( '{3}', 'm-1 altui-variable-push {4}', glyphTemplate.format( "signal", _T("Push to {5}"), "" ),_T("Push to {5}"))+
-			smallbuttonTemplate.format( '{3}', 'm-1 altui-variable-delete', deleteGlyph,_T('Delete'))+
-			"</td>");
+			'<div class="btn-group" role="group" aria-label="variable commands">' +
+			smallbuttonTemplate.format( '{3}', 'altui-variable-history', glyphTemplate.format( "calendar", _T("History"), "" ),_T('History'))+
+			smallbuttonTemplate.replace('btn-light','').format( '{3}', 'altui-variable-push {4}', glyphTemplate.format( "signal", _T("Push to {5}"), "" ),_T("Push to {5}"))+
+			smallbuttonTemplate.format( '{3}', 'altui-variable-delete', deleteGlyph,_T('Delete'))+
+			"</div></td>");
 		_deviceVariableLineTemplate += "		 <td id='{3}' class='altui-variable-value' >{1}</td>";
 		_deviceVariableLineTemplate += "	 </tr>";
 

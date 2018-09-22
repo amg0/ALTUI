@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2424 $";
+var ALTUI_revision = "$Revision: 2427 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -389,7 +389,6 @@ var styles =`
 	.altui-variable-buttons {
 	}
 	.altui-variable-value {
-		max-width: 200px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -2174,7 +2173,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		// 0: action , 1: value , 2: service, 3: devid
 		var deviceActionLineTemplate = "  <tr>";
-		deviceActionLineTemplate += "		  <td><span title='{2}'><button class='btn btn-light btn-sm altui-run-action' data-altuiid='{3}' data-service='{2}' >{0}</button></span></td>";
+		deviceActionLineTemplate += "		  <td><span title='{2}'><button class='btn btn-primary btn-sm altui-run-action' data-altuiid='{3}' data-service='{2}' >{0}</button></span></td>";
 		deviceActionLineTemplate += "		  <td>{1}</td>";
 		deviceActionLineTemplate += "	  </tr>";
 
@@ -2667,7 +2666,11 @@ var UIManager  = ( function( window, undefined ) {
 
 		var lastrun = (scene.last_run != undefined) ? okGlyph+" "+_toIso(new Date(scene.last_run*1000)).replace('T',' ') : '';
 		var nextrun = _findSceneNextRun(scene);
-		nextrun = (nextrun==0) ? '' : timeGlyph+" "+_toIso(new Date(nextrun*1000)).replace('T',' ');
+		if (scene.paused && scene.paused==1) {
+			nextrun = timeGlyph+" "+_T("Paused")
+		} else {
+			nextrun = (nextrun==0) ? '' : timeGlyph+" "+_toIso(new Date(nextrun*1000)).replace('T',' ');
+		}
 
 		var idDisplay = "<div class='pull-right text-muted'><small>#"+scene.altuiid+" </small></div>";
 		var eyeMonitorHtml = ""	//custom ctrlable
@@ -7522,11 +7525,11 @@ var UIManager  = ( function( window, undefined ) {
 
 		function sceneDraw(idx, scene) {
 			var html = UIManager.sceneDraw(scene);
-			var scenecontainerTemplate="<div class=' col-sm-6 col-md-4 col-xl-3 '>";
-			scenecontainerTemplate	+=	html;
-			scenecontainerTemplate	+=	"</div>";
+			var tpl="<div class=' col-sm-6 col-md-4 col-xl-3 '>";
+			tpl	+=	html;
+			tpl	+=	"</div>";
 			var domPanel = $(".altui-mainpanel");
-			domPanel.append(scenecontainerTemplate.format(scene.id));
+			domPanel.append(tpl.format(scene.id));
 		};
 
 		function _onChangeRoomFilter() {
@@ -14977,7 +14980,7 @@ $(function() {
 		deviceModalTemplate += "	  <div class='modal-body'>";
 		deviceModalTemplate += "	  <div class='row' >";
 		deviceModalTemplate += "	  <div class='col-12' style='overflow-x: auto;'>";
-		deviceModalTemplate += " <table class='table table-responsive-OFF table-sm'>";
+		deviceModalTemplate += " <table class='table table-responsive table-sm'>";	// -OFF
 		deviceModalTemplate += "	   <thead>";
 		deviceModalTemplate += "		 <tr>";
 		// deviceModalTemplate += "			  <th>#</th>";
