@@ -145,7 +145,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			`
 		style += ".boldLabel {    font-weight: bold; }";	// Hue plugin compat
 		style += ".cpanelSection {  border-bottom: 1px dashed #000; }";		// Hue plugin compat
-		style += ".altui-storage-info {font-size: 14px;}";
+		style += ".altui-storage-info {font-size: 12px;}";
 		style += ".altui-watts, .altui-volts, .altui-countdown	{font-size: 16px;}";
 		style += ".altui-watts-unit {font-size: 12px;}";
 		style += ".altui-temperature  {font-size: 16px;}";
@@ -1262,7 +1262,14 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			json = JSON.parse(json)
 			var total = Math.round(json.total/1024)
 			var used = Math.round(json.used/1024*100)/100
-			html = "<div>Storage</div><div class='altui-storage-info'><span class='text-info'>{0}MB</span> / {1}MB</div>".format(used,total)
+			html += "<div class='altui-storage-info'>Storage <span class='float-right'><span class='text-info'>{0}</span> / {1}MB</span></div>".format(used,total)
+		}
+		json = MultiBox.getStatus( device, 'urn:micasaverde-com:G550Siren1', 'CelullarInfo' ) || MultiBox.getStatus( device, 'urn:micasaverde-com:G550Siren1', 'CellularInfo' );
+		if (json) {
+			json = JSON.parse(json)
+			var total = Math.round(json.total/1024)
+			var used = Math.round(json.used/1024*100)/100
+			html += "<div class='altui-storage-info'>3G <span class='float-right'><span class='text-info'>{0}</span> / {1}MB</span></div>".format(used,total)
 		}
 		return html
 	};

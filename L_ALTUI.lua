@@ -14,6 +14,7 @@ local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
 local NMAX_IN_VAR	= 4000
+local DEFAULT_TIMEOUT = 30000
 local THINGSPEAK_PUSH_SEC = 15	-- thingspeak limits
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
@@ -319,6 +320,21 @@ local function run_scene(id)
 	debug(string.format("run_scene(%s)",id or "nil"))
 	local resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:HomeAutomationGateway1", "RunScene", {SceneNum = tostring(id)}, 0)
 	return resultCode, resultString, job, returnArguments
+end
+
+-- sceneIDs is ',' comma separated list of scene ID to run
+local function runScene(lul_device,sceneIDs)
+	sceneIDs = sceneIDs or ""
+	debug(string.format("runScene(%s)",sceneIDs))
+	local parts = sceneIDs:altui_split(",")
+	for k,v in pairs(parts) do
+		local sceneid = tonumber(v)
+		if (sceneid ~=nil) then
+			run_scene(sceneid)
+		else
+			warning(string.format("sceneid %s is not a number, ignoring it",v or ""))
+		end
+	end
 end
 
 local function getDataFor( deviceID,name,prefix )
@@ -2382,7 +2398,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local swversion = getSetVariable(ALTUI_SERVICE, "SWVersion", deviceID, SWVERSION)
 				local favicon = getSetVariable(ALTUI_SERVICE, "FavIcon", deviceID, "/favicon.ico")
 				local machinelearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
-				local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, 3000)
+				local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, DEFAULT_TIMEOUT)
 				local localbootstrap = getSetVariable(ALTUI_SERVICE, "LocalBootstrap", deviceID, "")
 				if (localbootstrap == "") then
 					localbootstrap=defaultBootstrapPath
@@ -4271,7 +4287,7 @@ function startupDeferred(lul_device)
 	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "https://emoncms.org")
 	local pendingReset = getSetVariable(ALTUI_SERVICE, "PendingReset", lul_device, 0)
 	local machineLearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
-	local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, 3000)
+	local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, DEFAULT_TIMEOUT)
 
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")

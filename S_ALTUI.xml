@@ -18,6 +18,12 @@
             <shortCode>debug</shortCode>
         </stateVariable>
         <stateVariable sendEvents="no">
+            <name>SceneIDs</name>
+            <dataType>string</dataType>
+            <defaultValue>""</defaultValue>
+            <shortCode>sceneids</shortCode>
+        </stateVariable>
+        <stateVariable sendEvents="no">
             <name>WorkflowAltuiid</name>
             <dataType>string</dataType>
             <defaultValue>"0-0"</defaultValue>
@@ -137,6 +143,16 @@
                 </argument>
             </argumentList>
         </action>
+		<action>
+            <name>RunScene</name>
+            <argumentList>
+                <argument>
+                    <name>sceneIDs</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>SceneIDs</relatedStateVariable>
+                </argument>
+            </argumentList>
+		</action>
 		<action>
             <name>EnableWorkflows</name>
             <argumentList>
