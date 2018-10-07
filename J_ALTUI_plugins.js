@@ -9,6 +9,7 @@
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
 // job_None=-1, // no icon
@@ -148,6 +149,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-storage-info {font-size: 12px;}";
 		style += ".altui-watts, .altui-volts, .altui-countdown	{font-size: 16px;}";
 		style += ".altui-watts-unit {font-size: 12px;}";
+		style += ".altui-denon-lastresult  {font-size: 10px; white-space: nowrap; overflow: hidden;}";
+		style += ".altui-denonoff-btngrp  {clear: right; }";
+		style += ".altui-denonoff-btn  {margin: 1px 1px 1px 1px; padding: 3px 3px 3px 3px !important; font-size: 11px !important; }";
 		style += ".altui-temperature  {font-size: 16px;}";
 		style += ".altui-temperature-heater	 {font-size: 12px; white-space: pre;}";
 		style += ".altui-temperature-minor	{font-size: 8px;}";
@@ -1255,6 +1259,56 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "</script>";
 		return html;
 	};
+	function _drawAltDenon( device ) {
+		var html="";
+		var cls = ["btn-light","btn-primary"];
+		var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altdenon1', 'LastResult' );
+		var pwrstatus = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
+		var sources = [
+			{id:"bd", label:"BD", cmd:"BD"},
+			{id:"cd", label:"CD", cmd:"CD"},
+			{id:"cbl", label:"CBL/SAT", cmd:"SAT/CBL"},
+			{id:"dvd", label:"DVD", cmd:"DVD"},
+			{id:"dvr", label:"DVR", cmd:"DVR"},
+			{id:"net", label:"NET/USB", cmd:"NET/USB"},
+			{id:"game", label:"GAME", cmd:"GAME"},
+			{id:"phono", label:"PHONO", cmd:"PHONO"},
+			{id:"tuner", label:"TUNER", cmd:"TUNER"},
+			{id:"tv", label:"TV", cmd:"TV"},
+			{id:"vcr", label:"VCR", cmd:"VCR"},
+		]
+
+		var src_html="";
+		$.each(sources, function(i,src) {
+			src_html += '<a class="dropdown-item " id="altui-denon{1}-{0}">{2}</a>'.format(device.altuiid ,src.id,src.label)
+		});
+		html += `
+			<div>
+			<span class="dropdown  altui-denonoff-btngrp">
+			  <button class="btn btn-sm btn-light dropdown-toggle altui-denonoff-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Source
+			  </button>
+			  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			  {3}
+			  </div>
+			</span>
+			<div class="float-right btn-group btn-group-sm altui-denonoff-btngrp" role="group" aria-label="Button group with nested dropdown">
+			  <button type="button" id="altui-denonstby-{0}" class="btn btn-sm {2} altui-denonoff-btn">StandBy</button>
+			  <button type="button" id="altui-denonon-{0}" class="btn btn-sm {1} altui-denonoff-btn">On</button>
+			</div>
+			</div>
+		`.format( device.altuiid , cls[pwrstatus], cls[1-pwrstatus], src_html ) 
+		html += "<div class='altui-denon-lastresult'>{0}</div>".format(status)
+		html += "<script type='text/javascript'>";
+		$.each(sources, function(i,src) {
+			html += "$('.dropdown-item#altui-denon{1}-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:upnp-org:serviceId:altdenon1', 'SendCmd', {newCmd:'SI{2}'}); });".format(
+			device.altuiid,src.id,src.cmd);
+		});
+		html += "$('button#altui-denonon-{0}').on('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:upnp-org:serviceId:altdenon1', 'SendCmd', {newCmd:'PWON'}); } );".format(device.altuiid);
+		html += "$('button#altui-denonstby-{0}').on ('click', function() { MultiBox.runActionByAltuiID('{0}', 'urn:upnp-org:serviceId:altdenon1', 'SendCmd', {newCmd:'PWSTANDBY'}); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	};
 	function _drawVeraSecure( device ) {
 		var html = "";
 		var json = MultiBox.getStatus( device, 'urn:micasaverde-com:G550Siren1', 'StorageInfo' );
@@ -1933,6 +1987,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	onClickWindowCoverButton : _onClickWindowCoverButton,
 	createOnOffButton : _createOnOffButton,
 	drawBinaryLight : _drawBinaryLight,
+	drawAltDenon : _drawAltDenon,
 	drawVeraSecure : _drawVeraSecure,
 	drawBinLightControlPanel : _drawBinLightControlPanel,
 	drawSceneController: _drawSceneController,
