@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2432 $";
+var ALTUI_revision = "$Revision: 2436 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14015,7 +14015,7 @@ var UIManager  = ( function( window, undefined ) {
 					cols: [
 						{ name:'id', type:'numeric', identifier:false, width:50 },
 						{ name:'altuiid', type:'string', identifier:true, width:80 },
-						{ name:'altid', type:'string', identifier:false, width:60 },
+						{ name:'altid', type:'string', identifier:false, width:90 },
 						{ name:'id_parent', type:'numeric', identifier:false, width:80 },
 						{ name:'manufacturer', type:'string', identifier:false, width:120 },
 						{ name:'model', type:'string', identifier:false, width:150 },

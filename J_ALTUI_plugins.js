@@ -1261,7 +1261,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	};
 	function _drawAltDenon( device ) {
 		var html="";
-		var cls = ["btn-light","btn-primary"];
+		var cls = ["btn-success","btn-light","btn-warning"];
 		var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altdenon1', 'LastResult' );
 		var pwrstatus = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
 		var sources = [
@@ -1294,10 +1294,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			</span>
 			<div class="float-right btn-group btn-group-sm altui-denonoff-btngrp" role="group" aria-label="Button group with nested dropdown">
 			  <button type="button" id="altui-denonstby-{0}" class="btn btn-sm {2} altui-denonoff-btn">StandBy</button>
-			  <button type="button" id="altui-denonon-{0}" class="btn btn-sm {1} altui-denonoff-btn">On</button>
+			  <button type="button" id="altui-denonon-{0}" class="btn btn-sm {1} altui-denonoff-btn"> ON </button>
 			</div>
 			</div>
-		`.format( device.altuiid , cls[pwrstatus], cls[1-pwrstatus], src_html ) 
+		`.format( device.altuiid , cls[1-pwrstatus], cls[2-pwrstatus], src_html ) 
 		html += "<div class='altui-denon-lastresult'>{0}</div>".format(status)
 		html += "<script type='text/javascript'>";
 		$.each(sources, function(i,src) {
