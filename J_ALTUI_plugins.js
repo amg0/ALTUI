@@ -1265,17 +1265,20 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altdenon1', 'LastResult' );
 		var pwrstatus = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
 		var sources = [
-			{id:"bd", label:"BD", cmd:"BD"},
-			{id:"cd", label:"CD", cmd:"CD"},
-			{id:"cbl", label:"CBL/SAT", cmd:"SAT/CBL"},
-			{id:"dvd", label:"DVD", cmd:"DVD"},
-			{id:"dvr", label:"DVR", cmd:"DVR"},
-			{id:"net", label:"NET/USB", cmd:"NET/USB"},
-			{id:"game", label:"GAME", cmd:"GAME"},
-			{id:"phono", label:"PHONO", cmd:"PHONO"},
-			{id:"tuner", label:"TUNER", cmd:"TUNER"},
-			{id:"tv", label:"TV", cmd:"TV"},
-			{id:"vcr", label:"VCR", cmd:"VCR"},
+				{id:"bd", label:"BD", cmd:"BD"},
+				{id:"cd", label:"CD", cmd:"CD"},
+				{id:"cbl", label:"CBL/SAT", cmd:"SAT/CBL"},
+				{id:"dvd", label:"DVD", cmd:"DVD"},
+				{id:"dvr", label:"DVR", cmd:"DVR"},
+				{id:"favorites", label:"FAVORITES", cmd:"FAVORITES"},
+				{id:"net", label:"NET/USB", cmd:"NET/USB"},
+				{id:"game", label:"GAME", cmd:"GAME"},
+				{id:"iradio", label:"IRADIO", cmd:"IRADIO"},
+				{id:"phono", label:"PHONO", cmd:"PHONO"},
+				{id:"server", label:"SERVER", cmd:"SERVER"},
+				{id:"tuner", label:"TUNER", cmd:"TUNER"},
+				{id:"tv", label:"TV", cmd:"TV"},
+				{id:"vcr", label:"VCR", cmd:"VCR"},
 		]
 
 		var src_html="";
