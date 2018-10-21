@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2436 $";
+var ALTUI_revision = "$Revision: 2439 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3468,14 +3468,19 @@ var UIManager  = ( function( window, undefined ) {
 					}
 				}
 			}
+			$(domparent).append('<div id="cpanel_controls_container" class="col-12"><div>')
+			var newparent = $(domparent).find("#cpanel_controls_container")
+
 			$.each( tab.Control, function (idx,control) {
 				var offset = _prepareSceneGroupOffset( tab, control );
-				_displayControl( domparent, device, control, idx, offset );
+				_displayControl( newparent, device, control, idx, offset );
 			});
+			// fix height because absolute positioning removes element from the DOM calculations
+			_fixHeight( newparent );
 		}
 
 		// fix height because absolute positioning removes element from the DOM calculations
-		_fixHeight( domparent );
+		// _fixHeight( domparent );
 
 	};
 
