@@ -187,12 +187,16 @@ local function findALTUIDevice()
 end
 
 local function findSONOSDevice()
+	local altsonos=-1
 	for k,v in pairs(luup.devices) do
 		if( v.device_type == "urn:schemas-micasaverde-com:device:Sonos:1" ) then
-			return k
+			return k,1	--sonos
+		end
+		if ( v.device_type == "urn:schemas-upnp-org:device:altsonos:1") then
+			altsonos=k
 		end
 	end
-	return -1
+	return altsonos,2 --altsonos or nothing
 end
 
 local function table2params(workflowaltuiid,args)
@@ -3542,15 +3546,25 @@ function sayTTS(lul_device,newMessage,volume,groupDevices)
 	local resultCode, resultString, job, returnArguments
 	resultCode = -1
 	if (uri ~= nil) then
-		local sonos = findSONOSDevice()
+		local sonos,typ = findSONOSDevice()
 		if (sonos~=-1) then
-			local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3}
-			if (groupDevices ~= "") then
-				params["GroupDevices"]= groupDevices
+			if (typ==1) then
+				local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3}
+				if (groupDevices ~= "") then
+					params["GroupDevices"]= groupDevices
+				else
+					params["GroupZones"]= "ALL"
+				end
+				resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 			else
-				params["GroupZones"]= "ALL"
+				local params = {urlClip=uri}
+				if (groupDevices ~= "") then
+					params["groupID"]= groupDevices
+				else
+					params["groupID"]= "ALL"
+				end
+				resultCode, resultString, job, returnArguments = luup.call_action("urn:upnp-org:serviceId:altsonos1", "AudioClip", params, sonos )
 			end
-			resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 		end
 	end
 	return resultCode
