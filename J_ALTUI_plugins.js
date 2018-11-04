@@ -1259,6 +1259,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "</script>";
 		return html;
 	};
+
 	function _drawAltDenon( device ) {
 		var html="";
 		var cls = ["btn-success","btn-light","btn-warning"];

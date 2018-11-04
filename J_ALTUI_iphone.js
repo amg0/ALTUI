@@ -62,9 +62,11 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	
 	function _drawAltUI( device) {
 		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altui1', 'Debug' ); 
+		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altui1', 'Version' ); 
 		
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
+		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:altui1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
@@ -172,7 +174,18 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		html += "</script>";
 		return html;
 	}
-	
+	function _drawAltSonos(device) {
+		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altsonos1', 'Debug' ); 
+		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altsonos1', 'Version' ); 
+		var html ="";
+		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
+
+		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
+		html += "<script type='text/javascript'>";
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:altsonos1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	}
 	function _drawIPX( device) {
 		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPX8001', 'Debug' ); 
 		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPX8001', 'Version' ); 
@@ -376,6 +389,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	getStyle 	: _getStyle,
 	drawIPhone 	: _drawIPhone,
 	drawIPhoneFavorite : _drawIPhoneFavorite,
+	drawAltSonos : _drawAltSonos,
 	drawIPX		: _drawIPX,
 	drawFLIPR	: _drawFLIPR,
 	drawKSENIA	: _drawKSENIA,
