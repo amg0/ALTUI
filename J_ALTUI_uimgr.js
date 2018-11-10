@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2439 $";
+var ALTUI_revision = "$Revision: 2444 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -4997,6 +4997,10 @@ var UIManager  = ( function( window, undefined ) {
 		}
 	};
 
+	function sanitizePageName(name)
+	{
+		return name.replace(' ','_').replace('\'','')
+	};
 	function _refreshUI( bFull ) {
 		// refresh rooms
 		// refresh devices
@@ -5048,7 +5052,7 @@ var UIManager  = ( function( window, undefined ) {
 			var pagename = _getActivePageName();
 			var page = PageManager.getPageFromName( pagename );
 			// for all widget present which need refresh
-			var selector = "#altui-page-content-{0} .altui-widget".format(pagename.replace(' ','_'));
+			var selector = "#altui-page-content-{0} .altui-widget".format( sanitizePageName(pagename) );
 			$(selector).each( function (idx,elem) {
 				var widgetid = $(elem).prop('id');
 				var widget = PageManager.getWidgetByID( page, widgetid );
@@ -6045,7 +6049,7 @@ var UIManager  = ( function( window, undefined ) {
 	};
 
 	function _getActivePageName() {
-		var str = $("#altui-page-tabs li.active").text();
+		var str = $("#altui-page-tabs li .active").text();
 		if (str.length != 0)
 			return str
 		str = $(".altui-page-content-one.active").prop("id");
@@ -6058,7 +6062,7 @@ var UIManager  = ( function( window, undefined ) {
 	function _getPageSelector( page ) {
 		if (page == undefined)
 				return ".altui-page-content-one";
-		return "#altui-page-content-{0}".format(page.name.replace(' ','_'));
+		return "#altui-page-content-{0}".format( sanitizePageName(page.name) );
 	};
 	function _getWidgetSelector(page,widget) {
 		if ((page==undefined) || (widget==undefined))
@@ -6074,7 +6078,7 @@ var UIManager  = ( function( window, undefined ) {
 		var lines = new Array();
 		PageManager.forEachPage( function( idx, page) {
 			// if ((idxPage==-1) || (idx==idxPage)) {
-				lines.push( "<li class='nav-item' id='altui-page-{1}' role='presentation' ><a class='nav-link' href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,page.name.replace(' ','_')) ); // no white space in ID
+				lines.push( "<li class='nav-item' id='altui-page-{1}' role='presentation' ><a class='nav-link' href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,sanitizePageName(page.name)) ); // no white space in ID
 			// }
 		});
 
@@ -6132,7 +6136,7 @@ var UIManager  = ( function( window, undefined ) {
 		height = Math.max( 500 , height);
 		var pageelem = $(pageHtml).height(height);
 		var pageelemhtml = pageelem.wrap( "<div></div>" ).parent().html();
-		var str = "<div role='tabpanel' class='tab-pane altui-page-content-one' id='altui-page-content-{0}' >{1}</div>".format(page.name.replace(' ','_'),pageelemhtml); // no white space in IDs
+		var str = "<div role='tabpanel' class='tab-pane altui-page-content-one' id='altui-page-content-{0}' >{1}</div>".format(sanitizePageName(page.name),pageelemhtml); // no white space in IDs
 		var elem = $(str).css('background',page.background).height(height+1);
 		return elem.wrap( "<div></div>" ).parent().html();
 	};
@@ -6148,7 +6152,7 @@ var UIManager  = ( function( window, undefined ) {
 		$.each(tools, function(idx,tool) {
 			if ($.isFunction( tool.onWidgetDisplay) )
 			{
-				var selector = "#altui-page-content-{0} .{1}".format(page.name.replace(' ','_'),tool.cls);
+				var selector = "#altui-page-content-{0} .{1}".format(sanitizePageName(page.name),tool.cls);
 				$(selector).each( function(idx,elem) {
 					var widgetid = $(elem).prop('id');
 					(tool.onWidgetDisplay)(page,widgetid, bEdit);		// edit mode
@@ -10982,9 +10986,8 @@ var UIManager  = ( function( window, undefined ) {
 					event.stopPropagation();
 				} else {
 					// everything looks good!
-					$.each( ['name','background'] , function(idx,htmlid) {
-						page[ htmlid ] = $("#"+htmlid).val();
-					});
+					page[ 'name' ] = sanitizePageName( $("#name").val() );
+					page[ 'background' ] = $("#background").val();
 					$('div#dialogModal').modal('hide');
 					_displayPages();
 				}
