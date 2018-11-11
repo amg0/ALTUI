@@ -39,7 +39,6 @@ THE SOFTWARE.
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
 var ALTUI_revision = "$Revision: 2448 $";
-var tzzest = 0;
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
