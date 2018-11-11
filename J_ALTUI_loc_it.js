@@ -509,7 +509,11 @@ Localization.init( {
 	"Menu2ColumnLimit: if a menu has more entries than this number then show the menu entries in 2 columns":"Menu2ColumnLimit: if a menu has more entries than this number then show the menu entries in 2 columns",
 	"TempUnitOverride: Unit for temperature":"TempUnitOverride: Unit for temperature",
 	"EditorFontSize: Editor font size in pixels":"EditorFontSize: Editor font size in pixels",
-	"Paused":"Paused"
+	"Paused":"Paused",
+	"ShowClock: The local clock time is displayed in the message bar":"ShowClock: The local clock time is displayed in the message bar",
+	"Show Clock in Message bar":"Show Clock in Message bar",
+	"MyRoom Backgrounds":"MyRoom Backgrounds",
+	"Graph Pages Control":"Graph Pages Control"
 });
 
 // override rules with localized version

@@ -518,7 +518,11 @@ Localization.init( {
 	"Menu2ColumnLimit: if a menu has more entries than this number then show the menu entries in 2 columns":"Menu2ColumnLimit: affiche le menu en 2 colonnes si le nombre de lignes est superieur à cette limite",
 	"TempUnitOverride: Unit for temperature":"TempUnitOverride: Unité pour la température",
 	"EditorFontSize: Editor font size in pixels":"EditorFontSize: taille des caractères en pixel",
-	"Paused":"Pause"
+	"Paused":"Pause",
+	"ShowClock: The local clock time is displayed in the message bar":"ShowClock: Montre l heure dans la barre de message",
+	"Show Clock in Message bar":"Montre l heure dans la barre de message",
+	"MyRoom Backgrounds":"Images pour Ma Maison",
+	"Graph Pages Control":"Control des pages de graphes"
 });
 
 // override rules with localized version
