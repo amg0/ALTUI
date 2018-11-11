@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2446 $";
+var ALTUI_revision = "$Revision: 2447 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -14816,12 +14816,27 @@ var UIManager  = ( function( window, undefined ) {
 			tr.remove()
 		}
 		function _addBackground(e) {
-			var html ="<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(
-				"<input class='form-control' type='text' name='altui-roomkey' value='' placeholder='enter room name'></input>",
-				"<input class='form-control' type='text' name='altui-roombkg' value='' placeholder='enter url to background'></input>",
-				xsbuttonTemplate.format("_","altui-bgmyhome-tr-del",deleteGlyph,"Del")
-			)
-			$("#altui-bgmyhome-opts tbody").append(html)
+			var name = "<input class='form-control' type='text' name='altui-roomkey' value='' placeholder='enter room name'></input>"
+			var url = "<input class='form-control' type='text' name='altui-roombkg' value='' placeholder='enter url to background'></input>"
+			var del =  xsbuttonTemplate.format("_","altui-bgmyhome-tr-del",deleteGlyph,"Del")
+			if ($("#altui-bgmyhome-opts tbody").length >=1) {
+				var html ="<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(
+					name,
+					url,
+					del
+				)
+				$("#altui-bgmyhome-opts tbody").append(html)
+			} else {
+				var model = [
+					{ 
+					id: name, 
+					url: url,
+					cmd: del
+					}
+				]
+				var tblBackground = HTMLUtils.array2Table(model,'id',[],"",'altui-bgmyhome-tr','altui-bgmyhome-opts',false)
+				$("#altui-bgmyhome-container").html(tblBackground)
+			}
 		}
 		function _saveBackground(e) {
 			MultiBox.getRooms( null,null,function( rooms ) {
