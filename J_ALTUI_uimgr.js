@@ -90,7 +90,7 @@ var glyphList = []
 //https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less
 // new 4.7.0 location "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/less/variables.less"
 // new 5.0 location "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/web-fonts-with-css/less/_variables.less"
-var tmp = ""
+
 // $.ajax({
 	// crossDomain :true,
 	// url:"https://github.com/FortAwesome/Font-Awesome/blob/master/web-fonts-with-css/less/_variables.less",	// prod
