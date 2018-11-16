@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE.  
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2448 $";
+var ALTUI_revision = "$Revision: 2450 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -48,7 +48,7 @@ var _HouseModes = [];
 var deviceModalTemplate = "";
 var deviceActionModalTemplate = "";
 var defaultDialogModalTemplate = "";
-var simul = null;	// global D3 forceSimulation
+var simul = null;	// global D3 forceSimulations
 
 
 var deleteGlyph = glyphTemplate.format("trash-o",_T("Delete"),"text-danger")
@@ -90,7 +90,7 @@ var glyphList = []
 //https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/less/variables.less
 // new 4.7.0 location "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/a8386aae19e200ddb0f6845b5feeee5eb7013687/less/variables.less"
 // new 5.0 location "https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/web-fonts-with-css/less/_variables.less"
-
+var tmp = ""
 // $.ajax({
 	// crossDomain :true,
 	// url:"https://github.com/FortAwesome/Font-Awesome/blob/master/web-fonts-with-css/less/_variables.less",	// prod
@@ -514,7 +514,7 @@ var styles =`
 	body.withBackground .altui-device , body.withBackground .altui-scene , body.withBackground .altui-workflow , body.withBackground .altui-pluginbox-panel , body.withBackground footer p {
 		background-color: rgba(255,255,255,0.5)
 	}
-	.altui-device-title {
+	.altui-device-title , .altui-workflow-heading {
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
@@ -529,7 +529,7 @@ var styles =`
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.altui-device-title-input {
+	.altui-device-title-input , .altui-workflow-title-input{
 		width: 70%;
 		height: 20px;
 	}
@@ -14705,7 +14705,7 @@ var UIManager  = ( function( window, undefined ) {
 		
 		var html = "";
 		html +="<div class='col-12 mb-2'>";
-		html +=" <div class='card xxx'>";
+		html +=" <div class='card border-secondary'>";
 		html +="  <div class='card-header'>"+_T("Options")+"</div>";
 		html +="  <div class='card-body'><form><div class='row'>";
 			$.each(_userOptions, function(id,check) {
@@ -14721,7 +14721,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		//http://api.github.com/repos/ajaxorg/ace/contents/lib/ace/theme
 		html += "<div class='col-12 mb-2'>";
-			html +="<div class='card xxx'>";
+			html +="<div class='card border-secondary'>";
 				html +="  <div class='card-header'>"+_T("Editor Control")+"</div>";
 				html +="  <div class='card-body'>";
 					html += "<div class='row'>";
@@ -14753,7 +14753,7 @@ var UIManager  = ( function( window, undefined ) {
 		});
 		var tblBackground = HTMLUtils.array2Table(model,'id',[],"",'altui-bgmyhome-tr','altui-bgmyhome-opts',false)
 		html += "<div class='col-12 mb-2'>";
-			html +="<div class='card xxx'>";
+			html +="<div class='card border-secondary'>";
 				html +="  <div class='card-header'>"+_T("MyRoom Backgrounds")+"</div>";
 				html +="  <div class='card-body'>";
 					html += "<div class='row' id='altui-bgmyhome-container'>";
@@ -14768,7 +14768,7 @@ var UIManager  = ( function( window, undefined ) {
 		html +="</div>";
 		
 		html += "<div class='col-12 mb-2'>";
-			html +="<div class='card xxx'>";
+			html +="<div class='card border-secondary'>";
 				html +="  <div class='card-header'>"+_T("Cache Control")+"</div>";
 				html +="  <div class='card-body'>";
 					if (MultiBox.isRemoteAccess()) {
@@ -14786,7 +14786,7 @@ var UIManager  = ( function( window, undefined ) {
 		html +="</div>";
 
 		html += "<div class='col-12 mb-2'>";
-		html +="<div class='card xxx'>";
+		html +="<div class='card border-secondary'>";
 		html +="  <div class='card-header'>"+_T("Custom Pages Control")+"</div>";
 		html +="  <div class='card-body'>";
 			// html += "<div class='btn-group' role='group' aria-label='User Pages DB'>";
@@ -14799,7 +14799,7 @@ var UIManager  = ( function( window, undefined ) {
 		html +="</div>";
 
 		html += "<div class='col-12 mb-2'>";
-		html +="<div class='card xxx'>";
+		html +="<div class='card border-secondary'>";
 		html +="  <div class='card-header'>"+_T("Graph Pages Control")+"</div>";
 		html +="  <div class='card-body'>";
 			// html += "<div class='btn-group' role='group' aria-label='User Pages DB'>";
