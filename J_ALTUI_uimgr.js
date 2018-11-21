@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2450 $";
+var ALTUI_revision = "$Revision: 2451 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -8075,6 +8075,8 @@ var UIManager  = ( function( window, undefined ) {
 			// first, fix the jointjs ID of all states, source and target ids.
 			// for each device in conditions or in actions, prepare a substitution entry.
 			var graph = JSON.parse(model.workflow.graph_json)
+			if ( graph==null )
+				return null;
 			graph.active_state = _fixID( graph.active_state );
 			$.each(graph.cells, function(idx,cell) {
 				cell.id = _fixID(cell.id)
@@ -8160,6 +8162,10 @@ var UIManager  = ( function( window, undefined ) {
 
 		UIManager.clearPage('Clone Workflow',_T("Clone Workflow"),UIManager.oneColumnLayout);
 		var model = _createCloneWorkflowModel(workflow);
+		if (model==null) {
+			UIControler.changePage("Workflow Pages");
+			return
+		}
 		var html = _displayCloneWorkflow(model);
 		$(".altui-mainpanel").append(html);
 		$("#altui-workflow-clonebutton").off().on('click',model,function(event){

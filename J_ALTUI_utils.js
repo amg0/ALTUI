@@ -3115,9 +3115,14 @@ var WorkflowManager = (function() {
 		if (_workflows.length==0)
 			altuiid="0-1";
 		else {
-			var last = _workflows[_workflows.length-1].altuiid;
-			var splits = last.split("-");
-			altuiid = "0-"+(parseInt(splits[1])+1)
+			// find next altuiid
+			var ids = $.map(_workflows, function(w) {
+				return( parseInt(w.altuiid.split("-")[1]) )
+			})
+			var max = ids.reduce(function(a, b) {
+				return Math.max(a, b);
+			});
+			altuiid = "0-"+(max+1)
 		}
 		if (workflow)
 			delete workflow.altuiid	// make sure we use the new ALTUIID
