@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.33"
+local version = "v2.34"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3514,11 +3514,12 @@ end
 
 local function createMP3file(lul_device,newMessage)
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "")
+	local language = getSetVariable(ALTUI_SERVICE, "VoiceRSS_lang", lul_device, "en-us")
 	if (api_key == "") then
 		error(string.format("ALTUI has no defined API key for VoiceRSS. Request is ignored"))
 		return nil
 	end
-	local url = "https://api.voicerss.org/?" .. "key=".. api_key .."&src="..newMessage.."&hl=fr-fr&c=MP3&f=44khz_16bit_mono"
+	local url = "https://api.voicerss.org/?" .. "key=".. api_key .."&src="..newMessage.."&hl="..language.."&c=MP3&f=44khz_16bit_mono"
 	debug(string.format("calling url: %s",url))
 	-- return url  => should work but does not for some reasons.
 
@@ -4305,6 +4306,7 @@ function startupDeferred(lul_device)
 	local workflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
 	local ctrlOptions = getSetVariable(ALTUI_SERVICE, "CtrlOptions", lul_device, "1500,60")
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "")
+	local language = getSetVariable(ALTUI_SERVICE, "VoiceRSS_lang", lul_device, "en-us")
 	local custompages = getSetVariable(ALTUI_SERVICE, "Data_CustomPages_0", lul_device, "[]")
 	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "https://emoncms.org")
 	local pendingReset = getSetVariable(ALTUI_SERVICE, "PendingReset", lul_device, 0)
