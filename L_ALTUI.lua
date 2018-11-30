@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.34"
+local version = "v2.35"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3512,6 +3512,14 @@ function resetDevice(lul_device,reload)
 	return default
 end
 
+local function mp3Duration(MP3FilePath)
+    local lfs = require "lfs"
+    local mp3FileBytes =  lfs.attributes (MP3FilePath, "size")
+    -- local mp3DurationinSeconds =  math.floor ((mp3FileBytes / 1024)*8)/64
+    local mp3DurationinSeconds =  mp3FileBytes/58000*16
+    return math.ceil(mp3DurationinSeconds)
+end
+
 local function createMP3file(lul_device,newMessage)
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "")
 	local language = getSetVariable(ALTUI_SERVICE, "VoiceRSS_lang", lul_device, "en-us")
@@ -3530,14 +3538,15 @@ local function createMP3file(lul_device,newMessage)
 		return nil
 	end
 
-	local f,errmsg,errno = io.open("/www/"..ALTUI_SONOS_MP3, "wb")
+	local filename = "/www/"..ALTUI_SONOS_MP3
+	local f,errmsg,errno = io.open(filename, "wb")
 	if (f==nil) then
 		error(string.format("ALTUI could not open the file %s in wb mode. check path & permissions. msg:%s",ALTUI_SONOS_MP3,errmsg))
 		return nil
 	end
 	f:write(content)
 	f:close()
-	return string.format("http://%s/%s",hostname,ALTUI_SONOS_MP3)
+	return string.format("http://%s/%s",hostname,ALTUI_SONOS_MP3) , mp3Duration(filename)
 end
 
 function sayTTS(lul_device,newMessage,volume,groupDevices)
@@ -3547,14 +3556,14 @@ function sayTTS(lul_device,newMessage,volume,groupDevices)
 	groupDevices = groupDevices or ""
 	log(string.format("sayTTS(%d,%s,%d,%s)",lul_device, newMessage,volume,groupDevices))
 
-	local uri = createMP3file(lul_device,newMessage)
+	local uri, estDuration = createMP3file(lul_device,newMessage)
 	local resultCode, resultString, job, returnArguments
 	resultCode = -1
 	if (uri ~= nil) then
 		local sonos,typ = findSONOSDevice()
 		if (sonos~=-1) then
 			if (typ==1) then
-				local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3}
+				local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=estDuration}
 				if (groupDevices ~= "") then
 					params["GroupDevices"]= groupDevices
 				else
@@ -3562,7 +3571,7 @@ function sayTTS(lul_device,newMessage,volume,groupDevices)
 				end
 				resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 			else
-				local params = {urlClip=uri}
+				local params = {urlClip=uri, Duration=estDuration}
 				if (groupDevices ~= "") then
 					params["groupID"]= groupDevices
 				else
