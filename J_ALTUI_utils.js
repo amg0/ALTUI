@@ -186,8 +186,15 @@ function Altui_ExecuteFunctionByName(functionName, context , device, extraparam)
 	var func = namespaces.pop();
 	for (var i = 0; i < namespaces.length; i++) {
 		context = context[namespaces[i]];
+		if ( context == undefined ) {
+			var str = "the module or function "+functionName+" does not exist, check your configuration"
+			console.warn(str)
+			setTimeout( function() {
+				PageMessage.message(str,"warning");
+			},3000);
+		}
 	}
-	return context[func].call(context, device, extraparam);
+	return context ? context[func].call(context, device, extraparam) : null
 };
 
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected

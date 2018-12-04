@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2451 $";
+var ALTUI_revision = "$Revision: 2454 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1659,7 +1659,7 @@ var UIManager  = ( function( window, undefined ) {
 				if (len==0) {
 					// not loaded yet
 					_toload++;
-					_loadScript(obj.ScriptFile, function() {
+					_loadScript(obj.ScriptFile, function(e) {
 						// script has been loaded , check if style needs to be loaded and if so, load them
 						$.each(_devicetypesDB,function(idx,dt) {
 							if ( (dt.ScriptFile == obj.ScriptFile) && (dt.StyleFunc != undefined) ) {
