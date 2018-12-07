@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2454 $";
+var ALTUI_revision = "$Revision: 2455 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -143,6 +143,27 @@ var styles =`
 	}
 	.nav-link {
 		white-space: nowrap;
+	}
+	@media (max-width: 991.98px) {
+	  .offcanvas-collapse {
+		position: fixed;
+		top: 56px; /* Height of navbar */
+		bottom: 0;
+		left: 100%;
+		width: 100%;
+		padding-right: 1rem;
+		padding-left: 1rem;
+		overflow-y: auto;
+		visibility: hidden;
+		background-color: #343a40;
+		transition-timing-function: ease-in-out;
+		transition-duration: .3s;
+		transition-property: left, visibility;
+	  }
+	  .offcanvas-collapse.open {
+		left: 0;
+		visibility: visible;
+	  }
 	}
 	.altui-clock {
 	}
@@ -1425,12 +1446,12 @@ var UIManager  = ( function( window, undefined ) {
 
 	function _generateNavBarHTML() {
 		var html = `
-		<nav id="navbar" class="navbar navbar-expand-md navbar-dark bg-primary">
+		<nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
 		  <a class="navbar-brand" href="#"><div class='imgLogo'></div></a>
-		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		  </button>
-		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		  <div class="navbar-collapse offcanvas-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 			{0}
 			</ul>
@@ -6328,7 +6349,7 @@ var UIManager  = ( function( window, undefined ) {
 		// EventBus.unregisterEventHandler("on_ui_deviceStatusChanged");
 		UIManager.stoprefreshModes();
 		HTMLUtils.stopAllTimers();
-		$(".navbar-collapse").collapse('hide');
+		$(".navbar-collapse").removeClass('open');
 		$(".altui-layout").remove();
 		$("#navbar").off("keyup", "#altui-search-text")
 		$("#altui-search-text").val("")
@@ -15206,6 +15227,9 @@ $(function() {
 		$("#wrap").prepend(body);
 		$("#menu_scene_withfavorite").hide();
 		$("#menu_scene").show();
+		$('[data-toggle="offcanvas"]').on('click', function () {
+			$('.offcanvas-collapse').toggleClass('open')
+		})
 
 		ALTUI_Templates = ALTUI_Templates_Factory();
 		if (g_ALTUI.g_CustomBackground.length>0) {
