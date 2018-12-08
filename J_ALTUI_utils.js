@@ -5083,7 +5083,7 @@ var SceneEditor = function (scene) {
 				//UI7 only features
 				if (UIManager.UI7Check()==true) {
 					//trigger mode
-					if ( $("#altui-trigger-and").hasClass("active") ) {
+					if ( $("#altui-trigger-and").hasClass("btn-primary") ) {
 						scene.triggers_operator = "AND"
 					} else {
 						scene.triggers_operator = "OR"

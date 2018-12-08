@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2455 $";
+var ALTUI_revision = "$Revision: 2456 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -155,7 +155,6 @@ var styles =`
 		padding-left: 1rem;
 		overflow-y: auto;
 		visibility: hidden;
-		background-color: #343a40;
 		transition-timing-function: ease-in-out;
 		transition-duration: .3s;
 		transition-property: left, visibility;
@@ -1451,7 +1450,7 @@ var UIManager  = ( function( window, undefined ) {
 		  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		  </button>
-		  <div class="navbar-collapse offcanvas-collapse" id="navbarSupportedContent">
+		  <div class="navbar-collapse offcanvas-collapse bg-primary" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 			{0}
 			</ul>
