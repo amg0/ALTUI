@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2456 $";
+var ALTUI_revision = "$Revision: 2457 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6770,6 +6770,8 @@ var UIManager  = ( function( window, undefined ) {
 
 	pageMyHome: function ( key, args )
 	{
+		var staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );
+		var starGlyph = glyphTemplate.format( "star", _T("Favorite"), "altui-favorite text-warning" );
 		var categoryFilters = {
 			'power':  {label:"Power", glyph:"fa-power-off", types:[
 				"urn:schemas-upnp-org:device:BinaryLight:1",
@@ -6886,7 +6888,7 @@ var UIManager  = ( function( window, undefined ) {
 			var arr = $.map( scenes, function(s,i) {
 				return {
 					id:s.altuiid,
-					name:s.name,
+					name:((s.favorite==true) ? starGlyph : staremtpyGlyph) + s.name,
 					run: smallbuttonTemplate.format( s.altuiid, 'altui-favorites-scene-content', runGlyph, _T("Run"), 'data-altuiid="{0}"'.format(s.altuiid) )
 				}
 			})
@@ -6912,7 +6914,9 @@ var UIManager  = ( function( window, undefined ) {
 						&& ( (search.length==0) || (roomname.toUpperCase().contains(search)==true) || (device.name.toUpperCase().contains(search)==true) )
 						&& ( (filteredDeviceTypes.length==0) || ($.inArray(device.device_type , filteredDeviceTypes)!=-1) )
 			});
-			var arr = $.map( devices, function(d,i) { return {id:d.altuiid, name:d.name, action:_deviceIcon(d), val:_deviceInfo(d)} } )
+			var arr = $.map( devices, function(d,i) { 
+				return {id:d.altuiid, name:((d.favorite==true) ? starGlyph : staremtpyGlyph)+d.name, action:_deviceIcon(d), val:_deviceInfo(d)} 
+			})
 			return (arr.length>0) ? HTMLUtils.array2Table(arr,'id',[],null,'altui-myhome-devices','htmlid',false) : null
 		}
 
@@ -7006,15 +7010,6 @@ var UIManager  = ( function( window, undefined ) {
 					// html = '<div class="col-12"><div class="row">' + html + '</div></div>'
 				}
 				$(".altui-mainpanel").html(html)
-				
-				// video
-				// var streamurl= "url(http://192.168.1.20:81/videostream.cgi?user=admin&pwd=Clem0tine)"
-				// $("#Bureau.altui-myhome-card .altui-myhome-roomimg").css("background-image","")
-				// $("#Bureau .altui-myhome-roomimg").css({
-						// "background-image": streamurl,
-						// "background-size": "contain",
-						// "background-repeat": "no-repeat"
-					// })
 
 				// now update the quick jump bar
 				_updateQuickJumpBar()
@@ -7046,6 +7041,27 @@ var UIManager  = ( function( window, undefined ) {
 				.on("click",".altui-back-top",function(d) {
 					window.scrollTo(0, 0);
 				})
+				.off("click",".altui-favorite")
+				.on("click",".altui-favorite",function(e) {
+					e.stopPropagation();
+					//$(this).closest("tr").closest("table").hasClass("altui-myhome-devices")
+					var tr = $(this).closest("tr")
+					var altuiid =$(tr).find("td:first-child").html()
+					var bFavorite = false
+					if ( $(tr).closest("table").hasClass("altui-myhome-devices") == true ) {
+						var device = MultiBox.getDeviceByAltuiID(altuiid);
+						device.favorite = !device.favorite;
+						Favorites.set('device', altuiid, device.favorite);
+						bFavorite = device.favorite
+					} else {
+						var scene = MultiBox.getSceneByAltuiID(altuiid);
+						scene.favorite = !scene.favorite;
+						Favorites.set('scene', altuiid, scene.favorite);
+						bFavorite = scene.favorite
+					}
+					$(this).replaceWith( bFavorite ? starGlyph : staremtpyGlyph );
+				})
+
 			$("#altui-pagemessage")
 				.off("click",".altui-quick-jump-type")
 				.on("click",".altui-quick-jump-type",function(d) {
@@ -15107,7 +15123,7 @@ $(function() {
 		deviceModalTemplate += "	  <div class='modal-body'>";
 		deviceModalTemplate += "	  <div class='row' >";
 		deviceModalTemplate += "	  <div class='col-12' style='overflow-x: auto;'>";
-		deviceModalTemplate += " <table class='table table-responsive table-sm'>";	// -OFF
+		deviceModalTemplate += " <table class='table  table-sm'>";	// -OFF
 		deviceModalTemplate += "	   <thead>";
 		deviceModalTemplate += "		 <tr>";
 		// deviceModalTemplate += "			  <th>#</th>";

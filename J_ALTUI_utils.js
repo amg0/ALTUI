@@ -2145,7 +2145,7 @@ var HTMLUtils = (function() {
 			}
 			return value;
 		} else if ( (valuetype==='string') && ( (value.indexOf("http") === 0) || (value.indexOf("https") === 0) || (value.indexOf("ftp") === 0) ) ) {
-			return "<a href='{0}'>{0}</a>".format(value);
+			return "<a href='{0}' target='_blank'>{0}</a>".format(value);
 		}
 		return value.toString().htmlEncode();
 	};
