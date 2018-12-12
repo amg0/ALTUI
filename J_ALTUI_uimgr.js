@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2457 $";
+var ALTUI_revision = "$Revision: 2458 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6939,21 +6939,37 @@ var UIManager  = ( function( window, undefined ) {
 
 		// $("#altui-toggle-messages").after("<a class='btn btn-light' role='button' href='#{0}'>{0}</a>".format(model.name))
 		function _updateQuickJumpBar() {
-			var html = "";
-			$(".altui-quick-jump").remove()
 			if ( $(".altui-quick-jump-type").length==0 ) {
-				var btnTemplate = _.template( '<button type="button" id="${id}" class="btn btn-light altui-quick-jump-type" ><i class="fa ${glyph}" aria-hidden="true"></i> ${label}</button>' )
+				//0: button label , 1:items , 2: class
+				var htmlDropDown = `<div class="{2}">
+					<button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{0}
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					{1}
+					</div>
+				</div>
+				`;
+				var btnTemplate = _.template( '<button type="button" id="${id}" class="dropdown-item btn btn-light altui-quick-jump-type" ><i class="fa ${glyph}" aria-hidden="true"></i> ${label}</button>' )
+				var htmlBtns=[]
 				$.each( categoryFilters, function(key,val) {
 					var model = $.extend( val, {id:key} )
-					html += (btnTemplate)(model)
+					htmlBtns.push( (btnTemplate)(model) )
 				});
-				$("#altui-toggle-messages").after(html)
-			}
-			html=""
-			$.each( $(".altui-myhome-card").map(function() { return this.id }), function( idx,name) {
-				html += '<a class="altui-quick-jump btn btn-light" role="button" href="#{0}">{0}</a>'.format(name)
-			});
-			$(".altui-quick-jump-type").last().after(html)
+				$("#altui-toggle-messages").after(htmlDropDown.format(tagsGlyph+" "+_T("Category"),htmlBtns.join(""),'altui-dropdown-category' ))
+
+				htmlBtns=[]
+				$.each( $(".altui-myhome-card").map(function() { return this.id }), function( idx,name) {
+					htmlBtns.push( '<a class="dropdown-item altui-quick-jump"  href="#{0}">{0}</a>'.format(name) )
+				});
+
+				$(".altui-dropdown-category").last().after( htmlDropDown.format( eyeOpenGlyph+" "+_T("Rooms"), htmlBtns.join(""),'altui-dropdown-rooms' ) )
+			}			
+			var nActive = $('.altui-dropdown-category button.dropdown-item.active').length
+			if (nActive==0)
+				$('.altui-dropdown-category .dropdown-toggle').addClass("btn-light").removeClass("btn-info")
+			else 
+				$('.altui-dropdown-category .dropdown-toggle').removeClass("btn-light").addClass("btn-info")
 		}
 
 		function _drawRooms() {
