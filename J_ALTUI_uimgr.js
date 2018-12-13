@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2458 $";
+var ALTUI_revision = "$Revision: 2461 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1046,6 +1046,18 @@ var UIManager  = ( function( window, undefined ) {
 
 	var _editorOptions = [
 		{ id:'EditorFontSize', type:'number', label:"Editor Font Size", _default:12, min:8, max:30, help:'Editor font size in pixels'  },
+	];
+
+	var meteoDefault = `
+<a class="weatherwidget-io" href="https://forecast7.com/fr/48d862d35/paris/" data-label_1="PARIS" data-label_2="Météo" data-theme="weather_one" >PARIS Météo</a>
+<script>
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+</script>
+`
+
+	var _meteoOptions = [
+		{ id:'WeatherWidgetButton', type:'button', label:"Configure", url:"https://weatherwidget.io/", help:'open weatherwidget.io to configure widget'  },
+		{ id:'WeatherWidgetCode', type:'multiline', rows:'5', label:"Weather Widget HTML Code", _default:meteoDefault, help:'Copy Paste the Widget code here'  },
 	];
 
 	var edittools = [];
@@ -4802,13 +4814,12 @@ var UIManager  = ( function( window, undefined ) {
 		if ( $(".altui-favorites").length==0 )
 			return;
 
-
 		if (bFirst==true) {
 			var favoritesToDraw=[];	// will then be sorted according to last saved preference
 
 			// draw meteo
-			if ( MyLocalStorage.getSettings('ShowWeather')==1 )
-				favoritesToDraw.push({name:"meteo"});
+			// if ( MyLocalStorage.getSettings('ShowWeather')==1 )
+				// favoritesToDraw.push({name:"meteo"});
 
 			// draw Housemode
 			if ((MyLocalStorage.getSettings('ShowHouseMode')==1) && (UIManager.UI7Check()==true) )
@@ -4865,6 +4876,14 @@ var UIManager  = ( function( window, undefined ) {
 			favoriteTemplate += "</div>";
 
 			var html = "";
+
+			if ( MyLocalStorage.getSettings('ShowWeather')==1 ) {
+				html += "<div class='altui-favorites row'>";
+					html += "<div class='col-12'>"; 
+					html += MyLocalStorage.getSettings('WeatherWidgetCode')
+					html += "</div>";
+				html += "</div>";
+			}
 
 			html += "<div class='altui-favorites row'>";
 			html += "<div class='altui-favorites-sortable col-12'>";
@@ -5132,14 +5151,20 @@ var UIManager  = ( function( window, undefined ) {
 		var options = JSON.parse(serveroptions);
 		var serversideOptions = MyLocalStorage.getSettings("ServerSideOptions")
 
-		$.each( $.merge( $.merge( [], _userOptions ), _editorOptions ) , function(idx,opt) {
-			if (MyLocalStorage.getSettings(opt.id) == null)
-				MyLocalStorage.setSettings(opt.id, opt._default);
-			if ( (serversideOptions==true) && (options[opt.id] != undefined ) ) {
-				var v= atob(options[opt.id])
-				if (isInteger(v)) v= parseInt(v);
-				MyLocalStorage.setSettings(opt.id, v );
-			}
+		// init all options
+		var options = [_userOptions,_editorOptions,_meteoOptions]
+		$.each(options, function(i,optarr) {
+			$.each(optarr, function(idx,opt) {
+				// if null, set the default
+				if (MyLocalStorage.getSettings(opt.id) == null)
+					MyLocalStorage.setSettings(opt.id, opt._default);
+				// if serverside is selected 
+				if ( (serversideOptions==true) && (options[opt.id] != undefined ) ) {
+					var v= atob(options[opt.id])
+					if (isInteger(v)) v= parseInt(v);
+					MyLocalStorage.setSettings(opt.id, v );
+				}
+			})
 		});
 	};
 	function _forceOptions(name,value) {
@@ -6370,6 +6395,9 @@ var UIManager  = ( function( window, undefined ) {
 		$(".blocklyToolboxDiv").remove();
 		$("body").append("<div class='altui-scripts'></div>");
 
+		// remove meteo widget script
+		$("script#weatherwidget-io-js").remove()
+		
 		// install breadCrumb callbacks
 		$(".altui-breadcrumd-item").off().on('click',function(e) {
 			var id = $(this).prop('id');
@@ -6950,7 +6978,7 @@ var UIManager  = ( function( window, undefined ) {
 					</div>
 				</div>
 				`;
-				var btnTemplate = _.template( '<button type="button" id="${id}" class="dropdown-item btn btn-light altui-quick-jump-type" ><i class="fa ${glyph}" aria-hidden="true"></i> ${label}</button>' )
+				var btnTemplate = _.template( '<button type="button" id="${id}" class="dropdown-item btn-light altui-quick-jump-type" ><i class="fa ${glyph}" aria-hidden="true"></i> ${label}</button>' )
 				var htmlBtns=[]
 				$.each( categoryFilters, function(key,val) {
 					var model = $.extend( val, {id:key} )
@@ -14672,10 +14700,13 @@ var UIManager  = ( function( window, undefined ) {
 						check.label,
 						width
 					  )
-					$(".altui-mainpanel").on("change","#altui-"+check.id,function(){
-						_saveOption(check.id, $("#altui-"+check.id).val());
-					});
+					$(".altui-mainpanel")
+						.off("change","#altui-"+check.id)
+						.on("change","#altui-"+check.id,function(){
+							_saveOption(check.id, $("#altui-"+check.id).val());
+						});
 					break;
+					
 				case 'checkbox':
 					html += `
 					<div class="{5} form-check">
@@ -14695,10 +14726,13 @@ var UIManager  = ( function( window, undefined ) {
 					// html +="<label title='"+check.id+"' class='checkbox-inline'>";
 					// html +=("  <input type='checkbox' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>"+_T(check.label));
 					// html +="</label>";
-					$(".altui-mainpanel").on("click","#altui-"+check.id,function(){
-						_saveOption(check.id,$("#altui-"+check.id).is(':checked') ? 1 : 0);
-					});
+					$(".altui-mainpanel")
+						.off("click","#altui-"+check.id)
+						.on("click","#altui-"+check.id,function(){
+							_saveOption(check.id,$("#altui-"+check.id).is(':checked') ? 1 : 0);
+						});
 					break;
+					
 				case 'number':
 					html += `
 					  <div class="{6} form-group">
@@ -14718,14 +14752,52 @@ var UIManager  = ( function( window, undefined ) {
 
 					// html +="<label title='"+check.id+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label>:";
 					// html +=("<input type='number' min='"+(check.min||0) +"' max='"+(check.max||999) +"' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>");
-					$(".altui-mainpanel").on("focusout","#altui-"+check.id,function(){
-						_saveOption(check.id,parseInt($("#altui-"+check.id).val()));
-					});
+					$(".altui-mainpanel")
+						.off("focusout","#altui-"+check.id)
+						.on("focusout","#altui-"+check.id,function(){
+							_saveOption(check.id,parseInt($("#altui-"+check.id).val()));
+						});
+					break;
+					
+				case 'button':
+					html += `
+					<div class="{3} form-group">
+						<label for="altui-{0}">{1}</label>
+						<button id="altui-{0}" class="btn btn-light" >{1}</button>
+						{2}
+					</div>`.format(check.id,check.label,helpbutton,width)
+					$(".altui-mainpanel")
+						.off("click","#altui-"+check.id)
+						.on("click","#altui-"+check.id,function(){
+							window.open( check.url, '_blank');
+						});
+					break;
+					
+				case 'multiline':
+					html += `
+					<div class="{4} form-group">
+						<label for="altui-{0}">{1}</label>
+						<textarea id="altui-{0}" class="form-control" rows="{5}">{2}</textarea>
+						{3}
+					</div>`.format(check.id,check.label,check._default,helpbutton,width,check.rows)
+					$(".altui-mainpanel")
+						.off("change","#altui-"+check.id)
+						.on("change","#altui-"+check.id,function(){
+							var val = $("#altui-"+check.id).val();
+							if (val.length<5)
+								val = check._default;
+							_saveOption(check.id,val);
+						});
+					break;
+					
+				default:
+					html += JSON.stringify({id:id, check:check, width:width})
 					break;
 			}
 			// html+=helpbutton;
 			return html;
 		};
+		
 		function _saveOption(name,value) {
 			MyLocalStorage.setSettings(name, value);
 			// var serversideOptions = MyLocalStorage.getSettings("ServerSideOptions")
@@ -14800,6 +14872,20 @@ var UIManager  = ( function( window, undefined ) {
 			html +="</div>";
 		html +="</div>";
 
+		// Weather Widget Control
+		html += "<div class='col-12 mb-2'>";
+			html +="<div class='card border-secondary'>";
+				html +="  <div class='card-header'>"+_T("Weather Widget Control")+"</div>";
+				html +="  <div class='card-body'>";
+					html += "<div class='row'>";
+						$.each(_meteoOptions, function(id,check) {
+							html += _displayOption(id,check,"col-sm-6");
+						});
+					html += "</div>";
+				html += "</div>";
+			html +="</div>";
+		html +="</div>";
+		
 		// MyRoom background control
 		var backgroundSettings = MyLocalStorage.getSettings('MyHomeBackgrounds') || {}
 		var model = $.map( Object.keys(backgroundSettings), function(key,idx) {
@@ -14866,9 +14952,9 @@ var UIManager  = ( function( window, undefined ) {
 		html += "</div>";
 		html +="  </div>";
 		html +="</div>";
-
 		
 		$(".altui-mainpanel").append(html);
+		
 		function _delBackground(e) {
 			var tr = $(this).closest("tr")
 			tr.remove()
