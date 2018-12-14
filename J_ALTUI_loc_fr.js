@@ -522,7 +522,11 @@ Localization.init( {
 	"ShowClock: The local clock time is displayed in the message bar":"ShowClock: Montre l heure dans la barre de message",
 	"Show Clock in Message bar":"Montre l heure dans la barre de message",
 	"MyRoom Backgrounds":"Images pour Ma Maison",
-	"Graph Pages Control":"Control des pages de graphes"
+	"Graph Pages Control":"Control des pages de graphes",
+	"Weather Widget Control":"Controle du Widget Météo",
+	"WeatherWidgetButton: open weatherwidget.io to configure widget":"WeatherWidgetButton: ouvrir weatherwidget.io pour la configuration",
+	"WeatherWidgetCode: Copy Paste the Widget code here":"WeatherWidgetCode: Copier Coller le code du widget météo",
+	"Weather Widget HTML Code":"Code HTML du Widget Météo"
 });
 
 // override rules with localized version

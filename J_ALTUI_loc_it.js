@@ -513,7 +513,11 @@ Localization.init( {
 	"ShowClock: The local clock time is displayed in the message bar":"ShowClock: The local clock time is displayed in the message bar",
 	"Show Clock in Message bar":"Show Clock in Message bar",
 	"MyRoom Backgrounds":"MyRoom Backgrounds",
-	"Graph Pages Control":"Graph Pages Control"
+	"Graph Pages Control":"Graph Pages Control",
+	"Weather Widget Control":"Weather Widget Control",
+	"WeatherWidgetButton: open weatherwidget.io to configure widget":"WeatherWidgetButton: open weatherwidget.io to configure widget",
+	"WeatherWidgetCode: Copy Paste the Widget code here":"WeatherWidgetCode: Copy Paste the Widget code here",
+	"Weather Widget HTML Code":"Weather Widget HTML Code"
 });
 
 // override rules with localized version

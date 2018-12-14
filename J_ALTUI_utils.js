@@ -5494,6 +5494,7 @@ var PageMessage = (function(window, undefined ) {
 				<div class="card card-body">
 				<table class='table table-sm '>
 				<tbody></tbody>
+				</table>
 				</div>
 			</div>
 		</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml(),cls||"",clock)
