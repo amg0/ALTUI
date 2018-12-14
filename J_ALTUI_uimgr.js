@@ -38,11 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-<<<<<<< HEAD
 var ALTUI_revision = "$Revision: 2462 $";
-=======
-var ALTUI_revision = "$Revision: 2461 $";
->>>>>>> c1a2ff0fa61d34c97e272eba4c5ff93d51f51c7a
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1066,11 +1062,7 @@ var UIManager  = ( function( window, undefined ) {
 
 	var _meteoOptions = [
 		{ id:'WeatherWidgetButton', type:'button', label:"Configure", url:"https://weatherwidget.io/", help:'open weatherwidget.io to configure widget'  },
-<<<<<<< HEAD
 		{ id:'WeatherWidgetCode', type:'multiline', rows:'5', label:_T("Weather Widget HTML Code"), _default:meteoDefault, help:'Copy Paste the Widget code here'  },
-=======
-		{ id:'WeatherWidgetCode', type:'multiline', rows:'5', label:"Weather Widget HTML Code", _default:meteoDefault, help:'Copy Paste the Widget code here'  },
->>>>>>> c1a2ff0fa61d34c97e272eba4c5ff93d51f51c7a
 	];
 
 	var edittools = [];
