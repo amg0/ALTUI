@@ -1979,6 +1979,7 @@ var HTMLUtils = (function() {
 		html += "</div>";
 		return html
 	};
+
 	function _drawButtonGroup(htmlid,model) {
 		var html="";
 		model = $.extend( true, {cls:'', attr:'', buttons:[] }, model)
@@ -2033,7 +2034,25 @@ var HTMLUtils = (function() {
 		}
 		return "<div class='{0} {1}'>{2}</div>" .format(htmlid,cls,toolbarHtml);
 	};
+	function _drawDropDown( model ) {
+		model = $.extend( {id:'', label:'', cls:''}, model )
+
+		var htmlBtns = []
+		var btnTemplate = _.template( '<button type="button" href="${href}" id="${id}" class="btn btn-light dropdown-item ${cls}" ><i class="fa ${glyph}" aria-hidden="true"></i> ${label}</button>' )
+		$.each(model.options, function(idx,opt) {
+			opt = $.extend( {id:'', cls:'', glyph:'', label:'', href:''}, opt )
+			htmlBtns.push( (btnTemplate)(opt) )
+		})
+		
+		var template = _.template( '<div id="${id}" class="dropdown ${cls}">	\
+		  <button class="btn btn-light dropdown-toggle " type="button" " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> \
+			${label} \
+		  </button> \
+		  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' + htmlBtns.join("") + '</div></div>')
+		return (template)( model )
+	};
 	function _drawSelect( model ) {
+		model = $.extend( {id:'', class:'', options:[], selected_idx:null },model )
 		var html ="<select class='form-control {1}' id='{0}'>".format(model.id,model.class)
 		$.each( model.options, function(i,opt) {
 			html += "<option {2} value='{0}'>{1}</option>".format(opt.value, opt.text,((opt.selected==true) || (i==model.selected_idx)) ? 'selected':'')
@@ -2206,6 +2225,7 @@ var HTMLUtils = (function() {
 		drawButtonGroup : _drawButtonGroup,
 		drawToolbar		: _drawToolbar,
 		drawSelect		: _drawSelect,
+		drawDropDown	: _drawDropDown,
 		drawFormFields	: _drawFormFields,
 		drawForm		: _drawForm,
 		startTimer		: _startTimer,
