@@ -3571,7 +3571,7 @@ function sayTTS(lul_device,newMessage,volume,groupDevices)
 				end
 				resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 			else
-				local params = {urlClip=uri, Duration=estDuration}
+				local params = {urlClip=uri, Duration=estDuration, Volume=volume }
 				if (groupDevices ~= "") then
 					params["groupID"]= groupDevices
 				else
