@@ -1979,7 +1979,29 @@ var HTMLUtils = (function() {
 		html += "</div>";
 		return html
 	};
-
+	function _drawTags(htmlid,model) {
+		var db = MyLocalStorage.getSettings('DeviceTags');
+		var template='<span id="${id}" class="altui-device-tag badge badge-pill badge-${cls}">${label}</span>'
+		var htmlTemplate = _.template( template )
+		var html='<span class="altui-tags" id="{0}">{1}{2}</span>'
+		var plusGlyph = glyphTemplate.format("plus",_T("Add Tag"),"")
+		var tags = []
+		$.each(model, function(idx,tag) {
+			var model = { cls:tag , label:db.names[tag]||tag , id:'altui-tag-'+tag}
+			tags.push( (htmlTemplate)(model) )
+		})
+		var addBtn = HTMLUtils.drawDropDown({
+			id:'altui-tag-add-dd', 
+			label:plusGlyph, 
+			cls:'altui-tag-addcls d-inline',
+			btncls:'btn-sm',
+			options: $.map(tagModel, function(tag,key){
+				return { id:'altui-tag-add-'+tag, cls:'altui-tag-add', label:db.names[tag]||tag , glyph:'fa-tags', glyphcls:'text-'+tag}
+			})
+		})
+		// tags.push( (htmlTemplate)({ id:'altui-tag-add', cls:'secondary' , label:plusGlyph }) )
+		return html.format( htmlid, tags.join("") , addBtn);
+	};
 	function _drawButtonGroup(htmlid,model) {
 		var html="";
 		model = $.extend( true, {cls:'', attr:'', buttons:[] }, model)
@@ -2034,18 +2056,19 @@ var HTMLUtils = (function() {
 		}
 		return "<div class='{0} {1}'>{2}</div>" .format(htmlid,cls,toolbarHtml);
 	};
+		
 	function _drawDropDown( model ) {
-		model = $.extend( {id:'', label:'', cls:''}, model )
+		model = $.extend( {id:'', label:'', cls:'' , btncls:''}, model )
 
 		var htmlBtns = []
-		var btnTemplate = _.template( '<button type="button" href="${href}" id="${id}" class="btn btn-light dropdown-item ${cls}" ><i class="fa ${glyph}" aria-hidden="true"></i> ${label}</button>' )
+		var btnTemplate = _.template( '<button type="button" id="${id}" class="btn btn-light dropdown-item ${cls}" ><i class="fa ${glyph} ${glyphcls}" aria-hidden="true"></i> ${label}</button>' )
 		$.each(model.options, function(idx,opt) {
-			opt = $.extend( {id:'', cls:'', glyph:'', label:'', href:''}, opt )
+			opt = $.extend( {id:'', cls:'', glyph:'', glyphcls:'', label:'' }, opt )
 			htmlBtns.push( (btnTemplate)(opt) )
 		})
 		
 		var template = _.template( '<div id="${id}" class="dropdown ${cls}">	\
-		  <button class="btn btn-light dropdown-toggle " type="button" " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> \
+		  <button class="btn btn-light ${btncls} dropdown-toggle " type="button" " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> \
 			${label} \
 		  </button> \
 		  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' + htmlBtns.join("") + '</div></div>')
@@ -2222,6 +2245,7 @@ var HTMLUtils = (function() {
 		optionsToString : _optionsToString,
 		array2Table		: _array2Table,			// (arr,idcolumn,viscols)
 		createAccordeon : _createAccordeon,		// (panels)
+		drawTags 		: _drawTags,
 		drawButtonGroup : _drawButtonGroup,
 		drawToolbar		: _drawToolbar,
 		drawSelect		: _drawSelect,

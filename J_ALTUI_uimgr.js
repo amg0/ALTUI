@@ -38,12 +38,13 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2464 $";
+var ALTUI_revision = "$Revision: 2469 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
 var NO_URL = 'no url';
+var tagModel = ['primary','success','danger','warning','info','dark']
 var _HouseModes = [];
 var deviceModalTemplate = "";
 var deviceActionModalTemplate = "";
@@ -664,6 +665,7 @@ var styles =`
 		height:100px;
 	}
 	.altui-dialog-ace	{ height:4em; }
+	.altui-myhome-favorite { font-size:1.3em; }
 	div.altui-favorites-container	{
 		padding-left: 0px;
 		padding-right: 0px;
@@ -1020,6 +1022,11 @@ var styles =`
 		font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 		font-size: .8em;
 	}
+	.altui-tags {
+	}
+	.altui-device-tag { 
+		cursor: pointer;
+	}
 `;
 
 var UIManager  = ( function( window, undefined ) {
@@ -1058,11 +1065,11 @@ var UIManager  = ( function( window, undefined ) {
 	];
 
 	var meteoDefault = `
-<a class="weatherwidget-io" href="https://forecast7.com/fr/48d862d35/paris/" data-label_1="PARIS" data-label_2="Météo" data-theme="weather_one" >PARIS Météo</a>
-<script>
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-</script>
-`
+	<a class="weatherwidget-io" href="https://forecast7.com/fr/48d862d35/paris/" data-label_1="PARIS" data-label_2="Météo" data-theme="weather_one" >PARIS Météo</a>
+	<script>
+	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+	</script>
+	`
 
 	var _meteoOptions = [
 		{ id:'WeatherWidgetButton', type:'button', label:"Configure", url:"https://weatherwidget.io/", help:'open weatherwidget.io to configure widget'  },
@@ -4040,8 +4047,11 @@ var UIManager  = ( function( window, undefined ) {
 						var selected = (room.id.toString() == device.room);
 						htmlRoomSelect	  += "<option value='{1}' {2}>{0}</option>".format(room.name,room.id,selected ? 'selected' : '');
 					});
-			htmlRoomSelect	  += "</select>";
-
+			htmlRoomSelect += "</select>";
+			var tags = MyLocalStorage.getSettings('DeviceTags')
+			var key = '_'+device.altuiid
+			tags = tags.devicemap[key]
+			var htmlTags = HTMLUtils.drawTags('altui-devicetags',tags);
 			var htmlDeleteButton= (device.donotdelete==true) ? '' : buttonTemplate.format( device.altuiid, 'btn-sm altui-deldevice ml-auto', deleteGlyph,'default',_T("Delete"));
 			var html ="";
 			html+="<div class='row'>";
@@ -4049,6 +4059,7 @@ var UIManager  = ( function( window, undefined ) {
 				html +="	<div class='card '>";
 				html +="		<div class='card-header form-inline'>";
 				html +="			<h4 class='card-title'>{0} {1} {2} (#{3}) "+htmlRoomSelect+"</h4>";
+				html +=				htmlTags;
 				html +=				htmlDeleteButton;
 				html +="		</div>";
 				html +="		<div class='card-body'>";
@@ -4202,6 +4213,37 @@ var UIManager  = ( function( window, undefined ) {
 		$("#altui-room-list").change( function() {
 			MultiBox.renameDevice(device, device.name, $(this).val() );
 		});
+		$(".altui-device-controlpanel")
+			.off('click','.altui-tag-add') 
+			.on('click','.altui-tag-add', function() { 
+				var tag = $(this).prop('id').substr("altui-tag-add-".length)
+				var altuiid = $(this).closest(".altui-device-controlpanel").data("altuiid")
+				var db = MyLocalStorage.getSettings('DeviceTags')
+				var key = '_'+altuiid
+				db.devicemap[key] = db.devicemap[key] || []
+				var index = db.devicemap[key].indexOf(tag);
+				if (index <= -1) {
+					db.devicemap[key].push(tag)
+					MyLocalStorage.setSettings('DeviceTags',db)
+					var htmlTags = HTMLUtils.drawTags('altui-devicetags',db.devicemap[key]);
+					$(".altui-tags").replaceWith( htmlTags );
+				}
+			})
+			.off('click','.altui-device-tag')
+			.on('click','.altui-device-tag',function() {
+				var tag = $(this).prop('id').substr("altui-tag-".length)
+				var db = MyLocalStorage.getSettings('DeviceTags')
+				var key = '_'+altuiid
+				if (db.devicemap[key]) {
+					var index = db.devicemap[key].indexOf(tag);
+					if (index > -1) {
+						db.devicemap[key].splice(index, 1);
+					}
+					MyLocalStorage.setSettings('DeviceTags',db)
+					var htmlTags = HTMLUtils.drawTags('altui-devicetags',db.devicemap[key]);
+					$(".altui-tags").replaceWith( htmlTags );
+				}
+			})
 		// ZWCONFIG PAGE
 		$(".altui-device-config")
 			.on('click',".altui-add-variable", function() {
@@ -5175,6 +5217,9 @@ var UIManager  = ( function( window, undefined ) {
 				}
 			})
 		});
+
+		var dbtags = $.extend( true, { names:{}, devicemap:{} } , MyLocalStorage.getSettings('DeviceTags') )
+		MyLocalStorage.setSettings('DeviceTags', dbtags);
 	};
 	function _forceOptions(name,value) {
 		$.each( _userOptions, function(idx,opt) {
@@ -6952,7 +6997,7 @@ var UIManager  = ( function( window, undefined ) {
 						&& ( (filteredDeviceTypes.length==0) || ($.inArray(device.device_type , filteredDeviceTypes)!=-1) )
 			});
 			var arr = $.map( devices, function(d,i) { 
-				return {id:d.altuiid, name:((d.favorite==true) ? starGlyph : staremtpyGlyph)+d.name, action:_deviceIcon(d), val:_deviceInfo(d)} 
+				return {id:d.altuiid, name:"<span class='altui-myhome-favorite'>{0}</span>".format((d.favorite==true) ? starGlyph : staremtpyGlyph)+d.name, action:_deviceIcon(d), val:_deviceInfo(d)} 
 			})
 			return (arr.length>0) ? HTMLUtils.array2Table(arr,'id',[],null,'altui-myhome-devices','htmlid',false) : null
 		}
@@ -7165,6 +7210,7 @@ var UIManager  = ( function( window, undefined ) {
 		UIManager.clearPage('Devices',_T("Devices"),UIManager.twoColumnLayout);
 
 		var searchText = $("#altui-search-text").val().toUpperCase();
+		var deviceTags = MyLocalStorage.getSettings('DeviceTags')
 		if (filter && (filter.cancelable !=undefined) ) {
 			// this is a event, so direct callback from an onClickAllDevices
 			filter = null;
@@ -7180,6 +7226,7 @@ var UIManager  = ( function( window, undefined ) {
 			bt_device		: (MyLocalStorage.getSettings("ShowBTDevice")==true),
 			category		: MyLocalStorage.getSettings("CategoryFilter") || 0,
 			filtername		: MyLocalStorage.getSettings("DeviceFilterName") || "",
+			tags			: []
 		}, filter );
 		var isCategoryFilterValid = (function() { return this.category!=0}).bind(_deviceDisplayFilter);
 		var isRoomFilterValid		= (function() {
@@ -7188,6 +7235,10 @@ var UIManager  = ( function( window, undefined ) {
 		var isDeviceFilterValid = (function() {
 			return ( ( this.favorites || this.invisible || this.batterydevice || this.zwavedevice || this.zigbee_device || this.bt_device || (this.filtername && this.filtername.length>0) )!=false )
 		}).bind(_deviceDisplayFilter);
+		var isTagFilterValid = (function() {
+			return this.tags.length>0
+		}).bind(_deviceDisplayFilter);
+		
 		// filter function
 		function deviceFilter(device) {
 			var batteryLevel = MultiBox.getDeviceBatteryLevel(device);
@@ -7218,6 +7269,16 @@ var UIManager  = ( function( window, undefined ) {
 					 (_deviceDisplayFilter.bt_device && MultiBox.isDeviceBT(device) == false) )
 					 return false;
 
+			if (_deviceDisplayFilter.tags.length>0) {
+				// current device's tags are deviceTags.devicemap[_ + device.altuiid]
+				// filtered tags are _deviceDisplayFilter.tags
+				// must return false if there are no intersects
+				var key = '_' + device.altuiid
+				var curdevicetags = deviceTags.devicemap[key] || []
+				var intersect = curdevicetags.filter(value => -1 !== _deviceDisplayFilter.tags.indexOf(value));
+				if (intersect.length==0)
+					return false;
+			}
 			switch( parseInt(_deviceDisplayFilter.room) ) {
 					case -1:
 						return true;
@@ -7287,7 +7348,7 @@ var UIManager  = ( function( window, undefined ) {
 		function drawDeviceEmptyContainer(idx, device) {
 			_domMainPanel.append(ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'col-sm-6 col-md-4 col-lg-3'));
 		};
-
+		
 		function _drawDeviceToolbar() {
 			var _checks = [
 				{ id:'altui-show-favorites' , filterprop:'favorites', Save:'ShowFavoriteDevice', label:'Favorites' },
@@ -7325,10 +7386,24 @@ var UIManager  = ( function( window, undefined ) {
 			var toolbarHtml="";
 			var roomfilterHtml="";
 			var categoryfilterHtml="";
+			var tagfilterHtml="";
 			var dfd = $.Deferred();
 			$.when( _drawRoomFilterButtonAsync(_deviceDisplayFilter.room) )
 			.then( function(html) {
+				function _drawTagFilter() {
+					return HTMLUtils.drawDropDown({
+						id:'altui-dropdown-tags', 
+						label:tagsGlyph+" "+_T("Tags"),
+						cls:'d-inline altui-dropdown-tags-cls',
+						options: $.map( tagModel, function(tag,idx) {
+							// var glyph = glyphTemplate.format( "tags", _T("Category") , 'text-'+tag);
+							return { id:'altui-filter-'+tag, cls:'altui-filter-tag', label:deviceTags.names[tag] || tag, glyph:'fa-tags', glyphcls:'text-'+tag}
+						})
+					});
+				}
+				
 				roomfilterHtml = html;
+				tagfilterHtml = _drawTagFilter()
 				categoryfilterHtml+='<select id="altui-device-category-filter" multiple="multiple">';
 				$.when( MultiBox.getCategories(
 					function(idx,category) {
@@ -7368,8 +7443,17 @@ var UIManager  = ( function( window, undefined ) {
 						$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false);
 						_drawDevices(deviceFilter,false);	// do not redraw toolbar
 					};
+					function _onChangeTagFilter(e) {
+						$(this).toggleClass("active btn-light btn-info")
+						_deviceDisplayFilter.tags = $.map( $("#altui-dropdown-tags .altui-filter-tag.active"), function(elem,idx) { 
+							return $(elem).prop('id').substr("altui-filter-".length)
+						})
+						$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
+						_drawDevices(deviceFilter,false);	// do not redraw toolbar
+					};
 					// Display
-					$(".altui-device-toolbar").replaceWith( "<div class='col-12 altui-device-toolbar'>"+roomfilterHtml+categoryfilterHtml+filterHtml+"</div>" );
+					$(".altui-device-toolbar").replaceWith( "<div class='col-12 altui-device-toolbar'>"+roomfilterHtml+tagfilterHtml+categoryfilterHtml+filterHtml+"</div>" );
+					$(".altui-pagefilter").css("display","inline");
 					$('#altui-device-room-filter').multiselect({
 						disableIfEmpty: true,
 						enableHTML : true,
@@ -7392,6 +7476,12 @@ var UIManager  = ( function( window, undefined ) {
 					if (nRooms+1>=parseInt(MyLocalStorage.getSettings('Menu2ColumnLimit')))
 						$('#altui-device-room-filter').next(".btn-group").children("ul").attr('style','columns: 2; -webkit-columns: 2; -moz-columns: 2;');
 
+					if (categories.length+1>=parseInt(MyLocalStorage.getSettings('Menu2ColumnLimit')))
+						$('#altui-device-category-filter').next(".btn-group").children("ul").attr('style','columns: 2; -webkit-columns: 2; -moz-columns: 2;');
+
+					// interactivity
+					$(".altui-filter-tag").click( _onChangeTagFilter );
+					
 					$('#altui-device-category-filter').multiselect({
 						disableIfEmpty: true,
 						enableHTML : true,
@@ -7410,12 +7500,7 @@ var UIManager  = ( function( window, undefined ) {
 							$("#altui-device-category-filter").next(".btn-group").find(".caret").toggleClass( "caret-reversed" );
 						}
 					});
-					if (categories.length+1>=parseInt(MyLocalStorage.getSettings('Menu2ColumnLimit')))
-						$('#altui-device-category-filter').next(".btn-group").children("ul").attr('style','columns: 2; -webkit-columns: 2; -moz-columns: 2;');
 
-					$(".altui-pagefilter").css("display","inline");
-
-					// interactivity
 					$("#altui-device-remove-btn").off("click touchend").on("click touchend",function() {
 						$(this).parent().find("input").val("");
 						_deviceDisplayFilter.filtername = "";
@@ -7482,6 +7567,7 @@ var UIManager  = ( function( window, undefined ) {
 					$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false);
 					$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false)
 					$("#altui-device-filter").toggleClass("btn-info",isDeviceFilterValid()).toggleClass("btn-light",isDeviceFilterValid()==false)
+					$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
 					dfd.resolve();
 				});
 			});
@@ -14897,6 +14983,27 @@ var UIManager  = ( function( window, undefined ) {
 			html +="</div>";
 		html +="</div>";
 		
+		// tags name control
+		var dbtags = MyLocalStorage.getSettings('DeviceTags')
+		var model = $.map( tagModel, function(key,idx) {
+			return { 
+				id:key, 
+				glyph: glyphTemplate.format( "tags", _T("Category") , 'text-'+key),
+				name:"<input id='altui-tag-name-{0}' class='form-control altui-tag-name' type='text' name='altui-tag-name-{0}' value='{1}'></input>".format(key,dbtags.names[key] || '' )
+			}
+		});
+		var tblBackground = HTMLUtils.array2Table(model,'id',[],"",'altui-tags-tr','altui-tags-opts',false)
+		html += "<div class='col-12 mb-2'>";
+			html +="<div class='card border-secondary'>";
+				html +="  <div class='card-header'>"+_T("Tag Custom Names")+"</div>";
+				html +="  <div class='card-body'>";
+					html += "<div class='row' id='altui-bgmyhome-container'>";
+						html += tblBackground;
+					html += "</div>";
+				html += "</div>";
+			html +="</div>";
+		html +="</div>";
+		
 		// MyRoom background control
 		var backgroundSettings = MyLocalStorage.getSettings('MyHomeBackgrounds') || {}
 		var model = $.map( Object.keys(backgroundSettings), function(key,idx) {
@@ -14922,6 +15029,7 @@ var UIManager  = ( function( window, undefined ) {
 			html +="</div>";
 		html +="</div>";
 		
+		// cache control
 		html += "<div class='col-12 mb-2'>";
 			html +="<div class='card border-secondary'>";
 				html +="  <div class='card-header'>"+_T("Cache Control")+"</div>";
@@ -14940,6 +15048,7 @@ var UIManager  = ( function( window, undefined ) {
 			html +="</div>";
 		html +="</div>";
 
+		// custom page control
 		html += "<div class='col-12 mb-2'>";
 		html +="<div class='card border-secondary'>";
 		html +="  <div class='card-header'>"+_T("Custom Pages Control")+"</div>";
@@ -15073,6 +15182,14 @@ var UIManager  = ( function( window, undefined ) {
 			
 		$("#altui-bgmyhome-container").off()
 			.on("click",".altui-bgmyhome-tr-del",_delBackground )
+			
+		$(".altui-tag-name").focusout( function() {
+			var val = $(this).val();
+			var key = $(this).prop('id').substr("altui-tag-name-".length)
+			var tags = MyLocalStorage.getSettings('DeviceTags')
+			tags.names[key]=val
+			MyLocalStorage.setSettings('DeviceTags',tags)
+		});
 	},
 	reloadEngine: function() {
 		MultiBox.reloadEngine(0).done(function(){
