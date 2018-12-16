@@ -526,7 +526,10 @@ Localization.init( {
 	"Weather Widget Control":"Controle du Widget Météo",
 	"WeatherWidgetButton: open weatherwidget.io to configure widget":"WeatherWidgetButton: ouvrir weatherwidget.io pour la configuration",
 	"WeatherWidgetCode: Copy Paste the Widget code here":"WeatherWidgetCode: Copier Coller le code du widget météo",
-	"Weather Widget HTML Code":"Code HTML du Widget Météo"
+	"Weather Widget HTML Code":"Code HTML du Widget Météo",
+	"Tag Custom Names":"Noms pour les Tags",
+	"Tags":"Tags",
+	"Add Tag":"Ajouter un Tag"
 });
 
 // override rules with localized version

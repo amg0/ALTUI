@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2469 $";
+var ALTUI_revision = "$Revision: 2470 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7257,8 +7257,18 @@ var UIManager  = ( function( window, undefined ) {
 			if ((_deviceDisplayFilter.filtername.length != 0) && (device.name.search( regexp )==-1)	 )
 				return false;
 
-			if ((searchText.length!=0) && ( device.name.toUpperCase().contains( searchText ) != true ))
-				return false;
+			var key = '_' + device.altuiid
+			var curdevicetags = deviceTags.devicemap[key] || []
+			if (searchText.length!=0) {
+				var pattern = new RegExp(searchText,"i");
+				var tagnames = $.map(curdevicetags, (tag) => (deviceTags.names[tag] || tag))
+				for(var i=0; i<tagnames.length; i++) {
+					if (pattern.test(tagnames[i])==true)
+						return true;
+				}
+				if ( device.name.toUpperCase().contains( searchText ) !=true )
+					return false;
+			}
 
 			if ( (_deviceDisplayFilter.batterydevice==true) && (batteryLevel == null) )
 				return false;
@@ -7273,8 +7283,6 @@ var UIManager  = ( function( window, undefined ) {
 				// current device's tags are deviceTags.devicemap[_ + device.altuiid]
 				// filtered tags are _deviceDisplayFilter.tags
 				// must return false if there are no intersects
-				var key = '_' + device.altuiid
-				var curdevicetags = deviceTags.devicemap[key] || []
 				var intersect = curdevicetags.filter(value => -1 !== _deviceDisplayFilter.tags.indexOf(value));
 				if (intersect.length==0)
 					return false;
@@ -15270,11 +15278,18 @@ var UIManager  = ( function( window, undefined ) {
 						'Scenes':	{goto:'Scene Edit'}
 					};
 					function _searchText(val) {
+						var db = MyLocalStorage.getSettings('DeviceTags')
 						var result={}
 						var pattern = new RegExp(val,"i");
 						var devices = MultiBox.getDevicesSync().filter( function(d) {
-							return (d.name) &&
-							( (pattern.test(d.name)==true) || (pattern.test(d.manufacturer)==true) || (pattern.test(d.model)==true)	 )
+							var tags = $.map(db.devicemap['_'+d.altuiid], function(tagname,idx) {
+								return db.names[tagname] || tagname
+							});
+							for(var i=0; i<tags.length; i++) {
+								if (pattern.test(tags[i])==true)
+									return true;
+							}
+							return ( (d.name) && ( (pattern.test(d.name)==true) || (pattern.test(d.manufacturer)==true) || (pattern.test(d.model)==true) ) )
 						});
 						result["Devices"] = devices
 						var scenes = MultiBox.getScenesSync().filter( function(d) {
