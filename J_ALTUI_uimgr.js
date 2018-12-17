@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2470 $";
+var ALTUI_revision = "$Revision: 2471 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6281,6 +6281,18 @@ var UIManager  = ( function( window, undefined ) {
 		return html;
 	};
 
+	function _drawTagFilter(model,deviceTags) {
+		return HTMLUtils.drawDropDown({
+			id:'altui-dropdown-tags', 
+			label:tagsGlyph+" "+_T("Tags"),
+			cls:'d-inline altui-dropdown-tags-cls',
+			options: $.map( model, function(tag,idx) {
+				// var glyph = glyphTemplate.format( "tags", _T("Category") , 'text-'+tag);
+				return { id:'altui-filter-'+tag, cls:'altui-filter-tag', label:deviceTags.names[tag] || tag, glyph:'fa-tags', glyphcls:'text-'+tag}
+			})
+		});
+	};
+
 	var bUIReady = false;
 	var bEngineReady = false;
 
@@ -6854,6 +6866,7 @@ var UIManager  = ( function( window, undefined ) {
 	{
 		var staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );
 		var starGlyph = glyphTemplate.format( "star", _T("Favorite"), "altui-favorite text-warning" );
+		var deviceTags = MyLocalStorage.getSettings('DeviceTags');
 		var categoryFilters = {
 			'power':  {label:"Power", glyph:"fa-power-off", types:[
 				"urn:schemas-upnp-org:device:BinaryLight:1",
@@ -6977,7 +6990,7 @@ var UIManager  = ( function( window, undefined ) {
 			return (arr.length>0) ? HTMLUtils.array2Table(arr,'id',[],null,'altui-myhome-scenes','htmlid',false) : null
 		}
 
-		function _tableDevices(roomname,filteredDeviceTypes) {
+		function _tableDevices(roomname,filteredDeviceTypes,filteredTags) {
 			var search = $("#altui-search-text").val().toUpperCase();
 			var devices = MultiBox.getDevicesSync().filter( function(device) {
 				var found = false
@@ -6991,10 +7004,13 @@ var UIManager  = ( function( window, undefined ) {
 						return false;
 					}
 				})
+				var key = '_'+device.altuiid;
+				// var intersect = curdevicetags.filter(value => -1 !== _deviceDisplayFilter.tags.indexOf(value));
 				return (found==true)
 						&& (device.invisible != true)
 						&& ( (search.length==0) || (roomname.toUpperCase().contains(search)==true) || (device.name.toUpperCase().contains(search)==true) )
 						&& ( (filteredDeviceTypes.length==0) || ($.inArray(device.device_type , filteredDeviceTypes)!=-1) )
+						&& ( (filteredTags.length==0) || ( deviceTags.devicemap[key]  && ( deviceTags.devicemap[key].filter( value => -1!==filteredTags.indexOf(value) ).length>0 ) ) )
 			});
 			var arr = $.map( devices, function(d,i) { 
 				return {id:d.altuiid, name:"<span class='altui-myhome-favorite'>{0}</span>".format((d.favorite==true) ? starGlyph : staremtpyGlyph)+d.name, action:_deviceIcon(d), val:_deviceInfo(d)} 
@@ -7032,7 +7048,9 @@ var UIManager  = ( function( window, undefined ) {
 				})
 				$("#altui-toggle-messages").after( html );
 				
-				html = HTMLUtils.drawDropDown({
+				var deviceTags = MyLocalStorage.getSettings('DeviceTags')
+				html = _drawTagFilter(tagModel, deviceTags)
+				html += HTMLUtils.drawDropDown({
 					id:'altui-dropdown-rooms', 
 					label:eyeOpenGlyph+" "+_T("Rooms"),
 					cls:'altui-dropdown-rooms',
@@ -7075,9 +7093,11 @@ var UIManager  = ( function( window, undefined ) {
 
 				var n=0;
 				var filteredDeviceTypes = []
-				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes = $.merge(filteredDeviceTypes, categoryFilters[$(this).prop('id')].types) } )
+				var filteredTags = []
+				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes.push( categoryFilters[$(this).prop('id')].types ) } )
+				$(".altui-filter-tag.active").each( function(i) { filteredTags.push( $(this).prop('id').substr('altui-filter-'.length) ) } )
 				$.each(_roomsNameToID, function(name,roomarr) {
-					var tbldevice = _tableDevices(name,filteredDeviceTypes)
+					var tbldevice = _tableDevices(name,filteredDeviceTypes,filteredTags)
 					var tblscene = (filteredDeviceTypes.length>0) ? null : _tableScenes(name)
 					var navtabs = _generateNavTabs(name,tbldevice,tblscene)
 					var defaultaltuiid = MultiBox.makeAltuiid(roomarr[0].controller,roomarr[0].id)
@@ -7160,6 +7180,11 @@ var UIManager  = ( function( window, undefined ) {
 			$("#altui-pagemessage")
 				.off("click",".altui-quick-jump-type")
 				.on("click",".altui-quick-jump-type",function(d) {
+					$(this).toggleClass("active btn-info btn-light")
+					_drawRooms()
+				})
+				.off("click",".altui-filter-tag")
+				.on("click",".altui-filter-tag",function(d) {
 					$(this).toggleClass("active btn-info btn-light")
 					_drawRooms()
 				})
@@ -7398,20 +7423,8 @@ var UIManager  = ( function( window, undefined ) {
 			var dfd = $.Deferred();
 			$.when( _drawRoomFilterButtonAsync(_deviceDisplayFilter.room) )
 			.then( function(html) {
-				function _drawTagFilter() {
-					return HTMLUtils.drawDropDown({
-						id:'altui-dropdown-tags', 
-						label:tagsGlyph+" "+_T("Tags"),
-						cls:'d-inline altui-dropdown-tags-cls',
-						options: $.map( tagModel, function(tag,idx) {
-							// var glyph = glyphTemplate.format( "tags", _T("Category") , 'text-'+tag);
-							return { id:'altui-filter-'+tag, cls:'altui-filter-tag', label:deviceTags.names[tag] || tag, glyph:'fa-tags', glyphcls:'text-'+tag}
-						})
-					});
-				}
-				
 				roomfilterHtml = html;
-				tagfilterHtml = _drawTagFilter()
+				tagfilterHtml = _drawTagFilter(tagModel, deviceTags)
 				categoryfilterHtml+='<select id="altui-device-category-filter" multiple="multiple">';
 				$.when( MultiBox.getCategories(
 					function(idx,category) {
