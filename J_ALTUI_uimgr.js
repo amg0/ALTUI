@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2471 $";
+var ALTUI_revision = "$Revision: 2472 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7037,6 +7037,13 @@ var UIManager  = ( function( window, undefined ) {
 
 		// $("#altui-toggle-messages").after("<a class='btn btn-light' role='button' href='#{0}'>{0}</a>".format(model.name))
 		function _updateQuickJumpBar() {
+			function _updateDropdown(cls) {
+				if ( $(cls + ' button.dropdown-item.active').length >0 ) 
+					$(cls + ' .dropdown-toggle').removeClass("btn-light").addClass("btn-info")
+				else
+					$(cls + ' .dropdown-toggle').addClass("btn-light").removeClass("btn-info")
+			}
+			
 			if ( $(".altui-quick-jump-type").length==0 ) {
 				var html = HTMLUtils.drawDropDown({
 					id:'altui-dropdown-category', 
@@ -7060,12 +7067,10 @@ var UIManager  = ( function( window, undefined ) {
 					})
 				});
 				$("#altui-dropdown-category").after( html )
-			}			
-			var nActive = $('.altui-dropdown-category button.dropdown-item.active').length
-			if (nActive==0)
-				$('.altui-dropdown-category .dropdown-toggle').addClass("btn-light").removeClass("btn-info")
-			else 
-				$('.altui-dropdown-category .dropdown-toggle').removeClass("btn-light").addClass("btn-info")
+			}
+			// update button background if an active selection is made
+			_updateDropdown('.altui-dropdown-category')
+			_updateDropdown('.altui-dropdown-tags-cls')
 		}
 
 		function _drawRooms() {
@@ -7094,7 +7099,7 @@ var UIManager  = ( function( window, undefined ) {
 				var n=0;
 				var filteredDeviceTypes = []
 				var filteredTags = []
-				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes.push( categoryFilters[$(this).prop('id')].types ) } )
+				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes = $.merge(categoryFilters[$(this).prop('id')].types, filteredDeviceTypes) } )
 				$(".altui-filter-tag.active").each( function(i) { filteredTags.push( $(this).prop('id').substr('altui-filter-'.length) ) } )
 				$.each(_roomsNameToID, function(name,roomarr) {
 					var tbldevice = _tableDevices(name,filteredDeviceTypes,filteredTags)
