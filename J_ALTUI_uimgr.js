@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2476 $";
+var ALTUI_revision = "$Revision: 2477 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -696,38 +696,25 @@ var styles =`
 	.altui-dialog-ace	{ height:4em; }
 	.altui-myhome-favorite { font-size:1.3em; }
 	div.altui-favorites-container	{
-		padding-left: 0px;
-		padding-right: 0px;
+
 	}
 	div.altui-favorites-housemode, div.altui-favorites-device, div.altui-favorites-scene {
-		width: 25%;
-		padding-bottom: 25%;		/* = width for a square aspect ratio */
 		position:relative;			/* so child are positioned relatve to it */
-		margin:0%;
 		overflow:hidden;
 		border: 1px solid black;
 	}
 	div.altui-favorites-weather {
-		width: 50%;
-		padding-bottom: 25%;		/* 1:2 aspect ratio */
 		position:relative;			/* so child are positioned relatve to it */
 		margin:0%;
 		overflow:hidden;
 		border: 1px solid black;
 	}
 	div.altui-favorites-device-container {
-		position:absolute;
 		text-align:center;
 		height:100%; /* = 100% - 2*0% padding */
 		width:100%; /* = 100% - 2*0% padding */
-		padding: 0% 0%;
 	}
 	.altui-favorites-title {
-		white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-		position:absolute;
-		z-index: 99;
-		top: 0px;
-		width: 100%; max-width: 100%
 	}
 	.altui-favorites-smalltext {
 		font-size:0.3em;
@@ -751,32 +738,15 @@ var styles =`
 		border-color: green;
 	}
 	.altui-favorites-lasttrip-text {
-		position: absolute;
-		bottom: 0px;
-		left: 0px;
-		right: 0px;
+	}
+	.altui-favorites-info {
+		font-size:14px;
 	}
 	.altui-favorites-watts {
-		float: right;
-		text-align: right;
-		font-size: 14px;
-		bottom: 0px;
-		position: absolute;
-		right: 0px;
 	}
 	.altui-favorites-kwh  {
-		float: left;
-		text-align: left;
-		font-size: 14px;
-		bottom: 0px;
-		position: absolute;
-		left: 0px;
 	}
 	.altui-favorites-netmontxt {
-		font-size: 16px;
-		position: absolute;
-		bottom: 0px;
-		right: 0px;
 	}
 	.btn.altui-housemode{
 		padding-left: 0px;
@@ -1095,14 +1065,13 @@ var styles =`
 	.altui-experimental-mediumtext,.altui-experimental-smalltext {
 		font-size:7px;
 	}
-	.altui-experimental-lasttrip-text {
-	}
 	.altui-experimental-netmontxts, .altui-experimental-watts {
-		font-weight: bold;		
 	}
 	.altui-experimental-info {
 		font-size: 13px;
-		font-weight: bold;
+	}
+	.altui-experimental-info.altui-experimental-lasttrip-text {
+		display: none;
 	}
 `;
 
@@ -4721,20 +4690,20 @@ var UIManager  = ( function( window, undefined ) {
 		// check is of row
 		var width = $(".altui-favorites").width();
 		if (width<400) {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'50%',"padding-bottom":'50%'});
-			$(".altui-favorites-weather").css({width:'100%',"padding-bottom":'50%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'50%',"xpadding-bottom":'50%'});
+			$(".altui-favorites-weather").css({width:'100%',"xpadding-bottom":'50%'});
 		} else if ( width <500 ) {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'30%',"padding-bottom":'30%'});
-			$(".altui-favorites-weather").css({width:'60%',"padding-bottom":'30%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'30%',"xpadding-bottom":'30%'});
+			$(".altui-favorites-weather").css({width:'60%',"xpadding-bottom":'30%'});
 		} else if ( width <800 ) {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'25%',"padding-bottom":'25%'});
-			$(".altui-favorites-weather").css({width:'50%',"padding-bottom":'25%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'25%',"xpadding-bottom":'25%'});
+			$(".altui-favorites-weather").css({width:'50%',"xpadding-bottom":'25%'});
 		} else if ( width <1200 ){
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"padding-bottom":'20%'});
-			$(".altui-favorites-weather").css({width:'40%',"padding-bottom":'20%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"xpadding-bottom":'20%'});
+			$(".altui-favorites-weather").css({width:'40%',"xpadding-bottom":'20%'});
 		} else {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'10%',"padding-bottom":'10%'});
-			$(".altui-favorites-weather").css({width:'20%',"padding-bottom":'10%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'10%',"xpadding-bottom":'10%'});
+			$(".altui-favorites-weather").css({width:'20%',"xpadding-bottom":'10%'});
 		}
 
 		// console.log(".altui-favorites-device.length="+$(".altui-favorites-device").length);
@@ -4811,7 +4780,7 @@ var UIManager  = ( function( window, undefined ) {
 			case "urn:schemas-micasaverde-com:device:HumiditySensor:1":
 				html += _deviceDrawFavoriteDefault(device);
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' );
-				posthtml += "<div class='bg-light altui-favorites-info altui-favorites-device-content'>{0}</span> <span class='altui-favorites-mediumtext'>%</div>".format(level);
+				posthtml += "<div class='bg-light altui-favorites-info'>{0}</span> <span class='altui-favorites-mediumtext'>%</div>".format(level);
 				break;
 			case "urn:schemas-micasaverde-com:device:VOTS:1":
 			case "urn:schemas-micasaverde-com:device:TemperatureSensor:1":
@@ -4832,7 +4801,7 @@ var UIManager  = ( function( window, undefined ) {
 				var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
 				if (lasttrip != null) {
 					var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
-					html+= "<div class='altui-favorites-lasttrip-text altui-favorites-mediumtext pull-right'>{0} {1}</div>".format( timeGlyph,lasttripdate );
+					posthtml+= "<div class='bg-light altui-favorites-info altui-favorites-lasttrip-text altui-favorites-mediumtext'>{0} {1}</div>".format( timeGlyph,lasttripdate );
 				}
 				break;
 			case "urn:schemas-upnp-org:device:VSwitch:1":
@@ -4959,10 +4928,6 @@ var UIManager  = ( function( window, undefined ) {
 		if (bFirst==true) {
 			var favoritesToDraw=[];	// will then be sorted according to last saved preference
 
-			// draw meteo
-			// if ( MyLocalStorage.getSettings('ShowWeather')==1 )
-				// favoritesToDraw.push({name:"meteo"});
-
 			// draw Housemode
 			if ((MyLocalStorage.getSettings('ShowHouseMode')==1) && (UIManager.UI7Check()==true) )
 				favoritesToDraw.push({name:"housemode"});
@@ -5003,60 +4968,33 @@ var UIManager  = ( function( window, undefined ) {
 			}
 			// draw them
 			// CSS technique of http://stackoverflow.com/questions/20456694/grid-of-responsive-squares
-			var favoriteTemplate = "";
-			favoriteTemplate += "<div id='{0}' class='altui-favorites-device pull-left' >";
+			var favoriteTemplate = "<div id='{0}' class=' altui-favorites-device ' >";
 				favoriteTemplate += "<div class='altui-favorites-device-container' >";
-						favoriteTemplate += "<div class='altui-favorites-title'>";
+						favoriteTemplate += "<div class='altui-favorites-title text-truncate'>";
 							favoriteTemplate += "<small class='text-info'>";
 							favoriteTemplate += "{1}";
 							favoriteTemplate += "</small>";
 						favoriteTemplate += "</div>";
-					favoriteTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
+					// favoriteTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
 						favoriteTemplate += "{2}";
-					favoriteTemplate += "</div></div>";
+					// favoriteTemplate += "</div></div>";
 				favoriteTemplate += "</div>";
 			favoriteTemplate += "</div>";
 
 			var html = "";
 
 			if ( MyLocalStorage.getSettings('ShowWeather')==1 ) {
-				html += "<div class='altui-favorites row'>";
-					html += "<div class='col-12'>"; 
-					html += MyLocalStorage.getSettings('WeatherWidgetCode')
-					html += "</div>";
+				html += "<div class='altui-favorites d-flex flex-wrap align-content-start'>"
+				html += '<div class="flex-fill">'+MyLocalStorage.getSettings('WeatherWidgetCode')+'</div>'
 				html += "</div>";
 			}
 
-			html += "<div class='altui-favorites row'>";
-			html += "<div class='altui-favorites-sortable col-12'>";
-			$.each(favoritesToDraw,function(idx,fav) {
-				if (fav.name=="meteo") {
-					var meteoTemplate = "";
-					meteoTemplate += "<div id='{0}' class='altui-favorites-weather pull-left' >";
-						meteoTemplate += "<div class='altui-favorites-device-container' >";
-							meteoTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
-								meteoTemplate += "{1}";
-							meteoTemplate += "</div></div>";
-						meteoTemplate += "</div>";
-					meteoTemplate += "</div>";
-					var language = getQueryStringValue("lang") || window.navigator.userLanguage || window.navigator.language;
-					var ws = MultiBox.getWeatherSettings();
-					if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
-						ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride');
-					var html_meteo="";
-					if (1) {
-						html_meteo +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
-						html_meteo +=('</a><div id="awcc1439296613816" class="aw-widget-current"  data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
-					} else {
-						html_meteo +=`
-<div id="cont_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"><div id="spa_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"><a id="a_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx" href="http://www.meteocity.com/france/meylan_v38229/" target="_blank" style="color:#333;text-decoration:none;">Météo Meylan</a> ©<a href="http://www.meteocity.com">meteocity.com</a></div><script type="text/javascript" src="http://widget.meteocity.com/js/MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"></script></div>
-`
-					}
-					html +=(meteoTemplate.format("meteo",html_meteo))
+			html += "<div class='altui-favorites altui-favorites-sortable d-flex flex-wrap align-content-start'>";
 
-				} else if (fav.name == "housemode" ) {
+			$.each(favoritesToDraw,function(idx,fav) {
+				if (fav.name == "housemode" ) {
 					var housemodeTemplate = "";
-					housemodeTemplate += "<div id='{0}' class='altui-favorites-housemode pull-left' >";
+					housemodeTemplate += "<div id='{0}' class=' altui-favorites-housemode' >";
 						housemodeTemplate += "<div class='altui-favorites-device-container' >";
 							housemodeTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
 								housemodeTemplate += "{1}";
@@ -5075,7 +5013,7 @@ var UIManager  = ( function( window, undefined ) {
 			});
 
 			// close col & row
-			html += "</div>";
+
 			html += "</div>";
 
 			$(".altui-favorites").replaceWith(html);
@@ -6588,24 +6526,7 @@ var UIManager  = ( function( window, undefined ) {
 	{
 		UIManager.clearPage('Home',_T("Welcome to ALTUI"),UIManager.oneColumnLayout);
 		$("#altui-pagetitle").remove();
-		//if ( MyLocalStorage.getSettings('ShowWeather')==1 )
-		if(0)
-		{
-			var language = getQueryStringValue("lang") || window.navigator.userLanguage || window.navigator.language;
-			var ws = MultiBox.getWeatherSettings();
-			if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
-				ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride');
-			var html="";
-			html ="<div class='altui-weather-widget d-none d-sm-block'>";
-			// html +='<a href="//www.accuweather.com/fr/fr/meylan/1097583/weather-forecast/1097583" class="aw-widget-legal">';
-			html +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
-			html +=('</a><div id="awcc1439296613816" class="aw-widget-current"	data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
-			html +="</div>";
-			// console.log(html);
-			$(".altui-mainpanel").append(html);
-		}
-		$(".altui-mainpanel").append("<div class='col-12'><div class='altui-favorites row'></div></div>");
-
+		$(".altui-mainpanel").append("<div class='col-12'><div class='altui-favorites'></div></div>");
 		_registerFavoriteClickHandlers();
 		_redrawFavorites( true );
 	},
