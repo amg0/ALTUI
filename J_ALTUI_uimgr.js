@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2475 $";
+var ALTUI_revision = "$Revision: 2476 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -49,6 +49,35 @@ var _HouseModes = [];
 var deviceModalTemplate = "";
 var deviceActionModalTemplate = "";
 var defaultDialogModalTemplate = "";
+var categoryFilters = {
+	'power':  {label:"Power", glyph:"fa-power-off", types:[
+		"urn:schemas-upnp-org:device:BinaryLight:1",
+		"urn:schemas-upnp-org:device:DimmableLight:1",
+		"urn:schemas-upnp-org:device:DimmableRGBLight:1",
+		"urn:schemas-upnp-org:device:DimmableRGBLight:2",
+		"urn:schemas-micasaverde-com:device:PhilipsHueLuxLamp:1",
+		"urn:schemas-micasaverde-com:device:PhilipsHueLamp:1",
+		"urn:schemas-upnp-org:device:VSwitch:1",
+		"urn:schemas-futzle-com:device:holidayvirtualswitch:1"
+	]},
+	'sensor': {label:"Sensor", glyph:"fa-thermometer-three-quarters", types:[
+		"urn:schemas-micasaverde-com:device:SmokeSensor:1",
+		"urn:schemas-micasaverde-com:device:DoorSensor:1",
+		"urn:schemas-micasaverde-com:device:LightSensor:1",
+		"urn:schemas-micasaverde-com:device:VOTS:1",
+		"urn:schemas-micasaverde-com:device:TemperatureSensor:1",
+		"urn:schemas-micasaverde-com:device:MotionSensor:1",
+		"urn:schemas-micasaverde-com:device:HumiditySensor:1",
+		"urn:schemas-micasaverde-com:device:FloodSensor:1",
+		"urn:schemas-micasaverde-com:device:TempLeakSensor:1",
+		"urn:schemas-micasaverde-com:device:GenericSensor:1",
+		"urn:schemas-futzle-com:device:WeMoSensor:1",
+		"urn:schemas-micasaverde-com:device:VOTS:1"
+	]},
+	'covers': {label:"Covers", glyph:"fa-align-justify", types:[
+		"urn:schemas-micasaverde-com:device:WindowCovering:1"
+	]},
+}
 var simul = null;	// global D3 forceSimulations
 
 
@@ -1067,11 +1096,13 @@ var styles =`
 		font-size:7px;
 	}
 	.altui-experimental-lasttrip-text {
-		position: absolute;
-		bottom: 0;
 	}
 	.altui-experimental-netmontxts, .altui-experimental-watts {
 		font-weight: bold;		
+	}
+	.altui-experimental-info {
+		font-size: 13px;
+		font-weight: bold;
 	}
 `;
 
@@ -4737,7 +4768,7 @@ var UIManager  = ( function( window, undefined ) {
 		if (isNaN(watts)==false) {
 			// Envoy has positive power, but it's really "green" since it is a generator (normally negative), not a consumer
 			var cls =  (watts > 0 && device.device_type != "urn:schemas-rboer-com:device:Envoy:1") ? 'bg-success' : 'bg-light'
-			posthtml += "<div class='{1} altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 , cls );
+			posthtml += "<div class='{1} altui-favorites-info altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 , cls );
 		}
 		switch(device.device_type) {
 			case "urn:schemas-micasaverde-com:device:BarometerSensor:1":
@@ -4753,7 +4784,7 @@ var UIManager  = ( function( window, undefined ) {
 			case "urn:schemas-micasaverde-com:device:LightSensor:1":
 				html += _deviceDrawFavoriteDefault(device);
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' );
-				posthtml += "<div class='bg-light altui-favorites-mediumtext'>{0} lux</div>".format(level/*+ws.tempFormat*/);
+				posthtml += "<div class='bg-light altui-favorites-info altui-favorites-mediumtext'>{0} lux</div>".format(level/*+ws.tempFormat*/);
 				break;
 			// case "urn:schemas-upnp-org:device:BinaryLight:1":
 			// 	var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' );
@@ -4775,12 +4806,12 @@ var UIManager  = ( function( window, undefined ) {
 			case "urn:schemas-upnp-org:device:DimmableLight:1":
 				html += _deviceDrawFavoriteDefault(device);
 				var loadLevelStatus = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' );
-				posthtml += "<div class='bg-light'>{0}%</div>".format(loadLevelStatus);
+				posthtml += "<div class='bg-light altui-favorites-info'>{0}%</div>".format(loadLevelStatus);
 				break;
 			case "urn:schemas-micasaverde-com:device:HumiditySensor:1":
 				html += _deviceDrawFavoriteDefault(device);
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' );
-				posthtml += "<div class='bg-light altui-favorites-device-content'>{0}</span> <span class='altui-favorites-mediumtext'>%</div>".format(level);
+				posthtml += "<div class='bg-light altui-favorites-info altui-favorites-device-content'>{0}</span> <span class='altui-favorites-mediumtext'>%</div>".format(level);
 				break;
 			case "urn:schemas-micasaverde-com:device:VOTS:1":
 			case "urn:schemas-micasaverde-com:device:TemperatureSensor:1":
@@ -4789,7 +4820,7 @@ var UIManager  = ( function( window, undefined ) {
 				var temp = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' );
 				if (mode==DEVICEDRAW_CONCISE) {
 					html += _deviceDrawFavoriteDefault(device);
-					posthtml += ("<div class='bg-light'>{0}</div>".format((temp || "") +"&deg;"))
+					posthtml += ("<div class='bg-light altui-favorites-info'>{0}</div>".format((temp || "") +"&deg;"))
 				} else
 					html +=  _drawFavoriteGauge(device,temp)
 				break;
@@ -4808,7 +4839,7 @@ var UIManager  = ( function( window, undefined ) {
 				html += _deviceDrawFavoriteDefault(device);
 				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VSwitch1', 'Status' );
 				status = parseInt(status);
-				posthtml += "<div class='{1}'>{0}</div>".format(
+				posthtml += "<div class='{1} altui-favorites-info'>{0}</div>".format(
 					status==1 ? "On" : "Off",
 					status==1 ? "text-success" : "text-danger"
 				);
@@ -4823,22 +4854,22 @@ var UIManager  = ( function( window, undefined ) {
 				var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
 				if (isNaN(kwh)==false)
 					if (kwh > 0) {
-						posthtml += "<div class='bg-danger altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+						posthtml += "<div class='bg-danger altui-favorites-info altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
 					} else {
-						posthtml += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+						posthtml += "<div class='bg-success altui-favorites-info altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
 					}
 				html += _deviceDrawFavoriteDefault(device);
 				break;
 			case "urn:schemas-rboer-com:device:Envoy:1":
 				var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
 				if (isNaN(kwh)==false)
-					posthtml += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+					posthtml += "<div class='bg-success altui-favorites-info altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
 				html += _deviceDrawFavoriteDefault(device);
 				break;
 			case "urn:schemas-upnp-org:device:netmon:1":
 				var targets = JSON.parse( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Targets' ) );
 				var offline = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'DevicesOfflineCount' ));
-				posthtml += "<div class='bg-light altui-favorites-netmontxt'><span class='text-danger' id='netmon-{0}'>{2}</span> / <span>{1}</span></div>".format( device.altuiid,targets.length,offline)
+				posthtml += "<div class='bg-light altui-favorites-info altui-favorites-netmontxt'><span class='text-danger' id='netmon-{0}'>{2}</span> / <span>{1}</span></div>".format( device.altuiid,targets.length,offline)
 				html += _deviceDrawFavoriteDefault(device);
 				break;
 			default:
@@ -6341,6 +6372,17 @@ var UIManager  = ( function( window, undefined ) {
 		return html;
 	};
 
+	function _drawCategoryFilter(model) {
+		return HTMLUtils.drawDropDown({
+			id:'altui-dropdown-category', 
+			label:tagsGlyph+" "+_T("Category"), 
+			cls:'altui-dropdown-category',
+			options: $.map(model, function(opt,key){
+				return { id:key, cls:'altui-quick-jump-type', label:opt.label, glyph:opt.glyph, href:"#"+key }
+			})
+		})
+	}
+
 	function _drawTagFilter(model,deviceTags) {
 		return HTMLUtils.drawDropDown({
 			id:'altui-dropdown-tags', 
@@ -6915,27 +6957,59 @@ var UIManager  = ( function( window, undefined ) {
 	},
 
 	pageExperimental: function ( ) {
-		UIManager.clearPage('Experimental Home',_T("Experimental Home"),UIManager.oneColumnLayout);
-		var elements=[];
+		var deviceTags = MyLocalStorage.getSettings('DeviceTags')
+		var _deviceDisplayFilter={ tags:[] , rooms:[] , categories:[]}
 		var deviceTemplate = `
 			<div class="card flex-fill">
 				<div class="card-header text-truncate">
-					\${name}
+					<span title="\${name}-\${altuiid}">\${name}</span>
 				</div>
 				<div class="card-body d-flex justify-content-center">
 					\${icon}
 				</div>
-			</div>`
-		var _tplFunc = _.template(deviceTemplate)
+			</div>`;
 
+		function isTagFilterValid() {
+			return _deviceDisplayFilter.tags.length>0
+		}
+		function isRoomFilterValid() {
+			return _deviceDisplayFilter.rooms.length>0
+		}
+		function isCategoryFilterValid() {
+			return _deviceDisplayFilter.categories.length>0
+		}
+		function _onChangeRoomFilter(e) {
+			$(this).toggleClass("active btn-light btn-info")
+			var roominfo = MultiBox.controllerOf($(this).prop('id'))
+			var active = $(this).hasClass("active")
+			_deviceDisplayFilter.rooms = $.map( $("#altui-dropdown-rooms .altui-quick-jump.active"), function(elem,idx) { 
+				return $(elem).prop('id')
+			})
+			$("#altui-dropdown-rooms .dropdown-toggle").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false)
+			_drawDevices();	
+		}
+		function _onChangeTagFilter(e) {
+			$(this).toggleClass("active btn-light btn-info")
+			_deviceDisplayFilter.tags = $.map( $("#altui-dropdown-tags .altui-filter-tag.active"), function(elem,idx) { 
+				return $(elem).prop('id').substr("altui-filter-".length)
+			})
+			$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
+			_drawDevices();	
+		};
+		function _onChangeCategoryFilter(e) {
+			$(this).toggleClass("active btn-light btn-info")
+			_deviceDisplayFilter.categories = $.map( $("#altui-dropdown-category .altui-quick-jump-type.active"), function(elem,idx) { 
+				return $(elem).prop('id')
+			})
+			$("#altui-dropdown-category .dropdown-toggle").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false)
+			_drawDevices();	
+		}
 		function _getDeviceModel(device) {
 			return {
 				name: device.name,
-				icon: UIManager.deviceDrawFavorite(device,null,DEVICEDRAW_CONCISE).replace(/altui-favorites-/g,'altui-experimental-') //UIManager.deviceIcon(device)	//( device, zindex, onclick )
+				altuiid: device.altuiid,
+				icon: UIManager.deviceDrawFavorite(device,null,DEVICEDRAW_CONCISE).replace(/altui-favorites-/g,'altui-experimental-')
 			}
-		}
-		function drawDeviceFlex(idx, device) {
-			elements.push((_tplFunc)(_getDeviceModel(device)))
 		}
 		function onUpdateDeviceFlex(eventname,device) {
 			var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
@@ -6943,16 +7017,68 @@ var UIManager  = ( function( window, undefined ) {
 				$(jqelem).closest(".card").replaceWith( (_tplFunc)(_getDeviceModel(device)) )
 			}
 		}
-		function filterfunc(device) {
-			return (device.invisible==undefined) || ( device.invisible!="1")
+		function _drawDevices() {
+			var elements=[];
+			function _drawDeviceFlex(idx, device) {
+				elements.push((_tplFunc)(_getDeviceModel(device)))
+			}
+			function _filterfunc(device) {
+				var curdevicetags =  deviceTags.devicemap['_'+device.altuiid] || []
+				var intersect = curdevicetags.filter(value => -1 !== _deviceDisplayFilter.tags.indexOf(value));
+				var deviceinfo = MultiBox.controllerOf(device.altuiid)
+				var deviceroom = MultiBox.makeAltuiid(deviceinfo.controller, device.room)
+
+				function _devicetypeIsListed( devtype, catlist) {
+					var bFound=false;
+					$.each(catlist, function(idx,aCat) {
+						if (-1 !==  categoryFilters[aCat].types.indexOf(devtype) ) {
+							bFound=true
+							return false;
+						}
+					})
+					return bFound
+				}
+				return 		( (device.invisible==undefined) || ( device.invisible!="1") ) 
+						&& 	( ( isTagFilterValid()==false ) || (intersect.length!=0) )
+						&&  ( ( isRoomFilterValid()==false ) || ( -1 !==_deviceDisplayFilter.rooms.indexOf(deviceroom) ) )
+						&&  ( ( isCategoryFilterValid()==false ) || (_devicetypeIsListed( device.device_type,_deviceDisplayFilter.categories )))
+			}
+			function _onEndDrawDevice(devices) {
+				$(".altui-mainpanel").append( '<div class="altui-experimental d-flex flex-wrap align-content-start">'+elements.join("")+'</div>' )
+			}
+			$(".altui-mainpanel").html("")
+			return MultiBox.getDevices( _drawDeviceFlex , _filterfunc, _onEndDrawDevice);
 		}
-		function onEndDrawDevice(devices) {
-			$(".altui-mainpanel").append( '<div class="altui-experimental d-flex flex-wrap align-content-start">'+elements.join("")+'</div>' )
+		function _registerInteractivity() {
 			_registerFavoriteClickHandlers("altui-experimental-device-content")
+			$(".altui-filter-tag").click(_onChangeTagFilter)
+			$(".altui-quick-jump").click(_onChangeRoomFilter)
+			$(".altui-quick-jump-type").click(_onChangeCategoryFilter)
 			EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,onUpdateDeviceFlex)
 		}
-		MultiBox.getDevices( drawDeviceFlex , filterfunc, onEndDrawDevice);
+		function _drawRoomFilter() {
+			var rooms = MultiBox.getRoomsSync()
+			return HTMLUtils.drawDropDown({
+				id:'altui-dropdown-rooms', 
+				label:eyeOpenGlyph+" "+_T("Rooms"),
+				cls:'altui-dropdown-rooms',
+				options: rooms.map( function(room) {
+					return { id:room.altuiid, cls:'altui-quick-jump', label:room.name, glyph:'' }
+				})
+			});			
+		}
+		function _generateToolBar() {
+			var html =_drawCategoryFilter(categoryFilters);
+			html += _drawTagFilter(tagModel, deviceTags)
+			html += _drawRoomFilter()
+			return html
+		}		
 
+		UIManager.clearPage('Experimental Home',_T("Experimental Home"),UIManager.oneColumnLayout);
+		var _tplFunc = _.template(deviceTemplate)
+		var html = _generateToolBar()
+		$("#altui-toggle-messages").after( html );
+		$.when( _drawDevices() ) .then ( _registerInteractivity() )
 	},
 
 	pageMyHome: function ( key, args )
@@ -6960,35 +7086,6 @@ var UIManager  = ( function( window, undefined ) {
 		var staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );
 		var starGlyph = glyphTemplate.format( "star", _T("Favorite"), "altui-favorite text-warning" );
 		var deviceTags = MyLocalStorage.getSettings('DeviceTags');
-		var categoryFilters = {
-			'power':  {label:"Power", glyph:"fa-power-off", types:[
-				"urn:schemas-upnp-org:device:BinaryLight:1",
-				"urn:schemas-upnp-org:device:DimmableLight:1",
-				"urn:schemas-upnp-org:device:DimmableRGBLight:1",
-				"urn:schemas-upnp-org:device:DimmableRGBLight:2",
-				"urn:schemas-micasaverde-com:device:PhilipsHueLuxLamp:1",
-				"urn:schemas-micasaverde-com:device:PhilipsHueLamp:1",
-				"urn:schemas-upnp-org:device:VSwitch:1",
-				"urn:schemas-futzle-com:device:holidayvirtualswitch:1"
-			]},
-			'sensor': {label:"Sensor", glyph:"fa-thermometer-three-quarters", types:[
-				"urn:schemas-micasaverde-com:device:SmokeSensor:1",
-				"urn:schemas-micasaverde-com:device:DoorSensor:1",
-				"urn:schemas-micasaverde-com:device:LightSensor:1",
-				"urn:schemas-micasaverde-com:device:VOTS:1",
-				"urn:schemas-micasaverde-com:device:TemperatureSensor:1",
-				"urn:schemas-micasaverde-com:device:MotionSensor:1",
-				"urn:schemas-micasaverde-com:device:HumiditySensor:1",
-				"urn:schemas-micasaverde-com:device:FloodSensor:1",
-				"urn:schemas-micasaverde-com:device:TempLeakSensor:1",
-				"urn:schemas-micasaverde-com:device:GenericSensor:1",
-				"urn:schemas-futzle-com:device:WeMoSensor:1",
-				"urn:schemas-micasaverde-com:device:VOTS:1"
-			]},
-			'covers': {label:"Covers", glyph:"fa-align-justify", types:[
-				"urn:schemas-micasaverde-com:device:WindowCovering:1"
-			]},
-		}
 
 		var _roomsNameToID = {};
 		var limit = (ALTUI_registered===false) ? 5 : null;
@@ -7138,18 +7235,12 @@ var UIManager  = ( function( window, undefined ) {
 			}
 			
 			if ( $(".altui-quick-jump-type").length==0 ) {
-				var html = HTMLUtils.drawDropDown({
-					id:'altui-dropdown-category', 
-					label:tagsGlyph+" "+_T("Category"), 
-					cls:'altui-dropdown-category',
-					options: $.map(categoryFilters, function(opt,key){
-						return { id:key, cls:'altui-quick-jump-type', label:opt.label, glyph:opt.glyph, href:"#"+key }
-					})
-				})
+				var html = _drawCategoryFilter(categoryFilters)
 				$("#altui-toggle-messages").after( html );
 				
 				var deviceTags = MyLocalStorage.getSettings('DeviceTags')
 				html = _drawTagFilter(tagModel, deviceTags)
+
 				html += HTMLUtils.drawDropDown({
 					id:'altui-dropdown-rooms', 
 					label:eyeOpenGlyph+" "+_T("Rooms"),
