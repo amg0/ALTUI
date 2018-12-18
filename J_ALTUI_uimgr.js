@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2472 $";
+var ALTUI_revision = "$Revision: 2475 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1026,6 +1026,52 @@ var styles =`
 	}
 	.altui-device-tag { 
 		cursor: pointer;
+	}
+	.bd-highlight {
+		background-color: rgba(86,61,124,.15);
+		border: 1px solid rgba(86,61,124,.15);
+	}
+	.altui-experimental div.card {
+		width:60px;
+		font-size:10px;
+	}
+	.altui-experimental div.card .card-body {
+		margin:0px;
+		padding:0px;
+	}
+	.altui-experimental div.card .card-header {
+		text-align: center;
+		margin:0px;
+		padding:0px;
+	}
+	.altui-experimental-device-content {
+		width:100%;
+	}
+	.altui-experimental-device-content .altui-device-icon {
+		width:50px;
+		height:50px;
+	}
+	.altui-experimental-device-content-box {
+		text-align: center;
+	}
+	.altui-experimental-device-content-box .altui-device-icon.altui-svg-marker {
+		width:75%;
+	}
+	.altui-experimental-device-content-box .fa-bolt {
+		display: none;
+	}
+	.altui-experimental-device-content-box .altui-iphone-txt {
+		font-size:10px;
+	}
+	.altui-experimental-mediumtext,.altui-experimental-smalltext {
+		font-size:7px;
+	}
+	.altui-experimental-lasttrip-text {
+		position: absolute;
+		bottom: 0;
+	}
+	.altui-experimental-netmontxts, .altui-experimental-watts {
+		font-weight: bold;		
 	}
 `;
 
@@ -2603,11 +2649,13 @@ var UIManager  = ( function( window, undefined ) {
 		}
 		else
 			iconDataSrc = iconPath;
-		return "<img class='altui-device-icon pull-left rounded' data-org-src='{0}' src='{1}' {3} alt='_todo_' onerror='UIManager.onDeviceIconError(\"{2}\")' ></img>".format(
+
+		return "<img class='altui-device-icon pull-left rounded {4}' data-org-src='{0}' src='{1}' {3} alt='_todo_' onerror='UIManager.onDeviceIconError(\"{2}\")' ></img>".format(
 			iconPath,
 			iconDataSrc,
 			device.altuiid,
-			(isNullOrEmpty(onclick)) ? "" : "onclick='{0}'".format(onclick)
+			(isNullOrEmpty(onclick)) ? "" : "onclick='{0}'".format(onclick),
+			(iconPath.substr(0,18)=="data:image/svg+xml") ? "altui-svg-marker" : ""
 		);
 		// return "<img class='altui-device-icon pull-left rounded' data-org-src='"+iconPath+"' src='"+iconDataSrc+"' alt='_todo_' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 	}
@@ -4672,19 +4720,24 @@ var UIManager  = ( function( window, undefined ) {
 		}
 	};
 
-	function _drawDefaultFavoriteDevice(device) {
+	function _deviceDrawFavoriteDefault(device) {
 		return UIManager.deviceIcon(device).replace('altui-device-icon','altui-device-icon altui-favorite-icon').replace('pull-left','');
 	}
 
-	function _drawFavoriteDevice(device,cls) {
+	const DEVICEDRAW_DEFAULT = 1
+	const DEVICEDRAW_CONCISE = 2
+	// mode = null or DEVICEDRAW_DEFAULT ; or DEVICEDRAW_CONCISE
+	function _deviceDrawFavorite(device,cls,mode) {
 		var html="";
+		var posthtml="";
+		mode = mode || DEVICEDRAW_DEFAULT
 		cls = cls || 'altui-favorites-device-content'
-		html += "<div class='{1}' data-altuiid='{0}'><div>".format(device.altuiid,cls);
+		html += "<div class='{1}' data-altuiid='{0}'><div class='altui-favorites-device-content-box'>".format(device.altuiid,cls);
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' ));
 		if (isNaN(watts)==false) {
 			// Envoy has positive power, but it's really "green" since it is a generator (normally negative), not a consumer
-			var cls =  (watts > 0 && device.device_type != "urn:schemas-rboer-com:device:Envoy:1") ? 'bg-danger' : 'bg-success'
-			html += "<div class='{1} altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 , cls );
+			var cls =  (watts > 0 && device.device_type != "urn:schemas-rboer-com:device:Envoy:1") ? 'bg-success' : 'bg-light'
+			posthtml += "<div class='{1} altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 , cls );
 		}
 		switch(device.device_type) {
 			case "urn:schemas-micasaverde-com:device:BarometerSensor:1":
@@ -4698,17 +4751,18 @@ var UIManager  = ( function( window, undefined ) {
 				html += "<img class='altui-sonos-tile-img' src='{0}' ></img>".format(src)
 				break;
 			case "urn:schemas-micasaverde-com:device:LightSensor:1":
+				html += _deviceDrawFavoriteDefault(device);
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' );
-				html += "<span>{0}</span> <span class='altui-favorites-mediumtext'>lux</span>".format(level/*+ws.tempFormat*/);
+				posthtml += "<div class='bg-light altui-favorites-mediumtext'>{0} lux</div>".format(level/*+ws.tempFormat*/);
 				break;
-			case "urn:schemas-upnp-org:device:BinaryLight:1":
-				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' );
-				status = parseInt(status);
-				html += "<span class='{1}'>{0}</span>".format(
-					status==1 ? "On" : "Off",
-					status==1 ? "text-success" : "text-danger"
-				);
-				break;
+			// case "urn:schemas-upnp-org:device:BinaryLight:1":
+			// 	var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' );
+			// 	status = parseInt(status);
+			// 	html += "<span class='{1}'>{0}</span>".format(
+			// 		status==1 ? "On" : "Off",
+			// 		status==1 ? "text-success" : "text-danger"
+			// 	);
+			// 	break;
 			case "urn:schemas-upnp-org:device:cplus:1":
 				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:cplus1', 'Present' );
 				status = parseInt(status);
@@ -4719,26 +4773,31 @@ var UIManager  = ( function( window, undefined ) {
 				break;
 			case "urn:schemas-micasaverde-com:device:WindowCovering:1"	:
 			case "urn:schemas-upnp-org:device:DimmableLight:1":
+				html += _deviceDrawFavoriteDefault(device);
 				var loadLevelStatus = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' );
-				html += "<span>{0}</span>  <span class='altui-favorites-mediumtext'>%</span>".format(loadLevelStatus);
+				posthtml += "<div class='bg-light'>{0}%</div>".format(loadLevelStatus);
 				break;
 			case "urn:schemas-micasaverde-com:device:HumiditySensor:1":
+				html += _deviceDrawFavoriteDefault(device);
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' );
-				html += "<span class='altui-favorites-device-content'>{0}</span> <span class='altui-favorites-mediumtext'>%</span>".format(level);
+				posthtml += "<div class='bg-light altui-favorites-device-content'>{0}</span> <span class='altui-favorites-mediumtext'>%</div>".format(level);
 				break;
 			case "urn:schemas-micasaverde-com:device:VOTS:1":
 			case "urn:schemas-micasaverde-com:device:TemperatureSensor:1":
 			case "urn:schemas-upnp-org:device:HVAC_ZoneThermostat:1":
 			case "urn:schemas-upnp-org:device:Heater:1":
 				var temp = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' );
-				html += _drawFavoriteGauge(device,temp)
-				// html += "<span>{0}</span>".format((temp || "") +"&deg;"/*+ws.tempFormat*/);
+				if (mode==DEVICEDRAW_CONCISE) {
+					html += _deviceDrawFavoriteDefault(device);
+					posthtml += ("<div class='bg-light'>{0}</div>".format((temp || "") +"&deg;"))
+				} else
+					html +=  _drawFavoriteGauge(device,temp)
 				break;
 			case "urn:schemas-micasaverde-com:device:MotionSensor:1":
 			case "urn:schemas-micasaverde-com:device:DoorSensor:1":
 				var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' ));
 				html += ("<span>{0}</span>".format( (tripped==true) ? glyphTemplate.format('bolt','trigger','text-danger') : " "));
-				html += _drawDefaultFavoriteDevice(device);
+				html += _deviceDrawFavoriteDefault(device);
 				var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
 				if (lasttrip != null) {
 					var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
@@ -4746,40 +4805,41 @@ var UIManager  = ( function( window, undefined ) {
 				}
 				break;
 			case "urn:schemas-upnp-org:device:VSwitch:1":
+				html += _deviceDrawFavoriteDefault(device);
 				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VSwitch1', 'Status' );
 				status = parseInt(status);
-				html += "<span class='{1}'>{0}</span>".format(
+				posthtml += "<div class='{1}'>{0}</div>".format(
 					status==1 ? "On" : "Off",
 					status==1 ? "text-success" : "text-danger"
 				);
 				break;
-			case "urn:schemas-micasaverde-com:device:PowerMeter:1":
-				var watts = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' );
-				watts = Math.round(parseFloat(watts)*10)/10
-				html += "<span>{0}</span> <span class='altui-favorites-mediumtext'>W</span>".format(watts || "-");
-				break;
+			// case "urn:schemas-micasaverde-com:device:PowerMeter:1":
+			// 	html += _deviceDrawFavoriteDefault(device);
+			// 	var watts = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' );
+			// 	watts = Math.round(parseFloat(watts)*10)/10
+			// 	posthtml += "<div class='bg-light altui-favorites-mediumtext'>{0}W</div>".format(watts || "-");
+			// 	break;
 			case "urn:schemas-smartmeter-han:device:SmartMeterHAN1:1":
 				var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
 				if (isNaN(kwh)==false)
 					if (kwh > 0) {
-						html += "<div class='bg-danger altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+						posthtml += "<div class='bg-danger altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
 					} else {
-						html += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+						posthtml += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
 					}
-				html += _drawDefaultFavoriteDevice(device);
+				html += _deviceDrawFavoriteDefault(device);
 				break;
 			case "urn:schemas-rboer-com:device:Envoy:1":
 				var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
 				if (isNaN(kwh)==false)
-					html += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
-				html += _drawDefaultFavoriteDevice(device);
+					posthtml += "<div class='bg-success altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+				html += _deviceDrawFavoriteDefault(device);
 				break;
 			case "urn:schemas-upnp-org:device:netmon:1":
 				var targets = JSON.parse( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Targets' ) );
 				var offline = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'DevicesOfflineCount' ));
-				html += "<div class='altui-favorites-netmontxt'><span class='text-danger' id='netmon-{0}'>{2}</span> / <span>{1}</span></div>".format( device.altuiid,targets.length,offline)
-				html += _drawDefaultFavoriteDevice(device);
-				return html;
+				posthtml += "<div class='bg-light altui-favorites-netmontxt'><span class='text-danger' id='netmon-{0}'>{2}</span> / <span>{1}</span></div>".format( device.altuiid,targets.length,offline)
+				html += _deviceDrawFavoriteDefault(device);
 				break;
 			default:
 				var _altuitypesDB = MultiBox.getALTUITypesDB();	// Master controller
@@ -4788,10 +4848,10 @@ var UIManager  = ( function( window, undefined ) {
 					html += Altui_ExecuteFunctionByName(dt.FavoriteFunc, window, device);
 				}
 				else
-					html += _drawDefaultFavoriteDevice(device);
+					html += _deviceDrawFavoriteDefault(device);
 				break;
 		}
-		html += "</div></div>";
+		html += (posthtml+"</div></div>");
 		return html;
 	};
 
@@ -4857,7 +4917,7 @@ var UIManager  = ( function( window, undefined ) {
 				jg.refresh(temp,Math.max( jg.config.max, temp));
 				break;
 			default:
-				$(jqelem).replaceWith( _drawFavoriteDevice(device,cls) );
+				$(jqelem).replaceWith( _deviceDrawFavorite(device,cls) );
 		}
 	};
 
@@ -4975,7 +5035,7 @@ var UIManager  = ( function( window, undefined ) {
 					html +=(housemodeTemplate.format("housemode", HouseModeEditor.displayModes2('altui-housemode-group','',[]) ))
 
 				} else if (fav.name[0]=="d") {
-					html +=favoriteTemplate.format(fav.name,fav.device.name,_drawFavoriteDevice(fav.device,'altui-favorites-device-content'));
+					html +=favoriteTemplate.format(fav.name,fav.device.name,_deviceDrawFavorite(fav.device,'altui-favorites-device-content'));
 
 				} else if (fav.name[0]=="s") {
 					html +=favoriteTemplate.format(fav.name,fav.scene.name,_drawFavoriteScene(fav.scene.altuiid));
@@ -6337,12 +6397,13 @@ var UIManager  = ( function( window, undefined ) {
 	jobStatusToColor	: _jobStatusToColor,
 	defaultDeviceDrawWatts: _defaultDeviceDrawWatts,	// default HTML for Watts & UserSuppliedWattage variable
 	defaultDeviceDrawAltuiStrings : _defaultDeviceDrawAltuiStrings,
-	drawDefaultFavoriteDevice : _drawDefaultFavoriteDevice,
+	drawDefaultFavoriteDevice : _deviceDrawFavoriteDefault,
 	deviceIcon			: _deviceIconHtml,				//( device, zindex, onclick )
 	deviceDraw			: _deviceDraw,					// draw the mini device on device page; can be customized by a plugin by ["DeviceDrawFunc"]
 	deviceDrawVariables : _deviceDrawVariables,			// draw the device variables
 	deviceDrawActions	: _deviceDrawActions,			// draw the device Upnp Actions
 	deviceDrawControlPanel	: _deviceDrawControlPanel,	// draw the full device control panel page; can be customized by a plugin ["ControlPanelFunc"]
+	deviceDrawFavorite  : _deviceDrawFavorite,
 	deviceCreate		: _deviceCreate,
 	cameraDraw			: _cameraDraw,
 	sceneDraw			: _sceneDraw,
@@ -6380,15 +6441,6 @@ var UIManager  = ( function( window, undefined ) {
 	},
 
 	// pages
-	appStoreLayout: function(title)
-	{
-		var body="";
-		body+="	<div class='altui-layout row'>";
-		body+="		<div class='col-12 altui-mainpanel'>";
-		body+="		</div>";
-		body+="	</div>";
-		return body;
-	},
 	fullColumnLayout: function(title)
 	{
 		var body="";
@@ -6860,6 +6912,47 @@ var UIManager  = ( function( window, undefined ) {
 	onDeviceIconError : function( altuiid ) {
 		$("div.altui-device[data-altuiid="+altuiid+"] img").attr('src',defaultIconSrc);
 		$("img.altui-myhomedevice-icon[data-altuiid="+altuiid+"]").attr('src',defaultIconSrc);
+	},
+
+	pageExperimental: function ( ) {
+		UIManager.clearPage('Experimental Home',_T("Experimental Home"),UIManager.oneColumnLayout);
+		var elements=[];
+		var deviceTemplate = `
+			<div class="card flex-fill">
+				<div class="card-header text-truncate">
+					\${name}
+				</div>
+				<div class="card-body d-flex justify-content-center">
+					\${icon}
+				</div>
+			</div>`
+		var _tplFunc = _.template(deviceTemplate)
+
+		function _getDeviceModel(device) {
+			return {
+				name: device.name,
+				icon: UIManager.deviceDrawFavorite(device,null,DEVICEDRAW_CONCISE).replace(/altui-favorites-/g,'altui-experimental-') //UIManager.deviceIcon(device)	//( device, zindex, onclick )
+			}
+		}
+		function drawDeviceFlex(idx, device) {
+			elements.push((_tplFunc)(_getDeviceModel(device)))
+		}
+		function onUpdateDeviceFlex(eventname,device) {
+			var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
+			if (jqelem.length>0) {
+				$(jqelem).closest(".card").replaceWith( (_tplFunc)(_getDeviceModel(device)) )
+			}
+		}
+		function filterfunc(device) {
+			return (device.invisible==undefined) || ( device.invisible!="1")
+		}
+		function onEndDrawDevice(devices) {
+			$(".altui-mainpanel").append( '<div class="altui-experimental d-flex flex-wrap align-content-start">'+elements.join("")+'</div>' )
+			_registerFavoriteClickHandlers("altui-experimental-device-content")
+			EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,onUpdateDeviceFlex)
+		}
+		MultiBox.getDevices( drawDeviceFlex , filterfunc, onEndDrawDevice);
+
 	},
 
 	pageMyHome: function ( key, args )
@@ -10410,7 +10503,7 @@ var UIManager  = ( function( window, undefined ) {
 			return html;
 		}
 
-		UIManager.clearPage('App Store',_T("Application Store"),UIManager.appStoreLayout);
+		UIManager.clearPage('App Store',_T("Application Store"),UIManager.fullColumnLayout);
 		$("#altui-pagemessage").remove();
 
 		_getPlugins({ versions:false })
@@ -15658,6 +15751,7 @@ var UIControler = (function(win) {
 			'Reload':		{ id:45, title:'Reload Luup Engine', htmlid:"#altui-reload", onclick:UIManager.reloadEngine, parent:0 },
 			'Reboot':		{ id:46, title:'Reboot Vera', htmlid:"#altui-reboot", onclick:UIManager.reboot, parent:0 },
 			'CheckUpdate':		{ id:47, title:'Check for Updates', htmlid:"#altui-checkupdate", onclick:UIManager.pageCheckUpdate, parent:0 },
+			'Experimental':		{ id:48, title:'Experimental', htmlid:"#altui-experimental", onclick:UIManager.pageExperimental, parent:0 },
 	};
 	var menu = [
 		{id:'menu_myhome' , child:null},
@@ -15691,6 +15785,7 @@ var UIControler = (function(win) {
 			{id:'altui-pages-edit' , child:null},
 		]},
 		{id:'menu_misc' , label:_T("Misc"), child:[
+			{id:'altui-experimental' , child:null},
 			{id:'altui-remoteaccess' , child:null},
 			{id:-1},
 			{id:'altui-reload' , child:null},

@@ -1985,6 +1985,7 @@ var HTMLUtils = (function() {
 		var htmlTemplate = _.template( template )
 		var html='<span class="altui-tags" id="{0}">{1}{2}</span>'
 		var plusGlyph = glyphTemplate.format("plus",_T("Add Tag"),"")
+		var tagGlyph= glyphTemplate.format( "tags", _T("Tag") , "");
 		var tags = []
 		$.each(model, function(idx,tag) {
 			var model = { cls:tag , label:db.names[tag]||tag , id:'altui-tag-'+tag}
@@ -1992,7 +1993,7 @@ var HTMLUtils = (function() {
 		})
 		var addBtn = HTMLUtils.drawDropDown({
 			id:'altui-tag-add-dd', 
-			label:plusGlyph, 
+			label:plusGlyph+' '+tagGlyph, 
 			cls:'altui-tag-addcls d-inline',
 			btncls:'btn-sm',
 			options: $.map(tagModel, function(tag,key){

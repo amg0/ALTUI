@@ -14,7 +14,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	// return styles needed by this plugin module
 	function _getStyle() {
 		var style="";
-		style += ".altui-iphone 	{	font-size: 16px;	}";
+		style += ".altui-iphone-txt 	{	font-size: 16px;	}";
 		style += ".altui-canalplus 	{	font-size: 12px;	}";
 		style += ".altui-razb 		{	font-size: 12px;	}";
 		style += "#altui-cplus-keytbl td {text-align:center;     vertical-align:middle;}";
@@ -310,7 +310,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		var mute = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Muted' ); 
 		
 		var html ="";
-		html+=("<span class='altui-iphone' > "+dist+" </span>");
+		html+=("<span class='altui-iphone-txt' > "+dist+" </span>");
 		html+=("<small > "+unit+" </small>");
 
 		html += ALTUI_PluginDisplays.createOnOffButton( mute,"altui-onoffbtn-"+device.altuiid, _T("Unmuted,Muted") , "pull-right");
@@ -326,7 +326,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 					.replace('pull-left','')
 		var dist = Math.round( parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' ) * 100) )/100; 
 		var unit = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Unit' ); 
-		html+=("<div class='altui-iphone' >{0} {1}</div>".format(dist,unit))
+		html+=("<div class='bg-light altui-iphone-txt' >{0} {1}</div>".format(dist,unit))
 		return html;
 	};
 	function _drawCanalplus( device) {
