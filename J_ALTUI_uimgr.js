@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2479 $";
+var ALTUI_revision = "$Revision: 2480 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6955,6 +6955,7 @@ var UIManager  = ( function( window, undefined ) {
 				setTimeout( ()=>{$(jqelem).closest(".card").css("background-color","")} , 0 )
 			}
 		}
+		
 		function _drawDevices() {
 			var elements=[];
 			function _drawDeviceFlex(idx, device) {
@@ -6987,13 +6988,19 @@ var UIManager  = ( function( window, undefined ) {
 			$(".altui-mainpanel").html("")
 			return MultiBox.getDevices( _drawDeviceFlex , _filterfunc, _onEndDrawDevice);
 		}
+		function _drawScenes() {
+			function _drawSceneFlex(scene) {}
+			function _filterfunc(scene) {}
+			function _onEndDrawScene(scene) {}
+			return 	MultiBox.getScenes( _drawSceneFlex , _filterfunc, _onEndDrawScene);
+		}
 		function _registerInteractivity() {
-			_registerFavoriteClickHandlers("altui-experimental-device-content")
 			$(".altui-filter-tag").click(_onChangeTagFilter)
 			$(".altui-quick-jump").click(_onChangeRoomFilter)
 			$(".altui-quick-jump-type").click(_onChangeCategoryFilter)
-			$(".altui-mainpanel").off('click')
+			$(".altui-mainpanel").off('click', '.altui-experimental .card-header')
 				.on('click', '.altui-experimental .card-header', _onClickHeader)
+			_registerFavoriteClickHandlers("altui-experimental-device-content")
 			// if ($.support.touch!=true) {
 			// 	$(".altui-experimental")
 			// 		.off('mouseenter mousleave')
