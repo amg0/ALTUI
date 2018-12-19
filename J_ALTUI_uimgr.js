@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2478 $";
+var ALTUI_revision = "$Revision: 2479 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1032,7 +1032,12 @@ var styles =`
 	}
 	.altui-experimental div.card {
 		font-size:8px;
-		transition: background-color 1s linear 0s;
+		transition: font-size .3s linear 0s, background-color 3s linear 0s;
+	}
+	.altui-experimental div.card.zoomed {
+		font-size:20px;
+		border-width: 1px;
+		border-color: black;
 	}
 	.altui-experimental div.card:hover {
 	}
@@ -1041,10 +1046,14 @@ var styles =`
 		padding:0px;
 	}
 	.altui-experimental div.card .card-header {
+		cursor: zoom-in;
 		text-align: center;
 		margin:0px;
 		padding:0px;
 	}
+	.altui-experimental div.card.zoomed .card-header {
+		cursor: zoom-out;
+	} 
 	.altui-experimental-device-content {
 		width:100%;
 	}
@@ -6899,6 +6908,10 @@ var UIManager  = ( function( window, undefined ) {
 		function isCategoryFilterValid() {
 			return _deviceDisplayFilter.categories.length>0
 		}
+		function _onClickHeader(e) {
+			var card = $(this).closest(".card")
+			$(card).toggleClass("zoomed")
+		}
 		function _onChangeRoomFilter(e) {
 			$(this).toggleClass("active btn-light btn-info")
 			var roominfo = MultiBox.controllerOf($(this).prop('id'))
@@ -6934,10 +6947,11 @@ var UIManager  = ( function( window, undefined ) {
 		}
 		function onUpdateDeviceFlex(eventname,device) {
 			var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
+			var zoomed = $(jqelem).closest(".card").hasClass("zoomed")
 			if (jqelem.length>0) {
 				$(jqelem).closest(".card").replaceWith( (_tplFunc)(_getDeviceModel(device)) )
 				var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
-				$(jqelem).closest(".card").css("background-color","lightblue")
+				$(jqelem).closest(".card").toggleClass("zoomed",zoomed).css("background-color","lightblue")
 				setTimeout( ()=>{$(jqelem).closest(".card").css("background-color","")} , 0 )
 			}
 		}
@@ -6978,6 +6992,18 @@ var UIManager  = ( function( window, undefined ) {
 			$(".altui-filter-tag").click(_onChangeTagFilter)
 			$(".altui-quick-jump").click(_onChangeRoomFilter)
 			$(".altui-quick-jump-type").click(_onChangeCategoryFilter)
+			$(".altui-mainpanel").off('click')
+				.on('click', '.altui-experimental .card-header', _onClickHeader)
+			// if ($.support.touch!=true) {
+			// 	$(".altui-experimental")
+			// 		.off('mouseenter mousleave')
+			// 		.on('mouseenter', '.card', function() { 
+			// 			$(this).addClass("zoomed")
+			// 		})
+			// 		.on('mouseleave', '.card', function() {
+			// 			$(this).removeClass("zoomed")
+			// 		})
+			// }
 			EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,onUpdateDeviceFlex)
 		}
 		function _drawRoomFilter() {
