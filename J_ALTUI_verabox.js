@@ -1601,16 +1601,17 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 								_user_data.devices[userdata_device_idx].dirty = true;
 
 								if (device.states !=null) {
-									$.each(device.states, function( idx, state) {
-										$.each( _user_data.devices[userdata_device_idx].states , function( idx, userdata_state)
-										{
+									for (var j=0; j<device.states.length; j++) {
+										var state = device.states[j];
+										for (var idx = 0; idx< _user_data.devices[userdata_device_idx].states.length; idx++) {
+											var userdata_state =  _user_data.devices[userdata_device_idx].states[idx]
 											if ((userdata_state.service == state.service) && (userdata_state.variable == state.variable))
 											{
 												_user_data.devices[userdata_device_idx].states[idx].value = state.value;
-												return false; // break from the $.each()
+												break;
 											}
-										});
-									});
+										}
+									}
 									EventBus.publishEvent("on_ui_deviceStatusChanged",_user_data.devices[userdata_device_idx]);
 								}
 							}

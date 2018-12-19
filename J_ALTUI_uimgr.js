@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2477 $";
+var ALTUI_revision = "$Revision: 2478 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1031,8 +1031,10 @@ var styles =`
 		border: 1px solid rgba(86,61,124,.15);
 	}
 	.altui-experimental div.card {
-		width:60px;
-		font-size:10px;
+		font-size:8px;
+		transition: background-color 1s linear 0s;
+	}
+	.altui-experimental div.card:hover {
 	}
 	.altui-experimental div.card .card-body {
 		margin:0px;
@@ -1054,7 +1056,6 @@ var styles =`
 		text-align: center;
 	}
 	.altui-experimental-device-content-box .altui-device-icon.altui-svg-marker {
-		width:75%;
 	}
 	.altui-experimental-device-content-box .fa-bolt {
 		display: none;
@@ -4690,14 +4691,14 @@ var UIManager  = ( function( window, undefined ) {
 		// check is of row
 		var width = $(".altui-favorites").width();
 		if (width<400) {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'50%',"xpadding-bottom":'50%'});
-			$(".altui-favorites-weather").css({width:'100%',"xpadding-bottom":'50%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'33%',"xpadding-bottom":'33%'});
+			$(".altui-favorites-weather").css({width:'66%',"xpadding-bottom":'33%'});
 		} else if ( width <500 ) {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'30%',"xpadding-bottom":'30%'});
-			$(".altui-favorites-weather").css({width:'60%',"xpadding-bottom":'30%'});
-		} else if ( width <800 ) {
 			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'25%',"xpadding-bottom":'25%'});
 			$(".altui-favorites-weather").css({width:'50%',"xpadding-bottom":'25%'});
+		} else if ( width <800 ) {
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"xpadding-bottom":'20%'});
+			$(".altui-favorites-weather").css({width:'40%',"xpadding-bottom":'20%'});
 		} else if ( width <1200 ){
 			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"xpadding-bottom":'20%'});
 			$(".altui-favorites-weather").css({width:'40%',"xpadding-bottom":'20%'});
@@ -6820,7 +6821,6 @@ var UIManager  = ( function( window, undefined ) {
 		$(".altui-mainpanel").append( "<div id='altui-device-controlpanel-container-"+altuiid+"' class='col-12 altui-device-controlpanel-container'></div>" );
 		var container = $("#altui-device-controlpanel-container-"+altuiid);
 		UIManager.deviceDrawControlPanel( device, container );	//altuiid, device, domparent
-		// EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function (eventname,device) {
 			$(".altui-device-controlpanel[data-altuiid='"+device.altuiid+"']").not(".altui-norefresh").each( function(index,element) {
 				// force a refresh/drawing if needed.
@@ -6936,6 +6936,9 @@ var UIManager  = ( function( window, undefined ) {
 			var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
 			if (jqelem.length>0) {
 				$(jqelem).closest(".card").replaceWith( (_tplFunc)(_getDeviceModel(device)) )
+				var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
+				$(jqelem).closest(".card").css("background-color","lightblue")
+				setTimeout( ()=>{$(jqelem).closest(".card").css("background-color","")} , 0 )
 			}
 		}
 		function _drawDevices() {
@@ -6995,7 +6998,7 @@ var UIManager  = ( function( window, undefined ) {
 			return html
 		}		
 
-		UIManager.clearPage('Experimental Home',_T("Experimental Home"),UIManager.oneColumnLayout);
+		UIManager.clearPage('BirdEye',_T("Bird Eye"),UIManager.oneColumnLayout);
 		var _tplFunc = _.template(deviceTemplate)
 		var html = _generateToolBar()
 		$("#altui-toggle-messages").after( html );
@@ -15763,10 +15766,13 @@ var UIControler = (function(win) {
 			'Reload':		{ id:45, title:'Reload Luup Engine', htmlid:"#altui-reload", onclick:UIManager.reloadEngine, parent:0 },
 			'Reboot':		{ id:46, title:'Reboot Vera', htmlid:"#altui-reboot", onclick:UIManager.reboot, parent:0 },
 			'CheckUpdate':		{ id:47, title:'Check for Updates', htmlid:"#altui-checkupdate", onclick:UIManager.pageCheckUpdate, parent:0 },
-			'Experimental':		{ id:48, title:'Experimental', htmlid:"#altui-experimental", onclick:UIManager.pageExperimental, parent:0 },
+			'BirdEye':		{ id:48, title:'BirdEye', htmlid:"#altui-experimental", onclick:UIManager.pageExperimental, args:[], parent:0 },
 	};
 	var menu = [
-		{id:'menu_myhome' , child:null},
+		{id:'menu_myhome_menu' , label:_T("My Home") , child:[
+			{id:'menu_myhome' , child:null},
+			{id:'altui-experimental' , child:null},
+		]},
 		{id:'menu_device' , child:null},
 		{id:'menu_scene'  , child:null},
 		{id:'menu_scene_withfavorite'  , label:_T("Scenes"), child:[
@@ -15797,7 +15803,6 @@ var UIControler = (function(win) {
 			{id:'altui-pages-edit' , child:null},
 		]},
 		{id:'menu_misc' , label:_T("Misc"), child:[
-			{id:'altui-experimental' , child:null},
 			{id:'altui-remoteaccess' , child:null},
 			{id:-1},
 			{id:'altui-reload' , child:null},
