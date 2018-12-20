@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2484 $";
+var ALTUI_revision = "$Revision: 2485 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6917,11 +6917,14 @@ var UIManager  = ( function( window, undefined ) {
 	pageBirdEye: function ( ) {
 		var deviceTags = MyLocalStorage.getSettings('DeviceTags')
 		var optionalWidth = MyLocalStorage.getSettings('BirdViewItemWidth');
+		$('style#BirdEye').remove()
+		if (optionalWidth && optionalWidth>0)
+			$('head').append('<style id="BirdEye">.altui-custom-width { width:'+optionalWidth+'px; }</style>');
+
 		var _deviceDisplayFilter={ tags:[] , rooms:[] , categories:[] , sort:null}
 		var _roomIDtoName = {}
-		var style = (optionalWidth && optionalWidth>0) ? (' style= "width:'+optionalWidth+'px;"' ) : ""
 		var deviceTemplate = `
-			<div class="card flex-fill" `+style+ `>
+			<div class="card flex-fill altui-custom-width" >
 				<div class="card-header text-truncate">
 					<span class="altui-experimental-extrainfo">\${roomname} - </span>
 					<span title="\${name}-\${altuiid}">\${name}</span>
