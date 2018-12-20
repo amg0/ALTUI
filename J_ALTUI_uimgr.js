@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2483 $";
+var ALTUI_revision = "$Revision: 2484 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1034,8 +1034,13 @@ var styles =`
 		font-size:8px;
 		transition: font-size .3s linear 0s, background-color 3s linear 0s;
 	}
+	.altui-experimental div.card.disabled {
+		opacity:0.3;
+		background-color:"lightred";
+	}
 	.altui-experimental div.card.zoomed {
 		font-size:20px;
+		width:auto;
 		border-width: 1px;
 		border-color: black;
 	}
@@ -1130,6 +1135,7 @@ var UIManager  = ( function( window, undefined ) {
 		{ id:'ShowAllRows', type:'checkbox', label:"Show all rows in grid tables", _default:0, help:'allways show all the lines in the grid tables, or have a row count selector instead'},
 		{ id:'LockFavoritePosition', type:'checkbox', label:"Lock favorites position", _default:0, help:'Prevent drag and drop of favorites to reorder them'},
 		{ id:'TopStats', type:'checkbox', label:"Show OS Statistics", _default:0, help:'Show OS statistics in the footer'},
+		{ id:'BirdViewItemWidth', type:'number', label:"Size of Bird view items", _default:0, help:'Size of Bird view items in pixel, 0 for flex' },
 		{ id:'Menu2ColumnLimit', type:'number', label:"2-columns Menu's limit", _default:15, min:2, max:30, help:'if a menu has more entries than this number then show the menu entries in 2 columns'	},
 		{ id:'TempUnitOverride', type:'select', label:"Weather Temp Unit (UI5)", _default:'c', choices:'c|f', help:'Unit for temperature'  }
 	];
@@ -6355,7 +6361,7 @@ var UIManager  = ( function( window, undefined ) {
 	function _drawTagFilter(model,deviceTags) {
 		return HTMLUtils.drawDropDown({
 			id:'altui-dropdown-tags', 
-			label:tagsGlyph+" "+_T("Tags"),
+			label:tagsGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Tags")),
 			cls:'d-inline altui-dropdown-tags-cls',
 			options: $.map( model, function(tag,idx) {
 				// var glyph = glyphTemplate.format( "tags", _T("Category") , 'text-'+tag);
@@ -6910,10 +6916,12 @@ var UIManager  = ( function( window, undefined ) {
 
 	pageBirdEye: function ( ) {
 		var deviceTags = MyLocalStorage.getSettings('DeviceTags')
+		var optionalWidth = MyLocalStorage.getSettings('BirdViewItemWidth');
 		var _deviceDisplayFilter={ tags:[] , rooms:[] , categories:[] , sort:null}
 		var _roomIDtoName = {}
+		var style = (optionalWidth && optionalWidth>0) ? (' style= "width:'+optionalWidth+'px;"' ) : ""
 		var deviceTemplate = `
-			<div class="card flex-fill">
+			<div class="card flex-fill" `+style+ `>
 				<div class="card-header text-truncate">
 					<span class="altui-experimental-extrainfo">\${roomname} - </span>
 					<span title="\${name}-\${altuiid}">\${name}</span>
@@ -6945,10 +6953,10 @@ var UIManager  = ( function( window, undefined ) {
 			var rooms = MultiBox.getRoomsSync()
 			return HTMLUtils.drawDropDown({
 				id:'altui-dropdown-rooms', 
-				label:eyeOpenGlyph+" "+_T("Rooms"),
+				label:eyeOpenGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Rooms")),
 				cls:'altui-dropdown-rooms',
 				options: rooms.map( function(room) {
-					return { id:room.altuiid, cls:'altui-quick-jump', label:room.name, glyph:'' }
+					return { id:room.altuiid, cls:'altui-quick-jump', label:room.name, glyph:'fa-home' }
 				})
 			});			
 		};
@@ -6956,7 +6964,7 @@ var UIManager  = ( function( window, undefined ) {
 			var optionGlyph = glyphTemplate.format("cogs",_T("Options"))
 			return HTMLUtils.drawDropDown({
 				id:'altui-dropdown-sort', 
-				label:optionGlyph+" "+_T("Sort"),
+				label:optionGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Sort")),
 				cls:'altui-dropdown-sort',
 				options: [
 					{ id:'altuiid', cls:'altui-option-sort', label:_T("ID"), glyph:'fa-sort-numeric-asc' },
@@ -7033,7 +7041,8 @@ var UIManager  = ( function( window, undefined ) {
 		function onUpdateDeviceFlex(eventname,device) {
 			var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
 			var zoomed = $(jqelem).closest(".card").hasClass("zoomed")
-			if (jqelem.length>0) {
+			var disabled = $(jqelem).closest(".card").hasClass("disabled")
+			if ((jqelem.length>0) && (disabled==false)) {
 				$(jqelem).closest(".card").replaceWith( (_tplFunc)(_getDeviceModel(device)) )
 				var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
 				$(jqelem).closest(".card").toggleClass("zoomed",zoomed).css("background-color","lightblue")
@@ -7135,7 +7144,13 @@ var UIManager  = ( function( window, undefined ) {
 				elements.sort( _sortFunction )
 				// display
 				$(".altui-mainpanel").append( '<div class="altui-experimental d-flex flex-wrap align-content-start">'+elements.map( (e)=>e.html ).join("")+'</div>' )
-				dfd.resolve();
+				if (ALTUI_registered === false) {
+					setTimeout( function() {
+						PageMessage.message( _T("Note: Bird Eye view is limited to 20 items for non registered users"), "danger");
+						$(".altui-experimental > .card:gt(20)").addClass("disabled")
+					},500 )
+				}			
+			dfd.resolve();
 			} )
 			.fail( function(  ) {
 				dfd.reject();
@@ -7164,12 +7179,13 @@ var UIManager  = ( function( window, undefined ) {
 		};
 
 		UIManager.clearPage('BirdEye',_T("Bird Eye"),UIManager.oneColumnLayout);
+		$("#altui-pagetitle").remove();
 		var _tplFunc = _.template(deviceTemplate)
 		var html = _generateToolBar()
 		$("#altui-toggle-messages").after( html );
 		var rooms = MultiBox.getRooms()
 		$.when( _initRoomNameMap(), _draw() ) 
-		.then ( _registerInteractivity() )
+		.then( _registerInteractivity() )
 	},
 
 	pageMyHome: function ( key, args )
