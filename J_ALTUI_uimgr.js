@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2485 $";
+var ALTUI_revision = "$Revision: 2486 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6921,8 +6921,14 @@ var UIManager  = ( function( window, undefined ) {
 		if (optionalWidth && optionalWidth>0)
 			$('head').append('<style id="BirdEye">.altui-custom-width { width:'+optionalWidth+'px; }</style>');
 
-		var _deviceDisplayFilter={ tags:[] , rooms:[] , categories:[] , sort:null}
+		var _deviceDisplayFilter={ 
+			tags:[] ,
+			rooms: MyLocalStorage.getSettings("DeviceRoomFilter") || [], 
+			categories: MyLocalStorage.getSettings("CategoryFilter")  || [] , 
+			sort: MyLocalStorage.getSettings("LastBirdSort") || 'name'
+		}
 		var _roomIDtoName = {}
+		var _roomNametoID = {}
 		var deviceTemplate = `
 			<div class="card flex-fill altui-custom-width" >
 				<div class="card-header text-truncate">
@@ -6935,13 +6941,16 @@ var UIManager  = ( function( window, undefined ) {
 				</div>
 			</div>`;
 
-		function _initRoomNameMap( ){
-			return $.when(MultiBox.getRooms())
-			.then(function(rooms) {
-				$.each(rooms, function(idx,room) {
+		function _initRoomNameMap() {
+			return MultiBox.getRooms( 
+				function( idx, room) {
 					_roomIDtoName[ room.altuiid ] = room.name
-				})
-			})			
+					_roomNametoID[ room.name ] = _roomNametoID[ room.name ] || []
+					_roomNametoID[ room.name ].push(room.id)
+				} ,
+				null,
+				null
+			);
 		};
 		function isTagFilterValid() {
 			return _deviceDisplayFilter.tags.length>0
@@ -6953,18 +6962,20 @@ var UIManager  = ( function( window, undefined ) {
 			return _deviceDisplayFilter.categories.length>0
 		};
 		function _drawRoomFilter() {
-			var rooms = MultiBox.getRoomsSync()
 			return HTMLUtils.drawDropDown({
 				id:'altui-dropdown-rooms', 
 				label:eyeOpenGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Rooms")),
 				cls:'altui-dropdown-rooms',
-				options: rooms.map( function(room) {
-					return { id:room.altuiid, cls:'altui-quick-jump', label:room.name, glyph:'fa-home' }
-				})
+				options: $.map( _roomNametoID, function(idtbl,name) {
+					return { id:name, cls:'altui-quick-jump', label:name, glyph:'fa-home' }
+				}),
+				selected: _deviceDisplayFilter.rooms
 			});			
 		};
 		function _drawSortSelect() {
 			var optionGlyph = glyphTemplate.format("cogs",_T("Options"))
+			var selected = []
+			selected.push(_deviceDisplayFilter.sort)
 			return HTMLUtils.drawDropDown({
 				id:'altui-dropdown-sort', 
 				label:optionGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Sort")),
@@ -6974,7 +6985,8 @@ var UIManager  = ( function( window, undefined ) {
 					{ id:'name', cls:'altui-option-sort', label:_T("Name"), glyph:'fa-sort-alpha-asc' },
 					{ id:'type', cls:'altui-option-sort', label:_T("Type"), glyph:'fa-plug' },
 					{ id:'room', cls:'altui-option-sort', label:_T("Room"), glyph:'fa-home' },
-				]
+				],
+				selected: selected
 			});			
 		};
 		function _generateToolBar() {
@@ -6993,32 +7005,34 @@ var UIManager  = ( function( window, undefined ) {
 			$(this).toggleClass("active")
 			var active = $("#altui-dropdown-sort .altui-option-sort.active")[0]
 			_deviceDisplayFilter.sort = $(active).prop('id')
+			MyLocalStorage.setSettings("LastBirdSort",_deviceDisplayFilter.sort) 
 			_draw();
 		};
 		function _onChangeRoomFilter(e) {
-			$(this).toggleClass("active btn-light btn-info")
+			$(this).toggleClass("active")
 			var roominfo = MultiBox.controllerOf($(this).prop('id'))
 			var active = $(this).hasClass("active")
 			_deviceDisplayFilter.rooms = $.map( $("#altui-dropdown-rooms .altui-quick-jump.active"), function(elem,idx) { 
 				return $(elem).prop('id')
 			})
-			$("#altui-dropdown-rooms .dropdown-toggle").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false)
+			MyLocalStorage.setSettings("DeviceRoomFilter",_deviceDisplayFilter.rooms);
+			if ( MyLocalStorage.getSettings('SyncLastRoom')==1 )
+				MyLocalStorage.setSettings("SceneRoomFilter",_deviceDisplayFilter.rooms);
 			_draw();
 		};
 		function _onChangeTagFilter(e) {
-			$(this).toggleClass("active btn-light btn-info")
+			$(this).toggleClass("active")
 			_deviceDisplayFilter.tags = $.map( $("#altui-dropdown-tags .altui-filter-tag.active"), function(elem,idx) { 
 				return $(elem).prop('id').substr("altui-filter-".length)
 			})
-			$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
 			_draw();
 		};
 		function _onChangeCategoryFilter(e) {
-			$(this).toggleClass("active btn-light btn-info")
+			$(this).toggleClass("active")
 			_deviceDisplayFilter.categories = $.map( $("#altui-dropdown-category .altui-quick-jump-type.active"), function(elem,idx) { 
 				return $(elem).prop('id')
 			})
-			$("#altui-dropdown-category .dropdown-toggle").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false)
+			MyLocalStorage.setSettings("CategoryFilter",_deviceDisplayFilter.categories);
 			_draw();	
 		};
 		function _getDeviceModel(device) {
@@ -7083,11 +7097,6 @@ var UIManager  = ( function( window, undefined ) {
 			if (a==b)
 				return 0
 			return (a<b) ? -1 : 1
-			// var devicea = MultiBox.getDeviceByAltuiID(a.deviceid)
-			// var deviceb = MultiBox.getDeviceByAltuiID(b.deviceid)
-			// if (devicea.name == deviceb.name)
-			// 	return 0
-			// return (devicea.name < deviceb.name) ? -1 : 1
 		};
 		var elements=[];
 		function _drawDevices() {
@@ -7098,7 +7107,8 @@ var UIManager  = ( function( window, undefined ) {
 				var curdevicetags =  deviceTags.devicemap['_'+device.altuiid] || []
 				var intersect = curdevicetags.filter(value => -1 !== _deviceDisplayFilter.tags.indexOf(value));
 				var deviceinfo = MultiBox.controllerOf(device.altuiid)
-				var deviceroom = MultiBox.makeAltuiid(deviceinfo.controller, device.room)
+				var deviceroomaltuiid = MultiBox.makeAltuiid(deviceinfo.controller, device.room)
+				var deviceroomname = _roomIDtoName[ deviceroomaltuiid ]
 
 				function _devicetypeIsListed( devtype, catlist) {
 					var bFound=false;
@@ -7112,7 +7122,7 @@ var UIManager  = ( function( window, undefined ) {
 				}
 				return 		( (device.invisible==undefined) || ( device.invisible!="1") ) 
 						&& 	( ( isTagFilterValid()==false ) || (intersect.length!=0) )
-						&&  ( ( isRoomFilterValid()==false ) || ( -1 !==_deviceDisplayFilter.rooms.indexOf(deviceroom) ) )
+						&&  ( ( isRoomFilterValid()==false ) || ( -1 !==_deviceDisplayFilter.rooms.indexOf(deviceroomname) ) )
 						&&  ( ( isCategoryFilterValid()==false ) || (_devicetypeIsListed( device.device_type,_deviceDisplayFilter.categories )))
 			}
 
@@ -7124,8 +7134,9 @@ var UIManager  = ( function( window, undefined ) {
 			}
 			function _filterfunc(scene) {
 				var sceneinfo = MultiBox.controllerOf(scene.altuiid)
-				var sceneroom = MultiBox.makeAltuiid(sceneinfo.controller, scene.room)
-				return ( ( isRoomFilterValid()==false ) || ( -1 !==_deviceDisplayFilter.rooms.indexOf(sceneroom) ) );
+				var sceneroomaltuiid = MultiBox.makeAltuiid(sceneinfo.controller, scene.room)
+				var sceneroomname =  _roomIDtoName[ sceneroomaltuiid ]
+				return ( ( isRoomFilterValid()==false ) || ( -1 !==_deviceDisplayFilter.rooms.indexOf(sceneroomname) ) );
 			}
 
 			return 	MultiBox.getScenes( _drawSceneFlex , _filterfunc, null);
@@ -7135,6 +7146,9 @@ var UIManager  = ( function( window, undefined ) {
 			elements=[];
 			var dfd = $.Deferred();
 			$(".altui-mainpanel").html("")
+			$("#altui-dropdown-rooms .dropdown-toggle").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false)
+			$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
+			$("#altui-dropdown-category .dropdown-toggle").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false)
 			// prepared defered calls
 			var toload = [
 				_drawDevices(),
@@ -7153,7 +7167,7 @@ var UIManager  = ( function( window, undefined ) {
 						$(".altui-experimental > .card:gt(20)").addClass("disabled")
 					},500 )
 				}			
-			dfd.resolve();
+				dfd.resolve();
 			} )
 			.fail( function(  ) {
 				dfd.reject();
@@ -7184,11 +7198,14 @@ var UIManager  = ( function( window, undefined ) {
 		UIManager.clearPage('BirdEye',_T("Bird Eye"),UIManager.oneColumnLayout);
 		$("#altui-pagetitle").remove();
 		var _tplFunc = _.template(deviceTemplate)
-		var html = _generateToolBar()
-		$("#altui-toggle-messages").after( html );
-		var rooms = MultiBox.getRooms()
-		$.when( _initRoomNameMap(), _draw() ) 
-		.then( _registerInteractivity() )
+
+		$.when( _initRoomNameMap() )
+		.then( function() {
+			var html = _generateToolBar()
+			$("#altui-toggle-messages").after( html );	
+			$.when( _draw() )
+			.then(  _registerInteractivity() )
+		}) 
 	},
 
 	pageMyHome: function ( key, args )
@@ -7393,7 +7410,7 @@ var UIManager  = ( function( window, undefined ) {
 				var n=0;
 				var filteredDeviceTypes = []
 				var filteredTags = []
-				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes = $.merge(categoryFilters[$(this).prop('id')].types, filteredDeviceTypes) } )
+				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes = $.merge(filteredDeviceTypes,categoryFilters[$(this).prop('id')].types) } )
 				$(".altui-filter-tag.active").each( function(i) { filteredTags.push( $(this).prop('id').substr('altui-filter-'.length) ) } )
 				$.each(_roomsNameToID, function(name,roomarr) {
 					var tbldevice = _tableDevices(name,filteredDeviceTypes,filteredTags)
@@ -7479,12 +7496,12 @@ var UIManager  = ( function( window, undefined ) {
 			$("#altui-pagemessage")
 				.off("click",".altui-quick-jump-type")
 				.on("click",".altui-quick-jump-type",function(d) {
-					$(this).toggleClass("active btn-info btn-light")
+					$(this).toggleClass("active")
 					_drawRooms()
 				})
 				.off("click",".altui-filter-tag")
 				.on("click",".altui-filter-tag",function(d) {
-					$(this).toggleClass("active btn-info btn-light")
+					$(this).toggleClass("active")
 					_drawRooms()
 				})
 				.off("click",".altui-quick-jump")

@@ -2059,12 +2059,13 @@ var HTMLUtils = (function() {
 	};
 		
 	function _drawDropDown( model ) {
-		model = $.extend( {id:'', label:'', cls:'' , btncls:''}, model )
+		model = $.extend( true, {id:'', label:'', cls:'' , btncls:'', selected:[] }, model )
 
 		var htmlBtns = []
-		var btnTemplate = _.template( '<button type="button" id="${id}" class="btn btn-light dropdown-item ${cls}" ><i class="fa ${glyph} ${glyphcls}" aria-hidden="true"></i> ${label}</button>' )
+		var btnTemplate = _.template( '<button type="button" id="${id}" class="btn dropdown-item ${cls}" ><i class="fa ${glyph} ${glyphcls}" aria-hidden="true"></i> ${label}</button>' )
 		$.each(model.options, function(idx,opt) {
 			opt = $.extend( {id:'', cls:'', glyph:'', glyphcls:'', label:'' }, opt )
+			opt.cls +=  ( (model.selected.indexOf( opt.id ) !== -1) ? " active" : " " )
 			htmlBtns.push( (btnTemplate)(opt) )
 		})
 		
