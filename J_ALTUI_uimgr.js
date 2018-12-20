@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2482 $";
+var ALTUI_revision = "$Revision: 2483 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6908,9 +6908,10 @@ var UIManager  = ( function( window, undefined ) {
 		$("img.altui-myhomedevice-icon[data-altuiid="+altuiid+"]").attr('src',defaultIconSrc);
 	},
 
-	pageExperimental: function ( ) {
+	pageBirdEye: function ( ) {
 		var deviceTags = MyLocalStorage.getSettings('DeviceTags')
 		var _deviceDisplayFilter={ tags:[] , rooms:[] , categories:[] , sort:null}
+		var _roomIDtoName = {}
 		var deviceTemplate = `
 			<div class="card flex-fill">
 				<div class="card-header text-truncate">
@@ -6923,6 +6924,14 @@ var UIManager  = ( function( window, undefined ) {
 				</div>
 			</div>`;
 
+		function _initRoomNameMap( ){
+			return $.when(MultiBox.getRooms())
+			.then(function(rooms) {
+				$.each(rooms, function(idx,room) {
+					_roomIDtoName[ room.altuiid ] = room.name
+				})
+			})			
+		};
 		function isTagFilterValid() {
 			return _deviceDisplayFilter.tags.length>0
 		};
@@ -6953,6 +6962,7 @@ var UIManager  = ( function( window, undefined ) {
 					{ id:'altuiid', cls:'altui-option-sort', label:_T("ID"), glyph:'fa-sort-numeric-asc' },
 					{ id:'name', cls:'altui-option-sort', label:_T("Name"), glyph:'fa-sort-alpha-asc' },
 					{ id:'type', cls:'altui-option-sort', label:_T("Type"), glyph:'fa-plug' },
+					{ id:'room', cls:'altui-option-sort', label:_T("Room"), glyph:'fa-home' },
 				]
 			});			
 		};
@@ -7041,11 +7051,19 @@ var UIManager  = ( function( window, undefined ) {
 					b= b.device ? b.device.device_type  : 'zzz' + b.scene.name
 					break;
 				case 'altuiid':
-					var ainfo = MultiBox.controllerOf(a.device ? a.device.altuiid : a.scene.altuiid)
-					var binfo = MultiBox.controllerOf(b.device ? b.device.altuiid : b.scene.altuiid)
-					a= a.controller*1000000 + parseInt(a.id)
-					b= b.controller*1000000 + parseInt(b.id)					
+					var ainfo = MultiBox.controllerOf(a.device ? a.device.altuiid : '999-'+a.scene.name)
+					var binfo = MultiBox.controllerOf(b.device ? b.device.altuiid : '999-'+b.scene.name)
+					a= ainfo.controller*10000000 + parseInt(ainfo.id)
+					b= binfo.controller*10000000 + parseInt(binfo.id)					
 					break
+				case 'room':
+					var aobj = a.device ? a.device : a.scene
+					var bobj = b.device ? b.device : b.scene
+					var ainfo = MultiBox.controllerOf(aobj.altuiid)
+					var binfo = MultiBox.controllerOf(bobj.altuiid)
+					a= _roomIDtoName[  MultiBox.makeAltuiid(ainfo.controller,aobj.room)  ] || 'undef'
+					b= _roomIDtoName[  MultiBox.makeAltuiid(binfo.controller,bobj.room)  ] || 'undef'
+					break;
 				default:
 					a=1;b=1;
 					break
@@ -7114,7 +7132,7 @@ var UIManager  = ( function( window, undefined ) {
 			$.when.apply( $, toload)
 			.done( function(  ) {
 				// sort
-				elements = elements.sort( _sortFunction )
+				elements.sort( _sortFunction )
 				// display
 				$(".altui-mainpanel").append( '<div class="altui-experimental d-flex flex-wrap align-content-start">'+elements.map( (e)=>e.html ).join("")+'</div>' )
 				dfd.resolve();
@@ -7149,8 +7167,8 @@ var UIManager  = ( function( window, undefined ) {
 		var _tplFunc = _.template(deviceTemplate)
 		var html = _generateToolBar()
 		$("#altui-toggle-messages").after( html );
-
-		$.when( _draw() ) 
+		var rooms = MultiBox.getRooms()
+		$.when( _initRoomNameMap(), _draw() ) 
 		.then ( _registerInteractivity() )
 	},
 
@@ -15915,7 +15933,7 @@ var UIControler = (function(win) {
 			'Reload':		{ id:45, title:'Reload Luup Engine', htmlid:"#altui-reload", onclick:UIManager.reloadEngine, parent:0 },
 			'Reboot':		{ id:46, title:'Reboot Vera', htmlid:"#altui-reboot", onclick:UIManager.reboot, parent:0 },
 			'CheckUpdate':		{ id:47, title:'Check for Updates', htmlid:"#altui-checkupdate", onclick:UIManager.pageCheckUpdate, parent:0 },
-			'BirdEye':		{ id:48, title:'BirdEye', htmlid:"#altui-experimental", onclick:UIManager.pageExperimental, args:[], parent:0 },
+			'BirdEye':		{ id:48, title:'BirdEye', htmlid:"#altui-experimental", onclick:UIManager.pageBirdEye, args:[], parent:0 },
 	};
 	var menu = [
 		{id:'menu_myhome_menu' , label:_T("My Home") , child:[

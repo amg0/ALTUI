@@ -124,7 +124,7 @@ function altui_buildUrlOptions(deviceID) {
 	}
 		// jQuery( "#altui_Home,#altui_Lang,#altui_Layout,#altui_nPage" ).each( function(item) {
 	var layout=["","lean"];
-	var home=["","pageHome","pageMyHome","pageRooms","pageDevices","pageScenes","pageSceneEdit","pagePlugins","pageUsePages","pageEditPages","pageCredits","pageLuaTest","pageLuaStart","pageOptions","pageEditor","pageZwave","pageLocalization","pagePower","pageChildren","pageRoutes","pageQuality","pageTblDevices","pageOsCommand"];
+	var home=["","pageHome","pageMyHome","pageBirdEye","pageRooms","pageDevices","pageScenes","pageSceneEdit","pagePlugins","pageUsePages","pageEditPages","pageCredits","pageLuaTest","pageLuaStart","pageOptions","pageEditor","pageZwave","pageLocalization","pagePower","pageChildren","pageRoutes","pageQuality","pageTblDevices","pageOsCommand"];
 	var lang=["","en","fr","it"];
 	var prefix = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&";
 	
@@ -166,7 +166,7 @@ function altui_Settings(deviceID) {
 	var emonCMS = get_device_state(deviceID,  altui_Svs, 'EmonCmsUrl',1);
 	var style='	<style>\
 	  table.altui_table td:first-child {\
-		width: 140px;\
+		width: 200px;\
 	  }\
 	  input.altui-ui-input {\
 		width: 440px;\
