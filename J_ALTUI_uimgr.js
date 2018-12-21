@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2486 $";
+var ALTUI_revision = "$Revision: 2487 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -6921,9 +6921,10 @@ var UIManager  = ( function( window, undefined ) {
 		if (optionalWidth && optionalWidth>0)
 			$('head').append('<style id="BirdEye">.altui-custom-width { width:'+optionalWidth+'px; }</style>');
 
+		var roomfilter =  MyLocalStorage.getSettings("DeviceRoomFilter") 
 		var _deviceDisplayFilter={ 
 			tags:[] ,
-			rooms: MyLocalStorage.getSettings("DeviceRoomFilter") || [], 
+			rooms: ((roomfilter =="-1") ? [] : roomfilter) || [], 
 			categories: MyLocalStorage.getSettings("CategoryFilter")  || [] , 
 			sort: MyLocalStorage.getSettings("LastBirdSort") || 'name'
 		}
@@ -6949,7 +6950,12 @@ var UIManager  = ( function( window, undefined ) {
 					_roomNametoID[ room.name ].push(room.id)
 				} ,
 				null,
-				null
+				function() {
+					_roomNametoID[_T("No Room")]=[ 0 ]
+					for (var i = 0; i<MultiBox.getControllers().length; i++) {
+						_roomIDtoName[ "{0}-0".format(i) ] = "0"
+					}
+				}
 			);
 		};
 		function isTagFilterValid() {
@@ -6962,13 +6968,14 @@ var UIManager  = ( function( window, undefined ) {
 			return _deviceDisplayFilter.categories.length>0
 		};
 		function _drawRoomFilter() {
+			var options = $.map( _roomNametoID, function(idtbl,name) {
+				return { id:(name==_T("No Room") ? "0" : name), cls:'altui-quick-jump', label:name, glyph:'fa-home' }
+			})
 			return HTMLUtils.drawDropDown({
 				id:'altui-dropdown-rooms', 
 				label:eyeOpenGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Rooms")),
 				cls:'altui-dropdown-rooms',
-				options: $.map( _roomNametoID, function(idtbl,name) {
-					return { id:name, cls:'altui-quick-jump', label:name, glyph:'fa-home' }
-				}),
+				options: options,
 				selected: _deviceDisplayFilter.rooms
 			});			
 		};
