@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2487 $";
+var ALTUI_revision = "$Revision: 2488 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -193,6 +193,9 @@ var styles =`
 		left: 0;
 		visibility: visible;
 	  }
+	}
+	.blur {
+		opacity:0.3;
 	}
 	.altui-clock {
 	}
@@ -752,6 +755,9 @@ var styles =`
 		padding-left: 0px;
 		padding-right: 0px;
 	}
+	.altui-housemode3 {
+		width: 50%;
+	}
 	.altui-housemode2 {
 		width: 50%;
 		padding-bottom: 50%;
@@ -800,10 +806,17 @@ var styles =`
 	.preset_night.housemode2_selected:after {
 		background-position: -115px -112px;
 	}
-	.housemode-countdown {
+	.altui-housemode-countdown {
 		font-size: 40px;
 		z-index: 99;
-		position: relative;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.altui-housemodeglyph {
+		font-size: 25px;
 	}
 	.housemode {
 		text-align: center;
@@ -5031,13 +5044,11 @@ var UIManager  = ( function( window, undefined ) {
 				if (fav.name == "housemode" ) {
 					var housemodeTemplate = "";
 					housemodeTemplate += "<div id='{0}' class=' altui-favorites-housemode' >";
-						housemodeTemplate += "<div class='altui-favorites-device-container' >";
-							housemodeTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
-								housemodeTemplate += "{1}";
-							housemodeTemplate += "</div></div>";
+						housemodeTemplate += "<div class='altui-favorites-device-container d-flex flex-row flex-wrap' >";
+						housemodeTemplate += "{1}";
 						housemodeTemplate += "</div>";
 					housemodeTemplate += "</div>";
-					html +=(housemodeTemplate.format("housemode", HouseModeEditor.displayModes2('altui-housemode-group','',[]) ))
+					html +=(housemodeTemplate.format("housemode", HouseModeEditor.displayModes3('altui-housemode-group','',[]) ))
 
 				} else if (fav.name[0]=="d") {
 					html +=favoriteTemplate.format(fav.name,fav.device.name,_deviceDrawFavorite(fav.device,'altui-favorites-device-content'));
@@ -5253,8 +5264,8 @@ var UIManager  = ( function( window, undefined ) {
 			MultiBox.getHouseMode( function (mode) {
 				// console.log("mode="+mode);
 				if (mode) {
-					$("div.altui-housemode2").removeClass("housemode2_selected").addClass("housemode2_unselected");
-					$("#altui-mode"+mode).removeClass("housemode2_unselected").addClass("housemode2_selected");
+					$("div.altui-housemode3 .altui-housemodeglyph").removeClass("text-success text-info")
+					$("#altui-mode"+mode+" .altui-housemodeglyph").addClass("text-success");
 				}
 				ALTUI_hometimer=setTimeout( _refreshModes, 10000 );
 			});
@@ -13792,16 +13803,25 @@ var UIManager  = ( function( window, undefined ) {
 
 		UIManager.refreshModes();
 
-		$("div.altui-housemode2").click( function() {
+		$("div.altui-housemode3").click( function() {
 			var id = $(this).prop('id');
 			var mode = id.substr("altui-mode".length);
-			var div = $(this).find(".housemode-countdown");
+			var that = $(this)
+			$(this)
+				.find(".altui-housemodeglyph").addClass("text-info")
+			$(this)
+				.closest(".altui-favorites-device-container")
+				.addClass("blur")
+				.parent()
+				.append("<div class='altui-housemode-countdown d-flex justify-content-center align-items-center '></div>");
+			var div = $(".altui-housemode-countdown")
 			$(div).html( (mode==1) ? 3 : MultiBox.getHouseModeSwitchDelay() );
 			var interval = setInterval( function(div) {
 				var val = parseInt( $(div).html() );
 				if (val==1) {
-					$(div).html( "" );
 					clearInterval(interval);
+					$(div).remove()
+					$(that).closest(".altui-favorites-device-container").removeClass("blur")
 					UIManager.refreshModes(); // force a refresh now
 				} else {
 					$(div).html( val-1 );
@@ -15688,10 +15708,10 @@ $(function() {
 	function _onInitLocalization2() {
 		// console.log("_initLocalizedGlobals()");
 		_HouseModes = [
-			{id:1, text:_T("Home"), cls:"preset_home"},
-			{id:2, text:_T("Away"), cls:"preset_away"},
-			{id:3, text:_T("Night"), cls:"preset_night"},
-			{id:4, text:_T("Vacation"), cls:"preset_vacation"}
+			{id:1, text:_T("Home"), cls:"preset_home" , glyph:'fa-home'},
+			{id:2, text:_T("Away"), cls:"preset_away", glyph:'fa-globe' },
+			{id:3, text:_T("Night"), cls:"preset_night", glyph:'fa-moon-o'},
+			{id:4, text:_T("Vacation"), cls:"preset_vacation", glyph:'fa-plane'}
 		];
 		// 0: table	 1: devicename 2: id
 		deviceModalTemplate = "<div id='deviceModal' class='modal fade'>";

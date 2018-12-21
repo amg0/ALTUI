@@ -415,16 +415,25 @@ function _formatTrigger(controller,trigger)
 
 
 var HouseModeEditor = (function() {
-	function _displayModes2(htmlid,cls,modes) {
-		var tmpl = "<button type='button' class='btn btn-light altui-housemode2'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>"
-		var html ="<div class='housemode2'>";
-				$.each(_HouseModes, function(idx,mode) {
-					var select = ($.inArray( mode.id.toString(), modes) == -1) ? "housemode2_unselected" : "housemode2_selected";
-					html += "<div id='altui-mode{3}' class='altui-housemode2 pull-left {1} {2}'><div class='altui-housemode2-content'><small class='text-muted'>{0}</small><div class='housemode-countdown'></div></div></div>".format( mode.text, mode.cls, select, mode.id);
-				});
-		html+="</div>";
+	function _displayModes3(htmlid,cls,modes) {
+		var html="";
+		var template = "<div id='altui-mode${id}' class='altui-housemode3'><div class='altui-favorites-title text-truncate'>${text}</div><div class='altui-housemodeglyph'><i class='fa ${glyph}' aria-hidden='true'></i></div></div>";
+		var _tmpFunc = _.template(template)
+		$.each(_HouseModes, function(idx,mode) {
+			html += (_tmpFunc)(mode)
+		});
 		return html;
 	};
+	// function _displayModes2(htmlid,cls,modes) {
+	// 	var tmpl = "<button type='button' class='btn btn-light altui-housemode2'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>"
+	// 	var html ="<div class='housemode2'>";
+	// 			$.each(_HouseModes, function(idx,mode) {
+	// 				var select = ($.inArray( mode.id.toString(), modes) == -1) ? "housemode2_unselected" : "housemode2_selected";
+	// 				html += "<div id='altui-mode{3}' class='altui-housemode2 pull-left {1} {2}'><div class='altui-housemode2-content'><small class='text-muted'>{0}</small><div class='altui-housemode-countdown'></div></div></div>".format( mode.text, mode.cls, select, mode.id);
+	// 			});
+	// 	html+="</div>";
+	// 	return html;
+	// };
 	function _displayModes(htmlid,cls,modes) {
 		var html ="";
 		html += "<div class='btn-group {1}' id='{0}'>".format(htmlid,cls);
@@ -465,7 +474,8 @@ var HouseModeEditor = (function() {
 	};
 	return {
 		displayModes : _displayModes,
-		displayModes2 : _displayModes2,
+		// displayModes2 : _displayModes2,
+		displayModes3 : _displayModes3,
 		runActions : _runActions,					// ( domroot, onclickCB )
 		getSelectedLabels : _getSelectedLabels,
 		getSelectedModes : _getSelectedModes
