@@ -417,7 +417,12 @@ function _formatTrigger(controller,trigger)
 var HouseModeEditor = (function() {
 	function _displayModes3(htmlid,cls,modes) {
 		var html="";
-		var template = "<div id='altui-mode${id}' class='altui-housemode3'><div class='altui-favorites-title text-truncate'>${text}</div><div class='altui-housemodeglyph'><i class='fa ${glyph}' aria-hidden='true'></i></div></div>";
+		var template = `<div id='altui-mode\${id}' class='altui-housemode3'>
+							<div class='altui-favorites-title text-truncate'><small class='text-info'>\${text}</small></div>
+							<div class='altui-housemodeglyph'>
+								<i class='fa \${glyph}' aria-hidden='true'></i>
+							</div>
+						</div>`;
 		var _tmpFunc = _.template(template)
 		$.each(_HouseModes, function(idx,mode) {
 			html += (_tmpFunc)(mode)
