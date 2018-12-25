@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.35"
+local version = "v2.36"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3600,6 +3600,14 @@ function UPNPregisterDataProvider(lul_device, newName, newUrl, newJsonParameters
 	end
 	warning("invalid json parameters, %s",newJsonParameters);
 	return 0
+end
+
+function UPNPunregisterPlugin(lul_device,newDeviceType)
+	log(string.format("UPNPunregisterPlugin(%d,%s)",lul_device,newDeviceType))
+	local tbljson = getSetVariable(ALTUI_SERVICE, "PluginConfig", lul_device, json.encode( getDefaultConfig() ) )
+	local tbl = json.decode(tbljson)	
+	tbl[newDeviceType] = nil
+	setVariableIfChanged(ALTUI_SERVICE, "PluginConfig", json.encode( tbl ), lul_device)
 end
 
 function UPNPregisterPlugin(lul_device,newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc,newFavoriteFunc)

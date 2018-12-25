@@ -54,6 +54,14 @@
 	</action>
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
+		<name>UnregisterPlugin</name>
+		<job>
+			UPNPunregisterPlugin(lul_device,lul_settings.newDeviceType)
+			return 4,0
+		</job>    
+	</action>
+	<action>
+		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>RegisterDataProvider</name>
 		<job>
 			UPNPregisterDataProvider(lul_device, lul_settings.newName, lul_settings.newUrl, lul_settings.newJsonParameters)

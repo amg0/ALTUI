@@ -229,6 +229,16 @@
             </argumentList>
         </action>
         <action>
+            <name>UnregisterPlugin</name>
+            <argumentList>
+                <argument>
+                    <name>newDeviceType</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>deviceType</relatedStateVariable>
+                </argument>
+            </argumentList>
+        </action>
+        <action>
             <name>RegisterDataProvider</name>
             <argumentList>
                 <argument>
