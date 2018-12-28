@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.36"
+local version = "v2.37"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
@@ -3573,9 +3573,9 @@ function sayTTS(lul_device,newMessage,volume,groupDevices)
 			else
 				local params = {urlClip=uri, Duration=estDuration, Volume=volume }
 				if (groupDevices ~= "") then
-					params["groupID"]= groupDevices
+					params["groupID_playerID"]= groupDevices
 				else
-					params["groupID"]= "ALL"
+					params["groupID_playerID"]= "ALL"
 				end
 				resultCode, resultString, job, returnArguments = luup.call_action("urn:upnp-org:serviceId:altsonos1", "AudioClip", params, sonos )
 			end
