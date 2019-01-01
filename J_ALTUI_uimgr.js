@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2488 $";
+var ALTUI_revision = "$Revision: 2494 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -571,6 +571,10 @@ var styles =`
 	}
 	body.withBackground .altui-device , body.withBackground .altui-scene , body.withBackground .altui-workflow , body.withBackground .altui-pluginbox-panel , body.withBackground footer p {
 		background-color: rgba(255,255,255,0.5)
+	}
+	.altui-device-container, .altui-scene-container, .altui-workflow-container {
+		padding-left: 3px;
+		padding-right: 3px;		
 	}
 	.altui-device-title , .altui-workflow-heading {
 		white-space: nowrap;
@@ -7713,7 +7717,7 @@ var UIManager  = ( function( window, undefined ) {
 		};
 
 		function drawDeviceEmptyContainer(idx, device) {
-			_domMainPanel.append(ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'col-sm-6 col-md-4 col-lg-3'));
+			_domMainPanel.append(ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'altui-device-container col-sm-6 col-md-4 col-lg-3'));
 		};
 		
 		function _drawDeviceToolbar() {
@@ -8089,7 +8093,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		function sceneDraw(idx, scene) {
 			var html = UIManager.sceneDraw(scene);
-			var tpl="<div class=' col-sm-6 col-md-4 col-xl-3 '>";
+			var tpl="<div class='altui-scene-container col-sm-6 col-md-4 col-xl-3 '>";
 			tpl	+=	html;
 			tpl	+=	"</div>";
 			var domPanel = $(".altui-mainpanel");
@@ -9875,7 +9879,7 @@ var UIManager  = ( function( window, undefined ) {
 					buttonTemplate.format( workflow.altuiid, 'altui-cloneworkflow pull-left', copyGlyph,'light',_T("Clone"));
 				var pauseButtonHtml = glyphTemplate.format( "power-off", _T("Pause Workflow") , 'altui-pauseworkflow ' + ((workflow.paused>0) ? 'paused':'activated'));
 				html += ALTUI_Templates.workflowContainerTemplate.format(
-					"col-sm-6 col-md-4 col-lg-3 col-xl-2",
+					"altui-workflow-container col-sm-6 col-md-4 col-lg-3 col-xl-2",
 					workflow.altuiid,
 					workflow.altuiid,
 					workflow.name,
