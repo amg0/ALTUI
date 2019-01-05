@@ -9,10 +9,11 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.38b"
+local version = "v2.38"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
-local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
+local ALTUI_TMP_PREFIX = "altui-"
+local ALTUI_SONOS_MP3 = ALTUI_TMP_PREFIX .. "sonos.mp3"
 local NMAX_IN_VAR	= 4000
 local DEFAULT_TIMEOUT = 30000
 local THINGSPEAK_PUSH_SEC = 15	-- thingspeak limits
@@ -1633,6 +1634,12 @@ end
 function UserMessage(text, mode)
 	mode = (mode or TASK_ERROR)
 	task(text,mode)
+end
+
+function clearAltuiFile(param)
+	if (string.len(param)>0) then
+		os.execute("rm /www/"..param)
+	end
 end
 
 ------------------------------------------------
@@ -3538,7 +3545,8 @@ local function createMP3file(lul_device,newMessage)
 		return nil
 	end
 
-	local filename = "/www/"..ALTUI_SONOS_MP3
+	local filename = "/www/"..ALTUI_TMP_PREFIX..math.random(1,100000)..".mp3"
+	-- local filename = "/www/"..ALTUI_SONOS_MP3
 	local f,errmsg,errno = io.open(filename, "wb")
 	if (f==nil) then
 		error(string.format("ALTUI could not open the file %s in wb mode. check path & permissions. msg:%s",ALTUI_SONOS_MP3,errmsg))
@@ -3546,7 +3554,12 @@ local function createMP3file(lul_device,newMessage)
 	end
 	f:write(content)
 	f:close()
-	return string.format("http://%s/%s",hostname,ALTUI_SONOS_MP3) , mp3Duration(filename)
+	
+	-- remove /www/ from filename
+	local cleanfilename = filename:gsub('/www/','')
+	-- schedule a cleanup in 15 min ( or in reload )
+	luup.call_delay("clearAltuiFile", 15*60, cleanfilename)
+	return string.format("http://%s/%s",hostname,cleanfilename) , mp3Duration(filename)
 end
 
 function sayTTS(lul_device,newMessage,volume,groupDevices)
@@ -4431,6 +4444,9 @@ function startupDeferred(lul_device)
 	-- clear the RESET flag
 	luup.variable_set(ALTUI_SERVICE, "PendingReset", 0, lul_device)
 
+	-- clear the tmp files
+	os.execute("rm /www/altui*")
+	
 	-- NOTHING to start
 	if( luup.version_branch == 1 and luup.version_major == 7) then
 		luup.set_failure(0,lul_device)	-- should be 0 in UI7
