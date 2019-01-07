@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.38"
+local version = "v2.39"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_TMP_PREFIX = "altui-"
@@ -3562,7 +3562,7 @@ local function createMP3file(lul_device,newMessage)
 	return string.format("http://%s/%s",hostname,cleanfilename) , mp3Duration(filename)
 end
 
-function sayTTS(lul_device,newMessage,volume,groupDevices)
+function sayTTS(lul_device,newMessage,volume,groupDevices,durationMs)
 	lul_device = tonumber(lul_device)
 	newMessage = modurl.escape( newMessage or "" )
 	volume = volume or 0
@@ -3576,7 +3576,7 @@ function sayTTS(lul_device,newMessage,volume,groupDevices)
 		local sonos,typ = findSONOSDevice()
 		if (sonos~=-1) then
 			if (typ==1) then
-				local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=estDuration}
+				local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=durationMs}
 				if (groupDevices ~= "") then
 					params["GroupDevices"]= groupDevices
 				else
@@ -3584,7 +3584,7 @@ function sayTTS(lul_device,newMessage,volume,groupDevices)
 				end
 				resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 			else
-				local params = {urlClip=uri, Duration=estDuration, Volume=volume }
+				local params = {urlClip=uri, Duration=durationMs, Volume=volume }
 				if (groupDevices ~= "") then
 					params["groupID_playerID"]= groupDevices
 				else

@@ -131,6 +131,12 @@
             <defaultValue></defaultValue>
             <shortCode>groupdevices</shortCode>
         </stateVariable>			
+        <stateVariable sendEvents="no">
+            <name>durationMs</name>
+            <dataType>ui2</dataType>
+            <defaultValue></defaultValue>
+            <shortCode>durationms</shortCode>
+        </stateVariable>			
 	</serviceStateTable>
     <actionList>
         <action>
@@ -285,6 +291,11 @@
                     <name>newGroupDevices</name>
                     <direction>in</direction>
                     <relatedStateVariable>groupDevices</relatedStateVariable>
+                </argument>
+                <argument>
+                    <name>durationMs</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>durationMs</relatedStateVariable>
                 </argument>
             </argumentList>
 		</action>

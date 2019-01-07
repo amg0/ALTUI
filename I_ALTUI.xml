@@ -79,7 +79,7 @@
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>SayTTS</name>
 		<job>
-			sayTTS(lul_device,lul_settings.newMessage,lul_settings.newVolume,lul_settings.newGroupDevices)
+			sayTTS(lul_device,lul_settings.newMessage,lul_settings.newVolume,lul_settings.newGroupDevices,lul_settings.durationMs)
 			return 4,0
 		</job>    
 	</action>
