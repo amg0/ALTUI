@@ -159,7 +159,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-motion {font-size: 22px;}";
 		style += ".altui-mysensorsext {font-size: 16px;}";
 		style += ".altui-keypad-status {font-size: 14px;}";
-		style += ".altui-weather-text, .altui-lasttrip-text, .altui-vswitch-text, .altui-gcal3-text {font-size: 11px;}";
+		style += ".altui-weather-text, .altui-lasttrip-text, .altui-lastread-text, .altui-vswitch-text, .altui-gcal3-text {font-size: 11px;}";
 		style += ".altui-red , .btn.altui-red { color:red;}";
 		style += ".altui-blue, .btn.altui-blue { color:blue;}";
 		style += ".altui-orange { color:darkorange;}";
@@ -1370,8 +1370,14 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		if (isNaN(volts)==false)
 			html += ALTUI_Templates.wattTemplate.format(volts,"Volts");
 
-		if (html=="") {
-			html += UIManager.defaultDeviceDrawAltuiStrings( device );
+		var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
+		if (isNaN(kwh)==false) {
+			html += ALTUI_Templates.wattTemplate.format(kwh,"KWH");
+			var kwhreading = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWHReading' );
+			if (kwhreading!=null) {
+				var lastread= _toIso(new Date(kwhreading*1000),' ');
+				html+= "<div class='altui-lastread-text text-muted'>{0} {1}</div>".format( timeGlyph,lastread );
+			}
 		}
 		// var pulse = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Pulse' ));
 		// if (isNaN(pulse)==false)
