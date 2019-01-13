@@ -1163,23 +1163,19 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	function _drawMotion( device) {
 		var html = "";
 
-		// armed button
-		// var status = parseInt(MultiBox.oldgetStatus( devid, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
-		// if ( ( ( device.Jobs != null ) && ( device.Jobs.length>0) ) || (device.status==1) || (device.status==5) ) {
-			// status = -1;
-		// }
 		var armed = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Armed' ));
+		var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' ));
 		html += _createOnOffButton( armed,"altui-onoffbtn-"+device.altuiid, _T("Bypass,Arm"), "pull-right" );
 
 		var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
+		var laststriphtml = ("<span class='altui-motion' >{0}</span>".format( (tripped==true) ? "<i class='fa fa-bolt text-danger' aria-hidden='true'></i>" : ""));
+
 		if (lasttrip != null) {
 			var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
-			html+= "<div class='altui-lasttrip-text text-muted'>{0} {1}</div>".format( timeGlyph,lasttripdate );
+			html+= "<div class='altui-lasttrip-text text-muted'>{0}{1} {2}</div>".format( laststriphtml,timeGlyph,lasttripdate );
 		}
-
-		// armed, tripped
-		var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' ));
-		html += ("<span class='altui-motion' >{0}</span>".format( (tripped==true) ? "<i class='fa fa-bolt text-danger' aria-hidden='true'></i>" : ""));
+		else
+			html += laststriphtml
 
 		// armed
 		html += "<script type='text/javascript'>";
