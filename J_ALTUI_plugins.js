@@ -1172,7 +1172,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		if (lasttrip != null) {
 			var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
-			html+= "<div class='altui-lasttrip-text text-muted'>{0}{1} {2}</div>".format( laststriphtml,timeGlyph,lasttripdate );
+			var prefix =(tripped==true) ? laststriphtml : timeGlyph
+			html+= "<div class='altui-lasttrip-text text-muted'>{0} {1}</div>".format( prefix,lasttripdate );
 		}
 		else
 			html += laststriphtml

@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.40"
+local version = "v2.41"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_TMP_PREFIX = "altui-"
@@ -3569,7 +3569,7 @@ function sayTTS(lul_device,newMessage,volume,groupDevices,durationMs)
 	groupDevices = groupDevices or ""
 	log(string.format("sayTTS(%d,%s,%d,%s)",lul_device, newMessage,volume,groupDevices))
 
-	local uri, estDuration = createMP3file(lul_device,newMessage)
+	local uri = string.starts(newMessage,"http") and newMessage or createMP3file(lul_device,newMessage)
 	local resultCode, resultString, job, returnArguments
 	resultCode = -1
 	if (uri ~= nil) then
