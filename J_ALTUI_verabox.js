@@ -1522,7 +1522,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	{
 		return _upnpHelper.UPnPGetJobStatus(jobid, cbfunc );
 	};
-
+	
 	function _setAttr(deviceid, attribute, value,cbfunc) {
 		if ( isNullOrEmpty(value) )
 			value = ""

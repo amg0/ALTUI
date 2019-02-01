@@ -1373,8 +1373,7 @@ var api = {
 	getDeviceProperty: function(deviceId, propertyName) {
 		// API version 6
 		var device = MultiBox.getDeviceByID( _JSAPI_ctx.controllerid, deviceId );
-		if ('undefined' != typeof device) MultiBox.getAttr( device, attributeName);
-		return void 0;
+		return ('undefined' != typeof device) ? device[propertyName] : null;
 	},
 	getDeviceAttribute: function (deviceId, attributeName) {
 		// API version 6

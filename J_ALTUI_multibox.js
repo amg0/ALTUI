@@ -562,6 +562,10 @@ var MultiBox = ( function( window, undefined ) {
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runAction(elems[1], service, action, params,cbfunc);
 		// return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPAction(elems[1], service, action, params,cbfunc);
 	};
+	// function _getAttr(device, attribute) {
+		// var elems = device.altuiid.split("-");
+		// return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getAttr(elems[1], attribute);
+	// };
 	function _setAttr(device, attribute, value,cbfunc) {
 		var elems = device.altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.setAttr(elems[1], attribute, value,cbfunc);
@@ -960,6 +964,7 @@ var MultiBox = ( function( window, undefined ) {
 	getStatus				: _getStatus,				// ( device, service, variable )
 	setStatus				: _setStatus,				// ( device, service, variable, value, dynamic )
 	getJobStatus			: _getJobStatus,			// (  jobid , cbfunc )
+	// getAttr					: _getAttr,					// device , attribute
 	setAttr					: _setAttr,					// ( device, attribute, value,function(result) )
 	runAction				: _runAction,				// (device, service, action, params,cbfunc);
 	runActionByAltuiID		: _runActionByAltuiID,		// (altuiid, service, action, params,cbfunc)
