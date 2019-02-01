@@ -1728,9 +1728,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					for (var col=0; col<colMax; col++) {
 						if (actBtns[btnid] !== undefined) {
 							html += "<div class='altui-harmony-col {0}'>".format(colCls);
-//RB Change start
+//RB Change V3.0
 //							html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-act-{3} btn btn-light btn-sm {2}'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'btn-info' : '',device.altuiid);
-							html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-act-{3} btn btn-light btn-sm {2}'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'active' : '',device.altuiid);
+							html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-act btn btn-light btn-sm {2}'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'active' : '',device.altuiid);
 //RB Change end
 							html += "</div>";
 							btnid ++;
@@ -1739,17 +1739,27 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					html += "</div>";
 				}
 				html += "</div>";
-				html += "<script type='text/javascript'>";
-				html += " $('button.altui-harmony-act-{0}').on('click', function() {".format(device.altuiid);
-				html += " var btnCmd = $(this).prop('id'); ";
-				html += " var action = 'StartActivity'; ";
-				html += " var params = {}; params['newActivityID']=btnCmd; ";
-				html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:Harmony1');
-				html += "});";
-				html += "</script>";
+//RB Change V3.0
+				$(".altui-mainpanel")
+					.off('click','button.altui-harmony-act')
+					.on('click','button.altui-harmony-act',device.altuiid,function(e) {
+						var btnCmd = $(this).prop('id');
+						MultiBox.runActionByAltuiID(e.data, "urn:rboer-com:serviceId:Harmony1", "StartActivity", {'newActivityID':btnCmd})
+					})
+//				html += "<script type='text/javascript'>";
+//				html += " $('button.altui-harmony-act-{0}').on('click', function() {".format(device.altuiid);
+//				html += " var btnCmd = $(this).prop('id'); ";
+//				html += " var action = 'StartActivity'; ";
+//				html += " var params = {}; params['newActivityID']=btnCmd; ";
+//				html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:Harmony1');
+//				html += "});";
+//				html += "</script>";
+//RB Change end
 			} else {
-				var status = parseInt(MultiBox.getStatus(device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status'));
-				html += ALTUI_PluginDisplays.createOnOffButton(status,"altui-onoffbtn-"+device.altuiid, _T("OFF,ON") , "pull-right");
+//RB Change V3.0
+//				var status = parseInt(MultiBox.getStatus(device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status'));
+//				html += ALTUI_PluginDisplays.createOnOffButton(status,"altui-onoffbtn-"+device.altuiid, _T("OFF,ON") , "pull-right");
+//RB Change end
 				for (i=0; i<actBtns.length; i++) {
 					if (actBtns[i].value === activity) {
 						html += "<div>Activity : "+actBtns[i].label+"</div>";
@@ -1771,13 +1781,20 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				html += " var body = $('html, body');"
 				html += " var scrPos = body.scrollTop();";
 				html += " var btnCmd = $(this).prop('id'); ";
-				html += " var action = 'StartActivity'; ";
+//RB Change V3.0
+//				html += " var action = 'StartActivity'; ";
+//RB Change end
 				html += " var params = {}; params['newActivityID']=btnCmd; ";
-				html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:Harmony1');
+//RB Change V3.0
+//				html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:Harmony1');
+				html += " MultiBox.runActionByAltuiID('{0}', 'urn:rboer-com:serviceId:Harmony1', 'StartActivity', params);".format(device.altuiid);
+//RB Change end
 				html += " body.animate({scrollTop:scrPos}, '1000', 'swing'); ";
 				html += "});";
-				html += " $('div#altui-onoffbtn-{0}').on('click touchend', function() { ALTUI_PluginDisplays.toggleOnOffButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
-				html += "</script>";
+//RB Change V3.0
+//				html += " $('div#altui-onoffbtn-{0}').on('click touchend', function() { ALTUI_PluginDisplays.toggleOnOffButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+//				html += "</script>";
+//RB Change end
 			}
 			}
 		} catch (e) {
@@ -1809,7 +1826,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				for (var btnid=0; btnid<actBtns.length; btnid++) {
 					if (actBtns[btnid] !== undefined) {
 						html += "<div class='altui-harmony-col col-6 col-sm-3 col-md-2 col-lg-1'>";
-						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-cp-act-{3} btn btn-{2} btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'primary' : 'default',device.altuiid);
+//RB Change V3.0
+//						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-cp-act-{3} btn btn-{2} btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'primary' : 'default',device.altuiid);
+						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmony-cp-act btn btn-{2} btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label,(actBtns[btnid].value==activity) ? 'primary' : 'default');
+//RB Change end
 						html += "</div>";
 					}
 				}
@@ -1817,6 +1837,21 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					"</div>";
 				html += "<div style='height: 20px;'>&nbsp;</div>"+
 					"<div class='container-fluid'>"+
+//RB Change V3.0
+					" <div class='row' style='height: 30px;'>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Change Channel:</div>"+
+					"  <div class='altui-harmony-col col-1 col-sm-1 col-md-1 col-lg-1'><input id='altui-harmony-cci-{0}' type='number' min='1' max='99999' size='5'></div>".format(device.altuiid)+
+					"  <div class='altui-harmony-col col-3 col-sm-2 col-md-2 col-lg-1'><button id='altui-harmony-cc' data-action='ChangeChannel' type='button' class='altui-harmony-open altui-harmony-cp-cc btn btn-sm'>Change</button></div>"+
+					" </div>"+
+					" <div class='row' style='height: 30px;'>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Update Configuration:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'><button id='altui-harmony-uc' data-action='ChangeChannel' type='button' class='altui-harmony-open altui-harmony-cp-uc btn btn-sm'>Update</button></div>"+
+					" </div>"+
+					" <div class='row' style='height: 20px;'>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Hub name:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'FriendlyName')+"</div>"+
+					" </div>"+
+//RB Change end
 					" <div class='row' style='height: 20px;'>"+
 					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Link Status:</div>"+
 					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'LinkStatus')+"</div>"+
@@ -1833,22 +1868,50 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Last command time:</div>"+
 					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'LastCommandTime')+"</div>"+
 					" </div>"+
+//RB Change V3.0
+					" <div class='row' style='height: 20px;'>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Hub configuration version:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'HubConfigVersion')+"</div>"+
+					" </div>"+
+					" <div class='row' style='height: 20px;'>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Hub software version:</div>"+
+					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:Harmony1', 'hubSwVersion')+"</div>"+
+					" </div>"+
+//RB Change end
 					"</div>";
 				html += "</div>";
-				html += "<script type='text/javascript'>";
-				html += " $('button.altui-harmony-cp-act-{0}').on('click', function() {".format(device.altuiid);
-				html += " var btnCmd = $(this).prop('id'); ";
-				html += " var action = 'StartActivity'; ";
-				html += " var params = {}; params['newActivityID']=btnCmd; ";
-				html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:Harmony1');
-				html += "});";
-				html += "</script>";
+				
+//RB Change V3.0
+				$(".altui-mainpanel")
+					.off('click','button.altui-harmony-cp-act')
+					.on('click','button.altui-harmony-cp-act',device.altuiid,function(e) {
+						var btnCmd = $(this).prop('id');
+						MultiBox.runActionByAltuiID(e.data, "urn:rboer-com:serviceId:Harmony1", "StartActivity", {'newActivityID':btnCmd})
+					})
+					.off('click','button.altui-harmony-cp-cc')
+					.on('click','button.altui-harmony-cp-cc',device.altuiid,function(e) {
+						var newChnl = $("#altui-harmony-cci-{0}".format(e.data)).val();
+						MultiBox.runActionByAltuiID(e.data, "urn:rboer-com:serviceId:Harmony1", "ChangeChannel", {'newChannel':newChnl})
+					})
+					.off('click','button.altui-harmony-cp-uc')
+					.on('click','button.altui-harmony-cp-uc',device.altuiid,function(e) {
+						MultiBox.runActionByAltuiID(e.data, "urn:rboer-com:serviceId:Harmony1", "ForceUpdateConfiguration")
+					})
+//				html += "<script type='text/javascript'>";
+//				html += " $('button.altui-harmony-cp-act-{0}').on('click', function() {".format(device.altuiid);
+//				html += " var btnCmd = $(this).prop('id'); ";
+//				html += " var action = 'StartActivity'; ";
+//				html += " var params = {}; params['newActivityID']=btnCmd; ";
+//				html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:Harmony1');
+//				html += "});";
+//				html += "</script>";
+//RB Change end
 			}
 		} catch (e) {
 			html += "<span>Error, sorry</span><p>"+e;
 		}
 		$(domparent).append(html);
-		$(domparent).height(255);
+		$(domparent).height(285);
 	};
 
 	// return the html string inside the .card-body of the .altui-device#id panel
@@ -1859,8 +1922,14 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			for (var i=1; i<=25; i++) {
 				var cmd = MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1','Command'+i);
 				var cmdDesc = MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1','CommandDesc'+i);
+//RB Change V3.0
+				var cmdDur = MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1','PrsCommand'+i);
+//RB Change end
 				if (cmd !== '' && cmdDesc !== '' && cmd !== null && cmdDesc !== null) {
-					actBtns.push({'value':cmd,'label':cmdDesc});
+//RB Change V3.0
+//					actBtns.push({'value':cmd,'label':cmdDesc});
+					actBtns.push({'value':cmd,'label':cmdDesc,'prsdur':cmdDur});
+//RB Change end
 				}
 			}
 			if (actBtns.length === 0) {
@@ -1884,7 +1953,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 						for (var col=0; col<colMax; col++) {
 							if (actBtns[btnid] !== undefined) {
 								html += "<div class='altui-harmony-col {0}'>".format(colCls);
-								html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cmd-{2} btn btn-light btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
+//RB Change V3.0
+//								html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cmd-{3} btn btn-light btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
+								html+= "<button id='{0}' data-prsdur='{2}' type='button' class='altui-harmony-open altui-harmonydevice-cmd btn btn-light btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, actBtns[btnid].prsdur);
+//RB Change end
 								html += "</div>";
 								btnid ++;
 							}
@@ -1892,21 +1964,34 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 						html += "</div>";
 					}
 					html += "</div>";
-					html += "<script type='text/javascript'>";
-					html += " $('button.altui-harmonydevice-cmd-{0}').on('click', function() {".format(device.altuiid);
-					html += " var btnCmd = $(this).prop('id'); ";
-					html += " var action = 'SendDeviceCommand'; ";
-					html += " var params = {}; params['Command']=btnCmd; ";
-					html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:HarmonyDevice1');
-					html += "});";
-					html += "</script>";
+//RB Change V3.0
+					$(".altui-mainpanel")
+						.off('click','button.altui-harmonydevice-cmd')
+						.on('click','button.altui-harmonydevice-cmd',device.altuiid,function(e) {
+							var btnCmd = $(this).prop('id');
+							var prsDur = $(this).data('prsdur');
+							var params = {}; params['Command']=btnCmd; params['Duration']=prsDur;
+							MultiBox.runActionByAltuiID(e.data, "urn:rboer-com:serviceId:HarmonyDevice1", "SendDeviceCommand", params)
+						})
+//					html += "<script type='text/javascript'>";
+//					html += " $('button.altui-harmonydevice-cmd-{0}').on('click', function() {".format(device.altuiid);
+//					html += " var btnCmd = $(this).prop('id'); ";
+//					html += " var action = 'SendDeviceCommand'; ";
+//					html += " var params = {}; params['Command']=btnCmd; ";
+//					html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:HarmonyDevice1');
+//					html += "});";
+//					html += "</script>";
+//RB Change end
 				} else {
 					html += "<div id='altui-harmonydevice-cmd-group-{0}' class='btn-group'>".format(device.altuiid);
 					html += "<button aria-expanded='false' data-toggle='dropdown' type='button' class='btn btn-light btn-sm dropdown-toggle'>";
 					html += "Select Command <span class='caret'></span></button>";
 					html += "<ul role='menu' class='dropdown-menu'>";
 					for (var i=0; i<actBtns.length; i++) {
-						html += "<li><a href='#' class='' id='{0}'>{1}</a></li>".format(actBtns[i].value, actBtns[i].label);
+//RB Change V3.0
+//						html += "<li><a href='#' class='' id='{0}'>{1}</a></li>".format(actBtns[i].value, actBtns[i].label);
+						html += "<li><a href='#' class='' id='{0}' data-prsdur='{2}'>{1}</a></li>".format(actBtns[i].value, actBtns[i].label, actBtns[i].prsdur);
+//RB Change end
 					}
 					html += "</ul></div>";
 					html += "</div>";
@@ -1915,9 +2000,14 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					html += " var body = $('html, body');"
 					html += " var scrPos = body.scrollTop();";
 					html += " var btnCmd = $(this).prop('id'); ";
-					html += " var action = 'SendDeviceCommand'; ";
-					html += " var params = {}; params['Command']=btnCmd; ";
-					html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:HarmonyDevice1');
+//RB Change V3.0
+//					html += " var action = 'SendDeviceCommand'; ";
+//					html += " var params = {}; params['Command']=btnCmd; ";
+//					html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:HarmonyDevice1');
+					html += " var prsDur = $(this).data('prsdur'); ";
+					html += " var params = {}; params['Command']=btnCmd;  params['Duration']=prsDur;";
+					html += " MultiBox.runActionByAltuiID('{0}', 'urn:rboer-com:serviceId:HarmonyDevice1', 'SendDeviceCommand', params);".format(device.altuiid);
+//RB Change end
 					html += " body.animate({scrollTop:scrPos}, '1000', 'swing'); ";
 					html += "});";
 					html += "</script>";
@@ -1937,8 +2027,14 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			for (var i=1; i<=25; i++) {
 				var cmd = MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1','Command'+i);
 				var cmdDesc = MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1','CommandDesc'+i);
+//RB Change V3.0
+				var cmdDur = MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1','PrsCommand'+i);
+//RB Change end
 				if (cmd !== '' && cmdDesc !== '' && cmd !== null && cmdDesc !== null) {
-					actBtns.push({'value':cmd,'label':cmdDesc});
+//RB Change V3.0
+//					actBtns.push({'value':cmd,'label':cmdDesc});
+					actBtns.push({'value':cmd,'label':cmdDesc,'prsdur':cmdDur});
+//RB Change end
 				}
 			}
 			if (actBtns.length === 0) {
@@ -1951,7 +2047,10 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				for (var btnid=0; btnid<actBtns.length; btnid++) {
 					if (actBtns[btnid] !== undefined) {
 						html += "<div class='altui-harmony-col col-6 col-sm-3 col-md-2 col-lg-1'>";
-						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cp-cmd-{2} btn btn-light btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
+//RB Change V3.0
+//						html+= "<button id='{0}' type='button' class='altui-harmony-open altui-harmonydevice-cp-cmd-{2} btn btn-light btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, device.altuiid);
+						html+= "<button id='{0}' data-prsdur='{2}' type='button' class='altui-harmony-open altui-harmonydevice-cp-cmd btn btn-light btn-sm'>{1}</button>".format(actBtns[btnid].value, actBtns[btnid].label, actBtns[btnid].prsdur);
+//RB Change end
 						html += "</div>";
 					}
 				}
@@ -1969,14 +2068,24 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					" </div>"+
 					"</div>";
 				html += "</div>";
-				html += "<script type='text/javascript'>";
-				html += " $('button.altui-harmonydevice-cp-cmd-{0}').on('click', function() {".format(device.altuiid);
-				html += " var btnCmd = $(this).prop('id'); ";
-				html += " var action = 'SendDeviceCommand'; ";
-				html += " var params = {}; params['Command']=btnCmd; ";
-				html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:HarmonyDevice1');
-				html += "});";
-				html += "</script>";
+//RB Change V3.0
+				$(".altui-mainpanel")
+					.off('click','button.altui-harmonydevice-cp-cmd')
+					.on('click','button.altui-harmonydevice-cp-cmd',device.altuiid,function(e) {
+						var btnCmd = $(this).prop('id');
+						var prsDur = $(this).data('prsdur');
+						var params = {}; params['Command']=btnCmd; params['Duration']=prsDur;
+						MultiBox.runActionByAltuiID(e.data, "urn:rboer-com:serviceId:HarmonyDevice1", "SendDeviceCommand", params)
+					})
+//				html += "<script type='text/javascript'>";
+//				html += " $('button.altui-harmonydevice-cp-cmd-{0}').on('click', function() {".format(device.altuiid);
+//				html += " var btnCmd = $(this).prop('id'); ";
+//				html += " var action = 'SendDeviceCommand'; ";
+//				html += " var params = {}; params['Command']=btnCmd; ";
+//				html += " MultiBox.runActionByAltuiID('{0}', '{1}', action, params);".format(device.altuiid, 'urn:rboer-com:serviceId:HarmonyDevice1');
+//				html += "});";
+//				html += "</script>";
+// Rene Boer end
 			}
 		} catch (e) {
 			html += "<span>Error, sorry</span>";
