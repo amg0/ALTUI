@@ -2022,6 +2022,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	// Draw the Control panel buttons dynamically to eliminate dependency on static json as that will get out of sync for bridged devices.
 	function _drawHarmonyDeviceControlPanel(device, domparent) {
 		var html = "";
+//RB Change V3.5
+		var isSonos = false;
+//RB Change end
 		try {
 			var actBtns = [];
 			for (var i=1; i<=25; i++) {
@@ -2040,6 +2043,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			if (actBtns.length === 0) {
 				html += "<span>No commands defined yet.</span>";
 			} else {
+//RB Change V3.5
+//				isSonos = Boolean(api.getDeviceAttribute(device,"manufacturer") === 'Sonos');
+				if (typeof(device.manufacturer === 'string')) {
+					isSonos = Boolean(device.manufacturer === 'Sonos');
+				}	
+//RB Change end
 				html += "<div class='altui-harmony-controlpanel'>"+	 //	 pull-right
 					"<div style='height: 20px;'>&nbsp;</div>"+
 					"<div class='container-fluid'>"+
@@ -2065,9 +2074,40 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 					" <div class='row' style='height: 20px;'>"+
 					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Last command:</div>"+
 					"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'LastDeviceCommand')+"</div>"+
-					" </div>"+
-					"</div>";
-				html += "</div>";
+//RB Change V3.5
+//					" </div>"+
+//					" </div>";
+//				html += "</div>";
+					" </div>";
+				if (isSonos) {
+					html += " <div class='row' style='height: 10px;'></div>"+
+						" <div class='row' style='height: 20px;'>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>Sonos</div>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'> </div>"+
+						" </div>"+
+						" <div class='row' style='height: 20px;'>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>&nbsp;&nbsp;Status:</div>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'Status')+"</div>"+
+						" </div>"+
+						" <div class='row' style='height: 20px;'>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>&nbsp;&nbsp;Volume:</div>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'Volume')+"</div>"+
+						" </div>"+
+						" <div class='row' style='height: 20px;'>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>&nbsp;&nbsp;Artist:</div>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'Artist')+"</div>"+
+						" </div>"+
+						" <div class='row' style='height: 20px;'>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>&nbsp;&nbsp;Title:</div>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'Title')+"</div>"+
+						" </div>"+
+						" <div class='row' style='height: 20px;'>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-3 col-lg-2'>&nbsp;&nbsp;Album:</div>"+
+						"  <div class='altui-harmony-col col-6 col-sm-4 col-md-2 col-lg-2'>"+MultiBox.getStatus(device, 'urn:rboer-com:serviceId:HarmonyDevice1', 'Album')+"</div>"+
+						" </div>";
+				}
+				html += "</div></div>";
+//RB Change end
 //RB Change V3.0
 				$(".altui-mainpanel")
 					.off('click','button.altui-harmonydevice-cp-cmd')
