@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.42"
+local version = "v2.42b"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_TMP_PREFIX = "altui-"
@@ -2414,9 +2414,12 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				if (localbootstrap == "") then
 					localbootstrap=defaultBootstrapPath
 				end
-				if (localcdn ~= "") then
-					altuipath = localcdn + "/"
+				if (localcdn=="~") then
+					localcdn=""
 				end
+				-- if (localcdn ~= "") then
+					-- altuipath = localcdn .. "/"
+				-- end
 				local variables={}
 				variables["hostname"] = hostname
 				variables["localcdn"] = localcdn
@@ -2443,6 +2446,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				if (localcdn ~= "") then
 					variables["csslinks"] = htmlLocalCSSlinks:template(variables)
 					variables["mandatory_scripts"] = htmlLocalScripts:template(variables)
+					variables["altui_scripts"] = htmlAltuiScripts:template(variables)
 				else
 					variables["csslinks"] = htmlCSSlinks:template(variables)
 					variables["mandatory_scripts"] = htmlScripts:template(variables)

@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2506 $";
+var ALTUI_revision = "$Revision: 2508 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1649,6 +1649,8 @@ var UIManager  = ( function( window, undefined ) {
 	function _loadCssIfNeeded( scriptname, path, drawfunc ) {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var localcdn = ( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalCDN" ).trim() || "");
+		if (localcdn=="~")
+			localcdn=""
 		var fullscriptname = (localcdn=="") ? (path+scriptname) : (localcdn+"/"+scriptname);	//supports https
 		var len = $('link.'+scriptname.replace(/\./g,"_")).length;
 		if (len==0) {				// not loaded yet
@@ -1663,6 +1665,8 @@ var UIManager  = ( function( window, undefined ) {
 	function _loadScriptIfNeeded( scriptname, path, drawfunc ) {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var localcdn = ( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalCDN" ).trim() || "");
+		if (localcdn=="~")
+			localcdn=""
 		var fullscriptname = (localcdn=="") ? (path+scriptname) : (localcdn+"/"+scriptname);	//supports https
 		var len = $('script[src="'+fullscriptname+'"]').length;
 		if (len==0) {				// not loaded yet
