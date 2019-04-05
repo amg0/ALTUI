@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2513 $";
+var ALTUI_revision = "$Revision: 2515 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -16058,7 +16058,7 @@ var UIControler = (function(win) {
 			{id:'altui-license-page' , child:null},
 			{id:'altui-credits' , child:null},
 			{id:'altui-evolutions' , child:null},
-			{id:'altui-support' , label:_T("Support"), href:'http://forum.micasaverde.com/index.php?board=78.0', child:null}
+			{id:'altui-support' , label:_T("Support"), href:'https://community.getvera.com/c/plugins-and-plugin-development/alternate-ui-to-ui7', child:null}
 		]},
 	];
 	var itemtemplate = `
