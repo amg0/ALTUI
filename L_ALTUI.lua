@@ -5,15 +5,18 @@
 -- // written agreement from amg0 / alexis . mermet @ gmail . com
 -- // This program is distributed in the hope that it will be useful,
 -- // but WITHOUT ANY WARRANTY; without even the implied warranty of
--- // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+-- // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.19b"
+local version = "v2.42b"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
-local ALTUI_SONOS_MP3 = "altui-sonos.mp3"
+local ALTUI_TMP_PREFIX = "altui-"
+local ALTUI_SONOS_MP3 = ALTUI_TMP_PREFIX .. "sonos.mp3"
 local NMAX_IN_VAR	= 4000
+local DEFAULT_TIMEOUT = 30000
+local THINGSPEAK_PUSH_SEC = 15	-- thingspeak limits
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
@@ -185,12 +188,16 @@ local function findALTUIDevice()
 end
 
 local function findSONOSDevice()
+	local altsonos=-1
 	for k,v in pairs(luup.devices) do
 		if( v.device_type == "urn:schemas-micasaverde-com:device:Sonos:1" ) then
-			return k
+			return k,1	--sonos
+		end
+		if ( v.device_type == "urn:schemas-upnp-org:device:altsonos:1") then
+			altsonos=k
 		end
 	end
-	return -1
+	return altsonos,2 --altsonos or nothing
 end
 
 local function table2params(workflowaltuiid,args)
@@ -207,7 +214,6 @@ local function table2params(workflowaltuiid,args)
 	return result
 end
 
-
 Queue = {
 	new = function(self,o)
 		o = o or {}	  -- create object if user does not provide one
@@ -218,18 +224,23 @@ Queue = {
 	size = function(self)
 		return tablelength(self)
 	end,
+	push = function(self,e)
+		return table.insert(self,1,e)
+	end,
+	pull = function(self)
+	    local elem = self[1]
+		table.remove(self,1)
+		return elem
+	end,
 	add = function(self,e)
 		return table.insert(self,e)
+	end,
+	removeItem = function(self, idx)
+		table.remove(self,idx)
 	end,
 	getHead = function(self)
 		local elem = self[1]
 		return elem
-	end,
-	removeHead = function(self)
-		table.remove(self,1)
-	end,
-	removeItem = function(self, idx)
-		table.remove(self,idx)
 	end,
 	list = function(self)
 		local i = 0
@@ -240,17 +251,27 @@ Queue = {
 			end
 		end
 	end,
+	listReverse = function(self)
+		local i = #self
+		return function()
+			if (i>0) then
+				local j = i
+				i = i-1
+				return j,self[j]
+			end
+		end
+	end,
 }
 
 local Thingspeak_Queue = Queue:new()
 local IFTTT_Queue = Queue:new()
 
 local function isOpenLuup()
-	local openLuup = luup.attr_get "openLuup"
-	if openLuup then
-		return true
+	local openLuup = luup.attr_get("openLuup")
+	if (openLuup == '' ) then
+		return false
 	end
-	return false
+	return true
 end
 
 ------------------------------------------------
@@ -304,6 +325,21 @@ local function run_scene(id)
 	debug(string.format("run_scene(%s)",id or "nil"))
 	local resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:HomeAutomationGateway1", "RunScene", {SceneNum = tostring(id)}, 0)
 	return resultCode, resultString, job, returnArguments
+end
+
+-- sceneIDs is ',' comma separated list of scene ID to run
+local function runScene(lul_device,sceneIDs)
+	sceneIDs = sceneIDs or ""
+	debug(string.format("runScene(%s)",sceneIDs))
+	local parts = sceneIDs:altui_split(",")
+	for k,v in pairs(parts) do
+		local sceneid = tonumber(v)
+		if (sceneid ~=nil) then
+			run_scene(sceneid)
+		else
+			warning(string.format("sceneid %s is not a number, ignoring it",v or ""))
+		end
+	end
 end
 
 local function getDataFor( deviceID,name,prefix )
@@ -1160,6 +1196,8 @@ local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent
 				new,old,lastupdate = luup.variable_get(cond.service, cond.variable, devid ) , "" , os.time()
 			end
 
+			old = old or ""
+			new = new or ""
 			local results = _evaluateUserExpression(lul_device,devid, cond.service, cond.variable,old,new,lastupdate,cond.luaexpr,workflow_idx)
 			-- if (bMatchingWatch==true) then
 				-- watchevent.watch['Expressions']['results'][cond.luaexpr]["LastEval"] = results[1]
@@ -1598,6 +1636,12 @@ function UserMessage(text, mode)
 	task(text,mode)
 end
 
+function clearAltuiFile(param)
+	if (string.len(param)>0) then
+		os.execute("rm /www/"..param)
+	end
+end
+
 ------------------------------------------------
 -- LUA Utils
 ------------------------------------------------
@@ -1807,13 +1851,19 @@ local htmlLocalScripts = [[
 	<script src="@localcdn@/ace.js"></script>
 	<script src="@localcdn@/justgage.min.js"></script>
 	<script src="@localcdn@/jsapi.js"></script>
-	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
-	<script src="J_ALTUI_utils.js" ></script>
-	<script src="J_ALTUI_api.js" ></script>
-	<script src="J_ALTUI_upnp.js" ></script>
-	<script src="J_ALTUI_verabox.js" ></script>
-	<script src="J_ALTUI_multibox.js" ></script>
-	<script src="J_ALTUI_uimgr.js" defer ></script>
+]]
+
+local htmlAltuiScripts = [[
+	<script type="text/javascript" data-src='J_ALTUI_jquery.ui.touch-punch.min.js' src="@altuipath@J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_utils.js' src="@altuipath@J_ALTUI_utils.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_api.js' src="@altuipath@J_ALTUI_api.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_upnp.js' src="@altuipath@J_ALTUI_upnp.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_verabox.js' src="@altuipath@J_ALTUI_verabox.js" ></script>
+	<script type="text/javascript" data-src='J_ALTUI_multibox.js'  src="@altuipath@J_ALTUI_multibox.js" ></script>
+
+	<script type='text/javascript' data-src='J_ALTUI_plugins.js' src='@altuipath@J_ALTUI_plugins.js'></script>
+	<script type='text/javascript' data-src='J_ALTUI_iphone.js' src='@altuipath@J_ALTUI_iphone.js'></script>
+	<script type="text/javascript" data-src='J_ALTUI_uimgr.js' src="@altuipath@J_ALTUI_uimgr.js"	></script>
 ]]
 	-- <script src="@localcdn@/d3.min.js"></script>
 
@@ -1832,25 +1882,16 @@ local htmlScripts = [[
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.js" ></script>
-	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/raphael/2.1.4/raphael-min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.0/ace.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.3/ace.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
 	<script type="text/javascript" src='//www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["gauge","table"]}]}' >
 	</script>
-	<script src="J_ALTUI_jquery.ui.touch-punch.min.js" ></script>
-	<script src="J_ALTUI_utils.js" ></script>
-	<script src="J_ALTUI_api.js" ></script>
-	<script src="J_ALTUI_upnp.js" ></script>
-	<script src="J_ALTUI_verabox.js" ></script>
-	<script src="J_ALTUI_multibox.js" ></script>
 
-	<script type='text/javascript' data-src='J_ALTUI_plugins.js' src='J_ALTUI_plugins.js'></script>
-	<script type='text/javascript' data-src='J_ALTUI_iphone.js' src='J_ALTUI_iphone.js'></script>
-	<script src="J_ALTUI_uimgr.js"	></script>
 ]]
 
 	-- <script src="J_ALTUI_b_blockly_compressed.js" defer ></script>
@@ -1864,7 +1905,7 @@ local htmlStyle = [[
 	</style>
 ]]
 
-local defaultBootstrapPath = "//maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+local defaultBootstrapPath = "//maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
 
 -- WARNING: put the proper class name to work with the UIManager preload check. '.' are replaced by '_'
 local htmlLocalCSSlinks = [[
@@ -1945,7 +1986,8 @@ local htmlLayout = [[
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- Latest compiled and minified JavaScript -->
 	@mandatory_scripts@
-
+	@altui_scripts@
+	
 	<!-- <script src="J_ALTUI_jquery.ui.touch-punch.min.js"></script> -->
 	@optional_scripts@
 	<script type='text/javascript' defer >
@@ -1966,6 +2008,7 @@ local htmlLayout = [[
 			 g_CtrlOptions : '@ctrloptions@',
 			 g_DeviceTypes :  JSON.parse('@devicetypes@'),
 			 g_MachineLearning : '@machinelearning@',
+			 g_CtrlTimeout : '@ctrltimeout@',
 			 //g_CustomPages : @custompages@,
 			 //g_Workflows : @workflows@
 		}
@@ -2220,8 +2263,6 @@ local function _helperGoogleAuthCallback(url,lul_device)
 			local url = headers["location"]
 			return _helperGoogleAuthCallback(url,lul_device)
 		end
-		-- normally
-		-- {"access_token":"ya29.Ci_-AuoRcj7luXViyJZL7AGDH5kXY9UdKBYxtSXT9SgZOKuubPHx5EWhQduxwfZxbg","token_type":"Bearer","expires_in":3600,"refresh_token":"1/vK4ZH9fqxH_dJ3azlkHcGqX6Ghnbpp3iOZwkpqLtxUk","id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjVjMzEwYWY5Y2E1MjNkOTFkZjQ0ZjU1ZTgyYjI3YjcwMGI4N2U2ZWMifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhdF9oYXNoIjoiOExFbTRBUlMtOGFkMmNMVkZWOGdsUSIsImF1ZCI6IjExNTI1Njc3MzMzNi1lOHFkbmNzNWFjNWNmbW9kaGx0c2gyY2d2azZqZHI2NS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODcxMDUwOTAwNjczODcyOTA4NCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiIxMTUyNTY3NzMzMzYtZThxZG5jczVhYzVjZm1vZGhsdHNoMmNndms2amRyNjUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJlbWFpbCI6ImFsZXhpcy5tZXJtZXRAZ21haWwuY29tIiwiaWF0IjoxNDY1NjgyNjU5LCJleHAiOjE0NjU2ODYyNTksIm5hbWUiOiJBbGV4aXMgTWVybWV0IiwicGljdHVyZSI6Imh0dHBzOi8vbGg1Lmdvb2dsZXVzZXJjb250ZW50LmNvbS8tQ2N6U1NtemtEUk0vQUFBQUFBQUFBQUkvQUFBQUFBQUFOOXMvT3pCaHl1TjhGa0Evczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkFsZXhpcyIsImZhbWlseV9uYW1lIjoiTWVybWV0IiwibG9jYWxlIjoiZnIifQ.IKlNBp-DP9Vmf-SQmD_Z_APADXUk23JTtv0CnN7C5f6q4UfAAsQ7UBcPAOkOsifbd_YGOmu5yG-j4iSyvGgG90dr5oYdzyNRt9Bzdp7HyXcMqPztWP7rfI5nm7ru3pvL7AgTsOqoEMt7LMPesWIF_EGBs-NyFrFfh8tRPQEGjyt1ojKZGHMhUgCK8zXCSfY4-VGqsS88h5cNNKNpaXOGDeHh3zrXM6ZBfnA_tK9UltRaItrU_J-Dw-rkoH6FWB4UwMD6ciIqq5ZZKAefTeCTiv9D2SLNx2s7esSHC0uZDV6-ynhyt0TZHwUky1QyZ5xLyEKPofbrDiqUQi8M8B7aIA"}
 		local obj = json.decode(content)
 		if ( (obj==nil) or (obj.error ~= nil) ) then
 			luup.variable_set(ALTUI_SERVICE, "GoogleLastError", content or "" , tonumber(lul_device))
@@ -2364,18 +2405,28 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				-- custompages = string.gsub(custompages,"\"","\\x22")
 				local serverOptions= getSetVariable(ALTUI_SERVICE, "ServerOptions", deviceID, "")
 				local localcdn = getSetVariable(ALTUI_SERVICE, "LocalCDN", deviceID, "")
+				local altuipath = getSetVariable(ALTUI_SERVICE, "ALTUIPath", deviceID, "")
 				local swversion = getSetVariable(ALTUI_SERVICE, "SWVersion", deviceID, SWVERSION)
 				local favicon = getSetVariable(ALTUI_SERVICE, "FavIcon", deviceID, "/favicon.ico")
 				local machinelearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
+				local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, DEFAULT_TIMEOUT)
 				local localbootstrap = getSetVariable(ALTUI_SERVICE, "LocalBootstrap", deviceID, "")
 				if (localbootstrap == "") then
 					localbootstrap=defaultBootstrapPath
 				end
+				if (localcdn=="~") then
+					localcdn=""
+				end
+				-- if (localcdn ~= "") then
+					-- altuipath = localcdn .. "/"
+				-- end
 				local variables={}
 				variables["hostname"] = hostname
 				variables["localcdn"] = localcdn
+				variables["altuipath"] = altuipath
 				variables["swversion"] = swversion
 				variables["favicon"] = favicon
+				variables["ctrltimeout"] = ctrltimeout
 				variables["machinelearning"] = machinelearning
 				variables["localbootstrap"] = localbootstrap
 				variables["devicetypes"] = json.encode(tbl)
@@ -2395,9 +2446,11 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				if (localcdn ~= "") then
 					variables["csslinks"] = htmlLocalCSSlinks:template(variables)
 					variables["mandatory_scripts"] = htmlLocalScripts:template(variables)
+					variables["altui_scripts"] = htmlAltuiScripts:template(variables)
 				else
 					variables["csslinks"] = htmlCSSlinks:template(variables)
 					variables["mandatory_scripts"] = htmlScripts:template(variables)
+					variables["altui_scripts"] = htmlAltuiScripts:template(variables)
 				end
 				-- " becomes \x22
 				variables["optional_scripts"] = optional_scripts
@@ -2826,12 +2879,15 @@ end
 ------------------------------------------------
 local function getDefaultConfig()
 	local tbl = {}
-
 	tbl["urn:schemas-upnp-org:device:BinaryLight:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawBinaryLight",
 		["StyleFunc"]="ALTUI_PluginDisplays.getStyle",
 		-- ["ControlPanelFunc"]="ALTUI_PluginDisplays.drawBinLightControlPanel",
+	}
+	tbl["urn:schemas-micasaverde-com:device:G550Siren:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawVeraSecure",
 	}
 	tbl["urn:schemas-micasaverde-com:device:SceneController:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
@@ -2988,11 +3044,19 @@ local function getDefaultConfig()
 		["ScriptFile"]="J_ALTUI_iphone.js",
 		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawALTHue",
 	}
+	tbl["urn:schemas-upnp-org:device:netmon:1"]= {
+		["ScriptFile"]="J_ALTUI_iphone.js",
+		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawNETMON",
+	}
 	tbl["urn:schemas-upnp-org:device:altui:1"]= {
 		["ScriptFile"]="J_ALTUI_iphone.js",
 		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawAltUI",
 		["ControlPanelFunc"]="ALTUI_IPhoneLocator.drawAltUIControlPanel",
 		["FavoriteFunc"]="ALTUI_IPhoneLocator.drawAltUIFavorite",
+	}
+	tbl["urn:schemas-upnp-org:device:altsonos:1"]= {
+		["ScriptFile"]="J_ALTUI_iphone.js",
+		["DeviceDrawFunc"]="ALTUI_IPhoneLocator.drawAltSonos",
 	}
 	tbl["urn:schemas-upnp-org:device:razb:1"]= {
 		["ScriptFile"]="J_ALTUI_iphone.js",
@@ -3037,6 +3101,10 @@ local function getDefaultConfig()
 	tbl["urn:schemas-utz-com:device:GCal:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawGCal"
+	}
+	tbl["urn:schemas-srs-com:device:GCal:3"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawGCal3"
 	}
 	tbl["urn:schemas-futzle-com:device:CombinationSwitch:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
@@ -3117,6 +3185,26 @@ local function getDefaultConfig()
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawHarmonyDevice",
 		["ControlPanelFunc"]=",ALTUI_PluginDisplays.drawHarmonyDeviceControlPanel"
 	}
+	tbl["urn:schemas-shward1-com:device:avreceiver:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawPioneer"
+	}
+	tbl["urn:schemas-upnp-org:device:VRainSensor:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawVRain"
+	}
+	tbl["urn:schemas-airedalez-net:device:PlantLink:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawPlantlink"
+	}
+	tbl["urn:schemas-ecobee-com:device:EcobeeHouse:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawEcobeeH"
+	}
+	tbl["urn:schemas-upnp-org:device:altdenon:1"]= {
+		["ScriptFile"]="J_ALTUI_plugins.js",
+		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawAltDenon"
+	}
 	return tbl
 end
 
@@ -3174,16 +3262,16 @@ local function sendValueToStorage_emoncms(watch_description,lul_device, lul_serv
 	debug(string.format("sendValueToStorage_emoncms(%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,old, new, lastupdate, json.encode(provider_params)))
 	debug(string.format("watch_description:%s",json.encode(watch_description)))
 	local providerparams = json.decode( watch_description['Data'] )
-	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "emoncms.org")
+	local lul_device = tonumber(lul_device)
+	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "https://emoncms.org")
 	if (isempty(providerparams[1])==false) and (isempty(providerparams[2])==false) and (isempty(providerparams[3])==false) then
-		local url = string.format("http://%s/input/post.json?node=%d&json={%s:%s}&apikey=%s",
+		local url = string.format("%s/input/post.json?node=%d&json={%s:%s}&apikey=%s",
 			emoncmsurl,
 			providerparams[1],	-- nodeid
 			providerparams[3],	-- inputkey
 			tostring(new),		-- new value
 			providerparams[4]	-- readwritekey
 		)
-
 		local response,response_body = luup.inet.wget(url,10)
 		-- local response_body = {}
 		-- local response, status, headers = http.request({
@@ -3199,9 +3287,8 @@ end
 
 function _deferredPostIFTTT()
 	debug(string.format("_deferredPostIFTTT : entering... IFTTT_Queue size=%d",IFTTT_Queue:size()))
-	local obj = IFTTT_Queue:getHead()
+	local obj = IFTTT_Queue:pull()
 	if (obj~=nil) then
-		IFTTT_Queue:removeItem(1)
 		local url = string.format("https://maker.ifttt.com/trigger/%s/with/key/%s",
 			obj.event_name,
 			obj.webhook_key)
@@ -3216,8 +3303,7 @@ function _deferredPostIFTTT()
 			},
 			sink = ltn12.sink.table(result)
 		})
-		debug(string.format("response:%s",response))
-		debug(string.format("status:%s",status))
+		log(string.format("IFTTT POST url:%s body:%s => status:%s response:%s",url,obj.body or '', status or '',response or ''))
 		if (response==1) then
 			local completestring = table.concat(result)
 			debug(string.format("ALTUI: Succeed to POST to %s , result=%s",url,completestring))
@@ -3266,51 +3352,61 @@ end
 
 function _deferredWgetThingspeak()
 	debug(string.format("_deferredWgetThingspeak : entering... Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
-	local cb_obj = Thingspeak_Queue:getHead()
-	if (cb_obj~=nil) then
-		debug(string.format("_deferredWgetThingspeak calls cb_obj:%s",json.encode(cb_obj)))
-		-- find all pending calls for the same channel and different fields
-		local todo = {
-			api_key = cb_obj.api_key,
-			fields = {
-				[cb_obj.field_num] = cb_obj.value
-			},
-			indexes = { 1 }
-		}
-		for k,v in Thingspeak_Queue:list() do
-			if (k>1) and (v.api_key == cb_obj.api_key) and (todo.fields[ v.field_num ]==nil) then
-				todo.fields[ v.field_num ] = v.value
-				table.insert( todo.indexes, 1, k )
+	if (true) then
+		local cb_obj = Thingspeak_Queue:getHead()
+		if (cb_obj~=nil) then
+			local channels = {}
+			for k,v in Thingspeak_Queue:listReverse() do	-- from older to newer
+				channels[ v.api_key ] = ( channels[ v.api_key ] or 0 ) +1
 			end
-		end
-		debug( string.format("_deferredWgetThingspeak is preparing to update => %s",json.encode(todo)) )
-		local url = prepareThingspeakUrl( todo )
-		local httpcode,data = luup.inet.wget(url)
-		debug(string.format("_deferredWgetThingspeak(url=%s) ==> httpcode=%s data=%s",url, httpcode,data ))
-		if (data~="0") then
-			for k,v in ipairs(todo.indexes) do
-				Thingspeak_Queue:removeItem(v)
+			debug(string.format("Channels to update: %s",json.encode(channels)))
+			
+			for apikey,v in pairs(channels) do
+				local todo = { fields = {}, indexes = {}, api_key=apikey }
+				debug(string.format("Check for channels %s",apikey))
+				
+				for k,v in Thingspeak_Queue:listReverse() do	-- from older to newer
+					-- debug(string.format("ELEM k:#%s v:%s",k,json.encode(v)))
+					if (v.api_key == todo.api_key) then
+						todo.fields[ v.field_num ] = v.value	-- most recent is kept
+						table.insert( todo.indexes, k )			-- mark index k as to be deleted
+					end
+				end
+				
+				-- debug( string.format("_deferredWgetThingspeak is preparing to update => %s",json.encode(todo)) )
+				local url = prepareThingspeakUrl( todo )
+				local code,data,httpcode = luup.inet.wget(url)
+				log(string.format("_deferredWgetThingspeak(url=%s) ==> code=%s httpcode=%s data=%s",url, code,httpcode,data ))
+				
+				if (data~="0") then
+					-- clean up the queue now
+					debug(string.format("Clean up indexes:%s for %s",json.encode(todo.indexes),todo.api_key))
+					for k,v in ipairs(todo.indexes) do
+						-- debug(string.format("remove ELEM k:#%s v:%s",v,json.encode(Thingspeak_Queue[v])))
+						Thingspeak_Queue:removeItem(v)
+					end
+				else
+					debug("_deferredWgetThingspeak failed to update thingspeak, will retry the same url next time")
+				end
 			end
 		else
-			debug("_deferredWgetThingspeak failed to update thingspeak, will retry the same url next time")
+			warning("_deferredWgetThingspeak engine has nothing to do, ignoring call")
 		end
-	else
-		warning("_deferredWgetThingspeak engine has nothing to do, ignoring call")
-	end
-	if (Thingspeak_Queue:size() >0) then
-		debug(string.format("Arming _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
-		luup.call_delay("_deferredWgetThingspeak", 5, url)
-	else
-		debug(string.format("No need to rearm _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+		if (Thingspeak_Queue:size() >0) then
+			debug(string.format("Arming _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+			luup.call_delay("_deferredWgetThingspeak", THINGSPEAK_PUSH_SEC, url)	
+		else
+			debug(string.format("No need to rearm _deferredWgetThingspeak engine. Thingspeak_Queue size=%d",Thingspeak_Queue:size()))
+		end
 	end
 end
 
 local function _CallThingspeakAPI(api_key,field_num,value)
 	local cb_obj = { api_key=api_key, field_num=field_num, value= tostring(value) }
-	Thingspeak_Queue:add(cb_obj)
+	Thingspeak_Queue:push(cb_obj)
 	if (Thingspeak_Queue:size() == 1) then
-		debug("Starting _deferredWgetThingspeak engine")
-		luup.call_delay("_deferredWgetThingspeak", 1, null)
+		debug("new entry , Queue size==1 , Starting _deferredWgetThingspeak engine")
+		luup.call_delay("_deferredWgetThingspeak", 1 , null)		-- there is something to do immediately
 	end
 	return 200,""
 end
@@ -3414,7 +3510,7 @@ function resetDevice(lul_device,reload)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "Timers", "", lul_device)
-	setVariableIfChanged(ALTUI_SERVICE, "EmonCmsUrl", "emoncms.org", lul_device)
+	-- setVariableIfChanged(ALTUI_SERVICE, "EmonCmsUrl", "https://emoncms.org", lul_device)
 	-- setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", "https://remotevera.000webhostapp.com/veralogin.php", lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", "https://hirwatech.com/veralogin/Veralogin.php", lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
@@ -3424,15 +3520,25 @@ function resetDevice(lul_device,reload)
 		luup.variable_set(ALTUI_SERVICE, "PendingReset", 1, lul_device)
 		local httpcode,data = luup.inet.wget("http://127.0.0.1"..port3480.."/data_request?id=reload",10)
 	end
+	return default
+end
+
+local function mp3Duration(MP3FilePath)
+    local lfs = require "lfs"
+    local mp3FileBytes =  lfs.attributes (MP3FilePath, "size")
+    -- local mp3DurationinSeconds =  math.floor ((mp3FileBytes / 1024)*8)/64
+    local mp3DurationinSeconds =  mp3FileBytes/58000*16
+    return math.ceil(mp3DurationinSeconds)
 end
 
 local function createMP3file(lul_device,newMessage)
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "")
+	local language = getSetVariable(ALTUI_SERVICE, "VoiceRSS_lang", lul_device, "en-us")
 	if (api_key == "") then
 		error(string.format("ALTUI has no defined API key for VoiceRSS. Request is ignored"))
 		return nil
 	end
-	local url = "https://api.voicerss.org/?" .. "key=".. api_key .."&src="..newMessage.."&hl=fr-fr&c=MP3&f=44khz_16bit_mono"
+	local url = "https://api.voicerss.org/?" .. "key=".. api_key .."&src="..newMessage.."&hl="..language.."&c=MP3&f=44khz_16bit_mono"
 	debug(string.format("calling url: %s",url))
 	-- return url  => should work but does not for some reasons.
 
@@ -3443,35 +3549,54 @@ local function createMP3file(lul_device,newMessage)
 		return nil
 	end
 
-	local f,errmsg,errno = io.open("/www/"..ALTUI_SONOS_MP3, "wb")
+	local filename = "/www/"..ALTUI_TMP_PREFIX..math.random(1,100000)..".mp3"
+	-- local filename = "/www/"..ALTUI_SONOS_MP3
+	local f,errmsg,errno = io.open(filename, "wb")
 	if (f==nil) then
 		error(string.format("ALTUI could not open the file %s in wb mode. check path & permissions. msg:%s",ALTUI_SONOS_MP3,errmsg))
 		return nil
 	end
 	f:write(content)
 	f:close()
-	return string.format("http://%s/%s",hostname,ALTUI_SONOS_MP3)
+	
+	-- remove /www/ from filename
+	local cleanfilename = filename:gsub('/www/','')
+	-- schedule a cleanup in 15 min ( or in reload )
+	luup.call_delay("clearAltuiFile", 15*60, cleanfilename)
+	return string.format("http://%s/%s",hostname,cleanfilename) , mp3Duration(filename)
 end
 
-function sayTTS(lul_device,newMessage,volume,groupDevices)
+function sayTTS(lul_device,newMessage,volume,groupDevices,durationMs)
 	lul_device = tonumber(lul_device)
 	newMessage = modurl.escape( newMessage or "" )
-	volume = tonumber(volume or 30)
+	volume = volume or 0
 	groupDevices = groupDevices or ""
 	log(string.format("sayTTS(%d,%s,%d,%s)",lul_device, newMessage,volume,groupDevices))
 
-	local uri = createMP3file(lul_device,newMessage)
+	local uri = string.starts(newMessage,"http") and newMessage or createMP3file(lul_device,newMessage)
 	local resultCode, resultString, job, returnArguments
 	resultCode = -1
 	if (uri ~= nil) then
-		local sonos = findSONOSDevice()
-		local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=3}
-		if (groupDevices ~= "") then
-			params["GroupDevices"]= groupDevices
-		else
-			params["GroupZones"]= "ALL"
+		local sonos,typ = findSONOSDevice()
+		if (sonos~=-1) then
+			if (typ==1) then
+				local params = {URI=uri,Volume=volume,SameVolumeForAll=true, Duration=durationMs}
+				if (groupDevices ~= "") then
+					params["GroupDevices"]= groupDevices
+				else
+					params["GroupZones"]= "ALL"
+				end
+				resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
+			else
+				local params = {urlClip=uri, Duration=durationMs, Volume=volume }
+				if (groupDevices ~= "") then
+					params["groupID_playerID"]= groupDevices
+				else
+					params["groupID_playerID"]= "ALL"
+				end
+				resultCode, resultString, job, returnArguments = luup.call_action("urn:upnp-org:serviceId:altsonos1", "AudioClip", params, sonos )
+			end
 		end
-		resultCode, resultString, job, returnArguments = luup.call_action("urn:micasaverde-com:serviceId:Sonos1", "Alert", params, sonos )
 	end
 	return resultCode
 end
@@ -3492,6 +3617,14 @@ function UPNPregisterDataProvider(lul_device, newName, newUrl, newJsonParameters
 	end
 	warning("invalid json parameters, %s",newJsonParameters);
 	return 0
+end
+
+function UPNPunregisterPlugin(lul_device,newDeviceType)
+	log(string.format("UPNPunregisterPlugin(%d,%s)",lul_device,newDeviceType))
+	local tbljson = getSetVariable(ALTUI_SERVICE, "PluginConfig", lul_device, json.encode( getDefaultConfig() ) )
+	local tbl = json.decode(tbljson)	
+	tbl[newDeviceType] = nil
+	setVariableIfChanged(ALTUI_SERVICE, "PluginConfig", json.encode( tbl ), lul_device)
 end
 
 function UPNPregisterPlugin(lul_device,newDeviceType,newScriptFile,newDeviceDrawFunc,newStyleFunc,newDeviceIconFunc,newControlPanelFunc,newFavoriteFunc)
@@ -3558,7 +3691,8 @@ function _evalCode(str,opt_wkflowidx)
 end
 
 function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,old,new,lastupdate,expr,opt_wkflowidx)
-	debug(string.format("_evaluateUserExpression(%s,%s,%s,%s,%s,%s,%s,%s)",lul_device, devid, lul_service, lul_variable,old,new,tostring(lastupdate),expr))
+	new = new or ""
+	debug(string.format("_evaluateUserExpression(%s,%s,%s,%s,%s,%s,%s,%s)",lul_device, devid, lul_service, lul_variable,old or "", new,tostring(lastupdate),expr))
 	local results = {}
 	local code = [[
 		return function(devid, lul_service, lul_variable, expr)
@@ -3633,6 +3767,8 @@ function sendValueToStorage(watch,lul_device, lul_service, lul_variable,old, new
 end
 
 function evaluateExpression(watch,lul_device, lul_service, lul_variable,expr,old, new, lastupdate, exp_index, scene)
+	old = old or ""
+	new = new or ""
 	debug(string.format("evaluateExpression(%s,%s,%s,%s,%s,%s,%s,%s,%s)",lul_device, lul_service, lul_variable,expr,old, new, tostring(lastupdate),exp_index,scene))
 	-- local watch = findWatch( lul_device, lul_service, lul_variable )
 	if (watch==nil) then
@@ -4180,9 +4316,7 @@ end
 function startupDeferred(lul_device)
 	lul_device = tonumber(lul_device)
 	log("startupDeferred, called on behalf of device:"..lul_device)
-
 	-- testCompress()
-
 	local debugmode = getSetVariable(ALTUI_SERVICE, "Debug", lul_device, "0")
 	local oldversion = getSetVariable(ALTUI_SERVICE, "Version", lul_device, version)
 	local url_req = port3480 .. "/data_request?id=lr_ALTUI_Handler&command=home"
@@ -4199,16 +4333,19 @@ function startupDeferred(lul_device)
 	local extraController= getSetVariable(ALTUI_SERVICE, "ExtraController", lul_device, "")
 	local serverOptions= getSetVariable(ALTUI_SERVICE, "ServerOptions", lul_device, "")
 	local localcdn = getSetVariable(ALTUI_SERVICE, "LocalCDN", lul_device, "")
+	local altuipath = getSetVariable(ALTUI_SERVICE, "ALTUIPath", deviceID, "")
 	local localbootstrap = getSetVariable(ALTUI_SERVICE, "LocalBootstrap", lul_device, "")
 	local worfklowmode = getSetVariable(ALTUI_SERVICE, "EnableWorkflows", lul_device, "0")
 	local worfklowactivestates = getSetVariable(ALTUI_SERVICE, "WorkflowsActiveState", lul_device, "")
 	local workflowsVariableBag = json.decode( getSetVariable(ALTUI_SERVICE, "WorkflowsVariableBag", lul_device, "") ) or {}
 	local ctrlOptions = getSetVariable(ALTUI_SERVICE, "CtrlOptions", lul_device, "1500,60")
 	local api_key = getSetVariable(ALTUI_SERVICE, "VoiceRSS_KEY", lul_device, "")
+	local language = getSetVariable(ALTUI_SERVICE, "VoiceRSS_lang", lul_device, "en-us")
 	local custompages = getSetVariable(ALTUI_SERVICE, "Data_CustomPages_0", lul_device, "[]")
-	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "emoncms.org")
+	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "https://emoncms.org")
 	local pendingReset = getSetVariable(ALTUI_SERVICE, "PendingReset", lul_device, 0)
 	local machineLearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
+	local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, DEFAULT_TIMEOUT)
 
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
 	-- getSetVariable(ALTUI_SERVICE, "GoogleDeviceCode", lul_device, "")
@@ -4279,7 +4416,7 @@ function startupDeferred(lul_device)
 		[2]		= { ["key"]= "feedid", ["label"]="Feed ID", ["type"]="number" },
 		[3]		= { ["key"]= "inputkey", ["label"]="Input Key name", ["type"]="text" },
 		[4]		= { ["key"]= "readwritekey", ["label"]="Read/Write API Key", ["type"]="text" },
-		[5]		= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]="http://".. emoncmsurl .. "/vis/realtime?feedid={1}&embed=1&apikey={3}"}
+		[5]		= { ["key"]= "graphicurl", ["label"]="Graphic Url", ["type"]="url", ["ifheight"]=460, ["default"]=emoncmsurl .. "/vis/realtime?feedid={1}&embed=1&apikey={3}"}
 	})
 
 	registerDataProvider("IFTTT","sendValueToStorage_ifttt",sendValueToStorage_ifttt, "", {
@@ -4311,6 +4448,9 @@ function startupDeferred(lul_device)
 	-- clear the RESET flag
 	luup.variable_set(ALTUI_SERVICE, "PendingReset", 0, lul_device)
 
+	-- clear the tmp files
+	os.execute("rm /www/altui*")
+	
 	-- NOTHING to start
 	if( luup.version_branch == 1 and luup.version_major == 7) then
 		luup.set_failure(0,lul_device)	-- should be 0 in UI7

@@ -12,6 +12,14 @@
 			setDebugMode(lul_device,lul_settings.newDebugMode)
 	  </run>
 	</action>
+	<action>
+	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
+	 <name>RunScene</name>
+	  <job>
+			runScene(lul_device,lul_settings.sceneIDs)
+			return 4,0
+	  </job>
+	</action>
     <action>
 	 <serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 	 <name>EnableWorkflows</name>
@@ -46,6 +54,14 @@
 	</action>
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
+		<name>UnregisterPlugin</name>
+		<job>
+			UPNPunregisterPlugin(lul_device,lul_settings.newDeviceType)
+			return 4,0
+		</job>    
+	</action>
+	<action>
+		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>RegisterDataProvider</name>
 		<job>
 			UPNPregisterDataProvider(lul_device, lul_settings.newName, lul_settings.newUrl, lul_settings.newJsonParameters)
@@ -55,16 +71,15 @@
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>Reset</name>
-		<job>
-			resetDevice(lul_device,true)
-			return 4,0
-		</job>    
+		<run>
+			return resetDevice(lul_device,true)
+		</run>    
 	</action>
 	<action>
 		<serviceId>urn:upnp-org:serviceId:altui1</serviceId>
 		<name>SayTTS</name>
 		<job>
-			sayTTS(lul_device,lul_settings.newMessage,lul_settings.newVolume,lul_settings.newGroupDevices)
+			sayTTS(lul_device,lul_settings.newMessage,lul_settings.newVolume,lul_settings.newGroupDevices,lul_settings.durationMs)
 			return 4,0
 		</job>    
 	</action>

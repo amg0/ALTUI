@@ -883,11 +883,34 @@ var UserDataHelper = (function(user_data) {
 			});
 			return (found !=undefined) ? found : '';
 		},
-		evaluateConditions : function(deviceid,devsubcat,conditions) {
+		evaluateConditions : function(deviceid,devcat,devsubcat,conditions) {
 			var bResult = false;
 			var expressions=[];
 			var that = this;
 			var cache = {}
+			
+			function _matchCondition( condition, devcat, devsubcat ) {
+				function _matchCat( condition, devcat ) {
+					return  (condition.category_num==undefined) || 
+							// (condition.category_num==0) ||
+							// (devcat==0) ||
+							(condition.category_num==devcat)
+				}
+				function _matchSubCat( condition, devsubcat ) {
+					return  (condition.subcategory_num==undefined) || 
+							// (condition.subcategory_num==0) ||
+							// (devsubcat==0) ||
+							(condition.subcategory_num==devsubcat)
+				}
+				if (condition.service==null || condition.variable==null) 
+					return false;
+				if (condition.subcategory_num==undefined && condition.category_num==undefined )
+					return true;
+				if (_matchCat( condition, devcat ))
+					return _matchSubCat( condition, devsubcat )
+				return false;
+			}
+			
 			function _getStatus(deviceid,service,variable) {
 				if (cache[service] == undefined)
 					cache[service]={}
@@ -898,15 +921,14 @@ var UserDataHelper = (function(user_data) {
 				cache[service] [variable] = that.getStatus( deviceid, service,variable )
 				return cache[service] [variable] ;
 			}
+			
 			for (var i=0; i<conditions.length; i++) {
 				var condition = conditions[i];
 				// strange device JSON sometime ... ex zWave repeater, condition is not defined
-				if ( (condition.service!=undefined) && (condition.variable!=undefined) &&
-					 ( (condition.subcategory_num==undefined) || (condition.subcategory_num==0) || (devsubcat==-1) || (condition.subcategory_num==devsubcat) ) )
+				if ( _matchCondition(condition,devcat,devsubcat) )
 				{
 					var str = "";
 					if (isInteger( condition.value )) {
-						// var val = that.getStatus( deviceid, condition.service, condition.variable );
 						var val = _getStatus( deviceid, condition.service, condition.variable );
 						if (val=="")
 							AltuiDebug.debug( "devid:{0} service:{1} variable:{2} devsubcat:{3} value:'{4}' should not be null".format(
@@ -935,7 +957,6 @@ var UserDataHelper = (function(user_data) {
 				}
 			}
 			var str = expressions.join(" && ");
-			//AltuiDebug.debug("_evaluateConditions(deviceid:{0} devsubcat:{1} str:{2} conditions:{3})".format(deviceid,devsubcat,str,JSON.stringify(conditions)));
 			var bResult = eval(str) ;
 			return (bResult==undefined) ? false : bResult ;
 		},
@@ -1024,6 +1045,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	var LU_STATUS_TIMEOUT= parseInt(ctrlOptions[1]) || 60;
 
 	var _uniqID = uniq_id;								// assigned by Multibox, unique, can be used for Settings & other things
+	var _bStopEngine = true;
 	var _hagdevice = { id: 0, altuiid:"{0}-0".format(_uniqID) };							// special device for HAG, service=S_HomeAutomationGateway1.xml
 	var _upnpHelper = new UPnPHelper(ip_addr,uniq_id);			// for common UPNP ajax
 	var _dataEngine = null;
@@ -1500,7 +1522,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	{
 		return _upnpHelper.UPnPGetJobStatus(jobid, cbfunc );
 	};
-
+	
 	function _setAttr(deviceid, attribute, value,cbfunc) {
 		if ( isNullOrEmpty(value) )
 			value = ""
@@ -1549,8 +1571,8 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return promise;
 	};
 
-	function _evaluateConditions(deviceid,devsubcat,conditions) {
-		return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
+	function _evaluateConditions(deviceid,cat,subcat,conditions) {
+		return UserDataHelper(_user_data).evaluateConditions(deviceid,cat,subcat,conditions);
 	};
 
 	function _refreshEngine() {
@@ -1579,16 +1601,17 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 								_user_data.devices[userdata_device_idx].dirty = true;
 
 								if (device.states !=null) {
-									$.each(device.states, function( idx, state) {
-										$.each( _user_data.devices[userdata_device_idx].states , function( idx, userdata_state)
-										{
+									for (var j=0; j<device.states.length; j++) {
+										var state = device.states[j];
+										for (var idx = 0; idx< _user_data.devices[userdata_device_idx].states.length; idx++) {
+											var userdata_state =  _user_data.devices[userdata_device_idx].states[idx]
 											if ((userdata_state.service == state.service) && (userdata_state.variable == state.variable))
 											{
 												_user_data.devices[userdata_device_idx].states[idx].value = state.value;
-												return false; // break from the $.each()
+												break;
 											}
-										});
-									});
+										}
+									}
 									EventBus.publishEvent("on_ui_deviceStatusChanged",_user_data.devices[userdata_device_idx]);
 								}
 							}
@@ -1645,6 +1668,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	}
 
 	function _loadUserData(data) {
+		var result = false;
 		if ((data) && (data != "NO_CHANGES") && (data != "Exiting") )
 		{
 			var bFirst = (_user_data_DataVersion==1);
@@ -1742,23 +1766,24 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 					EventBus.publishEvent("on_ui_deviceStatusChanged",device);
 				}
 			});
-			if (data.devices) {
-				// if (bFirst)
-					// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
-				EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
-			}
-
 			_upnpHelper.setConfig( {
 				isOpenLuup: _isOpenLuup(_user_data),
 				candoPost: _candoPost(_user_data)
 			});
-		} else {
+			result = (data.devices != null);
+		} 
+		return result
+		// else {
 			// console.log("controller #{0} wrong data : {1}".format(_uniqID,data || ""));
-		}
+		// }
 	};
 
 	function _isUserDataCached() {	return MyLocalStorage.get("VeraBox"+_uniqID)!=null; }
 
+	function _stopEngine() {
+		_bStopEngine = true
+	};
+	
 	function _saveEngine() {
 		//AltuiDebug.debug("_saveEngine()");
 		var verabox = {
@@ -1770,18 +1795,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return MyLocalStorage.clear("VeraBox"+_uniqID);
 	};
 
-	function _loadEngine( user_data ) {
-		//AltuiDebug.debug("_loadEngine()");
-/*
-		if (user_data) {	// if received in parameter ( like pre-prepared by Lua module )
-			_user_data	= user_data;
-		} else {	// or try to get from cache
-			var verabox = MyLocalStorage.get("VeraBox"+_uniqID);
-			if (verabox) {
-				_user_data = verabox._user_data || {};
-			}
-		}
-*/
+	function _loadEngine( /*user_data*/ ) {
 		_user_data_DataVersion	= 1;
 		_user_data_LoadTime		= null;
 		_user_data.BuildVersion = undefined;		// to keep the "waiting" message for the user
@@ -1799,14 +1813,23 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				// console.log("controller #{0} received old _DataVersion={1}".format(_uniqID,_user_data_DataVersion));
 				if (data!=null) {
 					_dataEngine = null;
-					_loadUserData(data);
+					if (_loadUserData(data) == true ) {
+						// if (bFirst)
+						// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
+						EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
+					}
 					UIManager.refreshUI( true );	// full but not first time
-					_dataEngine = setTimeout( _refreshEngine, 2000 );
+					if (_bStopEngine==false)
+						_dataEngine = setTimeout( _refreshEngine, 2000 );
 				}
 				else {
-					_dataEngine = setTimeout( _initDataEngine, 2000 );
-					// console.log( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr() ) + ", textStatus: " + textStatus , "danger");
+					console.log( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr() ))
+					if (_bStopEngine==false)
+						_dataEngine = setTimeout( _initDataEngine, 2000 );
 				}
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				// alert("fail 2");
 			})
 			.always(function() {
 				//AltuiDebug.debug("_initDataEngine() (user_data) returned.");
@@ -1946,24 +1969,60 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	};
 
 	function _runLua(code, cbfunc) {
-		var jqxhr = _httpGet( "?id=lr_ALTUI_LuaRunHandler&command=run_lua&lua={0}".format( encodeURIComponent(code) ), {}, function(data, textStatus, jqXHR) {
-			if (data!=null) {
-				var lines = data.split('||');
-				var success = (lines[0]=="1");
-				if (success)
-					PageMessage.message(_T("Lua execution succeeded"), "success");
-				else
-					PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
-				if ($.isFunction( cbfunc ))
-					cbfunc({success:success, result:lines[1], output:lines[2]},jqXHR);
-			}
-			else {
-				PageMessage.message( _T("Lua Command execution request failed. (returned {0})").format(textStatus) , "danger");
-				if ($.isFunction( cbfunc ))
-					cbfunc({success:false, result:"", output:""},jqXHR);
-			}
-		});
-		return jqxhr;
+		if (1) {
+			var doPost = _candoPost(_user_data)
+			var url = "data_request?id=lr_ALTUI_LuaRunHandler";
+			var jqxhr = $.ajax( {
+				url: url,
+				type: (doPost==true) ? "POST" : "GET",
+				data: {
+					command:'run_lua',
+					lua:code
+				}
+			})
+			.done(function(data, textStatus, jqXHR) {
+				if (data!=null) {
+					var lines = data.split('||');
+					var success = (lines[0]=="1");
+					if (success)
+						PageMessage.message(_T("Lua execution succeeded"), "success");
+					else
+						PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
+					if ($.isFunction( cbfunc ))
+						cbfunc({success:success, result:lines[1], output:lines[2]},jqXHR);
+				}
+				else {
+					PageMessage.message( _T("Lua Command execution request failed. (returned {0})").format(textStatus) , "danger");
+					if ($.isFunction( cbfunc ))
+						cbfunc({success:false, result:"", output:""},jqXHR);
+				}
+			})
+			.fail(function(jqXHR, textStatus) {
+				PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
+			})
+			.always(function() {
+			});
+			return jqxhr;
+		} else {
+			var jqxhr = _httpGet( "?id=lr_ALTUI_LuaRunHandler&command=run_lua&lua={0}".format( encodeURIComponent(code) ), {}, function(data, textStatus, jqXHR) {
+				if (data!=null) {
+					var lines = data.split('||');
+					var success = (lines[0]=="1");
+					if (success)
+						PageMessage.message(_T("Lua execution succeeded"), "success");
+					else
+						PageMessage.message( _T("Lua Command execution on vera failed.")+"({0})".format(data) , "danger");
+					if ($.isFunction( cbfunc ))
+						cbfunc({success:success, result:lines[1], output:lines[2]},jqXHR);
+				}
+				else {
+					PageMessage.message( _T("Lua Command execution request failed. (returned {0})").format(textStatus) , "danger");
+					if ($.isFunction( cbfunc ))
+						cbfunc({success:false, result:"", output:""},jqXHR);
+				}
+			});
+			return jqxhr;
+		}
 	};
 
 	function _renameDevice(device, newname, roomid)
@@ -2704,15 +2763,17 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 	// save page data into altui plugin device
 	saveData		: _saveData,		//	name, data , cbfunc
+	stopEngine		: _stopEngine,
 	saveEngine		: _saveEngine,
 	clearEngine		: _clearEngine,
 	loadEngine		: _loadEngine,		// optional user_data
 	isUserDataCached	: _isUserDataCached,
 	RequestBackup : _RequestBackup,
 	initEngine		: function( firstuserdata )		{
+						_bStopEngine = false;
 						_loadEngine( firstuserdata );
-						_initDataEngine();				// init the data collection engine
-					},
+						return _initDataEngine();				// init the data collection engine
+	},
   };
 });	// not invoked, object does not exists
 
@@ -2771,12 +2832,14 @@ var LearnBox = ( function( uniq_id ) {
 	};
 	
 	function _initEngine() {
+		var deferred  = $.Deferred()
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",this,this.onDeviceChange)
 		EventBus.registerEventHandler("on_deviceAction",this,this.onUserAction);
 		EventBus.registerEventHandler("on_sceneRun",this,this.onUserAction);
 		// EventBus.publishEvent("on_ui_userDataFirstLoaded_"+_uniqID);
 		EventBus.publishEvent("on_ui_userDataLoaded_"+_uniqID);
-		return false;
+		deferred.resolve(true)
+		return deferred;
 	};
 
 	function _getBoxFullInfo() {
@@ -2984,8 +3047,8 @@ var LearnBox = ( function( uniq_id ) {
 		getStatus		: _getStatus, //	( deviceid, service, variable )
 		getJobStatus	: _todo,
 		getStates		: _getStates,
-		evaluateConditions : function (deviceid,devsubcat,conditions) {
-			return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
+		evaluateConditions : function (deviceid,cat,subcat,conditions) {
+			return UserDataHelper(_user_data).evaluateConditions(deviceid,cat,subcat,conditions);
 		},
 
 		// createDevice	: _todo,			// not supported on other controller than 0
@@ -3028,6 +3091,7 @@ var LearnBox = ( function( uniq_id ) {
 
 		// save page data into altui plugin device
 		saveData		: _todo,
+		stopEngine		: _todo,
 		saveEngine		: _todo,
 		clearEngine		: _todo,
 		loadEngine		: _todo,
@@ -3104,11 +3168,12 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 		})
 		.always(function() {
 		});
+		return jqxhr;
 	};
 
 	function _initEngine() {
 		_dataEngine = null;
-		_refreshEngine()
+		return _refreshEngine()
 	};
 
 	function _asyncResponse(arr, func , filterfunc, endfunc) {
@@ -3499,8 +3564,8 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	getStatus		: _getStatus, //	( deviceid, service, variable )
 	getJobStatus	: _todo,
 	getStates		: _getStates,
-	evaluateConditions :	function (deviceid,devsubcat,conditions) {
-		return UserDataHelper(_user_data).evaluateConditions(deviceid,devsubcat,conditions);
+	evaluateConditions :	function (deviceid,cat,subcat,conditions) {
+		return UserDataHelper(_user_data).evaluateConditions(deviceid,cat,subcat,conditions);
 	},
 
 	createDevice	: _todo,

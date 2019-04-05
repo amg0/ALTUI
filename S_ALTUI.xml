@@ -18,6 +18,12 @@
             <shortCode>debug</shortCode>
         </stateVariable>
         <stateVariable sendEvents="no">
+            <name>SceneIDs</name>
+            <dataType>string</dataType>
+            <defaultValue>""</defaultValue>
+            <shortCode>sceneids</shortCode>
+        </stateVariable>
+        <stateVariable sendEvents="no">
             <name>WorkflowAltuiid</name>
             <dataType>string</dataType>
             <defaultValue>"0-0"</defaultValue>
@@ -46,6 +52,12 @@
             <dataType>string</dataType>
             <defaultValue></defaultValue>
             <shortCode>result</shortCode>
+        </stateVariable>
+        <stateVariable sendEvents="no">
+            <name>PluginConfig</name>
+            <dataType>string</dataType>
+            <defaultValue></defaultValue>
+            <shortCode>pluginConfig</shortCode>
         </stateVariable>
         <stateVariable sendEvents="no">
             <name>DeviceType</name>
@@ -119,6 +131,12 @@
             <defaultValue></defaultValue>
             <shortCode>groupdevices</shortCode>
         </stateVariable>			
+        <stateVariable sendEvents="no">
+            <name>durationMs</name>
+            <dataType>ui2</dataType>
+            <defaultValue></defaultValue>
+            <shortCode>durationms</shortCode>
+        </stateVariable>			
 	</serviceStateTable>
     <actionList>
         <action>
@@ -131,6 +149,16 @@
                 </argument>
             </argumentList>
         </action>
+		<action>
+            <name>RunScene</name>
+            <argumentList>
+                <argument>
+                    <name>sceneIDs</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>SceneIDs</relatedStateVariable>
+                </argument>
+            </argumentList>
+		</action>
 		<action>
             <name>EnableWorkflows</name>
             <argumentList>
@@ -207,6 +235,16 @@
             </argumentList>
         </action>
         <action>
+            <name>UnregisterPlugin</name>
+            <argumentList>
+                <argument>
+                    <name>newDeviceType</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>deviceType</relatedStateVariable>
+                </argument>
+            </argumentList>
+        </action>
+        <action>
             <name>RegisterDataProvider</name>
             <argumentList>
                 <argument>
@@ -228,6 +266,13 @@
         </action>
         <action>
             <name>Reset</name>
+            <argumentList>
+				<argument>
+				  <name>PluginConfig</name>
+				  <direction>out</direction>
+				  <relatedStateVariable>PluginConfig</relatedStateVariable>
+				</argument>
+            </argumentList>
         </action>
 		<action>
             <name>SayTTS</name>
@@ -246,6 +291,11 @@
                     <name>newGroupDevices</name>
                     <direction>in</direction>
                     <relatedStateVariable>groupDevices</relatedStateVariable>
+                </argument>
+                <argument>
+                    <name>durationMs</name>
+                    <direction>in</direction>
+                    <relatedStateVariable>durationMs</relatedStateVariable>
                 </argument>
             </argumentList>
 		</action>

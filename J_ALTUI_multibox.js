@@ -206,7 +206,32 @@ var MultiBox = ( function( window, undefined ) {
 
 		// prepare to wait for proper initialization
 		// EventBus.waitForAll( "on_ui_userDataFirstLoaded", _getAllEvents("on_ui_userDataFirstLoaded"), this, _AllLoaded );
-		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, _AllLoaded );
+		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, null , g_ALTUI.g_CtrlTimeout )
+		.always( function(data) {
+			// check data , if a controller is missing, disable it
+			var todel=[]
+			$.each(data, function(key,elem) {
+				if (elem==false) {
+					todel.push(key.substring("on_ui_userDataLoaded_".length))
+				}
+			})
+			$.each(todel.reverse(), function(idx,val) {
+				// delete controller val
+				var msg = _T("controller {0} did not respond.").format(_controllers[val].name)
+				console.log(msg)
+				if (val!=0) {
+					console.log(_T("disabling this secondary controller now"))
+					MultiBox.stopEngine(val)
+					_controllers.splice(val, 1)
+					setTimeout(function(msg){
+						PageMessage.message( msg, "warning");
+					}, 1000, msg)
+				} else {
+					console.log("Cannot disable main controller, trying to continue...")
+				}
+			})
+			_AllLoaded( "on_ui_userDataLoaded" )
+		})
 
 		// now start the engine
 		$.each(_controllers, function(idx,box) {
@@ -214,6 +239,15 @@ var MultiBox = ( function( window, undefined ) {
 		});
 
 	};
+	
+	function _stopEngine(controller) {
+		return _controllers[controller].controller.stopEngine();
+	};
+
+	function _initializeJsonp(controller) {
+		return _controllers[controller].controller.initializeJsonp();
+	};
+
 	function _saveEngine() {
 		$.each(_controllers, function(idx,box) {
 			box.controller.saveEngine();
@@ -528,6 +562,10 @@ var MultiBox = ( function( window, undefined ) {
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.runAction(elems[1], service, action, params,cbfunc);
 		// return (_controllers[elems[0]]==undefined)  ? null : _controllers[elems[0]].controller.getUPnPHelper().UPnPAction(elems[1], service, action, params,cbfunc);
 	};
+	// function _getAttr(device, attribute) {
+		// var elems = device.altuiid.split("-");
+		// return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.getAttr(elems[1], attribute);
+	// };
 	function _setAttr(device, attribute, value,cbfunc) {
 		var elems = device.altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.setAttr(elems[1], attribute, value,cbfunc);
@@ -589,9 +627,11 @@ var MultiBox = ( function( window, undefined ) {
 	function _getCategoryTitle(catnum) {
 		return _controllers[0].controller.getCategoryTitle(catnum);	//returns (found !=undefined) ? found : '';
 	};
-	function _evaluateConditions(device,devsubcat,conditions) {
+	function _evaluateConditions(device,conditions) {
 		var elems = device.altuiid.split("-");
-		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.evaluateConditions(elems[1],devsubcat,conditions);
+		var cat = device.category_num || 0
+		var subcat = device.subcategory_num || 0
+		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.evaluateConditions(elems[1],cat,subcat,conditions);
 	};
 	function _getWeatherSettings() {
 		return _controllers[0].controller.getWeatherSettings();
@@ -853,6 +893,7 @@ var MultiBox = ( function( window, undefined ) {
 	//static info per device type
 	initDB					: _initDB,	// (devicetypes)
 	initEngine				: _initEngine,
+	stopEngine				: _stopEngine,
 	reloadEngine			: _reloadEngine,
 	reboot					: _reboot,
 	saveEngine				: _saveEngine,	//()
@@ -923,6 +964,7 @@ var MultiBox = ( function( window, undefined ) {
 	getStatus				: _getStatus,				// ( device, service, variable )
 	setStatus				: _setStatus,				// ( device, service, variable, value, dynamic )
 	getJobStatus			: _getJobStatus,			// (  jobid , cbfunc )
+	// getAttr					: _getAttr,					// device , attribute
 	setAttr					: _setAttr,					// ( device, attribute, value,function(result) )
 	runAction				: _runAction,				// (device, service, action, params,cbfunc);
 	runActionByAltuiID		: _runActionByAltuiID,		// (altuiid, service, action, params,cbfunc)

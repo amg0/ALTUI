@@ -8,7 +8,7 @@
 // written devagreement from amg0 / alexis . mermet @ gmail . com
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE.  
 
 /*The MIT License (MIT)
 BOOTGRID: Copyright (c) 2014-2015 Rafael J. Staib
@@ -38,17 +38,47 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2356 $";
+var ALTUI_revision = "$Revision: 2508 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
 var NULL_ROOM = "0-0";
 var NO_URL = 'no url';
+var tagModel = ['primary','success','danger','warning','info','dark']
 var _HouseModes = [];
 var deviceModalTemplate = "";
 var deviceActionModalTemplate = "";
 var defaultDialogModalTemplate = "";
-var simul = null;	// global D3 forceSimulation
+var categoryFilters = {
+	'power':  {label:"Power", glyph:"fa-power-off", types:[
+		"urn:schemas-upnp-org:device:BinaryLight:1",
+		"urn:schemas-upnp-org:device:DimmableLight:1",
+		"urn:schemas-upnp-org:device:DimmableRGBLight:1",
+		"urn:schemas-upnp-org:device:DimmableRGBLight:2",
+		"urn:schemas-micasaverde-com:device:PhilipsHueLuxLamp:1",
+		"urn:schemas-micasaverde-com:device:PhilipsHueLamp:1",
+		"urn:schemas-upnp-org:device:VSwitch:1",
+		"urn:schemas-futzle-com:device:holidayvirtualswitch:1"
+	]},
+	'sensor': {label:"Sensor", glyph:"fa-thermometer-three-quarters", types:[
+		"urn:schemas-micasaverde-com:device:SmokeSensor:1",
+		"urn:schemas-micasaverde-com:device:DoorSensor:1",
+		"urn:schemas-micasaverde-com:device:LightSensor:1",
+		"urn:schemas-micasaverde-com:device:VOTS:1",
+		"urn:schemas-micasaverde-com:device:TemperatureSensor:1",
+		"urn:schemas-micasaverde-com:device:MotionSensor:1",
+		"urn:schemas-micasaverde-com:device:HumiditySensor:1",
+		"urn:schemas-micasaverde-com:device:FloodSensor:1",
+		"urn:schemas-micasaverde-com:device:TempLeakSensor:1",
+		"urn:schemas-micasaverde-com:device:GenericSensor:1",
+		"urn:schemas-futzle-com:device:WeMoSensor:1",
+		"urn:schemas-micasaverde-com:device:VOTS:1"
+	]},
+	'covers': {label:"Covers", glyph:"fa-align-justify", types:[
+		"urn:schemas-micasaverde-com:device:WindowCovering:1"
+	]},
+}
+var simul = null;	// global D3 forceSimulations
 
 
 var deleteGlyph = glyphTemplate.format("trash-o",_T("Delete"),"text-danger")
@@ -113,8 +143,10 @@ var _timerTypes = [];
 var _timerDOW = [];
 var _timerRelative = [];
 var _timerUnits = [
-	{value:'h',text:'h'},
-	{value:'m',text:'m'}
+	{value:'d',text:'days'},
+	{value:'h',text:'hours'},
+	{value:'m',text:'minutes'},
+	{value:'s',text:'seconds'}
 ];
 
 var styles =`
@@ -141,6 +173,31 @@ var styles =`
 	}
 	.nav-link {
 		white-space: nowrap;
+	}
+	@media (max-width: 991.98px) {
+	  .offcanvas-collapse {
+		position: fixed;
+		top: 56px; /* Height of navbar */
+		bottom: 0;
+		left: 100%;
+		width: 100%;
+		padding-right: 1rem;
+		padding-left: 1rem;
+		overflow-y: auto;
+		visibility: hidden;
+		transition-timing-function: ease-in-out;
+		transition-duration: .3s;
+		transition-property: left, visibility;
+	  }
+	  .offcanvas-collapse.open {
+		left: 0;
+		visibility: visible;
+	  }
+	}
+	.blur {
+		opacity:0.3;
+	}
+	.altui-clock {
 	}
 	.multiselect-container>li>a>label {
 		padding: 3px 3px 3px 3px !important;
@@ -385,7 +442,6 @@ var styles =`
 	.altui-variable-buttons {
 	}
 	.altui-variable-value {
-		max-width: 200px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -431,6 +487,11 @@ var styles =`
 		max-height:100px;
 		height:100px;
 		overflow-y: auto;
+	}
+	div#altui-pagemessage-panel.collapsing {
+		-webkit-transition: none;
+		transition: none;
+		display: none;
 	}
 	div#altui-pagemessage-panel td {
 		color:black;
@@ -495,6 +556,9 @@ var styles =`
 	  padding-bottom: 15px;
 	  padding-right: 15px;
 	}
+	.altui-DisplayLine1,.altui-DisplayLine2 {
+		font-size:14px;
+	}
 	.altui-device-keyvariables {
 	}
 	.altui-device-controlpanel .card-body {
@@ -508,7 +572,11 @@ var styles =`
 	body.withBackground .altui-device , body.withBackground .altui-scene , body.withBackground .altui-workflow , body.withBackground .altui-pluginbox-panel , body.withBackground footer p {
 		background-color: rgba(255,255,255,0.5)
 	}
-	.altui-device-title {
+	.altui-device-container, .altui-scene-container, .altui-workflow-container {
+		padding-left: 3px;
+		padding-right: 3px;		
+	}
+	.altui-device-title , .altui-workflow-heading {
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
@@ -523,7 +591,7 @@ var styles =`
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.altui-device-title-input {
+	.altui-device-title-input , .altui-workflow-title-input{
 		width: 70%;
 		height: 20px;
 	}
@@ -633,39 +701,27 @@ var styles =`
 		height:100px;
 	}
 	.altui-dialog-ace	{ height:4em; }
+	.altui-myhome-favorite { font-size:1.3em; }
 	div.altui-favorites-container	{
-		padding-left: 0px;
-		padding-right: 0px;
+
 	}
 	div.altui-favorites-housemode, div.altui-favorites-device, div.altui-favorites-scene {
-		width: 25%;
-		padding-bottom: 25%;		/* = width for a square aspect ratio */
 		position:relative;			/* so child are positioned relatve to it */
-		margin:0%;
 		overflow:hidden;
 		border: 1px solid black;
 	}
 	div.altui-favorites-weather {
-		width: 50%;
-		padding-bottom: 25%;		/* 1:2 aspect ratio */
 		position:relative;			/* so child are positioned relatve to it */
 		margin:0%;
 		overflow:hidden;
 		border: 1px solid black;
 	}
 	div.altui-favorites-device-container {
-		position:absolute;
 		text-align:center;
 		height:100%; /* = 100% - 2*0% padding */
 		width:100%; /* = 100% - 2*0% padding */
-		padding: 0% 0%;
 	}
 	.altui-favorites-title {
-		white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-		position:absolute;
-		z-index: 99;
-		top: 0px;
-		width: 100%; max-width: 100%
 	}
 	.altui-favorites-smalltext {
 		font-size:0.3em;
@@ -689,22 +745,22 @@ var styles =`
 		border-color: green;
 	}
 	.altui-favorites-lasttrip-text {
-		position: absolute;
-		bottom: 0px;
-		left: 0px;
-		right: 0px;
+	}
+	.altui-favorites-info {
+		font-size:14px;
 	}
 	.altui-favorites-watts {
-		float: right;
-		text-align: right;
-		font-size: 14px;
-		bottom: 0px;
-		position: absolute;
-		right: 0px;
+	}
+	.altui-favorites-kwh  {
+	}
+	.altui-favorites-netmontxt {
 	}
 	.btn.altui-housemode{
 		padding-left: 0px;
 		padding-right: 0px;
+	}
+	.altui-housemode3 {
+		width: 50%;
 	}
 	.altui-housemode2 {
 		width: 50%;
@@ -754,10 +810,17 @@ var styles =`
 	.preset_night.housemode2_selected:after {
 		background-position: -115px -112px;
 	}
-	.housemode-countdown {
+	.altui-housemode-countdown {
 		font-size: 40px;
 		z-index: 99;
-		position: relative;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.altui-housemodeglyph {
+		font-size: 25px;
 	}
 	.housemode {
 		text-align: center;
@@ -955,14 +1018,111 @@ var styles =`
 		cursor: pointer;
 	}
 	.altui-graph-content {
-		// overflow-x: scroll;
+		margin-left: -15px;
+		margin-right: -15px;
+		overflow: hidden;
 	}
 	.altui-graph-card {
+		background: lightcyan;
 		padding:0px;
 	}
 	.altui-graph-card .card-title {
 		cursor:move;
 	}
+	.iframe-wrapper {
+		-webkit-overflow-scrolling: touch;
+	}
+	.iframe-wrapper iframe {
+	}
+	#altui-WeatherWidgetCode {
+		font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+		font-size: .8em;
+	}
+	.altui-tags {
+	}
+	.altui-device-tag { 
+		cursor: pointer;
+	}
+	.bd-highlight {
+		background-color: rgba(86,61,124,.15);
+		border: 1px solid rgba(86,61,124,.15);
+	}
+	.altui-experimental div.card {
+		font-size:8px;
+		transition: font-size .3s linear 0s, background-color 3s linear 0s;
+	}
+	.altui-experimental div.card.disabled {
+		opacity:0.3;
+		background-color:"lightred";
+	}
+	.altui-experimental div.card.zoomed {
+		font-size:20px;
+		width:auto;
+		border-width: 1px;
+		border-color: black;
+	}
+	.altui-experimental div.card:hover {
+	}
+	.altui-experimental div.card .card-body {
+		margin:0px;
+		padding:0px;
+	}
+	.altui-experimental div.card .card-header {
+		cursor: zoom-in;
+		text-align: center;
+		margin:0px;
+		padding:0px;
+	}
+	.altui-experimental div.card.zoomed .card-header {
+		cursor: zoom-out;
+	} 
+	.altui-experimental div.card .card-header .altui-experimental-extrainfo {
+		display:none;
+	}
+	.altui-experimental div.card.zoomed .card-header .altui-experimental-extrainfo {
+		display:inline;
+	}
+	.altui-experimental-device-content {
+		width:100%;
+	}
+	.altui-experimental-device-content .altui-device-icon {
+		width:50px;
+		height:50px;
+	}
+	.altui-experimental-device-content-box {
+		text-align: center;
+	}
+	.altui-experimental-device-content-box .altui-device-icon.altui-svg-marker {
+	}
+	.altui-experimental-device-content-box .fa-bolt {
+		display: none;
+	}
+	.altui-experimental-device-content-box .altui-iphone-txt {
+		font-size:10px;
+	}
+	.altui-experimental-mediumtext,.altui-experimental-smalltext {
+		font-size:7px;
+	}
+	.altui-experimental-netmontxts, .altui-experimental-watts {
+	}
+	.altui-experimental-info {
+		font-size: 13px;
+	}
+	.altui-experimental-info.altui-experimental-lasttrip-text {
+		display: none;
+	}
+	.altui-experimental-scene-content {
+		width: 50px;
+		height: 50px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 15px;
+	}
+	.altui-experimental-scene-content-box {
+		text-align: center;
+	}
+
 `;
 
 var UIManager  = ( function( window, undefined ) {
@@ -980,6 +1140,7 @@ var UIManager  = ( function( window, undefined ) {
 		{ id:'ShowMyHomeImages', type:'checkbox', label:"Show Images in MyHome page", _default:1, help:'Show Images headers in MyHome page cards' },
 		{ id:'UseMasonryInMyHome', type:'checkbox', label:"Use Masonry layout in MyHome page", _default:0, help:'Use Masonry layout for cards in MyHome page' },
 		{ id:'ShowVideoThumbnail', type:'checkbox', label:"Show Video Thumbnail in Local mode", _default:1, help:'In Local access mode, show camera in video stream mode' },
+		{ id:'ShowClock', type:'checkbox', label:"Show Clock in Message bar", _default:1, help:'The local clock time is displayed in the message bar' },
 		//{ id:'FixedLeftButtonBar', type:'checkbox', label:"Left Buttons are fixed on the page", _default:1, help:'choose whether or not the selection Buttons on the left are scrolling with the page' },
 		{ id:'ShowWeather', type:'checkbox', label:"Show Weather on home page", _default:1, help:'display or not the weather widget on home page' },
 		{ id:'ShowHouseMode', type:'checkbox', label:"Show House Mode on home page", _default:1, help:'display or not the House mode widget on home page' },
@@ -991,12 +1152,25 @@ var UIManager  = ( function( window, undefined ) {
 		{ id:'ShowAllRows', type:'checkbox', label:"Show all rows in grid tables", _default:0, help:'allways show all the lines in the grid tables, or have a row count selector instead'},
 		{ id:'LockFavoritePosition', type:'checkbox', label:"Lock favorites position", _default:0, help:'Prevent drag and drop of favorites to reorder them'},
 		{ id:'TopStats', type:'checkbox', label:"Show OS Statistics", _default:0, help:'Show OS statistics in the footer'},
+		{ id:'BirdViewItemWidth', type:'number', label:"Size of Bird view items", _default:0, help:'Size of Bird view items in pixel, 0 for flex' },
 		{ id:'Menu2ColumnLimit', type:'number', label:"2-columns Menu's limit", _default:15, min:2, max:30, help:'if a menu has more entries than this number then show the menu entries in 2 columns'	},
 		{ id:'TempUnitOverride', type:'select', label:"Weather Temp Unit (UI5)", _default:'c', choices:'c|f', help:'Unit for temperature'  }
 	];
 
 	var _editorOptions = [
 		{ id:'EditorFontSize', type:'number', label:"Editor Font Size", _default:12, min:8, max:30, help:'Editor font size in pixels'  },
+	];
+
+	var meteoDefault = `
+	<a class="weatherwidget-io" href="https://forecast7.com/fr/48d862d35/paris/" data-label_1="PARIS" data-label_2="Météo" data-theme="weather_one" >PARIS Météo</a>
+	<script>
+	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+	</script>
+	`
+
+	var _meteoOptions = [
+		{ id:'WeatherWidgetButton', type:'button', label:"Configure", url:"https://weatherwidget.io/", help:'open weatherwidget.io to configure widget'  },
+		{ id:'WeatherWidgetCode', type:'multiline', rows:'5', label:_T("Weather Widget HTML Code"), _default:meteoDefault, help:'Copy Paste the Widget code here'  },
 	];
 
 	var edittools = [];
@@ -1396,12 +1570,12 @@ var UIManager  = ( function( window, undefined ) {
 
 	function _generateNavBarHTML() {
 		var html = `
-		<nav id="navbar" class="navbar navbar-expand-md navbar-dark bg-primary">
+		<nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary">
 		  <a class="navbar-brand" href="#"><div class='imgLogo'></div></a>
-		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		  </button>
-		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		  <div class="navbar-collapse offcanvas-collapse bg-primary" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
 			{0}
 			</ul>
@@ -1475,6 +1649,8 @@ var UIManager  = ( function( window, undefined ) {
 	function _loadCssIfNeeded( scriptname, path, drawfunc ) {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var localcdn = ( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalCDN" ).trim() || "");
+		if (localcdn=="~")
+			localcdn=""
 		var fullscriptname = (localcdn=="") ? (path+scriptname) : (localcdn+"/"+scriptname);	//supports https
 		var len = $('link.'+scriptname.replace(/\./g,"_")).length;
 		if (len==0) {				// not loaded yet
@@ -1489,6 +1665,8 @@ var UIManager  = ( function( window, undefined ) {
 	function _loadScriptIfNeeded( scriptname, path, drawfunc ) {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 		var localcdn = ( MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalCDN" ).trim() || "");
+		if (localcdn=="~")
+			localcdn=""
 		var fullscriptname = (localcdn=="") ? (path+scriptname) : (localcdn+"/"+scriptname);	//supports https
 		var len = $('script[src="'+fullscriptname+'"]').length;
 		if (len==0) {				// not loaded yet
@@ -1507,7 +1685,7 @@ var UIManager  = ( function( window, undefined ) {
 
 	function _loadJointJSScript( drawfunc ) {
 		//https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.0.1/joint.min.js
-		var ver = "2.0.1/";	// "1.1.0/"; // "1.0.3"
+		var ver = "2.1.4/" //"2.0.1/";	// "1.1.0/"; // "1.0.3"
 		_loadCssIfNeeded( "joint.css", "//cdnjs.cloudflare.com/ajax/libs/jointjs/"+ver)
 		_loadScriptIfNeeded('joint.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
 			_loadScriptIfNeeded('joint.shapes.fsa.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
@@ -1630,7 +1808,7 @@ var UIManager  = ( function( window, undefined ) {
 				if (len==0) {
 					// not loaded yet
 					_toload++;
-					_loadScript(obj.ScriptFile, function() {
+					_loadScript(obj.ScriptFile, function(e) {
 						// script has been loaded , check if style needs to be loaded and if so, load them
 						$.each(_devicetypesDB,function(idx,dt) {
 							if ( (dt.ScriptFile == obj.ScriptFile) && (dt.StyleFunc != undefined) ) {
@@ -1699,7 +1877,7 @@ var UIManager  = ( function( window, undefined ) {
 			html +="<input type='checkbox' {0} class='altui-enable-timer' id='{1}'></input>".format( timer.enabled==true ? 'checked' : '', timer.id);
 		html +="</td>";
 		html +="<td>";
-		html +="<b>{0}</b>".format(timer.name);
+		html +="<b>{0}</b>".format(timer.name || "");
 		html +="</td>";
 		html +="<td>";
 		switch( parseInt(timer.type) ) {
@@ -1771,6 +1949,8 @@ var UIManager  = ( function( window, undefined ) {
 	};
 
 	function _deviceDrawVariables(device) {
+		var dfd = $.Deferred();
+		
 		function _clickOnValue() {
 			var id = $(this).prop('id');	// idx in variable state array
 			var state =	 MultiBox.getStateByID( device.altuiid, id );
@@ -2059,10 +2239,23 @@ var UIManager  = ( function( window, undefined ) {
 			.off('click')
 			.on('click', function(e) {
 				// force the closure of Push Parameter dialogs
-				$(".altui-variable-push.btn-danger").click()
+				// $(".altui-variable-push.btn-danger").click()
+				if ($(".altui-variable-push.btn-danger").length>0) {
+					alert(_T("Please close the watch information first"))
+					e.preventDefault();
+					e.stopPropagation()
+					return false;
+				}
 			})
 			$('#deviceModal').modal();
+			$('#deviceModal').on('hidden.bs.modal', function (e) {
+			  // do something...
+			  dfd.resolve("hidden.bs.modal")
+			})
+		} else {
+			dfd.reject()
 		}
+		return dfd.promise();
 	};
 
 	function _deviceCreate() {
@@ -2132,7 +2325,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		// 0: action , 1: value , 2: service, 3: devid
 		var deviceActionLineTemplate = "  <tr>";
-		deviceActionLineTemplate += "		  <td><span title='{2}'><button class='btn btn-light btn-sm altui-run-action' data-altuiid='{3}' data-service='{2}' >{0}</button></span></td>";
+		deviceActionLineTemplate += "		  <td><span title='{2}'><button class='btn btn-primary btn-sm altui-run-action' data-altuiid='{3}' data-service='{2}' >{0}</button></span></td>";
 		deviceActionLineTemplate += "		  <td>{1}</td>";
 		deviceActionLineTemplate += "	  </tr>";
 
@@ -2310,7 +2503,6 @@ var UIManager  = ( function( window, undefined ) {
 		var id = device.altuiid;
 		var controller = MultiBox.controllerOf(id).controller;
 		var ui5 = MultiBox.isUI5( controller );
-		// var _devicetypesDB = MultiBox.getDeviceTypesDB(controller);
 		var icon='';
 		switch( device.device_type ) {
 			case 'urn:schemas-futzle-com:device:CountdownTimer:1':
@@ -2320,8 +2512,6 @@ var UIManager  = ( function( window, undefined ) {
 				var src = defaultIconSrc;
 				var ui_static_data = MultiBox.getDeviceStaticData(device);
 				var str = (ui_static_data && ui_static_data.default_icon ) ? ui_static_data.default_icon : "" ;
-				// var dt = _devicetypesDB[ device.device_type ];
-				//AltuiDebug.debug("Icon for device altuiid:"+device.altuiid+"	device.type:"+device.device_type);
 				if (ui_static_data!=null)
 				{
 					//dt.ui_static_data.DisplayStatus
@@ -2337,9 +2527,8 @@ var UIManager  = ( function( window, undefined ) {
 							var bFound = false;
 							$.each( si , function(key,obj) {
 								if (isObject(obj) && (obj.img!=undefined) ) {
-									// obj.conditions is an array
-									// obj.img s the icon
-									if (MultiBox.evaluateConditions(device, device.subcategory_num || -1, obj.conditions))
+									// obj.conditions is an array, obj.img s the icon
+									if (MultiBox.evaluateConditions(device, obj.conditions))
 									{
 										bFound = true;
 										str = obj.img;
@@ -2398,7 +2587,7 @@ var UIManager  = ( function( window, undefined ) {
 									// obj.parameters is an array (id,arguement,value) of values to change in the svg
 									// obj.conditions is an array
 									// obj.img s the icon
-									if (MultiBox.evaluateConditions(device, device.subcategory_num || -1, obj.conditions))
+									if (MultiBox.evaluateConditions(device, obj.conditions))
 									{
 										bFound = true;
 										str = obj.img;
@@ -2515,11 +2704,13 @@ var UIManager  = ( function( window, undefined ) {
 		}
 		else
 			iconDataSrc = iconPath;
-		return "<img class='altui-device-icon pull-left rounded' data-org-src='{0}' src='{1}' {3} alt='_todo_' onerror='UIManager.onDeviceIconError(\"{2}\")' ></img>".format(
+
+		return "<img class='altui-device-icon pull-left rounded {4}' data-org-src='{0}' src='{1}' {3} alt='_todo_' onerror='UIManager.onDeviceIconError(\"{2}\")' ></img>".format(
 			iconPath,
 			iconDataSrc,
 			device.altuiid,
-			(isNullOrEmpty(onclick)) ? "" : "onclick='{0}'".format(onclick)
+			(isNullOrEmpty(onclick)) ? "" : "onclick='{0}'".format(onclick),
+			(iconPath.substr(0,18)=="data:image/svg+xml") ? "altui-svg-marker" : ""
 		);
 		// return "<img class='altui-device-icon pull-left rounded' data-org-src='"+iconPath+"' src='"+iconDataSrc+"' alt='_todo_' onerror='UIManager.onDeviceIconError(\""+device.altuiid+"\")' ></img>";
 	}
@@ -2629,7 +2820,11 @@ var UIManager  = ( function( window, undefined ) {
 
 		var lastrun = (scene.last_run != undefined) ? okGlyph+" "+_toIso(new Date(scene.last_run*1000)).replace('T',' ') : '';
 		var nextrun = _findSceneNextRun(scene);
-		nextrun = (nextrun==0) ? '' : timeGlyph+" "+_toIso(new Date(nextrun*1000)).replace('T',' ');
+		if (scene.paused && scene.paused==1) {
+			nextrun = timeGlyph+" "+_T("Paused")
+		} else {
+			nextrun = (nextrun==0) ? '' : timeGlyph+" "+_toIso(new Date(nextrun*1000)).replace('T',' ');
+		}
 
 		var idDisplay = "<div class='pull-right text-muted'><small>#"+scene.altuiid+" </small></div>";
 		var eyeMonitorHtml = ""	//custom ctrlable
@@ -3424,14 +3619,19 @@ var UIManager  = ( function( window, undefined ) {
 					}
 				}
 			}
+			$(domparent).append('<div id="cpanel_controls_container" class="col-12"><div>')
+			var newparent = $(domparent).find("#cpanel_controls_container")
+
 			$.each( tab.Control, function (idx,control) {
 				var offset = _prepareSceneGroupOffset( tab, control );
-				_displayControl( domparent, device, control, idx, offset );
+				_displayControl( newparent, device, control, idx, offset );
 			});
+			// fix height because absolute positioning removes element from the DOM calculations
+			_fixHeight( newparent );
 		}
 
 		// fix height because absolute positioning removes element from the DOM calculations
-		_fixHeight( domparent );
+		// _fixHeight( domparent );
 
 	};
 
@@ -3950,8 +4150,11 @@ var UIManager  = ( function( window, undefined ) {
 						var selected = (room.id.toString() == device.room);
 						htmlRoomSelect	  += "<option value='{1}' {2}>{0}</option>".format(room.name,room.id,selected ? 'selected' : '');
 					});
-			htmlRoomSelect	  += "</select>";
-
+			htmlRoomSelect += "</select>";
+			var tags = MyLocalStorage.getSettings('DeviceTags')
+			var key = '_'+device.altuiid
+			tags = tags.devicemap[key]
+			var htmlTags = HTMLUtils.drawTags('altui-devicetags',tags);
 			var htmlDeleteButton= (device.donotdelete==true) ? '' : buttonTemplate.format( device.altuiid, 'btn-sm altui-deldevice ml-auto', deleteGlyph,'default',_T("Delete"));
 			var html ="";
 			html+="<div class='row'>";
@@ -3959,6 +4162,7 @@ var UIManager  = ( function( window, undefined ) {
 				html +="	<div class='card '>";
 				html +="		<div class='card-header form-inline'>";
 				html +="			<h4 class='card-title'>{0} {1} {2} (#{3}) "+htmlRoomSelect+"</h4>";
+				html +=				htmlTags;
 				html +=				htmlDeleteButton;
 				html +="		</div>";
 				html +="		<div class='card-body'>";
@@ -4094,7 +4298,8 @@ var UIManager  = ( function( window, undefined ) {
 				var pid = toHex2(splits[2])
 				$.ajax( {
 					cache:false,
-					method:'POST', url:"https://us-central1-altui-cloud-function.cloudfunctions.net/helloHttp",
+					crossDomain: true,
+					method:'POST', url:"https://europe-west1-altui-cloud-function.cloudfunctions.net/helloHttp",
 					data: {
 						manufacturer: manuf,
 						type: ptype,
@@ -4111,6 +4316,37 @@ var UIManager  = ( function( window, undefined ) {
 		$("#altui-room-list").change( function() {
 			MultiBox.renameDevice(device, device.name, $(this).val() );
 		});
+		$(".altui-device-controlpanel")
+			.off('click','.altui-tag-add') 
+			.on('click','.altui-tag-add', function() { 
+				var tag = $(this).prop('id').substr("altui-tag-add-".length)
+				var altuiid = $(this).closest(".altui-device-controlpanel").data("altuiid")
+				var db = MyLocalStorage.getSettings('DeviceTags')
+				var key = '_'+altuiid
+				db.devicemap[key] = db.devicemap[key] || []
+				var index = db.devicemap[key].indexOf(tag);
+				if (index <= -1) {
+					db.devicemap[key].push(tag)
+					MyLocalStorage.setSettings('DeviceTags',db)
+					var htmlTags = HTMLUtils.drawTags('altui-devicetags',db.devicemap[key]);
+					$(".altui-tags").replaceWith( htmlTags );
+				}
+			})
+			.off('click','.altui-device-tag')
+			.on('click','.altui-device-tag',function() {
+				var tag = $(this).prop('id').substr("altui-tag-".length)
+				var db = MyLocalStorage.getSettings('DeviceTags')
+				var key = '_'+altuiid
+				if (db.devicemap[key]) {
+					var index = db.devicemap[key].indexOf(tag);
+					if (index > -1) {
+						db.devicemap[key].splice(index, 1);
+					}
+					MyLocalStorage.setSettings('DeviceTags',db)
+					var htmlTags = HTMLUtils.drawTags('altui-devicetags',db.devicemap[key]);
+					$(".altui-tags").replaceWith( htmlTags );
+				}
+			})
 		// ZWCONFIG PAGE
 		$(".altui-device-config")
 			.on('click',".altui-add-variable", function() {
@@ -4420,7 +4656,7 @@ var UIManager  = ( function( window, undefined ) {
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 				var footerTemplate =  MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "FooterBranding" )
-					|| "<span>${appname} ${luaversion}.${jsrevision}, ${copyright} 2017 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></span><span>${paypal}</span><span id='altui-osstats'></span>";
+					|| "<span>${appname} ${luaversion}.${jsrevision}, ${copyright} 2018 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></span><span>${paypal}</span><span id='altui-osstats'></span>";
 				var tmpl = _.template(footerTemplate.trim());
 				var footerstr =tmpl( footerMap )
 
@@ -4460,6 +4696,9 @@ var UIManager  = ( function( window, undefined ) {
 						if ((bManual==true) && (bUpgrade==false)) {
 							DialogManager.infoDialog(_T("Check for Updates"),_T("You already have the latest version"));
 						}
+					})
+					.fail( function (data, textStatus, jqXHR) {
+						alert("fail")
 					})
 					.always( function() {
 						if (MyLocalStorage.getSettings('TopStats')==1) {
@@ -4506,20 +4745,20 @@ var UIManager  = ( function( window, undefined ) {
 		// check is of row
 		var width = $(".altui-favorites").width();
 		if (width<400) {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'50%',"padding-bottom":'50%'});
-			$(".altui-favorites-weather").css({width:'100%',"padding-bottom":'50%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'33%',"xpadding-bottom":'33%'});
+			$(".altui-favorites-weather").css({width:'66%',"xpadding-bottom":'33%'});
 		} else if ( width <500 ) {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'30%',"padding-bottom":'30%'});
-			$(".altui-favorites-weather").css({width:'60%',"padding-bottom":'30%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'25%',"xpadding-bottom":'25%'});
+			$(".altui-favorites-weather").css({width:'50%',"xpadding-bottom":'25%'});
 		} else if ( width <800 ) {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'25%',"padding-bottom":'25%'});
-			$(".altui-favorites-weather").css({width:'50%',"padding-bottom":'25%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"xpadding-bottom":'20%'});
+			$(".altui-favorites-weather").css({width:'40%',"xpadding-bottom":'20%'});
 		} else if ( width <1200 ){
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"padding-bottom":'20%'});
-			$(".altui-favorites-weather").css({width:'40%',"padding-bottom":'20%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'20%',"xpadding-bottom":'20%'});
+			$(".altui-favorites-weather").css({width:'40%',"xpadding-bottom":'20%'});
 		} else {
-			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'10%',"padding-bottom":'10%'});
-			$(".altui-favorites-weather").css({width:'20%',"padding-bottom":'10%'});
+			$(".altui-favorites-device , .altui-favorites-housemode").css({width:'10%',"xpadding-bottom":'10%'});
+			$(".altui-favorites-weather").css({width:'20%',"xpadding-bottom":'10%'});
 		}
 
 		// console.log(".altui-favorites-device.length="+$(".altui-favorites-device").length);
@@ -4536,17 +4775,25 @@ var UIManager  = ( function( window, undefined ) {
 		}
 	};
 
-	function _drawDefaultFavoriteDevice(device) {
+	function _deviceDrawFavoriteDefault(device) {
 		return UIManager.deviceIcon(device).replace('altui-device-icon','altui-device-icon altui-favorite-icon').replace('pull-left','');
 	}
 
-	function _drawFavoriteDevice(device,cls) {
+	const DEVICEDRAW_DEFAULT = 1
+	const DEVICEDRAW_CONCISE = 2
+	// mode = null or DEVICEDRAW_DEFAULT ; or DEVICEDRAW_CONCISE
+	function _deviceDrawFavorite(device,cls,mode) {
 		var html="";
+		var posthtml="";
+		mode = mode || DEVICEDRAW_DEFAULT
 		cls = cls || 'altui-favorites-device-content'
-		html += "<div class='{1}' data-altuiid='{0}'><div>".format(device.altuiid,cls);
+		html += "<div class='{1}' data-altuiid='{0}'><div class='altui-favorites-device-content-box'>".format(device.altuiid,cls);
 		var watts = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' ));
-		if (isNaN(watts)==false)
-			html += "<div class='bg-danger altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 );
+		if (isNaN(watts)==false) {
+			// Envoy has positive power, but it's really "green" since it is a generator (normally negative), not a consumer
+			var cls =  (watts > 0 && device.device_type != "urn:schemas-rboer-com:device:Envoy:1") ? 'bg-success' : 'bg-light'
+			posthtml += "<div class='{1} altui-favorites-info altui-favorites-watts'>{0} W</div>".format( Math.round(watts*10)/10 , cls );
+		}
 		switch(device.device_type) {
 			case "urn:schemas-micasaverde-com:device:BarometerSensor:1":
 			case "urn:schemas-micasaverde-com:device:WindSensor:1":
@@ -4559,17 +4806,18 @@ var UIManager  = ( function( window, undefined ) {
 				html += "<img class='altui-sonos-tile-img' src='{0}' ></img>".format(src)
 				break;
 			case "urn:schemas-micasaverde-com:device:LightSensor:1":
+				html += _deviceDrawFavoriteDefault(device);
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:LightSensor1', 'CurrentLevel' );
-				html += "<span>{0}</span> <span class='altui-favorites-mediumtext'>lux</span>".format(level/*+ws.tempFormat*/);
+				posthtml += "<div class='bg-light altui-favorites-info altui-favorites-mediumtext'>{0} lux</div>".format(level/*+ws.tempFormat*/);
 				break;
-			case "urn:schemas-upnp-org:device:BinaryLight:1":
-				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' );
-				status = parseInt(status);
-				html += "<span class='{1}'>{0}</span>".format(
-					status==1 ? "On" : "Off",
-					status==1 ? "text-success" : "text-danger"
-				);
-				break;
+			// case "urn:schemas-upnp-org:device:BinaryLight:1":
+			// 	var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' );
+			// 	status = parseInt(status);
+			// 	html += "<span class='{1}'>{0}</span>".format(
+			// 		status==1 ? "On" : "Off",
+			// 		status==1 ? "text-success" : "text-danger"
+			// 	);
+			// 	break;
 			case "urn:schemas-upnp-org:device:cplus:1":
 				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:cplus1', 'Present' );
 				status = parseInt(status);
@@ -4580,44 +4828,73 @@ var UIManager  = ( function( window, undefined ) {
 				break;
 			case "urn:schemas-micasaverde-com:device:WindowCovering:1"	:
 			case "urn:schemas-upnp-org:device:DimmableLight:1":
+				html += _deviceDrawFavoriteDefault(device);
 				var loadLevelStatus = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' );
-				html += "<span>{0}</span>  <span class='altui-favorites-mediumtext'>%</span>".format(loadLevelStatus);
+				posthtml += "<div class='bg-light altui-favorites-info'>{0}%</div>".format(loadLevelStatus);
 				break;
 			case "urn:schemas-micasaverde-com:device:HumiditySensor:1":
+				html += _deviceDrawFavoriteDefault(device);
 				var level = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:HumiditySensor1', 'CurrentLevel' );
-				html += "<span class='altui-favorites-device-content'>{0}</span> <span class='altui-favorites-mediumtext'>%</span>".format(level);
+				posthtml += "<div class='bg-light altui-favorites-info'>{0}</span> <span class='altui-favorites-mediumtext'>%</div>".format(level);
 				break;
 			case "urn:schemas-micasaverde-com:device:VOTS:1":
 			case "urn:schemas-micasaverde-com:device:TemperatureSensor:1":
 			case "urn:schemas-upnp-org:device:HVAC_ZoneThermostat:1":
 			case "urn:schemas-upnp-org:device:Heater:1":
 				var temp = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' );
-				html += _drawFavoriteGauge(device,temp)
-				// html += "<span>{0}</span>".format((temp || "") +"&deg;"/*+ws.tempFormat*/);
+				if (mode==DEVICEDRAW_CONCISE) {
+					html += _deviceDrawFavoriteDefault(device);
+					posthtml += ("<div class='bg-light altui-favorites-info'>{0}</div>".format((temp || "") +"&deg;"))
+				} else
+					html +=  _drawFavoriteGauge(device,temp)
 				break;
 			case "urn:schemas-micasaverde-com:device:MotionSensor:1":
 			case "urn:schemas-micasaverde-com:device:DoorSensor:1":
 				var tripped = parseInt(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'Tripped' ));
 				html += ("<span>{0}</span>".format( (tripped==true) ? glyphTemplate.format('bolt','trigger','text-danger') : " "));
-				html += _drawDefaultFavoriteDevice(device);
+				html += _deviceDrawFavoriteDefault(device);
 				var lasttrip = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:SecuritySensor1', 'LastTrip' );
 				if (lasttrip != null) {
 					var lasttripdate = _toIso(new Date(lasttrip*1000),' ');
-					html+= "<div class='altui-favorites-lasttrip-text altui-favorites-smalltext pull-right'>{0} {1}</div>".format( timeGlyph,lasttripdate );
+					posthtml+= "<div class='bg-light altui-favorites-info altui-favorites-lasttrip-text altui-favorites-mediumtext'>{0} {1}</div>".format( timeGlyph,lasttripdate );
 				}
 				break;
 			case "urn:schemas-upnp-org:device:VSwitch:1":
+				html += _deviceDrawFavoriteDefault(device);
 				var status = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VSwitch1', 'Status' );
 				status = parseInt(status);
-				html += "<span class='{1}'>{0}</span>".format(
+				posthtml += "<div class='{1} altui-favorites-info'>{0}</div>".format(
 					status==1 ? "On" : "Off",
 					status==1 ? "text-success" : "text-danger"
 				);
 				break;
-			case "urn:schemas-micasaverde-com:device:PowerMeter:1":
-				var watts = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' );
-				watts = Math.round(parseFloat(watts)*10)/10
-				html += "<span>{0}</span> <span class='altui-favorites-mediumtext'>W</span>".format(watts || "-");
+			// case "urn:schemas-micasaverde-com:device:PowerMeter:1":
+			// 	html += _deviceDrawFavoriteDefault(device);
+			// 	var watts = MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'Watts' );
+			// 	watts = Math.round(parseFloat(watts)*10)/10
+			// 	posthtml += "<div class='bg-light altui-favorites-mediumtext'>{0}W</div>".format(watts || "-");
+			// 	break;
+			case "urn:schemas-smartmeter-han:device:SmartMeterHAN1:1":
+				var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
+				if (isNaN(kwh)==false)
+					if (kwh > 0) {
+						posthtml += "<div class='bg-danger altui-favorites-info altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+					} else {
+						posthtml += "<div class='bg-success altui-favorites-info altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+					}
+				html += _deviceDrawFavoriteDefault(device);
+				break;
+			case "urn:schemas-rboer-com:device:Envoy:1":
+				var kwh = parseFloat(MultiBox.getStatus( device, 'urn:micasaverde-com:serviceId:EnergyMetering1', 'KWH' ));
+				if (isNaN(kwh)==false)
+					posthtml += "<div class='bg-success altui-favorites-info altui-favorites-kwh'>{0} kWh</div>".format( Math.round(kwh*10)/10 );
+				html += _deviceDrawFavoriteDefault(device);
+				break;
+			case "urn:schemas-upnp-org:device:netmon:1":
+				var targets = JSON.parse( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Targets' ) );
+				var offline = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'DevicesOfflineCount' ));
+				posthtml += "<div class='bg-light altui-favorites-info altui-favorites-netmontxt'><span class='text-danger' id='netmon-{0}'>{2}</span> / <span>{1}</span></div>".format( device.altuiid,targets.length,offline)
+				html += _deviceDrawFavoriteDefault(device);
 				break;
 			default:
 				var _altuitypesDB = MultiBox.getALTUITypesDB();	// Master controller
@@ -4626,10 +4903,10 @@ var UIManager  = ( function( window, undefined ) {
 					html += Altui_ExecuteFunctionByName(dt.FavoriteFunc, window, device);
 				}
 				else
-					html += _drawDefaultFavoriteDevice(device);
+					html += _deviceDrawFavoriteDefault(device);
 				break;
 		}
-		html += "</div></div>";
+		html += (posthtml+"</div></div>");
 		return html;
 	};
 
@@ -4637,15 +4914,17 @@ var UIManager  = ( function( window, undefined ) {
 		return '<div class="altui-gauge-favorite" id="altui-gauge-favorite-{0}" data-altuiid="{0}" data-name="{1}" data-temp="{2}"></div>'.format(device.altuiid,device.name,temp);
 	};
 
-	function _drawFavoriteScene(scenealtuiid) {
-		return "<div data-altuiid='{1}' class='altui-favorites-scene-content'><div>{0}</div></div>".format(runGlyph,scenealtuiid);
+	function _sceneDrawFavorite(scene,cls,mode) {
+		// todo : change altui-favorites-scene-content-box
+		return "<div data-altuiid='{1}' class='altui-favorites-scene-content d-flex justify-content-center'><div class='altui-favorites-scene-content-box'>{0}</div></div>".format(runGlyph,scene.altuiid);
 	};
 
-	function _registerFavoriteClickHandlers(cls) {
-		cls = '.' + (cls || "altui-favorites-device-content")
+	function _registerFavoriteClickHandlers(cls_devices,cls_scenes) {
+		cls_devices = '.' + (cls_devices || "altui-favorites-device-content")
+		cls_scenes = '.' + (cls_scenes || "altui-favorites-scene-content")
 		$(".altui-mainpanel")
-			.off("click",".altui-favorites-scene-content")
-			.on("click",".altui-favorites-scene-content",function() {
+			.off("click",cls_scenes)
+			.on("click",cls_scenes,function() {
 				var altuiid = $(this).data("altuiid");
 				$(this).addClass("btn-success").removeClass("btn-light");
 				var that = $(this);
@@ -4653,8 +4932,8 @@ var UIManager  = ( function( window, undefined ) {
 				MultiBox.runSceneByAltuiID(altuiid);
 				return false;
 			})
-			.off("click",cls)
-			.on("click",cls,function() {
+			.off("click",cls_devices)
+			.on("click",cls_devices,function() {
 				var altuiid = $(this).data("altuiid");
 				var device = MultiBox.getDeviceByAltuiID(altuiid);
 				switch( device.device_type) {
@@ -4695,7 +4974,7 @@ var UIManager  = ( function( window, undefined ) {
 				jg.refresh(temp,Math.max( jg.config.max, temp));
 				break;
 			default:
-				$(jqelem).replaceWith( _drawFavoriteDevice(device,cls) );
+				$(jqelem).replaceWith( _deviceDrawFavorite(device,cls) );
 		}
 	};
 
@@ -4703,13 +4982,8 @@ var UIManager  = ( function( window, undefined ) {
 		if ( $(".altui-favorites").length==0 )
 			return;
 
-
 		if (bFirst==true) {
 			var favoritesToDraw=[];	// will then be sorted according to last saved preference
-
-			// draw meteo
-			if ( MyLocalStorage.getSettings('ShowWeather')==1 )
-				favoritesToDraw.push({name:"meteo"});
 
 			// draw Housemode
 			if ((MyLocalStorage.getSettings('ShowHouseMode')==1) && (UIManager.UI7Check()==true) )
@@ -4751,71 +5025,50 @@ var UIManager  = ( function( window, undefined ) {
 			}
 			// draw them
 			// CSS technique of http://stackoverflow.com/questions/20456694/grid-of-responsive-squares
-			var favoriteTemplate = "";
-			favoriteTemplate += "<div id='{0}' class='altui-favorites-device pull-left' >";
+			var favoriteTemplate = "<div id='{0}' class=' altui-favorites-device ' >";
 				favoriteTemplate += "<div class='altui-favorites-device-container' >";
-						favoriteTemplate += "<div class='altui-favorites-title'>";
+						favoriteTemplate += "<div class='altui-favorites-title text-truncate'>";
 							favoriteTemplate += "<small class='text-info'>";
 							favoriteTemplate += "{1}";
 							favoriteTemplate += "</small>";
 						favoriteTemplate += "</div>";
-					favoriteTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
+					// favoriteTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
 						favoriteTemplate += "{2}";
-					favoriteTemplate += "</div></div>";
+					// favoriteTemplate += "</div></div>";
 				favoriteTemplate += "</div>";
 			favoriteTemplate += "</div>";
 
 			var html = "";
 
-			html += "<div class='altui-favorites row'>";
-			html += "<div class='altui-favorites-sortable col-12'>";
-			$.each(favoritesToDraw,function(idx,fav) {
-				if (fav.name=="meteo") {
-					var meteoTemplate = "";
-					meteoTemplate += "<div id='{0}' class='altui-favorites-weather pull-left' >";
-						meteoTemplate += "<div class='altui-favorites-device-container' >";
-							meteoTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
-								meteoTemplate += "{1}";
-							meteoTemplate += "</div></div>";
-						meteoTemplate += "</div>";
-					meteoTemplate += "</div>";
-					var language = getQueryStringValue("lang") || window.navigator.userLanguage || window.navigator.language;
-					var ws = MultiBox.getWeatherSettings();
-					if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
-						ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride');
-					var html_meteo="";
-					if (1) {
-						html_meteo +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
-						html_meteo +=('</a><div id="awcc1439296613816" class="aw-widget-current"  data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
-					} else {
-						html_meteo +=`
-<div id="cont_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"><div id="spa_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"><a id="a_MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx" href="http://www.meteocity.com/france/meylan_v38229/" target="_blank" style="color:#333;text-decoration:none;">Météo Meylan</a> ©<a href="http://www.meteocity.com">meteocity.com</a></div><script type="text/javascript" src="http://widget.meteocity.com/js/MzgyMjl8MnwxfDF8MXxGRkZGRkZ8MXxGRkZGRkZ8Y3wx"></script></div>
-`
-					}
-					html +=(meteoTemplate.format("meteo",html_meteo))
+			if ( MyLocalStorage.getSettings('ShowWeather')==1 ) {
+				html += "<div class='altui-favorites d-flex flex-wrap align-content-start'>"
+				html += '<div class="flex-fill">'+MyLocalStorage.getSettings('WeatherWidgetCode')+'</div>'
+				html += "</div>";
+			}
 
-				} else if (fav.name == "housemode" ) {
+			html += "<div class='altui-favorites altui-favorites-sortable d-flex flex-wrap align-content-start'>";
+
+			$.each(favoritesToDraw,function(idx,fav) {
+				if (fav.name == "housemode" ) {
 					var housemodeTemplate = "";
-					housemodeTemplate += "<div id='{0}' class='altui-favorites-housemode pull-left' >";
-						housemodeTemplate += "<div class='altui-favorites-device-container' >";
-							housemodeTemplate += "<div class='altui-favorites-table'><div class='altui-favorites-table-cell'>";
-								housemodeTemplate += "{1}";
-							housemodeTemplate += "</div></div>";
+					housemodeTemplate += "<div id='{0}' class=' altui-favorites-housemode' >";
+						housemodeTemplate += "<div class='altui-favorites-device-container d-flex flex-row flex-wrap' >";
+						housemodeTemplate += "{1}";
 						housemodeTemplate += "</div>";
 					housemodeTemplate += "</div>";
-					html +=(housemodeTemplate.format("housemode", HouseModeEditor.displayModes2('altui-housemode-group','',[]) ))
+					html +=(housemodeTemplate.format("housemode", HouseModeEditor.displayModes3('altui-housemode-group','',[]) ))
 
 				} else if (fav.name[0]=="d") {
-					html +=favoriteTemplate.format(fav.name,fav.device.name,_drawFavoriteDevice(fav.device,'altui-favorites-device-content'));
+					html +=favoriteTemplate.format(fav.name,fav.device.name,_deviceDrawFavorite(fav.device,'altui-favorites-device-content'));
 
 				} else if (fav.name[0]=="s") {
-					html +=favoriteTemplate.format(fav.name,fav.scene.name,_drawFavoriteScene(fav.scene.altuiid));
+					html +=favoriteTemplate.format(fav.name,fav.scene.name,_sceneDrawFavorite(fav.scene))
 
 				}
 			});
 
 			// close col & row
-			html += "</div>";
+
 			html += "</div>";
 
 			$(".altui-favorites").replaceWith(html);
@@ -4914,7 +5167,8 @@ var UIManager  = ( function( window, undefined ) {
 				var content = $(elem).find(".altui-favorites-scene-content");
 				if (content.length>0) {
 					var altuiid = content.data("altuiid");
-					$(content).replaceWith( _drawFavoriteScene(altuiid) );
+					var scene = MultiBox.getSceneByAltuiID(altuiid)
+					$(content).replaceWith( _sceneDrawFavorite(scene) );
 				}
 			});
 			// resize favorite
@@ -4922,6 +5176,10 @@ var UIManager  = ( function( window, undefined ) {
 		}
 	};
 
+	function sanitizePageName(name)
+	{
+		return name.replace(' ','_').replace('\'','')
+	};
 	function _refreshUI( bFull ) {
 		// refresh rooms
 		// refresh devices
@@ -4973,7 +5231,7 @@ var UIManager  = ( function( window, undefined ) {
 			var pagename = _getActivePageName();
 			var page = PageManager.getPageFromName( pagename );
 			// for all widget present which need refresh
-			var selector = "#altui-page-content-{0} .altui-widget".format(pagename.replace(' ','_'));
+			var selector = "#altui-page-content-{0} .altui-widget".format( sanitizePageName(pagename) );
 			$(selector).each( function (idx,elem) {
 				var widgetid = $(elem).prop('id');
 				var widget = PageManager.getWidgetByID( page, widgetid );
@@ -5014,8 +5272,8 @@ var UIManager  = ( function( window, undefined ) {
 			MultiBox.getHouseMode( function (mode) {
 				// console.log("mode="+mode);
 				if (mode) {
-					$("div.altui-housemode2").removeClass("housemode2_selected").addClass("housemode2_unselected");
-					$("#altui-mode"+mode).removeClass("housemode2_unselected").addClass("housemode2_selected");
+					$("div.altui-housemode3 .altui-housemodeglyph").removeClass("text-success text-info")
+					$("#altui-mode"+mode+" .altui-housemodeglyph").addClass("text-success");
 				}
 				ALTUI_hometimer=setTimeout( _refreshModes, 10000 );
 			});
@@ -5029,15 +5287,24 @@ var UIManager  = ( function( window, undefined ) {
 		var options = JSON.parse(serveroptions);
 		var serversideOptions = MyLocalStorage.getSettings("ServerSideOptions")
 
-		$.each( $.merge( $.merge( [], _userOptions ), _editorOptions ) , function(idx,opt) {
-			if (MyLocalStorage.getSettings(opt.id) == null)
-				MyLocalStorage.setSettings(opt.id, opt._default);
-			if ( (serversideOptions==true) && (options[opt.id] != undefined ) ) {
-				var v= atob(options[opt.id])
-				if (isInteger(v)) v= parseInt(v);
-				MyLocalStorage.setSettings(opt.id, v );
-			}
+		// init all options
+		var options = [_userOptions,_editorOptions,_meteoOptions]
+		$.each(options, function(i,optarr) {
+			$.each(optarr, function(idx,opt) {
+				// if null, set the default
+				if (MyLocalStorage.getSettings(opt.id) == null)
+					MyLocalStorage.setSettings(opt.id, opt._default);
+				// if serverside is selected 
+				if ( (serversideOptions==true) && (options[opt.id] != undefined ) ) {
+					var v= atob(options[opt.id])
+					if (isInteger(v)) v= parseInt(v);
+					MyLocalStorage.setSettings(opt.id, v );
+				}
+			})
 		});
+
+		var dbtags = $.extend( true, { names:{}, devicemap:{} } , MyLocalStorage.getSettings('DeviceTags') )
+		MyLocalStorage.setSettings('DeviceTags', dbtags);
 	};
 	function _forceOptions(name,value) {
 		$.each( _userOptions, function(idx,opt) {
@@ -5273,7 +5540,7 @@ var UIManager  = ( function( window, undefined ) {
 		var dialog = DialogManager.registerDialog('dialogModal',
 						defaultDialogModalTemplate.format( 'dialogModal',
 						'Image Properties',																// title
-						"<form>"+propertyline.format( widget.properties.url.htmlEncode() )+"</form>",	// body
+						propertyline.format( widget.properties.url.htmlEncode() ),	// body
 						"modal-lg",	// size
 						""	// glyph icon
 					));
@@ -5970,7 +6237,7 @@ var UIManager  = ( function( window, undefined ) {
 	};
 
 	function _getActivePageName() {
-		var str = $("#altui-page-tabs li.active").text();
+		var str = $("#altui-page-tabs li .active").text();
 		if (str.length != 0)
 			return str
 		str = $(".altui-page-content-one.active").prop("id");
@@ -5983,7 +6250,7 @@ var UIManager  = ( function( window, undefined ) {
 	function _getPageSelector( page ) {
 		if (page == undefined)
 				return ".altui-page-content-one";
-		return "#altui-page-content-{0}".format(page.name.replace(' ','_'));
+		return "#altui-page-content-{0}".format( sanitizePageName(page.name) );
 	};
 	function _getWidgetSelector(page,widget) {
 		if ((page==undefined) || (widget==undefined))
@@ -5999,7 +6266,7 @@ var UIManager  = ( function( window, undefined ) {
 		var lines = new Array();
 		PageManager.forEachPage( function( idx, page) {
 			// if ((idxPage==-1) || (idx==idxPage)) {
-				lines.push( "<li class='nav-item' id='altui-page-{1}' role='presentation' ><a class='nav-link' href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,page.name.replace(' ','_')) ); // no white space in ID
+				lines.push( "<li class='nav-item' id='altui-page-{1}' role='presentation' ><a class='nav-link' href='#altui-page-content-{1}' aria-controls='{1}' role='tab' data-toggle='tab'>{0}</a></li>".format(page.name,sanitizePageName(page.name)) ); // no white space in ID
 			// }
 		});
 
@@ -6057,7 +6324,7 @@ var UIManager  = ( function( window, undefined ) {
 		height = Math.max( 500 , height);
 		var pageelem = $(pageHtml).height(height);
 		var pageelemhtml = pageelem.wrap( "<div></div>" ).parent().html();
-		var str = "<div role='tabpanel' class='tab-pane altui-page-content-one' id='altui-page-content-{0}' >{1}</div>".format(page.name.replace(' ','_'),pageelemhtml); // no white space in IDs
+		var str = "<div role='tabpanel' class='tab-pane altui-page-content-one' id='altui-page-content-{0}' >{1}</div>".format(sanitizePageName(page.name),pageelemhtml); // no white space in IDs
 		var elem = $(str).css('background',page.background).height(height+1);
 		return elem.wrap( "<div></div>" ).parent().html();
 	};
@@ -6073,7 +6340,7 @@ var UIManager  = ( function( window, undefined ) {
 		$.each(tools, function(idx,tool) {
 			if ($.isFunction( tool.onWidgetDisplay) )
 			{
-				var selector = "#altui-page-content-{0} .{1}".format(page.name.replace(' ','_'),tool.cls);
+				var selector = "#altui-page-content-{0} .{1}".format(sanitizePageName(page.name),tool.cls);
 				$(selector).each( function(idx,elem) {
 					var widgetid = $(elem).prop('id');
 					(tool.onWidgetDisplay)(page,widgetid, bEdit);		// edit mode
@@ -6097,6 +6364,29 @@ var UIManager  = ( function( window, undefined ) {
 			html += "</div>";
 		// html += "</form>";
 		return html;
+	};
+
+	function _drawCategoryFilter(model) {
+		return HTMLUtils.drawDropDown({
+			id:'altui-dropdown-category', 
+			label:tagsGlyph+" "+_T("Category"), 
+			cls:'altui-dropdown-category',
+			options: $.map(model, function(opt,key){
+				return { id:key, cls:'altui-quick-jump-type', label:opt.label, glyph:opt.glyph, href:"#"+key }
+			})
+		})
+	}
+
+	function _drawTagFilter(model,deviceTags) {
+		return HTMLUtils.drawDropDown({
+			id:'altui-dropdown-tags', 
+			label:tagsGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Tags")),
+			cls:'d-inline altui-dropdown-tags-cls',
+			options: $.map( model, function(tag,idx) {
+				// var glyph = glyphTemplate.format( "tags", _T("Category") , 'text-'+tag);
+				return { id:'altui-filter-'+tag, cls:'altui-filter-tag', label:deviceTags.names[tag] || tag, glyph:'fa-tags', glyphcls:'text-'+tag}
+			})
+		});
 	};
 
 	var bUIReady = false;
@@ -6143,15 +6433,17 @@ var UIManager  = ( function( window, undefined ) {
 	jobStatusToColor	: _jobStatusToColor,
 	defaultDeviceDrawWatts: _defaultDeviceDrawWatts,	// default HTML for Watts & UserSuppliedWattage variable
 	defaultDeviceDrawAltuiStrings : _defaultDeviceDrawAltuiStrings,
-	drawDefaultFavoriteDevice : _drawDefaultFavoriteDevice,
+	drawDefaultFavoriteDevice : _deviceDrawFavoriteDefault,
 	deviceIcon			: _deviceIconHtml,				//( device, zindex, onclick )
 	deviceDraw			: _deviceDraw,					// draw the mini device on device page; can be customized by a plugin by ["DeviceDrawFunc"]
 	deviceDrawVariables : _deviceDrawVariables,			// draw the device variables
 	deviceDrawActions	: _deviceDrawActions,			// draw the device Upnp Actions
 	deviceDrawControlPanel	: _deviceDrawControlPanel,	// draw the full device control panel page; can be customized by a plugin ["ControlPanelFunc"]
+	deviceDrawFavorite  : _deviceDrawFavorite,
 	deviceCreate		: _deviceCreate,
 	cameraDraw			: _cameraDraw,
 	sceneDraw			: _sceneDraw,
+	sceneDrawFavorite   : _sceneDrawFavorite,
 	refreshUI			: _refreshUI,					//
 	refreshUIPerDevice	: _refreshUIPerDevice,
 	refreshFooter		: _refreshFooter,
@@ -6186,15 +6478,6 @@ var UIManager  = ( function( window, undefined ) {
 	},
 
 	// pages
-	appStoreLayout: function(title)
-	{
-		var body="";
-		body+="	<div class='altui-layout row'>";
-		body+="		<div class='col-12 altui-mainpanel'>";
-		body+="		</div>";
-		body+="	</div>";
-		return body;
-	},
 	fullColumnLayout: function(title)
 	{
 		var body="";
@@ -6245,7 +6528,7 @@ var UIManager  = ( function( window, undefined ) {
 		// EventBus.unregisterEventHandler("on_ui_deviceStatusChanged");
 		UIManager.stoprefreshModes();
 		HTMLUtils.stopAllTimers();
-		$(".navbar-collapse").collapse('hide');
+		$(".navbar-collapse").removeClass('open');
 		$(".altui-layout").remove();
 		$("#navbar").off("keyup", "#altui-search-text")
 		$("#altui-search-text").val("")
@@ -6267,6 +6550,9 @@ var UIManager  = ( function( window, undefined ) {
 		$(".blocklyToolboxDiv").remove();
 		$("body").append("<div class='altui-scripts'></div>");
 
+		// remove meteo widget script
+		$("script#weatherwidget-io-js").remove()
+		
 		// install breadCrumb callbacks
 		$(".altui-breadcrumd-item").off().on('click',function(e) {
 			var id = $(this).prop('id');
@@ -6286,7 +6572,7 @@ var UIManager  = ( function( window, undefined ) {
 	//window.open("data_request?id=lr_ALTUI_Handler&command=home","_self");
 	pageDefault : function() {
 		var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
-		var defurl = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalHome" );
+		var defurl = MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "LocalHome" )
 		if ( (defurl=="") || (defurl=="/port_3480/data_request?id=lr_ALTUI_Handler&command=home") )
 			UIManager.pageHome()
 		else
@@ -6297,25 +6583,8 @@ var UIManager  = ( function( window, undefined ) {
 	{
 		UIManager.clearPage('Home',_T("Welcome to ALTUI"),UIManager.oneColumnLayout);
 		$("#altui-pagetitle").remove();
-		//if ( MyLocalStorage.getSettings('ShowWeather')==1 )
-		if(0)
-		{
-			var language = getQueryStringValue("lang") || window.navigator.userLanguage || window.navigator.language;
-			var ws = MultiBox.getWeatherSettings();
-			if ((ws.tempFormat==undefined) || (ws.tempFormat==""))
-				ws.tempFormat=MyLocalStorage.getSettings('TempUnitOverride');
-			var html="";
-			html ="<div class='altui-weather-widget d-none d-sm-block'>";
-			// html +='<a href="//www.accuweather.com/fr/fr/meylan/1097583/weather-forecast/1097583" class="aw-widget-legal">';
-			html +='<a href="//www.accuweather.com/" class="aw-widget-legal">';
-			html +=('</a><div id="awcc1439296613816" class="aw-widget-current"	data-locationkey="1097583" data-unit="'+ws.tempFormat.toLowerCase()+'" data-language="'+language.substring(0, 2)+'" data-useip="true" data-uid="awcc1439296613816"></div><script type="text/javascript" src="//oap.accuweather.com/launch.js"></script>');
-			html +="</div>";
-			// console.log(html);
-			$(".altui-mainpanel").append(html);
-		}
-		$(".altui-mainpanel").append("<div class='col-12'><div class='altui-favorites row'></div></div>");
-
-		_registerFavoriteClickHandlers();
+		$(".altui-mainpanel").append("<div class='col-12'><div class='altui-favorites'></div></div>");
+		_registerFavoriteClickHandlers();	// all default classes
 		_redrawFavorites( true );
 	},
 
@@ -6608,7 +6877,6 @@ var UIManager  = ( function( window, undefined ) {
 		$(".altui-mainpanel").append( "<div id='altui-device-controlpanel-container-"+altuiid+"' class='col-12 altui-device-controlpanel-container'></div>" );
 		var container = $("#altui-device-controlpanel-container-"+altuiid);
 		UIManager.deviceDrawControlPanel( device, container );	//altuiid, device, domparent
-		// EventBus.registerEventHandler("on_ui_deviceStatusChanged",UIManager,"refreshUIPerDevice");
 		EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,function (eventname,device) {
 			$(".altui-device-controlpanel[data-altuiid='"+device.altuiid+"']").not(".altui-norefresh").each( function(index,element) {
 				// force a refresh/drawing if needed.
@@ -6665,37 +6933,312 @@ var UIManager  = ( function( window, undefined ) {
 		$("img.altui-myhomedevice-icon[data-altuiid="+altuiid+"]").attr('src',defaultIconSrc);
 	},
 
+	pageBirdEye: function ( ) {
+		var deviceTags = MyLocalStorage.getSettings('DeviceTags')
+		var optionalWidth = MyLocalStorage.getSettings('BirdViewItemWidth');
+		$('style#BirdEye').remove()
+		if (optionalWidth && optionalWidth>0)
+			$('head').append('<style id="BirdEye">.altui-custom-width { width:'+optionalWidth+'px; }</style>');
+
+		var roomfilter =  MyLocalStorage.getSettings("DeviceRoomFilter") 
+		var _deviceDisplayFilter={ 
+			tags:[] ,
+			rooms: ((roomfilter =="-1") ? [] : roomfilter) || [], 
+			categories: MyLocalStorage.getSettings("CategoryFilter")  || [] , 
+			sort: MyLocalStorage.getSettings("LastBirdSort") || 'name'
+		}
+		var _roomIDtoName = {}
+		var _roomNametoID = {}
+		var deviceTemplate = `
+			<div class="card flex-fill altui-custom-width" >
+				<div class="card-header text-truncate">
+					<span class="altui-experimental-extrainfo">\${roomname} - </span>
+					<span title="\${name}-\${altuiid}">\${name}</span>
+					<span class="altui-experimental-extrainfo">#\${altuiid}</span>
+				</div>
+				<div class="card-body d-flex justify-content-center">
+					\${icon}
+				</div>
+			</div>`;
+
+		function _initRoomNameMap() {
+			return MultiBox.getRooms( 
+				function( idx, room) {
+					_roomIDtoName[ room.altuiid ] = room.name
+					_roomNametoID[ room.name ] = _roomNametoID[ room.name ] || []
+					_roomNametoID[ room.name ].push(room.id)
+				} ,
+				null,
+				function() {
+					_roomNametoID[_T("No Room")]=[ 0 ]
+					for (var i = 0; i<MultiBox.getControllers().length; i++) {
+						_roomIDtoName[ "{0}-0".format(i) ] = "0"
+					}
+				}
+			);
+		};
+		function isTagFilterValid() {
+			return _deviceDisplayFilter.tags.length>0
+		};
+		function isRoomFilterValid() {
+			return _deviceDisplayFilter.rooms.length>0
+		};
+		function isCategoryFilterValid() {
+			return _deviceDisplayFilter.categories.length>0
+		};
+		function _drawRoomFilter() {
+			var options = $.map( _roomNametoID, function(idtbl,name) {
+				return { id:(name==_T("No Room") ? "0" : name), cls:'altui-quick-jump', label:name, glyph:'fa-home' }
+			})
+			return HTMLUtils.drawDropDown({
+				id:'altui-dropdown-rooms', 
+				label:eyeOpenGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Rooms")),
+				cls:'altui-dropdown-rooms',
+				options: options,
+				selected: _deviceDisplayFilter.rooms
+			});			
+		};
+		function _drawSortSelect() {
+			var optionGlyph = glyphTemplate.format("cogs",_T("Options"))
+			var selected = []
+			selected.push(_deviceDisplayFilter.sort)
+			return HTMLUtils.drawDropDown({
+				id:'altui-dropdown-sort', 
+				label:optionGlyph+"<span class='d-none d-sm-inline'> {0}</span>".format(_T("Sort")),
+				cls:'altui-dropdown-sort',
+				options: [
+					{ id:'altuiid', cls:'altui-option-sort', label:_T("ID"), glyph:'fa-sort-numeric-asc' },
+					{ id:'name', cls:'altui-option-sort', label:_T("Name"), glyph:'fa-sort-alpha-asc' },
+					{ id:'type', cls:'altui-option-sort', label:_T("Type"), glyph:'fa-plug' },
+					{ id:'room', cls:'altui-option-sort', label:_T("Room"), glyph:'fa-home' },
+				],
+				selected: selected
+			});			
+		};
+		function _generateToolBar() {
+			var html =_drawCategoryFilter(categoryFilters);
+			html += _drawTagFilter(tagModel, deviceTags)
+			html += _drawRoomFilter()
+			html += _drawSortSelect()
+			return html
+		};		
+		function _onClickHeader(e) {
+			var card = $(this).closest(".card")
+			$(card).toggleClass("zoomed")
+		};
+		function _onChangeSortOption(e) {
+			$("#altui-dropdown-sort .altui-option-sort").removeClass("active btn-light btn-info")
+			$(this).toggleClass("active")
+			var active = $("#altui-dropdown-sort .altui-option-sort.active")[0]
+			_deviceDisplayFilter.sort = $(active).prop('id')
+			MyLocalStorage.setSettings("LastBirdSort",_deviceDisplayFilter.sort) 
+			_draw();
+		};
+		function _onChangeRoomFilter(e) {
+			$(this).toggleClass("active")
+			var roominfo = MultiBox.controllerOf($(this).prop('id'))
+			var active = $(this).hasClass("active")
+			_deviceDisplayFilter.rooms = $.map( $("#altui-dropdown-rooms .altui-quick-jump.active"), function(elem,idx) { 
+				return $(elem).prop('id')
+			})
+			MyLocalStorage.setSettings("DeviceRoomFilter",_deviceDisplayFilter.rooms);
+			if ( MyLocalStorage.getSettings('SyncLastRoom')==1 )
+				MyLocalStorage.setSettings("SceneRoomFilter",_deviceDisplayFilter.rooms);
+			_draw();
+		};
+		function _onChangeTagFilter(e) {
+			$(this).toggleClass("active")
+			_deviceDisplayFilter.tags = $.map( $("#altui-dropdown-tags .altui-filter-tag.active"), function(elem,idx) { 
+				return $(elem).prop('id').substr("altui-filter-".length)
+			})
+			_draw();
+		};
+		function _onChangeCategoryFilter(e) {
+			$(this).toggleClass("active")
+			_deviceDisplayFilter.categories = $.map( $("#altui-dropdown-category .altui-quick-jump-type.active"), function(elem,idx) { 
+				return $(elem).prop('id')
+			})
+			MyLocalStorage.setSettings("CategoryFilter",_deviceDisplayFilter.categories);
+			_draw();	
+		};
+		function _getDeviceModel(device) {
+			var info = MultiBox.controllerOf(device.altuiid) 
+			var room = MultiBox.getRoomByAltuiID( MultiBox.makeAltuiid(info.controller,device.room)) 
+			return {
+				name: device.name,
+				roomname : room ? room.name : '',
+				altuiid: device.altuiid,
+				icon: UIManager.deviceDrawFavorite(device,null,DEVICEDRAW_CONCISE).replace(/altui-favorites-/g,'altui-experimental-')
+			}
+		};
+		function _getSceneModel(scene) {
+			var info = MultiBox.controllerOf(scene.altuiid) 
+			var room = MultiBox.getRoomByAltuiID( MultiBox.makeAltuiid(info.controller,scene.room)) 
+			return {
+				name: scene.name,
+				roomname : room ? room.name : '',
+				altuiid: scene.altuiid,
+				icon: UIManager.sceneDrawFavorite(scene,null,DEVICEDRAW_CONCISE).replace(/altui-favorites-/g,'altui-experimental-')
+			}
+		};
+		function onUpdateDeviceFlex(eventname,device) {
+			var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
+			var zoomed = $(jqelem).closest(".card").hasClass("zoomed")
+			var disabled = $(jqelem).closest(".card").hasClass("disabled")
+			if ((jqelem.length>0) && (disabled==false)) {
+				$(jqelem).closest(".card").replaceWith( (_tplFunc)(_getDeviceModel(device)) )
+				var jqelem = $(".altui-experimental-device-content[data-altuiid={0}]".format(device.altuiid))
+				$(jqelem).closest(".card").toggleClass("zoomed",zoomed).css("background-color","lightblue")
+				setTimeout( ()=>{$(jqelem).closest(".card").css("background-color","")} , 0 )
+			}
+		};
+		function _sortFunction(a,b) {
+			switch( _deviceDisplayFilter.sort ) {
+				case 'name':
+					a= a.device ? a.device.name : 'zzz' + a.scene.name
+					b= b.device ? b.device.name : 'zzz' + b.scene.name
+					break;
+				case 'type':
+					a= a.device ? a.device.device_type  : 'zzz' + a.scene.name
+					b= b.device ? b.device.device_type  : 'zzz' + b.scene.name
+					break;
+				case 'altuiid':
+					var ainfo = MultiBox.controllerOf(a.device ? a.device.altuiid : '999-'+a.scene.name)
+					var binfo = MultiBox.controllerOf(b.device ? b.device.altuiid : '999-'+b.scene.name)
+					a= ainfo.controller*10000000 + parseInt(ainfo.id)
+					b= binfo.controller*10000000 + parseInt(binfo.id)					
+					break
+				case 'room':
+					var aobj = a.device ? a.device : a.scene
+					var bobj = b.device ? b.device : b.scene
+					var ainfo = MultiBox.controllerOf(aobj.altuiid)
+					var binfo = MultiBox.controllerOf(bobj.altuiid)
+					a= _roomIDtoName[  MultiBox.makeAltuiid(ainfo.controller,aobj.room)  ] || 'undef'
+					b= _roomIDtoName[  MultiBox.makeAltuiid(binfo.controller,bobj.room)  ] || 'undef'
+					break;
+				default:
+					a=1;b=1;
+					break
+			}
+			if (a==b)
+				return 0
+			return (a<b) ? -1 : 1
+		};
+		var elements=[];
+		function _drawDevices() {
+			function _drawDeviceFlex(idx, device) {
+				elements.push({ device:device, html:(_tplFunc)(_getDeviceModel(device)) })
+			}
+			function _filterfunc(device) {
+				var curdevicetags =  deviceTags.devicemap['_'+device.altuiid] || []
+				var intersect = curdevicetags.filter(value => -1 !== _deviceDisplayFilter.tags.indexOf(value));
+				var deviceinfo = MultiBox.controllerOf(device.altuiid)
+				var deviceroomaltuiid = MultiBox.makeAltuiid(deviceinfo.controller, device.room)
+				var deviceroomname = _roomIDtoName[ deviceroomaltuiid ]
+
+				function _devicetypeIsListed( devtype, catlist) {
+					var bFound=false;
+					$.each(catlist, function(idx,aCat) {
+						if (-1 !==  categoryFilters[aCat].types.indexOf(devtype) ) {
+							bFound=true
+							return false;
+						}
+					})
+					return bFound
+				}
+				return 		( (device.invisible==undefined) || ( device.invisible!="1") ) 
+						&& 	( ( isTagFilterValid()==false ) || (intersect.length!=0) )
+						&&  ( ( isRoomFilterValid()==false ) || ( -1 !==_deviceDisplayFilter.rooms.indexOf(deviceroomname) ) )
+						&&  ( ( isCategoryFilterValid()==false ) || (_devicetypeIsListed( device.device_type,_deviceDisplayFilter.categories )))
+			}
+
+			return MultiBox.getDevices( _drawDeviceFlex , _filterfunc, null);
+		};
+		function _drawScenes() {
+			function _drawSceneFlex(idx,scene) {
+				elements.push({ scene:scene, html:(_tplFunc)(_getSceneModel(scene)) })
+			}
+			function _filterfunc(scene) {
+				var sceneinfo = MultiBox.controllerOf(scene.altuiid)
+				var sceneroomaltuiid = MultiBox.makeAltuiid(sceneinfo.controller, scene.room)
+				var sceneroomname =  _roomIDtoName[ sceneroomaltuiid ]
+				return ( ( isRoomFilterValid()==false ) || ( -1 !==_deviceDisplayFilter.rooms.indexOf(sceneroomname) ) );
+			}
+
+			return 	MultiBox.getScenes( _drawSceneFlex , _filterfunc, null);
+		};
+		function _draw()
+		{
+			elements=[];
+			var dfd = $.Deferred();
+			$(".altui-mainpanel").html("")
+			$("#altui-dropdown-rooms .dropdown-toggle").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false)
+			$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
+			$("#altui-dropdown-category .dropdown-toggle").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false)
+			// prepared defered calls
+			var toload = [
+				_drawDevices(),
+				_drawScenes()
+			];
+			// when all is done, signal we are ready
+			$.when.apply( $, toload)
+			.done( function(  ) {
+				// sort
+				elements.sort( _sortFunction )
+				// display
+				$(".altui-mainpanel").append( '<div class="altui-experimental d-flex flex-wrap align-content-start">'+elements.map( (e)=>e.html ).join("")+'</div>' )
+				if (ALTUI_registered === false) {
+					setTimeout( function() {
+						PageMessage.message( _T("Note: Bird Eye view is limited to 20 items for non registered users"), "danger");
+						$(".altui-experimental > .card:gt(20)").addClass("disabled")
+					},500 )
+				}			
+				dfd.resolve();
+			} )
+			.fail( function(  ) {
+				dfd.reject();
+			} );
+			return dfd.promise();
+		};
+		function _registerInteractivity() {
+			$(".altui-filter-tag").click(_onChangeTagFilter)
+			$(".altui-quick-jump").click(_onChangeRoomFilter)
+			$(".altui-quick-jump-type").click(_onChangeCategoryFilter)
+			$(".altui-option-sort").click(_onChangeSortOption)
+			$(".altui-mainpanel").off('click', '.altui-experimental .card-header')
+				.on('click', '.altui-experimental .card-header', _onClickHeader)
+			_registerFavoriteClickHandlers("altui-experimental-device-content","altui-experimental-scene-content")
+			// if ($.support.touch!=true) {
+			// 	$(".altui-experimental")
+			// 		.off('mouseenter mousleave')
+			// 		.on('mouseenter', '.card', function() { 
+			// 			$(this).addClass("zoomed")
+			// 		})
+			// 		.on('mouseleave', '.card', function() {
+			// 			$(this).removeClass("zoomed")
+			// 		})
+			// }
+			EventBus.registerEventHandler("on_ui_deviceStatusChanged",null,onUpdateDeviceFlex)
+		};
+
+		UIManager.clearPage('BirdEye',_T("Bird Eye"),UIManager.oneColumnLayout);
+		$("#altui-pagetitle").remove();
+		var _tplFunc = _.template(deviceTemplate)
+
+		$.when( _initRoomNameMap() )
+		.then( function() {
+			var html = _generateToolBar()
+			$("#altui-toggle-messages").after( html );	
+			$.when( _draw() )
+			.then(  _registerInteractivity() )
+		}) 
+	},
+
 	pageMyHome: function ( key, args )
 	{
-		var categoryFilters = {
-			'power':  {label:"Power", glyph:"fa-power-off", types:[
-				"urn:schemas-upnp-org:device:BinaryLight:1",
-				"urn:schemas-upnp-org:device:DimmableLight:1",
-				"urn:schemas-upnp-org:device:DimmableRGBLight:1",
-				"urn:schemas-upnp-org:device:DimmableRGBLight:2",
-				"urn:schemas-micasaverde-com:device:PhilipsHueLuxLamp:1",
-				"urn:schemas-micasaverde-com:device:PhilipsHueLamp:1",
-				"urn:schemas-upnp-org:device:VSwitch:1",
-				"urn:schemas-futzle-com:device:holidayvirtualswitch:1"
-			]},
-			'sensor': {label:"Sensor", glyph:"fa-thermometer-three-quarters", types:[
-				"urn:schemas-micasaverde-com:device:SmokeSensor:1",
-				"urn:schemas-micasaverde-com:device:DoorSensor:1",
-				"urn:schemas-micasaverde-com:device:LightSensor:1",
-				"urn:schemas-micasaverde-com:device:VOTS:1",
-				"urn:schemas-micasaverde-com:device:TemperatureSensor:1",
-				"urn:schemas-micasaverde-com:device:MotionSensor:1",
-				"urn:schemas-micasaverde-com:device:HumiditySensor:1",
-				"urn:schemas-micasaverde-com:device:FloodSensor:1",
-				"urn:schemas-micasaverde-com:device:TempLeakSensor:1",
-				"urn:schemas-micasaverde-com:device:GenericSensor:1",
-				"urn:schemas-futzle-com:device:WeMoSensor:1",
-				"urn:schemas-micasaverde-com:device:VOTS:1"
-			]},
-			'covers': {label:"Covers", glyph:"fa-align-justify", types:[
-				"urn:schemas-micasaverde-com:device:WindowCovering:1"
-			]},
-		}
+		var staremtpyGlyph =glyphTemplate.format( "star-o", _T("Favorite"), "altui-favorite text-muted" );
+		var starGlyph = glyphTemplate.format( "star", _T("Favorite"), "altui-favorite text-warning" );
+		var deviceTags = MyLocalStorage.getSettings('DeviceTags');
 
 		var _roomsNameToID = {};
 		var limit = (ALTUI_registered===false) ? 5 : null;
@@ -6711,6 +7254,12 @@ var UIManager  = ( function( window, undefined ) {
 			function _locked(str) { return (str==1) ? 'Locked' : '' }
 			function _firstelem(str) { return (str || "").split(",")[0] }
 			function _daynight(str) { return (str==1) ? 'Day' : 'Night' }
+			function _netmonstats(str) { 
+				var arr = JSON.parse(str)
+				var c = arr.length;
+				var offline = $.grep(arr, function(item) {return item.tripped=="1"} ).length
+				return "<span class='text-danger'>{0}</span>/{1}".format(offline,c);
+			}
 			var arr= [
 				{service:'urn:toggledbits-com:serviceId:AutoVirtualThermostat1', variable:'DisplayTemperature'},
 				{service:'urn:upnp-org:serviceId:DistanceSensor1', variable:'CurrentDistance'},
@@ -6736,6 +7285,7 @@ var UIManager  = ( function( window, undefined ) {
 				{service:'urn:rts-services-com:serviceId:DayTime', variable:'Status', translate:_daynight },
 				{service:'urn:upnp-org:serviceId:AVTransport', variable:'CurrentStatus', format:'<small>{0}</small>'},
 				{service:'urn:micasaverde-com:serviceId:GenericSensor1', variable:'CurrentLevel', format:'{0}' },
+				{service:'urn:upnp-org:serviceId:netmon1', variable:'DevicesStatus', format:'{0}', translate:_netmonstats },
 			]
 			var tpl = "<span class='altui-device-info'>{0}</span>"
 			for (var i=0 ; i<arr.length ; i++) {
@@ -6776,14 +7326,14 @@ var UIManager  = ( function( window, undefined ) {
 			var arr = $.map( scenes, function(s,i) {
 				return {
 					id:s.altuiid,
-					name:s.name,
+					name:((s.favorite==true) ? starGlyph : staremtpyGlyph) + s.name,
 					run: smallbuttonTemplate.format( s.altuiid, 'altui-favorites-scene-content', runGlyph, _T("Run"), 'data-altuiid="{0}"'.format(s.altuiid) )
 				}
 			})
 			return (arr.length>0) ? HTMLUtils.array2Table(arr,'id',[],null,'altui-myhome-scenes','htmlid',false) : null
 		}
 
-		function _tableDevices(roomname,filteredDeviceTypes) {
+		function _tableDevices(roomname,filteredDeviceTypes,filteredTags) {
 			var search = $("#altui-search-text").val().toUpperCase();
 			var devices = MultiBox.getDevicesSync().filter( function(device) {
 				var found = false
@@ -6797,12 +7347,17 @@ var UIManager  = ( function( window, undefined ) {
 						return false;
 					}
 				})
+				var key = '_'+device.altuiid;
+				// var intersect = curdevicetags.filter(value => -1 !== _deviceDisplayFilter.tags.indexOf(value));
 				return (found==true)
 						&& (device.invisible != true)
 						&& ( (search.length==0) || (roomname.toUpperCase().contains(search)==true) || (device.name.toUpperCase().contains(search)==true) )
 						&& ( (filteredDeviceTypes.length==0) || ($.inArray(device.device_type , filteredDeviceTypes)!=-1) )
+						&& ( (filteredTags.length==0) || ( deviceTags.devicemap[key]  && ( deviceTags.devicemap[key].filter( value => -1!==filteredTags.indexOf(value) ).length>0 ) ) )
 			});
-			var arr = $.map( devices, function(d,i) { return {id:d.altuiid, name:d.name, action:_deviceIcon(d), val:_deviceInfo(d)} } )
+			var arr = $.map( devices, function(d,i) { 
+				return {id:d.altuiid, name:"<span class='altui-myhome-favorite'>{0}</span>".format((d.favorite==true) ? starGlyph : staremtpyGlyph)+d.name, action:_deviceIcon(d), val:_deviceInfo(d)} 
+			})
 			return (arr.length>0) ? HTMLUtils.array2Table(arr,'id',[],null,'altui-myhome-devices','htmlid',false) : null
 		}
 
@@ -6825,54 +7380,77 @@ var UIManager  = ( function( window, undefined ) {
 
 		// $("#altui-toggle-messages").after("<a class='btn btn-light' role='button' href='#{0}'>{0}</a>".format(model.name))
 		function _updateQuickJumpBar() {
-			var html = "";
-			$(".altui-quick-jump").remove()
-			if ( $(".altui-quick-jump-type").length==0 ) {
-				var btnTemplate = _.template( '<button type="button" id="${id}" class="btn btn-light altui-quick-jump-type" ><i class="fa ${glyph}" aria-hidden="true"></i> ${label}</button>' )
-				$.each( categoryFilters, function(key,val) {
-					var model = $.extend( val, {id:key} )
-					html += (btnTemplate)(model)
-				});
-				$("#altui-toggle-messages").after(html)
+			function _updateDropdown(cls) {
+				if ( $(cls + ' button.dropdown-item.active').length >0 ) 
+					$(cls + ' .dropdown-toggle').removeClass("btn-light").addClass("btn-info")
+				else
+					$(cls + ' .dropdown-toggle').addClass("btn-light").removeClass("btn-info")
 			}
-			html=""
-			$.each( $(".altui-myhome-card").map(function() { return this.id }), function( idx,name) {
-				html += '<a class="altui-quick-jump btn btn-light" role="button" href="#{0}">{0}</a>'.format(name)
-			});
-			$(".altui-quick-jump-type").last().after(html)
+			
+			if ( $(".altui-quick-jump-type").length==0 ) {
+				var html = _drawCategoryFilter(categoryFilters)
+				$("#altui-toggle-messages").after( html );
+				
+				var deviceTags = MyLocalStorage.getSettings('DeviceTags')
+				html = _drawTagFilter(tagModel, deviceTags)
+
+				html += HTMLUtils.drawDropDown({
+					id:'altui-dropdown-rooms', 
+					label:eyeOpenGlyph+" "+_T("Rooms"),
+					cls:'altui-dropdown-rooms',
+					options: $(".altui-myhome-card").map( function(idx,jq) {
+						var name = this.id.substring('altui-roomid-'.length).replace(/_/g," ")
+						return { id:this.id, cls:'altui-quick-jump', label:name, glyph:'', href:"#"+name }
+					})
+				});
+				$("#altui-dropdown-category").after( html )
+			}
+			// update button background if an active selection is made
+			_updateDropdown('.altui-dropdown-category')
+			_updateDropdown('.altui-dropdown-tags-cls')
 		}
 
 		function _drawRooms() {
 			MultiBox.getRooms( null,null,function( rooms ) {
-
+				var backgroundSettings = MyLocalStorage.getSettings('MyHomeBackgrounds') || {}
 				var colwidths = "col-12 col-md-6 col-lg-4 col-xl-3"
 				var defaulturi = 'data:image/jpeg;base64,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'
-				var htmlTemplate = '<div id="${name}" class="altui-myhome-card card '+colwidths+'">'
+				var htmlTemplate = '<div id="${id}" class="altui-myhome-card card '+colwidths+'">'
 				if (MyLocalStorage.getSettings('ShowMyHomeImages')==1)
-					htmlTemplate += '<div class="card-img-top altui-myhome-roomimg" style="background-image: url({0}/\${file}.jpg),url({1})"></div>'
+					htmlTemplate += '<div class="card-img-top altui-myhome-roomimg" style="background-image: ${bkgd}"></div>'
 
 				htmlTemplate += `
 					<div class="card-body">
-						<h4 class="card-title">\${name}<span class="float-right"><i class="fa fa-arrow-circle-up altui-back-top" aria-hidden="true"></i></span></h4>
+						<h4 class="card-title">\${name}
+							<span class="float-right">
+							<i class="fa fa-arrow-circle-up altui-back-top" aria-hidden="true"></i>
+							</span>
+						</h4>
 						<h6 class="card-subtitle mb-2 text-muted">\${altuiid}</h6>
 						\${navtabs}
 						</div>
 					</div>`
-				htmlTemplate = _.template( htmlTemplate.format(g_ALTUI.g_CustomImagePath,defaulturi ) )
+				htmlTemplate = _.template( htmlTemplate )
 				var html="";
 
 				var n=0;
 				var filteredDeviceTypes = []
-				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes = $.merge(filteredDeviceTypes, categoryFilters[$(this).prop('id')].types) } )
+				var filteredTags = []
+				$(".altui-quick-jump-type.active").each( function(i) { filteredDeviceTypes = $.merge(filteredDeviceTypes,categoryFilters[$(this).prop('id')].types) } )
+				$(".altui-filter-tag.active").each( function(i) { filteredTags.push( $(this).prop('id').substr('altui-filter-'.length) ) } )
 				$.each(_roomsNameToID, function(name,roomarr) {
-					var tbldevice = _tableDevices(name,filteredDeviceTypes)
+					var tbldevice = _tableDevices(name,filteredDeviceTypes,filteredTags)
 					var tblscene = (filteredDeviceTypes.length>0) ? null : _tableScenes(name)
 					var navtabs = _generateNavTabs(name,tbldevice,tblscene)
 					var defaultaltuiid = MultiBox.makeAltuiid(roomarr[0].controller,roomarr[0].id)
+					var bkgd = "url("+g_ALTUI.g_CustomImagePath+"/R_"+defaultaltuiid+".jpg),url("+defaulturi+")"
+					if (backgroundSettings[name] != undefined)
+						bkgd = "url("+backgroundSettings[name].url+")"
 					var model = {
+						id: 'altui-roomid-'+name.replace(/\s/g,"_"),
 						name: name,
 						altuiid: $.map(roomarr ,function(i) { return MultiBox.makeAltuiid(i.controller,i.id)} ).join(", "),
-						file:'R_'+defaultaltuiid,
+						bkgd : bkgd,
 						navtabs: navtabs
 					}
 					n++
@@ -6897,7 +7475,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		function _setInteractivity() {
 			// register action click
-			_registerFavoriteClickHandlers("altui-myhomedevice-icon")
+			_registerFavoriteClickHandlers("altui-myhomedevice-icon")	// scene cls is default
 			// then register icon replacement by a spinner
 			$(".altui-mainpanel").on("click",".altui-myhomedevice-icon",function(e) {
 				var altuiid = $(this).data("altuiid")
@@ -6920,11 +7498,42 @@ var UIManager  = ( function( window, undefined ) {
 				.on("click",".altui-back-top",function(d) {
 					window.scrollTo(0, 0);
 				})
+				.off("click",".altui-favorite")
+				.on("click",".altui-favorite",function(e) {
+					e.stopPropagation();
+					//$(this).closest("tr").closest("table").hasClass("altui-myhome-devices")
+					var tr = $(this).closest("tr")
+					var altuiid =$(tr).find("td:first-child").html()
+					var bFavorite = false
+					if ( $(tr).closest("table").hasClass("altui-myhome-devices") == true ) {
+						var device = MultiBox.getDeviceByAltuiID(altuiid);
+						device.favorite = !device.favorite;
+						Favorites.set('device', altuiid, device.favorite);
+						bFavorite = device.favorite
+					} else {
+						var scene = MultiBox.getSceneByAltuiID(altuiid);
+						scene.favorite = !scene.favorite;
+						Favorites.set('scene', altuiid, scene.favorite);
+						bFavorite = scene.favorite
+					}
+					$(this).replaceWith( bFavorite ? starGlyph : staremtpyGlyph );
+				})
+
 			$("#altui-pagemessage")
 				.off("click",".altui-quick-jump-type")
 				.on("click",".altui-quick-jump-type",function(d) {
-					$(this).toggleClass("active btn-info btn-light")
+					$(this).toggleClass("active")
 					_drawRooms()
+				})
+				.off("click",".altui-filter-tag")
+				.on("click",".altui-filter-tag",function(d) {
+					$(this).toggleClass("active")
+					_drawRooms()
+				})
+				.off("click",".altui-quick-jump")
+				.on("click",".altui-quick-jump",function(d) {
+					document.querySelector("div#"+this.id).scrollIntoView()
+					// $( "html" ).scrollTop( $("#"+this.id).offset().top + 300 );	// 200 is the height of room bitmap
 				})
 
 			$("#navbar")
@@ -6968,6 +7577,7 @@ var UIManager  = ( function( window, undefined ) {
 		UIManager.clearPage('Devices',_T("Devices"),UIManager.twoColumnLayout);
 
 		var searchText = $("#altui-search-text").val().toUpperCase();
+		var deviceTags = MyLocalStorage.getSettings('DeviceTags')
 		if (filter && (filter.cancelable !=undefined) ) {
 			// this is a event, so direct callback from an onClickAllDevices
 			filter = null;
@@ -6983,6 +7593,7 @@ var UIManager  = ( function( window, undefined ) {
 			bt_device		: (MyLocalStorage.getSettings("ShowBTDevice")==true),
 			category		: MyLocalStorage.getSettings("CategoryFilter") || 0,
 			filtername		: MyLocalStorage.getSettings("DeviceFilterName") || "",
+			tags			: []
 		}, filter );
 		var isCategoryFilterValid = (function() { return this.category!=0}).bind(_deviceDisplayFilter);
 		var isRoomFilterValid		= (function() {
@@ -6991,6 +7602,10 @@ var UIManager  = ( function( window, undefined ) {
 		var isDeviceFilterValid = (function() {
 			return ( ( this.favorites || this.invisible || this.batterydevice || this.zwavedevice || this.zigbee_device || this.bt_device || (this.filtername && this.filtername.length>0) )!=false )
 		}).bind(_deviceDisplayFilter);
+		var isTagFilterValid = (function() {
+			return this.tags.length>0
+		}).bind(_deviceDisplayFilter);
+		
 		// filter function
 		function deviceFilter(device) {
 			var batteryLevel = MultiBox.getDeviceBatteryLevel(device);
@@ -7009,8 +7624,18 @@ var UIManager  = ( function( window, undefined ) {
 			if ((_deviceDisplayFilter.filtername.length != 0) && (device.name.search( regexp )==-1)	 )
 				return false;
 
-			if ((searchText.length!=0) && ( device.name.toUpperCase().contains( searchText ) != true ))
-				return false;
+			var key = '_' + device.altuiid
+			var curdevicetags = deviceTags.devicemap[key] || []
+			if (searchText.length!=0) {
+				var pattern = new RegExp(searchText,"i");
+				var tagnames = $.map(curdevicetags, (tag) => (deviceTags.names[tag] || tag))
+				for(var i=0; i<tagnames.length; i++) {
+					if (pattern.test(tagnames[i])==true)
+						return true;
+				}
+				if ( device.name.toUpperCase().contains( searchText ) !=true )
+					return false;
+			}
 
 			if ( (_deviceDisplayFilter.batterydevice==true) && (batteryLevel == null) )
 				return false;
@@ -7021,6 +7646,14 @@ var UIManager  = ( function( window, undefined ) {
 					 (_deviceDisplayFilter.bt_device && MultiBox.isDeviceBT(device) == false) )
 					 return false;
 
+			if (_deviceDisplayFilter.tags.length>0) {
+				// current device's tags are deviceTags.devicemap[_ + device.altuiid]
+				// filtered tags are _deviceDisplayFilter.tags
+				// must return false if there are no intersects
+				var intersect = curdevicetags.filter(value => -1 !== _deviceDisplayFilter.tags.indexOf(value));
+				if (intersect.length==0)
+					return false;
+			}
 			switch( parseInt(_deviceDisplayFilter.room) ) {
 					case -1:
 						return true;
@@ -7088,9 +7721,9 @@ var UIManager  = ( function( window, undefined ) {
 		};
 
 		function drawDeviceEmptyContainer(idx, device) {
-			_domMainPanel.append(ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'col-sm-6 col-md-4 col-lg-3'));
+			_domMainPanel.append(ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'altui-device-container col-sm-6 col-md-4 col-lg-3'));
 		};
-
+		
 		function _drawDeviceToolbar() {
 			var _checks = [
 				{ id:'altui-show-favorites' , filterprop:'favorites', Save:'ShowFavoriteDevice', label:'Favorites' },
@@ -7128,10 +7761,12 @@ var UIManager  = ( function( window, undefined ) {
 			var toolbarHtml="";
 			var roomfilterHtml="";
 			var categoryfilterHtml="";
+			var tagfilterHtml="";
 			var dfd = $.Deferred();
 			$.when( _drawRoomFilterButtonAsync(_deviceDisplayFilter.room) )
 			.then( function(html) {
 				roomfilterHtml = html;
+				tagfilterHtml = _drawTagFilter(tagModel, deviceTags)
 				categoryfilterHtml+='<select id="altui-device-category-filter" multiple="multiple">';
 				$.when( MultiBox.getCategories(
 					function(idx,category) {
@@ -7171,8 +7806,17 @@ var UIManager  = ( function( window, undefined ) {
 						$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false);
 						_drawDevices(deviceFilter,false);	// do not redraw toolbar
 					};
+					function _onChangeTagFilter(e) {
+						$(this).toggleClass("active btn-light btn-info")
+						_deviceDisplayFilter.tags = $.map( $("#altui-dropdown-tags .altui-filter-tag.active"), function(elem,idx) { 
+							return $(elem).prop('id').substr("altui-filter-".length)
+						})
+						$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
+						_drawDevices(deviceFilter,false);	// do not redraw toolbar
+					};
 					// Display
-					$(".altui-device-toolbar").replaceWith( "<div class='col-12 altui-device-toolbar'>"+roomfilterHtml+categoryfilterHtml+filterHtml+"</div>" );
+					$(".altui-device-toolbar").replaceWith( "<div class='col-12 altui-device-toolbar'>"+roomfilterHtml+tagfilterHtml+categoryfilterHtml+filterHtml+"</div>" );
+					$(".altui-pagefilter").css("display","inline");
 					$('#altui-device-room-filter').multiselect({
 						disableIfEmpty: true,
 						enableHTML : true,
@@ -7195,6 +7839,12 @@ var UIManager  = ( function( window, undefined ) {
 					if (nRooms+1>=parseInt(MyLocalStorage.getSettings('Menu2ColumnLimit')))
 						$('#altui-device-room-filter').next(".btn-group").children("ul").attr('style','columns: 2; -webkit-columns: 2; -moz-columns: 2;');
 
+					if (categories.length+1>=parseInt(MyLocalStorage.getSettings('Menu2ColumnLimit')))
+						$('#altui-device-category-filter').next(".btn-group").children("ul").attr('style','columns: 2; -webkit-columns: 2; -moz-columns: 2;');
+
+					// interactivity
+					$(".altui-filter-tag").click( _onChangeTagFilter );
+					
 					$('#altui-device-category-filter').multiselect({
 						disableIfEmpty: true,
 						enableHTML : true,
@@ -7213,12 +7863,7 @@ var UIManager  = ( function( window, undefined ) {
 							$("#altui-device-category-filter").next(".btn-group").find(".caret").toggleClass( "caret-reversed" );
 						}
 					});
-					if (categories.length+1>=parseInt(MyLocalStorage.getSettings('Menu2ColumnLimit')))
-						$('#altui-device-category-filter').next(".btn-group").children("ul").attr('style','columns: 2; -webkit-columns: 2; -moz-columns: 2;');
 
-					$(".altui-pagefilter").css("display","inline");
-
-					// interactivity
 					$("#altui-device-remove-btn").off("click touchend").on("click touchend",function() {
 						$(this).parent().find("input").val("");
 						_deviceDisplayFilter.filtername = "";
@@ -7285,6 +7930,7 @@ var UIManager  = ( function( window, undefined ) {
 					$("#altui-device-room-filter").next(".btn-group").children("button").toggleClass("btn-info",isRoomFilterValid()).toggleClass("btn-light",isRoomFilterValid()==false);
 					$("#altui-device-category-filter").next(".btn-group").children("button").toggleClass("btn-info",isCategoryFilterValid()).toggleClass("btn-light",isCategoryFilterValid()==false)
 					$("#altui-device-filter").toggleClass("btn-info",isDeviceFilterValid()).toggleClass("btn-light",isDeviceFilterValid()==false)
+					$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
 					dfd.resolve();
 				});
 			});
@@ -7451,11 +8097,11 @@ var UIManager  = ( function( window, undefined ) {
 
 		function sceneDraw(idx, scene) {
 			var html = UIManager.sceneDraw(scene);
-			var scenecontainerTemplate="<div class=' col-sm-6 col-md-4 col-xl-3 '>";
-			scenecontainerTemplate	+=	html;
-			scenecontainerTemplate	+=	"</div>";
+			var tpl="<div class='altui-scene-container col-sm-6 col-md-4 col-xl-3 '>";
+			tpl	+=	html;
+			tpl	+=	"</div>";
 			var domPanel = $(".altui-mainpanel");
-			domPanel.append(scenecontainerTemplate.format(scene.id));
+			domPanel.append(tpl.format(scene.id));
 		};
 
 		function _onChangeRoomFilter() {
@@ -7969,6 +8615,8 @@ var UIManager  = ( function( window, undefined ) {
 			// first, fix the jointjs ID of all states, source and target ids.
 			// for each device in conditions or in actions, prepare a substitution entry.
 			var graph = JSON.parse(model.workflow.graph_json)
+			if ( graph==null )
+				return null;
 			graph.active_state = _fixID( graph.active_state );
 			$.each(graph.cells, function(idx,cell) {
 				cell.id = _fixID(cell.id)
@@ -8054,6 +8702,10 @@ var UIManager  = ( function( window, undefined ) {
 
 		UIManager.clearPage('Clone Workflow',_T("Clone Workflow"),UIManager.oneColumnLayout);
 		var model = _createCloneWorkflowModel(workflow);
+		if (model==null) {
+			UIControler.changePage("Workflow Pages");
+			return
+		}
 		var html = _displayCloneWorkflow(model);
 		$(".altui-mainpanel").append(html);
 		$("#altui-workflow-clonebutton").off().on('click',model,function(event){
@@ -9224,14 +9876,14 @@ var UIManager  = ( function( window, undefined ) {
 		function _drawWorkflows(workflows) {
 			var html = "";
 			$("#altui-workflow-save").toggleClass("btn-danger",WorkflowManager.saveNeeded());
-			$.each(workflows, function(idx,workflow) {
+			$.each(workflows.sort(altuiSortByName), function(idx,workflow) {
 				// 0:bootgrid classes 1:altuiid 2:htmlid 3: heading 4:panel body
 				var body =
 					buttonTemplate.format( workflow.altuiid, 'altui-editworkflow pull-left', wrenchGlyph,'light',_T("Settings")) +
 					buttonTemplate.format( workflow.altuiid, 'altui-cloneworkflow pull-left', copyGlyph,'light',_T("Clone"));
 				var pauseButtonHtml = glyphTemplate.format( "power-off", _T("Pause Workflow") , 'altui-pauseworkflow ' + ((workflow.paused>0) ? 'paused':'activated'));
 				html += ALTUI_Templates.workflowContainerTemplate.format(
-					"col-sm-6 col-md-4 col-lg-3 col-xl-2",
+					"altui-workflow-container col-sm-6 col-md-4 col-lg-3 col-xl-2",
 					workflow.altuiid,
 					workflow.altuiid,
 					workflow.name,
@@ -9821,7 +10473,7 @@ var UIManager  = ( function( window, undefined ) {
 		var nMaxPerPage = 20;
 		var nPage = 1;
 		var arr = ["abc","def","ghi","jkl","mno","pqr","stu","vwx","yz "];
-		var installglyph = glyphTemplate.format( "cloud-download", _T("Install"), "" );
+		var installglyph = glyphTemplate.format( "cloud-download", "", "" );
 		var pageGlyphs = {
 			// "forward" : glyphTemplate.format( "forward", _T("Next Page"), "" ),
 			// "backward" : glyphTemplate.format( "backward", _T("Prev Page"), "" ),
@@ -9957,9 +10609,9 @@ var UIManager  = ( function( window, undefined ) {
 			var repositories = (versionid != undefined) ? UIManager._findRepositories(plugin,versionid) : plugin.Repositories
 			$.each(repositories,function(i,repo) {
 				if (repo.type=="GitHub")
-					html += "<button class='pull-left altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"))
+					html += "<button title='{2}' class='pull-left altui-store-install-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("ALT"),_T("Install from Github with Alt App Store"))
 				if (repo.type=="Vera")
-					html += "<button class='pull-left altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"))
+					html += "<button title='{2}' class='pull-left altui-store-mcvinstall-btn btn btn-sm btn-info'>{0} {1}</button>".format(installglyph,_T("Vera"),_T("Install from the Vera App Store"))
 			});
 			html += "</div>"
 			return html;
@@ -9968,11 +10620,12 @@ var UIManager  = ( function( window, undefined ) {
 			var reviews = $.extend({average_rating:0,nb:0},plugin.reviews)
 			var html ="";
 			var stars = "";
+			var title = (_T("Review this plugin!")+" ({0})").format(reviews.average_rating)
 			for( var i=1 ; i<= Math.round(reviews.average_rating); i++) {
-				stars += glyphTemplate.format("star",reviews.average_rating,"text-warning")
+				stars += glyphTemplate.format("star",title,"text-warning")
 			}
 			for( var i=1+Math.round(reviews.average_rating); i<=5; i++) {
-				stars += glyphTemplate.format("star-o",reviews.average_rating,"")
+				stars += glyphTemplate.format("star-o",title,"")
 			}
 			html +="<div class='{2}'>{0} <span class='badge badge-secondary'>{1}</span></div>".format(stars, reviews.nb,cls)
 			return html;
@@ -10094,7 +10747,7 @@ var UIManager  = ( function( window, undefined ) {
 			return html;
 		}
 
-		UIManager.clearPage('App Store',_T("Application Store"),UIManager.appStoreLayout);
+		UIManager.clearPage('App Store',_T("Application Store"),UIManager.fullColumnLayout);
 		$("#altui-pagemessage").remove();
 
 		_getPlugins({ versions:false })
@@ -10899,9 +11552,8 @@ var UIManager  = ( function( window, undefined ) {
 					event.stopPropagation();
 				} else {
 					// everything looks good!
-					$.each( ['name','background'] , function(idx,htmlid) {
-						page[ htmlid ] = $("#"+htmlid).val();
-					});
+					page[ 'name' ] = sanitizePageName( $("#name").val() );
+					page[ 'background' ] = $("#background").val();
 					$('div#dialogModal').modal('hide');
 					_displayPages();
 				}
@@ -11543,6 +12195,8 @@ var UIManager  = ( function( window, undefined ) {
 		});
 		$("#altui-luaform-button-"+htmlid).click( function() {
 			var code = editor.getValue();
+			$('#altui-editor-result').text("")
+			$('#altui-editor-output').text("")
 			onClickCB(code,$(this));
 		});
 	},
@@ -11564,8 +12218,10 @@ var UIManager  = ( function( window, undefined ) {
 		var lastOne = MyLocalStorage.getSettings("LastOne_LuaTest") || "return true";
 		UIManager.pageEditorForm($(".altui-mainpanel"),'altui-page-editor',_T("Lua Test Code"),lastOne,true,_T("Submit"),function(lua) {
 			MyLocalStorage.setSettings("LastOne_LuaTest",lua);
+			$("#altui-luaform-button-altui-page-editor").addClass("disabled")
 			MultiBox.runLua(0,lua, function(res) {
 				res = $.extend({success:false, result:"",output:""},res);
+				$("#altui-luaform-button-altui-page-editor").removeClass("disabled")
 				$("#altui-editor-result").text(res.result+"\n");
 				$("#altui-editor-output").text(res.output+"\n");
 				if ( res.success ==true )
@@ -11579,6 +12235,7 @@ var UIManager  = ( function( window, undefined ) {
 	pageOsCommand: function ()
 	{
 		var defaultCommands = [
+			{label:_T("Time"), command:'date' },
 			{label:_T("Disk Usage"), command:'du -h' },
 			{label:_T("Free Space"), command:'df -h' },
 			{label:_T("Plugin Files"), command:'ls -l /etc/cmh-ludl' },
@@ -11679,7 +12336,7 @@ var UIManager  = ( function( window, undefined ) {
 				var dialog = DialogManager.registerDialog('dialogModal',
 								defaultDialogModalTemplate.format('dialogModal',
 								_T('Command Parameters'),		// title
-								"<form></form>",				// body
+								"",				// body
 								"modal-lg",	// size
 								""	// glyph icon
 							));
@@ -13154,16 +13811,25 @@ var UIManager  = ( function( window, undefined ) {
 
 		UIManager.refreshModes();
 
-		$("div.altui-housemode2").click( function() {
+		$("div.altui-housemode3").click( function() {
 			var id = $(this).prop('id');
 			var mode = id.substr("altui-mode".length);
-			var div = $(this).find(".housemode-countdown");
+			var that = $(this)
+			$(this)
+				.find(".altui-housemodeglyph").addClass("text-info")
+			$(this)
+				.closest(".altui-favorites-device-container")
+				.addClass("blur")
+				.parent()
+				.append("<div class='altui-housemode-countdown d-flex justify-content-center align-items-center '></div>");
+			var div = $(".altui-housemode-countdown")
 			$(div).html( (mode==1) ? 3 : MultiBox.getHouseModeSwitchDelay() );
 			var interval = setInterval( function(div) {
 				var val = parseInt( $(div).html() );
 				if (val==1) {
-					$(div).html( "" );
 					clearInterval(interval);
+					$(div).remove()
+					$(that).closest(".altui-favorites-device-container").removeClass("blur")
 					UIManager.refreshModes(); // force a refresh now
 				} else {
 					$(div).html( val-1 );
@@ -13190,7 +13856,7 @@ var UIManager  = ( function( window, undefined ) {
 			var dialog = DialogManager.registerDialog('dialogModal',
 							defaultDialogModalTemplate.format( 'dialogModal',
 							_T('Command Parameters'),		// title
-							"<form></form>",				// body
+							"",				// body
 							"modal-lg",	// size
 							""	// glyph icon
 						));
@@ -13837,6 +14503,7 @@ var UIManager  = ( function( window, undefined ) {
 		(model.domcontainer).append( html );
 
 		var options = (MyLocalStorage.getSettings('ShowAllRows')==1) ? {rowCount:-1	} : {};
+
 		var id = htmlid;
 		var grid = $("#"+htmlid).bootgrid(
 			$.extend({
@@ -13849,6 +14516,7 @@ var UIManager  = ( function( window, undefined ) {
 					actionDropDown: "<div class=\"{{css.dropDownMenu}}\"><button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"><span class=\"{{css.dropDownMenuText}}\">{{ctx.content}}</span> <span class=\"caret\"></span></button><ul class=\"{{css.dropDownMenuItems}}\" role=\"menu\"></ul></div>",
 					actionDropDownItem: "<li><a data-action=\"{{ctx.action}}\" class=\"{{css.dropDownItem}} {{css.dropDownItemButton}}\">{{ctx.text}}</a></li>",
 					paginationItem: "<li class=\"page-item {{ctx.css}}\"><a data-page=\"{{ctx.page}}\" class=\"page-link {{css.paginationButton}}\">{{ctx.text}}</a></li>",
+					search: "<div class=\"{{css.search}}\"><div class=\"input-group\"><div class=\"input-group-prepend\"><span class=\"{{css.icon}} input-group-text {{css.iconSearch}}\"></span> </div><input type=\"text\" class=\"{{css.searchField}}\" placeholder=\"{{lbl.search}}\" /></div></div>",
 				},
 				css: {
 					icon: "icon fa",
@@ -13874,6 +14542,10 @@ var UIManager  = ( function( window, undefined ) {
 			var settings = $("#"+htmlid).bootgrid("getColumnSettings");
 			viscols = $.map($.grep(settings, function (obj) { return obj.visible == true }),function(obj){ return obj.id;});
 			MyLocalStorage.setSettings(type+"VisibleCols",viscols);
+
+			var sortDict = $("#"+htmlid).bootgrid("getSortDictionary");
+			MyLocalStorage.setSettings(type+'SortDictionary',sortDict);
+
 			/* your code goes here */
 			if (model.commands) {
 				$.each(model.commands, function(cmd,descr) {
@@ -13888,8 +14560,11 @@ var UIManager  = ( function( window, undefined ) {
 					});
 				});
 			}
-		});
-
+		})
+		
+		var sortDict = MyLocalStorage.getSettings(type+'SortDictionary')
+		$("#"+htmlid).bootgrid("sort",sortDict || {});
+		
 		// Add CSV export button
 		var glyph = glyphTemplate.format('save',_T("Copy to clipboard"), '');
 		var csvButtonHtml = buttonTemplate.format( 'altui-grid-btn-'+htmlid, 'altui-tbl2csv', glyph,'d');
@@ -13923,7 +14598,7 @@ var UIManager  = ( function( window, undefined ) {
 					cols: [
 						{ name:'id', type:'numeric', identifier:false, width:50 },
 						{ name:'altuiid', type:'string', identifier:true, width:80 },
-						{ name:'altid', type:'string', identifier:false, width:60 },
+						{ name:'altid', type:'string', identifier:false, width:90 },
 						{ name:'id_parent', type:'numeric', identifier:false, width:80 },
 						{ name:'manufacturer', type:'string', identifier:false, width:120 },
 						{ name:'model', type:'string', identifier:false, width:150 },
@@ -13965,45 +14640,74 @@ var UIManager  = ( function( window, undefined ) {
 	},
 	// optional idx in watches VariablesToSend
 	pageWatchDisplay: function( event, watchidx ) {
+		var ORDER = " "
+		var WATCH_ID = "{0}/{1}/{2}/{3}"
 		var active_page = null;
 		var pages = null;
 		var watches = null;
 		var providers = null;
 		var save_needed = false;
+		var mapID2Watch = {};
 		var sortable_options = {
-				// containment: "parent",
-				handle: ".card-title",
-				cursor: "move",
-				forceHelperSize: true,
-				forcePlaceholderSize: true,
-				helper: "original",
-				item: ".altui-graph-card",
-				delay: 150,
-				distance: 5,
-				opacity: 0.5,
-				revert: true,
-				tolerance: "pointer",
-				stop: function(ui,event) { 
-					save_needed=true;
-					$("#altui-watchpage-save").removeClass('btn-success').addClass('btn-danger')
-				}
+			// containment: "parent",
+			handle: ".card-title",
+			cursor: "move",
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			helper: "original",
+			items: ".altui-graph-card",
+			delay: 150,
+			distance: 5,
+			opacity: 0.5,
+			revert: true,
+			tolerance: "pointer",
+			stop: function(ui,event) { 
+				save_needed=true;
+				$("#altui-watchpage-save").removeClass('btn-success').addClass('btn-danger')
 			}
-			
-		function isWatchInPage( watch , page ) {
+		};
+		var sortable_options_toolbar = {
+			cursor: "move",
+			containment: "parent",
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			helper: "original",
+			items: "a.altui-watchpage-page",
+			cancel: "button",
+			delay: 150,
+			distance: 5,
+			opacity: 0.5,
+			revert: true,
+			tolerance: "pointer",
+			stop:function(ui,event) {
+				save_needed=true;
+				$("#altui-watchpage-save").removeClass('btn-success').addClass('btn-danger')
+			}
+		};
+		function isWatchInPage( id , page ) {
 			var result = false;
-			$.each(page.watches, function( idx, w) {
-				if ((w.deviceid == watch.deviceid) && (w.variable==watch.variable) && (w.service==watch.service) && (w.provider==watch.provider)) {
+			$.each(page.watches, function( idx, widx) {
+				if (id == widx) {
 					result = true;
-					return false;
+					return false
 				}
+				// var w = mapID2Watch[widx]
+				// if ((w.deviceid == watch.deviceid) && (w.variable==watch.variable) && (w.service==watch.service) && (w.provider==watch.provider)) {
+					// result = true;
+					// return false;
+				// }
 			})
 			return result;
 		};
-		
+		function isValidPage( page ) {
+			return ( page.id && (page.id != " " ))
+		};
+
 		function _calculateLastPageID(pages) {
 			var max = 0;
 			$.each(pages, function(key,page) {
-				max = Math.max( max, parseInt(page.id.substring( "altui-watchpage-page".length )));
+				if (isValidPage(page))
+					max = Math.max( max, parseInt(page.id.substring( "altui-watchpage-page".length )));
 			})
 			return max
 		};
@@ -14030,12 +14734,14 @@ var UIManager  = ( function( window, undefined ) {
 			}
 		};
 		
-		function _getWatchGraphHtml(idx,entry) {
+		function _getWatchGraphHtml(entry) {
 			var html = ""
-			var watch = entry.watch
+			var watch = mapID2Watch[ entry.id ]
 			if (entry.url && entry.url!=NO_URL) {
-				//scrolling='no'
-				html += "<iframe  id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-idx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(entry.url,idx,idx,entry.height);
+				var style = (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) ? "overflow-y: scroll;" : ""
+				html += "<div class='iframe-wrapper' style='{0}'>".format(style)
+				html += "<iframe  id='altui-iframe-chart-{2}' class='altui-thingspeak-chart' data-watchidx='{1}'	width='100%' height='{3}' style='border: 1px solid #cccccc;' src='{0}' ></iframe>".format(entry.url,entry.id,entry.id,entry.height);
+				html += "</div>"
 			} else {
 				html +="<p>{0}: {1}</p>".format(watch.provider,_T("No Graphic Url available"))
 			}
@@ -14050,14 +14756,15 @@ var UIManager  = ( function( window, undefined ) {
 			var card_template = `
 				<div class="altui-graph-card card col-sm-6 col-xl-4" data-watchidx="{1}">
 				  <div class="card-body">
-					<h5 class="card-title">{0}<button type="button" id="closeidx_{1}" class="altui-graph-card-close close push-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h5>
-					<h6 class="card-subtitle mb-2 text-muted">{3}{4}</h6>
+					<h6 class="card-title">{0}<button type="button" id="closeidx_{1}" class="altui-graph-card-close close float-right" aria-label="Close"><span aria-hidden="true">&times;</span></button></h6>
+					<small><p class="card-subtitle mb-2 text-muted">{3}{4}</p></small>
 					<div class="altui-graph-content">{2}</div>
 				  </div>
 				</div>
 			`
 			// var refresh_template = '<button class="btn btn-secondary {0}" id="watchidx_{1}">{2}</button>'
-			var refresh_template = '<span class="altui-graph-refresh pull-right" id="watchidx_{0}">'+refreshGlyph+'</span>'
+			var refresh_template = '<button class="altui-graph-refresh pull-right" id="watchidx_{0}">'+refreshGlyph+'</button>'
+			var editbtn = '<button class="altui-graph-edit float-right">{0}</button>'.format(editGlyph)
 			var panels=[];
 			if (model.watches.length==0) {
 				panels.push( card_template.format( 
@@ -14068,25 +14775,25 @@ var UIManager  = ( function( window, undefined ) {
 					""
 				))
 			} else {
-				var arr = []
-				if ( model.order ) {
-					$.each(model.order, function(idx,elem) {
-						arr.push(model.watches[elem])
-					})
-				} else {
-					arr = model.watches
-				}
-				$.each(arr, function(idx,entry) {
-					var watch = entry.watch;
+				// var arr = []
+				// if ( model.order ) {
+					// $.each(model.order, function(idx,elem) {
+						// if (model.watches[elem])
+							// arr.push(model.watches[elem])
+					// })
+				// } else {
+					// arr = model.watches
+				// }
+				$.each(model.watches, function(idx,entry) {
+					var watch = mapID2Watch[entry.id]
 					if (entry.url && entry.url!=NO_URL) {					
-						var refreshbtn = refresh_template.format(idx);
-						var realidx =  (model.order) ? model.order[idx] : idx
+						var refreshbtn = refresh_template.format(entry.id);
 						panels.push( card_template.format( 
 							"<span>{0} - {1}</span>".format(entry.devicename,watch.variable),
-							realidx, //btn id
-							_getWatchGraphHtml(realidx,entry), // body
+							entry.id, //btn id
+							_getWatchGraphHtml(entry), // body
 							watch.service,		// subtitle
-							refreshbtn
+							refreshbtn + editbtn
 						))
 					}
 				})
@@ -14097,8 +14804,11 @@ var UIManager  = ( function( window, undefined ) {
 		
 		function _prepareToolbarModel(active_page,pages) {
 			var model_pills = [];
-			$.each(pages,function(idx,page) {
-				model_pills.push({id:page.id, label:page.name, glyph:"", cls:'btn-light altui-watchpage-page {0}'.format( (idx==active_page) ? 'active' : '')})
+			var order = ( pages[ORDER] && pages[ORDER].order  ) ?  pages[ORDER].order : Object.keys(pages)
+			$.each(order,function(i,idx) {
+				var page = pages[idx]
+				if (isValidPage(page))	// special case to store the order
+					model_pills.push({type: 'a', id:page.id, label:page.name, glyph:"area-chart", cls:'btn-light altui-watchpage-page {0}'.format( (idx==active_page) ? 'active' : '')})
 			})				
 			model_pills.push({id:'altui-watchpage-edit', label:_T("Edit"), glyph:"pencil", cls:"btn-secondary"})
 			model_pills.push({id:'altui-watchpage-add', label:_T("Add"), glyph:"plus", cls:"btn-secondary"})
@@ -14109,22 +14819,30 @@ var UIManager  = ( function( window, undefined ) {
 		
 		function _prepareWatchListModel(page) {
 			var model_watchlist={ watches:[] };
+			var todelete = []
 			if (page.watches) {
-				$.each(page.watches,function(idx,watch) {
-					var device = MultiBox.getDeviceByAltuiID(watch.deviceid);
-					if (device && providers[watch.provider] ) {
-						var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
-						model_watchlist.watches.push( {
-							watch: watch,
-							devicename: device.name,
-							url:urlinfo.url,
-							height:urlinfo.height || 260
-						})
+				for (var i = page.watches.length -1 ; i>=0 ; i--) {
+					var watchid = page.watches[i]
+					var watch = mapID2Watch[watchid]
+					if (watch) {
+						var device = MultiBox.getDeviceByAltuiID(watch.deviceid);
+						if (device && providers[watch.provider] ) {
+							var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
+							model_watchlist.watches.push( {
+								id: watchid,
+								// watch: watch,
+								devicename: device.name,
+								url:urlinfo.url,
+								height:urlinfo.height || 260
+							})
+						}
+					} else {
+						// watch must have been deleted
+						page.watches.splice(i, 1);
 					}
-				});
+				}
+				model_watchlist.watches = model_watchlist.watches.reverse()
 			}
-			if (page.order)
-				model_watchlist.order = page.order
 			return model_watchlist
 		};
 
@@ -14136,6 +14854,7 @@ var UIManager  = ( function( window, undefined ) {
 			
 			if ($(".altui-watch-toolbar").length==0) {
 				$(".altui-mainpanel").prepend( html );
+				$(".altui-watch-toolbar > div").sortable( sortable_options_toolbar )
 			} else {
 				$(".altui-watch-toolbar").replaceWith(  html );
 			}
@@ -14150,22 +14869,30 @@ var UIManager  = ( function( window, undefined ) {
 				$(".altui-mainpanel").append( _getWatchListHtml(model_watchlist,active_page) );
 				$('.altui-graph-row .row').sortable( sortable_options );
 			}					
-			$(".altui-graph-row[data-pageidx!='"+active_page+"']").addClass("d-none")		
-			$(".altui-graph-row[data-pageidx='"+active_page+"']").removeClass("d-none")		
+			$(".altui-graph-row[data-pageidx!='"+active_page+"']").hide()		
+			$(".altui-graph-row[data-pageidx='"+active_page+"']").show()		
 		}
 		
 		function _interactivity() {
+			function sortByDevice(a,b) {
+				var devicea = MultiBox.getDeviceByAltuiID(a.deviceid)
+				var deviceb = MultiBox.getDeviceByAltuiID(b.deviceid)
+				if (devicea.name == deviceb.name)
+					return 0
+				return (devicea.name < deviceb.name) ? -1 : 1
+			}
+			
 			$(".altui-mainpanel")
 			.off('click','.altui-graph-refresh')
 			.on('click','.altui-graph-refresh',function() {
 				var panel = $(this).closest(".altui-graph-card")
-				var idx = parseInt($(this).prop('id').substr("watchidx_".length));
+				var watchid = $(this).prop('id').substr("watchidx_".length);
 				var page = pages[active_page];
-				var watch = page.watches[idx]
+				var watch = mapID2Watch[ watchid ]
 				var device = MultiBox.getDeviceByAltuiID(watch.deviceid)
 				var urlinfo = _buildWatchUrl(watch,providers[watch.provider]);
-				$(panel).find(".altui-graph-content").html( _getWatchGraphHtml(idx,{
-							watch: watch,
+				$(panel).find(".altui-graph-content").html( _getWatchGraphHtml({
+							// watch: watch,
 							devicename: device.name,
 							url:urlinfo.url,
 							height:urlinfo.height || 260
@@ -14173,19 +14900,22 @@ var UIManager  = ( function( window, undefined ) {
 			})
 			.off('click','.altui-graph-card-close')
 			.on('click','.altui-graph-card-close',function() {
-				var idx = parseInt($(this).prop('id').substr("closeidx_".length));
+				var watchid = $(this).prop('id').substr("closeidx_".length);
 				var panel = $(this).closest(".altui-graph-card")
 				var page = pages[active_page];
-				var watch = page.watches[idx]
 				$(panel).remove()
 				DialogManager.confirmDialog(_T("Do you ALSO want to delete the data push configuration for this variable"),function(result) {
 					if (result==true) {
+						var watch = mapID2Watch[ watchid ]
 						MultiBox.delWatch( watch );
-						UIControler.changePage("WatchDisplay",[])
+						delete mapID2Watch[ watchid ]
 					}
-					page.watches.splice(idx,1)
-					MyLocalStorage.setSettings("WatchPages",pages)
-					UIControler.changePage("WatchDisplay",[])
+
+					// remove watchid from array
+					page.watches = $.grep( page.watches, function(value) { return value != watchid  });
+					save_needed = true;
+					_refreshWatchPills(active_page,true)
+					_refreshWatchList(active_page)
 				})
 			})			
 			.off('click','.altui-watchpage-page')
@@ -14194,6 +14924,22 @@ var UIManager  = ( function( window, undefined ) {
 				$('.altui-watchpage-page').removeClass('active')
 				$(this).addClass('active')
 				_refreshWatchList(active_page)
+			})
+			.off('click','.altui-graph-edit')
+			.on('click','.altui-graph-edit',function() {
+				var card = $(this).closest('.altui-graph-card')
+				var watchid = card.data('watchidx')
+				var page = pages[active_page];
+				var watch = mapID2Watch[ watchid ]
+				var device = MultiBox.getDeviceByAltuiID( watch.deviceid );
+				$.when(UIManager.deviceDrawVariables(device))
+				.done(function(txt) {
+					$.when( _initGraphPage(active_page) ).done(function (active_page) {
+						// Display Page's Watches
+						_refreshWatchPills(active_page,true)
+						_refreshWatchList(active_page,true)
+					})
+				})
 			})
 			.off('click','#altui-watchpage-edit')
 			.on('click','#altui-watchpage-edit',function() {
@@ -14204,17 +14950,19 @@ var UIManager  = ( function( window, undefined ) {
 				];
 				var html = HTMLUtils.drawFormFields(  model );
 				model = []
-				$.each(watches.sort(altuiSortByWatchAltuiID), function(idx,watch) {
+				var arrwatch = $.map(mapID2Watch,function(val,key) { return val })
+				$.each(arrwatch.sort(sortByDevice), function(key,watch) {
+					var id = WATCH_ID.format(watch.provider, watch.deviceid, watch.service, watch.variable)
 					var device = MultiBox.getDeviceByAltuiID(watch.deviceid)
 					if (device) {
 						var urlinfo = _buildWatchUrl(watch,providers[watch.provider])
 						if (urlinfo && urlinfo.url && urlinfo.url!=NO_URL) {
 							model.push({
-								id:'watch_'+idx,
+								id:'watch_'+id,
 								label:"<b>{0}</b> <small>({1})</small> <b>{2}</b> <small>({3})</small>".format(device.name, watch.deviceid, watch.variable, watch.service),
 								type:'input',
 								inputtype:'checkbox',
-								value: isWatchInPage( watch, page )
+								value: isWatchInPage( id, page )
 							})
 						}
 					}
@@ -14237,8 +14985,8 @@ var UIManager  = ( function( window, undefined ) {
 						page.watches=[]
 						$("#watches input").each(function(idx,elem){
 							if ($(elem).prop('checked')==true) {
-								var idx = $(elem).prop('id').substring( 'watch_'.length )
-								page.watches.push( watches[idx] ) 
+								var id = $(elem).prop('id').substring( 'watch_'.length )
+								page.watches.push( id ) // watch ID in the mapID2Watch 
 							}
 						})
 						page.order = null
@@ -14251,6 +14999,10 @@ var UIManager  = ( function( window, undefined ) {
 			})
 			.off('click','#altui-watchpage-add')
 			.on('click','#altui-watchpage-add',function() {
+				if (( Object.keys(pages).length>=1) && (ALTUI_registered!=true) ) {
+					PageMessage.message( _T("Creating more than one graph page is limited to registered users"), "danger");
+					return
+				}
 				var id = _calculateLastPageID(pages)+1;
 				var page = {
 					name:'Page'+id, 
@@ -14258,13 +15010,18 @@ var UIManager  = ( function( window, undefined ) {
 					watches: []
 				}
 				pages[page.id]=page;
+				if (pages[ORDER] && pages[ORDER].order) 
+					pages[ORDER].order.push(page.id)
 				save_needed = true;
 				_refreshWatchPills(active_page)
 			})
 			.off('click','#altui-watchpage-del')
 			.on('click','#altui-watchpage-del',function() {
-				if (Object.keys(pages).length>1) {
+				if (Object.keys(pages).length> 1 + ((pages[ORDER]!=null) ? 1 : 0) ) {
+					if (pages[ORDER] && pages[ORDER].order) 
+						pages[ORDER].order = pages[ORDER].order.filter( function(item) { return item !== active_page } )
 					delete pages[active_page] 
+					$(".altui-graph-row[data-pageidx='"+active_page+"']").remove()
 					active_page = 'altui-watchpage-page'+ _calculateLastPageID(pages)
 					save_needed = true;
 					_refreshWatchPills(active_page,true)
@@ -14277,42 +15034,62 @@ var UIManager  = ( function( window, undefined ) {
 					var pageidx = $(row).data("pageidx")
 					var order = $.map( 
 						$(row).find(".row").sortable( "toArray" , {attribute:'data-watchidx'} ),
-						function(item,i) {return parseInt(item)} 
+						function(item,i) {return item} 
 					)
-					pages[pageidx].order = order;
+					pages[pageidx].watches = order;
 				});
+				pages[ORDER]= {
+					order:$(".altui-watch-toolbar > div").sortable( "toArray" , {attribute:'id'} )
+				}
 				MyLocalStorage.setSettings("WatchPages",pages)
 				save_needed = false;
 				_refreshWatchPills(active_page,true)
 			})			
 		};
 
-		UIManager.clearPage('WatchDisplay',_T("Watch Display"),UIManager.oneColumnLayout);
-		MultiBox.getDataProviders(function(result) {
-			providers = result
-			pages = MyLocalStorage.getSettings("WatchPages") || {}
-			watches = MultiBox.getWatches("VariablesToSend", null)
-			if (Object.keys(pages).length==0) {
-				var firstpage = {
-					name:'Page1', 
-					id:'altui-watchpage-page1', 
-					watches: []
+		function _initGraphPage(init_active_page) {
+			var dfd = $.Deferred();
+			MultiBox.getDataProviders(function(result) {
+				providers = result
+				pages = MyLocalStorage.getSettings("WatchPages") || {}
+				watches = MultiBox.getWatches("VariablesToSend", null)
+				mapID2Watch = {};
+				$.each(watches, function(idx,watch) {
+					var id = WATCH_ID.format(watch.provider, watch.deviceid, watch.service, watch.variable)
+					var device = MultiBox.getDeviceByAltuiID(watch.deviceid)
+					if (device)
+						mapID2Watch[id]=watch
+				})
+				if (Object.keys(pages).length==0) {
+					var firstpage = {
+						name:'Page1', 
+						id:'altui-watchpage-page1', 
+						watches: []
+					}
+					active_page = firstpage.id;
+					pages[active_page] = firstpage
 				}
-				active_page = firstpage.id;
-				pages[active_page] = firstpage
-			}
-			
-			active_page = Object.keys(pages)[0]; 
 
+				active_page = (init_active_page!=null) ? init_active_page : (( pages[ORDER] && pages[ORDER].order ) ? pages[ORDER].order[0] : Object.keys(pages)[0]);
+				dfd.resolve(active_page);
+			})
+			return dfd.promise();
+		}
+		
+		function _refreshScreen() {
 			// Display Pages Pills
 			_refreshWatchPills(active_page)
 
 			// Display Page's Watches
 			_refreshWatchList(active_page)
-			
+		}
+		
+		UIManager.clearPage('WatchDisplay',_T("Watch Display"),UIManager.oneColumnLayout);
+		$.when( _initGraphPage(null) ).done(function (active_page) {
 			// Display Page's Watches
-			_interactivity() 
-		});
+			_refreshScreen();
+			_interactivity();
+		})
 	},
 	pageThemes: function() {
 		UIManager.clearPage('Themes',_T("Themes"),UIManager.oneColumnLayout);
@@ -14392,10 +15169,13 @@ var UIManager  = ( function( window, undefined ) {
 						check.label,
 						width
 					  )
-					$(".altui-mainpanel").on("change","#altui-"+check.id,function(){
-						_saveOption(check.id, $("#altui-"+check.id).val());
-					});
+					$(".altui-mainpanel")
+						.off("change","#altui-"+check.id)
+						.on("change","#altui-"+check.id,function(){
+							_saveOption(check.id, $("#altui-"+check.id).val());
+						});
 					break;
+					
 				case 'checkbox':
 					html += `
 					<div class="{5} form-check">
@@ -14415,10 +15195,13 @@ var UIManager  = ( function( window, undefined ) {
 					// html +="<label title='"+check.id+"' class='checkbox-inline'>";
 					// html +=("  <input type='checkbox' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>"+_T(check.label));
 					// html +="</label>";
-					$(".altui-mainpanel").on("click","#altui-"+check.id,function(){
-						_saveOption(check.id,$("#altui-"+check.id).is(':checked') ? 1 : 0);
-					});
+					$(".altui-mainpanel")
+						.off("click","#altui-"+check.id)
+						.on("click","#altui-"+check.id,function(){
+							_saveOption(check.id,$("#altui-"+check.id).is(':checked') ? 1 : 0);
+						});
 					break;
+					
 				case 'number':
 					html += `
 					  <div class="{6} form-group">
@@ -14438,14 +15221,52 @@ var UIManager  = ( function( window, undefined ) {
 
 					// html +="<label title='"+check.id+"' class='' for='altui-"+check.id+"'>"+_T(check.label)+"</label>:";
 					// html +=("<input type='number' min='"+(check.min||0) +"' max='"+(check.max||999) +"' id='altui-"+check.id+"' " + ( (init==true) ? 'checked' : '') +" value='"+init+"' title='"+check.id+"'>");
-					$(".altui-mainpanel").on("focusout","#altui-"+check.id,function(){
-						_saveOption(check.id,parseInt($("#altui-"+check.id).val()));
-					});
+					$(".altui-mainpanel")
+						.off("focusout","#altui-"+check.id)
+						.on("focusout","#altui-"+check.id,function(){
+							_saveOption(check.id,parseInt($("#altui-"+check.id).val()));
+						});
+					break;
+					
+				case 'button':
+					html += `
+					<div class="{3} form-group">
+						<label for="altui-{0}">{1}</label>
+						<button id="altui-{0}" class="btn btn-light" >{1}</button>
+						{2}
+					</div>`.format(check.id,check.label,helpbutton,width)
+					$(".altui-mainpanel")
+						.off("click","#altui-"+check.id)
+						.on("click","#altui-"+check.id,function(){
+							window.open( check.url, '_blank');
+						});
+					break;
+					
+				case 'multiline':
+					html += `
+					<div class="{4} form-group">
+						<label for="altui-{0}">{1}</label>
+						<textarea id="altui-{0}" class="form-control" rows="{5}">{2}</textarea>
+						{3}
+					</div>`.format(check.id,check.label,check._default,helpbutton,width,check.rows)
+					$(".altui-mainpanel")
+						.off("change","#altui-"+check.id)
+						.on("change","#altui-"+check.id,function(){
+							var val = $("#altui-"+check.id).val();
+							if (val.length<5)
+								val = check._default;
+							_saveOption(check.id,val);
+						});
+					break;
+					
+				default:
+					html += JSON.stringify({id:id, check:check, width:width})
 					break;
 			}
 			// html+=helpbutton;
 			return html;
 		};
+		
 		function _saveOption(name,value) {
 			MyLocalStorage.setSettings(name, value);
 			// var serversideOptions = MyLocalStorage.getSettings("ServerSideOptions")
@@ -14480,11 +15301,10 @@ var UIManager  = ( function( window, undefined ) {
 
 		color =	 MyLocalStorage.get("Pages")!=null ? "text-success" : "text-danger";
 		var okGlyph4 = glyphTemplate.format( "check-circle", "OK" , color );
-
+		
 		var html = "";
-
 		html +="<div class='col-12 mb-2'>";
-		html +=" <div class='card xxx'>";
+		html +=" <div class='card border-secondary'>";
 		html +="  <div class='card-header'>"+_T("Options")+"</div>";
 		html +="  <div class='card-body'><form><div class='row'>";
 			$.each(_userOptions, function(id,check) {
@@ -14500,7 +15320,7 @@ var UIManager  = ( function( window, undefined ) {
 
 		//http://api.github.com/repos/ajaxorg/ace/contents/lib/ace/theme
 		html += "<div class='col-12 mb-2'>";
-			html +="<div class='card xxx'>";
+			html +="<div class='card border-secondary'>";
 				html +="  <div class='card-header'>"+_T("Editor Control")+"</div>";
 				html +="  <div class='card-body'>";
 					html += "<div class='row'>";
@@ -14521,9 +15341,70 @@ var UIManager  = ( function( window, undefined ) {
 			html +="</div>";
 		html +="</div>";
 
+		// Weather Widget Control
 		html += "<div class='col-12 mb-2'>";
-			html +="<div class='card xxx'>";
-			html +="  <div class='card-header'>"+_T("Cache Control")+"</div>";
+			html +="<div class='card border-secondary'>";
+				html +="  <div class='card-header'>"+_T("Weather Widget Control")+"</div>";
+				html +="  <div class='card-body'>";
+					html += "<div class='row'>";
+						$.each(_meteoOptions, function(id,check) {
+							html += _displayOption(id,check,"col-sm-6");
+						});
+					html += "</div>";
+				html += "</div>";
+			html +="</div>";
+		html +="</div>";
+		
+		// tags name control
+		var dbtags = MyLocalStorage.getSettings('DeviceTags')
+		var model = $.map( tagModel, function(key,idx) {
+			return { 
+				id:key, 
+				glyph: glyphTemplate.format( "tags", _T("Category") , 'text-'+key),
+				name:"<input id='altui-tag-name-{0}' class='form-control altui-tag-name' type='text' name='altui-tag-name-{0}' value='{1}'></input>".format(key,dbtags.names[key] || '' )
+			}
+		});
+		var tblBackground = HTMLUtils.array2Table(model,'id',[],"",'altui-tags-tr','altui-tags-opts',false)
+		html += "<div class='col-12 mb-2'>";
+			html +="<div class='card border-secondary'>";
+				html +="  <div class='card-header'>"+_T("Tag Custom Names")+"</div>";
+				html +="  <div class='card-body'>";
+					html += "<div class='row' id='altui-bgmyhome-container'>";
+						html += tblBackground;
+					html += "</div>";
+				html += "</div>";
+			html +="</div>";
+		html +="</div>";
+		
+		// MyRoom background control
+		var backgroundSettings = MyLocalStorage.getSettings('MyHomeBackgrounds') || {}
+		var model = $.map( Object.keys(backgroundSettings), function(key,idx) {
+			return { 
+				id :"<input class='form-control col-4' type='text' name='altui-roomid-{0}' value='{0}'></input>".format(key), 
+				url:"<input class='form-control' type='text' name='altui-roombkg-{0}' value='{1}'></input>".format(key,backgroundSettings[key].url),
+				cmd: xsbuttonTemplate.format("_","altui-bgmyhome-tr-del",deleteGlyph,"Del")
+			}
+		});
+		var tblBackground = HTMLUtils.array2Table(model,'id',[],"",'altui-bgmyhome-tr','altui-bgmyhome-opts',false)
+		html += "<div class='col-12 mb-2'>";
+			html +="<div class='card border-secondary'>";
+				html +="  <div class='card-header'>"+_T("MyRoom Backgrounds")+"</div>";
+				html +="  <div class='card-body'>";
+					html += "<div class='row' id='altui-bgmyhome-container'>";
+						html += tblBackground;
+					html += "</div>";
+					html += "<div id='altui-bgmyhome-toolbar' class='btn-group mr-2' role='group' aria-label='Add Background'>";
+						html += "<button class='btn btn-light altui-bgmyhome-tr-add' type='button'>"+plusGlyph+" Add Background</button>";
+						html += "<button class='btn btn-light altui-bgmyhome-save' type='button'>"+saveGlyph+" Save Backgrounds</button>";
+					html += "</div>";
+				html += "</div>";
+			html +="</div>";
+		html +="</div>";
+		
+		// cache control
+		html += "<div class='col-12 mb-2'>";
+			html +="<div class='card border-secondary'>";
+				html +="  <div class='card-header'>"+_T("Cache Control")+"</div>";
 				html +="  <div class='card-body'>";
 					if (MultiBox.isRemoteAccess()) {
 						html +="<div class='btn-group mr-2' role='group' aria-label='Icon DB'>";
@@ -14539,8 +15420,9 @@ var UIManager  = ( function( window, undefined ) {
 			html +="</div>";
 		html +="</div>";
 
+		// custom page control
 		html += "<div class='col-12 mb-2'>";
-		html +="<div class='card xxx'>";
+		html +="<div class='card border-secondary'>";
 		html +="  <div class='card-header'>"+_T("Custom Pages Control")+"</div>";
 		html +="  <div class='card-body'>";
 			// html += "<div class='btn-group' role='group' aria-label='User Pages DB'>";
@@ -14553,7 +15435,7 @@ var UIManager  = ( function( window, undefined ) {
 		html +="</div>";
 
 		html += "<div class='col-12 mb-2'>";
-		html +="<div class='card xxx'>";
+		html +="<div class='card border-secondary'>";
 		html +="  <div class='card-header'>"+_T("Graph Pages Control")+"</div>";
 		html +="  <div class='card-body'>";
 			// html += "<div class='btn-group' role='group' aria-label='User Pages DB'>";
@@ -14562,9 +15444,50 @@ var UIManager  = ( function( window, undefined ) {
 		html += "</div>";
 		html +="  </div>";
 		html +="</div>";
-
 		
 		$(".altui-mainpanel").append(html);
+		
+		function _delBackground(e) {
+			var tr = $(this).closest("tr")
+			tr.remove()
+		}
+		function _addBackground(e) {
+			var name = "<input class='form-control' type='text' name='altui-roomkey' value='' placeholder='enter room name'></input>"
+			var url = "<input class='form-control' type='text' name='altui-roombkg' value='' placeholder='enter url to background'></input>"
+			var del =  xsbuttonTemplate.format("_","altui-bgmyhome-tr-del",deleteGlyph,"Del")
+			if ($("#altui-bgmyhome-opts tbody").length >=1) {
+				var html ="<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>".format(
+					name,
+					url,
+					del
+				)
+				$("#altui-bgmyhome-opts tbody").append(html)
+			} else {
+				var model = [
+					{ 
+					id: name, 
+					url: url,
+					cmd: del
+					}
+				]
+				var tblBackground = HTMLUtils.array2Table(model,'id',[],"",'altui-bgmyhome-tr','altui-bgmyhome-opts',false)
+				$("#altui-bgmyhome-container").html(tblBackground)
+			}
+		}
+		function _saveBackground(e) {
+			MultiBox.getRooms( null,null,function( rooms ) {
+				var roomnames = $.map(rooms, function(r) { return r.name } )
+				var settings={}
+				$("#altui-bgmyhome-opts tbody tr").each( function(idx,tr) {
+					var key = $(tr).find("td:first input").val()
+					var url = $(tr).find("td:nth-child(2) input").val()
+					if ( roomnames.in_array(key) ) {
+						settings[key] = { url:url }
+					}
+				})
+				MyLocalStorage.setSettings('MyHomeBackgrounds', settings)
+			});
+		}
 		// ACE
 		var editor = ace.edit( "altui-editor-sample" );
 		editor.session.setMode( "ace/mode/lua" );
@@ -14625,7 +15548,20 @@ var UIManager  = ( function( window, undefined ) {
 				}
 			})
 		});
-		
+		$("#altui-bgmyhome-toolbar").off()
+			.on("click",".altui-bgmyhome-tr-add",_addBackground )
+			.on("click",".altui-bgmyhome-save",_saveBackground )
+			
+		$("#altui-bgmyhome-container").off()
+			.on("click",".altui-bgmyhome-tr-del",_delBackground )
+			
+		$(".altui-tag-name").focusout( function() {
+			var val = $(this).val();
+			var key = $(this).prop('id').substr("altui-tag-name-".length)
+			var tags = MyLocalStorage.getSettings('DeviceTags')
+			tags.names[key]=val
+			MyLocalStorage.setSettings('DeviceTags',tags)
+		});
 	},
 	reloadEngine: function() {
 		MultiBox.reloadEngine(0).done(function(){
@@ -14706,11 +15642,18 @@ var UIManager  = ( function( window, undefined ) {
 						'Scenes':	{goto:'Scene Edit'}
 					};
 					function _searchText(val) {
+						var db = MyLocalStorage.getSettings('DeviceTags')
 						var result={}
 						var pattern = new RegExp(val,"i");
 						var devices = MultiBox.getDevicesSync().filter( function(d) {
-							return (d.name) &&
-							( (pattern.test(d.name)==true) || (pattern.test(d.manufacturer)==true) || (pattern.test(d.model)==true)	 )
+							var tags = $.map(db.devicemap['_'+d.altuiid], function(tagname,idx) {
+								return db.names[tagname] || tagname
+							});
+							for(var i=0; i<tags.length; i++) {
+								if (pattern.test(tags[i])==true)
+									return true;
+							}
+							return ( (d.name) && ( (pattern.test(d.name)==true) || (pattern.test(d.manufacturer)==true) || (pattern.test(d.model)==true) ) )
 						});
 						result["Devices"] = devices
 						var scenes = MultiBox.getScenesSync().filter( function(d) {
@@ -14773,10 +15716,10 @@ $(function() {
 	function _onInitLocalization2() {
 		// console.log("_initLocalizedGlobals()");
 		_HouseModes = [
-			{id:1, text:_T("Home"), cls:"preset_home"},
-			{id:2, text:_T("Away"), cls:"preset_away"},
-			{id:3, text:_T("Night"), cls:"preset_night"},
-			{id:4, text:_T("Vacation"), cls:"preset_vacation"}
+			{id:1, text:_T("Home"), cls:"preset_home" , glyph:'fa-home'},
+			{id:2, text:_T("Away"), cls:"preset_away", glyph:'fa-globe' },
+			{id:3, text:_T("Night"), cls:"preset_night", glyph:'fa-moon-o'},
+			{id:4, text:_T("Vacation"), cls:"preset_vacation", glyph:'fa-plane'}
 		];
 		// 0: table	 1: devicename 2: id
 		deviceModalTemplate = "<div id='deviceModal' class='modal fade'>";
@@ -14789,7 +15732,7 @@ $(function() {
 		deviceModalTemplate += "	  <div class='modal-body'>";
 		deviceModalTemplate += "	  <div class='row' >";
 		deviceModalTemplate += "	  <div class='col-12' style='overflow-x: auto;'>";
-		deviceModalTemplate += " <table class='table table-responsive-OFF table-sm'>";
+		deviceModalTemplate += " <table class='table  table-sm'>";	// -OFF
 		deviceModalTemplate += "	   <thead>";
 		deviceModalTemplate += "		 <tr>";
 		// deviceModalTemplate += "			  <th>#</th>";
@@ -14846,7 +15789,7 @@ $(function() {
 		// 0:id 1: title, 2: body, 3: class size 4:icon
 		defaultDialogModalTemplate =`
 <div id='{0}' class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog {3}" role="document">
     <div class="modal-content">
 		<form name='{0}' id='form_{0}' class='form' onsubmit='return false;'>
 			  <div class="modal-header">
@@ -14908,6 +15851,9 @@ $(function() {
 		$("#wrap").prepend(body);
 		$("#menu_scene_withfavorite").hide();
 		$("#menu_scene").show();
+		$('[data-toggle="offcanvas"]').on('click', function () {
+			$('.offcanvas-collapse').toggleClass('open')
+		})
 
 		ALTUI_Templates = ALTUI_Templates_Factory();
 		if (g_ALTUI.g_CustomBackground.length>0) {
@@ -15058,9 +16004,13 @@ var UIControler = (function(win) {
 			'Reload':		{ id:45, title:'Reload Luup Engine', htmlid:"#altui-reload", onclick:UIManager.reloadEngine, parent:0 },
 			'Reboot':		{ id:46, title:'Reboot Vera', htmlid:"#altui-reboot", onclick:UIManager.reboot, parent:0 },
 			'CheckUpdate':		{ id:47, title:'Check for Updates', htmlid:"#altui-checkupdate", onclick:UIManager.pageCheckUpdate, parent:0 },
+			'BirdEye':		{ id:48, title:'BirdEye', htmlid:"#altui-experimental", onclick:UIManager.pageBirdEye, args:[], parent:0 },
 	};
 	var menu = [
-		{id:'menu_myhome' , child:null},
+		{id:'menu_myhome_menu' , label:_T("My Home") , child:[
+			{id:'menu_myhome' , child:null},
+			{id:'altui-experimental' , child:null},
+		]},
 		{id:'menu_device' , child:null},
 		{id:'menu_scene'  , child:null},
 		{id:'menu_scene_withfavorite'  , label:_T("Scenes"), child:[
@@ -15195,7 +16145,9 @@ var UIControler = (function(win) {
 			if ( getQueryStringValue("Layout") == 'lean') {
 				$("#altui-pagemessage").remove();
 				$("#navbar").remove();
-				$("ul.nav-tabs").remove();
+				if ( getQueryStringValue("nPage") != '') {
+					$("ul.nav-tabs").remove();
+				}
 				// $(".container-fluid").css("margin-top","-60px");
 				// $(".container-fluid").find(".col-12").first().removeClass('col-sm-push-1').removeClass('col-sm-10');
 			}

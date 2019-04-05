@@ -186,8 +186,15 @@ function Altui_ExecuteFunctionByName(functionName, context , device, extraparam)
 	var func = namespaces.pop();
 	for (var i = 0; i < namespaces.length; i++) {
 		context = context[namespaces[i]];
+		if ( context == undefined ) {
+			var str = "the module or function "+functionName+" does not exist, check your configuration"
+			console.warn(str)
+			setTimeout( function() {
+				PageMessage.message(str,"warning");
+			},3000);
+		}
 	}
-	return context[func].call(context, device, extraparam);
+	return context ? context[func].call(context, device, extraparam) : null
 };
 
 // 0:modeid 1:modetext 2:modeclss for bitmap 3:preset_unselected or preset_selected
@@ -233,10 +240,11 @@ var ALTUI_Templates_Factory= function() {
 		// deviceVariableLineTemplate += "		   <th scope='row'>1</th>";
 		_deviceVariableLineTemplate += "		 <td class='altui-variable-title'><span title='{2}'>{0}</span></td>";
 		_deviceVariableLineTemplate +=	("<td class='altui-variable-buttons'>"+
-			smallbuttonTemplate.format( '{3}', 'm-1 altui-variable-history', glyphTemplate.format( "calendar", _T("History"), "" ),_T('History'))+
-			smallbuttonTemplate.replace('btn-light','').format( '{3}', 'm-1 altui-variable-push {4}', glyphTemplate.format( "signal", _T("Push to {5}"), "" ),_T("Push to {5}"))+
-			smallbuttonTemplate.format( '{3}', 'm-1 altui-variable-delete', deleteGlyph,_T('Delete'))+
-			"</td>");
+			'<div class="btn-group" role="group" aria-label="variable commands">' +
+			smallbuttonTemplate.format( '{3}', 'altui-variable-history', glyphTemplate.format( "calendar", _T("History"), "" ),_T('History'))+
+			smallbuttonTemplate.replace('btn-light','').format( '{3}', 'altui-variable-push {4}', glyphTemplate.format( "signal", _T("Push to {5}"), "" ),_T("Push to {5}"))+
+			smallbuttonTemplate.format( '{3}', 'altui-variable-delete', deleteGlyph,_T('Delete'))+
+			"</div></td>");
 		_deviceVariableLineTemplate += "		 <td id='{3}' class='altui-variable-value' >{1}</td>";
 		_deviceVariableLineTemplate += "	 </tr>";
 
@@ -407,16 +415,30 @@ function _formatTrigger(controller,trigger)
 
 
 var HouseModeEditor = (function() {
-	function _displayModes2(htmlid,cls,modes) {
-		var tmpl = "<button type='button' class='btn btn-light altui-housemode2'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>"
-		var html ="<div class='housemode2'>";
-				$.each(_HouseModes, function(idx,mode) {
-					var select = ($.inArray( mode.id.toString(), modes) == -1) ? "housemode2_unselected" : "housemode2_selected";
-					html += "<div id='altui-mode{3}' class='altui-housemode2 pull-left {1} {2}'><div class='altui-housemode2-content'><small class='text-muted'>{0}</small><div class='housemode-countdown'></div></div></div>".format( mode.text, mode.cls, select, mode.id);
-				});
-		html+="</div>";
+	function _displayModes3(htmlid,cls,modes) {
+		var html="";
+		var template = `<div id='altui-mode\${id}' class='altui-housemode3'>
+							<div class='altui-favorites-title text-truncate'><small class='text-info'>\${text}</small></div>
+							<div class='altui-housemodeglyph'>
+								<i class='fa \${glyph}' aria-hidden='true'></i>
+							</div>
+						</div>`;
+		var _tmpFunc = _.template(template)
+		$.each(_HouseModes, function(idx,mode) {
+			html += (_tmpFunc)(mode)
+		});
 		return html;
 	};
+	// function _displayModes2(htmlid,cls,modes) {
+	// 	var tmpl = "<button type='button' class='btn btn-light altui-housemode2'><div>{1}</div><div id='altui-mode{0}' class='{2} {3} housemode'></div></button>"
+	// 	var html ="<div class='housemode2'>";
+	// 			$.each(_HouseModes, function(idx,mode) {
+	// 				var select = ($.inArray( mode.id.toString(), modes) == -1) ? "housemode2_unselected" : "housemode2_selected";
+	// 				html += "<div id='altui-mode{3}' class='altui-housemode2 pull-left {1} {2}'><div class='altui-housemode2-content'><small class='text-muted'>{0}</small><div class='altui-housemode-countdown'></div></div></div>".format( mode.text, mode.cls, select, mode.id);
+	// 			});
+	// 	html+="</div>";
+	// 	return html;
+	// };
 	function _displayModes(htmlid,cls,modes) {
 		var html ="";
 		html += "<div class='btn-group {1}' id='{0}'>".format(htmlid,cls);
@@ -457,7 +479,8 @@ var HouseModeEditor = (function() {
 	};
 	return {
 		displayModes : _displayModes,
-		displayModes2 : _displayModes2,
+		// displayModes2 : _displayModes2,
+		displayModes3 : _displayModes3,
 		runActions : _runActions,					// ( domroot, onclickCB )
 		getSelectedLabels : _getSelectedLabels,
 		getSelectedModes : _getSelectedModes
@@ -1971,6 +1994,30 @@ var HTMLUtils = (function() {
 		html += "</div>";
 		return html
 	};
+	function _drawTags(htmlid,model) {
+		var db = MyLocalStorage.getSettings('DeviceTags');
+		var template='<span id="${id}" class="altui-device-tag badge badge-pill badge-${cls}">${label}</span>'
+		var htmlTemplate = _.template( template )
+		var html='<span class="altui-tags" id="{0}">{1}{2}</span>'
+		var plusGlyph = glyphTemplate.format("plus",_T("Add Tag"),"")
+		var tagGlyph= glyphTemplate.format( "tags", _T("Tag") , "");
+		var tags = []
+		$.each(model, function(idx,tag) {
+			var model = { cls:tag , label:db.names[tag]||tag , id:'altui-tag-'+tag}
+			tags.push( (htmlTemplate)(model) )
+		})
+		var addBtn = HTMLUtils.drawDropDown({
+			id:'altui-tag-add-dd', 
+			label:plusGlyph+' '+tagGlyph, 
+			cls:'altui-tag-addcls d-inline',
+			btncls:'btn-sm',
+			options: $.map(tagModel, function(tag,key){
+				return { id:'altui-tag-add-'+tag, cls:'altui-tag-add', label:db.names[tag]||tag , glyph:'fa-tags', glyphcls:'text-'+tag}
+			})
+		})
+		// tags.push( (htmlTemplate)({ id:'altui-tag-add', cls:'secondary' , label:plusGlyph }) )
+		return html.format( htmlid, tags.join("") , addBtn);
+	};
 	function _drawButtonGroup(htmlid,model) {
 		var html="";
 		model = $.extend( true, {cls:'', attr:'', buttons:[] }, model)
@@ -1998,6 +2045,10 @@ var HTMLUtils = (function() {
 					toolbarHtml+='<select id="{0}" class="{1}" multiple="multiple">'.format(tool.id,tool.cls||'');
 					toolbarHtml+='</select>'
 					break;
+				case 'a':
+					var glyph = glyphTemplate.format(tool.glyph,tool.label || tool.title || '');
+					toolbarHtml+="	<a class='btn {2} ' href='#' role='button' title='{1}' id='{0}' >{3}{4}</a>".format(tool.id||'',tool.title||'',tool.cls||'btn-light',glyph,tool.label || '');
+					break;
 				case 'button':
 				default:
 					toolbarHtml+="	<button type='button' class='btn {3} ' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'btn-light');
@@ -2010,16 +2061,38 @@ var HTMLUtils = (function() {
 			}
 		});
 		toolbarHtml+="</div>";
-		toolbarHtml+="<div>";
-		$.each(preareas, function(idx,idPre) {
-			if (idPre.startsWith('#'))
-				idPre = idPre.substr(1)
-			toolbarHtml+="<div class='collapse' id='{0}'></div>".format(idPre);
-		});
-		toolbarHtml+="</div>";
+		if (preareas.length>0) {
+			toolbarHtml+="<div>";
+			$.each(preareas, function(idx,idPre) {
+				if (idPre.startsWith('#'))
+					idPre = idPre.substr(1)
+				toolbarHtml+="<div class='collapse' id='{0}'></div>".format(idPre);
+			});
+			toolbarHtml+="</div>";
+		}
 		return "<div class='{0} {1}'>{2}</div>" .format(htmlid,cls,toolbarHtml);
 	};
+		
+	function _drawDropDown( model ) {
+		model = $.extend( true, {id:'', label:'', cls:'' , btncls:'', selected:[] }, model )
+
+		var htmlBtns = []
+		var btnTemplate = _.template( '<button type="button" id="${id}" class="btn dropdown-item ${cls}" ><i class="fa ${glyph} ${glyphcls}" aria-hidden="true"></i> ${label}</button>' )
+		$.each(model.options, function(idx,opt) {
+			opt = $.extend( {id:'', cls:'', glyph:'', glyphcls:'', label:'' }, opt )
+			opt.cls +=  ( (model.selected.indexOf( opt.id ) !== -1) ? " active" : " " )
+			htmlBtns.push( (btnTemplate)(opt) )
+		})
+		
+		var template = _.template( '<div id="${id}" class="dropdown ${cls}">	\
+		  <button class="btn btn-light ${btncls} dropdown-toggle " type="button" " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> \
+			${label} \
+		  </button> \
+		  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' + htmlBtns.join("") + '</div></div>')
+		return (template)( model )
+	};
 	function _drawSelect( model ) {
+		model = $.extend( {id:'', class:'', options:[], selected_idx:null },model )
 		var html ="<select class='form-control {1}' id='{0}'>".format(model.id,model.class)
 		$.each( model.options, function(i,opt) {
 			html += "<option {2} value='{0}'>{1}</option>".format(opt.value, opt.text,((opt.selected==true) || (i==model.selected_idx)) ? 'selected':'')
@@ -2131,7 +2204,7 @@ var HTMLUtils = (function() {
 			}
 			return value;
 		} else if ( (valuetype==='string') && ( (value.indexOf("http") === 0) || (value.indexOf("https") === 0) || (value.indexOf("ftp") === 0) ) ) {
-			return "<a href='{0}'>{0}</a>".format(value);
+			return "<a href='{0}' target='_blank'>{0}</a>".format(value);
 		}
 		return value.toString().htmlEncode();
 	};
@@ -2189,9 +2262,11 @@ var HTMLUtils = (function() {
 		optionsToString : _optionsToString,
 		array2Table		: _array2Table,			// (arr,idcolumn,viscols)
 		createAccordeon : _createAccordeon,		// (panels)
+		drawTags 		: _drawTags,
 		drawButtonGroup : _drawButtonGroup,
 		drawToolbar		: _drawToolbar,
 		drawSelect		: _drawSelect,
+		drawDropDown	: _drawDropDown,
 		drawFormFields	: _drawFormFields,
 		drawForm		: _drawForm,
 		startTimer		: _startTimer,
@@ -2447,27 +2522,41 @@ var EventBus = ( function (undefined) {
 				_subscriptions[eventname].splice(iFound , 1);
 		}
 	};
-	function _waitForAll(event, eventtbl, object, funcname ) {
+	function _waitForAll(event, eventtbl, object, funcname , maxwaitms) {
+		var defered = $.Deferred();
 		var _state = {};
+		var timeout = (maxwaitms==undefined ) 
+			? null 
+			: setTimeout(function() {  
+				timeout=null;
+				defered.resolve(_state);
+			} , maxwaitms );
+		
 		function _signal(eventname/*, args */) {
 			var theArgs = arguments;
 			_state[eventname] = true;
 			// if all are true, call the object,funcname
 			if (_allSet(_state)) {
 				theArgs[0] = event;
-				if ($.isFunction(funcname)) {
-					(funcname).apply(object,theArgs);
-				} else {
-					// theArgs.unshift(eventname);
-					var func = object[funcname];
-					func.apply( object , theArgs );
+				if (funcname) {
+					if ($.isFunction(funcname)) {
+						(funcname).apply(object,theArgs);
+					} else {
+						// theArgs.unshift(eventname);
+						var func = object[funcname];
+						func.apply( object , theArgs );
+					}
 				}
+				if (timeout) clearTimeout(timeout); 
+				timeout=null;
+				defered.resolve(_state)
 			}
 		};
 		$.each(eventtbl , function( idx, event) {
 			_state[event] = false;
 			_registerEventHandler(event, this, _signal );
 		})
+		return defered;
 	};
 
 	function _publishEvent(eventname/*, args */) {
@@ -2500,11 +2589,6 @@ var EventBus = ( function (undefined) {
 		},
 	}
 })();
-// function myFunc(device) {
-	// console.log("Device {0} state changed".format(device.id));
-// }
-//on_ui_initFinished
-// EventBus.registerEventHandler("on_ui_deviceStatusChanged",window,"myFunc");
 
 var PageManager = (function() {
 	var _pages = null;
@@ -3099,9 +3183,14 @@ var WorkflowManager = (function() {
 		if (_workflows.length==0)
 			altuiid="0-1";
 		else {
-			var last = _workflows[_workflows.length-1].altuiid;
-			var splits = last.split("-");
-			altuiid = "0-"+(parseInt(splits[1])+1)
+			// find next altuiid
+			var ids = $.map(_workflows, function(w) {
+				return( parseInt(w.altuiid.split("-")[1]) )
+			})
+			var max = ids.reduce(function(a, b) {
+				return Math.max(a, b);
+			});
+			altuiid = "0-"+(max+1)
 		}
 		if (workflow)
 			delete workflow.altuiid	// make sure we use the new ALTUIID
@@ -4151,7 +4240,7 @@ var TimerEditor = (function() {
 		init: function( _timer ) {
 			timer = cloneObject(_timer);
 			var dialog = DialogManager.createPropertyDialog(_T('Timer'));
-			DialogManager.dlgAddLine( dialog , "TimerName", _T("TimerName"), timer.name, "", {required:''} );
+			DialogManager.dlgAddLine( dialog , "TimerName", _T("TimerName"), timer.name , "", {required:''} );
 			DialogManager.dlgAddSelect(dialog, "TimerType", _T("TimerType"), timer.type, _timerTypes, {required:''});
 			DialogManager.dlgAddTimeInterval(dialog, "TimerInterval",_T("TimerInterval"),timer.interval, _timerUnits);
 			DialogManager.dlgAddDayOfWeek(dialog, "TimerDayOfWeek", _T("TimerDayOfWeek"), timer.days_of_week || '' , _timerDOW);
@@ -4983,6 +5072,16 @@ var SceneEditor = function (scene) {
 		$(".altui-json-code").hide();
 		$(".altui-mainpanel")
 			.off("click")
+			.on("click",".altui-delscene",function() {
+				var altuiid = $(this).closest(".altui-scene").data('altuiid');
+				var scene = MultiBox.getSceneByAltuiID(altuiid);
+				DialogManager.confirmDialog(_T("Are you sure you want to delete scene ({0})").format(altuiid),function(result) {
+					if (result==true) {
+						MultiBox.deleteScene( scene );
+						window.history.go(-1)
+					}
+				});
+			})
 			.on("click",".altui-trigger-mode",function(e) {
 				$(".altui-trigger-mode").removeClass("active btn-primary");
 				$(this).addClass("active btn-primary");
@@ -5045,7 +5144,7 @@ var SceneEditor = function (scene) {
 				//UI7 only features
 				if (UIManager.UI7Check()==true) {
 					//trigger mode
-					if ( $("#altui-trigger-and").hasClass("active") ) {
+					if ( $("#altui-trigger-and").hasClass("btn-primary") ) {
 						scene.triggers_operator = "AND"
 					} else {
 						scene.triggers_operator = "OR"
@@ -5282,6 +5381,7 @@ var SceneEditor = function (scene) {
 // ===========================
 //	Page UI pieces helpers
 // ===========================
+
 var PageMessage = (function(window, undefined ) {
 	var _badgeTemplate = '<span class="badge badge-secondary">{0}</span>&nbsp;';
 	var _msgTemplate = '<span class="altui-pagemessage-txt" >{0}</span>';
@@ -5439,6 +5539,8 @@ var PageMessage = (function(window, undefined ) {
 	};
 
 	function _init(breadcrumb,cls) {
+		// hidden on xs
+		var clock = Clock ? Clock.getClockHtml() : ""
 		var Html=`
 		<div id='altui-pagemessage' class='{3}'>
 			<form class='form-inline'>
@@ -5447,14 +5549,16 @@ var PageMessage = (function(window, undefined ) {
 			{1} <i class="fa fa-caret-down" aria-hidden="true"></i>
 			</button>
 			{2}
+			{4}
 			</form>
 			<div class="collapse" id="altui-pagemessage-panel">
 				<div class="card card-body">
 				<table class='table table-sm '>
 				<tbody></tbody>
+				</table>
 				</div>
 			</div>
-		</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml(),cls||"")
+		</div>`.format(UIManager.breadCrumb( breadcrumb ),_T("Messages"),SpeechManager.getHtml(),cls||"",clock)
 
 		$("#altui-pagemessage-span").html(	Html );
 		// close button for pageMessages
@@ -5487,7 +5591,7 @@ var PageMessage = (function(window, undefined ) {
 		jobMessage		: _jobMessage,
 		clearJobMessage	: _clearJobMessage,
 	};
-})();
+})(window);
 
 
 var HistoryManager = ( function(win) {
@@ -5534,5 +5638,19 @@ var HistoryManager = ( function(win) {
 			win.history.pushState( _history.length , id, null);
 		}
 	}
-})( window )
+})( window );
 
+if ((MyLocalStorage.getSettings('ShowClock') || 0)==1) {
+	var Clock = (function(window) {
+		function _updateClock() {
+			$(".altui-clock").replaceWith( Clock.getClockHtml() )
+		}
+		var _timer = setInterval(_updateClock, 1000)
+		return {
+			getClockHtml: function() {
+				var glyph = (typeof(timeGlyph)!="undefined") ? timeGlyph : ""
+				return "<span class='altui-clock d-none d-sm-block shadow-sm m-0 p-1 bg-light rounded'>{0} <small>{1}</small></span>".format(glyph , new Date().toLocaleString())
+			}
+		}
+	})(window);
+}

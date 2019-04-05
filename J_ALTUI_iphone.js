@@ -14,7 +14,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	// return styles needed by this plugin module
 	function _getStyle() {
 		var style="";
-		style += ".altui-iphone 	{	font-size: 16px;	}";
+		style += ".altui-iphone-txt 	{	font-size: 16px;	}";
 		style += ".altui-canalplus 	{	font-size: 12px;	}";
 		style += ".altui-razb 		{	font-size: 12px;	}";
 		style += "#altui-cplus-keytbl td {text-align:center;     vertical-align:middle;}";
@@ -44,12 +44,29 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		return style;
 	};
 
-
+	function _drawNETMON( device) {
+		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Debug' ); 
+		var offline = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'DevicesOfflineCount' ));
+		var targets = JSON.parse( MultiBox.getStatus( device, 'urn:upnp-org:serviceId:netmon1', 'Targets' ) );
+		var html ="";
+		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
+		html += "<span>{0} Devices</span>".format(targets.length)
+		if (offline>0) {
+			html += "<div><span class='text-danger altui-netmon-offline'>{0} Offline</span></div>".format(offline)
+		}
+		html += "<script type='text/javascript'>";
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:netmon1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	};
+	
 	function _drawAltUI( device) {
 		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altui1', 'Debug' ); 
+		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altui1', 'Version' ); 
 		
 		var html ="";
 		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
+		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:altui1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
 		html += "</script>";
@@ -157,7 +174,18 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		html += "</script>";
 		return html;
 	}
-	
+	function _drawAltSonos(device) {
+		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altsonos1', 'Debug' ); 
+		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:altsonos1', 'Version' ); 
+		var html ="";
+		html += ALTUI_PluginDisplays.createOnOffButton( debug,"altui-onoffbtn-"+device.altuiid, _T("Normal,Debug") , "pull-right");
+
+		html += "<div class='altui-version pull-left'>{0}</div>".format(version);
+		html += "<script type='text/javascript'>";
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_IPhoneLocator.toggleDebug('urn:upnp-org:serviceId:altsonos1','{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	}
 	function _drawIPX( device) {
 		var debug = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPX8001', 'Debug' ); 
 		var version =  MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPX8001', 'Version' ); 
@@ -282,7 +310,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 		var mute = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Muted' ); 
 		
 		var html ="";
-		html+=("<span class='altui-iphone' > "+dist+" </span>");
+		html+=("<span class='altui-iphone-txt' > "+dist+" </span>");
 		html+=("<small > "+unit+" </small>");
 
 		html += ALTUI_PluginDisplays.createOnOffButton( mute,"altui-onoffbtn-"+device.altuiid, _T("Unmuted,Muted") , "pull-right");
@@ -298,7 +326,7 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 					.replace('pull-left','')
 		var dist = Math.round( parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Distance' ) * 100) )/100; 
 		var unit = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:IPhoneLocator1', 'Unit' ); 
-		html+=("<div class='altui-iphone' >{0} {1}</div>".format(dist,unit))
+		html+=("<div class='bg-light altui-iphone-txt' >{0} {1}</div>".format(dist,unit))
 		return html;
 	};
 	function _drawCanalplus( device) {
@@ -361,11 +389,13 @@ var ALTUI_IPhoneLocator= ( function( window, undefined ) {
 	getStyle 	: _getStyle,
 	drawIPhone 	: _drawIPhone,
 	drawIPhoneFavorite : _drawIPhoneFavorite,
+	drawAltSonos : _drawAltSonos,
 	drawIPX		: _drawIPX,
 	drawFLIPR	: _drawFLIPR,
 	drawKSENIA	: _drawKSENIA,
 	drawRAZB	: _drawRAZB,
 	drawRAZBUNKIcon : _drawRAZBUNKIcon,
+	drawNETMON : _drawNETMON,
 	drawAltUI : _drawAltUI,
 	drawAltUIControlPanel:_drawAltUIControlPanel,
 	drawAltUIFavorite:_drawAltUIFavorite,

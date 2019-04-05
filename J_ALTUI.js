@@ -20,6 +20,11 @@ var altui_api = (typeof api === 'undefined') ? null :  api;
 // Utilities for searching Vera devices
 //-------------------------------------------------------------
 var ALTUI_VeraUtils = (function(){
+	function beautify(str) {
+		var val = JSON.stringify(JSON.parse(str),null,2)
+		return val
+	};
+	
 	function altui_format(str)
 	{
 	   var content = str;
@@ -65,12 +70,25 @@ var ALTUI_VeraUtils = (function(){
 		return jsonp.ud.devices[idx].ip;
 	};
 	
+	function buildUPnPActionUrl(deviceID,service,action,params)
+	{
+		var urlHead = ip_address +'id=action&output_format=json&DeviceNum='+deviceID+'&serviceId='+service+'&action='+action;//'&newTargetValue=1';
+		if (params != undefined) {
+			jQuery.each(params, function(index,value) {
+				urlHead = urlHead+"&"+index+"="+value;
+			});
+		}
+		return urlHead;
+	};
+	
 	return {
+		beautify:beautify,
 		altui_format:altui_format,
 		findDeviceIdx:findDeviceIdx,
 		findRootDeviceIdx:findRootDeviceIdx,
 		findRootDevice:findRootDevice,
-		findDeviceIP:findDeviceIP
+		findDeviceIP:findDeviceIP,
+		buildUPnPActionUrl:buildUPnPActionUrl
 	}
 })()
 
@@ -89,7 +107,8 @@ function altui_License(deviceID) {
 
 function altui_onOpenLocalButton(deviceId) {
 	// var url = window.location.origin + "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&" + jQuery( "#altui-home" ).val()
-	var url = window.location.origin +  get_device_state(deviceId, altui_Svs, "LocalHome", 0)
+	// var url = data_command_url + get_device_state(deviceId, altui_Svs, "LocalHome", 0).replace('/data_request?','')
+	var url = get_device_state(deviceId, altui_Svs, "LocalHome", 0)
 	window.open( url, '_blank');
 }
 
@@ -105,9 +124,10 @@ function altui_buildUrlOptions(deviceID) {
 	}
 		// jQuery( "#altui_Home,#altui_Lang,#altui_Layout,#altui_nPage" ).each( function(item) {
 	var layout=["","lean"];
-	var home=["","pageHome","pageMyHome","pageRooms","pageDevices","pageScenes","pageSceneEdit","pagePlugins","pageUsePages","pageEditPages","pageCredits","pageLuaTest","pageLuaStart","pageOptions","pageEditor","pageZwave","pageLocalization","pagePower","pageChildren","pageRoutes","pageQuality","pageTblDevices","pageOsCommand"];
+	var home=["","pageHome","pageMyHome","pageBirdEye","pageRooms","pageDevices","pageScenes","pageSceneEdit","pagePlugins","pageUsePages","pageEditPages","pageCredits","pageLuaTest","pageLuaStart","pageOptions","pageEditor","pageZwave","pageLocalization","pagePower","pageChildren","pageRoutes","pageQuality","pageTblDevices","pageOsCommand"];
 	var lang=["","en","fr","it"];
 	var prefix = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&";
+	
 	var LocalHome = get_device_state(deviceID,  altui_Svs, 'LocalHome',1);
 	if (LocalHome.startsWith(prefix) != true )
 		LocalHome=prefix;
@@ -142,10 +162,11 @@ function altui_Settings(deviceID) {
 	var extraCtrl = get_device_state(deviceID,  altui_Svs, 'ExtraController',1);
 	var remoteUrl = get_device_state(deviceID,  altui_Svs, 'RemoteAccess',1);
 	var apiKey = get_device_state(deviceID,  altui_Svs, 'VoiceRSS_KEY',1);
+	var apiLang = get_device_state(deviceID,  altui_Svs, 'VoiceRSS_lang',1);
 	var emonCMS = get_device_state(deviceID,  altui_Svs, 'EmonCmsUrl',1);
 	var style='	<style>\
 	  table.altui_table td:first-child {\
-		width: 140px;\
+		width: 200px;\
 	  }\
 	  input.altui-ui-input {\
 		width: 440px;\
@@ -171,10 +192,10 @@ function altui_Settings(deviceID) {
 	var htmlBootstrap = '<input id="altui-localbootstrap" class="altui-ui-input form-control" placeholder="optional local bootstrap relative url, use internet otherwise"></input>';
 	var htmlCTRL = '<input id="altui-ctrl" class="altui-ui-input form-control" placeholder="Comma separated list of ip_addr for extra controllers"></input>';
 	var htmlApiKey = '<input id="altui-apikey" class="altui-ui-input form-control" placeholder="Your VoiceRSS API Key"></input>';
+	var htmlApiLang = '<input id="altui-apilang" class="altui-ui-input form-control" placeholder="Your VoiceRSS Lang selection"></input>';
 	var htmlEmonCMS = '<input id="altui-emoncms" class="altui-ui-input form-control" placeholder="default url : emoncms.org"></input>'
 	var htmlSetConfig= '<button class="btn btn-secondary btn-sm" id="altui-setconfig">Set Configuration</button>';
 	var htmlResetConfig= '<button class="btn btn-secondary btn-sm" id="altui-resetconfig">Default Configuration</button>';
-	var htmlViewJson = '<button class="btn btn-secondary btn-sm" id="altui-viewconfig">View Configuration</button>';
 	var htmlUrlOptions = altui_buildUrlOptions(deviceID)
 	var html =
 		style+
@@ -186,6 +207,7 @@ function altui_Settings(deviceID) {
 		'<tr><td>Home Page Url</td><td> '+htmlHome+' </td></tr>' +
 		'<tr><td>Extra Controllers</td><td> '+htmlCTRL+' </td></tr>' +
 		'<tr><td>Voice RSS API Key for TTS support</td><td> '+htmlApiKey+' </td></tr>' +
+		'<tr><td>Voice RSS <a href="http://www.voicerss.org/api/documentation.aspx" target="_blank">Language code</a></td><td> '+htmlApiLang+' </td></tr>' +
 		'<tr><td>MyHome Image Path</td><td> '+htmlImagePath+' </td></tr>' +		
 		'<tr><td>Background Image</td><td> '+htmlBackground+' </td></tr>' +
 		'<tr><td>Theme</td><td> '+htmlTheme+' </td></tr>' +
@@ -193,7 +215,7 @@ function altui_Settings(deviceID) {
 		'<tr><td>Local CDN ?</td><td> '+htmlCDN+' </td></tr>' +
 		'<tr><td>EmonCMS Url</td><td> '+htmlEmonCMS+' </td></tr>' +
 		'<tr><td>Config</td><td> '+htmlConfig+' </td></tr>' +
-		'<tr><td>Actions</td><td> '+htmlViewJson+htmlSetConfig+htmlResetConfig+' </td></tr>' +
+		'<tr><td>Actions</td><td> '+htmlSetConfig+htmlResetConfig+' </td></tr>' +
 		'</table>'+
 		'</div>' ;
 
@@ -207,11 +229,12 @@ function altui_Settings(deviceID) {
 	jQuery( "#altui-localbootstrap" ).val(localbootstrap);
 	jQuery( "#altui-ctrl" ).val(extraCtrl);
 	jQuery( "#altui-apikey" ).val(apiKey);
+	jQuery( "#altui-apilang" ).val(apiLang);
 	jQuery( "#altui-emoncms" ).val(emonCMS);
 	//
 	// test isregistered
 	//
-	jQuery( "#altui-config" ).text( config );
+	jQuery( "#altui-config" ).text( ALTUI_VeraUtils.beautify(config) );
 	jQuery( "#altui-theme" ).text( themecss ).change( function() {
 		var themecss = jQuery(this).val()+' ';
 		saveVar(deviceID,  altui_Svs, "ThemeCSS", themecss, true);
@@ -234,14 +257,10 @@ function altui_Settings(deviceID) {
 					options.push(ALTUI_VeraUtils.altui_format("{0}={1}",id,val));
 			}
 		});
-		var url = "/port_3480/data_request?id=lr_ALTUI_Handler&command=home&"+options.join('&')
+		var url = data_command_url + "id=lr_ALTUI_Handler&command=home&"+options.join('&')
 		saveVar(deviceID,  altui_Svs, "LocalHome", url, true)
 		jQuery("#altui-home").text(url)
 	});
-	// jQuery( "#altui-home" ).change( function() {
-		// var home = jQuery(this).val()+' ';
-		// saveVar(deviceID,  altui_Svs, "LocalHome", home, true);
-	// });
 	jQuery( "#altui-cdn" ).change( function() {
 		var cdn = jQuery(this).val();
 		saveVar(deviceID,  altui_Svs, "LocalCDN", cdn, true);
@@ -257,6 +276,10 @@ function altui_Settings(deviceID) {
 	jQuery( "#altui-apikey" ).change( function() {
 		var apikey = jQuery(this).val();
 		saveVar(deviceID,  altui_Svs, "VoiceRSS_KEY", apikey, true);
+	});
+	jQuery( "#altui-apilang" ).change( function() {
+		var apikey = jQuery(this).val();
+		saveVar(deviceID,  altui_Svs, "VoiceRSS_lang", apikey, true);
 	});
 	jQuery( "#altui-open-remote" ).click(function() {
 		window.open( remoteUrl, '_blank');
@@ -275,22 +298,14 @@ function altui_Settings(deviceID) {
 		saveVar(deviceID,  altui_Svs, 'EmonCmsUrl', varVal, true)
 	});
 
-	jQuery( "#altui-viewconfig" ).click(function() {
-		var varVal = jQuery( "#altui-config" ).val();
-		var url = "http://jsoneditoronline.org/?json="+varVal;
-		window.open(url,'_blank');
-	});
 	jQuery( "#altui-resetconfig" ).click(function() {
-		var url = buildUPnPActionUrl(deviceID,altui_Svs,'Reset');
+		var url = ALTUI_VeraUtils.buildUPnPActionUrl(deviceID,altui_Svs,'Reset');
 		jQuery.ajax({
 			type: "GET",
 			url: url,
 			cache: false,
-		}).done(function() {
-			setTimeout( function() {
-				var config = get_device_state(deviceID,  altui_Svs, 'PluginConfig',1);
-				jQuery( "#altui-config" ).val(config)			
-			}, 2000 );
+		}).done(function(data) {
+			jQuery( "#altui-config" ).val( ALTUI_VeraUtils.beautify( data["u:ResetResponse"].PluginConfig ) )
 		}).fail(function() {
 			alert('Reset Failed!');
 		});
@@ -323,45 +338,9 @@ function saveVar(deviceID,  service, varName, varVal, reload)
 {
 	//set_device_state (deviceID, service, varName, varVal, 0);	// only updated at time of luup restart
 	set_device_state (deviceID, altui_Svs, varName, varVal, (reload==true) ? 0 : 1);	// lost in case of luup restart
-	
-	// 3rd method : updated immediately but not reflected !
-	/*
-	var url = buildVariableSetUrl( deviceID, varName, varVal)
-	var jqxhr = jQuery.ajax({
-		url:url,
-		async:false		// important to be in synchronous mode in that case
-	})  
-	.done(function() {
-		// success, remove pending save for this variable
-
-	})
-	.fail(function() {
-		// error, keep track of error, keep entry in DB for next save
-
-	});
-	*/
 }
 
 
-//-------------------------------------------------------------
-// Helper functions to build URLs to call VERA code from JS
-//-------------------------------------------------------------
 
-function buildVariableSetUrl( deviceID, varName, varValue)
-{
-	var urlHead = '' + ip_address + 'id=variableset&DeviceNum='+deviceID+'&serviceId='+altui_Svs+'&Variable='+varName+'&Value='+varValue;
-	return urlHead;
-}
-
-function buildUPnPActionUrl(deviceID,service,action,params)
-{
-	var urlHead = ip_address +'id=action&output_format=json&DeviceNum='+deviceID+'&serviceId='+service+'&action='+action;//'&newTargetValue=1';
-	if (params != undefined) {
-		jQuery.each(params, function(index,value) {
-			urlHead = urlHead+"&"+index+"="+value;
-		});
-	}
-	return urlHead;
-}
 
 
