@@ -699,6 +699,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		MultiBox.runActionByAltuiID ( altuiid, "urn:upnp-org:serviceId:Dimming1", "SetLoadLevelTarget", {newLoadlevelTarget:ui.value} );
 	};
 
+	function _onSliderVolChange(event,ui) {
+		var altuiid = $(ui.handle).closest(".altui-device").data("altuiid");
+		MultiBox.runActionByAltuiID ( altuiid, "urn:upnp-org:serviceId:RenderingControl1", "SetVolume", {DesiredVolume:ui.value} );
+	};
+
 	// return the html string inside the .card-body of the .altui-device#id panel
 	function _onColorPicker(e,altuiid,color) {
 		var device = MultiBox.getDeviceByAltuiID(altuiid);
@@ -1299,7 +1304,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			  <button type="button" id="altui-denonon-{0}" class="btn btn-sm {1} altui-denonoff-btn"> ON </button>
 			</div>
 			</div>
-		`.format( device.altuiid , cls[1-pwrstatus], cls[2-pwrstatus], src_html ) 
+		`.format( device.altuiid , cls[1-pwrstatus], cls[2-pwrstatus], src_html )
 		html += "<div class='altui-denon-lastresult'>{0}</div>".format(status)
 		html += "<script type='text/javascript'>";
 		$.each(sources, function(i,src) {
@@ -1631,7 +1636,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 
 		html += "<script type='text/javascript'>";
 		html += "$('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleOnOffButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
-		html += "$('div#slider-{0}.altui-dimmable-slider').slider({ max:100,min:0,value:{1},change:ALTUI_PluginDisplays.onSliderChange });".format(device.altuiid,level);
+		html += "$('div#slider-{0}.altui-dimmable-slider').slider({ max:100,min:0,value:{1},change:ALTUI_PluginDisplays.onSliderVolChange });".format(device.altuiid,level);
 		html += "</script>";
 		$(".altui-mainpanel").off("slide","#slider-"+device.altuiid).on("slide","#slider-"+device.altuiid,function( event, ui ){
 			$("#slider-val-"+device.altuiid).text( ui.value+'%');
@@ -1880,7 +1885,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 //RB Change end
 					"</div>";
 				html += "</div>";
-				
+
 //RB Change V3.0
 				$(".altui-mainpanel")
 					.off('click','button.altui-harmony-cp-act')
@@ -2047,7 +2052,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 //				isSonos = Boolean(api.getDeviceAttribute(device,"manufacturer") === 'Sonos');
 				if (typeof(device.manufacturer === 'string')) {
 					isSonos = Boolean(device.manufacturer === 'Sonos');
-				}	
+				}
 //RB Change end
 				html += "<div class='altui-harmony-controlpanel'>"+	 //	 pull-right
 					"<div style='height: 20px;'>&nbsp;</div>"+
@@ -2156,6 +2161,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawCameraTile	   : _drawCameraTile,
 	drawVswitch	   : _drawVswitch,
 	onSliderChange : _onSliderChange,
+	onSliderVolChange : _onSliderVolChange,
 	drawDoorSensor : _drawDoorSensor,
 	drawDoorLock   : _drawDoorLock,
 	drawPLEG	   : _drawPLEG,
@@ -2198,7 +2204,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawDataMine	: _drawDataMine,
 	drawMultiswitch : _drawMultiswitch,		// warning, hardcoded display direction from UIMANAGER on this one due to changing device type
 // Rafale77 start
-	drawPioneer     : _drawPioneer, 
+	drawPioneer     : _drawPioneer,
 	drawPlantlink	: _drawPlantlink,
 	drawVRain	: _drawVRain,
 	drawEcobeeH	: _drawEcobeeH,
