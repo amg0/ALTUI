@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.42b"
+local version = "v2.43"
 local SWVERSION = "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_TMP_PREFIX = "altui-"
@@ -214,7 +214,7 @@ local function table2params(workflowaltuiid,args)
 	return result
 end
 
-Queue = {
+local Queue = {
 	new = function(self,o)
 		o = o or {}	  -- create object if user does not provide one
 		setmetatable(o, self)
@@ -2300,6 +2300,8 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 	-- debug('ALTUI_Handler: outputformat is: '..json.encode(lul_outputformat))
 	local lul_html = "";	-- empty return by default
 	local mime_type = "";
+	local command
+	
 	-- debug("hostname="..hostname)
 	if (hostname=="") then
 		hostname = getIP()
@@ -3571,7 +3573,7 @@ function sayTTS(lul_device,newMessage,volume,groupDevices,durationMs)
 	newMessage = modurl.escape( newMessage or "" )
 	volume = volume or 0
 	groupDevices = groupDevices or ""
-	log(string.format("sayTTS(%d,%s,%d,%s)",lul_device, newMessage,volume,groupDevices))
+	log(string.format("sayTTS(%d,%s,%s,%s)",lul_device, newMessage,volume,groupDevices))
 
 	local uri = string.starts(newMessage,"http") and newMessage or createMP3file(lul_device,newMessage)
 	local resultCode, resultString, job, returnArguments
