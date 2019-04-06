@@ -501,7 +501,7 @@ local function _addWatch( service, variable, devid, scene, expression, xml, prov
 	debug(string.format("_addWatch(%s,%s,%s,%s,%s,%s,%s,%s)",service, variable, devid, scene, expression, xml or "", provider or "", json.encode(providerparams or "")))
 	local data = json.encode(providerparams)
 	local result = 1
-	devidstr = tostring(devid)	 -- to inssure it is not a indexed array , but hash table
+	local devidstr = tostring(devid)	 -- to inssure it is not a indexed array , but hash table
 	local parts = devidstr:altui_split("-")
 	if (parts[2]==nil) then
 		devidstr = "0-"..devidstr
