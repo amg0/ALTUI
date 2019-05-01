@@ -984,7 +984,8 @@ var UserDataHelper = (function(user_data) {
 						FileDB.getFileContent(controller,service.SFilename , function( xmlstr ) {
 							var xml = $( $.parseXML( xmlstr ) );
 							$.each(xml.find("action"), function( idx,action) {
-								var name = $(action).find("name").first().text();	// action name is the first one
+								// var name = $(action).find("name").first().text();	// action name is the first one
+								var name = $(action).find(">name").text();	// action name is the first one
 								if (__findAction(that,name)==null)
 								{
 									var input=[];
