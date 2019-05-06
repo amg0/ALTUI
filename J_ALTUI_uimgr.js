@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2518 $";
+var ALTUI_revision = "$Revision: 2519 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -578,6 +578,7 @@ var styles =`
 	}
 	.altui-device-message {
 		font-size: .8em;
+		padding: 0px;
 	}
 	.altui-device-title , .altui-workflow-heading {
 		white-space: nowrap;
@@ -2772,7 +2773,7 @@ var UIManager  = ( function( window, undefined ) {
 				}
 
 				// $("div.altui-device#"+id+" div.card-body" ).append(deviceHtml);
-				var devicemsg = (device.tooltip && device.tooltip.display !=0) ? device.tooltip.tag2 : ""
+				var visibility = (device.tooltip && device.tooltip.display !=0 && device.status!=4)
 				deviceHtml = ALTUI_Templates.devicecontainerTemplate.format(
 					id,
 					_enhancedDeviceTitle(device),
@@ -2786,7 +2787,8 @@ var UIManager  = ( function( window, undefined ) {
 					),
 					batteryHtml,
 					iconHtml,
-					devicemsg
+					(visibility ? "d-block" : "d-none"),
+					(visibility ? device.tooltip.tag2 : "")
 					);
 			}
 		}
