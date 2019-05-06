@@ -226,6 +226,7 @@ var ALTUI_Templates_Factory= function() {
 	var _devicecontainerTemplate	= "<div class='card altui-device' data-altuiid='{5}' id='{0}'>"
 		_devicecontainerTemplate	+=		"<div class='card-header bg-{4} altui-device-heading'>{6} {7}<div class='card-title altui-device-title' data-toggle='tooltip' data-placement='left' title='{2}'>{1}</div></div>";
 		_devicecontainerTemplate	+=		"<div class='card-body altui-device-body'>";
+		_devicecontainerTemplate	+=		"<div class='altui-device-message bg-{4}'>{9}</div>";
 		_devicecontainerTemplate	+=		"{8}{3}";
 		_devicecontainerTemplate	+=		"</div>";
 	_devicecontainerTemplate	+=	  "</div>";

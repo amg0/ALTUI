@@ -1600,6 +1600,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 								_user_data.devices[userdata_device_idx].status = device.status;
 								_user_data.devices[userdata_device_idx].Jobs = device.Jobs;
 								_user_data.devices[userdata_device_idx].dirty = true;
+								_user_data.devices[userdata_device_idx].tooltip = device.tooltip;
 
 								if (device.states !=null) {
 									for (var j=0; j<device.states.length; j++) {

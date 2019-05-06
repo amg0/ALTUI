@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2515 $";
+var ALTUI_revision = "$Revision: 2518 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -575,6 +575,9 @@ var styles =`
 	.altui-device-container, .altui-scene-container, .altui-workflow-container {
 		padding-left: 3px;
 		padding-right: 3px;		
+	}
+	.altui-device-message {
+		font-size: .8em;
 	}
 	.altui-device-title , .altui-workflow-heading {
 		white-space: nowrap;
@@ -2769,6 +2772,7 @@ var UIManager  = ( function( window, undefined ) {
 				}
 
 				// $("div.altui-device#"+id+" div.card-body" ).append(deviceHtml);
+				var devicemsg = (device.tooltip && device.tooltip.display !=0) ? device.tooltip.tag2 : ""
 				deviceHtml = ALTUI_Templates.devicecontainerTemplate.format(
 					id,
 					_enhancedDeviceTitle(device),
@@ -2781,7 +2785,8 @@ var UIManager  = ( function( window, undefined ) {
 						(device.invisible=="1") ? _T("Show") : _T("Hide")
 					),
 					batteryHtml,
-					iconHtml
+					iconHtml,
+					devicemsg
 					);
 			}
 		}
@@ -5197,7 +5202,7 @@ var UIManager  = ( function( window, undefined ) {
 				var Html = _deviceDraw(device);
 				device.dirty=false;
 				$(this).replaceWith(  Html );
-
+				
 				// draw job information.
 				if (device.Jobs != undefined) {
 					$.each( device.Jobs, function( idx, job ) {
