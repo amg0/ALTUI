@@ -1,4 +1,3 @@
-UIManager.checkAltuiUpdate("2506,xxx,?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=37656",
+UIManager.checkAltuiUpdate("2520,xxx,?id=action&serviceId=urn:micasaverde-com:serviceId:HomeAutomationGateway1&action=CreatePlugin&PluginNum=8246&Version=38096",
 {
 })
- 
