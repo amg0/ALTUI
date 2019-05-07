@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2519 $";
+var ALTUI_revision = "$Revision: 2520 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7263,9 +7263,8 @@ var UIManager  = ( function( window, undefined ) {
 			function _daynight(str) { return (str==1) ? 'Day' : 'Night' }
 			function _netmonstats(str) { 
 				var arr = JSON.parse(str)
-				var c = arr.length;
 				var offline = $.grep(arr, function(item) {return item.tripped=="1"} ).length
-				return "<span class='text-danger'>{0}</span>/{1}".format(offline,c);
+				return "<span class='text-danger'>{0}</span>/{1}".format(offline, Object.keys(arr).length );
 			}
 			var arr= [
 				{service:'urn:toggledbits-com:serviceId:AutoVirtualThermostat1', variable:'DisplayTemperature'},
