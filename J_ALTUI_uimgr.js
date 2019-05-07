@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2520 $";
+var ALTUI_revision = "$Revision: 2521 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -13298,16 +13298,18 @@ var UIManager  = ( function( window, undefined ) {
 
 			// $(".altui-children-d3chart").replaceWith("<svg class='col-12 altui-children-d3chart'></svg>");
 			var available_height = $(window).height() - $("#altui-pagemessage").outerHeight() - $("#altui-pagetitle").outerHeight() /*- $("#altui-zwavechart-order").outerHeight() */ - $("footer").outerHeight();
-			var margin = {top: 20, right: 10, bottom: 10, left: 20};
+			// var margin = {top: 20, right: 10, bottom: 10, left: 20};
+			var margin = {top: 0, right: 0, bottom: 0, left: 0};
 			width = $(".altui-children-d3chart-container").innerWidth() - margin.left - margin.right-30;
-			height = Math.max(300,Math.min(width,available_height - margin.top - margin.bottom));
+			// height = Math.max(300,Math.min(width,available_height - margin.top - margin.bottom));
+			height = available_height;
 			$(".altui-children-d3chart").height(height)
 
 			//Set up the colour scale
 			var color = d3.scaleOrdinal(d3.schemeCategory20);
 			var svg = d3.select(".altui-children-d3chart")
 				.append("g")
-					.attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
+					// .attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
 
 			//Set up the force layout
 			data = _prepareDataParents( );
@@ -13495,7 +13497,7 @@ var UIManager  = ( function( window, undefined ) {
 					stroke-opacity: .8;		\
 				}							\
 				</style>" )
-			.append(html+"<div class='col-12 altui-children-d3chart-container'><svg class='w-100 altui-children-d3chart'></svg></div>")
+			.append(html+"<div class='col-12 p-0 altui-children-d3chart-container'><svg class='w-100 altui-children-d3chart'></svg></div>")
 		UIManager.loadD3Script( function() {
 			MultiBox.getDevices(null,null,function(arr) {
 				// console.log("received {0} devices:".format(arr.length));
