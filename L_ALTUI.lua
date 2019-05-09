@@ -4233,7 +4233,7 @@ function registerHandlers(lul_device)
 				errcode=1
 		end
 		printResult = table.concat (printResult, "\n")
-		return string.format("%d||%s||%s",errcode,tostring(results),printResult);
+		return string.format("%d||%s||%s",errcode,pretty(results),printResult);
 	end
 	luup.register_handler('ALTUI_LuaRunHandler','ALTUI_LuaRunHandler')
 	]]
