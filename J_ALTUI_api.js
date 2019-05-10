@@ -657,6 +657,7 @@ var application = (function(undefined) {
 var MessageCategory = {"SUCCESS":0,"NOTIFICATION":1,"ERROR":2,"WAITING":3,"CONFIRMATION":4};
 var DEVICETYPE_HOME_AUTO_GATEWAY = "urn:schemas-micasaverde-com:device:HomeAutomationGateway:1";
 var DEVICETYPE_BINARY_LIGHT = "urn:schemas-upnp-org:device:BinaryLight:1";
+var DEVICETYPE_WATER_VALVE = "urn:schemas-micasaverde-com:device:WaterValve:1";
 var DEVICETYPE_DIMMABLE_LIGHT = "urn:schemas-upnp-org:device:DimmableLight:1";
 var DEVICETYPE_THERMOSTAT = "urn:schemas-upnp-org:device:HVAC_ZoneThermostat:1";
 var DEVICETYPE_HUMIDITY_SENSOR = "urn:schemas-micasaverde-com:device:HumiditySensor:1";
