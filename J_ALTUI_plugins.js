@@ -1261,7 +1261,23 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "</script>";
 		return html;
 	};
+	//Rafale77 start
+	function _drawWaterValve( device) {
+		var html ="";
 
+		var status = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:SwitchPower1', 'Status' ));
+		// if ( ( ( device.Jobs != null ) && ( device.Jobs.length>0) ) || (device.status==1) || (device.status==5) ) {
+		// if ( (device.status==1) || (device.status==5))  {
+		if ( _isBusyStatus(device) )  {
+			status = -1;
+		}
+		html += _createOnOffButton( status,"altui-onoffbtn-"+device.altuiid, _T("CLOSED,OPEN") , "pull-right");
+		html += "<script type='text/javascript'>";
+		html += " $('div#altui-onoffbtn-{0}').on('click', function() { ALTUI_PluginDisplays.toggleOnOffButton('{0}','div#altui-onoffbtn-{0}'); } );".format(device.altuiid);
+		html += "</script>";
+		return html;
+	};
+	//Rafale77 end
 	function _drawAltDenon( device ) {
 		var html="";
 		var cls = ["btn-success","btn-light","btn-warning"];
@@ -2149,6 +2165,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	onClickWindowCoverButton : _onClickWindowCoverButton,
 	createOnOffButton : _createOnOffButton,
 	drawBinaryLight : _drawBinaryLight,
+	drawWaterValve : _drawWaterValve,
 	drawAltDenon : _drawAltDenon,
 	drawVeraSecure : _drawVeraSecure,
 	drawBinLightControlPanel : _drawBinLightControlPanel,
