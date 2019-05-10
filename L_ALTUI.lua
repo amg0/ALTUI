@@ -2887,6 +2887,10 @@ local function getDefaultConfig()
 		["StyleFunc"]="ALTUI_PluginDisplays.getStyle",
 		-- ["ControlPanelFunc"]="ALTUI_PluginDisplays.drawBinLightControlPanel",
 	}
+	tbl["urn:schemas-micasaverde-com:device:WaterValve:1"]= {
+                ["ScriptFile"]="J_ALTUI_plugins.js",
+                ["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawWaterValve",
+        }
 	tbl["urn:schemas-micasaverde-com:device:G550Siren:1"]= {
 		["ScriptFile"]="J_ALTUI_plugins.js",
 		["DeviceDrawFunc"]="ALTUI_PluginDisplays.drawVeraSecure",
