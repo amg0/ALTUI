@@ -1,6 +1,6 @@
 {
-  "flashicon": "https://cdn.rawgit.com/amg0/ALTUI/c3393a3e/iconALTUI.png",
-  "default_icon": "https://cdn.rawgit.com/amg0/ALTUI/c3393a3e/iconALTUI.png",
+  "flashicon": "https://cdn.jsdelivr.net/gh/amg0/ALTUI/iconALTUI.png",
+  "default_icon": "https://cdn.jsdelivr.net/gh/amg0/ALTUI/iconALTUI.png",
   "halloIconsDir": "pics\/hallo",
   "x": "2",
   "y": "4",
