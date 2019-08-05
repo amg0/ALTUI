@@ -15376,7 +15376,7 @@ var UIManager  = ( function( window, undefined ) {
 			html +="<div class='card border-secondary'>";
 				html +="  <div class='card-header'>"+_T("Tag Custom Names")+"</div>";
 				html +="  <div class='card-body'>";
-					html += "<div class='row' id='altui-bgmyhome-container'>";
+					html += "<div class='row' id='altui-tags-container'>";
 						html += tblBackground;
 					html += "</div>";
 				html += "</div>";
