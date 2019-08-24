@@ -2828,7 +2828,7 @@ var UIManager  = ( function( window, undefined ) {
 			? ""
 			: $.map( scene.modeStatus.split(","),function(m) { 
 				var mode = _HouseModes[ parseInt(m)-1 ]
-				return '<i class="fa {0}" aria-hidden="true" title="{1}"></i>'.format(mode.glyph,mode.text)s
+				return '<i class="fa {0}" aria-hidden="true" title="{1}"></i>'.format(mode.glyph,mode.text)
 			} ).join(" ")
 			
 
@@ -4671,7 +4671,7 @@ var UIManager  = ( function( window, undefined ) {
 				// get template
 				var altuidevice = MultiBox.getDeviceByID( 0, g_ALTUI.g_MyDeviceID );
 				var footerTemplate =  MultiBox.getStatus( altuidevice, "urn:upnp-org:serviceId:altui1", "FooterBranding" )
-					|| "<span>${appname} ${luaversion}.${jsrevision}, ${copyright} 2018 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></span><span>${paypal}</span><span id='altui-osstats'></span>";
+					|| "<span>${appname} ${luaversion}.${jsrevision}, ${copyright} 2019 amg0,${boxinfo} User: ${curusername} <span id='registration'></span></span><span>${paypal}</span><span id='altui-osstats'></span>";
 				var tmpl = _.template(footerTemplate.trim());
 				var footerstr =tmpl( footerMap )
 
