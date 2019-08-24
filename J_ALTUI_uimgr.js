@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$Revision: 2524 $";
+var ALTUI_revision = "$MyRevision: 2525 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2823,6 +2823,14 @@ var UIManager  = ( function( window, undefined ) {
 		var pauseButtonHtml = glyphTemplate.format( "power-off", _T("Pause Scene") , 'altui-pausescene ' + ((scene.paused>0) ? 'paused':'activated'));
 		var favoriteHtml = (scene.favorite==true) ? starGlyph : staremtpyGlyph;
 		var label = ((scene.hidden==true) ? hiddenGlyph+' ' : '') + scene.name;
+		var modeStatusHtml = 
+			(scene.modeStatus == "0") 
+			? ""
+			: $.map( scene.modeStatus.split(","),function(m) { 
+				var mode = _HouseModes[ parseInt(m)-1 ]
+				return '<i class="fa {0}" aria-hidden="true" title="{1}"></i>'.format(mode.glyph,mode.text)s
+			} ).join(" ")
+			
 
 		var lastrun = (scene.last_run != undefined) ? okGlyph+" "+_toIso(new Date(scene.last_run*1000)).replace('T',' ') : '';
 		var nextrun = _findSceneNextRun(scene);
@@ -2845,12 +2853,12 @@ var UIManager  = ( function( window, undefined ) {
 		scenecontainerTemplate	+= `
 			<div class='d-flex'>
 				<div class=' '>
-					<div>{0}</div>
+					<div>{0}<span class='text-nowrap'> {4}</span></div>
 					<div class='altui-scene-btnarea text-nowrap'>{1}{2}{3}</div>
 				</div>
 				<div class='ml-auto '>
-					<div class='altui-scene-date text-muted text-wrap pull-right'><small>{4}</small></div>
-					<div class='altui-scene-date text-info text-wrap pull-right'><small>{5}</small></div>
+					<div class='altui-scene-date text-muted text-wrap pull-right'><small>{5}</small></div>
+					<div class='altui-scene-date text-info text-wrap pull-right'><small>{6}</small></div>
 				</div>
 			</div>
 			`.format(
@@ -2858,6 +2866,7 @@ var UIManager  = ( function( window, undefined ) {
 				buttonTemplate.format( scene.altuiid, 'btn-sm altui-editscene ', wrenchGlyph,'light',_T("Settings")),
 				buttonTemplate.format( scene.altuiid, 'btn-sm altui-clonescene', copyGlyph,'light',_T("Copy")),
 				buttonTemplate.format( scene.altuiid, 'btn-sm altui-scene-history ', calendarGlyph,'light',_T("History")),
+				modeStatusHtml,
 				lastrun,
 				nextrun)
 
@@ -4639,7 +4648,7 @@ var UIManager  = ( function( window, undefined ) {
 				curusername:'',
 				paypal:''
 			};
-			var re = /\$Revision:\s*(\d*).*\$/;
+			var re = /\$MyRevision:\s*(\d*).*\$/;
 			var m;
 			if ((m = re.exec(ALTUI_revision)) !== null) {
 
