@@ -1,0 +1,182 @@
+{
+    "database_id": 42,
+    "label": "45603",
+    "manufacturer_name": "Jasco Products",
+    "manufacturer_id": "0063",
+    "device_ref": [
+        "5052:3031",
+        "5250:3030"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Fluorescent Light & Appliance Module",
+    "overview": "<p>Jasco's Z-Wave Plug-In Lamp and Appliance Module allows you the option to adjust mood lighting for all occasions within your home. Z-Wave is a radio frequency, mesh network technology specifically designed for use in residential lighting control. Every Z-Wave enabled wall switch is capable of relaying commands and utilizes two-way communications to ensure reliable operation throughout the entire home. The open-air, line-of-sight transmission distance is up to 100-Feet between devices.<\/p> <ul><li>One Z-wave controlled AC outlet<\/li> <li>Remote ON\/OFF control via the Z-Wave controller<\/li> <li>Manual ON\/OFF control with the front panel pushbutton \u2022 One Always-ON pass-through AC outlet<\/li> <li>Space efficient design<\/li> <li>Does not block the lower outlet when plugged in to the upper outlet of a duplex wall receptacle. (This assumes that the duplex receptacle is mounted with the ground pin down.)<\/li> <li>Plugs and cords for connected devices route to the side allowing close placement of furniture<\/li> <li>Z-Wave certified<\/li> <\/ul>",
+    "inclusion": "<ol><li>Plug ZW4101 into outlet<\/li> <li>Place controller in inclusion mode<\/li> <li>Press button on front of ZW4101<\/li> <\/ol>",
+    "exclusion": "<ol><li>Plug ZW4101 into outlet<\/li> <li>Place controller in exclusion mode<\/li> <li>Press button on front of ZW4101<\/li> <\/ol>",
+    "wakeup": "",
+    "protocol_version": 3.04,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": false,
+    "library_type": {
+        "id": 7,
+        "name": "LIB_CONTROLLER_BRIDGE"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "75",
+                    "name": "PROTECTION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 3,
+            "label": "Night Light",
+            "description": "Defines the behavior of the blue LED; default has LED on when switch is off.",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED on when switch is OFF"
+                },
+                {
+                    "value": 1,
+                    "label": "LED on when switch is ON"
+                },
+                {
+                    "value": 2,
+                    "label": "LED always off"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Invert Switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+            "overview": "<p>Note: If you invert the switches and also install the product upside down, remember the load will now be controlled by the right, not the left switch.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No"
+                },
+                {
+                    "value": 1,
+                    "label": "Yes"
+                }
+            ]
+        }
+    ],
+    "associations": []
+}

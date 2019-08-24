@@ -1,0 +1,296 @@
+{
+    "database_id": 805,
+    "label": "NZW30",
+    "manufacturer_name": "Inovelli",
+    "manufacturer_id": "0312",
+    "device_ref": [
+        "1E01:1E01"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "In-Wall Switch (On\/Off)",
+    "overview": "<p>Turn ON\/OFF manually or remotely via the Z-Wave controller<br \/>\u2022 Can be Included in multiple Groups and Scenes<br \/>\u2022 Compatible with all incandescent and CFL\/ LED bulbs<br \/>\u2022 Blue LED indicates switch location in a dark room<br \/>\u2022 Z-Wave Certified for simple pairing and integrated home automation<br \/>\u2022 Screw Terminal Installation \u2014 requires wiring connections for Line (Hot), Load, Neutral.<\/p>",
+    "inclusion": "<ul><li>Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.<\/li> <li>Once the controller is ready to include your device, triple press the Up\/Down push button to include it in the network.<\/li> <\/ul>",
+    "exclusion": "<ul><li>Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.<\/li> <li>Once the controller is ready to Exclude your device, triple press the Up\/Down push button to exclude it\u00a0from the network.<\/li> <\/ul>",
+    "wakeup": "",
+    "protocol_version": 4.061,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 3,
+            "label": "ledIndicator",
+            "description": "Set the LED light behavior",
+            "overview": "<p>This setting controls the operation of the LED indicator light on the bottom of the switch.\u00a0 The options are 0,1,2,3.\u00a0 They are described below.<\/p> <ul><li>0 (default): Turn LED indicator on when\u00a0switch is off<\/li> <li>1: Turn LED indicator on when\u00a0switch\u00a0is\u00a0on<\/li> <li>2: Indicator LED is always off<\/li> <li>3:\u00a0Indicator LED is always on<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Turn LED indicator on when switch is off"
+                },
+                {
+                    "value": 1,
+                    "label": "Turn LED indicator on when switch is on"
+                },
+                {
+                    "value": 2,
+                    "label": "Indicator LED is always off"
+                },
+                {
+                    "value": 3,
+                    "label": "Indicator LED is always on"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "invert",
+            "description": "Invert on & off on the physical switch",
+            "overview": "<p>Invert\u00a0what the top and bottom of the switch does.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No"
+                },
+                {
+                    "value": 1,
+                    "label": "Yes"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "autoOff",
+            "description": "Automatically turn switch off after this number of seconds",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p>An association command class that allows the device\u00a0to communicate with other Z-Wave devices directly -- such as sending BASIC REPORT whenever the switch\u00a0is turned on or off.<\/p>"
+        }
+    ]
+}

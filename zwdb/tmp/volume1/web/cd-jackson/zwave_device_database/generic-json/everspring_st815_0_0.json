@@ -1,0 +1,267 @@
+{
+    "database_id": 32,
+    "label": "ST815",
+    "manufacturer_name": "Everspring",
+    "manufacturer_id": "0060",
+    "device_ref": [
+        "0007:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Illumination Sensor",
+    "overview": "<p>The Illumination Sensor is designed to monitor the current illumination of ambient environment. The reading of illumination can be reported to you on a regular base at your disposal. If illumination reaches set points, the sensor will send alerts to associated devices for further execution (such as trigger on connected lightings). The Illumination Sensor is suitable for use in darkness and outdoor.\u00a0<\/p>",
+    "inclusion": "<p>Pressing ESC key 3 times within 1.5 seconds will enter inclusion mode.\u00a0<\/p>",
+    "exclusion": "<p>Pressing ESC key 3 times within 1.5 seconds will enter exclusion mode.\u00a0<\/p>",
+    "wakeup": "<p>Not Provided<\/p>",
+    "protocol_version": 2.064,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_luminance",
+                            "label": "Sensor (luminance)",
+                            "config": [
+                                "type=LUMINANCE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Basic Set Level",
+            "description": "Basic Set Level",
+            "overview": "<p>Set basic set value to be on or off.<\/p> <p>Set to 0 to disable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 99,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "Lux Trigger On Value",
+            "description": "Lux Trigger On Value",
+            "overview": "<p>Lux level when ON command is sent out.<\/p> <p>Set to 0 to disable.<\/p> <p>Valid values - 30-1000 or 0<\/p> <p>Default 30<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 300,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "Lux Trigger Off Value",
+            "description": "Lux Trigger Off Value",
+            "overview": "<p>Lux level when Off command is sent out.<\/p> <p>Values 30-1000 or 0<\/p> <p>Default 500<\/p> <p>Set to 0 to disable.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 500,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Lux Trigger Off Timer Value.",
+            "description": "Lux Trigger Off Timer Value.",
+            "overview": "<p>Timer value in minutes.<\/p> <p>Values : 1-480 or 0<\/p> <p>Default 240<\/p> <p>Set to 0 to disable.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 480,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Auto Report Time Interval",
+            "description": "Auto Report Time Interval",
+            "overview": "<p>Time interval in minutes to auto report to association group 1<\/p> <p>Valid values 1-1439 minutes or 0<\/p> <p>Set to 0 to Disable<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1439,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Auto Report Lux Interval",
+            "description": "Auto Report Lux Interval",
+            "overview": "<p>Lux interval step size to auto report to association group 1<\/p> <p>Valid Values 30-1000 (Lux)<\/p> <p>Set to 0 to Disable<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Reports",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Control",
+            "max_nodes": 3,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

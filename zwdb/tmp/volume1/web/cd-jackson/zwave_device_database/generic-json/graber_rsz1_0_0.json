@@ -1,0 +1,172 @@
+{
+    "database_id": 585,
+    "label": "RSZ1",
+    "manufacturer_name": "Graber",
+    "manufacturer_id": "026E",
+    "device_ref": [
+        "5253:5A31"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Somfy Motorized Shade",
+    "overview": "<p>The Graber\/Bali two-button remote allows up\/down\/stop control over a single shade or group of shades and acts as a secondary controller\/remote.<\/p>",
+    "inclusion": "<p>To operate as a secondary controller on a Z-Wave network, the following steps must be performed in order:<\/p> <ol><li>\u00a0Reset the remote (unassociate it from the blind\/shade)<\/li> <li>\u00a0Include the blind\/shade to the Z-Wave network<\/li> <li>\u00a0Include the remote in the Z-Wave network<\/li> <li>Associate the remote to the blind\/shade<\/li> <\/ol><p><strong>Reset the remote<\/strong><\/p> <p>Press and hold the programming button on the back of the remote until the LEDs stop flashing.\u00a0 LEDs will flash green, amber, red, and then finally turn off (about 15 seconds).<\/p> <p><strong>Include the blind\/shade in the Z-Wave network<\/strong><\/p> <p>Follow the manufacturer's directions for inclusion of the blind\/shade.<\/p> <p><strong>Include the remote in the Z-Wave network<\/strong><\/p> <p>Put the primary controller in inclusion mode.\u00a0 Press and hold the programming button on the back of the remote until the LEDs start flashing green (3-4 seconds).<\/p> <p><strong>Associate the remote to the blind\/shade<\/strong><\/p> <p>Press and release the programming button on the back of the remote once.\u00a0 The LEDs will flash green. Set the headrail of the blind\/shade to associate a remote (typically holding the programming button on the headrail for 3 seconds until the LEDs flash green).\u00a0 The remote should be associated with the blind\/shade and the primary controller will allow the remote to act as secondary controller for the blind\/shade.<\/p>",
+    "exclusion": "<p>For exclusion, the remote must be reset and the remote node must be deleted manually from the primary controller.\u00a0 To reset the remote, press and hold the programming button on the back of the remote until the LEDs stop flashing.\u00a0 LEDs will flash green, amber, red, and then finally turn off (about 15 seconds).<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.033,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_CLASS_C_MOTOR_CONTROL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 7,
+                "name": "SPECIFIC_TYPE_CLASS_C_MOTOR_CONTROL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "blinds_control",
+                            "label": "Rollershutter",
+                            "config": []
+                        },
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Lifeline (primary controller) ",
+            "overview": "<p>SWITCH MULTILEVEL REPORT after movement<br \/>BATTERY STATUS after movement or critical status<br \/>DEVICE RESET LOCALLY<\/p>"
+        }
+    ]
+}

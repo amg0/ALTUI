@@ -1,0 +1,415 @@
+{
+    "database_id": 598,
+    "label": "RGB bulb",
+    "manufacturer_name": "Hank",
+    "manufacturer_id": "0208",
+    "device_ref": [
+        "0100:0004",
+        "0101:0004"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "HKZW-RGB01-V1.0",
+    "overview": "",
+    "inclusion": "",
+    "exclusion": "",
+    "wakeup": "",
+    "protocol_version": 4.034,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "2",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2C",
+                    "name": "SCENE_ACTUATOR_CONF",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "33",
+                    "name": "COLOR",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "color_color",
+                            "label": "Color Control",
+                            "config": [
+                                "colorMode=RGB"
+                            ]
+                        },
+                        {
+                            "type": "color_temperature",
+                            "label": "Color Temperature",
+                            "config": [
+                                "colorMode=DIFF_WHITE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 21,
+            "label": "Status after power failure",
+            "description": "Define how the RGB BULB will react after the power supply is back on.",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "RGB BULB memorizes its state after a power failure"
+                },
+                {
+                    "value": 1,
+                    "label": "Device will be on after power supply is reconnected"
+                },
+                {
+                    "value": 2,
+                    "label": "Device will be off after power supply is reconnected"
+                }
+            ]
+        },
+        {
+            "id": 24,
+            "label": "Notification when Load status change",
+            "description": "RGB BULB can send notifications to associated device ",
+            "overview": "<p>RGB BULB can send notifications to associated device (Group Lifeline) when the status of the RGB BULB is changed.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Notifications Disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "Send BASIC REPORT"
+                },
+                {
+                    "value": 2,
+                    "label": "Send BASIC REPORT only without status change"
+                }
+            ]
+        },
+        {
+            "id": 51,
+            "label": "Enable\/disable the function of using wall switch",
+            "description": "Enable\/disable the function of using wall switch to turn on\/off RGB BULB",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        },
+        {
+            "id": 61,
+            "label": "Advance mode",
+            "description": "RGB BULB can blink or cyclic\/random change color automatically at set intervals.",
+            "overview": "<p>RGB BULB can blink or cyclic\/random change color automatically at set intervals. It will stop blink or change color when receiving any control command like Basic Set<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 3072,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 3072,
+            "value_max": 318816256,
+            "options": [
+                {
+                    "value": 3072,
+                    "label": "Stop changing"
+                },
+                {
+                    "value": 16826368,
+                    "label": "Color gradual change randomly"
+                },
+                {
+                    "value": 33603584,
+                    "label": "Color change randomly with a breathing blink"
+                },
+                {
+                    "value": 50380800,
+                    "label": "Blink with random color"
+                },
+                {
+                    "value": 67158016,
+                    "label": "Color change randomly"
+                },
+                {
+                    "value": 285261824,
+                    "label": "Color gradual change"
+                },
+                {
+                    "value": 302039040,
+                    "label": "Breathing blink with a specific color"
+                },
+                {
+                    "value": 318816256,
+                    "label": "Blink with a specific color"
+                }
+            ]
+        },
+        {
+            "id": 255,
+            "label": "Resetting to factory default",
+            "description": "RGB BULB will exclude from the Z-Wave network with this particular command",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 1431655765,
+            "options": [
+                {
+                    "value": 1431655765,
+                    "label": "Resetting to the factory default"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

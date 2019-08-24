@@ -1,0 +1,367 @@
+{
+    "database_id": 226,
+    "label": "plugInDimmer",
+    "manufacturer_name": "BeNext",
+    "manufacturer_id": "008A",
+    "device_ref": [
+        "0018:0100"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Plug-in Dimmer",
+    "overview": "<p>Basic operations<\/p> <ul><li>The Plug-in Dimmer can be operated both manually as with Z-Wave.<\/li> <li>The Plug-in Dimmer can dim up to 125Watt.<\/li> <li>The Plug-in Dimmer is easy to install and configured.<\/li> <li>The Plug-in Dimmer can measure and report energy.<\/li> <\/ul><p>How it operates<\/p> <p>A lamp can be switched on and off, manually by pressing the button or by Z-Wave using the basic command class. A (dimmable) lamp can be dimmed to a level, manually by pressing and holding the button or by Z-Wave using the switch multilevel command class.<\/p>",
+    "inclusion": "<p>When the lamp and indicator light are off (!) press and hold the button. After circa 2 seconds, when the indicator light starts blinking, release the button to start the inclusion process.<\/p>",
+    "exclusion": "<p>When the lamp and indicator light are off (!) press and hold the button. After circa 2 seconds, when the indicator led starts blinking, release the button to start the exclusion process.<\/p>",
+    "wakeup": "",
+    "protocol_version": 3.052,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 0,
+                "name": null
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "5",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Reset to factory settings",
+            "description": "Set all configuration values to default values (factory settings).",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Enable dimming",
+            "description": "Enable dimming",
+            "overview": "<p>This parameter is used to enable the dimming option of the product.<\/p> <p>When disabled the dimming and fading routine are disabled.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": "Maximum powerload",
+            "description": "Maximum powerload",
+            "overview": "<p>The maximum powerload in watts when light is turned on, when measured higher then this value the Plugin Dimmer is automatically stops with dimming or is turned off.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 125,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 25,
+            "value_max": 150,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Dimming speed",
+            "description": "Dimming speed",
+            "overview": "<p>The speed of dimming when activated (manual and RF). Dim speed is 1% per value (* 10 ms)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Fading up speed",
+            "description": "Fading up speed",
+            "overview": "<p>The speed of fading up when activated (manual and RF). Fade speed is 1% per value (* 10 ms)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Auto meter report: percentage",
+            "description": "Auto meter report: percentage",
+            "overview": "<p>A percentage that an energy value must be different compared to a previous sent value before an unsolicited meter report is sent.<\/p> <p>Minimum value = 1%\u00a0 Maximum value = 100%<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "Auto meter report: watt",
+            "description": "Auto meter report: watt",
+            "overview": "<p>A watt value that an energy value must be different compared to a previous sent value before an unsolicited meter report is sent.<\/p> <p>Minimum value = 5 watt\u00a0 Maximum value = 255 watt<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 13,
+            "label": "Auto meter report: time",
+            "description": "Auto meter report: time",
+            "overview": "<p>A time value that has to be passed compared to a previous sent value before a unsolicited meter report is sent.<\/p> <p>Minimum value = 10 seconds\u00a0 Maximum value = 255 seconds<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 14,
+            "label": "Last known status",
+            "description": "Last known status",
+            "overview": "<p>What to do with lamp status when power applied. <\/p> <p>If 0x00: Always switch light off when power applied. <\/p> <p>If &gt; 0x00: Switch lamp on\/off depending on last known lampstatus before power was disconnected.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 15,
+            "label": "Fading down speed",
+            "description": "Fading down speed",
+            "overview": "<p>The speed of fading down when activated (manual and RF). Fade speed is 1% per value (* 10 ms)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Group 1",
+            "max_nodes": 8,
+            "controller": false,
+            "description": "Receives BASIC SET commands",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Group 2",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Receives METER and MULTILEVEL_SWITCH commands",
+            "overview": ""
+        }
+    ]
+}

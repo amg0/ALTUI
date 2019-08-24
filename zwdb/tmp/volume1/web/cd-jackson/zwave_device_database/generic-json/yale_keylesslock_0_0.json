@@ -1,0 +1,377 @@
+{
+    "database_id": 948,
+    "label": "Keyless Connected Smart Door Lock",
+    "manufacturer_name": "ASSA ABLOY",
+    "manufacturer_id": "0129",
+    "device_ref": [
+        "0007:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Smart door lock with z-wave module.",
+    "overview": "<p>The Yale Keyless Connected Smart Door Lock can have Z-Wave\u00ae and Yale modules added to allow easy integration to smart home systems.<\/p>",
+    "inclusion": "<p>For more information on how to connect your smart door lock to a Yale system go to www.yale.co.uk\/YaleEcoSystem. For other home automation systems please follow their instructions on adding a lock and when prompted follow the instructions below.<\/p> <p>Touch the keypad with the palm of your hand. Enter the master code, followed by # key. Press the [4] button followed by # key. Press the [1] button followed by the # key. Please wait up to 60 seconds.<\/p>",
+    "exclusion": "<p>For security reasons a lock will not connect to a new home automation system if it is linked to another. If you have changed your home automation system please remove the device from the old system before adding it on to the new one.<\/p> <p>Touch the keypad with the palm of your hand. Enter the master code, followed by # key. Press the [4] button followed by # key. Press the [3] button followed by the # key. Please wait up to 60 seconds.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.061,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 0,
+        "name": null
+    },
+    "generic_class": {
+        "id": 0,
+        "name": null
+    },
+    "specific_class": {
+        "id": 0,
+        "name": "SPECIFIC_TYPE_NOT_USED"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 64,
+                "name": "GENERIC_TYPE_ENTRY_CONTROL"
+            },
+            "specific_class": {
+                "id": 3,
+                "name": "SPECIFIC_TYPE_SECURE_KEYPAD_DOOR_LOCK"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "4C",
+                    "name": "DOOR_LOCK_LOGGING",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "4E",
+                    "name": "SCHEDULE_ENTRY_LOCK",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "62",
+                    "name": "DOOR_LOCK",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "lock_door",
+                            "label": "Door Lock",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "63",
+                    "name": "USER_CODE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_general",
+                            "label": "Alarm (general)",
+                            "config": []
+                        },
+                        {
+                            "type": "alarm_access",
+                            "label": "Alarm (access)",
+                            "config": [
+                                "type=ACCESS_CONTROL"
+                            ]
+                        },
+                        {
+                            "type": "alarm_power",
+                            "label": "Alarm (power)",
+                            "config": [
+                                "type=POWER_MANAGEMENT"
+                            ]
+                        },
+                        {
+                            "type": "alarm_raw",
+                            "label": "Alarm (raw)",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8A",
+                    "name": "TIME",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8B",
+                    "name": "TIME_PARAMETERS",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "time_offset",
+                            "label": "Clock Time Offset",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Audio Volume",
+            "description": "Sets the volume level of the beeps and voice prompts",
+            "overview": "1 = Silent 2 = Low 3 = High",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Silent"
+                },
+                {
+                    "value": 2,
+                    "label": "Low"
+                },
+                {
+                    "value": 3,
+                    "label": "High"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Auto Re-lock",
+            "description": "When enabled, the unit will automatically re-lock",
+            "overview": "0 = Off 255 = On",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 255,
+                    "label": "On"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Re-lock Time",
+            "description": "Time after unlocking that the device will lock",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 7,
+            "value_max": 90,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Wrong Code Entry Limit",
+            "description": "The number of invalid tries before the lock shutdowns and sends an alarm",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 7,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Alarm Reports",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "\tAlarm reports are sent out to all devices in the association group",
+            "overview": ""
+        }
+    ]
+}

@@ -1,0 +1,209 @@
+{
+    "database_id": 694,
+    "label": "HM-DW001",
+    "manufacturer_name": "Erone",
+    "manufacturer_id": "006F",
+    "device_ref": [
+        "0102:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Door\/Window Contact",
+    "overview": "<p>The Door\/Window Sensor is a Z-Wave\u00ae enabled device (interoperable, two-way RF mesh networking technology) and is fully compatible with any Z-Wave enabled network. Z-Wave enabled devices displaying the Z-Wave logo can also be used with it regardless of the manufacturer, and ours can also be used in other manufacturer\u2019s Z-Wave enabled networks. Each mains powered module in a Network is designed to act as a repeater. Repeaters will retransmit the RF signal to ensure that the signal is received by its intended destination by routing the signal around obstacles and radio dead spots.\u00a0<\/p>",
+    "inclusion": "<p>In the rear casing, there is a tamper switch which is used to carry out inclusion, exclusion or association.<\/p> <ul><li>Put a Z-WAVETM Wireless Controller into inclusion\/exclusion mode,<\/li> <li>Press the tamper switch on the detector to complete the inclusion\/exclusion process.<\/li> <\/ul><p>The Door\/Window Detector will stay \u201cawake\u201d for ten minutes when changing the status of tamper switch from being pressed to be released or from being released to be pressed to allow time for configuration.\u00a0<\/p>",
+    "exclusion": "<p>In the rear casing, there is a tamper switch which is used to carry out inclusion, exclusion or association.<\/p> <ul><li>Put a Z-WAVETM Wireless Controller into inclusion\/exclusion mode,<\/li> <li>Press the tamper switch on the detector to complete the inclusion\/exclusion process.<\/li> <\/ul><p>The Door\/Window Detector will stay \u201cawake\u201d for ten minutes when changing the status of tamper switch from being pressed to be released or from being released to be pressed to allow time for configuration.\u00a0<\/p>",
+    "wakeup": "<p>To wake up the device manually, triple-click the tamper button on the back of the device.<\/p>",
+    "protocol_version": 2.009,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": false,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_ROUTING_SENSOR_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 32,
+                "name": "GENERIC_TYPE_SENSOR_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Basic Set Level",
+            "description": "Value to be sent with a BASIC SET command",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 99,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "Configuring the OFF Delay",
+            "description": "OFF Delay in seconds ",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Tamper Event Report (Alarm Report)",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Control other Z-Wave Devices",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

@@ -1,0 +1,511 @@
+{
+    "database_id": 864,
+    "label": "SmartCode 888",
+    "manufacturer_name": "Black & Decker",
+    "manufacturer_id": "0090",
+    "device_ref": [
+        "0003:0541"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Touchpad Electronic Deadbolt",
+    "overview": "<p>Kwikset\u00ae, the leader in residential security, introduces the SmartCode\u2122 888 Touchpad Electronic Deadbolt with Z-Wave.<\/p> <ul><li>Backlit keypad with One touch locking\u00a0<\/li> <li>30 user codes\u00a0<\/li> <li>BHMA grade 3 certified\u00a0<\/li> <li>Full 128-bit encryption security\u00a0<\/li> <li>Drill and pick resistant backup keyway\u00a0<\/li> <li>SmartKey: Re-key the lock in seconds<\/li> <\/ul>",
+    "inclusion": "<p>\u00a0Press button \u201cA\u201d on the lock one time to include it in your system.<\/p>",
+    "exclusion": "<p>\u00a0Press button \u201cA\u201d on the lock one time to include it in your system.<\/p>",
+    "wakeup": "",
+    "protocol_version": 0,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 7,
+        "name": "LIB_CONTROLLER_BRIDGE"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_ENTRY_CONTROL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_SECURE_KEYPAD_DOOR_LOCK"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 64,
+                "name": "GENERIC_TYPE_ENTRY_CONTROL"
+            },
+            "specific_class": {
+                "id": 3,
+                "name": "SPECIFIC_TYPE_SECURE_KEYPAD_DOOR_LOCK"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "4C",
+                    "name": "DOOR_LOCK_LOGGING",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "4E",
+                    "name": "SCHEDULE_ENTRY_LOCK",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "62",
+                    "name": "DOOR_LOCK",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "lock_door",
+                            "label": "Door Lock",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "63",
+                    "name": "USER_CODE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_access",
+                            "label": "Alarm (access)",
+                            "config": [
+                                "type=ACCESS_CONTROL"
+                            ]
+                        },
+                        {
+                            "type": "alarm_power",
+                            "label": "Alarm (power)",
+                            "config": [
+                                "type=POWER_MANAGEMENT"
+                            ]
+                        },
+                        {
+                            "type": "alarm_raw",
+                            "label": "Alarm (number)",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "75",
+                    "name": "PROTECTION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "76",
+                    "name": "LOCK",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8B",
+                    "name": "TIME_PARAMETERS",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 33,
+            "label": "SKU",
+            "description": "Set the first four most significant bytes of the SKU",
+            "overview": "<p>The configuration parameters 33 and 34 are used to set and get the SKU part numbers. The SKU is made up of 8 bytes. Each parameter consists of four bytes of data. Parameter 33 contains the first four most significant bytes of the SKU, while parameter 34 contains the four least significant bytes of the SKU. When setting the SKU, it must be done in two set commands, one for each parameter. The order of programming the SKU does not matter. Most printable values are accepted for the set command. When getting the SKU, it must be done in two get commands, one for each parameter. The order of getting the SKU does not matter. Getting parameter 33 will retrieve the first four bytes of the SKU. Getting parameter 34 will retrieve the last 4 bytes of the SKU.\u00a0<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 4,
+            "options": []
+        },
+        {
+            "id": 34,
+            "label": "SKU (Last 4)",
+            "description": "The four least significant bytes of the SKU",
+            "overview": "<p>The configuration parameters 33 and 34 are used to set and get the SKU part numbers. The SKU is made up of 8 bytes. Each parameter consists of four bytes of data. Parameter 33 contains the first four most significant bytes of the SKU, while parameter 34 contains the four least significant bytes of the SKU. When setting the SKU, it must be done in two set commands, one for each parameter. The order of programming the SKU does not matter. Setting parameter 33 will program the first four bytes of the SKU. Setting parameter 34 will program the last 4 bytes of the SKU. Most printable values are accepted for the set command. When getting the SKU, it must be done in two get commands, one for each parameter. The order of getting the SKU does not matter. Getting parameter 33 will retrieve the first four bytes of the SKU. Getting parameter 34 will retrieve the last 4 bytes of the SKU.<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 4,
+            "options": []
+        },
+        {
+            "id": 35,
+            "label": "Interior Status LED",
+            "description": "Allows user to get\/set the value for the Interior Status LED control",
+            "overview": "<p>The configuration parameter 35 is a one byte field that will allow the user to get \/ set the value for the Interior Status LED control. The value of 0 means that the setting is disabled; whereas the value of 1 means that the setting is enabled. Sending a set command with the default field set to 1 will cause the control to revert back to its factory default setting.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "OFF"
+                },
+                {
+                    "value": 1,
+                    "label": "ON"
+                }
+            ]
+        },
+        {
+            "id": 36,
+            "label": "Auto-Lock Feature Control",
+            "description": "Enables or disables automatically re-locking of door",
+            "overview": "<p>The configuration parameter 36 uses 2 bytes that will allow the user to get \/ set the value for the Auto Lock feature and timing for that feature. The first byte will be the enable\/disable byte. The value of 0 means that the setting is disabled; whereas the value of 1 means that the setting is enabled. The second byte will be the timing for the Auto Lock feature and should contain the number of seconds before the Auto Lock will occur. The valid values are: 0 (default \u2013 30 seconds), 30, 60, 90, 120, 180. For example, setting the auto lock feature for 60 seconds, the two timing bytes should be: 0x003C. Sending a set command with the default field set to 1 will cause the control to revert back to its factory default settings.\u00a0<\/p>",
+            "size": 2,
+            "bitmask": "00000001",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "OFF"
+                },
+                {
+                    "value": 1,
+                    "label": "ON"
+                }
+            ]
+        },
+        {
+            "id": 36,
+            "label": "Auto-Lock Feature Control Timing",
+            "description": "The number of seconds before the Auto-Lock will occur",
+            "overview": "<p>The number of seconds before the Auto-Lock will occur in increments of 30 starting and going to a max value of 180 seconds.\u00a0 Only allows certain values.<\/p>",
+            "size": 2,
+            "bitmask": "0000FF00",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 30,
+            "value_max": 180,
+            "options": [
+                {
+                    "value": 30,
+                    "label": "Thirty seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "Sixty Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "Ninety Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "One-Twenty Seconds"
+                },
+                {
+                    "value": 180,
+                    "label": "One-Eighty Seconds"
+                }
+            ]
+        },
+        {
+            "id": 37,
+            "label": "Audio Feature Control",
+            "description": "Allows the user to get\/set the audio feed back command",
+            "overview": "<p>Enables or disables the audible notifications on the device<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "OFF"
+                },
+                {
+                    "value": 1,
+                    "label": "ON"
+                }
+            ]
+        },
+        {
+            "id": 40,
+            "label": "Factory Default",
+            "description": "Reset to factory default settings",
+            "overview": "<p>Reset factory default settings, except for the anti-theft setting.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Normal"
+                },
+                {
+                    "value": 1,
+                    "label": "Factory Default"
+                }
+            ]
+        },
+        {
+            "id": 47,
+            "label": "Motor Load Control",
+            "description": "Allows the device to send motor load alarms",
+            "overview": "<p>The configuration parameter 47 uses 1 byte that will allow the user to get \/ set the value to enable or disable the motor load alarm. Setting this byte to 0 will disable the alarm, whereas setting this byte to 1 will enable the alarm. If a motor load alarm has been activated and the alarm has been enabled, the alarm will be sent via the Power Management group in the Notification Command Class as a Load Error (0x09).\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "OFF"
+                },
+                {
+                    "value": 1,
+                    "label": "ON"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": "<p>Group 1 is assigned to the Lifeline group and can only support 1 node. The Lifeline group supports the following unsolicited messages:<span style=\"font-size: 12.16px;\">\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0\u00a0<\/span><\/p>\r\n<table style=\"height: 132px; width: 692px;\">\r\n<tbody>\r\n<tr>\r\n<td style=\"width: 271.6px;\"><strong>Command Class<\/strong><\/td>\r\n<td style=\"width: 407.4px;\"><strong>Command<\/strong><\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"width: 271.6px;\">Command Class Battery<\/td>\r\n<td style=\"width: 407.4px;\">Battery Report<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"width: 271.6px;\">Command Class Door Lock\u00a0 \u00a0<\/td>\r\n<td style=\"width: 407.4px;\">Door Lock Operation Report<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"width: 271.6px;\">Command Class Notification<\/td>\r\n<td style=\"width: 407.4px;\">Notification Report<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"width: 271.6px;\">Command Class Device Reset Locally\u00a0<\/td>\r\n<td style=\"width: 407.4px;\">Device Reset Locally Notification<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>\r\n<p>\u00a0<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Doorlock notify report",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "Provides all Notificaton Reports",
+            "overview": "<p>Association group 2 is identified as the \u201cDoorlock notify report\u201d group. It allows at most 5 other nodes to be associated with the lock and will provide all Notification Reports, via the Command Class Notification, generated by the lock.\u00a0<\/p>"
+        }
+    ]
+}

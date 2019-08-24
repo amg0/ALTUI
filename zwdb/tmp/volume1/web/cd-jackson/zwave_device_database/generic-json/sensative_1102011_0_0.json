@@ -1,0 +1,517 @@
+{
+    "database_id": 747,
+    "label": "11 02 011",
+    "manufacturer_name": "Sensative AB",
+    "manufacturer_id": "019A",
+    "device_ref": [
+        "0003:000A"
+    ],
+    "version_min": 0,
+    "version_max": 0.2,
+    "decription": "Strips Comfort\/Drips Multisensor",
+    "overview": "<p>Strips, the ultra-thin multi sensor is now available in two new sensor models, Strips Drip and Strips Comfort. Drip and Comfort join Strips Guard, the thinnest magnet sensor in the world detecting if your windows are open and closed invisibly since 2015. Strip Drip sends an alarm signal if it detects a water leak. Its unique design allows it to be easily placed almost everywhere, including most places other sensors simply can\u2019t fit. With soaking pads integrated in the mounting plate even small amounts of water will be detected. The built-in temperature sensor gives the possibility to combine the leakage alarm with a freeze alarm. There is also a built-in ambient light sensor that may be useful in special applications. Strips Comfort is a very accurate temperature and ambient light sensor. The unique design and mounting plate makes it easy to place almost invisibly in your home to measure temperature or control heating, air conditioning and even windows blinds which are connected to your Z-Wave smart home system. All Strips products can be used both in-doors and out-doors and the integrated custom battery gives Strips an expected lifetime of up to 10 years. For you, this means no hassle needing to change or charge batteries in your Strips sensors for the lifetime of the products!<\/p> <p>You may need to reset Strips if your Z-Wave controller is missing or not responding. Follow the instructions for \u201cWake up\u201d, but on the 3rd repetition, leave the magnet at the rounded edge for 10 seconds. A long LED signal indicates success.<\/p>",
+    "inclusion": "<p>Set your controller to add mode (see your controller\u2019s manual). Follow the instruction for Wake up. A long LED blink indicates that the add\/remove was successful.<\/p>",
+    "exclusion": "<p>Set your controller to remove mode (see your controller\u2019s manual). Follow the instruction for Wake up. A long LED blink indicates that the add\/remove was successful.<\/p>",
+    "wakeup": "<p>Wake up Strips manually for Z-Wave communication. Place the magnet at the rounded edge. When the LED blinks, move the magnet away. Repeat twice within 10 seconds.<\/p>",
+    "protocol_version": 4.054,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "5",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        },
+                        {
+                            "type": "sensor_moisture",
+                            "label": "Sensor (moisture)",
+                            "config": [
+                                "type=MOISTURE"
+                            ]
+                        },
+                        {
+                            "type": "sensor_luminance",
+                            "label": "Sensor (luminance)",
+                            "config": [
+                                "type=LUMINANCE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "4",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        },
+                        {
+                            "type": "alarm_flood",
+                            "label": "Alarm (flood)",
+                            "config": [
+                                "type=FLOOD"
+                            ]
+                        },
+                        {
+                            "type": "alarm_heat",
+                            "label": "Alarm (heat)",
+                            "config": [
+                                "type=HEAT"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": []
+        }
+    ],
+    "parameters": [
+        {
+            "id": 3,
+            "label": "Temperature reporting mode",
+            "description": "0:Off 1:Normal 2:High Accuracy",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": " Off"
+                },
+                {
+                    "value": 1,
+                    "label": "Normal"
+                },
+                {
+                    "value": 2,
+                    "label": "High Accuracy"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Temperature reporting unit",
+            "description": "0:Celcius 1:Fahrenheit",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Celcius"
+                },
+                {
+                    "value": 1,
+                    "label": "Fahrenheit"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "High Temperature alarm",
+            "description": "0:Off 1:On",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Off"
+                },
+                {
+                    "value": 1,
+                    "label": "On"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": "High Temperature alarm level",
+            "description": "-20 to + 60 degree C",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -20,
+            "value_max": 60,
+            "options": [
+                {
+                    "value": -20,
+                    "label": "Temperature alarm level"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "Low Temperature alarm",
+            "description": "0:Off 1:On",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Off"
+                },
+                {
+                    "value": 1,
+                    "label": "On"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "label": "Low Temperature alarm level ",
+            "description": "-20 to + 60 degree C",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": -20,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -20,
+            "value_max": 60,
+            "options": [
+                {
+                    "value": -20,
+                    "label": "Temperature alarm level"
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "label": "Ambient light reporting",
+            "description": "0:Off 1:On",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Off"
+                },
+                {
+                    "value": 1,
+                    "label": "On"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "label": "Leakage alarm",
+            "description": "0:Off 1:On",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Off"
+                },
+                {
+                    "value": 1,
+                    "label": "On"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "label": "Leakage alarm level",
+            "description": "1 to 100 (1= almost dry, 100 = soaking wet)",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 25,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 100,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "(1= almost dry, 100= soaking wet)"
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "label": "Moisture reporting period",
+            "description": "0-120: Number of hours between moisture reports",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 120,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Number of hours between moisture reports"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

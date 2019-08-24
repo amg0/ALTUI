@@ -1,0 +1,300 @@
+{
+    "database_id": 1045,
+    "label": "GE 28169 \/ Jasco 28168",
+    "manufacturer_name": "Jasco Products",
+    "manufacturer_id": "0063",
+    "device_ref": [
+        "5052:3037",
+        "5052:3038"
+    ],
+    "version_min": 5,
+    "version_max": 255.255,
+    "decription": "Plug in Smart Switch",
+    "overview": "<p>Z-wave controlled AC outlet for standard incandescent lighting, CFL\/LEDs, fans or small appliances.<br \/>Must not exceed 600 watts (Incandescent); 1800W (15A) Resistive or \u00bd HP Motor\u00a0<\/p>",
+    "inclusion": "<p>Put controller into inclusion mode, single press and release the manual\/program button on the smart switch to include it in the network<\/p>",
+    "exclusion": "<p>Put controller into exclusion mode, single press and release the manual\/program button on the smart switch to exclude it from the network<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.005,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2C",
+                    "name": "SCENE_ACTUATOR_CONF",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "56",
+                    "name": "CRC_16_ENCAP",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 3,
+            "label": "LED Light",
+            "description": "Set the state of the LED Light",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED Light on when Z-Wave turned OFF (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "LED Light on when Z-Wave turned On"
+                },
+                {
+                    "value": 2,
+                    "label": "LED Light Always Off"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "Supports Lifeline, Binary Switch Report",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Single Press Button",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Sends message directly to configured node on single press of button.",
+            "overview": "<p><span style=\"font-size: 12.16px;\">This device will\u00a0send a Basic Set Message directly to\u00a0whatever\u00a0Z-wave device you have mapped this setting to when you\u00a0single press the on\/off button. For example, if you map this setting to a wall switch and then\u00a0single press the on\/off button on\u00a0this\u00a0<\/span><span style=\"font-size: 12.16px;\">\"Plug in Smart Switch,\"<\/span><span style=\"font-size: 12.16px;\">\u00a0a corresponding on\/off message will be sent directly to that wall switch, bypassing\u00a0openHAB.<\/span><\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Double Press button",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Sends message directly to configured node on double press of button.",
+            "overview": "<p><span style=\"font-size: 12.16px;\">This device will\u00a0send a Basic Set Message directly to\u00a0whatever\u00a0Z-wave device you have mapped this setting to when you double press the on\/off button. For example, if you map this setting to a wall switch and then double press the on\/off button on\u00a0this\u00a0<\/span><span style=\"font-size: 12.16px;\">\"Plug in Smart Switch,\"<\/span><span style=\"font-size: 12.16px;\">\u00a0a corresponding on\/off message will be sent directly to that wall switch, bypassing\u00a0openHAB.<\/span><\/p>"
+        }
+    ]
+}

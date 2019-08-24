@@ -1,0 +1,263 @@
+{
+    "database_id": 800,
+    "label": "HM-HS1WL-Z",
+    "manufacturer_name": "Zipato",
+    "manufacturer_id": "0131",
+    "device_ref": [
+        "8004:1000"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Smart Water Leakage Sensor",
+    "overview": "<p>INTRODUCTION<\/p> <p>Smart Water Leakage sensor adopts Z-Wave wireless module. Super low power consumption circuit design ensures the long battery lifespan. Separate design of body and sensor efficiently prevents the influence resulted from high humidity. High precision and sensitivity applicable for basement, machine room, hotel, water tower, pool, swimming pool, solar, kitchen, bathroom and other places may have water leakage or water overflow.<\/p> <p>SPECIFICATION<\/p> <p>Working voltage: DC3V (2 x AAA battery) <br \/>Static current: 5uA <br \/>Alarm current: 35mA <br \/>Networking: Z-Wave<br \/> Wireless networking distance: 70 (open area) <br \/>Working temperature: -10\u00b0C~+50\u00b0C<br \/> Working humidity: max 95%RH<br \/> Body dimensions: 76 x 36.6 x 16.5 mm <br \/>Sensor dimensions: 28.3 x 26.5 x 12.2 mm<\/p> <p>WARNINGS <br \/>1. Install water leakage sensor at areas where it may leak. <br \/>2. Don\u2019t install water leakage sensor at position of rainwater, lampblack, water vapor, etc. <br \/>3. Don\u2019t install water leakage sensor at water immersed position.<\/p> <p>ASSOCIATION &amp; ASSOCIATION GROUP INFORMATION <br \/>- Lifeline between controller and Water Leak Sensor <br \/>- Supported command classes Battery report, Notification report, and Device Reset Locally notification, Binary report.<\/p> <p>- Association Group description <br \/><br \/>\u2022 Association group 1: Lifeline association group <br \/>- Maximum supported nodes are <br \/>1. Include command classes: Battery report, Notification report, and Device Reset Locally notification, Binary report. <br \/><br \/>\u2022 Association group 2: Root Device group (Binary Sensor) <br \/>- Maximum supported nodes are 5. <br \/>1-Binary Sensor Command Class: Compatible with 300 series <br \/>2-Binary Sensor reports status of water or no water via Lifeline. <br \/>3-When the sensor detects status change between water and no water, the device will be triggered.<\/p> <p>\u2022 Association group 3: Root Device group (Binary Sensor) <br \/>- Maximum supported nodes are 5. <br \/>- Binary Sensor Command Class:Compatible with 300 series <br \/>1-Binary Sensor reports the removed status of water sensor. <br \/>2-When the sensor detects status change of tamper, the device will be triggered. <br \/><br \/>\u2022 Association group 4: Root Device group (Notification) <br \/>- Maximum supported nodes are 5. <br \/>1-Notification reports reports status of detect water or no water via Lifeline. <br \/>2-When the sensor detects status change between water and no water, the device will be triggered. <br \/><br \/>\u2022 Association group 5: Root Device group (Notification) <br \/>- Maximum supported nodes are 5. <br \/>1-Binary Sensor reports the removed status of water sensor <br \/>1-When the sensor detects status change of tamper, the device will be triggered.<\/p> <p>4-Association &amp; Association Group Information <br \/>- Lifeline between controller and the product <br \/>- Supported command classes: Battery report, multilevel sensor, and Device Reset Locally notification.<\/p>",
+    "inclusion": "<p>INSTALLATION STEP 1:\u00a0<br \/>Remove battery insulation film to power it on<\/p> <p>INSTALLATION STEP 2: <br \/>1.\u00a0DEVICE INCLUSION <br \/>- Click [Add] icon in Z-Wave PC Controller Program. <br \/>- Press the networking button 3 times within 1.5s, Green LED is blinking 3 times within 1 second. <br \/>- If Inclusion Process is successful, Green led will turn off.<\/p>",
+    "exclusion": "<p>DEVICE EXCLUSION <br \/>- Click [Remove] icon in Z-Wave PC Controller Program <br \/>- Press the networking button 3 times within 1.5s <br \/>- If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.<\/p> <p>FACTORY RESET <br \/>Long press the networking button, then power on (put into the battery), ID code is clear and reset to factory settings.<\/p>",
+    "wakeup": "<p>The manual doesn't say, but I've found that tapping the tamper sensor once makes the device blink and that seems to wake it up.<\/p>",
+    "protocol_version": 4.038,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "7",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        },
+                        {
+                            "type": "alarm_flood",
+                            "label": "Alarm (flood)",
+                            "config": [
+                                "type=FLOOD"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "Lifeline association group",
+            "overview": "<p><span style=\"font-size: 12.16px;\">1. Include command classes: <\/span><\/p>\r\n<p><span style=\"font-size: 12.16px;\">Battery report, <br \/>Notification report, <br \/>Device Reset Locally notification, <br \/>Binary report.\u00a0<\/span><\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Root Device group (Binary Sensor)",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Root Device group (Binary Sensor)",
+            "overview": "<p><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">1-Binary Sensor Command Class: Compatible with 300 series\u00a0<\/span><br style=\"box-sizing: inherit; color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\" \/><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">2-Binary Sensor reports status of water or no water via Lifeline.\u00a0<\/span><br style=\"box-sizing: inherit; color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\" \/><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">3-When the sensor detects status change between water and no water, the device will be triggered.<\/span><\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Root Device group (Binary Sensor) ",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Root Device group  (Binary Sensor) ",
+            "overview": "<p><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">- Binary Sensor Command Class:Compatible with 300 series\u00a0<\/span><br style=\"box-sizing: inherit; color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\" \/><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">1-Binary Sensor reports the removed status of water sensor.\u00a0<\/span><br style=\"box-sizing: inherit; color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\" \/><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">2-When the sensor detects status change of tamper, the device will be triggered.\u00a0<\/span><\/p>"
+        },
+        {
+            "id": 4,
+            "label": "Root Device group (Notification) ",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Root Device group (Notification) ",
+            "overview": "<p><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">1-Notification reports reports status of detect water or no water via Lifeline.\u00a0<\/span><br style=\"box-sizing: inherit; color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\" \/><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">2-When the sensor detects status change between water and no water, the device will be triggered.\u00a0<\/span><\/p>"
+        },
+        {
+            "id": 5,
+            "label": "Root Device group (Notification) ",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Root Device group (Notification) ",
+            "overview": "<p><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">1-Binary Sensor reports the removed status of water sensor\u00a0<\/span><br style=\"box-sizing: inherit; color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\" \/><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">1-When the sensor detects status change of tamper, the device will be triggered.<\/span><\/p>\r\n<p><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">4-Association &amp; Association Group Information\u00a0<\/span><br style=\"box-sizing: inherit; color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\" \/><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">- Lifeline between controller and the product\u00a0<\/span><br style=\"box-sizing: inherit; color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\" \/><span style=\"color: #666666; font-family: roboto, sans-serif; font-size: 16px; background-color: #f2f2f2;\">- Supported command classes: Battery report, multilevel sensor, and Device Reset Locally notification.<\/span><\/p>"
+        }
+    ]
+}

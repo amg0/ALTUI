@@ -1,0 +1,474 @@
+{
+    "database_id": 1037,
+    "label": "YRD216",
+    "manufacturer_name": "ASSA ABLOY",
+    "manufacturer_id": "0129",
+    "device_ref": [
+        "8004:0600"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Yale Real Living Assure Lock Push Button Deadbolt",
+    "overview": "<p>Yale Assure Lock<\/p> <ul><li>Push Button keypad with backlit numbers that won\u2019t wear off<\/li> <li>Mechanical key override<\/li> <li>Manage up to 25 unique codes\u00a0to share with friends and family<\/li> <li>Weather Protection Gasket<\/li> <li>One-touch locking and keypad wake-up<\/li> <li>Privacy Mode \u2013 privacy button located on the interior side of the lock enables users to temporarily disable user codes<\/li> <li>Tamper Resistant Battery Cover<\/li> <li>Tamper Alert \u2013 audible alarm sounds if there is an attempt to forcibly remove the lock<\/li> <li>Automatically relocks after 30 seconds<\/li> <li>Simple to install on standard doors and replaces your existing deadbolt in minutes with just a screwdriver<\/li> <li>Certified ANSI\/BHMA A156.36, Grade 2<\/li> <li>Lifetime limited warranty for finish and mechanical,\u00a0one year electronics<\/li> <\/ul><p>Zwave alliance information:\u00a0https:\/\/products.z-wavealliance.org\/products\/1971<\/p>",
+    "inclusion": "<p>To join the lock in a Z-Wave Network (taken from the installation\u00a0manual)<\/p> <ol><li>Enter the master pin\u00a0and press #<\/li> <li>Press 7, then #<\/li> <li>Press 1, then #<\/li> <\/ol><p>The lock will now be in inclusion mode.<\/p>",
+    "exclusion": "<p>To exit the Z-Wave Network (taken from the installation\u00a0manual)<\/p> <ol><li>Enter the master pin\u00a0and press #<\/li> <li>Press 7, then #<\/li> <li>Press 3, then #<\/li> <\/ol><p>The lock will now be in exclusion mode.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.024,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 3,
+        "name": "BASIC_TYPE_SLAVE"
+    },
+    "generic_class": {
+        "id": 3,
+        "name": "GENERIC_TYPE_ENTRY_CONTROL"
+    },
+    "specific_class": {
+        "id": 3,
+        "name": "SPECIFIC_TYPE_SECURE_KEYPAD_DOOR_LOCK_DEADBOLT"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 64,
+                "name": "GENERIC_TYPE_ENTRY_CONTROL"
+            },
+            "specific_class": {
+                "id": 3,
+                "name": "SPECIFIC_TYPE_SECURE_KEYPAD_DOOR_LOCK"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "4C",
+                    "name": "DOOR_LOCK_LOGGING",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "4E",
+                    "name": "SCHEDULE_ENTRY_LOCK",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "62",
+                    "name": "DOOR_LOCK",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "lock_door",
+                            "label": "Door Lock",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "63",
+                    "name": "USER_CODE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8A",
+                    "name": "TIME",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8B",
+                    "name": "TIME_PARAMETERS",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Silent mode",
+            "description": "Silent mode on\/off",
+            "overview": "<p>Default is 1 or High Volume<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Loud"
+                },
+                {
+                    "value": 2,
+                    "label": "Quiet"
+                },
+                {
+                    "value": 3,
+                    "label": "Off"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Auto Relock",
+            "description": "Auto Relock on\/off",
+            "overview": "<p>default is 0x00 or OFF<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Auto relock off"
+                },
+                {
+                    "value": 255,
+                    "label": "Auto relock on"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Auto Relock Time",
+            "description": "Auto Relock Time",
+            "overview": "<p>10 to 180 seconds (default is 30 seconds)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 10,
+            "value_max": 180,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Wrong code Entry Limit",
+            "description": "Wrong code Entry Limit",
+            "overview": "<p>3 to 10 (default is 5 times)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 3,
+            "value_max": 10,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Language",
+            "description": "Language",
+            "overview": "<p>1=English, 2=Spanish, 3=French (default is 1= English)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "English"
+                },
+                {
+                    "value": 2,
+                    "label": "Spanish"
+                },
+                {
+                    "value": 3,
+                    "label": "French"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "Shut down time",
+            "description": "Shut down time after wrong code entries",
+            "overview": "<p>10 to 180 seconds (default is 60 seconds)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 10,
+            "value_max": 180,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Operating mode",
+            "description": "Operating mode",
+            "overview": "<p>00 = normal mode (this is the default mode)<br \/>01 = vacation mode, keypad lockout<br \/>02 = privacy mode, no keypad. RF Unlock will work<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Normal"
+                },
+                {
+                    "value": 1,
+                    "label": "Vacation"
+                },
+                {
+                    "value": 2,
+                    "label": "Privacy"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "label": "One touch locking",
+            "description": "One touch locking",
+            "overview": "<p>0x00 = OFF, 0xFF = ON (default)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "Privacy button",
+            "description": "Privacy button",
+            "overview": "<p>0x00 = OFF (default), 0xFF = ON<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 13,
+            "label": "Lock status LED",
+            "description": "Lock status LED",
+            "overview": "<p>0x00 = OFF (default), 0xFF = ON<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 15,
+            "label": "Reset to factory default",
+            "description": "Reset to factory default",
+            "overview": "<p>01 = Lock will execute Reset To Factory.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Association group",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Lifeline",
+            "overview": ""
+        }
+    ]
+}

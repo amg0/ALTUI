@@ -1,0 +1,346 @@
+{
+    "database_id": 684,
+    "label": "DMMZ1",
+    "manufacturer_name": "Elexa Consumer Products Inc.",
+    "manufacturer_id": "021F",
+    "device_ref": [
+        "0003:0104"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Dome Battery powered Z-Wave Plus enabled mousetrap",
+    "overview": "<p>The Dome Mouser is a battery powered Z-Wave Plus enabled mousetrap that works by electrocution and is designed to be humane and painless to the rodent. After a mouse is caught, the Mouser will send a Z-Wave signal to its controller to notify the user, and will not retrigger until the trap is reset.\u00a0<\/p>",
+    "inclusion": "<p>Press the CONNECT BUTTON quickly 3 times in a row. The LED INDICATOR will flash five times indicating inclusion<\/p>",
+    "exclusion": "<p>Press the CONNECT BUTTON quickly 3 times in a row. The LED INDICATOR will flash five times indicating exclusion\/disconnection.\u00a0<\/p>",
+    "wakeup": "<p>The device can be forced to wake up to submit reports or accept new settings immediately by simply pressing and holding the BUTTON for two seconds. The LED INDICATOR will flash once indicating successful wake up<\/p>",
+    "protocol_version": 4.038,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_general",
+                            "label": "Alarm",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "BASIC_SET Level",
+            "description": "Sets the value sent by the BASIC_SET command to Association Group 2",
+            "overview": "<p>This parameter sets the value sent by the BASIC_SET command to Association Group 2 (for more information, see \u201cAssocation Groups\u201d.)<\/p> <p>00 (0\/Turn Off Device)<\/p> <p>01 ~ 63 (0-99)<\/p> <p>FF (255\/Turn On Device)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "Set Firing Mode",
+            "description": "This parameter sets the \u201cfiring mode\u201d of the Mouser.",
+            "overview": "<p>This parameter sets \u201cfiring mode\u201d of the Mouser. Two firing modes are available: in the first (Continuous Fire,) electricity is passed continuously for the entire duration, and in the second (Burst Fire,) electricity is passed continuously only for the first minute and it is pulsed at approximately 400 beats per minute for the remainder of the time.<\/p> <p>01 (Continuous Fire)<\/p> <p>02 (Burst Fire)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Continuous Fire"
+                },
+                {
+                    "value": 2,
+                    "label": "Burst Fire"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "High Voltage Duration Time ",
+            "description": "How long the Mouser will fire continuously before it starts to burst-fire",
+            "overview": "<p>This parameter defines how long the Mouser will fire continuously before it starts to burst-fire (see parameter 2.)<\/p> <p>00 64 ~ 01 68 (100~360 in Seconds)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 64,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 64,
+            "value_max": 168,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Enable\/Disable LED Alarm",
+            "description": " Enables or disables the indicator LED alarm when the trap is tripped",
+            "overview": "<p>This parameter enables or disables the indicator LED alarm when the trap is tripped.<\/p> <p>00 (LED Alarm Disabled)<\/p> <p>01 (LED Alarm Enabled)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED Alarm Disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "LED Alarm Enabled"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "LED Alarm Duration",
+            "description": "Sets the amount of time the LED Indicator blinks after the trap is tripped",
+            "overview": "<p>This parameter sets the amount of time the LED Indicator blinks after the trap is tripped.<\/p> <p>00 (LED Alarm Blinks Until Trap is Cleared)<\/p> <p>01~FF (1~255 in Hours)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Group 1",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p><span style=\"font-family: 'Helvetica Neue', Helvetica, Arial, 'Microsoft Yahei', \u5fae\u8f6f\u96c5\u9ed1, STXihei, \u534e\u6587\u7ec6\u9ed1, sans-serif; font-size: 13px;\">Group 1 is the \u201cLifeline\u201d group, which can hold five members, typically including the main Z-Wave controller. The Door\/Window Sensor sends this group a Notification Report and a Binary Sensor Report when it is tripped, reset, armed, and disarmed. It also sends this group a Battery Report in response to Battery Get commands.<\/span><\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Group 2",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p><span style=\"font-family: 'Helvetica Neue', Helvetica, Arial, 'Microsoft Yahei', \u5fae\u8f6f\u96c5\u9ed1, STXihei, \u534e\u6587\u7ec6\u9ed1, sans-serif; font-size: 13px;\">The Mouser sends a Basic Set command to Association Group 2 (or the Control Group) to directly trigger devices (like a light, chime, etc.) when it is tripped. After the trap is reset, a BASIC_SET(00) command is sent to reset the device (e.g. turn off the light.) The value of the Basic Set command (e.g. brightness of the lamp) is configured using configuration parameter 1.<\/span><\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Group 3",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p><span style=\"font-family: 'Helvetica Neue', Helvetica, Arial, 'Microsoft Yahei', \u5fae\u8f6f\u96c5\u9ed1, STXihei, \u534e\u6587\u7ec6\u9ed1, sans-serif; font-size: 13px;\">Group 3 supports up to 5 members and the Mouser sends it a NOTIFICATION_REPORT when tripped, reset, armed, and disarmed.<\/span><\/p>"
+        },
+        {
+            "id": 4,
+            "label": "Group 4",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p><span style=\"font-family: 'Helvetica Neue', Helvetica, Arial, 'Microsoft Yahei', \u5fae\u8f6f\u96c5\u9ed1, STXihei, \u534e\u6587\u7ec6\u9ed1, sans-serif; font-size: 13px;\">Group 4 supports up to 5 members and the Mouser sends it a SENSOR_BINARY_REPORT when tripped, reset, armed, and disarmed.<\/span><\/p>"
+        }
+    ]
+}

@@ -1,0 +1,310 @@
+{
+    "database_id": 410,
+    "label": "MINI KEYPAD RFID",
+    "manufacturer_name": "Zipato",
+    "manufacturer_id": "0131",
+    "device_ref": [
+        "4501:6131",
+        "6131:4101",
+        "6131:4501",
+        "6131:5501"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Keypad with alarm activation rfid tag",
+    "overview": "<p>Place the Tag Reader close to the main exit of your office or home to enjoy it\u2019s full potential.<\/p> <p>With the Tag Reader you can activate or de-activate your security by simply passing the RFID Tag in front of the reader. It is called a Tag Reader because it uses RFID Tags to identify people and their personal preferences around leaving the house or coming home.<\/p> <p>Separately from working with RFID Tags, the Tag Reader also has a numerical keypad. Within the free of charge online manager you can configure a numerical code. This way you prevent being locked out of the system in case you may have lost the RFID Tag.<\/p> <p>By using the Tag Reader intelligently you can secure your house and save money on your energy bill at the same time. You can actually let your house \u2018fall asleep\u2019 when enabling the \u2018Away Scene\u2019. This is especially noted when u are using energy saving products of BeNext such as Radiator Control and of course a Energy Switch.<\/p> <ul><li>Class: 0x85 COMMAND_CLASS_ASSOCIATION<\/li> <li>Class: 0x80 COMMAND_CLASS_BATTERY<\/li> <li>Class: 0x84 COMMAND_CLASS_WAKE_UP<\/li> <li>Class: 0x86 COMMAND_CLASS_VERSION<\/li> <li>Class: 0x72 COMMAND_CLASS_MANUFACTURER_SPECIFIC_V2<\/li> <li>Class: 0x71 COMMAND_CLASS_ALARM_V2<\/li> <li>Class: 0x70 COMMAND_CLASS_CONFIGURATION<\/li> <li>Class: 0x25 COMMAND_CLASS_SWITCH_BINARY<\/li> <li>Class: 0x63 COMMAND_CLASS_USER_CODE<\/li> <\/ul><p>Some link<\/p> <p>http:\/\/www.openzwave.com\/device-database\/0097%3A4501%3A6131<\/p> <p>http:\/\/www.fhemwiki.de\/wiki\/Z-Wave-ZIP_WT-RFID_Keypad<\/p> <p>HASH DEVICE 0097:4501:6131<\/p>",
+    "inclusion": "<p>Press and hold the tamper for 1 seconds and release to start the inclusion\/exclusion process.<\/p>",
+    "exclusion": "<p>Press and hold the tamper for 1 seconds and release to start the inclusion\/exclusion process.<\/p>",
+    "wakeup": "<p>Tap a button. The always awake mode can be activated by: CONFIGURATION_SET \/ Parameter: 0x05 \/ Size: 0x01 (can\u2019t be different from 1) \/ Value: 0x03 (mode 3)<\/p>",
+    "protocol_version": 0,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_ENTRY_CONTROL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOT_USED"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 64,
+                "name": "GENERIC_TYPE_ENTRY_CONTROL"
+            },
+            "specific_class": {
+                "id": 0,
+                "name": "SPECIFIC_TYPE_NOT_USED"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "63",
+                    "name": "USER_CODE",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_access",
+                            "label": "Alarm (access)",
+                            "config": [
+                                "type=ACCESS_CONTROL"
+                            ]
+                        },
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Set to default",
+            "description": "Set all configuration to factory settings",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -128,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": -1,
+                    "label": "Reset to default factory"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Feedback time",
+            "description": "To configure the time the beep is automatically turned off in seconds.",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 15,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -128,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": -1,
+                    "label": "Endless"
+                },
+                {
+                    "value": 0,
+                    "label": "Disabled"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Feedback timeout",
+            "description": "Timeout beep",
+            "overview": "<p>To configure the timeout to wait for a WAKEUP_NO_MORE_INFORMATION before the error beep is automatically sound. The error beep are fixed 8 beeps shortly after each other.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -128,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Feedback beeps per second",
+            "description": "To configure the number of beeps per second. Every beep is fixed about 10ms.",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -128,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "The mode",
+            "description": "Operating mode",
+            "overview": "<p>1 \u00a0 -&gt; \u00a0 Normal operating mode 3 \u00a0 -&gt; \u00a0 Z\u2010Wave chip is always on to request e.g. version or manufacturer id. 2 \u00a0 -&gt; \u00a0 If any mode other then 3, that value will be reported after a get but will be handled in SW as mode 1. 4 - 127 \u00a0 -&gt; \u00a0 If any mode other then 3, that value will be reported after a get but will be handled in SW as mode 1.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Normal operating mode"
+                },
+                {
+                    "value": 2,
+                    "label": "Normal operating mode (like 1)"
+                },
+                {
+                    "value": 3,
+                    "label": "Z\u2010Wave chip is always on to request"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Association",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "The Association Command Class is used to associate the TagReader to other devices. When a tag or code is read, the TagReader will send a notification to the Z\u2010Wave devices in its association group. It will also report the state of the tamper alarm to the ",
+            "overview": ""
+        }
+    ]
+}

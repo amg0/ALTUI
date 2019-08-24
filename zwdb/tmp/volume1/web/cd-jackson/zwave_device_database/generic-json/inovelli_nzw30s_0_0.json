@@ -1,0 +1,331 @@
+{
+    "database_id": 894,
+    "label": "NZW30S",
+    "manufacturer_name": "Inovelli",
+    "manufacturer_id": "0312",
+    "device_ref": [
+        "1E00:1E00"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "In-Wall Switch (On\/Off) Scene Enabled",
+    "overview": "<p>Turn ON\/OFF manually or remotely via the Z-Wave controller<br \/>\u2022 Can be Included in multiple Groups and Scenes\u00a0<br \/>\u2022 Compatible with all incandescent and CFL\/ LED bulbs<br \/>\u2022 Blue LED indicates switch location in a dark room<br \/>\u2022 Z-Wave Certified for simple pairing and integrated home automation<br \/>\u2022 Screw Terminal Installation \u2014 requires wiring connections for Line (Hot), Load, Neutral.<\/p>",
+    "inclusion": "<p>AUTO-INCLUSION! PLEASE READ.<\/p> <p>PLEASE NOTE:\u00a0This product is equipped with auto-inclusion to make your life easier. However, please read below to make sure you set it up properly:<\/p> <ul><li>Please\u00a0DO NOT\u00a0switch on your power until you are physically including the switch to [your controller] as auto-inclusion will time-out in 30 seconds<\/li> <li>If successful, the switch will blink twice<\/li> <li>If unsuccessful, please use the backup method, which is to press the top button 6x within 2 seconds<\/li> <\/ul>",
+    "exclusion": "<ul><li>Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.<\/li> <li>Once the controller is ready to Exclude your device, press the B button 6 times within two seconds.<\/li> <li>Manual removal by pressing B button 5 seconds after shutting power off and turning it back on)<\/li> <\/ul>",
+    "wakeup": "",
+    "protocol_version": 4.061,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "22",
+                    "name": "APPLICATION_STATUS",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "0",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "75",
+                    "name": "PROTECTION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 3,
+            "label": "LED ON - Switch ON",
+            "description": "LED Indicator. Default = Switch On \/ LED Off",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Switch On \/ LED On"
+                },
+                {
+                    "value": 1,
+                    "label": "Switch Off \/ LED On"
+                },
+                {
+                    "value": 2,
+                    "label": "Disable LED"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Invert",
+            "description": "Invert switch",
+            "overview": "<p>To change the top of the switch to OFF and the bottom to ON.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Up=On, Down=Off"
+                },
+                {
+                    "value": 1,
+                    "label": "Up=Off, Down=On"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Countdown",
+            "description": "Countdown Timer",
+            "overview": "<p>Value 0 (default) = No Timer<\/p> <p>Range = 0 - 32768 Seconds<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32768,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p>An association command class that allows the device\u00a0to communicate with other Z-Wave devices directly -- such as sending BASIC REPORT whenever the switch\u00a0is turned on or off.<\/p>"
+        }
+    ]
+}

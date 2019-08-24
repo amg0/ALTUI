@@ -1,0 +1,1110 @@
+{
+    "database_id": 980,
+    "label": "Z-TRM2fx",
+    "manufacturer_name": "ThermoFloor",
+    "manufacturer_id": "019B",
+    "device_ref": [
+        "0003:0202"
+    ],
+    "version_min": 3,
+    "version_max": 255.255,
+    "decription": "Floor thermostat",
+    "overview": "<p>FEATURES<\/p> <ul><li>Floor sensor<\/li> <li>External room sensor<\/li> <li>Temperature limiter<\/li> <li>Weekly program\/setback via gateway or pilot wire<\/li> <li>Multilevel sensor command class<\/li> <li>Firmware updates (OTA)<\/li> <li>Power metering<\/li> <li>LED-diode<\/li> <li>May be used in connection with different NTC-sensors<\/li> <li>Lock mode\/child lock<\/li> <li>Calibration<\/li> <li>5 associations<\/li> <li>Supports encryption mode: S0, S2 Authenticated Class, S2 Unauthenticated Class<\/li> <\/ul>",
+    "inclusion": "<p>To\u00a0add\u00a0the thermostat to your home automation gateway, press Center (confirm) for 10 seconds.The display will show OFF.<\/p> <p>Press Right (down) 4 times till you see Con in the display.<\/p> <p>Now start add device in your home automation software.<\/p> <p>Start adding mode by pressing Center (confirm) for approximately 2 seconds.<\/p> <p>Adding Mode is indicated in the display by some \u201ccircling\u201d LED segments in the display until the timeout occurs after 20 seconds or the module has been added in the network.<\/p> <p>Confirmation will show Inc in the display. If adding fails, Err (error) will appear.<\/p> <p>Leave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings.<\/p>",
+    "exclusion": "<p>To remove the thermostat\u00a0from your home automation gateway, press Center (confirm) for 10 seconds. The display will show OFF.<\/p> <p>Press Right (down) 4 times till you see Con in the display.<\/p> <p>Now start remove device in your home automation software.<\/p> <p>Start removing mode by pressing Center (confirm) for approximately 2 seconds.<\/p> <p>Removing Mode is indicated in the display by some \u201ccircling\u201d LED segments in the display until the timeout occurs after 20 seconds or the module has been removed\u00a0from the network.<\/p> <p>Confirmation will show Inc\/EcL in the display. If removing fails, Err (error) will appear.<\/p> <p>Leave programming mode by choosing ESC in menu.<\/p>",
+    "wakeup": "",
+    "protocol_version": 5.003,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_THERMOSTAT"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 8,
+                "name": "GENERIC_TYPE_THERMOSTAT"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_voltage",
+                            "label": "Electric meter (volts)",
+                            "config": [
+                                "type=E_V"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "60",
+                    "name": "MULTI_INSTANCE",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "config_decimal",
+                            "label": "Energy Saving Mode Setpoint (ECO)",
+                            "config": [
+                                "parameter=10"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Heating mode setpoint (Comfort)",
+                            "config": [
+                                "parameter=9"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Display brightness - dimmed",
+                            "config": [
+                                "parameter=17"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Button brightness - dimmed",
+                            "config": [
+                                "parameter=15"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 8,
+                "name": "GENERIC_TYPE_THERMOSTAT"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "40",
+                    "name": "THERMOSTAT_MODE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_mode",
+                            "label": "Thermostat mode",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (cooling)",
+                            "config": [
+                                "type=COOLING"
+                            ]
+                        },
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (heating)",
+                            "config": [
+                                "type=HEATING"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "External sensor",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Floor sensor",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch binary",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_voltage",
+                            "label": "Electric meter (volts) 4",
+                            "config": [
+                                "type=E_V"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh) 4",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts) 4",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Operation mode",
+            "description": "Operation mode",
+            "overview": "<p>Value = 0, Off (default)<br \/>Value = 1, Heating mode<br \/>Value = 2, Cooling mode (not implemented)<br \/>Value = 11, Energy saving mode<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 11,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Off. (default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Heating mode"
+                },
+                {
+                    "value": 2,
+                    "label": "Cooling mode (not implemented)"
+                },
+                {
+                    "value": 11,
+                    "label": "Energy saving heating mode"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Sensor mode",
+            "description": "Sensor mode",
+            "overview": "<p>Value = 0, F-mode, floor sensor mode (default)<br \/>Value = 3, A2-mode, external room sensor mode<br \/>Value = 4,\u00a0A2F-mode, external sensor with floor limitation<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 4,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "F-mode, floor sensor mode"
+                },
+                {
+                    "value": 3,
+                    "label": "A2-mode, external room sensor mode"
+                },
+                {
+                    "value": 4,
+                    "label": "A2F-mode, external sensor with floor limitation"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Floor sensor type",
+            "description": "Floor sensor type",
+            "overview": "<p>1. Value = 0, 10K-NTC (default)<br \/>2. Value = 1, 12K-NTC<br \/>3. Value = 2, 15K-NTC<br \/>4. Value = 3, 22K-NTC<br \/>5. Value = 4, 33K-NTC<br \/>6. Value = 5, 47K-NTC<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "10K-NTC (default)"
+                },
+                {
+                    "value": 1,
+                    "label": "12K-NTC"
+                },
+                {
+                    "value": 2,
+                    "label": "15K-NTC"
+                },
+                {
+                    "value": 3,
+                    "label": "22K-NTC"
+                },
+                {
+                    "value": 4,
+                    "label": "33K-NTC"
+                },
+                {
+                    "value": 5,
+                    "label": "47K-NTC"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Temperature control hysteresis (DIFF I)",
+            "description": "Temperature control hysteresis (DIFF I)",
+            "overview": "<p>1. Value = 3 - 30, 0.3C - 3.0C (default is 0.5C)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 3,
+            "value_max": 30,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Floor minimum temperature limit (FLo)",
+            "description": "Floor minimum temperature limit (FLo)",
+            "overview": "<p>1. Value = 50 - 400, 5.0C - 40.0C, default = 5.0C<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 50,
+            "value_max": 400,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Floor maximum temperature (FHi)",
+            "description": "Floor maximum temperature (FHi)",
+            "overview": "<p>1. Value = 50 - 400, 5.0C - 40.0C, default = 40.0C)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 400,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 50,
+            "value_max": 400,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Air (A2) minimum temperature limit (ALo)",
+            "description": "Air (A2) minimum temperature limit (ALo)",
+            "overview": "<p>1. Value = 50 - 400, 5.0C - 40.0C, default = 5.0C<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 50,
+            "value_max": 400,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Air (A2) maximum temperature limit (AHi)",
+            "description": "Air (A2) maximum temperature limit (AHi)",
+            "overview": "<p>1. Value = 50 - 400, 5.0C - 40.0C, default = 40.0C)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 400,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 50,
+            "value_max": 400,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Heating mode setpoint (CO)",
+            "description": "Heating mode setpoint (CO)",
+            "overview": "<p>1. Value = 50 - 400, 5.0C - 40.0C, default = 21.0C<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 210,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 50,
+            "value_max": 400,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Energy saving mode setpoint (ECO)",
+            "description": "Energy saving mode setpoint (ECO)",
+            "overview": "<p>1. Value = 50 - 400, 5.0C - 40.0C, default = 18.0C<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 180,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 50,
+            "value_max": 400,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Cooling setpoint (COOL)",
+            "description": "Cooling setpoint (COOL)",
+            "overview": "<p>1. Value = 50 - 400, 5.0C - 40.0C, default = 21.0C<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 210,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 50,
+            "value_max": 400,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "Floor sensor calibration",
+            "description": "Floor sensor calibration",
+            "overview": "<p>1. Value = -40 - 40, -4.0C - 4.0C, default = 0.0C<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -40,
+            "value_max": 40,
+            "options": []
+        },
+        {
+            "id": 13,
+            "label": "External sensor calibration",
+            "description": "External sensor calibration",
+            "overview": "<p>1. Value = -40 - 40, -4.0V - 4.0C, default = 0.0C<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -40,
+            "value_max": 40,
+            "options": []
+        },
+        {
+            "id": 14,
+            "label": "Temperature display",
+            "description": "Temperature display",
+            "overview": "<p>1. Value = 0, Display setpoint temperature (default)<br \/>2. Value = 1, Display\u00a0measured temperature<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Display setpoint temperature (default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Display measured temperature"
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "label": "Button brightness - dimmed state",
+            "description": "Button brightness - dimmed state",
+            "overview": "<p>1. Value = 0 - 100, 0% - 100%, default = 50%<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 16,
+            "label": "Button brightness - active state",
+            "description": "Button brightness - active state",
+            "overview": "<p>1. Value = 0 - 100, 0% - 100%, default = 100%<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 17,
+            "label": "Display brightness - dimmed state",
+            "description": "Display brightness - dimmed state",
+            "overview": "<p>1. Value = 0 - 100, 0% - 100%, default = 50%<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 18,
+            "label": "Display brightness - active state",
+            "description": "Display brightness - active state",
+            "overview": "<p>1. Value = 0 - 100, 0% - 100%, default = 100%<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 19,
+            "label": "Temperature report interval",
+            "description": "Temperature report interval",
+            "overview": "<p>1. Value = 0, Reporting of temperature disabled<br \/>2. Value = 30 - 32767, 30s - 32767s, default = 60s<\/p> <p>Time interval between consecutive temperature reports.<br \/>Temperature reports can also be sent as a result of polling.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 20,
+            "label": "Temperature report hysteresis",
+            "description": "Temperature report hysteresis",
+            "overview": "<p>1. Value = 1 - 100, 0.1C - 10.0C, default = 1.0C<\/p> <p>The temperature report will be sent if there is a difference in temperature from the previous value reported,<br \/>defined in this parameter (hysteresis).<br \/>Temperature reports can also be sent as a result of polling.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 21,
+            "label": "Meter report interval",
+            "description": "Meter report interval",
+            "overview": "<p>1. Value = 0, Reporting of metering values is disabled<br \/>2. Value = 30 - 32767, 30s - 32767s, default = 60s<\/p> <p>Time interval between consecutive meter reports.<br \/>Meter reports can also be sent as a result of polling.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 22,
+            "label": "Meter report delta value",
+            "description": "Meter report delta value",
+            "overview": "<p>1. Value = 0 - 127, 0kWh - 12.7kWh, default = 1.0kWh<\/p> <p>Delta value in kWh\u00a0between consecutive meter reports.<br \/>Meter reports can also be sent as a result of polling.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "The main thermostat device",
+            "overview": "<p>Lifeline. (Normally used by the Z-Wave Controller) Sends:<\/p>\r\n<ul>\r\n<li>Device Reset Notifications.<\/li>\r\n<li>Thermostat Setpoint Reports<\/li>\r\n<li>Thermostat Mode Reports<\/li>\r\n<li>Basic Reports<\/li>\r\n<li>Meter Reports<\/li>\r\n<\/ul>"
+        },
+        {
+            "id": 2,
+            "label": "External temperature",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>Send Multilevel Sensor Reports for external temperature sensor.<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Floor temperature",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>Send Multilevel Sensor Reports for floor temperature sensor.<\/p>"
+        },
+        {
+            "id": 4,
+            "label": "Internal relay status",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>Send Binary Switch Set commands representing the status of the internal relay.<\/p>"
+        }
+    ]
+}

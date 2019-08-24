@@ -1,0 +1,422 @@
+{
+    "database_id": 1053,
+    "label": "UMV3-BTZ",
+    "manufacturer_name": "Poly-control",
+    "manufacturer_id": "010E",
+    "device_ref": [
+        "0009:0002"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Danalock Universal Module V3",
+    "overview": "<p>The Universal Model V3 supports: - S0\/S2 Z-Wave Security - Can operate 3 outputs. - Outputs can be delayed. - Bluetooth Smart<\/p> <p>The UMV3 can be set to factory settings by pushing the switch 10 times. Please use this procedure only when the primary controller is missing or otherwise inoperable.<\/p>",
+    "inclusion": "<p>To add or include the UMV3 into a Z-Wave network 1. Set the controller in inclusion mode 2. Push the switch once. 3. Wait 5 seconds.<\/p>",
+    "exclusion": "<p>To remove or exclude the UMV3 into a Z-Wave network 1. Set the controller in exclusion mode 2. Push the switch once. 3. Wait 5 seconds.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.061,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_ENTRY_CONTROL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_SECURE_KEYPAD_DOOR_LOCK"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 64,
+                "name": "GENERIC_TYPE_ENTRY_CONTROL"
+            },
+            "specific_class": {
+                "id": 3,
+                "name": "SPECIFIC_TYPE_SECURE_KEYPAD_DOOR_LOCK"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "62",
+                    "name": "DOOR_LOCK",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "lock_door",
+                            "label": "Door Lock",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_access",
+                            "label": "Alarm (access)",
+                            "config": [
+                                "type=ACCESS_CONTROL"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Relay 1 Pulse length (ms)",
+            "description": "Time the relay is on in milliseconds. ",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 5000,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "Relay 1 Delay length (ms) ",
+            "description": "Time before the relay is activated.",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "Relay 2 Pulse length (ms)",
+            "description": "Time the relay is on in milliseconds. ",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 5000,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Relay 2 Delay length (ms) ",
+            "description": "Time before the relay is activated.",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Relay 3 Pulse length (ms)",
+            "description": "Time the relay is on in milliseconds. ",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 5000,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Relay 3 Delay length (ms) ",
+            "description": "Time before the relay is activated.",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Disable battery alarm",
+            "description": "Disable battery alarm0 = Battery Alarm enable,1 = Battery Alarm disable",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Battery Alarm enable"
+                },
+                {
+                    "value": 1,
+                    "label": "Battery Alarm disable"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "label": " Battery Sample Interval Seconds ",
+            "description": " Battery Sample Interval Seconds  ",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 3600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Battery Milli Volt Level Threshold Maximum",
+            "description": "Maximum battery alarm level in mV.",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 12100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 12100,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Battery Milli Volt Level Threshold Minimum",
+            "description": "Minimum battery alarm level in mV.",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 11600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Ble temporary allow \u2013 timer - seconds",
+            "description": "Allow Bluetooth to be on for a time in seconds",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "BLE Always allowed",
+            "description": "0 = Not always allowed. 1= Always allowed.",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Not always allowed"
+                },
+                {
+                    "value": 1,
+                    "label": "Always allowed"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

@@ -1,0 +1,320 @@
+{
+    "database_id": 959,
+    "label": "ZEN26",
+    "manufacturer_name": "Zooz",
+    "manufacturer_id": "027A",
+    "device_ref": [
+        "A000:A001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Z-Wave Plus S2 ON\/OFF Switch",
+    "overview": "<p>Manual or Z-Wave on\/off control with instant status updates<\/p> <p>Simple Direct 3-Way: connect with existing on\/off switches in 3-way, 4-way, and 5-way set-ups, no add-on needed (neutral wire required)<\/p> <p>Remembers and restores on\/off status after power failure<\/p> <p>LED indicator signals inclusion, exclusion, reset, and setting changes<\/p> <p>Built-in Z-Wave Plus signal repeater to extend network range<\/p> <p>Works with LED, CFL, and incandescent bulbs<\/p> <p>S2 security protocol and the latest 500 Z-Wave chip for faster and safer wireless communication<\/p> <p>Supported by most Z-Wave controllers<\/p>",
+    "inclusion": "<p>TAP Upper paddle 3-5 TIMES QUICKLY<\/p> <p>The LED indicator will blink to signal communication and remain on for 2 seconds to confirm inclusion<\/p>",
+    "exclusion": "<p>\u00a0Tap the lower paddle on the switch 3 times quickly<\/p>",
+    "wakeup": "",
+    "protocol_version": 5.003,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Paddle Control",
+            "description": "Choose Paddle Functionality (Invert)",
+            "overview": "<p>Choose if you want the upper paddle to turn the light on or turn the light off when tapped<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Top on, Bottom off"
+                },
+                {
+                    "value": 1,
+                    "label": "Top off, Bottom on"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "LED Indicator Control",
+            "description": "Change behavior of the LED indicator",
+            "overview": "<p>Choose if you want the LED indicator to turn on when the switch (light) is on or off, or if you want it to remain on or off at all times<\/p> <p>OR<\/p> <p>6 x TAP PADDLE to change the LED indicator mode<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED on when switch off"
+                },
+                {
+                    "value": 1,
+                    "label": "LED on when switch on"
+                },
+                {
+                    "value": 2,
+                    "label": "LED off"
+                },
+                {
+                    "value": 3,
+                    "label": "LED on"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Auto Turn-Off Timer",
+            "description": "enable the Auto Turn-Off Timer",
+            "overview": "<p>Use this parameter to set the time which you want the switch to automatically turn off once it has been turned on. The number entered as value corresponds to the number of seconds.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32768,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "On Off Status After Power Failure",
+            "description": "Set the on off status for the switch after power failure.",
+            "overview": "<p>Set the on off status for the switch after power failure.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Off"
+                },
+                {
+                    "value": 1,
+                    "label": "On"
+                },
+                {
+                    "value": 2,
+                    "label": "last state"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": false,
+            "description": "",
+            "overview": "<p>This device will send BINARY SWITCH REPORT to Group 1 and 2 when operated manually<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Control",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p>This device will send BINARY SWITCH REPORT to Group 1 and 2 when operated manually<\/p>"
+        }
+    ]
+}

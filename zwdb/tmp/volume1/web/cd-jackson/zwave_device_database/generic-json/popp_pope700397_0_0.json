@@ -1,0 +1,574 @@
+{
+    "database_id": 969,
+    "label": "POPE700397",
+    "manufacturer_name": "Popp & Co",
+    "manufacturer_id": "0154",
+    "device_ref": [
+        "0003:000A"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Popp Smart Outdoor Plug - IP44 rated",
+    "overview": "<p>The Wall Plug Switch Outdoor can be placed between a wall outlet for plugs type F and electric devices, plugged in by a cord. It can switch all loads up to 3500 W. The plug switch is IP 44 rated and can, therefore, be used both in dry as well as humid environments in- and outdoor.<\/p> <p>Switching is controlled by the local button or wirelessly. The use of the local button and the behavior on wireless commands can be configured using configuration parameters. When detached from the control of local leads the button on the device can be used to trigger scenes in a central gateway. A single click and double click are distinguished.<\/p> <p>The device is also measuring the mains voltage supply reporting mains voltage and mains frequency. Additionally, the power consumption of the attached load is monitored as well.<\/p> <p>All metering values can be requested from the central controller and will be reported unsolicited if configured.\u00a0<\/p>",
+    "inclusion": "<p>Tripple Click the button for inclusion.\u00a0<\/p>",
+    "exclusion": "<p>Tripple Click the button for exclusion.<\/p>",
+    "wakeup": "",
+    "protocol_version": 6.001,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "8",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_frequency",
+                            "label": "Frequency",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_powerfactor",
+                            "label": "Electric meter (power factor)",
+                            "config": [
+                                "type=E_Power_Factor"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        },
+                        {
+                            "type": "meter_voltage",
+                            "label": "Electric meter (volts)",
+                            "config": [
+                                "type=E_V"
+                            ]
+                        },
+                        {
+                            "type": "meter_current",
+                            "label": "Electric meter (amps)",
+                            "config": [
+                                "type=E_A"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_reset",
+                            "label": "Clear Accumulated Energy",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "75",
+                    "name": "PROTECTION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "LED Operation Mode",
+            "description": "Defines when the LED shall shine and how",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED off, only blinks on traffic"
+                },
+                {
+                    "value": 1,
+                    "label": "Defined by Parameter 21 and 22"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Auto Off",
+            "description": "Defines if and after which time the device shall turn off",
+            "overview": "<p>Defines if and after which time the device shall turn off without any user interaction (in seconds) 0 = No auto off<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "Switching behavior",
+            "description": "Switching behavior when receiving wireless OFF",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Switches off"
+                },
+                {
+                    "value": 1,
+                    "label": "Ignores Off command"
+                },
+                {
+                    "value": 2,
+                    "label": "Switches on"
+                },
+                {
+                    "value": 3,
+                    "label": "Switches on, when receiving off and state is off"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Button Mode",
+            "description": "This parameter defines if the local button ...",
+            "overview": "<p>This parameter defines if the local button shall control (switch) the load or it is only used to send out scene control commands to the central controller.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Controls Load + Scenes"
+                },
+                {
+                    "value": 1,
+                    "label": "Scene Control Only"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Status after Power Failure",
+            "description": "Status after Power Failure",
+            "overview": "<p>Defines the switching status after a power failure or unplugging<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Always off"
+                },
+                {
+                    "value": 1,
+                    "label": "Return to last switching state"
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "label": "LED Color on OFF state",
+            "description": "LED Color on OFF state",
+            "overview": "<p>Defines the behavior of the LED when the load is switched off<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Off"
+                },
+                {
+                    "value": 1,
+                    "label": "Red"
+                },
+                {
+                    "value": 2,
+                    "label": "Green"
+                }
+            ]
+        },
+        {
+            "id": 22,
+            "label": "LED Color on ON state",
+            "description": "LED Color on ON state",
+            "overview": "<p>Defines the behavior of the LED when the load is switched on<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Off"
+                },
+                {
+                    "value": 1,
+                    "label": "Red"
+                },
+                {
+                    "value": 2,
+                    "label": "Green"
+                }
+            ]
+        },
+        {
+            "id": 23,
+            "label": "Voltage Report Threshold ",
+            "description": "Voltage Report Threshold ",
+            "overview": "<p>Report the voltage when the voltage has changed by more then X\u00a0 * 1 V. When disabled (Value 0) the device will report every 10 minutes regardless of current voltage.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 250,
+            "options": []
+        },
+        {
+            "id": 24,
+            "label": "Current Reporting Threshold",
+            "description": "Current Reporting Threshold",
+            "overview": "<p>Report the current when the current has changed by more then X *0,01 A. When disabled the device will report every 10 minutes regardless of current change.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 25,
+            "label": "Power Reporting Threshold",
+            "description": "Power Reporting Threshold",
+            "overview": "<p>Report the power when the power\u00a0 has changed by more then X Watt. When disabled (Value 0) the device will report every 10 minutes regardless of power consumption change.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 26,
+            "label": "Soft Circuit Breaker Threshold",
+            "description": "Soft Circuit Breaker Threshold",
+            "overview": "<p>When the power draw exceeds the value set in this parameter (x W) for a time set in parameter 28 the soft ciruit breaker will disconnect the load.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 3600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3600,
+            "options": []
+        },
+        {
+            "id": 27,
+            "label": "Soft Circuit Breaker Recovery Time",
+            "description": "Soft Circuit Breaker Recovery Time",
+            "overview": "<p>Once the soft circuit breaker tipps and the load is disconnected the load will be automatically reconneced after X seconds. When disabled (value 0) the load must be repowered manually or with wireless command.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 28,
+            "label": "Soft Circuit Breaker Delay Time ",
+            "description": "Soft Circuit Breaker Delay Time ",
+            "overview": "<p>This delay time (x * 0,1s) defines how fast the soft circuit breaker wil react when the threshold power is exceeded. The power is cut off only if the power draw remains over the threshold level for the defines time.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "Lifeline",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Control other devices",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Control other devices on single click of the button. BASIC command (on\/off) is sent according to switching state of the load.",
+            "overview": ""
+        }
+    ]
+}

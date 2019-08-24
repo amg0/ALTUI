@@ -1,0 +1,248 @@
+{
+    "database_id": 914,
+    "label": "ZT1101",
+    "manufacturer_name": "Vision Security",
+    "manufacturer_id": "0109",
+    "device_ref": [
+        "1002:0202"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "4 Button Key Fob ",
+    "overview": "<p>Portable Controller with Remote Control Keyfob:<\/p> <ul><li>Micro USB Charge (5V)<\/li> <li>Lithium Rechargeable Battery (280mAH)<\/li> <li>Setting Mode (Inclusion\/Exclusion\/Association\/Learning\/Shift)<\/li> <li>Control Mode (Arm\/Disarm, On\/Off Control)<\/li> <\/ul>",
+    "inclusion": "<p>To \u201cInclude\u201d into (adding into) an existing network: Put the Z-Wave\u2122 Gateway or Controller into learn mode to add the keyfob into your controller. To get in to \u201cinclusion\u201d mode, the distance between sensor and controller is suggested to be within one meter.<\/p> <p>Under Control Mode: press button 1 and 4 together till the red LED flashes<\/p> <p>Under Setup Mode: press button 3 and 4 together till the red LED flashes<\/p>",
+    "exclusion": "<p>To \u201cExclude\u201d from (removing from) an existing network: Put the Z-Wave\u2122 Gateway or Controller into learn mode to remove the keyfob into\/from your controller. To get in to \u201cexclusion\u201d mode, the distance between sensor and controller is suggested to be within one meter.<\/p> <p>Under Control Mode: press button 1 and 4 together till the red LED flashes<\/p> <p>Under Setup Mode: press button 3 and 4 together till the red LED flashes<\/p>",
+    "wakeup": "<p>Press button 2 and 3 together until green LED flashes<\/p>",
+    "protocol_version": 6.51,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": false,
+    "beaming": true,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 1,
+        "name": "BASIC_TYPE_CONTROLLER"
+    },
+    "generic_class": {
+        "id": 1,
+        "name": "GENERIC_TYPE_GENERIC_CONTROLLER"
+    },
+    "specific_class": {
+        "id": 1,
+        "name": "SPECIFIC_TYPE_REMOTE_CONTROL_SIMPLE"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 1,
+                "name": "BASIC_TYPE_CONTROLLER"
+            },
+            "generic_class": {
+                "id": 1,
+                "name": "GENERIC_TYPE_GENERIC_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_REMOTE_CONTROL_SIMPLE"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Scene Activation Set(Button 1)",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Scene Activation Set(Button 2)",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "Scene Activation Set(Button 3)",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 5,
+            "label": "Scene Activation Set(Button 4)",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

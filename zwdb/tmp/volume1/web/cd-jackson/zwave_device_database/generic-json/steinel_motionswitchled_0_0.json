@@ -1,0 +1,1047 @@
+{
+    "database_id": 1060,
+    "label": "MotionSwitch LED",
+    "manufacturer_name": "Steinel",
+    "manufacturer_id": "0271",
+    "device_ref": [
+        "0002:19FB"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Infrared motion detector with orientation light",
+    "overview": "<p>Infrared motion detector with orientation light and Z-Wave interface for indoor power sockets.<\/p> <p>The ininfrared sensor can be used for switching light ON and OFF automatically. The unit is not suitable for burglar alarm systems as it is not tamperproof in the manner prescribed for such systems. The orientation light can be switched ON and OFF via the sensor or the button on the MotionSwitch LED. The relevant setting can be programmed.<\/p>",
+    "inclusion": "<p>To start the motion detector's inclusion mode, press the button three times in rapid succession. During inclusion mode and following configuration process device is blinking.<\/p>",
+    "exclusion": "<p>To start the motion detector's exclusion mode, press the button three times in rapid succession. During exclusion mode and following configuration process device is blinking.<\/p> <p>Following exclusion, all configuration parameters (time, sensitivity etc.) remain intact until the next inclusion.<\/p>",
+    "wakeup": "",
+    "protocol_version": 5.003,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": null
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOT_USED"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "22",
+                    "name": "APPLICATION_STATUS",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "0",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "4",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_luminance",
+                            "label": "Sensor (luminance)",
+                            "config": [
+                                "type=LUMINANCE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "60",
+                    "name": "MULTI_INSTANCE",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "config_decimal",
+                            "label": "Duration of light after motion detection [s]",
+                            "config": [
+                                "parameter=1"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Light threshold [lx]",
+                            "config": [
+                                "parameter=2"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "4",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "4",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar) 1",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "4",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_luminance",
+                            "label": "Sensor (luminance) 2",
+                            "config": [
+                                "type=LUMINANCE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "22",
+                    "name": "APPLICATION_STATUS",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 3",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "3",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number 4",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "TIME",
+            "description": "Duration of light after motion detection [s]",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 180,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 5,
+            "value_max": 900,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Duration of light after motion detection [s]"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "LIGHT",
+            "description": "Light threshold [lx]",
+            "overview": "<p>Light threshold: 2 - 2000, 0 lx<\/p> <p>0 - run Learn ambient light sequence. 2000 - is used as daylight ( always night mode ).<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 2000,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2000,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Light threshold [lx]"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "SENSITIVITY",
+            "description": "Motion Radar Sensitivity [%]",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 2,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "BRIGHTNES MEAS INTERVAL",
+            "description": "Brightness measuring interval [min]",
+            "overview": "<p>Interval for measuring ambient light when lamp is on ( lamp switches off briefly and measures ): 5 - 120 min. 0 = function is off.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 120,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "GLOBAL_LIGHT",
+            "description": "Use external Ambient Light Value",
+            "overview": "<p>When GLOBAL_LIGHT mode is ON - device overrides its own light sensor values and uses Light report values from any Z-Wave light sensor instead - this has to be configured appropriately to send light automatically. If the last remote light level value is older than 30 minutes, the internal light value is used again until the next external value is received.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "SLAVE_MODE",
+            "description": "Disable local control",
+            "overview": "<p>Bit Field:<\/p> <table><tr><td>Bit<\/td> <td>7<\/td> <td>6<\/td> <td>5<\/td> <td>4<\/td> <td>3<\/td> <td>2<\/td> <td>1<\/td> <td>0<\/td> <\/tr><tr><td>Function<\/td> <td>-<\/td> <td>-<\/td> <td>-<\/td> <td>-<\/td> <td>-<\/td> <td>\"Stupid\" mode<\/td> <td>Central unit<br \/>checking in<br \/>slave mode<\/td> <td>Slave mode<\/td> <\/tr><\/table><p><br \/><strong>\"Stupid\" mode ( bit 2 = 1 ):<\/strong><br \/>- has higher priority then slave mode.<br \/>- LED is permanently on ( for simple power wall switch controlling ).<\/p> <p><br \/><strong>Slave mode ( bit 0 = 1 ):<\/strong><br \/>- only if included in Z-Wave network<br \/>- useful for controlling via third-party sensor<br \/>- LED is directly controlled via Z-Wave, internal sensors are not used for controlling it<\/p> <p><br \/><strong>Central unit checking ( bit 1 = 1 ):<\/strong> ( useful especially for controlling via gateway )<br \/>When slave bit is 0:<br \/>- device signalises fail of lifeline connection ( if this bit is zero, fail of lifeline connection<br \/>is not signalised )<br \/>When slave bit is 1:<br \/>- device checks presence of Z-Wave device in lifeline group ( gateway ). If it is not<br \/>present for 2 minutes ( testing repeatedly every 30 seconds ) device switches<br \/>to normal mode in the same way as after the end of local disabled mode<br \/>( ON_BEHAVIOUR )<br \/>- the device checks every 1 minute for recovery of Lifeline connection.<br \/>- if no lifeline specified - it works in normal mode<\/p> <p><br \/><strong>Be careful with this option<\/strong>, device stops using its own motion sensor in Slave<br \/>and Stupid mode.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 4,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "OFF_BEHAVIOUR",
+            "description": "Off behaviour ( timeout )",
+            "overview": "<p>Behaviour after BASIC OFF ( and similar commands ).<br \/>If a transition ( even with zero change ) with a non-default duration is to be processed,<br \/>the transition cannot be interrupted by any motion event in any case.<\/p> <p>0 LED is switched off and remains so until any new motion event ( local or remote ) is received.<br \/>1 - 209 LED is switched off and remains so until after a specified timeout once a new motion event ( local or remote ) is received.<br \/>Timeout:<br \/>1..100 - 1 second ( 1 ) to 100 seconds ( 100 ) in 1-second resolution<br \/>101..200 - 1 minute ( 101 ) to 100 minutes ( 200 ) 1-minute resolution<br \/>201..209 - 1 hour ( 201 ) to 9 hours ( 209 ) in 1-hour resolution<br \/>210 - 254 Reserved<br \/>255 LED is switched off for TIME ( cfg 1 ). It does not wait for a motion event and works normally via current motion evaluation.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 209,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "ON_BEHAVIOUR",
+            "description": "On behaviour ( timeout )",
+            "overview": "<p>Behaviour after BASIC ON ( and similar commands ).<br \/>If a transition ( even with zero change ) with a non-default duration is to be processed, the transition cannot be interrupted by any motion event in any case.<\/p> <p>0 LED is switched on and remains so until any new motion event ( local or remote ) is received. It then works normally via current motion evaluation.<br \/>Notice - during the day, this mode cannot be ended remotely due to motion events not being transmitted - only via local motion sensor if enabled.<br \/>1 - 209 LED is switched off and remains so until after a specified timeout<br \/>once a new motion event ( local or remote ) is received.<br \/>Timeout:<br \/>1..100 - 1 second ( 1 ) to 100 seconds ( 100 ) in 1-second resolution<br \/>101..200 - 1 minute ( 101 ) to 100 minutes ( 200 ) 1-minute resolution<br \/>201..209 - 1 hour ( 201 ) to 9 hours ( 209 ) in 1-hour resolution<br \/>Notice - during the day, this mode cannot be ended remotely due to motion<br \/>events not being transmitted - only via local motion sensor if enabled.<br \/>210 - 254 Reserved<br \/>255 LED is switched off for TIME ( cfg 1 ). It does not wait for a motion<br \/>event and works normally via current motion evaluation.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "ON_TIME_OVER",
+            "description": "On behaviour time over ( timeout )",
+            "overview": "<p>Time limit to stop waiting for motion after timeout of ON_BEHAVIOUR or OFF_ON_BEHAVIOUR ( 0-209 ) to prevent staying ON forever when there is no motion.<\/p> <p>0 No additional waiting for motion.<br \/>1..100 - 1 second ( 1 ) to 100 seconds ( 100 ) in 1-second resolution<br \/>101..200 - 1 minute ( 101 ) to 100 minutes ( 200 ) in 1-minute resolution<br \/>201..209 - 1 hour ( 201 ) to 9 hours ( 209 ) in 1-hour resolution<br \/>210 - 254 Reserved<br \/>255 Never stop waiting for motion.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 204,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 209,
+            "options": []
+        },
+        {
+            "id": 13,
+            "label": "ON_OFF_BEHAVIOUR",
+            "description": "Sequence On-Off behaviour ( timeout )",
+            "overview": "<p>Behaviour after a rapid sequence of BASIC ON and BASIC OFF commands.<br \/>The intention is to use a much longer timeout value than the time after a single ON command which should then be followed by a short timeout value.<br \/>The behaviour is the same as for parameter 10 ( OFF_LOCAL_DISABLE ) except: 255 - device ignores ON - OFF sequence and uses OFF behaviour<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 204,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 209,
+            "options": []
+        },
+        {
+            "id": 14,
+            "label": "OFF_ON_BEHAVIOUR",
+            "description": "Sequence Off-On behaviour ( timeout )",
+            "overview": "<p>Behaviour after a rapid sequence of BASIC OFF and BASIC ON commands.<br \/>The intention is to use a much longer timeout value than the time after a single OFF command which should then be followed by a short timeout value.<br \/>The behaviour is the same as for parameter 11 ( ON_LOCAL_DISABLE ) except: 255 - device ignores OFF - ON sequence and uses ON behaviour.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 204,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 209,
+            "options": []
+        },
+        {
+            "id": 15,
+            "label": "SEQUENCE_TIME",
+            "description": "Sequence Off-On behaviour ( timeout )",
+            "overview": "<p>Time in [100 milliseconds] of maximum delay between BASIC ON and BASIC OFF ( and vice versa ) to consider this as a sequence. It is typically 1 second, but can be exceptionally longer due to retransmissions and overload - in this case, a longer interval can be allowed ( up to 5 seconds ).<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 10,
+            "value_max": 50,
+            "options": []
+        },
+        {
+            "id": 16,
+            "label": "MOTION_DISABLE",
+            "description": "Motion Off behaviour ( timeout )",
+            "overview": "<p>Motion disable timeout after BASIC SET to motion endpoint when the internal motion sensor is not used for evaluating the behaviour of the LED and groups 2 and 3. Events are, however, still transmitted to the Lifeline, and the device can be controlled via remote motion sensors.<\/p> <p><br \/>0 BASIC SET to Motion sensor endpoint ignored, BASIC to root is mapped to LED endpoint, motion sensor still enabled<br \/>1 - 209 Internal motion sensor is disabled for specified timeout after BASIC SET 0x00 to Motion sensor endpoint. BASIC to root is mapped to Motion sensor endpoint. ( SPIR )<br \/>Timeout:<br \/>1..100 - 1 second ( 1 ) to 100 seconds ( 100 ) in 1-second resolution<br \/>101..200 - 1 minute ( 101 ) to 100 minutes ( 200 ) in 1-minute resolution<br \/>201..209 - 1 hour ( 201 ) to 9 hours ( 209 ) in 1-hour resolution<br \/>210 - 254 Reserved<br \/>255 BASIC SET to Motion sensor endpoint ignored, BASIC to root is mapped to LED endpoint, motion sensor still disabled<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 209,
+            "options": []
+        },
+        {
+            "id": 17,
+            "label": "BUTTON_BEHAVIOUR",
+            "description": "Toggle button behaviour",
+            "overview": "<p>Bit Field:<\/p> <table><tr><td>Bit<\/td> <td>7<\/td> <td>6<\/td> <td>5<\/td> <td>4<\/td> <td>3<\/td> <td>2<\/td> <td>1<\/td> <td>0<\/td> <\/tr><tr><td>Function<\/td> <td>-<\/td> <td>-<\/td> <td>-<\/td> <td>Dim<br \/>disable<\/td> <td>Network<br \/>behaviour<\/td> <td>Standalone<br \/>behaviour<\/td> <td>Scene<br \/>switch<\/td> <td>Dim<br \/>increase<\/td> <\/tr><\/table><p><br \/><strong>Dim increase ( bit 0 ):<\/strong><br \/>- long press of button does dim decreasing ( 0 = default )<br \/>- long press of button does dim increasing ( 1 )<\/p> <p><strong>Scene switch ( bit 1 ):<\/strong><br \/>- short press of button does toggle - on\/off ( 0 = default )<br \/>- short press of button does scene switch ( 1 )<\/p> <p><strong>Standalone behaviour ( bit 2 ):<\/strong><br \/>- using \"legacy\" sensor deactivity after button press ( 0 = default )<br \/>- using \"cfg 10-14\" sensor deactivity after button press ( 1 )<\/p> <p><strong>Network behaviour ( bit 3 ):<\/strong><br \/>- using \"legacy\" sensor deactivity after button press ( 0 )<br \/>- using \"cfg 10-14\" sensor deactivity after button press ( 1 = default )<\/p> <p><strong>Dim disable ( bit 4 ):<\/strong><br \/>- dim events ( long press ) are used ( 0 = default )<br \/>- dim events ( long press ) are ignored ( 1 )<\/p> <p>\"legacy\" sensor deactivity behaviour does this:<br \/>- Pressing push button when LED is OFF: LED will switch on as long as there is<br \/>movement and the delay time runs of<br \/>- Pressing push button when LED is ON: LED will switch off as long as there is<br \/>movement ans the delay time runs of ( invers logic ).<\/p> <p>\"cfg 10-14\" sensor deactivity behaviour uses behaviour specified in parameters<br \/>10-14 ( the same behaviour as pressing of external switch using BASIC ON\/OFF<br \/>functions )<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 8,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 31,
+            "options": []
+        },
+        {
+            "id": 18,
+            "label": "BUTTON_SCENES",
+            "description": "Toggle button Scene 1-4",
+            "overview": "<p>Parameters 18 specifies scene numbers ( from 1 to number ) to be switched by<br \/>toggle button. 0 menas - do not useany.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 19,
+            "label": "LEGACY_INACTIVITY_TIME )",
+            "description": "Toggle button inactivity time in \"legacy\" mode ( timeout )",
+            "overview": "<p>In \"legacy\" button mode function this timeout is used to cancel motion sensor inactivity mode after motion end ( both for on and off state of LED ).<\/p> <p>Timeout:<br \/>1..100 - 1 second ( 1 ) to 100 seconds ( 100 ) in 1-second resolution<br \/>101..200 - 1 minute ( 101 ) to 100 minutes ( 200 ) in 1-minute resolution<br \/>201..209 - 1 hour ( 201 ) to 9 hours ( 209 ) in 1-hour resolution<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 103,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 209,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 0,
+            "label": "ROOT DEVICE",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Root",
+            "overview": ""
+        },
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Lifeline",
+            "overview": "<p>Lifeline messages<br \/>- Device Reset Locally<br \/>- Notifications:<br \/>0x07 ( Home security ) - Motion Begin event ( 0x08 )<br \/>0x07 ( Home security ) - Motion End event ( 0x00, 0x08 )<br \/>- Binary Switch Report - LED state<br \/>- Multilevel Sensor Report - value of internal ambient light sensor<br \/>- Central scene notification - button events<\/p>\r\n<p>Motion Begin and Motion End events are sent along with frames to group 3. If multichannel<br \/>association is created the events are sent from motion sensor endpoint.<br \/>Switch Report is sent immediately upon a change of status along with frames<br \/>to group 2. If multichannel association is created the events are sent from LED<br \/>endpoint.<br \/>All notifications to lifeline are sent as sensor states regardless of sensor settings<br \/>and states as SLAVE_MODE, LOCAL_DISABLED and MOTION_ENABLE.<br \/>Multilevel Sensor Report is sent a maximum of once per 1 minute ( if the value has<br \/>changed by at least 3% ) and a minimum of once per 15 minutes ( if the value has<br \/>not changed ). If the ambient light value is old ( cannot be measured because of<br \/>permanent light ), the value is not transmitted via lifeline. Multilevel Sensor Report<br \/>can also be added to some other events to send in bulk. If multichannel association<br \/>is created the events are sent from light sensor endpoint.<br \/>Central scene notification is send as reaction to user interaction. If multichannel<br \/>association is created the events are send from toogle button endpoint.<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "On\/Off control",
+            "max_nodes": 16,
+            "controller": true,
+            "description": "On\/Off control",
+            "overview": "<p>Group 2 is used for directly controlling Z-Wave devices via BASIC SET commands<br \/>through the evaluation of movement and light, as with internal use ( so that all of<br \/>these devices work together ). This is intended for use especially with third-party<br \/>devices that do not implement reactions for motion events. BASIC_SET and<br \/>similar Z-Wave commands are not retransmitted intentionally to slaves and must<br \/>be sent to slave devices via the controlling device simultaneously. Only for use in<br \/>master-slave system, multi-device control is not possible.<br \/>Group 2 is evaluated and frames are transmitted there also in SLAVE_MODE, regardless<br \/>of LOCAL_DISABLED state and when MOTION_ENABLE is off ( not using<br \/>internal motion sensor, just reacting to remote motion events in this case ).<br \/>If multichannel association is created the events are send from motion sensor<br \/>endpoint.<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Notification Report",
+            "max_nodes": 16,
+            "controller": true,
+            "description": "Notification Report",
+            "overview": "<p>Group 3 sends MOTION_BEGIN and MOTION_END frames.<br \/>MOTION_BEGIN frame = Notification 0x07 ( Home security ) - Motion detection without location ( 0x08 )<br \/>MOTION_END frame = Notification 0x07 ( Home security ) - Event inactive ( 0x00, parameter 0x08 )<br \/>After the first motion detection, MOTION_BEGIN is sent. If continual movement is detected, MOTION_BEGIN is sent every 1 minute repeatedly. When motion ends, MOTION_END is sent 5 seconds after the last motion detection.<br \/>Notification to group 3 is sent only when NIGHT_MODE = ON and MOTION_ENABLE = ON, regardless of LOCAL_DISABLE state.<br \/>All devices in a group should have the same TIME settings in order that they switch<br \/>off at the same time.<br \/>If multichannel association is created the events are send from motion sensor<br \/>endpoint.<\/p>"
+        },
+        {
+            "id": 4,
+            "label": "Ambient light",
+            "max_nodes": 6,
+            "controller": true,
+            "description": "Ambient light",
+            "overview": "<p>Ambient Light via Group 4 is intended to substitute locally measured LUX values in target devices - so that the network can have one source of ambient light value.<br \/>Frames are sent a maximum of once per 2.5 minutes and a minimum of once per 15 minutes.<br \/>When device already uses remote Ambient light value, then this value is also retransmitted to group 4.<br \/>All devices in such a group should have the same LIGHT ( threshold ) settings in order that night mode is detected at the same time.<br \/>If multichannel association is created the events are send from light sensor endpoint.<\/p>"
+        },
+        {
+            "id": 5,
+            "label": "Button on\/off",
+            "max_nodes": 16,
+            "controller": true,
+            "description": "Button on\/off",
+            "overview": "<p>Group 5 is used for directly controlling Z-Wave devices via BASIC SET commands by button. This function is allowed by default in cfg 17 ( BUTTON_BEHAVIOUR ).<br \/>If multichannel association is created the events are sent from toggle button endpoint.<\/p>"
+        },
+        {
+            "id": 6,
+            "label": "Button scene",
+            "max_nodes": 16,
+            "controller": true,
+            "description": "Button scene",
+            "overview": "<p>Group 6 is used for scene activation - switches from scene 1 to scene specified in cfg 18 ( BUTTON_SCENES ) - increased by 1 - this function must be allowed in cfg 17 ( BUTTON_BEHAVIOUR ). If multichannel association is created the events are sent from toggle button endpoint.<\/p>"
+        },
+        {
+            "id": 7,
+            "label": "Button dim",
+            "max_nodes": 16,
+            "controller": true,
+            "description": "Button dim",
+            "overview": "<p>Group 7 is used for dimming ( use just for multilevel lamps ). This function is allowed by default in cfg 17 ( BUTTON_BEHAVIOUR ).<br \/>If multichannel association is created the events are sent from toggle button endpoint.<\/p>"
+        }
+    ]
+}

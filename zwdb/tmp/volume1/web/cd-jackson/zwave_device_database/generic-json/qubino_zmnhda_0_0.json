@@ -1,0 +1,567 @@
+{
+    "database_id": 209,
+    "label": "ZMNHDA",
+    "manufacturer_name": "Goap",
+    "manufacturer_id": "0159",
+    "device_ref": [
+        "0001:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Flush dimmer",
+    "overview": "<p>This Z-Wave module is used for dimming the bulb or to manage the speed of a fan. The module can be controlled either through a Z-Wave network or through the wall switch.\u00a0 <br \/>\u00a0<br \/>The module is designed to be mounted inside a \u201cflush mounting box\u201d and is hidden behind a traditional wall switch. <br \/>\u00a0<br \/>Module measures power consumption of bulb or fan and supports connection of digital temperature sensor.<\/p>",
+    "inclusion": "<ul><li>Connect module to power supply,<\/li> <li>bring module within maximum 1 meter (3 feet) of the main controller,<\/li> <li>enable add\/remove mode on main controller,<\/li> <li>auto-inclusion (30 minutes after connected to power supply) or<\/li> <li>press service button S for more than 2 seconds or<\/li> <li>press push button I1 three times within 3s (3 times change switch state within 3 seconds).<\/li> <\/ul>",
+    "exclusion": "<ul><li>Connect module to power supply,<\/li> <li>bring module within maximum 1 meter (3 feet) of the main controller,<\/li> <li>enable add\/remove mode on main controller,<\/li> <li>press service button S for more than 6 seconds or\u00a0<\/li> <li>press push button I1 five times within 3s (5 times change switch state within 3 seconds)<\/li> <\/ul><p>By this function all parameters of the module are set to default values and own ID is deleted.<\/p> <p>If service button S is pressed more than 2 and less than 6 second module is excluded, but configuration parameters are not set to default values.\u00a0<\/p>",
+    "wakeup": "",
+    "protocol_version": 3.067,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "60",
+                    "name": "MULTI_INSTANCE",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "FORCEVERSION",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "FORCEVERSION",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "FORCEVERSION",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 32,
+                "name": "GENERIC_TYPE_SENSOR_BINARY"
+            },
+            "specific_class": {
+                "id": 0,
+                "name": null
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor 1",
+                            "config": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 32,
+                "name": "GENERIC_TYPE_SENSOR_BINARY"
+            },
+            "specific_class": {
+                "id": 0,
+                "name": null
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor 2",
+                            "config": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Input 1 switch type",
+            "description": "Switch type (input I1)",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "mono-stable switch (push button)"
+                },
+                {
+                    "value": 1,
+                    "label": "bi-stable (toggle) switch"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Input 2 contact type",
+            "description": "Input 2 contact type",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "NO (normally open) input type"
+                },
+                {
+                    "value": 1,
+                    "label": "NC (normally close) input type"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Input 3 contact type",
+            "description": "Input 3 contact type",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "NO (normally open) input type"
+                },
+                {
+                    "value": 1,
+                    "label": "NC (normally close) input type"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "label": "Activate \/ deactivate functions ALL ON\/ALL OFF",
+            "description": "Activate \/ deactivate functions ALL ON\/ALL OFF",
+            "overview": "<p>Flush 1 relay module responds to commands ALL ON \/ ALL OFF that may be sent by the main controller or by other controller belonging to the system.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "ALL ON is not active ALL OFF is not active"
+                },
+                {
+                    "value": 1,
+                    "label": "ALL ON is not active ALL OFF active"
+                },
+                {
+                    "value": 2,
+                    "label": "ALL ON active ALL OFF is not active"
+                },
+                {
+                    "value": 255,
+                    "label": "ALL ON active, ALL OFF active"
+                }
+            ]
+        },
+        {
+            "id": 30,
+            "label": "State of the device after a power failure",
+            "description": "State of the device after a power failure",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Saves its state before power failure"
+                },
+                {
+                    "value": 1,
+                    "label": "OFF"
+                }
+            ]
+        },
+        {
+            "id": 40,
+            "label": "Power reporting in Watts on power change",
+            "description": "Set value means percentage",
+            "overview": "<ul><li>0 \u2013 Reporting Disabled<\/li> <li>1 \u2013 100 = 1% - 100% Reporting enabled.<\/li> <\/ul><p>Power report is send (push) only when actual power in Watts in real time change for more than set percentage comparing to previous actual power in Watts, step is 1%.\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 42,
+            "label": "Power reporting in Watts by time interval",
+            "description": "Power reporting in Watts by time interval",
+            "overview": "<p>Set value means time interval (0 \u2013 65535) in seconds, when power report is send.<\/p> <ul><li>default value 300 (power report in Watts is send each 300s)<\/li> <li>0 \u2013 Reporting Disabled<\/li> <li>1 \u2013 65535 = 1 second \u2013 65535 seconds. Reporting enabled.<\/li> <\/ul><p>Power report is send with time interval set by entered value.\u00a0<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 300,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 60,
+            "label": "Minimum dimming value",
+            "description": "Minimum dimming value",
+            "overview": "<ul><li>\u00a0Default value 1 (Minimum dimming value is 1%)<\/li> <li>1- 98 = 1% \u2013 98%, step is 1%. Minimum dimming values is set by entered value.<\/li> <\/ul><p><strong>NOTE<\/strong>: The maximum level may not be lower than the minimum level! 1% min. dimming value is defined by Z-Wave multilevel device class<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 98,
+            "options": []
+        },
+        {
+            "id": 61,
+            "label": "Maximum dimming value",
+            "description": "Maximum dimming value",
+            "overview": "<ul><li>Default value 99 (Maximum dimming value is 99 %)<\/li> <li>2- 99 = 2% \u2013 99%, step is 1%. Maximum dimming values is set by entered value.<\/li> <\/ul><p><strong>NOTE:<\/strong> The maximum level may not be lower than the minimum level! 99% max. dimming value is defined by Z-Wave multilevel device class<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 99,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 2,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 65,
+            "label": "Dimming time (soft on\/off)",
+            "description": "Dimming time (soft on\/off)",
+            "overview": "<p>Set value means time of moving the Dimmer between min. and max. dimming values by short press of push button I1 or controlled through UI.<\/p> <ul><li>Default value 100 (Dimming time between min. and max. dimming values is 1s)<\/li> <li>1- 255 = 10mseconds \u2013 2550mseconds (2,55s), step is 10mseconds\u00a0<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 66,
+            "label": "Dimming time when key pressed",
+            "description": "Dimming time when key pressed",
+            "overview": "<p>Time of moving the Dimmer between min. and max dimming values by continues hold of push button I1.<\/p> <p>Default value 3 (Dimming time between min. and max. dimming values is 3s)<\/p> <p>\u00a01- 255 = 1 second \u2013 255 seconds<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "multilevel",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "",
+            "overview": "<p>\u00a0(triggered at changes of state\/value of the Flush dimmer)<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "basic on\/off triggered by the input I2 state",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "basic on\/off triggered by the input I3 state",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "Controller updates",
+            "max_nodes": 4,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

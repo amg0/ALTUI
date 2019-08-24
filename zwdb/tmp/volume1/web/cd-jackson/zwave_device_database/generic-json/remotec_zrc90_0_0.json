@@ -1,0 +1,218 @@
+{
+    "database_id": 361,
+    "label": "ZRC-90",
+    "manufacturer_name": "Remotec",
+    "manufacturer_id": "5254",
+    "device_ref": [
+        "0000:8510",
+        "0001:8510",
+        "0002:8510"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Scene master 8 button remote",
+    "overview": "<p>Central Scene Controller with 8 Buttons supporting long-press capability.<br \/><br \/>Key Features:<br \/>\u00a0\u00a0\u00a0 - Controls up to 8x2 pre-set scenes and<br \/>\u00a0\u00a0\u00a0 - One learn-key setup and simple operation<br \/>\u00a0\u00a0\u00a0 - Report for key pressed 1 time, 2 times, released and held down<br \/>\u00a0\u00a0\u00a0 - Unlimited controlling capability through gateway<br \/>\u00a0\u00a0\u00a0 - Z-Wave Plus compliant<br \/>\u00a0\u00a0\u00a0 - Super thin, elegant design and able to mount to the wall-bracket<\/p>",
+    "inclusion": "<p>Include device by<\/p> <p>- pressing button R (middle button over the battery) + L (right button over the battery)<br \/>- Press the keys until LED light up<\/p>",
+    "exclusion": "<p>Exclude device<\/p> <p>- single click to button R (middle button over the battery)<\/p> <p>Reset to factory default<\/p> <p>- Press and keep holding button R for 10 seconds, then triple click<\/p>",
+    "wakeup": "<p>Wake up<\/p> <p>- single click button W (left button over the battery)<\/p>",
+    "protocol_version": 4.005,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": false,
+    "beaming": true,
+    "library_type": {
+        "id": 2,
+        "name": "LIB_CONTROLLER"
+    },
+    "basic_class": {
+        "id": 1,
+        "name": "BASIC_TYPE_CONTROLLER"
+    },
+    "generic_class": {
+        "id": 1,
+        "name": "GENERIC_TYPE_GENERIC_CONTROLLER"
+    },
+    "specific_class": {
+        "id": 1,
+        "name": "SPECIFIC_TYPE_REMOTE_CONTROL_SIMPLE"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 1,
+                "name": "BASIC_TYPE_CONTROLLER"
+            },
+            "generic_class": {
+                "id": 1,
+                "name": "GENERIC_TYPE_GENERIC_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_REMOTE_CONTROL_SIMPLE"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "21",
+                    "name": "CONTROLLER_REPLICATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

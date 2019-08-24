@@ -1,0 +1,438 @@
+{
+    "database_id": 930,
+    "label": "10002080-13x",
+    "manufacturer_name": "SimonTech S.L.U",
+    "manufacturer_id": "0267",
+    "device_ref": [
+        "0004:0000",
+        "0004:0022",
+        "0004:0063",
+        "0004:0091",
+        "0004:0092",
+        "0004:0093",
+        "0004:0094",
+        "0004:0177"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Simon IO: Roller Blind",
+    "overview": "<p>Roller Blind IO is ready to operate with Z-Wave controllers and configured to be managed by Simon100 IO APP using the HUB plug IO for getting a better user experience. Sending the Blind Up\/Down or setting a specific position.<\/p>",
+    "inclusion": "<p>When the pushbutton is released after a press of (2&lt;T&lt;10sec) the device will send a NIF to include from Z-Wave network or perform an association with other Z-Wave device.<\/p> <p>Central LED will Blink with 0,3 sec period to inform that NIF can be send after release of pushbutton.<\/p> <p>This process does not perform a default reset of configurations.<\/p> <p>Main LED will Blink with 0,3 sec period to inform that NIF can be send after release of pushbutton.<\/p>",
+    "exclusion": "<p>When the pushbutton is released after a press of (2&lt;T&lt;10sec) the device will send a NIF to exclude from Z-Wave network or perform an association with other Z-Wave device.<\/p> <p>Main LED will Blink with 0,3 sec period to inform that NIF can be send after release of pushbutton.<\/p> <p>This process does not perform a default reset of configurations.<\/p> <p>Main LED will Blink with 0,3 sec period to inform that NIF can be send after release of pushbutton.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.24,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_CLASS_C_MOTOR_CONTROL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 7,
+                "name": "SPECIFIC_TYPE_CLASS_C_MOTOR_CONTROL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "blinds_control",
+                            "label": "Blinds Control",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Association LED",
+            "description": "Activates the Central LED.",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Turns the LED OFF (default)"
+                },
+                {
+                    "value": 255,
+                    "label": " Turns the LED ON"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Up Time",
+            "description": "Up Time",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": true,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 120,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Sets the UP time in seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "Default"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Down Time",
+            "description": "Down Time",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 120,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Sets the DOWN time in seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "Default"
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "label": "Calibration",
+            "description": "Calibration",
+            "overview": "<p>255\u00a0-\u00a0The device will perform a calibration process in order to Set the UP and DOWN times automatically<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": true,
+            "value_min": 255,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "Behavior of LED in Repose",
+            "description": "Configuration of Main LED as identification at 20%.",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED OFF"
+                },
+                {
+                    "value": 255,
+                    "label": "LED ON at 20% of maximum level"
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "label": "Lock Input",
+            "description": " Unlock\/lock the direct control of load. ",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": " Unlock the direct control of load."
+                },
+                {
+                    "value": 255,
+                    "label": "Lock the direct control of load."
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "label": "Load State",
+            "description": "Load State (Read Only)",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": true,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Bit 0: Load is OFF"
+                },
+                {
+                    "value": 0,
+                    "label": "Bit 1: Sunblind position 0%"
+                },
+                {
+                    "value": 1,
+                    "label": "Bit 0: Load is going UP\/DOWN"
+                },
+                {
+                    "value": 99,
+                    "label": "Bit 1: Sunblind position 99%"
+                }
+            ]
+        },
+        {
+            "id": 23,
+            "label": "Calibration Required",
+            "description": "Calibration Required (Read Only)",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": true,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Calibration is not required."
+                },
+                {
+                    "value": 255,
+                    "label": "It is necessary to calibrate the device."
+                }
+            ]
+        },
+        {
+            "id": 27,
+            "label": "Lock long press",
+            "description": "7 Lock long press",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Long press works as default."
+                },
+                {
+                    "value": 255,
+                    "label": "Long press works as overview."
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 3,
+            "controller": false,
+            "description": "Lifeline",
+            "overview": "<div title=\"Page 6\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>Change on Sunblind position:<\/p>\r\n<ul>\r\n<li>On -&gt; CC Basic, Basic Report.<\/li>\r\n<li>Value 0x01 -\u00a00x63 Report sunblind position<\/li>\r\n<\/ul>\r\n<p>Calibration requirement change.\u00a0(If device needs to be calibrated and is Added into a ZWave network, it will report after receive an Association Set of life line).<\/p>\r\n<div title=\"Page 6\">\r\n<div>\r\n<div>\r\n<div>\r\n<ul>\r\n<li>Calibration required -&gt; CC Configuration, Configuration Report, Param 23, Value 0xF<\/li>\r\n<li>Calibration not required -&gt; CC Configuration, Configuration Report, Param 23, Value 0x00<\/li>\r\n<\/ul>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        },
+        {
+            "id": 2,
+            "label": "ctrl",
+            "max_nodes": 20,
+            "controller": true,
+            "description": "Control",
+            "overview": "<div title=\"Page 6\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>Change on Sunblind position:<\/p>\r\n<ul>\r\n<li>CC Basic, Basic Report.<\/li>\r\n<li>Value 0x00 -\u00a00x63 Report sunblind position<\/li>\r\n<\/ul>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        }
+    ]
+}

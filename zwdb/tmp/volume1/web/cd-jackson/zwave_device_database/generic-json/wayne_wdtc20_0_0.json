@@ -1,0 +1,186 @@
+{
+    "database_id": 1071,
+    "label": "WDTC-20",
+    "manufacturer_name": "Wayne Dalton",
+    "manufacturer_id": "0008",
+    "device_ref": [
+        "0007:0020"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Thermostat",
+    "overview": "<p>The Wayne-Dalton Z-Wave\u00ae Enabled Thermostat is compatible with most standard 24 Volt heating and cooling systems including:<\/p> <ul><li>1 and 2 stage heat pump systems<\/li> <li>1 or 2 stage normal heating systems<\/li> <li>1 stage cooling systems<\/li> <\/ul><p>The Wayne-Dalton Z-Wave\u00ae Enabled Thermostat also features:<\/p> <ul><li>Support for all Z-Wave\u00ae controllers<\/li> <li>\u201cHome\u201d and \u201cAway\u201d programs via Z-Wave\u00ae or manual operation<\/li> <li>\u201cHeat\u201d and \u201cCool\u201d modes via Z-Wave\u00ae or manual operation<\/li> <li>Temperature setting up or down via Z-Wave\u00ae or manual operation<\/li> <li>Easy Energy Savings buttons and Mode Switch<\/li> <li>Low Battery indicator<\/li> <\/ul><p>The Z-Wave\u00ae Enabled Thermostat is a new arrival into the Wayne-Dalton Z-Wave\u00ae product line and contains many new features that were not conceived when some Z-Wave\u00ae controllers were initially developed. The Wayne-Dalton Z-Wave\u00ae Enabled Thermostat has a special compatibility mode and is designed to work with your Z-Wave\u00ae network regardless of the manufacturer of your controller or its date of manufacture. When programming your thermostat to your controller, if it does not respond to the commands, reprogram it using the alternate programming method.<\/p> <p>The Z-Wave\u00ae Enabled Thermostat is designed to live by your schedule rather than forcing you to live by the rigid schedule it was programmed with. Now you can program it to the \u201cAway\u201d Scene on a controller such as the Wireless Gateway and when you leave the house you can activate that Scene from your car to set-back your thermostat, then when you arrive home, you can activate the \u201cHome\u201d Scene to return the thermostat to your normal setting.<\/p>",
+    "inclusion": "<ol><li>Set your primary controller to INCLUDE mode, to add the thermostat as a node on your network (see your specific controller\u2019s User Manual for detailed instructions.)<\/li> <li>Press and release the BIND button on the thermostat.<\/li> <\/ol><p>Your controller will indicate the thermostat was successfully added to its network (see your specific controller\u2019s User Manual for details.) Also, your thermostat will indicate it was successfully added to the network by flashing the entire Z-Wave\u00ae logo.<\/p>",
+    "exclusion": "<ol><li>Press the REMOVE DEVICE button located in ThinkEssentials\u00ae on the DESIGN TAB.<\/li> <li>Press and release the BIND button on the thermostat. If successful, ThinkEssentials\u00ae will display a message that the device was removed successfully and a thermostat icon will appear.<\/li> <\/ol>",
+    "wakeup": "",
+    "protocol_version": 0,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_THERMOSTAT"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 8,
+                "name": "GENERIC_TYPE_THERMOSTAT"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "40",
+                    "name": "THERMOSTAT_MODE",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_mode",
+                            "label": "Thermostat mode",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "42",
+                    "name": "THERMOSTAT_OPERATING_STATE",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_state",
+                            "label": "Operating State",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "87",
+                    "name": "INDICATOR",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": []
+}

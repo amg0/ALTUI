@@ -1,0 +1,190 @@
+{
+    "database_id": 936,
+    "label": "ES800ZWE",
+    "manufacturer_name": "Essence Security",
+    "manufacturer_id": "0160",
+    "device_ref": [
+        "0001:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Z-Wave extender",
+    "overview": "<p>The Z-Wave Plus Extender incorporates third party Z-Wave devices into WeR@Home\u2122, integrating home automation and control functions with the core WeR@Home\u2122 system.<\/p> <p>Features include:<\/p> <ul><li>Single-element, compact Z-Wave Plus controller<\/li> <li>Allows Z-Wave devices to be added as seamlessly integrated elements in WeR@Home\u2122.<\/li> <li>Enables support for Smart Devices such as: <ul><li>Light switches (on\/off and dimmer)<\/li> <li>Thermostats<\/li> <li>Door locks<\/li> <li>Power strips<\/li> <li>Multi-colored (RGBW) LED bulbs<\/li> <\/ul><\/li> <li>Powered by the WeR@Home\u2122 hub<\/li> <li>Simple and fast pairing process<\/li> <\/ul>",
+    "inclusion": "<p>If you have an existing third-party Z-Wave network, WeR@Home\u2122 can join the network. WeR@Home\u2122 enters \"learn\" mode on the existing network to automatically copy the existing network's Smart Home network structure. When you join a Z-Wave network, you have access to the Z-Wave devices supported by WeR@Home\u2122. The Z-Wave Plus Extender is assigned one of the following roles depending on the third-party controller capabilities:<\/p> <ul><li><strong>Secondary (inclusion)<\/strong> - allowed to add or delete additional Z-Wave devices<\/li> <li><strong>Secondary<\/strong> \u2013not allowed to add or delete additional Z-Wave devices<\/li> <\/ul><p>To join an existing third-party Z-Wave network:<\/p> <ol><li>Remove all Z-Wave devices from your WeR@Home\u2122, except for your Z-Wave Plus Extender. Refer to 5.5 Removing a Z-Wave Device on page 14.<\/li> <li>In the WeR@Home\u2122 app, tap \"menu\" The main menu appears.<\/li> <li>Tap \"Devices\". The Devicesscreen appears.<\/li> <li>Tap the\u00a0gear icon for your Z-Wave Plus Extender. The Z-Wave Controller configuration screen appears.<\/li> <li>Put the primary controller of the existing network into Add mode, according to the controller\u2019s user manual.<\/li> <li>Tap Join Existing Network. All Z-Wave devices are removed from WeR@Home\u2122. WeR@Home\u2122 copies the topology of the existing network and prompts you to enter the name for the existing network controller.<\/li> <li>Enter the name for the existing network controller and tap OK.<\/li> <\/ol>",
+    "exclusion": "<p>If your Z-Wave Plus Extender role is Secondary or Secondary (inclusion), you can remove your Z-Wave Plus Extender from the existing third-party network.<\/p> <p><em><strong>Caution:<\/strong> Removing the Z-Wave Plus Extender from the existing network, removes connection to all Z-Wave devices from the Z-Wave Plus Extender.<\/em><\/p> <p>To remove your Z-Wave Plus Extender from the existing network:<\/p> <ol><li>In the WeR@Home\u2122 app, tap . The main menu appears.<\/li> <li>Tap Devices. The Devicesscreen appears.<\/li> <li>Tap the\u00a0gear icon for your Z-Wave Plus Extender. The Z-Wave Controller configuration screen appears.<\/li> <li>Tap Role. The Role screen appears.<\/li> <li>Put the primary controller of the existing network into Remove mode, according to the controller\u2019s user manual.<\/li> <li>Tap Exclude Network. A confirmation window appears.<\/li> <li>Tap OK. The third-party controller and its devices are removed.<\/li> <\/ol>",
+    "wakeup": "",
+    "protocol_version": 4.033,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 1,
+        "name": "LIB_CONTROLLER_STATIC"
+    },
+    "basic_class": {
+        "id": 0,
+        "name": null
+    },
+    "generic_class": {
+        "id": 0,
+        "name": null
+    },
+    "specific_class": {
+        "id": 0,
+        "name": "SPECIFIC_TYPE_NOT_USED"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 2,
+                "name": "BASIC_TYPE_STATIC_CONTROLLER"
+            },
+            "generic_class": {
+                "id": 2,
+                "name": "GENERIC_TYPE_STATIC_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_PC_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "22",
+                    "name": "APPLICATION_STATUS",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "56",
+                    "name": "CRC_16_ENCAP",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": []
+}

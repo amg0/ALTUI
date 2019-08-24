@@ -1,0 +1,222 @@
+{
+    "database_id": 1035,
+    "label": "ZWP10",
+    "manufacturer_name": "Fakro",
+    "manufacturer_id": "0085",
+    "device_ref": [
+        "0001:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Z-Wave Controller",
+    "overview": "<p>The<strong>\u00a0ZWP10<\/strong>\u00a0multi-channel remote control enables radio control of FAKRO electrical accessories and of other manufacturers which are compatible with the Z-Wave communication module. The ZWP10 remote control can be used to operate up to 10 devices individually on five channels (two devices per channel). It also allows the creation of 10 independent groups. Each group can contain several devices operated simultaneously.<\/p> <p>The controller's memory can contain up to 231 devices.<\/p> <p>The ZWP10 remote control can serve as the basic controller (PRIMARY) and additional controller (SECONDARY). The PRIMARY controller allows to integrate numerous devices into one radio network, while the SECONDARY controller acts as additional controller in an already existing network.<\/p> <p>In addition to Basic control mode, i.e.: ?, \u23f9\ufe0f, ?, the ZWP10 remote control also features Multilevel mode which allows e.g. for smooth dimming of light or smooth operation of roller shutters and blinds (by keeping the\u00a0?\u00a0or ? button pressed). For convenience the ZWP10 remote can be magnetically attached to a wall mounted holder.<\/p> \u00a0 \u00a0",
+    "inclusion": "<p>By default the ZWP10 is the primary controller. Inclusion mode is enabled by pressing once the IN\/EX button at the back of the\u00a0remote control. LEDs 1 and 4 will turn on. Follow the instructions on\u00a0the device to be included (within 10 seconds). Upon successful inclusion, LEDs 2 &amp; 3 will briefly turn on.<\/p> <p>In case the ZWP10 is added to an existing network: set the primary controller in INCLUDE mode. Press three times the IN\/EX button at the back of the ZWP10 remote control to be included until LEDs 1 and 3 turn on. Upon completion, LEDs 2 &amp; 4 will briefly turn on to confirm successful inclusion as SECONDARY controller.<\/p> \u00a0 \u00a0",
+    "exclusion": "<p>When the ZWP10 is the primary controller: press twice\u00a0the IN\/EX button\u00a0at the back of the\u00a0remote control until LEDs 1 and 3 turn on. Follow the instructions on\u00a0the device to be excluded\u00a0(within 10 seconds). Upon successful inclusion, LEDs 1\u00a0&amp; 4\u00a0will briefly turn on.<\/p> <p><strong>Remark:<\/strong> you can exclude any included device this way, even if the ZWP10 remote controller has been reset to factory defaults.\u00a0 \u00a0<\/p> \u00a0 \u00a0",
+    "wakeup": "<p>The user manual doesn't provide information about waking up the ZWP10 portable remote. However, communication with the primary controller can be initiated by pressing the SELECT button (\u2194\ufe0f) for <strong>at least 3 seconds<\/strong>\u00a0until LEDs 1, 2, 3 and 4 start blinking. Communication starts when releasing the SELECT button (\u2194\ufe0f). LEDs 1, 2, 3 and 4 will keep blink simultaneously until the communication is finished.<\/p> \u00a0 \u00a0",
+    "protocol_version": 3.067,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": false,
+    "beaming": true,
+    "library_type": {
+        "id": 2,
+        "name": "LIB_CONTROLLER"
+    },
+    "basic_class": {
+        "id": 1,
+        "name": "BASIC_TYPE_CONTROLLER"
+    },
+    "generic_class": {
+        "id": 1,
+        "name": "GENERIC_TYPE_GENERIC_CONTROLLER"
+    },
+    "specific_class": {
+        "id": 1,
+        "name": "SPECIFIC_TYPE_PORTABLE_REMOTE_CONTROLLER"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 1,
+                "name": "BASIC_TYPE_CONTROLLER"
+            },
+            "generic_class": {
+                "id": 1,
+                "name": "GENERIC_TYPE_GENERIC_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_PORTABLE_REMOTE_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Channel \"1234\" left",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Channel \"1234\" right",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Channel \"1\" left",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 4,
+            "label": "Channel \"1\" right",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 5,
+            "label": "Channel \"2\" left",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 6,
+            "label": "Channel \"2\" right",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 7,
+            "label": "Channel \"3\" left",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 8,
+            "label": "Channel \"3\" right",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 9,
+            "label": "Channel \"4\" left",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        },
+        {
+            "id": 10,
+            "label": "Channel \"4\" right",
+            "max_nodes": 232,
+            "controller": false,
+            "description": "",
+            "overview": "<p>The ZWP10 portable remote controller features 5 channels (\"1\", \"2\", \"3\", \"4\", \"1234\") and each channels features 2 sets of controls (left set and right set). Press\u00a0repeatedly the SELECT button (\u2194\ufe0f) until the desired channel is selected.<\/p>"
+        }
+    ]
+}

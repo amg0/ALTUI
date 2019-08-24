@@ -1,0 +1,549 @@
+{
+    "database_id": 589,
+    "label": "DMS01",
+    "manufacturer_name": "Elexa Consumer Products Inc.",
+    "manufacturer_id": "021F",
+    "device_ref": [
+        "0003:0088"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Dome Wireless Siren",
+    "overview": "<p>Alert you with sounds and built-in LED\u2019s to security threats and problems such as leaks and fires. It can also sound a mild chime when doors or windows open to let you know when people come and go.<\/p>",
+    "inclusion": "<p>Follow the instructions for your Z-Wave certified Controller to enter inclusion mode. When prompted by the Controller:<\/p> <ol><li>For proper inclusion, bring the Siren to within 10 feet of your Controller. After inclusion, the device can be moved to any desired location.<\/li> <li>Remove the Back Plate of the Siren.<\/li> <li>Remove the Battery Tabs.<\/li> <li>Press the Connect Button quickly 3 times in a row. The LED Ring will flash five times indicating inclusion.<\/li> <\/ol>",
+    "exclusion": "<p>Follow the instructions for your Z-Wave certified Controller to enter exclusion mode. When prompted by the Controller:<\/p> <ol><li>Remove the Back Plate of the Siren.<\/li> <li>Press the Connect Button quickly 3 times in a row. The LED Ring will flash five times indicating exclusion\/disconnection.<\/li> <\/ol>",
+    "wakeup": "<p>The device can be forced to wake up to submit these reports or accept new settings immediately by simply pressing and holding the CONNECT BUTTON for two seconds. The LED RING will flash once indicating successful wake up.<\/p>",
+    "protocol_version": 4.034,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_SIREN"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 5,
+                "name": "SPECIFIC_TYPE_SIREN"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "config_decimal",
+                            "label": "Notification Sound",
+                            "config": [
+                                "parameter=7"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Primary Notification Volume",
+                            "config": [
+                                "parameter=1"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Secondary Notification Volume",
+                            "config": [
+                                "parameter=4"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Primary Notification Sound",
+                            "config": [
+                                "parameter=5"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Secondary Notification Sound",
+                            "config": [
+                                "parameter=6"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Primary Notification Length",
+                            "config": [
+                                "parameter=2"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Secondary Notification Length",
+                            "config": [
+                                "parameter=3"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "6",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_general",
+                            "label": "Alarm",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "87",
+                    "name": "INDICATOR",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Primary Notification Volume Level",
+            "description": "",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Low Volume"
+                },
+                {
+                    "value": 2,
+                    "label": "Medium Volume"
+                },
+                {
+                    "value": 3,
+                    "label": "High Volume"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Primary Notification Length",
+            "description": "",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 2,
+                    "label": "1 Minute"
+                },
+                {
+                    "value": 3,
+                    "label": "5 Minutes"
+                },
+                {
+                    "value": 255,
+                    "label": "Plays Until Battery Is Depleted"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Secondary Notification Length",
+            "description": "",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Does Not Stop"
+                },
+                {
+                    "value": 1,
+                    "label": "One Minute"
+                },
+                {
+                    "value": 5,
+                    "label": "Five Minutes"
+                },
+                {
+                    "value": 255,
+                    "label": "Chime Will Not Play"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Secondary Notification Volume Level",
+            "description": "",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Low Volume"
+                },
+                {
+                    "value": 2,
+                    "label": "Medium Volume"
+                },
+                {
+                    "value": 3,
+                    "label": "High Volume"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Primary Notification Sound",
+            "description": "Set the siren primary notification sound.",
+            "overview": "<p>The siren offers ten different sounds to use as the Siren (primary) notification. This parameter sets the Siren (primary) notification sound.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 9,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 10,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Ding dong"
+                },
+                {
+                    "value": 2,
+                    "label": "Fur Elise"
+                },
+                {
+                    "value": 3,
+                    "label": "Westminster Chime"
+                },
+                {
+                    "value": 4,
+                    "label": "Dingdongdingdongdingdong"
+                },
+                {
+                    "value": 5,
+                    "label": "William Tell Overture"
+                },
+                {
+                    "value": 6,
+                    "label": "Classical"
+                },
+                {
+                    "value": 7,
+                    "label": "Weeooeeooeeooeeoo"
+                },
+                {
+                    "value": 8,
+                    "label": "Err-err-err-err-err"
+                },
+                {
+                    "value": 9,
+                    "label": "Beepbeepbeepbeep (Default)"
+                },
+                {
+                    "value": 10,
+                    "label": "beeeep-beeeep-beeeep"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": "Secondary Notification Sound",
+            "description": "",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 9,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 10,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Ding dong"
+                },
+                {
+                    "value": 2,
+                    "label": "Fur Elise"
+                },
+                {
+                    "value": 3,
+                    "label": "Westminster Chime"
+                },
+                {
+                    "value": 4,
+                    "label": "Dingdongdingdongdingdong"
+                },
+                {
+                    "value": 5,
+                    "label": "William Tell Overture"
+                },
+                {
+                    "value": 6,
+                    "label": "Classical"
+                },
+                {
+                    "value": 7,
+                    "label": "Weeooeeooeeooeeoo"
+                },
+                {
+                    "value": 8,
+                    "label": "Err-err-err-err-err"
+                },
+                {
+                    "value": 9,
+                    "label": "Beepbeepbeepbeep (Default)"
+                },
+                {
+                    "value": 10,
+                    "label": "beeeep-beeeep-beeeep"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "Toggle secondary chime",
+            "description": "Toggles between primary and secondary chime for binary switch",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Primary notification will play"
+                },
+                {
+                    "value": 2,
+                    "label": "Secondary notification will play"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Binary Switch Reports",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Notification Reports",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

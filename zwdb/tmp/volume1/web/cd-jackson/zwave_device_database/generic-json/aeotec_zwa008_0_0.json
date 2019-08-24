@@ -1,0 +1,583 @@
+{
+    "database_id": 1065,
+    "label": "ZWA008",
+    "manufacturer_name": "Aeotec Limited",
+    "manufacturer_id": "0371",
+    "device_ref": [
+        "0002:0007",
+        "0102:0007"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Door\/Window Sensor 7",
+    "overview": "<p>Aeotec Door\/ Window Sensor 7 is a small window position sensor for your smart home, it monitors window and their exact opening position and lets your know when a window is tilted or completely opened. It also supports connecting external binary sensors through the dry binary contact of the Door\/ Window sensor.<\/p>",
+    "inclusion": "<p>Tripple click the tamper switch<br \/><br \/><\/p>",
+    "exclusion": "<p>Tripple click the tamper switch\u00a0<\/p>",
+    "wakeup": "<p>Hit the tamper switch once.<\/p>",
+    "protocol_version": 6.002,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_door",
+                            "label": "Door Sensor",
+                            "config": [
+                                "type=ACCESS_CONTROL"
+                            ]
+                        },
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "FORCEVERSION",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Sensor Operation Mode",
+            "description": "Defines if internal magnet sensor or the external terminal input is detected",
+            "overview": "<p>This parameter defines if the internal magnet sensor or the external terminal input is detected and used to issue alarm notification. There is always one input active only. The other sensor input the deactivated. <\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Internal Magnet Sensor Used"
+                },
+                {
+                    "value": 1,
+                    "label": "External Terminal Inputs Used"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Sensor State Polarity",
+            "description": "Defines the polarity of the magnet sensor",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Closed when Magnet in proximity"
+                },
+                {
+                    "value": 1,
+                    "label": "Opened when Magnet in proximity"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Visual LED Indications",
+            "description": "Defines when the red LED will indicate events. ",
+            "overview": "<p>Disabling all indications may extend battery life.<\/p> <table><tr><td><strong>Setting<\/strong><\/td> <td><strong>Description<\/strong><\/td> <\/tr><tr><td>Byte 1: 00000001\u00a0<\/td> <td>No Indications<\/td> <\/tr><tr><td>Byte 1: 00000010\u00a0<\/td> <td>Open\/Close Status Change\u00a0<\/td> <\/tr><tr><td>Byte 1: 00000100\u00a0<\/td> <td>Wake Up\u00a0<\/td> <\/tr><tr><td>Byte 1: 00010000<\/td> <td>Device Tampering\u00a0<\/td> <\/tr><\/table>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 31,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Range Test after double click",
+            "description": "Allows to enable the activation of a Z-Wave range.",
+            "overview": "<p>Allows to enable the activation of a Z-Wave range test with double clicking the tamper switch. <\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "Enabled"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "2nd Association Group Trigger",
+            "description": "Sending a BASIC command to all devices of Association Group 2",
+            "overview": "<p>This parameter defines the status of the magnet switch that causes sending a BASIC command to all devices of Association Group 2 <\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Switch after \u2018Open\u2018 and \u2018Close\u2018"
+                },
+                {
+                    "value": 1,
+                    "label": "Switch after \u2018Open\u2018 "
+                },
+                {
+                    "value": 2,
+                    "label": "Switch after \u2018Close\u2018"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": " Command Sent to Devices of Association Group 2 ",
+            "description": "This parameter defines which commands is sent to 2nd Association Group ",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "On"
+                },
+                {
+                    "value": 1,
+                    "label": "Off"
+                },
+                {
+                    "value": 2,
+                    "label": "On and Off"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "BASIC command value sent to 2nd Assoc Group on On",
+            "description": "BASIC command value sent to 2nd Association Group on \u2018On\u2018 event",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "BASIC command value sent to 2nd Assoc Group on Off",
+            "description": "BASIC command value sent to 2nd Association Group on \u2018Off\u2018 event",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Time Delay of \u2018Off\u2018 command frame",
+            "description": "Time Delay of \u2018Off\u2018 command frame",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32400,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Time Delay of \u2018Off\u2018 command frame",
+            "description": "Time Delay of \u2018Off\u2018 command frame",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32400,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Delay of Tamper Alarm Cancellation",
+            "description": "Delay of Tamper Alarm Cancellation",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32400,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "Reporting Tamper Alarm Cancellation",
+            "description": "Reporting Tamper Alarm Cancellation",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Do not send Report"
+                },
+                {
+                    "value": 1,
+                    "label": "Send Report"
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "label": "Central Scene Event Functionality",
+            "description": "Central Scene Event Functionality",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "Enabled"
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "label": "Tilt Sensor Functionality",
+            "description": "Tilt Sensor Functionality",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "Enabled"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Group 2",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Control devices when magnet or external dry contacts trips",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Group 3",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Sends alarm message when magnet controlled or external dry sensor trips.",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "Group 4",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Sends alarm messages when tamper is tripped",
+            "overview": ""
+        }
+    ]
+}

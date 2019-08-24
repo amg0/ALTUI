@@ -1,0 +1,730 @@
+{
+    "database_id": 835,
+    "label": "DSI-101 binary switch",
+    "manufacturer_name": "Defaro",
+    "manufacturer_id": "032E",
+    "device_ref": [
+        "0004:0042"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "DSI-101 binary switch",
+    "overview": "<p>https:\/\/defaro.ru\/index.php\/support\/instructions\/208-dsi-101<\/p>",
+    "inclusion": "<p>1. Set controller in inclusion mode<\/p> <p>2. Press button on the device for three seconds<\/p>",
+    "exclusion": "<p>1. Set controller in exclusion mode<\/p> <p>2. Press button on the device for three seconds<\/p>",
+    "wakeup": "<p>Press button on the device once.<\/p>",
+    "protocol_version": 4.005,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_WALL_CONTROLLER"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_current",
+                            "label": "Central scene number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "B1 operation mode",
+            "description": "B1 operation mode",
+            "overview": "<p>0 - Turn off for short press\/Dim down for hold (monostable switch)<\/p> <p>1 - Turn on for short press\/Dim up for hold (monostable switch)<\/p> <p>2 - Bistable switch<\/p> <p>3 - Scene activation mode<\/p> <p>4 - Monostable switch. Each press\/hold switches on\/off\/sends dim up\/down state for devices from AG 3 or 11 (only first device from this AG is supported!)<\/p> <p>5 - Bistable switch for devices from AG 3 or 11 (only first device from this AG is supported!)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "B2 operation mode",
+            "description": "B2 operation mode",
+            "overview": "<p>0 - Turn off for short press\/Dim down for hold (monostable switch)<\/p> <p>1 - Turn on for short press\/Dim up for hold (monostable switch)<\/p> <p>2 - Bistable switch<\/p> <p>3 - Scene activation mode<\/p> <p>4 - Monostable switch. Each press\/hold switches on\/off\/sends dim up\/down state for devices from AG 4 or 12 (only first device from this AG is supported!)<\/p> <p>5 - Bistable switch for devices from AG 4 or 12 (only first device from this AG is supported)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "B3 operation mode",
+            "description": "B3 operation mode",
+            "overview": "<p>0 - Turn off for short press\/Dim down for hold (monostable switch)<\/p> <p>1 - Turn on for short press\/Dim up for hold (monostable switch)<\/p> <p>2 - Bistable switch<\/p> <p>3 - Scene activation mode<\/p> <p>4 - Monostable switch. Each press\/hold switches on\/off\/sends dim up\/down state for devices from AG 5 or 13 (only first device from this AG is supported!)<\/p> <p>5 - Bistable switch for devices from AG 5 or 13 (only first device from this AG is supported)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "B4 operation mode",
+            "description": "B4 operation mode",
+            "overview": "<p>0 - Turn off for short press\/Dim down for hold (monostable switch)<\/p> <p>1 - Turn on for short press\/Dim up for hold (monostable switch)<\/p> <p>2 - Bistable switch<\/p> <p>3 - Scene activation mode<\/p> <p>4 - Monostable switch. Each press\/hold switches on\/off\/sends dim up\/down state for devices from AG 4 or 12 (only first device from this AG is supported!)<\/p> <p>5 - Bistable switch for devices from AG 4 or 12 (only first device from this AG is supported)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "B5 operation mode",
+            "description": "B5 operation mode",
+            "overview": "<p>0 - Turn off for short press\/Dim down for hold (monostable switch)<\/p> <p>1 - Turn on for short press\/Dim up for hold (monostable switch)<\/p> <p>2 - Bistable switch<\/p> <p>3 - Scene activation mode<\/p> <p>4 - Monostable switch. Each press\/hold switches on\/off\/sends dim up\/down state for devices from AG 7 or 15 (only first device from this AG is supported!)<\/p> <p>5 - Bistable switch for devices from AG 7 or 15 (only first device from this AG is supported)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "B6 operation mode",
+            "description": "B6 operation mode",
+            "overview": "<p>0 - Turn off for short press\/Dim down for hold (monostable switch)<\/p> <p>1 - Turn on for short press\/Dim up for hold (monostable switch)<\/p> <p>2 - Bistable switch<\/p> <p>3 - Scene activation mode<\/p> <p>4 - Monostable switch. Each press\/hold switches on\/off\/sends dim up\/down state for devices from AG 8 or 16 (only first device from this AG is supported!)<\/p> <p>5 - Bistable switch for devices from AG 8 or 16 (only first device from this AG is supported)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "B7 operation mode",
+            "description": "B7 operation mode",
+            "overview": "<p>0 - Turn off for short press\/Dim down for hold (monostable switch)<\/p> <p>1 - Turn on for short press\/Dim up for hold (monostable switch)<\/p> <p>2 - Bistable switch<\/p> <p>3 - Scene activation mode<\/p> <p>4 - Monostable switch. Each press\/hold switches on\/off\/sends dim up\/down state for devices from AG 9 or 17 (only first device from this AG is supported!)<\/p> <p>5 - Bistable switch for devices from AG 9 or 17 (only first device from this AG is supported)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "B8 operation mode",
+            "description": "B8 operation mode",
+            "overview": "<p>0 - Turn off for short press\/Dim down for hold (monostable switch)<\/p> <p>1 - Turn on for short press\/Dim up for hold (monostable switch)<\/p> <p>2 - Bistable switch<\/p> <p>3 - Scene activation mode<\/p> <p>4 - Monostable switch. Each press\/hold switches on\/off\/sends dim up\/down state for devices from AG 10 or 18 (only first device from this AG is supported!)<\/p> <p>5 - Bistable switch for devices from AG 10 or 18 (only first device from this AG is supported)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 5,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Long press delay",
+            "description": "Delay for long press detection",
+            "overview": "<p>In 1\/10 of sec<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 50,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "B1 value for AG 11",
+            "description": "B1 value to send for AG 11",
+            "overview": "<p>Value to send to AG 11\u00a0 (0 - disable this functionality)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "B2 value to send",
+            "description": "B2 value to send for AG 12",
+            "overview": "<p>Value to send to AG 12\u00a0 (0 - disable this functionality)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "B3 value to send for AG 13",
+            "description": "B3 value to send for AG 13",
+            "overview": "<p>Value to send to AG 13\u00a0 (0 - disable this functionality)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 13,
+            "label": "B4 value to send",
+            "description": "B4 value to send for AG 14",
+            "overview": "<p>Value to send to AG 14\u00a0 (0 - disable this functionality)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 14,
+            "label": "B5 value to send",
+            "description": "B5 value to send for AG 15",
+            "overview": "<p>Value to send to AG 15\u00a0 (0 - disable this functionality)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 15,
+            "label": "B6 value to send",
+            "description": "B6 value to send for AG 16",
+            "overview": "<p>Value to send to AG 16\u00a0 (0 - disable this functionality)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 16,
+            "label": "B7 value to send",
+            "description": "B7 value to send for AG 17",
+            "overview": "<p>Value to send to AG 17\u00a0 (0 - disable this functionality)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 17,
+            "label": "B8 value to send",
+            "description": "B8 value to send for AG 18",
+            "overview": "<p>Value to send to AG 18\u00a0 (0 - disable this functionality)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 20,
+            "label": "Sensor 1 turn on value",
+            "description": "Sensor 1 turn on value for AG 19",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -60,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 21,
+            "label": "Sensor 1 command off value",
+            "description": "Sensor 1 command off value for AG19",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -60,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 22,
+            "label": "Sensor 1 conversion rules",
+            "description": "Sensor 1 conversion rules",
+            "overview": "<p>All commands are sent to devices in AG 19<\/p> <p>0 - ignore sensor value<\/p> <p>1 - send ON if Value &lt;= Param20 and send OFF if Value &gt;= Param21<\/p> <p>2 - send OFF if Value &lt;= Param21 and send ON if Value &gt;= Param20<\/p> <p>3 - send ON if Value &lt;= Param20<\/p> <p>4 - send ON if Value &gt;= Param20<\/p> <p>5 - send OFF if Value &gt;= Param21<\/p> <p>6 - send OFF if Value &lt;= Param21<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": []
+        },
+        {
+            "id": 23,
+            "label": "Sensor 2 command on value",
+            "description": "Sensor 2 command on value for AG 20",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -60,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 24,
+            "label": "Sensor 2 command off value",
+            "description": "Sensor 2 command off value for AG 20",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -60,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 25,
+            "label": "Sensor 2 conversion rules",
+            "description": "Sensor 2 conversion rules",
+            "overview": "<p>All commands are sent to devices in AG 20<\/p> <p>0 - ignore sensor value<\/p> <p>1 - send ON if Value &lt;= Param23 and send OFF if Value &gt;= Param24<\/p> <p>2 - send OFF if Value &lt;= Param24 and send ON if Value &gt;= Param23<\/p> <p>3 - send ON if Value &lt;= Param23<\/p> <p>4 - send ON if Value &gt;= Param23<\/p> <p>5 - send OFF if Value &gt;= Param24<\/p> <p>6 - send OFF if Value &lt;= Param24<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Battery level",
+            "max_nodes": 3,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Scene activation set",
+            "max_nodes": 3,
+            "controller": true,
+            "description": "",
+            "overview": "<p>Scene Ids:<\/p>\r\n<table style=\"height: 58px;\" width=\"744\">\r\n<tbody>\r\n<tr>\r\n<td style=\"width: 76.6667px; text-align: center;\">Button<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">B1<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">B2<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">B3<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">B4<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">B5<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">B6<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">B7<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">B8<\/td>\r\n<\/tr>\r\n<tr>\r\n<td style=\"width: 76.6667px; text-align: center;\">SceneID<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">10<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">20<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">30<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">40<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">50<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">60<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">70<\/td>\r\n<td style=\"width: 76.6667px; text-align: center;\">80<\/td>\r\n<\/tr>\r\n<\/tbody>\r\n<\/table>\r\n<p>\u00a0<\/p>\r\n<p>\u00a0<\/p>\r\n<p>\u00a0<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "On\/Off command for switch 1",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "On\/Off command for switch 2",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 5,
+            "label": "On\/Off command for switch 3",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 6,
+            "label": "On\/Off command for switch 4",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 7,
+            "label": "On\/Off command for switch 5",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 8,
+            "label": "On\/Off command for switch 6",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 9,
+            "label": "On\/Off command for switch 7",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 10,
+            "label": "On\/Off command for switch 8",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 11,
+            "label": "Dim command for switch 1",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 12,
+            "label": "Dim command for switch 2",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 13,
+            "label": "Dim command for switch 3",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 14,
+            "label": "Dim command for switch 4",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 15,
+            "label": "Dim command for switch 5",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 16,
+            "label": "Dim command for switch 6",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 17,
+            "label": "Dim command for switch 7",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 18,
+            "label": "Dim command for switch 8",
+            "max_nodes": 10,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 19,
+            "label": "Sensor 1 group",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 20,
+            "label": "Sensor 2 group",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

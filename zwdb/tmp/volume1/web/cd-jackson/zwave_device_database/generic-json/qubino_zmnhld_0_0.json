@@ -1,0 +1,1475 @@
+{
+    "database_id": 498,
+    "label": "ZMNHLD",
+    "manufacturer_name": "Goap",
+    "manufacturer_id": "0159",
+    "device_ref": [
+        "0005:0053"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Flush PWM Thermostat",
+    "overview": "This Z-Wave module is used to regulate temperature. Regulation is done using full wave PWM technology. The module can be controlled either through Z-wave network or through the wall switch. The module is designed to be mounted inside a \u201cflush mounting box\u201d and is hidden behind a traditional wall switch. Module measures power consumption of connected device. It is designed to act as repeater in order to improve range and stability of Z-wave network.",
+    "inclusion": "<p>WARNING: Service button S <strong>must NOT be used<\/strong> when module is connected to 110-230V power supply.<\/p> <ul><li>Connect module to power supply (with temperature sensor connected - if purchased),<\/li> <li>Enable add\/remove mode on main controller<\/li> <li>Auto-inclusion (works for about 5 seconds after connected to power supply) or<\/li> <li><strong>110V-230V power supply:\u00a0<\/strong>Press push button I1 three times within 3 seconds (3 times change switch state within 3 seconds)<\/li> <li><strong>24V SELV:\u00a0<\/strong>Press service button <strong>S<\/strong>\u00a0for more than 2 seconds.<\/li> <\/ul><p><strong>NOTE1:<\/strong> For auto-inclusion procedure, first set main controller into inclusion mode and then connect module to power supply.<\/p> <p><strong>NOTE2:<\/strong> When connecting temperature sensor to module that has already been included, you have to exclude module first.\u00a0Switch off power supply,connect the sensor and re-include the module.<\/p>",
+    "exclusion": "<p>WARNING: Service button S <strong>must NOT be used<\/strong> when module is connected to 110-230V power supply.<\/p> <ul><li>Connect module to power supply<\/li> <li>Bring module within maximum 1 meter (3 feet) of the main controller<\/li> <li>Enable add\/remove mode on main controller<\/li> <li><strong>110V-230V power supply:<\/strong> Press push button <strong>I1<\/strong> five times within 3 seconds (5 times change switch state within 3 seconds) in the first 60 seconds after the module is connected to the power supply<\/li> <li><strong>24V SELV:<\/strong> Press ervice button <strong>S<\/strong> for more than 6 seconds.<\/li> <\/ul><p>By this function all parameters of the module are set to default values and own ID is deleted. If push button I1 is pressed three times within 3 seconds (or service button S is pressed more than 2 and less than 6 seconds) module is excluded, but configuration parameters are not set to default values.<\/p> <p>NOTE: If the module is included with parameters 100 or 101 with values different to default and module reset is done, wait at least 30s before next inclusion.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.005,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": false,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_THERMOSTAT"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 8,
+                "name": "GENERIC_TYPE_THERMOSTAT"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "7",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "40",
+                    "name": "THERMOSTAT_MODE",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_mode",
+                            "label": "Thermostat mode",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Thermostat setpoint",
+                            "config": [
+                                "type=HEATING"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "EF",
+                    "name": "MARK",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 8,
+                "name": "GENERIC_TYPE_THERMOSTAT"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "7",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Temperature Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "40",
+                    "name": "THERMOSTAT_MODE",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_mode",
+                            "label": "Thermostat mode",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 32,
+                "name": "GENERIC_TYPE_SENSOR_BINARY"
+            },
+            "specific_class": {
+                "id": 0,
+                "name": "SPECIFIC_TYPE_NOT_USED"
+            },
+            "commandclasses": [
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "40",
+                    "name": "THERMOSTAT_MODE",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 32,
+                "name": "GENERIC_TYPE_SENSOR_BINARY"
+            },
+            "specific_class": {
+                "id": 0,
+                "name": "SPECIFIC_TYPE_NOT_USED"
+            },
+            "commandclasses": [
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 32,
+                "name": "GENERIC_TYPE_SENSOR_BINARY"
+            },
+            "specific_class": {
+                "id": 0,
+                "name": "SPECIFIC_TYPE_NOT_USED"
+            },
+            "commandclasses": [
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "7",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Input I1 switch type",
+            "description": "Input I1 switch type",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "mono-stable switch type"
+                },
+                {
+                    "value": 1,
+                    "label": "bi-stable switch type"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Input I2 switch type",
+            "description": "Input I2 switch type",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "mono-stable switch type"
+                },
+                {
+                    "value": 1,
+                    "label": "bi-stable switch type"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Input I3 switch type",
+            "description": "Input I3 switch type",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "mono-stable switch type (push button)"
+                },
+                {
+                    "value": 1,
+                    "label": "bi-stable switch type"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Input 1 contact type",
+            "description": "Input 1 contact type",
+            "overview": "This parameter determines how the sensor is connected (for example: door\/window sensor) Set this parameter according to the type of sensor you use. This parameter has influence only when parameter no. 11 is set to the value \u201c2\u201d. After setting this parameter, switch the window sensor once, so that the device can determine the input state.",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "normally open"
+                },
+                {
+                    "value": 1,
+                    "label": "normally closed"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Input 2 contact type",
+            "description": "Input 2 contact type",
+            "overview": "This parameter determines how the sensor is connected (for example: door\/window sensor). Set this parameter according to the type of sensor you use. <p>This parameter has influence only when parameter no. 12 is set to value \"2000\"<br \/>After setting the parameter switch the sensor once, so tha the module could determine the input state<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "normally open"
+                },
+                {
+                    "value": 1,
+                    "label": "normally closed"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": "Input 3 contact type",
+            "description": "Input 3 contact type",
+            "overview": "Available config. parameters (data type is 1 Byte DEC):<br \/> \uf0b7 default value 0<br \/> \uf0b7 0 - NO (normally open) input type<br \/> \uf0b7 1 - NC (normally close) input type<br \/> NOTE: This parameter has influence only when parameter no. 13 is set to the value \u201c2\u201d. After setting this parameter, switch the flood sensor once, so that the module could determine the input state.<br \/>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "normally open"
+                },
+                {
+                    "value": 1,
+                    "label": "normally closed"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "label": "Activate \/ deactivate ALL ON\/ALL OFF",
+            "description": "Activate \/ deactivate ALL ON\/ALL OFF",
+            "overview": "Flush Heat &amp; Cool Thermostat device responds to commands ALL ON \/ ALL OFF that may be sent by the primary or secondary gateway (hub) within the Z-Wave network.",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "ALL ON is not active \/ ALL OFF is not active"
+                },
+                {
+                    "value": 1,
+                    "label": "ALL ON is not active \/ ALL OFF is active"
+                },
+                {
+                    "value": 2,
+                    "label": "ALL ON is active \/ ALL OFF is not active"
+                },
+                {
+                    "value": 255,
+                    "label": "ALL ON is active \/ ALL OFF is active"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "label": "I1 Functionality selection",
+            "description": "I1 Functionality selection",
+            "overview": "If \"Window Sensor\" selected (value set to \"2\"), parameter 100 (enable\/disable endpoint) must be set to non-zero value and module re-included!",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 32767,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Input I1 changes the mode between Off and Heat\/Cool "
+                },
+                {
+                    "value": 2,
+                    "label": "Input I1 influences the heating\/cooling valves"
+                },
+                {
+                    "value": 32767,
+                    "label": "Input I1 doesnt  influence on the Heat\/Cool process"
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "label": "I2 Functionality selection",
+            "description": "I2 Functionality selection",
+            "overview": "<p>0-990 - Temperature setpoint from 0,0 to 99,0 \u00b0C<br \/>1001-1150 - Temperature setpoint -0.1 to -15\u00b0C<br \/>2000 - Input I2 influences on the cooling value according to the status of condense sensor. <br \/>32767 - input I2 does not influence on the Heat\/Cool process <\/p> If \"Condense Sensor\" selected (value set to \"2000\"), parameter 101 (enable\/disable endpoint) must be set to non-zero value and device re-included!",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 32767,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": [
+                {
+                    "value": 2000,
+                    "label": "Input I2 influences the cooling value with condense sensor"
+                },
+                {
+                    "value": 32767,
+                    "label": "Input I2 doesnt influence on the Heat\/Cool process"
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "label": "I3 Functionality selection",
+            "description": "I3 Functionality selection",
+            "overview": "default value 32767<br \/> 32767 - input I3 does not influence on the heat\/cool process<br \/> 1 - input I3 changes the mode of the thermostat between Heat and Cool and override parameter 59. In this case function on flood sensor is disabled NOTE: After parameter change, first exclude module (without setting parameters to default value) and then re include the module!<br \/> 2 - input I3 influences on heating\/cooling valves according to status of flood sensor. In this case function of Heat\/Cool selection by I3 is disabled<br \/> NOTE1: If this parameter is changed, it is necessary to reinclude the module.<br \/> NOTE2: If \"Flood Sensor\" selected (value set to \"2\"), parameter 102 (enable\/disable endpoint) must be set to non zero value and module re-included!",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 32767,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "input I3 changes the mode of the thermostat"
+                },
+                {
+                    "value": 2,
+                    "label": "input I3 influences on heating\/cooling valves"
+                },
+                {
+                    "value": 32767,
+                    "label": "input I3 does not influence on the heat\/cool process"
+                }
+            ]
+        },
+        {
+            "id": 40,
+            "label": "Power reporting in Watts on power change",
+            "description": "Power reporting in Watts on power change",
+            "overview": "<p>Choose by how much power consumption needs to increase or decrease to be reported. Values correspond to percentages so if 10 is set, for example, the device will report any power consumption changes of 10% or more compared to the last reading. Power consumption needs to increase or decrease by at least 1 Watt to be reported, REGARDLESS of percentage set in this parameter. <br \/> 0 - Power consumption reporting disabled<br \/> 1 - 100 = 1% - 100% Power consumption reporting enabled. New value is reported only when Wattage in real time changes by more than the percentage value set in this parameter compared to the previous Wattage reading, starting at 1% (the lowest value possible).<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Power consumption reporting disabled"
+                }
+            ]
+        },
+        {
+            "id": 42,
+            "label": "Power reporting in Watts by time interval",
+            "description": "Power reporting in Watts by time interval",
+            "overview": "Set value refers to the time interval with which power consumption in Watts is reported (0 \u2013 32767 seconds). If for example 300 is entered, energy consumption reports will be sent to the gateway (hub) every 300 seconds (or 5 minutes).<br \/><p>0 - report disabled<br \/>1-32767 = 1 second - 32767 seconds interval. Reporting enabled with time interval<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 45,
+            "label": "Antifreeze",
+            "description": "Antifreeze",
+            "overview": "Set value means at which temperature the device will be turned on even if the thermostat was manually set to off. Available config. parameters (data type is 2 Byte DEC):<br \/> \uf0b7 default value 50 (5,0 \u00b0C)<br \/> \uf0b7 0 - 127 = 0,0\u00b0C \u2026 12,7 \u00b0C<br \/> \uf0b7 1001 - 1127 = -0,1\u00b0C \u2026 - 12,6 \u00b0C<br \/> \uf0b7 255 - Antifreeze functionality disabled<br \/> NOTE: Antifreeze is activated only in heating mode.",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1127,
+            "options": []
+        },
+        {
+            "id": 50,
+            "label": "PWM maximum value",
+            "description": "PWM maximum value",
+            "overview": "<p>2..100 = 2..100% Maximum PWM is set by entered value<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 2,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 51,
+            "label": "PWM minimum value",
+            "description": "PWM minimum value",
+            "overview": "<p>0..99 = 0..99% Minimum PWM is set by entered value<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 52,
+            "label": "PWM cycle duration",
+            "description": "PWM cycle duration",
+            "overview": "<p>5..127 = 5-125 seconds. PWM cycle duration is set by entered value<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 5,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 53,
+            "label": "PID value inside deadband",
+            "description": "PID value inside deadband",
+            "overview": "<p>0 - PID value equals PWM minimum cycle<br \/>1 - PID value set to LAST VALUE<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 54,
+            "label": "PID deadband",
+            "description": "PID deadband",
+            "overview": "<p>0..127 = 0..12.7 \u00b0C <br \/>This parameter defines the zone where PID is not active.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 55,
+            "label": "Integral sampling time",
+            "description": "Integral sampling time",
+            "overview": "<p>0..127 = 0..127 seconds.<br \/>Parameter defines the time between samples.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 56,
+            "label": "P parameter",
+            "description": "P parameter",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 57,
+            "label": "I parameter",
+            "description": "I parameter",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 58,
+            "label": "D parameter",
+            "description": "D parameter",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 59,
+            "label": "Thermostat mode",
+            "description": "Thermostat mode",
+            "overview": "Available config. parameters (data type is 1 Byte DEC):<br \/> \uf0b7 default value 0<br \/> \uf0b7 0 - Heat mode<br \/> \uf0b7 1 - Cool mode<br \/> If parameter changed it is necessary to re-include module.",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Heat mode"
+                },
+                {
+                    "value": 1,
+                    "label": "Cool mode"
+                }
+            ]
+        },
+        {
+            "id": 60,
+            "label": "Too low temperature limit",
+            "description": "Too low temperature limit",
+            "overview": "This parameter determines the temperature at which the device sends a command to the associated device - to turn ON device or to turn OFF device.<br \/>Too low temperature limit is used with Association Group 4. <br \/>\u2022 Default value 50 (Too low temperature limit is 5.0 \u00b0C)<br \/> \u2022 1 - 1000 = 0.1 \u00b0C to 100.0 \u00b0C, step is 0.1 \u00b0C.<br \/> \u2022 1001 - 1150: - 0.1 \u00b0C to \u2013 15.0 \u00b0C",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 1150,
+            "options": []
+        },
+        {
+            "id": 61,
+            "label": "Too high temperature limit",
+            "description": "Too high temperature limit",
+            "overview": "This parameter determines the temperature at which the device sends a command to the associated device, to turn ON device or to turn OFF device.<br \/> \u2022 default value 700 (too high temperature limit is 70.0 \u00b0C)<br \/> \u2022 1 - 1000 = 0.1 \u00b0C - 100.0 \u00b0C, step is 0.1 \u00b0C. Too high temperature limit is used with Association Group 4.",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 700,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 63,
+            "label": "Output Switch selection",
+            "description": "Output Switch selection",
+            "overview": "Set value means the type of the device that is connected to the PWM output. The device type can be normally open (NO) or normally close (NC).<br \/> Available config. parameters (data type is 1 Byte DEC):<br \/> \uf0b7 default value 0<br \/> \uf0b7 0 - When system is turned off the output is 0 V.<br \/> \uf0b7 1 - When system is turned off the output is 230 V.<br \/>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "When system is turned off the output is 0V(NC)."
+                },
+                {
+                    "value": 1,
+                    "label": "When system is turned off the output is 230V or 24V(NO)."
+                }
+            ]
+        },
+        {
+            "id": 70,
+            "label": "Input I1 status on delay",
+            "description": "Input I1 status on delay",
+            "overview": "This parameter specifies the delay before the device executes command, after input I1 is activated. For example, if you set the parameter to 30 seconds and close the window, heater will turn ON after 30 seconds.<br \/> If the value of parameter is different to 0, means that the Influence of this input to heating or cooling will react after inserted time. This parameter has influence only when the window sensor functionality is selected by the parameter no. 11.<br \/> Device status on UI change immediately, but the command will be sent after time set.",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32000,
+            "options": []
+        },
+        {
+            "id": 71,
+            "label": "Input I1 status off delay",
+            "description": "Input I1 status off delay",
+            "overview": "This parameter specifies the delay before the device executes command after input I1 is deactivated. For example, if you set the parameter to 30 seconds and close the window, heater will turn OFF after 30 seconds.<br \/>If the value of parameter is different to 0, means that the Influence of this input to heating or cooling will react after inserted time. This parameter has influence only when the window sensor functionality is selected by the parameter no. 11.Device status on UI change immediately but the command will be send after the set time.",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32000,
+            "options": []
+        },
+        {
+            "id": 72,
+            "label": "Input I2 status on delay",
+            "description": "Input I2 status on delay",
+            "overview": "This parameter specifies the delay before the device execute command after input I2 is activated.<br \/> This parameter has influence only when the condense sensor functionality is selected by the parameter no. 12.",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32000,
+            "options": []
+        },
+        {
+            "id": 73,
+            "label": "Input I2 status off delay",
+            "description": "Input I2 status off delay",
+            "overview": "This parameter specifies the delay before the device execute command after input I2 is deactivated.<br \/> This parameter has influence only when the condense sensor functionality is selected by the parameter no. 12.",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32000,
+            "options": []
+        },
+        {
+            "id": 74,
+            "label": "Input 3 status ON delay",
+            "description": "Input 3 status ON delay",
+            "overview": "This parameter specifies the delay before the device execute command after input I3 is activated.<br \/> This parameter has influence only when the flood sensor functionality is selected by the parameter no. 13.",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32000,
+            "options": []
+        },
+        {
+            "id": 75,
+            "label": "Input I3 status off delay",
+            "description": "Input I3 status off delay",
+            "overview": "<p>If the value of the parameter is different to 0 means that the influence of this input to heating or cooling will react after inserted time.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32000,
+            "options": []
+        },
+        {
+            "id": 76,
+            "label": "Association group 2, 10 - reporting on time interval",
+            "description": "Association group 2, 10 - reporting on time interval",
+            "overview": "Determinates the time interval of sending device status ON\/OFF to the associated device.<br \/> If the Association groups 2 or 10 are set, the device is reporting its state (Basic Set ON\/ OFF) on change and on time interval (if this parameter is set).<br \/> \u2022 Default value 30 = 30 minutes<br \/> \u2022 0 = Reporting disabled<br \/> \u2022 1-127 = 1 minute \u2013 127 minutes, reporting enabled",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 77,
+            "label": "Association group 10 - delay before sending Basic Set ON",
+            "description": "Association group 10 - delay before sending Basic Set ON",
+            "overview": "Set a time delay before sent Basic set ON to the associated device. The same time frame also applies for the Basic set OFF.<br \/> If this parameter is set, Basic Set ON\/OFF Report is delayed for the time defined in this parameter.<br \/> \u2022 Default value 180 = 3 minutes<br \/> \u2022 0 = Reports with no delay<br \/> \u2022 1-32767 = 1 second\u2013 32767 seconds, reporting enabled",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 180,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 78,
+            "label": "Scale Selection",
+            "description": "Scale Selection",
+            "overview": "This parameter determines in which measurement unit the device will report temperature - Fahrenheit or Celsius.<br \/> This scale has influence on Temperature reporting and scale reporting. The device is capable of receiving a Set point in all supported scales",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "degrees Celsius"
+                },
+                {
+                    "value": 1,
+                    "label": "degrees Fahrenheit"
+                }
+            ]
+        },
+        {
+            "id": 100,
+            "label": "Enable\/Disable Endpoint I1 or select the Type and Event",
+            "description": "Enable\/Disable Endpoint I1 or select the  Notification Type and Event",
+            "overview": "Choose whether the Endpoint I1 is disabled (and not shown on the UI) or enabled (and displayed on the UI). By enabling this endpoint (setting it to be either a notification sensor or a binary sensor), the user also selects a Notification Type and a Notification Event for which notification reports will be sent (in case the endpoint is configured as a notification sensor).<br \/> After changing the values of the parameter, first exclude the device (without setting the parameters to their default values), then wait at least 30s and then re-include the device!<br \/> When the parameter is set to the value 9 the notifications are sent for the Home Security notification type.<br \/> If \"endpoint enabled\" (value is set to 1-9), parameter 11 must be set to \"2\" as \"Window Sensor\" to determine how device input I1 will operate",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "Home security, motion detection"
+                },
+                {
+                    "value": 2,
+                    "label": "CO - Carbon monoxid detected"
+                },
+                {
+                    "value": 3,
+                    "label": "CO2 - Carbon dioxid detected"
+                },
+                {
+                    "value": 4,
+                    "label": "Water alarm"
+                },
+                {
+                    "value": 5,
+                    "label": "Heat alarm"
+                },
+                {
+                    "value": 6,
+                    "label": "Smoke alarm"
+                },
+                {
+                    "value": 9,
+                    "label": "Sensor binary"
+                }
+            ]
+        },
+        {
+            "id": 101,
+            "label": "Enable\/Disable Endpoint I2 or select type",
+            "description": "Enable\/Disable Endpoint I2 or select type",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "Home security, motion detection"
+                },
+                {
+                    "value": 2,
+                    "label": "CO - Carbon monoxid detected"
+                },
+                {
+                    "value": 3,
+                    "label": "CO2 - Carbon dioxid detected"
+                },
+                {
+                    "value": 4,
+                    "label": "Water alarm"
+                },
+                {
+                    "value": 5,
+                    "label": "Heat alarm"
+                },
+                {
+                    "value": 6,
+                    "label": "Smoke alarm"
+                },
+                {
+                    "value": 9,
+                    "label": "Sensor binary "
+                }
+            ]
+        },
+        {
+            "id": 102,
+            "label": "Enable\/Disable Endpoint I3 or select type",
+            "description": "Enable\/Disable Endpoint I3 or select type",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "Home security, motion detection"
+                },
+                {
+                    "value": 2,
+                    "label": "CO - Carbon monoxid detected"
+                },
+                {
+                    "value": 3,
+                    "label": "CO2 - Carbon dioxid detected"
+                },
+                {
+                    "value": 4,
+                    "label": "Water alarm"
+                },
+                {
+                    "value": 5,
+                    "label": "Heat alarm"
+                },
+                {
+                    "value": 6,
+                    "label": "Smoke alarm"
+                },
+                {
+                    "value": 9,
+                    "label": "Sensor binary"
+                }
+            ]
+        },
+        {
+            "id": 110,
+            "label": "Temperature sensor offset settings",
+            "description": "Temperature sensor offset settings",
+            "overview": "<p>32536 = offset is 0.0\u00b0C<br \/>1..100 = offset is 0.1..10.0\u00b0C added to actual measuring value<br \/>1001..1100 = offset is -0.1..-10.0\u00b0C subtracted to actual measuring value<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 32536,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32536,
+            "options": []
+        },
+        {
+            "id": 120,
+            "label": "Digital temperature sensor reporting",
+            "description": "Digital temperature sensor reporting",
+            "overview": "<p>If digital teperature sensor is connected, module reports measured temperature on temperture change defined by this parameter<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 121,
+            "label": "Digital temperature sensor \/ setpoint selector",
+            "description": "Digital temperature sensor \/ setpoint selector",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 10,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "internal sensor is mounted"
+                },
+                {
+                    "value": 1,
+                    "label": "temperature is grabbed by sensor with assoc 3"
+                },
+                {
+                    "value": 2,
+                    "label": "temperature is grabbed from ext battery sensor"
+                },
+                {
+                    "value": 4,
+                    "label": "setpoint is grabbed by sensor with assoc 5"
+                },
+                {
+                    "value": 8,
+                    "label": "setpoint is grabbed from ext battery sensor"
+                },
+                {
+                    "value": 10,
+                    "label": "temperature an setpoint are grabbed from ext batt sensor"
+                }
+            ]
+        },
+        {
+            "id": 122,
+            "label": "Node Id of external battery powered sensor",
+            "description": "Node Id of external battery powered sensor",
+            "overview": "<p>0 - disabled<\/p> <p>1..254 = NodeId of external battery powered room sensor<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 254,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "reserved for communication with the main controller",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "basic on\/off (output)",
+            "max_nodes": 16,
+            "controller": false,
+            "description": "Triggered at change of the output",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Sensor_multilevel_get",
+            "max_nodes": 16,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "basic on\/off (temp limit)",
+            "max_nodes": 16,
+            "controller": false,
+            "description": "triggered by Too high temperature limit",
+            "overview": ""
+        },
+        {
+            "id": 5,
+            "label": "Thermostat setpoint get",
+            "max_nodes": 16,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 6,
+            "label": "basic on\/off (window)",
+            "max_nodes": 16,
+            "controller": false,
+            "description": "triggered by change of I1",
+            "overview": ""
+        },
+        {
+            "id": 7,
+            "label": "basic on\/off (condense sensor)",
+            "max_nodes": 16,
+            "controller": false,
+            "description": "triggered by change of I2",
+            "overview": ""
+        },
+        {
+            "id": 8,
+            "label": "basic on\/off (flood sensor)",
+            "max_nodes": 16,
+            "controller": false,
+            "description": "triggered by change of I3",
+            "overview": ""
+        },
+        {
+            "id": 9,
+            "label": "sensor multilevel report",
+            "max_nodes": 16,
+            "controller": false,
+            "description": "Triggered at change of temperature",
+            "overview": ""
+        }
+    ]
+}

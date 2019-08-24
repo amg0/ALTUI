@@ -1,0 +1,220 @@
+{
+    "database_id": 789,
+    "label": "ZEN24",
+    "manufacturer_name": "Zooz",
+    "manufacturer_id": "027A",
+    "device_ref": [
+        "B112:261C"
+    ],
+    "version_min": 20.15,
+    "version_max": 20.15,
+    "decription": "Z-Wave Plus Toggle Dimmer Light Switch Ver 2.0",
+    "overview": "<ul><li>Manual or remote on\/off and dimming control from your mobile device or computer (when included to a Z-Wave gateway controller)<\/li> <li>Universal 3-way capability \u2013 works with existing 3-way switches as long as neutral is present<\/li> <li>Z-Wave Plus with improved 500 chip for faster and safer wireless communication<\/li> <li>Works with LED, CFL, and incandescent bulbs<\/li> <li>Remembers and restores on\/off \/ brightness status after power failure<\/li> <li>Based on universal multilevel switch command class - supported by most Z-Wave controllers<\/li> <li>May be associated and grouped with other Z-Wave devices for advanced home automation<\/li> <li>Air-gap switch for added safety<\/li> <li>Classic toggle design<\/li> <li>Built-in Z-Wave signal repeater for a stronger, more reliable network<\/li> <\/ul>",
+    "inclusion": "<ol><li>Bring your Z-Wave gateway hub or controller as close to the switch as possible<\/li> <li>Put your Z-Wave controller into inclusion mode<\/li> <li>Toggle the switch UP 3 times very quickly to finalize the inclusion process<\/li> <li>A new dimming device will appear on your controller's device list<\/li> <\/ol><p><strong>TROUBLESHOOTING TIPS: <\/strong><\/p> <p>If you are unable to include the Z-Wave switch to your controller, please try one of the following:<\/p> <ul><li>Bring the controller closer to your ZWave switch or use a hand-held secondary controller for inclusion<\/li> <li>Toggle your Z-Wave switch UP even quicker at least 5 or 7 times once you put the controller into inclusion mode to ensure the command has gone through<\/li> <li>Put your controller into EXCLUSION mode and toggle the switch DOWN 3 times quickly, then try adding it to your network again<\/li> <\/ul>",
+    "exclusion": "<ol><li>Bring your Z-Wave gateway hub or controller as close to the switch as possible<\/li> <li>Put your Z-Wave controller into exclusion mode 3. Toggle the switch DOWN<\/li> <li>times very quickly to complete the exclusion process<\/li> <li>The device will disappear from your controller's device list<\/li> <\/ol><p>Please repeat the process following all steps carefully if the first attempt is unsuccessful.\u00a0<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.005,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Toggle Control",
+            "description": "Controls behavior of the toggle switch",
+            "overview": "<p>Choose if you want the to turn the light on by clicking the toggle up or down Values:<\/p> <p>0 \u2013 Toggle up turns the light on, toggle down turns the light off (default);<\/p> <p>1 \u2013 Toggle up turns the light off, toggle down turns the light on<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p>Once the Z-Wave switch is added to your network, you are able to turn the device on or off and adjust brightness remotely from your mobile device, computer, or Z-Wave remote control. Depending on your Z-Wave gateway's home automation software capabilities, you may be able to associate your ZWave switch in groups with other ZWave devices to schedule scenes and create events. This toggle dimmer switch supports Group 1 with up to 5 devices for lifeline communication. This device will send MULTILEVEL REPORT to Group 1 when operated manually. Please refer to your controller's user guide for advanced programming instructions as they are a little different for each software.<\/p>"
+        }
+    ]
+}

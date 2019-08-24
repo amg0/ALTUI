@@ -1,0 +1,40 @@
+{
+    "database_id": 558,
+    "label": "AZL7434",
+    "manufacturer_name": "Vision Security",
+    "manufacturer_id": "0109",
+    "device_ref": [
+        "200C:0C06"
+    ],
+    "version_min": 5.1,
+    "version_max": 5.1,
+    "decription": "In-wall Switch",
+    "overview": "<p>In-wall switch 1-relay<\/p>",
+    "inclusion": "<p>Press 3 times on Program button within 2 seconds or turn on the wall switch 3 times within 2 seconds.<\/p>",
+    "exclusion": "<p>Press 3 times on Program button within 2 seconds or turn on the wall switch within 2 seconds<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.5,
+    "listening": true,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [],
+    "parameters": [],
+    "associations": []
+}

@@ -1,0 +1,527 @@
+{
+    "database_id": 929,
+    "label": "MH-P311",
+    "manufacturer_name": "McoHome Technology Co., Ltd",
+    "manufacturer_id": "015F",
+    "device_ref": [
+        "511A:1452"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "MCO Home Dimmer Switch",
+    "overview": "<p>Wall Dimmer Switch\u00a0<\/p>",
+    "inclusion": "<p>INCLUDING the device into Z-Wave network:<\/p> <ol><li>Set the controller into INCLUSION mode. Follow instructions provided by controller manufacturer.<\/li> <li>Press the key on the panel 3 times in quick succession (within approx 1.5sec).<\/li> <\/ol><p>Note: Check the controller or gateway to see whether inclusion is successful.\u00a0<\/p>",
+    "exclusion": "<p>EXCLUDING the device from Z-Wave network:<\/p> <ol><li>Set the controller into EXCLUSION mode. Follow instructions provided by controller manufacturer.<\/li> <li>Press the key on the panel 3 times in quick succession (within approx 1.5sec).<\/li> <\/ol><p>Note: Check the controller or gateway to see whether exclusion is successful. The exclusion will delete all association data.\u00a0<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.005,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_SCENE_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 4,
+                "name": "SPECIFIC_TYPE_SCENE_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "2",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2C",
+                    "name": "SCENE_ACTUATOR_CONF",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "State Saved?",
+            "description": "Dimmer state saved or not when power down",
+            "overview": "<p>0x00 not saved\uff0cDimmer will be off<\/p> <p>when powered again<\/p> <p>0x01 saved\uff0cDimmer will keep the same<\/p> <p>state when powered again<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "Beep",
+            "description": "Beep",
+            "overview": "<p>0x00 Beep disabled<\/p> <p>0x01 Beep enabled<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "LED Backlit Brightness Level",
+            "description": "LED Backlit Brightness Level",
+            "overview": "<p>0x00 LED disabled<\/p> <p>0x01~0x0A Min level-Max level<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 10,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "ALL ON\/ALL OFF",
+            "description": "ALL ON\/ALL OFF",
+            "overview": "<p>0x00 forbid ALL ON, forbid ALL OFF<\/p> <p>0x01 forbid ALL ON, allow ALL OFF<\/p> <p>0x02 allow ALL ON, forbid ALL OFF<\/p> <p>0xFF allow ALL ON, allow ALL OFF<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Minimum brightness level",
+            "description": "Minimum brightness level",
+            "overview": "<p>1~98 percentage brightness level<\/p> <p>The max level\u00a0should always\u00a0higher than min\u00a0level<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 98,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Maximum brightness level",
+            "description": "Maximum brightness level",
+            "overview": "<p>2~99 percentage brightness level<\/p> <p>The max level\u00a0should always higher than min level<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 99,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 2,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Single dimming step time(Manual)",
+            "description": "Single dimming step time(Manual)",
+            "overview": "<p>Max 2.55s, in 10ms steps<\/p> <p>Manual control\u00a0realized by\u00a0holding external\u00a08 button<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 2550,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Single dimming step size(Manual)",
+            "description": "Single dimming step time(Manual)",
+            "overview": "<p>Single dimming\u00a0step size(Manual)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Single dimming step time (Auto)",
+            "description": "Single dimming step time (Auto)",
+            "overview": "<p>Max 2.55s, in 10ms steps<\/p> <p>Auto control<\/p> <p>realized by:<\/p> <p>- one click;<\/p> <p>- double click of<\/p> <p>external button;<\/p> <p>- send Z-Wave CC<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 2550,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Single dimming step size (Auto)",
+            "description": "Single dimming step size (Auto)",
+            "overview": "<p>Auto control<\/p> <p>realized by:<\/p> <p>- one click;<\/p> <p>- double click of<\/p> <p>external button;<\/p> <p>- send Z-Wave CC<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Timer function (Auto-off)",
+            "description": "Timer function (Auto-off)",
+            "overview": "<p>0x00 function disabled<\/p> <p>0x0001~0x00FF 1s~255s<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 13,
+            "label": "One click of S1",
+            "description": "One click of S1",
+            "overview": "<p>0x00 switch between Off and last saved<\/p> <p>brightness level<\/p> <p>1~99 percentage value<\/p> <p>switch between Off and the set value<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 99,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 14,
+            "label": "Double click of S1",
+            "description": "Double click of S1",
+            "overview": "<p>0x00 function disabled<\/p> <p>0x01 reach max brightness level<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 15,
+            "label": "Switch1 to Association Group 2 & 3",
+            "description": "Operation report from Switch1 to Association Group 2 & 3",
+            "overview": "<p>bit 6:0<\/p> <p>0x00 report all operation to AG2&amp;3<\/p> <p>0x01 only report when switching OFF<\/p> <p>0x02 only report when switching ON<\/p> <p>bit7 (valid for AG3 during dimming only)<\/p> <p>0 not report during dimming<\/p> <p>1 report during dimming<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 16,
+            "label": "Switch1 to Association Group 2",
+            "description": "Operation report from Switch1 to Association Group 2",
+            "overview": "<p>0x00 When sent Basic Set On,<\/p> <p>carried Value is 0xFF<\/p> <p>0x01 When sent Basic Set On, carried<\/p> <p>Value is Current Dimmer Value<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 19,
+            "label": "Scene ID sent to AG1 when one click of S1",
+            "description": "Scene ID sent to AG1 when one click of S1",
+            "overview": "<p>0 Scene Activation disabled<\/p> <p>1~255 send Activation CC to AG1 with<\/p> <p>specified Scene ID<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 20,
+            "label": "Scene ID sent to AG1 when double click of S1",
+            "description": "Scene ID sent to AG1 when double click of S1",
+            "overview": "<p>0 Scene Activation disabled<\/p> <p>1~255 send Activation CC to AG1 with<\/p> <p>specified Scene ID<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 21,
+            "label": "Scene ID sent to AG1 when hold S1",
+            "description": "Scene ID sent to AG1 when hold S1",
+            "overview": "<p>0 Scene Activation disabled<\/p> <p>1~255 send Activation CC to AG1 with<\/p> <p>specified Scene ID<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 255,
+            "label": "Factory setting",
+            "description": "Factory setting",
+            "overview": "<p>0x55 restore factory setting<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 85,
+            "read_only": false,
+            "write_only": true,
+            "value_min": 85,
+            "value_max": 85,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "1st AG: reports device\u2019s dimming state. It supports only one Node ID. A controller\/gateway SHOULD be associated to this AG.",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Basic Set Command",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Basic Set Command",
+            "overview": "<p>2nd AG: to control the associated devices synchronously. When S1\u2019s state changes, it will send \u201cBasic Set Command\u201d to these devices. It supports upto 5 Node IDs.<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Multi-level Set Command",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>AG: to control the associated devices synchronously. When S1\u2019s state changes, it will send<\/p>\r\n<p>\u201cMulti-level Set Command\u201d to these devices. It supports upto 5 Node IDs.<\/p>"
+        }
+    ]
+}

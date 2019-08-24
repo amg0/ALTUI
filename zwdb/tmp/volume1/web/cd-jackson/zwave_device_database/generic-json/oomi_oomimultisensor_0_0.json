@@ -1,0 +1,173 @@
+{
+    "database_id": 975,
+    "label": "Oomi Multisensor",
+    "manufacturer_name": "Fantem",
+    "manufacturer_id": "016A",
+    "device_ref": [
+        "0002:0064"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Oomi Multisensor",
+    "overview": "<h4>Oomi by Fantem\u2019 MultiSensor looks like nothing that has come before. It\u2019s a motion sensor and it\u2019s also so much more. Installing this 1 piece of Z-Wave\u00aetechnology is the same as installing 6 pieces of Z-Wave technology. Your home control network will immediately understand motion, temperature, humidity,light, Ultraviolet and Vibration readings wherever MultiSensor is installed. Those intelligent readings will equate to intelligent automation. And intelligent automation will give you the perfect smart home.<br \/>MultiSensor can be powered by battery or by USB with an appropriate adaptor.<\/h4> <h4>Technical Specifications<\/h4> <ul><li>Power Input: 5V 1A<\/li> <li>Battery Type: 2x CR123A (not included)<\/li> <li>Temperature Sensor Range: 32\u00baf -104\u00baf (0\u00bac -40\u00bac)<\/li> <li>Motion Sensor Field of View: 100\u00ba<\/li> <li>Motion Sensor Range: 16 feet<\/li> <li>Humidity Sensor Range: 20-80%<\/li> <li>Light Sensor Range: 0-30000 Lux<\/li> <li>UV Sensor Range: 1-11 Index level<\/li> <li>Dimensions: 1.8 x 1.8 x 1.5 inches<\/li> <\/ul><p>Model number: FT100<br \/>Power supply: USB DC 5V or battery power(2\u00d7CR123A batteries, 3V, 1500mAh).<br \/>Operating temperature: 0\u00b0C to 40\u00b0C.<br \/>Measured temperature range: -10\u00b0C to 50\u00b0C. Accuracy: \u00b11\u00b0C.<br \/>Measured humidity range: 20%RH to 90%RH. Accuracy: \u00b13%RH (at 25\u00b0C).<br \/>Lighting: 0 LUX to 30000 LUX.<br \/>Max motion sensitivity: 5 metres.<br \/>Water proofing: IP20.<br \/>NFC operating distance: Maximum 30mm.<br \/>Z-wave operating distance: Up to 492 feet\/150 metres outdoors<\/p>",
+    "inclusion": "<p>1. Set your Z-Wave gateway to accept new products.<\/p> <p>2. Press the Action Button on your MultiSensor.<\/p> <p>3.Test that your sensor has been successfully added your Z-Wave gateway by pressing its Action Button. If you press the button and its LED is solid green for a few seconds, then inclusion has been successful. If the LED blinks green when the button is pressed, the inclusion has been unsuccessful and you should repeat the above steps.<\/p>",
+    "exclusion": "<p>Your MultiSensor can be removed from your Z-Wave network at any time.You\u2019ll need to use your Z-Wave network\u2019s main controller to do this and the following instructions tell you how to do this using Aeotec by Aeon Labs\u2019 Z-Stick and Minimote controllers. If you are using other products as your main Z-Wave controller, please refer to the part of their respective manuals that tells you how remove devices from your network.<br \/><br \/><\/p> <p><strong>If you\u2019re using a Z-Stick:<\/strong><\/p> <p>1. If your Z-Stick is plugged into a gateway or a computer, unplug it.<\/p> <p>2. Take your Z-Stick to your MultiSensor.<\/p> <p>3. Press and hold the Action Button on your Z-Stick for 3 seconds and then release.<\/p> <p>4. Press the Action Button on your MultiSensor.<\/p> <p>5. If your MultiSensor has been successfully removed from your network, the RGB LED will be active with a colourful gradient for 3 seconds. When you press the Action Button on the MultiSensor, its green LED will blink. If the removal was unsuccessful, the green LED will stay solid for a few seconds when you press the Action Button. Press the Action Button on the Z-Stick to take it out of removal mode.<br \/><br \/><\/p> <p><strong>If you\u2019re using a Minimote:<\/strong><\/p> <p>1. Take your Minimote to your MultiSensor.<\/p> <p>2. Press the Remove Button on your Minimote.<\/p> <p>3. Press the Action Button on your MultiSensor.<\/p> <p>4. If your MultiSensor has been successfully removed from your network, the RGB LED will be active with a colourful gradient for 3 seconds. When you press the Action Button on the MultiSensor, its green LED will blink. If the removal was unsuccessful, the green LED will stay solid for a few seconds when you press the Action Button.<\/p> <p>5. Press any button on your Minimote to take it out of removal mode.<\/p>",
+    "wakeup": "<p>If your MultiSensor is battery powered, you will need to ensure that it is active when configuring it. To do this, press the Action Button once, which will trigger to send out a wake up notification command. If you want it to wake up for 10 minutes, to do this, press and hold its Action Button for 3 seconds and then release it. Your MultiSensor\u2019s orange LED will fast blink for 10 minutes to indicate that it is active. When you are done configuring or communicating with your MultiSensor, you can put it back into sleep mode to conserve battery power. To do this, press and hold its Action button for 3 seconds and then release it. Your MultiSensor\u2019s LED should now be off to indicate that it is asleep.<\/p>",
+    "protocol_version": 0,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": []
+}

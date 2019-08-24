@@ -1,0 +1,383 @@
+{
+    "database_id": 976,
+    "label": "39339 (ZW3107) ",
+    "manufacturer_name": "Honeywell",
+    "manufacturer_id": "0039",
+    "device_ref": [
+        "5044:3033"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Z-Wave Plug-in Smart Dimmer",
+    "overview": "<p>Stay connected to your home with a Honeywell Z-Wave Smart Dimmer. Compatible with all Z\u2011Wave certified gateways, the smart dimmer gives you wireless control of your dimmable lights from any mobile device, computer or Z-Wave enabled remote. Setup is easy \u2013 simply plug the dimmer into any in-wall outlet, then connect your light to one of the two dual smart outlets located on either side of the dimmer. Whether you\u2019re at home or away, access the dimmer to turn your lights on and off, or to adjust the brightness levels of the room.<\/p> <p>The smart dimmer incorporates reliable, dynamic illumination to your home, giving you a fully lit workspace or letting you settle down for the evening with effective, stylish accent lighting. Not only does the smart dimmer help cut energy costs, but it boosts the safety of your home by keeping rooms looking bright and lived\u2011in. Give your space the perfect amount of light with a Honeywell Z-Wave Smart Dimmer.<\/p> <h4>Features<\/h4> <ul><li>ALEXA COMPATIBLE (HUB REQUIRED) - Requires an Alexa supported hub for voice control with Amazon Echo Products (Alexa device and hub are sold separately).Cannot connect directly with ECHO PLUS (Only ZigBee products can connect directly to Echo Plus)<\/li> <li>REQUIRES A Z-WAVE CERTIFIED HUB - Compatible with the following Z-Wave Hubs: Honeywell, SmartThings, Pulse, Trane, Wink, Nexia, Honeywell, HomeSeer, Smart Security, Harmony Home Hub Extender, Vera, and Fibaro<\/li> <li>WIRELESSLY CONTROL &amp; SCHEDULE LIGHTS - Schedule timed events for connected lighting. Customize scenes for day or night, home or away. Wirelessly control from anywhere through your smartphone, tablet, PC or Z-Wave remote<\/li> <li>FULL RANGE DIMMING \u2013 Give your space the perfect amount of light with the ability to customize the brightness levels from 0 to 100%. Works ONLY with dimmable bulbs and lamps<\/li> <li>2 SIMULTANEOUSLY CONTROLLED POLARIZED OUTLET - features 2 polarized outlets that can be controlled at the same time (NOT SEPERATLEY) and a manual ON\/OFF, dim &amp; program physical button. To setup simply plug the module into any in-wall outlet, then connect<\/li> <\/ul>",
+    "inclusion": "<p>Press and release the manual\/program button. (Tested to work with Network Wide Inclusion.)<\/p>",
+    "exclusion": "<p>Press and release the manual\/program button.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.034,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2C",
+                    "name": "SCENE_ACTUATOR_CONF",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "56",
+                    "name": "CRC_16_ENCAP",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 3,
+            "label": "LED Light",
+            "description": "LED Light Control",
+            "overview": "<p>When shipped from the factory, the LED is set to turn ON when the connected light is turned On. This is the default setting and can be changed if your primary controller supports the node configuration function or by a manual method. To make the LED turn ON when the light is turned ON, change parameter 3s value to 1. To turn the LED OFF at all times, change parameter 3s value to 2.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Set parameter to factory default"
+                },
+                {
+                    "value": 1,
+                    "label": "LED On when light is turned On "
+                },
+                {
+                    "value": 2,
+                    "label": "LED always Off"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "Dim Rate Adjustments (Z-Wave Controller)",
+            "description": "Number of steps or levels ",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Dim Rate Adjustments (Z-Wave Controller, Timing) ",
+            "description": "Timing of steps",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Dim Rate Adjustments (manually controlled) ",
+            "description": "Number of steps or levels",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Dim Rate Adjustments (manually controlled, timing)",
+            "description": "Timing of steps",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Dim Rate Adjustments (All-On\/Off Commands) ",
+            "description": "Number of steps or levels",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 13,
+            "label": "Dim Rate Adjustments (All-On\/Off Command, Timing)",
+            "description": "Timing of steps",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 4,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Group 2",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Basic Set local load",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Group 3",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Basic Set double click",
+            "overview": ""
+        }
+    ]
+}

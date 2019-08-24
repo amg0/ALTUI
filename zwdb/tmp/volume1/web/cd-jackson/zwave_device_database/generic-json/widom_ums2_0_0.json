@@ -1,0 +1,459 @@
+{
+    "database_id": 1004,
+    "label": "UMS2",
+    "manufacturer_name": "wiDom",
+    "manufacturer_id": "0149",
+    "device_ref": [
+        "1214:0800"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "WiDom Smart Roller Shutter",
+    "overview": "<p>WiDom Smart Roller Shutter is an \"in wall device\", for the multilevel control of roller shutter motors. It can accurately control the opening and closing of blinds, curtains, shutters, venetian blinds as requested by the user through local commands or remotely using computers, smartphones, tablets. At the same time, it is completely configurable so that it can adapt to the most varied customers\u2019 needs, while being ready for use without needing additional configurations in order to operate.\u00a0 After an initial calibration procedure, thanks to a proprietary algorithm, WiDom Smart Roller Shutter is able to identify the exact position of the roller shutter without using external sensors. During the operation, a continuous and automatic control of the limit switches allows maintaining the calibration. In the absence of a power source, the system runs a self-repositioning procedure that restores calibration. The device is equipped with contact protection technology (Zero Crossing) which reduces the electrical stress on the relay contacts and ensures a longer life. The open \/ closed switching of the device always occur when the instantaneous value of voltage is 0.\u00a0<\/p> <p>It operates in any Z-Wave network with other Z-Wave\/Z-Wave Plus certified devices and controllers from any other manufacturer. As a constantly powered node, WiDom Smart Roller Shutter will act as repeater regardless of the vendor in order to increase the reliability of the network.<\/p>",
+    "inclusion": "<p>Before including the device the LED status indicator is solid RED. The procedure of inclusion is activated by clicking Add in the inclusion interface and by pressing any sequence of click on the integrated button. As soon as the inclusion procedure initiates the LED indicator starts a sequence of GREEN-BLUE blinks.\u00a0<\/p>",
+    "exclusion": "<p>The procedure of exclusion can be activated by Removing a node from the Z-Wave network and any click sequence on the integrated button; as soon as the exclusion initiates, the LED indicator starts a sequence of RED-BLUE blinks. The device is excluded from the network when the LED status indicator is solid RED\u00a0<\/p>",
+    "wakeup": "",
+    "protocol_version": 6.4,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_MOTOR_MULTIPOSITION"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_CLASS_B_MOTOR_CONTROL"
+            },
+            "commandclasses": [
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "0",
+                    "nif": true,
+                    "basic": true,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "blinds_control",
+                            "label": "Blinds control",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_watts",
+                            "label": "Meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Meter (KWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_reset",
+                            "label": "Meter Reset",
+                            "config": [
+                                "reset=true"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": " Numbers of clicks to control the local load",
+            "description": "Define which sequences of click control the local load",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "DISABLED"
+                },
+                {
+                    "value": 1,
+                    "label": "ONE_CLICK"
+                },
+                {
+                    "value": 2,
+                    "label": "TWO_CLICKS"
+                },
+                {
+                    "value": 3,
+                    "label": "ONE_CLICK and TWO_CLICKS"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": " Favorite level for ON position",
+            "description": " Favorite level for ON position",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 50,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "Favorite level for OFF position",
+            "description": "Favorite level for OFF position",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 49,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Value for Group 2 with 1 click on  UP button",
+            "description": "Value for Group 2 with 1 click on  UP button",
+            "overview": "<p>Value used for devices belonging to Group 2 when UP button receive 1 Click<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": -1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Value for Group 2 with 1 click on DOWN button",
+            "description": "Value for Group 2 with 1 click on DOWN button",
+            "overview": "<p>Value used for devices belonging to Group 2 when DOWN button receive 1 Click\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": " Value for Group 3 with 2 clicks on UP button",
+            "description": " Value for Group 3 with 2 clicks on UP button",
+            "overview": "<p>\u00a0Value used for devices belonging to Group 3 when UP button receive 2 Clicks<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": -1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Value for Group 3 with 2 clicks on DOWN button",
+            "description": "Value for Group 3 with 2 clicks on DOWN button",
+            "overview": "<p>Value used for devices belonging to Group 3 when DOWN button receive 2 Clicks\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Value for Group 4 with 3 clicks on UP button",
+            "description": "Value for Group 4 with 3 clicks on UP button",
+            "overview": "<p>Value used for devices belonging to Group 4 when UP button receive 3 Clicks\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": -1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Value for Group 4 with 3 clicks on DOWN button ",
+            "description": "Value for Group 4 with 3 clicks on DOWN button ",
+            "overview": "<p>Value used for devices belonging to Group 4 when DOWN button receive 3 Clicks<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 20,
+            "label": "Calibration",
+            "description": "Defines the status of the calibration procedure",
+            "overview": "<p>Defines the status of the calibration procedure. By default, as soon as the device has been included, the calibration starts in automatic mode. At the end of the calibration, this parameter is set to 1. Afterwards the calibration can be done again by setting this parameter to 0 (AUTO) or 2 (MANUAL) and clicking on any external button.\u00a0 If the calibration is set in AUTO mode, it will be completed automatically.\u00a0 If the calibration is set in MANUAL mode, a click on any external button is necessary to carry on the next step.\u00a0 During the calibration, the LED indicator blinks repeatedly in BLUE.\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": []
+        },
+        {
+            "id": 21,
+            "label": "Motor idle state definition",
+            "description": "Motor idle state definition",
+            "overview": "<p>Defines the level of power consumption under which the motor is considered steady (stationary)\u00a0<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1000,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3000,
+            "options": []
+        },
+        {
+            "id": 22,
+            "label": "Limit switch recognition",
+            "description": "Limit switch recognition",
+            "overview": "<p>The motor has reached the limit switch when its power consumption is lower than PLIMIT (the power defined in parameter No. 21) for an amount of time defined by this parameter.\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 8,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "1 Click",
+            "max_nodes": 8,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "2 Clicks",
+            "max_nodes": 8,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "3 Clicks",
+            "max_nodes": 8,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

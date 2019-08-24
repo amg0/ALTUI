@@ -1,0 +1,376 @@
+{
+    "database_id": 802,
+    "label": "HS-MS100+",
+    "manufacturer_name": "HomeSeer Technologies",
+    "manufacturer_id": "000C",
+    "device_ref": [
+        "0201:0009"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "HomeSeer Z-Wave Plus Motion Sensor",
+    "overview": "<p>Motion sensor can be included and operated in any Z-Wave network with other Z-Wave certified devices. <br \/>The features list: <br \/>1) Z-Wave Plus certified for wide compatibility (500 serials product)<br \/>2) Supports security 0 and security 2 protected mode with AES-128 encryption. <br \/>3) Motion sensor. <br \/>4) Tamper alarm by shock sensor. <br \/>5) The battery life is up to 1 year. <br \/>6) Low battery alarm. <br \/>7) Support firmware OTA.<\/p>",
+    "inclusion": "<p>1) Open the cover<\/p> <p>2) Place the device withing the direct range of your Z-Wave controller<\/p> <p>3) Set the main controller into inclusion mode<\/p> <p>4a) \"Secure Inclusion\". Hold Z-button for 5 sec and then release. The LED indicator should blink fast.<\/p> <p>4b) \"Non-secure Inclusion\". Press Z-button once. The LED indicator should blink fast.<\/p> <p>5) Wait for the adding process to end<\/p>",
+    "exclusion": "<p>1) Open the cover<\/p> <p>2) Place the device withing the direct range of your Z-Wave controller<\/p> <p>3) Set the main controller into exclusion mode<\/p> <p>4a) Triple click Z-button quickly. The LED indicator should blink fast.<\/p> <p>5) Wait for the removing process to end<\/p>",
+    "wakeup": "<p>Press and hold Z button for more than 5 seconds and release<\/p>",
+    "protocol_version": 4.061,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "5",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_motion",
+                            "label": "Motion Alarm",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        },
+                        {
+                            "type": "alarm_tamper",
+                            "label": "Tamper Alarm",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 12,
+            "label": "Motion sensor sensitivity",
+            "description": "Motion sensor sensitivity",
+            "overview": "<p>The higher the value, the more sensitive the PIR sensor.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 8,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 8,
+            "options": []
+        },
+        {
+            "id": 14,
+            "label": "Enable\/Disable BASIC SET command",
+            "description": "Enable\/Disable BASIC SET command",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "label": "Value of the BASIC SET",
+            "description": "Value of the BASIC SET",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Triggered value 255"
+                },
+                {
+                    "value": 1,
+                    "label": "Triggered value 0"
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "label": "Enable\/ Disable shock alarm",
+            "description": "Enable\/ Disable shock alarm",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Do not send a vibration alarm"
+                },
+                {
+                    "value": 1,
+                    "label": "Send a vibration alarm"
+                }
+            ]
+        },
+        {
+            "id": 18,
+            "label": "Motion timeout interval",
+            "description": "Motion timeout interval",
+            "overview": "<p>Set 0 to disable report.<\/p> <p>Value 1 to 65535 set timeout of transmitting command when motion has not been sensed for a period of time<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 32,
+            "label": "Level of low battery",
+            "description": "Level of low battery",
+            "overview": "<p>The low level from 10% to 50%<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 20,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 10,
+            "value_max": 50,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p>Z-Wave Plus Lifeline:<\/p>\r\n<ol>\r\n<li>Notification Report. Sensor will send Notification Report to the associated nodes when Motion Sensor is removed or\/and PIR is triggered.<\/li>\r\n<li>Battery Report. Motion Sensor will send Battery Report when the battery level is low and the battery report\u2019s value is 0xFF.<\/li>\r\n<li>Device Reset Locally Notification.<\/li>\r\n<\/ol>"
+        },
+        {
+            "id": 2,
+            "label": "Group 2",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>1. Basic Set. Motion Sensor will send Basic Set to associated nodes when the PIR is triggered.<\/p>"
+        }
+    ]
+}

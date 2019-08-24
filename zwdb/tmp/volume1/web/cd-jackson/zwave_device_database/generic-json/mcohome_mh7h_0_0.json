@@ -1,0 +1,440 @@
+{
+    "database_id": 773,
+    "label": "MH7H",
+    "manufacturer_name": "McoHome Technology Co., Ltd",
+    "manufacturer_id": "015F",
+    "device_ref": [
+        "0701:5102",
+        "0702:5102",
+        "0712:5102",
+        "0732:5102"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Water \/ Electrical Heating Thermostat",
+    "overview": "<p>MCOHome Water \/ Electrical Heating Thermostat is a Z-Wave enabled device for indoor temperature control. MH7H-WH is mainly applied to control wall mounted boiler, water valve\/pump etc. , while MH7H-EH is for electrical heating system. The device is of high reliability and practicability, which can be included and operated in any Z-Wave network with other Z-Wave certified devices from any other manufacturers.<\/p> <p>Features:<\/p> <ul><li>Capacitive touch buttons<\/li> <li>Tempered glass panel, PC alloy enclosure<\/li> <li>Precise temperature calibration function<\/li> <li>Attractive appearance<\/li> <li>Clear display, easy to operate<\/li> <\/ul><p>Specifications:<\/p> <ul><li>Power Supply:AC85-260V, 50\/60HZ<\/li> <li>Output: MH7H-WH \u2264 5A ; MH7H-EH \u2264 16A<\/li> <li>Self Consumption: \u2264 1W<\/li> <li>Internal Temp. Sensor: NTC 15K<\/li> <li>External Temp. Sensor(optional): NTC R25\u00b0C=15K\u03a9 B25\u00b0C\/50\u00b0C=3550K<\/li> <li>Working Environment:0-50 \u00b0C ; 0-90% RH(Non-condensation)<\/li> <li>Temperature Setting:5-37 \u00b0C(41-99\u00b0F) (Adjustable)<\/li> <li>Dimension:86*86*15mm<\/li> <li>Hole Pitch:60-61mm<\/li> <\/ul>",
+    "inclusion": "<p>In normal working interface, press\u00a0and hold S4 to enter interface for inclusion or exclusion of\u00a0Z-Wave network. Before device included into network, \u201c- - -\u201d will display on the screen. Then\u00a0press S4 once, device will enter learning mode to get a node ID. If inclusion is success, a node ID\u00a0will display on the screen in a few seconds.<\/p> <p>After inclusion, turn off the device and\u00a0then turn it on. Now the device is ready to be\u00a0operated by controller\/ gateway in Z-Wave\u00a0network.<\/p>",
+    "exclusion": "<p>In normal working interface, press\u00a0and hold S4 to enter interface for inclusion or exclusion of\u00a0Z-Wave network. Before device included into network, \u201c- - -\u201d will display on the screen. Then\u00a0press S4 once, device will enter learning mode to get a node ID. If inclusion is success, a node ID\u00a0will display on the screen in a few seconds.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.033,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_THERMOSTAT"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_THERMOSTAT_HEATING"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 8,
+                "name": "GENERIC_TYPE_THERMOSTAT"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_THERMOSTAT_HEATING"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Heating state",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "10",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_relhumidity",
+                            "label": "Sensor (relative humidity)",
+                            "config": [
+                                "type=RELATIVE_HUMIDITY"
+                            ]
+                        },
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "40",
+                    "name": "THERMOSTAT_MODE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_mode",
+                            "label": "Thermostat mode",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "42",
+                    "name": "THERMOSTAT_OPERATING_STATE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_state",
+                            "label": "Operating State",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (heating)",
+                            "config": [
+                                "type=HEATING"
+                            ]
+                        },
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (furnace)",
+                            "config": [
+                                "type=FURNACE"
+                            ]
+                        },
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (economy)",
+                            "config": [
+                                "type=HEATING_ECON"
+                            ]
+                        },
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (away)",
+                            "config": [
+                                "type=AWAY_HEATING"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8A",
+                    "name": "TIME",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8B",
+                    "name": "TIME_PARAMETERS",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "time_offset",
+                            "label": "Clock Time Offset",
+                            "config": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Upload temperature format automatically",
+            "description": "Upload temperature format automatically",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Celsius"
+                },
+                {
+                    "value": 1,
+                    "label": "Fahrenheit"
+                },
+                {
+                    "value": 2,
+                    "label": "Follow the main display"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Upload temperature and humidity automatically",
+            "description": "Upload temperature and humidity automatically",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "OFF"
+                },
+                {
+                    "value": 1,
+                    "label": "Upload the difference value only"
+                },
+                {
+                    "value": 2,
+                    "label": "Timing upload mode only"
+                },
+                {
+                    "value": 3,
+                    "label": "Upload the difference+timing upload mode"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Upload temperature difference",
+            "description": "Base on 0.1\u00b0C unit, 5 by default, 5*0.1\u00b0C=0.5\u00b0C",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 3,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Upload time interval regularly",
+            "description": "Base on 1s unit, it suggest to be set above 30s",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 19,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Upload humidity difference",
+            "description": "Upload when percent difference exceeded",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 2,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 255,
+            "label": "Factory setting",
+            "description": "Restore the factory setting - write only, set to 85 to reset",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": true,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "For sending temperature, working mode, etc. notifications",
+            "overview": "<p>Thermostat supports 1 association group. A gateway is suggested to associate with this\u00a0group.<\/p>\r\n<p>Then if any changes happen, such as: temperature, working mode, etc., the thermostat will report to this associated device (gateway).<\/p>"
+        }
+    ]
+}

@@ -1,0 +1,2334 @@
+{
+    "database_id": 910,
+    "label": "Da Vinci v9",
+    "manufacturer_name": "Avadesign Technology Co.",
+    "manufacturer_id": "025D",
+    "device_ref": [
+        "0100:0100"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "",
+    "overview": "<p>The Da Vinci wall controller is a Multi Chanel Z-Wave device that contains up to 6 relays and up to 9 touch buttons that can be set to control either the relays (On\/Off switches and shutters) or any other on\/off (SWITCH_BINARY) , shutter (MULTILEVEL_SWITCH) Z-Wave device.<\/p> <p>Double Press the following buttons in the following order 8,1,3. Use the reset procedure only when the primary controller is missing or inoperable.<\/p>",
+    "inclusion": "<p>Press the #1 button 3 times.<\/p>",
+    "exclusion": "<p>Press the #1 button 3 times.<\/p>",
+    "wakeup": "",
+    "protocol_version": 6.51,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": false,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_REMOTE"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_SWITCH_REMOTE_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Button 1 Type",
+            "description": "button 1 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Null"
+                },
+                {
+                    "value": 1,
+                    "label": "Switch On\/Off"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind  down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Button 1 Partner-Id",
+            "description": "Button 1 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "0"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Button 1 Blind Duration",
+            "description": "Button 1 Blind Duration",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 Seconds"
+                },
+                {
+                    "value": 10,
+                    "label": "10 Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Button 1 Output",
+            "description": "Button 1 Output",
+            "overview": "<p>Output = Relay<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No output"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Button 1 attributes",
+            "description": "Button 1 attributes",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": "Button 2 Type",
+            "description": "Button 2 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Switch On\/Off"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "Button 2 Partner-Id",
+            "description": "Button 2 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "0"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "label": "Button 2 Blind Duration",
+            "description": "Button 2 Blind Duration",
+            "overview": "<p>Possible values<\/p> <p>3-127<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 Seconds"
+                },
+                {
+                    "value": 10,
+                    "label": "10 Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "label": "Button 2 Output",
+            "description": "Button 2 Output",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No output"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "label": "Button 2 attributes",
+            "description": "Button 2 attributes",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "label": "Button 3 Type",
+            "description": "Button 3 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Switch On\/Off"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "label": "Button 3 Partner-Id",
+            "description": "Button 3 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "0"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "label": "Button 3 Blind Duration",
+            "description": "Button 3 Blind Duration",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "label": "Button 1 Output",
+            "description": "Button 1 Output",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No output"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "label": "Button 3 attributes",
+            "description": "Button 3 attributes",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 16,
+            "label": "Button 4 Type",
+            "description": "Button 4 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Switch On\/Off"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "label": "Button 4 Partner-Id",
+            "description": "Button 4 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 18,
+            "label": "Button 4 Blind Duration",
+            "description": "Button 4 Blind Duration",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 19,
+            "label": "Button 4 Output",
+            "description": "Button 4 Output",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 4,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No output"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                }
+            ]
+        },
+        {
+            "id": 20,
+            "label": "Button 4 attributes",
+            "description": "Button 4 attributes",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "label": "Button 5 Type",
+            "description": "Button 5 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Switch On\/Off"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 22,
+            "label": "Button 5 Partner-Id",
+            "description": "Button 5 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 23,
+            "label": "Button 5 Blind Duration",
+            "description": "Button 5 Blind Duration",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 24,
+            "label": "Button 5 Output",
+            "description": "Button 5 Output",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 6,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No output"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                }
+            ]
+        },
+        {
+            "id": 25,
+            "label": "Button 5 attributes",
+            "description": "Button 5 attributes",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 26,
+            "label": "Button 6 Type",
+            "description": "Button 6 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Switch On\/Off"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 27,
+            "label": "Button 6 Partner-Id",
+            "description": "Button 6 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 28,
+            "label": "Button 6 Blind Duration",
+            "description": "Button 6 Blind Duration",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 29,
+            "label": "Button 6 Output",
+            "description": "Button 6 Output",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 6,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No output"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                }
+            ]
+        },
+        {
+            "id": 30,
+            "label": "Button 6 attributes",
+            "description": "Button 6 attributes",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 31,
+            "label": "Button 7 Type",
+            "description": "Button 7 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "On\/Off Switch"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind  down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 32,
+            "label": "Button 7 Partner-Id",
+            "description": "Button 7 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 33,
+            "label": "Button 7 Blind Duration",
+            "description": "Button 7 Blind Duration",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 34,
+            "label": "Button 7 Output",
+            "description": "Button 7 Output",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                }
+            ]
+        },
+        {
+            "id": 35,
+            "label": "Button 7 attribute",
+            "description": "Button 7 attribute",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 36,
+            "label": "Button 8 Type",
+            "description": "Button 8 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Switch On\/Off"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 37,
+            "label": "Button 8 Partner-Id",
+            "description": "Button 8 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 38,
+            "label": "Button 8 Blind Duration",
+            "description": "Button 8 Blind Duration",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 39,
+            "label": "Button 8 Output",
+            "description": "Button 8 Output",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No output"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                },
+                {
+                    "value": 255,
+                    "label": "BLANK"
+                }
+            ]
+        },
+        {
+            "id": 40,
+            "label": "Button 8 attribute",
+            "description": "Button 8 attribute",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 41,
+            "label": "Button 9 Type",
+            "description": "Button 9 Type",
+            "overview": "<p>1 = switch on\/off<\/p> <p>2 = blind up<\/p> <p>3 = blind down<\/p> <p>4 = switch multiway<\/p> <p>5 = blind-up multiway<\/p> <p>6 = blind-down multiway<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Switch On\/Off"
+                },
+                {
+                    "value": 2,
+                    "label": "Blind up"
+                },
+                {
+                    "value": 3,
+                    "label": "Blind down"
+                },
+                {
+                    "value": 4,
+                    "label": "Switch multiway"
+                },
+                {
+                    "value": 5,
+                    "label": "Blind-up multiway"
+                },
+                {
+                    "value": 6,
+                    "label": "Blind-down multiway"
+                }
+            ]
+        },
+        {
+            "id": 42,
+            "label": "Button 9 Partner-Id",
+            "description": "Button 9 Partner-Id",
+            "overview": "<ul><li>When setting Button (EP) to blind, Partner Id EP also change to blind (opposite direction).<\/li> <li>Blind must contain Partner Id which is different than 0 and it must be unique.\u00a0<\/li> <li>When setting blind to switch, Partner Id also change to switch<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 9,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "1"
+                },
+                {
+                    "value": 2,
+                    "label": "2"
+                },
+                {
+                    "value": 3,
+                    "label": "3"
+                },
+                {
+                    "value": 4,
+                    "label": "4"
+                },
+                {
+                    "value": 5,
+                    "label": "5"
+                },
+                {
+                    "value": 6,
+                    "label": "6"
+                },
+                {
+                    "value": 7,
+                    "label": "7"
+                },
+                {
+                    "value": 8,
+                    "label": "8"
+                },
+                {
+                    "value": 9,
+                    "label": "9"
+                }
+            ]
+        },
+        {
+            "id": 43,
+            "label": "Button 9 Blind Duration",
+            "description": "Button 9 Blind Duration",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 Seconds"
+                },
+                {
+                    "value": 30,
+                    "label": "30 Seconds"
+                },
+                {
+                    "value": 60,
+                    "label": "60 Seconds"
+                },
+                {
+                    "value": 90,
+                    "label": "90 Seconds"
+                },
+                {
+                    "value": 120,
+                    "label": "120 Seconds"
+                }
+            ]
+        },
+        {
+            "id": 44,
+            "label": "Button 9 Output",
+            "description": "Button 9 Output",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No output"
+                },
+                {
+                    "value": 1,
+                    "label": "Output number 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Output number 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Output number 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Output number 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Output number 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Output number 6"
+                }
+            ]
+        },
+        {
+            "id": 45,
+            "label": "Button 9 attributes",
+            "description": "Button 9 attributes",
+            "overview": "<p>Bit [0] = LED enable<\/p> <p>Bit [1] = Sound enable<\/p> <p>Bit [2] = Dry contact enable<\/p> <p>Bit [3] = Motor enable<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "None"
+                },
+                {
+                    "value": 1,
+                    "label": "Only Led"
+                },
+                {
+                    "value": 2,
+                    "label": "Only Sound"
+                }
+            ]
+        },
+        {
+            "id": 46,
+            "label": "Device Led on intensity",
+            "description": "Device Led on intensity",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 7,
+            "options": []
+        },
+        {
+            "id": 47,
+            "label": "Device Led off intensity",
+            "description": "Device Led off intensity",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 7,
+            "options": []
+        },
+        {
+            "id": 48,
+            "label": "Device Toggle or Pulse the output",
+            "description": "Device Toggle or Pulse the output",
+            "overview": "<p><strong>Device Toggle or Pulse the output:<\/strong><\/p> <p>0 = Toggle<\/p> <p>1 = Pulse<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 49,
+            "label": "Device Background LEDs Timeout",
+            "description": "Device Background LEDs Timeout",
+            "overview": "<p><strong>Device Background LEDs Timeout:<\/strong><\/p> <p>0 = always Off<\/p> <p>10 - 40 = Timeout in seconds<\/p> <p>255 = always On!!!!!!!<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 50,
+            "label": "Device touch sensitivity",
+            "description": "Device touch sensitivity",
+            "overview": "<p><strong>You can choose value between 0 \u2013 7<\/strong><\/p> <p>0 = most sensitive<\/p> <p>7 = least sensitive<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 7,
+            "options": []
+        },
+        {
+            "id": 51,
+            "label": "Save and Reset",
+            "description": "Save and Reset",
+            "overview": "<p>255 = save and reset<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "0"
+                },
+                {
+                    "value": 255,
+                    "label": "Save and Reset"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP1_SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "SWITCH_BINARY_REPORT ",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP1_SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP1_SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 5,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP1_SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 6,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP2_SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 7,
+            "label": "SWITCH_BINARY_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP2_SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 8,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP2_SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 9,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP2_SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 10,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP3_SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 11,
+            "label": "SWITCH_BINARY_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP3_SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 12,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP3_SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 13,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP3_SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 14,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP4_SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 15,
+            "label": "SWITCH_BINARY_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP4_SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 16,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP4_SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 17,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP4_SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 18,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP5_SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 19,
+            "label": "SWITCH_BINARY_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP5_SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 20,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP5_SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 21,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP5_SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 22,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP6_SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 23,
+            "label": "SWITCH_BINARY_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP6_SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 24,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "EP6_SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 25,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP6_SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 26,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP7_ SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 27,
+            "label": "SWITCH_BINARY_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP7_SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 28,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP7_ SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 29,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP7_ SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 30,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP8_SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 31,
+            "label": "SWITCH_BINARY_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP8_ SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 32,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP8_ SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 33,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP8_ SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 34,
+            "label": "SWITCH_BINARY_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP9_ SWITCH_BINARY_SET",
+            "overview": ""
+        },
+        {
+            "id": 35,
+            "label": "SWITCH_BINARY_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP9_SWITCH_BINARY_REPORT",
+            "overview": ""
+        },
+        {
+            "id": 36,
+            "label": "SWITCH_MULTILEVEL_SET",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP9_ SWITCH_MULTILEVEL_SET",
+            "overview": ""
+        },
+        {
+            "id": 37,
+            "label": "SWITCH_MULTILEVEL_REPORT",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "EP9_ SWITCH_MULTILEVEL_REPORT",
+            "overview": ""
+        }
+    ]
+}

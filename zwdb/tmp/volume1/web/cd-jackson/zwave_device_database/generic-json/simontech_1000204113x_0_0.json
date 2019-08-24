@@ -1,0 +1,423 @@
+{
+    "database_id": 974,
+    "label": "10002041-13X",
+    "manufacturer_name": "SimonTech S.L.U",
+    "manufacturer_id": "0267",
+    "device_ref": [
+        "0009:0022"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "iO Cover for the Simon 100 schuko plug socket",
+    "overview": "<p>Once plugged to 10002432-039 This Front permits the direct control of a load plugged toggling it each time that the pushbutton is. It is also possible to control the load using Z- Wave devices.<\/p>",
+    "inclusion": "<p>KeyPad long press (2s&lt;t&lt;30s) -&gt; Central LED blinks until release of Pushbutton -&gt; The Node Information Frame is sent via Z- Wave.<\/p>",
+    "exclusion": "<p>KeyPad long press (2s&lt;t&lt;30s) -&gt; Central LED blinks until release of Pushbutton -&gt; The Node Information Frame is sent via Z- Wave.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.024,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_current",
+                            "label": "Electric meter (amps)",
+                            "config": [
+                                "type=E_A"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        },
+                        {
+                            "type": "meter_voltage",
+                            "label": "Electric meter (volts)",
+                            "config": [
+                                "type=E_V"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Association LED",
+            "description": "Turns ON\/OFF the Association LED",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": true,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Default"
+                },
+                {
+                    "value": 255,
+                    "label": "Center LED ON"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Custom consumption limit",
+            "description": "Custom consumption limit",
+            "overview": "<p>0x0001 - 0xFFFF -&gt; Sets the power in Watts that is supported. (once the load is over, it is disconnected).<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Default"
+                },
+                {
+                    "value": 255,
+                    "label": "Power in Watts"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Beacon",
+            "description": "Beacon LEDs",
+            "overview": "<p>0x01-0x63 (1-100%) -&gt; Sets the intensity of the beacon LEDs.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disables the beacon function"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "label": "Delay ON",
+            "description": "Delay",
+            "overview": "<ul><li>0x00 -&gt; (Default) Disables timing<\/li> <li>0x01-0x7F -&gt; Sets a timing with a range of (1-127sec)<\/li> <li>0x80-0xFE -&gt; Sets a timing with range of (1-127min)<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 254,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Activation TIME",
+            "description": "Activation TIME",
+            "overview": "<ul><li>0x00 -&gt; (Default) Disables timing<\/li> <li>0x01-0x7F -&gt; Sets a timing with a range of (1-127sec)<\/li> <li>0x80-0xFE -&gt; Sets a timing with range of (1-127min)<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 254,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "LED in Repose",
+            "description": " Behavior of LED in Repose",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "OFF"
+                },
+                {
+                    "value": 255,
+                    "label": "ON"
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "label": "Lock Input",
+            "description": "",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Default"
+                },
+                {
+                    "value": 255,
+                    "label": "Disables pushbutton"
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "label": "Reset",
+            "description": "Reset default",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": true,
+            "value_min": 0,
+            "value_max": 0,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "All parameters except Long Pulse Lock."
+                },
+                {
+                    "value": 39015,
+                    "label": "Restored to default"
+                }
+            ]
+        },
+        {
+            "id": 16,
+            "label": "Delay OFF",
+            "description": "Delay OFF",
+            "overview": "<ul><li>0x00 -&gt; (Default) Disables timing<\/li> <li>0x01-0x7F -&gt; Sets a timing with a range of (1-127sec)<\/li> <li>0x80-0xFE -&gt; Sets a timing with range of (1-127min)<\/li> <\/ul>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 254,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 3,
+            "controller": false,
+            "description": "Group 1 (Lifeline) -> Name \u201clifeline\u201d",
+            "overview": "<p><strong>COMMAND_CLASS_BASIC_REPORT<\/strong><\/p>\r\n<p>It is sent to the associated nodes when the load changes state:<\/p>\r\n<ul>\r\n<li>ON -&gt; 0xFF<\/li>\r\n<li>OFF -&gt; 0x00<\/li>\r\n<\/ul>\r\n<p><strong>COMMAND_CLASS_METER_REPORT_V4<\/strong><\/p>\r\n<p>It is sent to the associated nodes when the power consumed varies more than 10%<\/p>\r\n<p>\u201cElectric meter\u201d, \u201cConsumed\u201d, \u201cWatts\u201d, Size 4, Precision 1, Value (W)<\/p>\r\n<p><strong>COMMAND_CLASS_DEVICE_RESET_LOCALLY_ NOTIFICATION<\/strong><\/p>\r\n<p>The associated nodes are sent when the device is deleted from the Z-Wave network<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "ctrl",
+            "max_nodes": 20,
+            "controller": true,
+            "description": "Group 2 (Control) -> Name \u201cctrl\"",
+            "overview": "<p>COMMAND_CLASS_BASIC_REPORT<\/p>\r\n<p>It is sent to the associated nodes when the load changes state:<\/p>\r\n<ul>\r\n<li>ON -&gt; 0xFF<\/li>\r\n<li>OFF -&gt; 0x00<\/li>\r\n<\/ul>"
+        }
+    ]
+}

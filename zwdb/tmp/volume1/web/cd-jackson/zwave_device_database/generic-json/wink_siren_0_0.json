@@ -1,0 +1,517 @@
+{
+    "database_id": 917,
+    "label": "Siren",
+    "manufacturer_name": "Wink Inc.",
+    "manufacturer_id": "017F",
+    "device_ref": [
+        "0200:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Wink Siren",
+    "overview": "<p>The Wink Siren is a Z-Wave Plus battery-powered device that will sound an alarm, chime, and flash a built-in light to let you know when doors and windows open or when motion is detected in your home. The siren\u2019s multi-purpose functionality of an alarm siren, doorbell, or chime notification can be turned on and off manually or automatically from your smartphone using a Wink Hub or other Z-Wave Plus certified hub. <br \/><br \/>The Wink Siren offers ten user selectable sounds for alarm and chime, with three volume levels (up to 105dB) and adjustable siren duration timeout. Additional visual notification is provided by built-in flashing blue LEDs when triggered. <br \/><br \/>The Wink Siren offers an extra-long z-wave wireless range of up to 150 feet, so you can place it in your home where it\u2019s needed, and requires a Wink Hub or other Z-Wave Plus certified hub for operation. The siren comes with two CR123A 3.0V batteries and has a three-year battery life, and will send an alert to your smartphone when the device has low battery.<\/p> <ul><li>Z-Wave Plus Certified<\/li> <li>Requires a Z-Wave Plus Certified Hub to operate<\/li> <li>Works with all Z-Wave Plus compatible networks<\/li> <li>110\u00b0 Extra-Wide Coverage Area<\/li> <li>Up to 150 feet range<\/li> <li>Three-Year Battery Life (Two CR123 Batteries included)<\/li> <li>Low Battery Indication<\/li> <\/ul>",
+    "inclusion": "<p>Follow the instructions for your Z-Wave certified Controller to enter inclusion mode. When prompted by the Controller:<\/p> <ol><li>For proper inclusion, bring the Siren within range of your Controller.<\/li> <li>Pull the tab on the side of the siren to power on, or remove then re-install the batteries.<\/li> <\/ol><p>The LED Ring will flash five times indicating inclusion<\/p>",
+    "exclusion": "<p>Follow the instructions for your Z-Wave certified Controller to enter exclusion mode. When prompted by the Controller:<\/p> <ol><li>Press the sensor cover release button to remove the top cover, and be sure the sensor is powered on.<\/li> <li>Press the Connect Button next to the battery quickly 3 times in a row.<\/li> <\/ol><p>The LED indicator will flash five times indicating exclusion\/disconnection<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.038,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_SIREN"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 5,
+                "name": "SPECIFIC_TYPE_SIREN"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_general",
+                            "label": "Alarm",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "87",
+                    "name": "INDICATOR",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Primary Notification Volume Level",
+            "description": "Set the volume level",
+            "overview": "<p>This parameter sets the volume of the Siren (primary) sound. There are three possible volume levels available<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Low Volume"
+                },
+                {
+                    "value": 2,
+                    "label": "Medium Volume"
+                },
+                {
+                    "value": 3,
+                    "label": "High Volume"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Primary Notification Length",
+            "description": "Set the Notification Length",
+            "overview": "<p>This parameter defines the length of the Alarm\/primary notification.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": -1,
+                    "label": "Plays until battery dies"
+                },
+                {
+                    "value": 1,
+                    "label": "30 Sec"
+                },
+                {
+                    "value": 2,
+                    "label": "I min"
+                },
+                {
+                    "value": 3,
+                    "label": "5 min"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Secondary Notification Length",
+            "description": "Secondary Notification Length",
+            "overview": "<p>This parameter defines the length of the Chime\/secondary notification<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -128,
+            "value_max": 127,
+            "options": [
+                {
+                    "value": -1,
+                    "label": "Chime Will Not Play"
+                },
+                {
+                    "value": 0,
+                    "label": "Does Not Stop"
+                },
+                {
+                    "value": 1,
+                    "label": "1 min"
+                },
+                {
+                    "value": 2,
+                    "label": "2 Min"
+                },
+                {
+                    "value": 5,
+                    "label": "5 Min"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Secondary Notification Volume Level",
+            "description": "",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Low Volume"
+                },
+                {
+                    "value": 2,
+                    "label": "Medium Volume"
+                },
+                {
+                    "value": 3,
+                    "label": "High Volume"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Primary Notification Sound",
+            "description": "Primary Notification Sound",
+            "overview": "<p>The Siren offers ten different sounds to use as the Siren (primary) notification. This parameter sets the Siren (primary) notification sound<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 9,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 10,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Tone 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Tone 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Tone 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Tone 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Tone 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Tone 6"
+                },
+                {
+                    "value": 7,
+                    "label": "Tone 7"
+                },
+                {
+                    "value": 8,
+                    "label": "Tone 8"
+                },
+                {
+                    "value": 9,
+                    "label": "Tone 9"
+                },
+                {
+                    "value": 10,
+                    "label": "Tone 10"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": "Secondary Notification Sound",
+            "description": "Secondary Notification Sound",
+            "overview": "<p>If Parameter 7 is set to 02, the Siren will play a secondary chime sound instead of the main alarm. The Siren offers ten different sounds to use as the Chime (secondary) notification. This parameter sets the Chime (secondary) notification sound.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 9,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 10,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Tone 1"
+                },
+                {
+                    "value": 2,
+                    "label": "Tone 2"
+                },
+                {
+                    "value": 3,
+                    "label": "Tone 3"
+                },
+                {
+                    "value": 4,
+                    "label": "Tone 4"
+                },
+                {
+                    "value": 5,
+                    "label": "Tone 5"
+                },
+                {
+                    "value": 6,
+                    "label": "Tone 6"
+                },
+                {
+                    "value": 7,
+                    "label": "Tone 7"
+                },
+                {
+                    "value": 8,
+                    "label": "Tone 8"
+                },
+                {
+                    "value": 9,
+                    "label": "Tone 9"
+                },
+                {
+                    "value": 10,
+                    "label": "Tone 10"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "Toggle Secondary Chime",
+            "description": "Toggle Secondary Chime",
+            "overview": "<p>This Parameter toggles between the Primary and Secondary notification sound to be played when the Siren receives a BINARY_SWITCH_SET(FF) command<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Primary Notification Will Play"
+                },
+                {
+                    "value": 2,
+                    "label": "Secondary Notification Will Play"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "label": "Power Level",
+            "description": "Power Level",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "Group 1 is the \u201cLifeline\u201d group, which can hold five members, typically including the main Z-Wave controller. The Siren sends this group a Notification Report and a Binary Switch Report when the siren is turned on or off. It also sends this group a Batter",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Siren",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Group 2 can hold five members, and the Siren sends a single command to this Association Group, the Binary Switch Report, whenever the Siren is turned on or off",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Siren",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Group 2 can hold five members, and the Siren sends a single command to this Association Group, a Notification Report, whenever the Siren is turned on or off",
+            "overview": ""
+        }
+    ]
+}

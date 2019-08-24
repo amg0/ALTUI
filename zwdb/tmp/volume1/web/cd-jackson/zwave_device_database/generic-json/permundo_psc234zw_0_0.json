@@ -1,0 +1,266 @@
+{
+    "database_id": 798,
+    "label": "PSC234ZW ",
+    "manufacturer_name": "permundo GmbH",
+    "manufacturer_id": "0245",
+    "device_ref": [
+        "0003:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Metering Plug switching 16A",
+    "overview": "<p>The wireless plug socket PSC234ZW allows you to remotely control electrical appliances.<\/p> <p>It features a metering function to measure the power consumption and the accumulated energy usage of connected equipment. The built-in metering unit is of high quality: it calculates the true-power and also works for small loads from 1W upwards. This feature is important to have a correct measurement value also for electronic loads like led lamps.\u00a0<\/p> <p><br \/>The PSC234ZW has a built-in safety features that will switch-off the output in case of too high temperature or overload.\u00a0<\/p> <p>Additionally the PSC234 has a feature to switch the load on at zero voltage and switch the load off at zero current. This leads to a very high number of possible switching cycles also for difficult loads like led-lamps or motors, e.g. pumps.\u00a0<\/p>",
+    "inclusion": "<p>When a PSC234 that is not associated to a Z-Wave Network, is inserted into the mains outlet, it will flash once red followed by 2 green flashed followed by steady red flashing. The PSC234 can now be added to (=inclusion) or removed from (=exclusion) a Z-Wave network:<\/p> <ol><li>Hold the touch button until the led\u00a0shows green light<\/li> <li>Release the touch button<\/li> <\/ol><p>The PSC234 will confirm successful addition to the network by 5 green flashes.<\/p>",
+    "exclusion": "<p>When a PSC234 that is not associated to a Z-Wave network, is inserted into the mains outlet, it will flash once red followed by 2 green flashed followed by steady red flashing. The PSC234 can now be added to (=inclusion) or removed from (=exclusion) a Z-Wave network:<\/p> <ol><li>Hold the touch button until the led\u00a0shows green light<\/li> <li>Release the touch button<\/li> <\/ol><p>\u00a0The PSC234 will confirm successful removal\/exclusion by steady red flashing. At the time of exclusion the device is factory reset.\u00a0<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.005,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "75",
+                    "name": "PROTECTION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 31,
+            "label": "LocalControlOff",
+            "description": "Disable local control of plug",
+            "overview": "<p>31d Size:1 Default: 00d<\/p> <p>Bit 0:<\/p> <p>\u00a0 \u00a0 \u00a0 \u00a0 1=LocalControlOff<\/p> <p>\u00a0 \u00a0 \u00a0 \u00a0 0=LocalControlOn<\/p> <p>Bit 1-7: 0 (siehe auch CC_PROTECTION)\u00a0<\/p> <p>LocalControlOff: In der Werkseinstellung (LocalControlOff=0) \u00e4ndert das Ger\u00e4t den Zustand des Ausgangs bei Bet\u00e4tigung des TouchButtons. Durch das Setzen von LocalControlOff=1 kann der Ausgang des Ger\u00e4ts nur noch \u00fcber Z-Wave+ gesteuert werden.<\/p> <p>LocalControlOff wird entweder \u00fcber Parameter 31 der CC_CONFIGURATION oder \u00fcber CC_PROTECTION, PROTECTION_SET konfiguriert.\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Enable Local Control"
+                },
+                {
+                    "value": 1,
+                    "label": "Disable Local Control"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Reports",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Reports triggered by change of relay state, meter values or time",
+            "overview": "<p>Assoziationsgruppe Gruppe 1 (lifeline): 5 Events\/Notifications:<\/p>\r\n<p>(1) Sendet COMMAND_CLASS_BASIC, BASIC_REPORT und COMMAND_CLASS_SWITCH_BINARY, BINARY_REPORT jeweils nach \u00c4nderung des RelaisStatus.<\/p>\r\n<p>(2) Sendet COMMAND_CLASS_METER_V2, METER_REPORT_V2 jeweils nach \u00c4nderung der Messwerte Energie oder Leistung entweder um einen Minimalbetrag, oder nach Ablauf einer Maximalzeit. Ebenso wird nach jedem Report eine Mindestzeit gewartet, bevor ein n\u00e4chster Report gesendet wird. Zeiten f\u00fcr Werte Energie\/Leistung:<\/p>\r\n<p>Mindestzeit zwischen 2 Reports: 1s PSC234ZW RC2.05 G3 DE 7<\/p>\r\n<p>Maximalzeit bis zum n\u00e4chsten Report: 15min. Trigger bei Abweichung seit letzter Messung: 4% Leistung (mind. 2W) oder 1Wh Energie\u00a0<\/p>"
+        }
+    ]
+}

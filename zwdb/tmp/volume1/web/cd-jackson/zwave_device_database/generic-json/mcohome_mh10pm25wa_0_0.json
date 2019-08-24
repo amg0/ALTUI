@@ -1,0 +1,157 @@
+{
+    "database_id": 244,
+    "label": "MH10-PM2.5-WA",
+    "manufacturer_name": "McoHome Technology Co., Ltd",
+    "manufacturer_id": "015F",
+    "device_ref": [
+        "0A01:3102",
+        "0A05:0100",
+        "0A05:0201"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "PM2.5 Monitor",
+    "overview": "<p>MCOHome PM2.5 Monitor is an air quality detector which compatible with Z-Wave Plus technology, it is mainly used to monitor PM2.5 concentration in industrial, agricultural, and residence environment, while monitoring the indoor temperature and humidity. Device can be included into any Z-Wave network, and is compatible with any other Z-Wave certified devices.<\/p>",
+    "inclusion": "<p>The unlabelled buttons on the left edge of the device are S1, S2 and S3, starting from the top.<\/p> <p>Activate Inclusion\/Exclusion mode in your Z-Wave controller.<\/p> <p>With the device powered on, long press S1 &amp; S3 simultaneously to enter Inclusion\/Exclusion mode.<\/p> <ul><li>If device is not included into a Z-Wave network before, \u201c- - -\u201d will display on the screen.<\/li> <li>Then press S1 once, \u201c- - -\u201d will flash and the device enters into learning mode to get a node ID.<\/li> <\/ul><p>If inclusion is successful, a node ID will display on the screen. If not, \u201c- - -\u201d will stop flashing after 20 seconds.<\/p> <p>Note: If display is flashing, you can abort the operation by long pressing S1+S3. If display is not flashing, press S2 once to return to normal operation.<\/p>",
+    "exclusion": "<p>The unlabelled buttons on the left edge of the device are S1, S2 and S3, starting from the top.<\/p> <p>Activate Inclusion\/Exclusion mode in your Z-Wave controller.<\/p> <p>With the device powered on, long press S1 &amp; S3 simultaneously to enter Inclusion\/Exclusion mode.<\/p> <ul><li>If a node ID is displayed, it means the device is already in a Z-Wave network.<\/li> <li>Press S1 once can remove it from the network. \u201c- - -\u201d displays.<\/li> <li>Press S2 once can return to normal work<\/li> <\/ul><p>Note: If display is flashing, you can abort the operation by long pressing S1+S3. If display is not flashing, press S2 once to return to normal operation.<\/p>",
+    "wakeup": "",
+    "protocol_version": 3.067,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 5,
+        "name": "LIB_INSTALLER"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 33,
+                "name": "GENERIC_TYPE_SENSOR_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "5",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_relhumidity",
+                            "label": "Sensor (relative humidity)",
+                            "config": [
+                                "type=RELATIVE_HUMIDITY"
+                            ]
+                        },
+                        {
+                            "type": "sensor_particulate",
+                            "label": "Sensor (particulate)",
+                            "config": [
+                                "type=PARTICULATE_MATTER"
+                            ]
+                        },
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Group 1",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

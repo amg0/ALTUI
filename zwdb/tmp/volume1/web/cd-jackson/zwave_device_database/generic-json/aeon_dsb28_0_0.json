@@ -1,0 +1,679 @@
+{
+    "database_id": 85,
+    "label": "DSB28",
+    "manufacturer_name": "AEON Labs",
+    "manufacturer_id": "0086",
+    "device_ref": [
+        "0002:001C"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Home Energy Meter G2",
+    "overview": "<p>Aeon Labs Home Energy Meter is a kind of energy meter for the entire home electric power consumption. It can report immediate wattage and kWh and voltage and amperage usage of the AC mains to a Z-Wave gateway wirelessly.<\/p> <p>It can send Z-Wave REPORTS (Meter v3 Command Class) to response Z-Wave GET command at any time.<\/p> <p>HEM can also be configured as sending unsolicited reports periodically to the associated nodes (within an association group). The time interval of reports can also be configured HEM can also send report of each individual channel with corresponding current clamp via the command of \u201cMulti Channel Command Class Encapsulation \u201d.<\/p> <p>To reduce the network traffic, HEM can send reports only when the loads significant change occurred(by percentage or Wattage value change, which can be configured)<\/p>",
+    "inclusion": "<ol><li>Connect HEM G2 to power and install the device properly (according to the Installation instruction, if necessary, please ask an electrician for help) , at beginning its LED blink slowly.<\/li> <li>Let the primary controller of existing Z-Wave network into inclusion mode (If you don\u2019t know how to do this, refer to its manual).<\/li> <li>Press the Z-Wave button of HEM G2.<\/li> <li>If learning success, HEM G2 LED will stop slow blink, or it will still slow blink, please repeat the process from step 2.\u00a0<\/li> <\/ol>",
+    "exclusion": "<ol><li>Make sure the HEM G2 is powered, its LED be light on steadily.<\/li> <li>Let the primary controller of existing Z-Wave network into remove mode (If you don\u2019t know how to do this, refer to its manual).<\/li> <li>Press the Z-Wave button.<\/li> <li>If exclusion success, HEM G2 LED will blink slowly or its LED still be on, please repeat the process from step 2.<\/li> <\/ol>",
+    "wakeup": "",
+    "protocol_version": 3.067,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_METER"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_SIMPLE_METER"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 49,
+                "name": "GENERIC_TYPE_METER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_SIMPLE_METER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        },
+                        {
+                            "type": "meter_current",
+                            "label": "Electric meter (amps)",
+                            "config": [
+                                "type=E_A"
+                            ]
+                        },
+                        {
+                            "type": "meter_voltage",
+                            "label": "Electric meter (volts)",
+                            "config": [
+                                "type=E_V"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_reset",
+                            "label": "Reset Meter",
+                            "config": [
+                                "reset=true"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "56",
+                    "name": "CRC_16_ENCAP",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "60",
+                    "name": "MULTI_INSTANCE",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 49,
+                "name": "GENERIC_TYPE_METER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_SIMPLE_METER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts) 1",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        },
+                        {
+                            "type": "meter_current",
+                            "label": "Electric meter (amps) 1",
+                            "config": [
+                                "type=E_A"
+                            ]
+                        },
+                        {
+                            "type": "meter_voltage",
+                            "label": "Electric meter (volts) 1",
+                            "config": [
+                                "type=E_V"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh) 1",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 49,
+                "name": "GENERIC_TYPE_METER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_SIMPLE_METER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts) 2",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        },
+                        {
+                            "type": "meter_current",
+                            "label": "Electric meter (amps) 2",
+                            "config": [
+                                "type=E_A"
+                            ]
+                        },
+                        {
+                            "type": "meter_voltage",
+                            "label": "Electric meter (volts) 2",
+                            "config": [
+                                "type=E_V"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh) 2",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 49,
+                "name": "GENERIC_TYPE_METER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_SIMPLE_METER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts) 3",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        },
+                        {
+                            "type": "meter_voltage",
+                            "label": "Electric meter (volts) 3",
+                            "config": [
+                                "type=E_V"
+                            ]
+                        },
+                        {
+                            "type": "meter_current",
+                            "label": "Electric meter (amps) 3",
+                            "config": [
+                                "type=E_A"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh) 3",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 2,
+            "label": "Reverse clamping",
+            "description": "If the reverse clamping pliers, negative power is detected.",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "Enabled"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Selective Reporting",
+            "description": "Report only when power change reaches a threshold set in 4-11 below. ",
+            "overview": "<p>Enable selective reporting only when power change reaches a certain threshold or percentage set in 4-11 below.<\/p> <p>This is used to reduce network traffic.(Bit 0: Whole HEM ,Bit 1:Clamp 1,Bit 2:Clamp 2,Bit 3:Clamp 3)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 16,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Power Threshold - Whole HEM",
+            "description": "Threshold change in power to induce an automatic report (Whole HEM). ",
+            "overview": "<p>Threshold change in wattage to induce a automatic report (Whole HEM). (Valid values 0-60000)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 60000,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Power Threshold - Clamp 1",
+            "description": "Threshold change in power to induce an automatic report (Clamp 1)",
+            "overview": "<p>Threshold change in wattage to induce a automatic report (Clamp 1). (Valid values 0-60000)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 60000,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Power Threshold - Clamp 2",
+            "description": "Threshold change in power to induce a automatic report (Clamp 2).",
+            "overview": "<p>Threshold change in wattage to induce a automatic report (Clamp 2). (Valid values 0-60000)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 60000,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Power Threshold - Clamp 3",
+            "description": "Threshold change in power to induce an automatic report (Clamp 3).",
+            "overview": "<p>Threshold change in wattage to induce a automatic report (Clamp 3). (Valid values 0-60000)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 60000,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Percent Change - Whole HEM",
+            "description": "Percentage change in power to induce an automatic report (Whole HEM).",
+            "overview": "<p>Percentage change in wattage to induce a automatic report (Whole HEM). (Valid values 0-100)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Percent Change - Clamp 1",
+            "description": "Percentage change in power to induce an automatic report (Clamp 1).",
+            "overview": "<p>Percentage change in wattage to induce a automatic report (Clamp 1). (Valid values 0-100)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Percent Change - Clamp 2",
+            "description": "Percentage change in power to induce a automatic report (Clamp 2).",
+            "overview": "<p>Percentage change in wattage to induce a automatic report (Clamp 2). (Valid values 0-100)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Percent Change - Clamp 3",
+            "description": "Percentage change in power to induce a automatic report (Clamp 3).",
+            "overview": "<p>Percentage change in wattage to induce a automatic report (Clamp 3). (Valid values 0-100)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 101,
+            "label": "Reports  for group 1",
+            "description": "Reports  for group 1",
+            "overview": "<p>1 -&gt; Battery Report<br \/><br \/>2 -&gt; MultiSensor Report for the whole device<br \/><br \/>4 -&gt; Meter Report for Watt for the whole device<br \/><br \/>8 -&gt; Meter Report for kWh for the whole device<br \/><br \/>256 -&gt; Meter Report for Watt for clamp 1<br \/><br \/>512 -&gt; Meter Report for W<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 8,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1061109568,
+            "options": []
+        },
+        {
+            "id": 102,
+            "label": "Reports for group 2",
+            "description": "Reports for group 2",
+            "overview": "<p>1 -&gt; Battery Report<br \/><br \/>2 -&gt; MultiSensor Report for the whole device<br \/><br \/>4 -&gt; Meter Report for Watt for the whole device<br \/><br \/>8 -&gt; Meter Report for kWh for the whole device<br \/><br \/>256 -&gt; Meter Report for Watt for clamp 1<br \/><br \/>512 -&gt; Meter Report for W<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 8,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1061109568,
+            "options": []
+        },
+        {
+            "id": 103,
+            "label": "Reports for group 3",
+            "description": "Reports for group 3",
+            "overview": "<p>1 -&gt; Battery Report<br \/><br \/>2 -&gt; MultiSensor Report for the whole device<br \/><br \/>4 -&gt; Meter Report for Watt for the whole device<br \/><br \/>8 -&gt; Meter Report for kWh for the whole device<br \/><br \/>256 -&gt; Meter Report for Watt for clamp 1<br \/><br \/>512 -&gt; Meter Report for W<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 8,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1061109568,
+            "options": []
+        },
+        {
+            "id": 111,
+            "label": "Interval to send out reports of group 1",
+            "description": "",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 720,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 2678400,
+            "options": []
+        },
+        {
+            "id": 112,
+            "label": "Interval to send out reports of group 2",
+            "description": "",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 720,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 2678400,
+            "options": []
+        },
+        {
+            "id": 113,
+            "label": "Interval to send out reports of group 3",
+            "description": "",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 720,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 2678400,
+            "options": []
+        },
+        {
+            "id": 255,
+            "label": "Factory Reset",
+            "description": "Reset all settings to factory defaults",
+            "overview": "<p>If you upgrade firmware and are seeing crazy or impossible numbers, reset to factory then reconfigure unit.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Do nothing"
+                },
+                {
+                    "value": 1,
+                    "label": "Reset to Factory Defaults"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Group 1",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Group 2",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Group 3",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

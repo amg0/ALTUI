@@ -1,0 +1,332 @@
+{
+    "database_id": 405,
+    "label": "ZW120",
+    "manufacturer_name": "AEON Labs",
+    "manufacturer_id": "0086",
+    "device_ref": [
+        "0002:0078",
+        "0102:0078",
+        "0202:0078"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Door\/Window sensor Gen5",
+    "overview": "<p>Aeon Labs Door\/ Window Sensor Gen5 is a smart Z-Wave sensor that can detect the status of door\/window's open\/close in real time. It\u2019s a security Z-Wave device that supports security encryption. It can be included and operated in any Z-Wave network with other Z-Wave certified devices from manufacturers and\/or other applications.<\/p>",
+    "inclusion": "To include your Sensor as a non-security device in your Z-wave network, turn the primary controller into inclusion mode, then press the Action Button once on Door Window Sensor.\u00a0 \u00a0 To include your Sensor as a\u00a0secure\u00a0device, turn the primary controller into inclusion mode, then press the Sensor\u2019s Action Button 2 times within 1 second",
+    "exclusion": "<p>To exclude your sensor from the z-wave network, turn the primary controller into exclusion mode, then press the Action Button once on Door Window Sensor.\u00a0<\/p>",
+    "wakeup": "<p>Remove your Sensor unit from its Back Mounting Plate, press\u00a0 the Action Button on the back of the Sensor unit and then release the Action Button. This will trigger and send a wake up notification command to your controller\/gateway.<\/p>",
+    "protocol_version": 4.005,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_door",
+                            "label": "Door Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_general",
+                            "label": "Alarm (general)",
+                            "config": [
+                                "type=GENERAL"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Magnet ON\/OFF",
+            "description": "Value sent when the Magnet is triggered On\/Off.",
+            "overview": "<p>Which value of the Sensor Binary Report or Basic Set will be sent when the Magnet is triggered On\/Off.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Close=0xFF, Open=0x00"
+                },
+                {
+                    "value": 1,
+                    "label": " Close=0x00, Open=0xFF"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Wake up 10 minutes",
+            "description": "Default setting: Disable",
+            "overview": "<p>Wake up 10 minutes when re-power on the sensor<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Basic Set Report",
+            "description": "Which value of the Basic Set will be sent when the door is Opened\/Closed",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Open: 0xFF, Close: 0x00"
+                },
+                {
+                    "value": 1,
+                    "label": "Open: 0x00, Close: 0xFF"
+                }
+            ]
+        },
+        {
+            "id": 39,
+            "label": "Set the low battery value.",
+            "description": "10% to 50%",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 10,
+            "value_max": 50,
+            "options": []
+        },
+        {
+            "id": 111,
+            "label": "Set the interval time of low battery checking.",
+            "description": "Minimum interval is 4 minutes, Range is 0 to 2147483647",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 86640,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2147483647,
+            "options": []
+        },
+        {
+            "id": 121,
+            "label": "Report type",
+            "description": "Sensor report sent when triggered Opened\/Closed",
+            "overview": "<p>To configure which sensor report will be sent when the Sensor is triggered Opened\/Closed. Bitsets: 0-&gt;Battery report, 4-&gt;Sensor Binary, 8-&gt;Basic Set, Default setting: 0x00000100 (Basic Set).Ideal Setting for OZW is 17 (Sensor Binary and Battery Report).<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 255,
+            "label": "Reset To Factory Defaults.",
+            "description": "",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Reset to factory default setting"
+                },
+                {
+                    "value": 1,
+                    "label": "Normal"
+                },
+                {
+                    "value": 1431655765,
+                    "label": "Reset to factory default"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Group 1",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

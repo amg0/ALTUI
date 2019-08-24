@@ -1,0 +1,276 @@
+{
+    "database_id": 979,
+    "label": "ZL-PD-100",
+    "manufacturer_name": "Z Wave Products Inc.",
+    "manufacturer_id": "0315",
+    "device_ref": [
+        "4744:3032"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Plug-In Dimmer",
+    "overview": "<p>Plug-in lamp control module with dimmer, supporting incandescent, LED, and CFL bulbs.\u00a0<\/p>",
+    "inclusion": "<ol><li>Place your network controller into inclusion mode.<\/li> <li>When the controller is ready, single click the button on the front of the PD-100.<\/li> <li>The controller should indicate that the new device was added successfully.<\/li> <\/ol><p>If the controller shows it was a fail, repeat the procedure.\u00a0<\/p> <p>Note: If inclusion still failed after the 2nd attempt, you need to first reset the PD-100 before repeating the above step. The manual reset method is as follows:<\/p> <ol><li>Unplug the PD-100 from the AC outlet and also unplug the power plugs of the lighting from the module (if plugged in).<\/li> <li>Press and hold the button on the PD-100.<\/li> <li>Plug the PD-100 back into the AC outlet with the button pressed. After 3 seconds, release the button. If you see the button blink, that means that the PD-100 has been reset successfully and you may retry Step 3 above to add the module into your network. Otherwise, please repeat the manual reset procedures.<\/li> <\/ol>",
+    "exclusion": "<p>Note: If PD-100 was previously Added (Included) in your network, resetting it locally does not mean it has been removed from your network. If you wish to remove PD-100 from your network you will need to Delete (Exclude) the module from the network by your controller.<\/p> <p>Use the manual reset procedure only in the event that the network primary controller is lost or otherwise inoperable.\u00a0<\/p>",
+    "wakeup": "",
+    "protocol_version": 6.001,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2C",
+                    "name": "SCENE_ACTUATOR_CONF",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 3,
+            "label": "Nightlight",
+            "description": "Controls LED operation",
+            "overview": "<p>When value = 0, the LED indicator will be OFF when the connected appliance is ON, and the LED indicator will be ON when the connected appliance is OFF. If value = 1, the LED indicator will be OFF when the connected appliance is OFF, and the LED indicator will be ON when the connected appliance is ON. If value = 2, the LED indicator will be always OFF regardless of the load status.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Dimming Resolution Level",
+            "description": "Steps to change dimmer level per tick",
+            "overview": "<p>Indicates the number of levels the lighting will change when the timer runs out.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Dimming Resolution Speed",
+            "description": "Tick length in 10ms units",
+            "overview": "<p>Indicates the time duration of each level. The resolution is 10 ms. For example, a default value of 3 means the timer runs out every 30 milliseconds. Using the combinations of these 2 parameters, you can create a dim rate adjustment range as short as 10 ms to a very slow dim rate.\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": "<p>Association:<\/p>\r\n<p>1. PD-100 supports group #1 for lifeline communication.<\/p>\r\n<p>2. PD-100 supports a maximum of 1 node for group #1.<\/p>\r\n<p>3. Lifeline association only supports the \"manual reset\" event.<\/p>\r\n<p>4. For instructions on how to \"set lifeline associate,\" please refer to your wireless controller instructions.<\/p>"
+        }
+    ]
+}

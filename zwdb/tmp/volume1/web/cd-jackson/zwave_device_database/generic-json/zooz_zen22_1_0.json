@@ -1,0 +1,320 @@
+{
+    "database_id": 1010,
+    "label": "ZEN22",
+    "manufacturer_name": "Zooz",
+    "manufacturer_id": "027A",
+    "device_ref": [
+        "B112:1F1C"
+    ],
+    "version_min": 1,
+    "version_max": 1.255,
+    "decription": "Z-Wave Plus Dimmer Light Switch",
+    "overview": "<ul><li>Manual or remote on\/off and dimming control from your mobile device or computer (when included to a Z-Wave gateway controller)<\/li> <li>Universal 3-way capability \u2013 works with existing 3-way switches as long as neutral is present<\/li> <li>Z-Wave Plus with improved 500 chip for faster and safer wireless communication<\/li> <li>Works with LED, CFL, and incandescent bulbs<\/li> <li>Remembers and restores on\/off \/ brightness status after power failure<\/li> <li>Based on universal multilevel switch command class - supported by most Z-Wave controllers<\/li> <li>May be associated and grouped with other Z-Wave devices for advanced home automation<\/li> <li>Customizeable LED indicator<\/li> <li>Air-gap switch for added safety<\/li> <li>Modern paddle design<\/li> <li>Built-in Z-Wave signal repeater for a stronger, more reliable network<\/li> <li>Configurable Ramp-Rate (Two options)<\/li> <\/ul>",
+    "inclusion": "<ol><li>Bring your Z-Wave gateway hub or controller as close to the switch as possible<\/li> <li>Put your Z-Wave controller into inclusion mode<\/li> <li>Tap the upper paddle of the switch 3 times very quickly to finalize the inclusion process<\/li> <li>A new dimming device will appear on your controller's device list<\/li> <\/ol>",
+    "exclusion": "<ol><li>Bring your Z-Wave gateway hub or controller as close to the switch as possible<\/li> <li>Put your Z-Wave controller into exclusion mode<\/li> <li>Tap the lower paddle of the switch 3 times very quickly to finalize the exclusion process<\/li> <li>The device will disappear from your controller's device list <\/li> <\/ol>",
+    "wakeup": "",
+    "protocol_version": 4.061,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Paddle Control",
+            "description": "Choose Paddle Functionality",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Upper paddle turns on, lower paddle turns off"
+                },
+                {
+                    "value": 1,
+                    "label": "Upper paddle turns off, lower paddle turns on"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "LED Indicator Control",
+            "description": "Choose LED Functionality",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED on when switch off, LED off when switch off"
+                },
+                {
+                    "value": 1,
+                    "label": "LED on when switch on, LED off when switch off"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Enable \/ Disable LED Indicator ",
+            "description": "Enable or disable the LED indicator",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED indicator is enabled "
+                },
+                {
+                    "value": 1,
+                    "label": "LED indicator is disabled"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Ramp Rate Control",
+            "description": "Choose from 2 ramp rate options (fade-in \/ fade-out effect)",
+            "overview": "<p>Choose from 2 ramp rate options (fade-in \/ fade-out effect for on \/ off operation)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Slow Ramp Rate"
+                },
+                {
+                    "value": 1,
+                    "label": "Fast Ramp Rate"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

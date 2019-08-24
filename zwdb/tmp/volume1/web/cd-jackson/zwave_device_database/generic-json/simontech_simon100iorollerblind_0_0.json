@@ -1,0 +1,40 @@
+{
+    "database_id": 1087,
+    "label": "Simon 100 IO: Roller Blind",
+    "manufacturer_name": "SimonTech S.L.U",
+    "manufacturer_id": "0267",
+    "device_ref": [
+        "0004:0092"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Roller blind to operate with z-wave controller",
+    "overview": "",
+    "inclusion": "",
+    "exclusion": "",
+    "wakeup": "",
+    "protocol_version": 0,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": false,
+    "beaming": false,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 0,
+        "name": null
+    },
+    "generic_class": {
+        "id": 0,
+        "name": null
+    },
+    "specific_class": {
+        "id": 0,
+        "name": "SPECIFIC_TYPE_NOT_USED"
+    },
+    "endpoints": [],
+    "parameters": [],
+    "associations": []
+}

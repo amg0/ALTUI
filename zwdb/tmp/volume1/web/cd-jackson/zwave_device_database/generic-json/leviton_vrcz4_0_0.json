@@ -1,0 +1,209 @@
+{
+    "database_id": 879,
+    "label": "VRCZ4",
+    "manufacturer_name": "Leviton",
+    "manufacturer_id": "001D",
+    "device_ref": [
+        "0701:0206",
+        "0702:0261",
+        "0801:0206"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "4 zone controller ",
+    "overview": "<p>Vizia RF + 4-Button Zone Controller for Multi-Location Control with IR Remote Capability.\u00a0<\/p>",
+    "inclusion": "<ul><li>To access programming mode, press and hold the left side of buttons 1 and 3. Wait 5 seconds until the LEDs turn amber then\u00a0release the buttons. \u00a0The LEDs will blink amber.<\/li> <li>While holding your system controller\u00a0close the the 4-Zone controller (approximately 1 foot) put your system comptroller into inclusion mode. \u00a0When the 4-Zone controller is included in your system the LEDs will turn off.<\/li> <li>If the LEDs on the 4-Zone controller turn red while including, there has been a communications problem.<\/li> <li>The instructions state that only\u00a0one device may be included at a time and it seems that inclusion works best if the system controller is put in including mode after the device is in programming mode.<\/li> <li>If the 4-Zone controller has been successfully included in the network and the user tries to include it again without first excluding it from the network, the controller will retain the first node ID it had\u00a0received and ignore the second.<\/li> <\/ul>",
+    "exclusion": "<ul><li>To access programming mode, press and hold the left side of buttons 1 and 3. Wait 5 seconds until the LEDs turn amber then\u00a0release the buttons. \u00a0The LEDs will blink amber.<\/li> <li>While holding your system controller\u00a0close the the 4-zone controller (approximately 1 foot) put your system comptroller into exclusion\u00a0mode. \u00a0When the 4-Zone controller is excluded\u00a0from your system the LEDs will turn off.<\/li> <li>If the LEDs on the 4-Zone controller turn red while excluding, there has been a communications problem.<\/li> <\/ul>",
+    "wakeup": "",
+    "protocol_version": 0,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": false,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 2,
+        "name": "BASIC_TYPE_STATIC_CONTROLLER"
+    },
+    "generic_class": {
+        "id": 2,
+        "name": "GENERIC_TYPE_STATIC_CONTROLLER"
+    },
+    "specific_class": {
+        "id": 2,
+        "name": "SPECIFIC_TYPE_SCENE_CONTROLLER"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 2,
+                "name": "BASIC_TYPE_STATIC_CONTROLLER"
+            },
+            "generic_class": {
+                "id": 2,
+                "name": "GENERIC_TYPE_STATIC_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 2,
+                "name": "SPECIFIC_TYPE_SCENE_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2C",
+                    "name": "SCENE_ACTUATOR_CONF",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "2D",
+                    "name": "SCENE_CONTROLLER_CONF",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "77",
+                    "name": "NODE_NAMING",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "82",
+                    "name": "HAIL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Group 1",
+            "max_nodes": 32,
+            "controller": true,
+            "description": "Button 1",
+            "overview": "<p>First (top)\u00a0button on controller, can be associated with up to 32 devices.<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Group 2",
+            "max_nodes": 32,
+            "controller": true,
+            "description": "Button 2",
+            "overview": "<p>Second button on controller. Can be associated with up to 32 devices.<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Group 3",
+            "max_nodes": 32,
+            "controller": true,
+            "description": "Button 3",
+            "overview": "<p><span style=\"font-size: 12.16px;\">Third\u00a0button on controller. Can be associated with up to 32 devices.<\/span><\/p>"
+        },
+        {
+            "id": 4,
+            "label": "Group 4",
+            "max_nodes": 32,
+            "controller": true,
+            "description": "Button 4",
+            "overview": "<p><span style=\"font-size: 12.16px;\">Fourth button on controller. Can be associated with up to 32 devices.<\/span><\/p>"
+        }
+    ]
+}

@@ -1,0 +1,285 @@
+{
+    "database_id": 667,
+    "label": " DP-32 \/ IX-30 \/ IX-32",
+    "manufacturer_name": "Kaipule Technology Co., Ltd.",
+    "manufacturer_id": "0214",
+    "device_ref": [
+        "0002:0002",
+        "0003:0002"
+    ],
+    "version_min": 6,
+    "version_max": 255.255,
+    "decription": "PIR Sensor ",
+    "overview": "<p>The hardware board for the IX30 (wall) and IX32 (ceiling) is the same thing and reports the same Type and ID.<\/p>",
+    "inclusion": "",
+    "exclusion": "",
+    "wakeup": "",
+    "protocol_version": 0,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_motion",
+                            "label": "Motion Alarm",
+                            "config": [
+                                "type=BURGLAR",
+                                " event=8"
+                            ]
+                        },
+                        {
+                            "type": "alarm_tamper",
+                            "label": "Tamper Alarm",
+                            "config": [
+                                "type=BURGLAR",
+                                " event=3"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Basic Set",
+            "description": "If there is any device in Association Group 2 the PIR Sensor will send BASIC Set = Value command to control that deivce when the PIR is triggered.",
+            "overview": "<p>If there is any device in Association Group 2 the PIR Sensor will send BASIC Set = Value command to control that deivce when the PIR is triggered.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "Turn Off Light Time Configuration",
+            "description": "If there is any device in Association Group 2 the PIR Sensor will send BASIC Set = Value command to Group 2 and send Basic Set = 0x00 to turn of light after 5 x t seconds- Set value t means to send the BAsic Set command after t seconds.",
+            "overview": "<p>If there is any device in Association Group 2 the PIR Sensor will send BASIC Set = Value command to Group 2 and send Basic Set = 0x00 to turn of light after 5 x t seconds- Set value t means to send the BAsic Set command after t seconds.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 20,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 120,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "PIR Sensor Alarm Elemination Time Configuration",
+            "description": "Min time is 5s. Eg If the config is 1, this means it will eliminate alarm after 1 * 5s = 5 seconds",
+            "overview": "<p>The selected value is multiplied with 5. After this time the sensor will report PIR OFF.<\/p> <p>E.g. If you select value --&gt; 3 * 5s = 15 seconds.<\/p> <p>The Sensor will report PIR Off after 15 seconds.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 20,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 120,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Send \"notification_Report\" to the device in Life line group",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Basic Set Command",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>When sensor is triggered:<\/p>\r\n<p>[Command Class BAsic, Basic Set, Value = 0xFF(default 0xFF, configurable, see Config Parameters)<\/p>\r\n<p>\u00a0<\/p>\r\n<p>When light up timeout:<\/p>\r\n<p>[Command Class BAsic, BAsic Set, Value =0x00]<\/p>"
+        }
+    ]
+}

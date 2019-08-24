@@ -1,0 +1,443 @@
+{
+    "database_id": 870,
+    "label": "ZTS-500",
+    "manufacturer_name": "Remotec",
+    "manufacturer_id": "5254",
+    "device_ref": [
+        "0200:8170",
+        "0202:8170"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Thermostat",
+    "overview": "<p>Remotec ZTS-500 is a security Z-Wave enabled thermostat designed to control residential HVAC systems. <\/p>",
+    "inclusion": "<p>Z-Wave Inclusion and Exclusion<\/p> <p>When ZTS-500 is not in any Z-Wave network, \"Z-Wave Disconnected\" icon will show up on the standby menu, you can navigate to the Z-Wave from operation menu to do the inclusion. Or you can go to system settings menu, the first menu is for Z-Wave setup, you can do both inclusion and exclusion.<\/p> <p>Tap the \"+\" scroll key when an inclusion or exclusion request is sent by a local Z-Wave gateway, HUB, or controller. If the procedure is successful, a \"\uf0fc\" screen will display. If the procedure fails, a \"\uf0fb\" screen will display.<br \/> If the ZTS-500 is included in a Z-Wave network, the \"Z-Wave Disconnected\" icon will no longer display in the standby menu.<\/p> <p>Note: All Z-Wave configuration parameter values will keep no changes after excluding the unit from the network, except for the association groups information. The ZTS-500 will retain the last selected HVAC system type.<\/p>",
+    "exclusion": "<p>Z-Wave Inclusion and Exclusion<\/p> <p>When ZTS-500 is not in any Z-Wave network, \"Z-Wave Disconnected\" icon will show up on the standby menu, you can navigate to the Z-Wave from operation menu to do the inclusion. Or you can go to system settings menu, the first menu is for Z-Wave setup, you can do both inclusion and exclusion.<\/p> <p>Tap the \"+\" scroll key when an inclusion or exclusion request is sent by a local Z-Wave gateway, HUB, or controller. If the procedure is successful, a \"\uf0fc\" screen will display. If the procedure fails, a \"\uf0fb\" screen will display.<br \/> If the ZTS-500 is included in a Z-Wave network, the \"Z-Wave Disconnected\" icon will no longer display in the standby menu.<\/p> <p>Note: All Z-Wave configuration parameter values will keep no changes after excluding the unit from the network, except for the association groups information. The ZTS-500 will retain the last selected HVAC system type.<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.024,
+    "listening": false,
+    "frequently_listening": true,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_THERMOSTAT"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 8,
+                "name": "GENERIC_TYPE_THERMOSTAT"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_THERMOSTAT_GENERAL_V2"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "5",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "40",
+                    "name": "THERMOSTAT_MODE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_mode",
+                            "label": "Thermostat mode",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "42",
+                    "name": "THERMOSTAT_OPERATING_STATE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_state",
+                            "label": "Operating State",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (cooling)",
+                            "config": [
+                                "type=COOLING"
+                            ]
+                        },
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (heating)",
+                            "config": [
+                                "type=HEATING"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "44",
+                    "name": "THERMOSTAT_FAN_MODE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_fanmode",
+                            "label": "Thermostat fan mode",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "45",
+                    "name": "THERMOSTAT_FAN_STATE",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_fanstate",
+                            "label": "Thermostat fan state",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Temp. Scale",
+            "description": "0=C, 1=F",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Celsius"
+                },
+                {
+                    "value": 1,
+                    "label": "Fahrenheit"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Swing",
+            "description": "1=1F\/0.5C  -  4=4F\/2C",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 4,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "1F \/ 0.5C"
+                },
+                {
+                    "value": 2,
+                    "label": "2F \/ 1C"
+                },
+                {
+                    "value": 3,
+                    "label": "3F \/ 1.5C"
+                },
+                {
+                    "value": 4,
+                    "label": "4F \/ 2C"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Differential",
+            "description": "1=1F\/0.5C - 4=4F\/2C",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 4,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "1F \/ 0.5C"
+                },
+                {
+                    "value": 2,
+                    "label": "2F \/ 1C"
+                },
+                {
+                    "value": 3,
+                    "label": "3F \/ 1.5C"
+                },
+                {
+                    "value": 4,
+                    "label": "4F \/ 2C"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Dead Band",
+            "description": "3=3F\/1.5C - 6=6F\/3C",
+            "overview": "<p>The Dead Band is a temperature range in which neither COOL or HEAT turns on when in AUTO mode.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 4,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 3,
+            "value_max": 6,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Temp. Sensor Calibration",
+            "description": "Changes Temp. Display (-10=-10F\/-5C - 10=+10F\/5C)",
+            "overview": "<p>Adjusts room temperature display to match a calibrated value.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -10,
+            "value_max": 10,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Group 1",
+            "max_nodes": 2,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Group 2",
+            "max_nodes": 2,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

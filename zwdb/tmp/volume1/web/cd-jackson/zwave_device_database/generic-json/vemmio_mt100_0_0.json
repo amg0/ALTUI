@@ -1,0 +1,433 @@
+{
+    "database_id": 760,
+    "label": "MT-100",
+    "manufacturer_name": "Vemmio",
+    "manufacturer_id": "030F",
+    "device_ref": [
+        "0003:0003"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Motion and Light Mini Sensor",
+    "overview": "<p>Motion Mini Sensor provides accurate motion and illumination level detection. When integrated with your controller - wireless notifications, low battery alerts, custom automation scenarios based on both light and motion triggers become available. For example, when motion is detected, the controller will send an alert to any smartphone, set off an alarm or trigger a lighting scene. The sensor works with any Z-Wave-certified controller\u00a0<\/p> <p>Wireless standard Z-Wave Plus Frequency 868.40 MHz Network range 30 m line of sight Operating temperature 0\u00b0C ~ 40\u00b0C Illumination measurement range 0 ~ 8500 lux Movement Sensor Measurement range 6 m Battery CR123A 3V Battery &gt;2 years, low power indication.<\/p> <p>Factory reset: press and hold the Z-Wave button for at least 10 seconds until the LED indicator flashes once (it may then flash 5 times to indicate the device is no longer part of Z-Wave network). Release the button.<\/p>",
+    "inclusion": "<p>When prompted by the controller, press quickly one of the Z-wave button 3 times in a row.\u00a0The sensor should be included in 5 seconds. The sensor should\u00a0appear on your controller\u2019s device list.<\/p>",
+    "exclusion": "<p>When prompted by the controller, press quickly one of the Z-wave button 3 times in a row.\u00a0The sensor should be excluded in 5 seconds. The sensor should\u00a0appear on your controller\u2019s device list.<\/p>",
+    "wakeup": "<p>You can press the button once to wake up the device and send wakeup notification to controller -the LED will flash once.<\/p>",
+    "protocol_version": 0,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 0,
+        "name": null
+    },
+    "generic_class": {
+        "id": 0,
+        "name": null
+    },
+    "specific_class": {
+        "id": 0,
+        "name": "SPECIFIC_TYPE_NOT_USED"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "7",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_luminance",
+                            "label": "Sensor (luminance)",
+                            "config": [
+                                "type=LUMINANCE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Sensitivity Level Setting",
+            "description": "This parameter defines the sensitivity of PIR detector",
+            "overview": "<p>This parameter defines the sensitivity\u00a0of PIR detector, it is recommended to\u00a0test the detector with movements from\u00a0a farthest end of the coverage area at\u00a0first time of use. If movements cannot\u00a0be detected sensitively, simply adjust\u00a0the sensitivity level with this parameter.<\/p> <p>This Parameter can be configured with\u00a0the value of 8 through 255, where 8\u00a0means high sensitivity and 255 means lowest sensitivity.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 12,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 8,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "On\/Off Duration",
+            "description": "how long the associated devices should stay ON status",
+            "overview": "<p>This parameter can be determined how\u00a0long the associated devices should stay\u00a0ON status. For instance, this parameter\u00a0is set to 30(second), the PIR detector\u00a0will send a BASIC_SET Command to an\u00a0associated device with value basic set\u00a0level if PIR detector is triggered and\u00a0the associated device will be turned on\u00a030(second) before it is turned off. This\u00a0Parameter value must be large than Parameter 6#. If user set this parameter to\u00a0default by Configure CC, the parameter\u00a0#6 will be set to default value<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 5,
+            "value_max": 600,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "Basic Set Level",
+            "description": "value when PIR detector is triggered and Basic Set command sent",
+            "overview": "<p>Valid Values: (0 \u2013 99)\u00a0<\/p> <p>0 \u2013 OFF , 255 - ON\u00a0<\/p> <p>Basic Set Command will be sent where\u00a0contains a value when PIR detector is\u00a0triggered, the receiver will take it for\u00a0consideration; for instance, if a lamp\u00a0module is received the Basic Set Command of which value is decisive as to\u00a0how bright of dim level of lamp module\u00a0shall be. This Parameter is used to some\u00a0associated devices<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 99,
+            "options": [
+                {
+                    "value": 255,
+                    "label": "OFF"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "PIR Detecting Function Enabled\/Disabled",
+            "description": " enabled or disabled the PIR",
+            "overview": "<p>Valid Values: 0 \u2013 Disable PIR, 255 \u2013\u00a0Enable PIR<\/p> <p>This parameter can be enabled or\u00a0disabled the PIR detector detecting\u00a0function.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable PIR"
+                },
+                {
+                    "value": 255,
+                    "label": "Enable PIR"
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "label": "Ambient illumination Lux Level",
+            "description": "Set a lux level value which determines when the light sensor is activated",
+            "overview": "<p>This parameter can be set a lux level\u00a0value which determines when the light\u00a0sensor is activated. If the ambient illumination level falls below this value\u00a0and a person moves across or within the\u00a0detected area , PIR detector will send a\u00a0Z-Wave ON command(i.e. BASIC_SET\u00a0(value = parameter 3) to an associated\u00a0device and activate i<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Retrigger Interval Setting",
+            "description": "Interval of being re-triggered after the PIR detector has been triggered. ",
+            "overview": "<p>This Parameter can be used to adjust\u00a0the interval of being re-triggered after\u00a0the PIR detector has been triggered.<\/p> <p>This Parameter value must be less than\u00a0Parameter 2#. If user set this parameter\u00a0to default by Configure CC, the para<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 8,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 8,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Light Sensor Polling Interva Time",
+            "description": "Set the light sensor measure ambient illumination level  interval time",
+            "overview": "<p>This Parameter can be set the light sensor measure ambient illumination level<\/p> <p>interval time. NOTE: This Value Must Be\u00a0less than Wakeup Interval Time<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 180,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 60,
+            "value_max": 36000,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Lux Level Function Enable",
+            "description": "",
+            "overview": "<p>If this parameter is set to \u20181\u2019, and when\u00a0Lux level less than the value define by\u00a0parameter #5, PIR detector will send\u00a0a BASIC_SET command frame (i.e.\u00a0BASIC_SET (value = parameter 3) to an\u00a0associated device and activate it. If Lux\u00a0Level greater than the value define by\u00a0parameter #5, PIR detector will not send\u00a0a BASIC_SET command frame.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Ambient illumination Lux Level Report",
+            "description": "",
+            "overview": "<p>This parameter defines by how much\u00a0Lux Level must change, in lux, to be\u00a0reported to the main controller.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Led Flash Enable",
+            "description": "This parameter defines the Led on\/off enable",
+            "overview": "<p>This parameter defines the Led on\/off\u00a0enable. If this parameter is set to \u20181\u2019, the\u00a0led blink will be enabled, the led will\u00a0flash once when motion sensor detect a\u00a0movement. Otherwise,\u00a0the led will\u00a0be turned off always.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "GROUP 1",
+            "max_nodes": 4,
+            "controller": true,
+            "description": "lifeline service that assigned to Motion detector status",
+            "overview": "<p><span style=\"font-size: 12.16px;\">GROUP 1 is lifeline service that assigned to Sensor (Motion detector) status \u2013 Open\/Close. It enables the sensor to send reports and readings to Z-Wave Controller or ZWave Gateway whenever the sensor is triggered. This Group Supports:<\/span><\/p>\r\n<ul>\r\n<li><span style=\"font-size: 12.16px;\">NOTIFICATION_REPORT_V4<\/span><\/li>\r\n<li><span style=\"font-size: 12.16px;\">SENSOR_BINARY_REPORT_V2<\/span><\/li>\r\n<li><span style=\"font-size: 12.16px;\">SENSOR_MULTILEVEL_REPORT_V7<\/span><\/li>\r\n<li><span style=\"font-size: 12.16px;\">BATTERY_REPORT DEVICE_RESET_LOCALLY_NOTIFICATION<\/span><\/li>\r\n<\/ul>"
+        },
+        {
+            "id": 2,
+            "label": "GROUP 2",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "allows for sending control commands to associated devices ",
+            "overview": "<p><span style=\"font-size: 12.16px;\">GROUP 2 allows for sending control commands to associated devices such as relay\u00a0<\/span><span style=\"font-size: 12.16px;\">module, lighting, etc. This association group is configured through the advanced parameters no. 2, 3, 5 and 8. This Group Supports:<\/span><\/p>\r\n<ul>\r\n<li><span style=\"font-size: 12.16px;\">\u00a0BASIC_SET<\/span><\/li>\r\n<\/ul>\r\n<p>\u00a0<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "GROUP 3",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "allows for Send Notification to associated devices",
+            "overview": "<p><span style=\"font-size: 12.16px;\">GROUP 3 allows for Send Notification to associated devices in this group. This Group Supports:<\/span><\/p>\r\n<ul>\r\n<li>NOTIFICATION_REPORT_V4<\/li>\r\n<\/ul>"
+        },
+        {
+            "id": 4,
+            "label": "GROUP 4",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "allows for Send Sensor Binary Report to associated devices",
+            "overview": "<p><span style=\"font-size: 12.16px;\">ROUP 4 allows for Send Sensor Binary Report to associated devices in this group. This Group Supports:<\/span><\/p>\r\n<ul>\r\n<li><span style=\"font-size: 12.16px;\">SENSOR_BINARY_REPORT_V2<\/span><\/li>\r\n<\/ul>"
+        }
+    ]
+}

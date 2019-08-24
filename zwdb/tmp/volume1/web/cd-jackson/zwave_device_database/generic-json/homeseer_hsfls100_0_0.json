@@ -1,0 +1,363 @@
+{
+    "database_id": 888,
+    "label": "HS-FLS100+",
+    "manufacturer_name": "HomeSeer Technologies",
+    "manufacturer_id": "000C",
+    "device_ref": [
+        "0201:000B"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Floodlight Sensor",
+    "overview": "<p>The HS-FLS100+ is a PIR module that\u2019s designed to retrofit onto existing outdoor floodlights. It features a PIR sensor to detect motion through movement of heat sources and a LUX sensor for determining brightness of its surroundings. It is equipped with Z-Wave Plus wireless communication capability that will convert an ordinary motion-activated floodlight into a smart home device.<\/p> <p><strong>Conventional Floodlight Mode<\/strong> HS-FLS100+ can be used as a conventional motion-activated floodlight sensor to power floodlights when motion is sensed during dark hours. Controls are provided for manual adjustment of LUX sensitivity and floodlight ON times.<\/p> <p><strong>Smart Floodlight Mode<\/strong> When added to a smart home system, HS-FLS100+ will send Z-Wave commands to the smart hub or home controller when motion is sensed and when the LUX level changes. Likewise, the smart hub or home controller can send Z-Wave commands back to the HS-FLS100+ to turn floodlights ON and OFF. This added functionality provides a very high level of flexibility not typically available in conventional motion-activated floodlights.<\/p> <p><strong>Smart Sensor Mode<\/strong> HS-FLS100+ can be installed and used simply as an outdoor motion and LUX sensor. Floodlight functionality is not required. This provides some interesting security and smart home possibilities!<\/p>",
+    "inclusion": "<p>Press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode.<\/p>",
+    "exclusion": "<p>Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode.<\/p>",
+    "wakeup": "",
+    "protocol_version": 5.003,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "5",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_luminance",
+                            "label": "Sensor (luminance)",
+                            "config": [
+                                "type=LUMINANCE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "config_decimal",
+                            "label": "PIR Trigger Off period",
+                            "config": [
+                                "parameter=1"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Lux sensor threshold",
+                            "config": [
+                                "parameter=2"
+                            ]
+                        },
+                        {
+                            "type": "config_decimal",
+                            "label": "Auto Report luminance interval",
+                            "config": [
+                                "parameter=3"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_power",
+                            "label": "Alarm (power)",
+                            "config": [
+                                "type=POWER_MANAGEMENT"
+                            ]
+                        },
+                        {
+                            "type": "alarm_motion",
+                            "label": "Motion Alarm",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "PIR Trigger Off Period",
+            "description": "Period to send Trigger Off command after PIR is triggered.",
+            "overview": "<p>Period to send Trigger Off command after PIR is triggered. Before this period expires, the PIR will not be able to detect any subsequent motion.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 15,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 8,
+            "value_max": 720,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "Lux sensor threshold",
+            "description": "Lux level to activate the PIR",
+            "overview": "<p>When the lux level falls below this threshold and the PIR gets triggered, the unit emits a Basic Set Command (Value=0xFF) and turns on its floodlight. This overwrites the Lux level set by the Lux knob.<\/p> <p>Setting = 0: always don\u2019t turn ON light<\/p> <p>Setting = 30~200: lighting activation by setting<\/p> <p>Setting = 255: turn ON light upon PIR triggered<\/p> <p>If the level is set to 0, the unit will not turn on its floodlight. The PIR will still send a notification report to the controller; if the level is set to 255, when motion is sensed, the sensor ignore the ambient brightness but just turn on the light.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": " Auto Report luminance interval",
+            "description": "sets the interval of periodic lux level report to the controller",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1440,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Basic Report",
+            "description": "",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "not send Basic Report"
+                },
+                {
+                    "value": 1,
+                    "label": "send Basic Report"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": "<p>Device Reset Locally\u00a0<span style=\"font-size: 12.16px;\">Notification<\/span><\/p>\r\n<p><span style=\"font-size: 12.16px;\">Notification Report <\/span><\/p>\r\n<p><span style=\"font-size: 12.16px;\">Binary Report <\/span><\/p>\r\n<p><span style=\"font-size: 12.16px;\">Sensor Multilevel Report <\/span><\/p>\r\n<p><span style=\"font-size: 12.16px;\">Basic Report<\/span><\/p>"
+        },
+        {
+            "id": 2,
+            "label": "PIR Control",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "Devices in the group are controlled by the PIR sensor",
+            "overview": "<p>Basic Set<\/p>"
+        }
+    ]
+}

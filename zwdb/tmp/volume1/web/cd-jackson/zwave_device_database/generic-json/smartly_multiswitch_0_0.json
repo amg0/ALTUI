@@ -1,0 +1,1342 @@
+{
+    "database_id": 1032,
+    "label": "FMS01",
+    "manufacturer_name": "Smartly AS",
+    "manufacturer_id": "024F",
+    "device_ref": [
+        "0003:1002"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Multifunction Switch",
+    "overview": "<p>The Multifunction Switch is a Z-Wave Plus mains powered Wallbox mountable Wall Controller. It can be configured to control up to Four separate Light Zones or Central Scenes. Each Light Zone can consist of both Dimmers and Switches. The device can be combined with a Back Unit, which provide local Switch or Dimmer functionality.\u00a0<br \/>Room and Floor temperature sensors can also be connected to the device, which enables the device to function as a head-less Thermostat. The Thermostat is fully controllable from a Z-Wave Controller, and can control both a Local and Remote heating relay.<\/p> <p>The Multifunction Switch is capable of controlling local loads via a modular Back Unit. The back unit can be mounted and connected to mains electricity inside a Electrical Wall box. Two types of Relay and Dimmer Back Units are currently available. The maximum controllable local load are specified in each Back Unit product sheets.\u00a0<\/p>",
+    "inclusion": "<p>Push and Hold both Lower buttons simultaneously for 5 seconds. Inclusion is indicated by the LEDs flashing in a \"U\" shaped pattern.\u00a0<\/p>",
+    "exclusion": "<p>Push and Hold both Lower buttons simultaneously for 5 seconds. Exclusion is indicated by the LEDs flashing in a \"U\" shaped pattern.\u00a0<\/p>",
+    "wakeup": "",
+    "protocol_version": 5.003,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_WALL_CONTROLLER"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "5",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        },
+                        {
+                            "type": "sensor_power",
+                            "label": "Sensor (power)",
+                            "config": [
+                                "type=POWER"
+                            ]
+                        },
+                        {
+                            "type": "sensor_current",
+                            "label": "Sensor (current)",
+                            "config": []
+                        },
+                        {
+                            "type": "sensor_voltage",
+                            "label": "Sensor (voltage)",
+                            "config": [
+                                "type=VOLTAGE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        },
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "40",
+                    "name": "THERMOSTAT_MODE",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_mode",
+                            "label": "Thermostat mode",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "43",
+                    "name": "THERMOSTAT_SETPOINT",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "thermostat_setpoint",
+                            "label": "Setpoint (heating)",
+                            "config": [
+                                "type=HEATING"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "60",
+                    "name": "MULTI_INSTANCE",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 1",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer 1",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 2",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer 2",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 3",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer 3",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 4",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer 4",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 5",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer 5",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 4,
+            "label": "Safety Activate Delay",
+            "description": "Safety Activate Delay in seconds",
+            "overview": "<p>Safety Mode is activated after the configured number of seconds has elapsed. It will start by turning OFF the Back Unit when activated. A 0 value Disables Safety Mode. The MAX limit is 32767 seconds (9 hours, 6 minutes and 7 seconds). The minimum Actication delay is 60 seconds, and values from 1 to 59 will automatically be translated to a 60 second delay.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Safety OFF Period",
+            "description": "Safety OFF Period in seconds",
+            "overview": "<p>The number of seconds to stay in OFF mode when Safety is activated. The Back unit turns ON when the timer have elapsed. If value is 0, the Back Unit will not turn back ON. The MAX limit is 32767 seconds (9 hours, 6 minutes and 7 seconds). A 60 second minimum period applies.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Safety ON Period",
+            "description": "Safety ON Period in seconds",
+            "overview": "<p>The number of seconds to stay in ON mode when Safety is activated. The Back Unit turns back OFF when the timer have elapsed (and continues to turn ON and OFF alternately). If value is 0, the Back Unit WILL NOT turn ON at all. The MAX limit is 32767 seconds (9 hours, 6 minutes and 7 seconds). A 60 second minimum period applies.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 300,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Dimming speed",
+            "description": "Dimmer Speed in 1\/100th of a Second",
+            "overview": "<p>Defines the \"fade\" time when setting a dim level from a controller. Fade time is defined as the time it takes to dim from MIN level to MAX level, which means an increase of 10% in light level takes 1\/10th of the configured time. The value defines the dim time in 1\/100'th of a second, which means a value\u00a0of 200 gives a Dimming Speed of 2.0 seconds from MIN to MAX. Max time is\u00a0327.67\u00a0seconds (almost 11 minutes). Values below 30 (0.3 seconds) are ignored \u0327 and values below 100 (1 second) are discouraged.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 300,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 30,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Dimmer mode",
+            "description": "Dimmer Operation Mode",
+            "overview": "<p>[ Leading Edge (LE) = 0, Tailing Edge (TE) = 1 ] Defines if Dimmer should operate in Leading or Tailing Edge mode. Most Lights work quite OK in the default Leading Edge mode, but this mode also usually cause some noise from the dimmer unit. During installation it is therefore recommended to try TE mode, and use this if the Light operates properly. Tailing Edge mode is known to cause instability in some type of Lights! This configuration does not have any effect on 1-10V Dimmer Back Units!<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "Maximum Level",
+            "description": "Maximum Dimmer Level",
+            "overview": "<p>The Maximum Light level of the dimmer. Typically there is no visible difference when the dimming level reaches a point in the range 75 - 90, and the installer should set this value to the lowest value where no change is visible. The default value of 90 is usually OK.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 90,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 13,
+            "label": "Minimum Level",
+            "description": "Minimum Dimmer Level",
+            "overview": "<p>The Minimum Light Level of the dimmer. This should be adjusted so the controlled Light is still ON and stable. Remember that LED type lights may work if dimmed down to a low value, but may not start if the light is turned OFF and ON again.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 15,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 14,
+            "label": "Button mode",
+            "description": "Operating mode for switch",
+            "overview": "<p>Controls the operation mode of the buttons. Valid configuration values are:<br \/>0 \u2013 Single Switch Mode (default)<br \/>1 \u2013 Dual Switch Mode<br \/>2 \u2013 Quadruple Switch Mode<br \/>3 \u2013 Legacy Scenario Mode<br \/>4 \u2013 Central Scene Controller Mode<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 4,
+            "options": []
+        },
+        {
+            "id": 15,
+            "label": "Light Zone Control Mode",
+            "description": "Light Zone Control Mode",
+            "overview": "<p>Controls if the Light Zones should operate in Switch or Dimmer Mode (only used in Button Modes 0, 1 and 2):<br \/>0\u00a0\u2013\u00a0All Light Zones in Dimmer Mode (default) 1\u00a0\u2013\u00a0All Light Zones in Switch Mode<\/p> <p>To control Light Zone switch mode individually, add any of the following values to enable switch mode individually (dimmer is default):<br \/>2\u00a0\u2013\u00a0Light Zone 1 Switch Mode<br \/>4\u00a0\u2013\u00a0Light Zone 2 Switch Mode<br \/>8\u00a0\u2013\u00a0Light Zone 3 Switch Mode<br \/>16\u00a0\u2013\u00a0Light Zone 4 Switch Mode<br \/>Example: A value of 10 (8 + 2) enables switch mode in Light Zone 1 and 3.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 30,
+            "options": []
+        },
+        {
+            "id": 17,
+            "label": "Back Unit Role",
+            "description": "Selected Back Unit Role",
+            "overview": "<p>Configures the Role of the Back Unit, which dictates what Local functionality controls it. Valid configuration values are:<br \/>0 - The Thermostat will control the Back Unit (if the back unit is a dimmer, then this value has no effect as Thermostats requires a local relay for local control)<\/p> <p>1 - The Light Control feature (buttons) will control the Back Unit.<br \/>2 - Disconnected mode means the Back Unit is not controlled by any local UI or features, and can only be controlled via Z-Wave End-Point 1 (or the Root Device).<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": []
+        },
+        {
+            "id": 18,
+            "label": "Back Unit Light Zone",
+            "description": "Selected Back Unit Light Zone",
+            "overview": "<p>Selects which Light Zone controls the Back Unit (in Light Mode). Possible values are:<br \/>1\u00a0\u2013\u00a0Light Zone 1 (Button and Z-Wave) (default) 2\u00a0\u2013\u00a0Light Zone 2 (Button and Z-Wave)<br \/>3\u00a0\u2013\u00a0Light Zone 3 (Button and Z-Wave)<br \/>4\u00a0\u2013\u00a0Light Zone 4 (Button and Z-Wave)<\/p> <p>This does not have any effect however when the BU role is set to Thermostat or Disconnected!<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 4,
+            "options": []
+        },
+        {
+            "id": 32,
+            "label": "Thermostat Set Point Max",
+            "description": "Set Point Max in 1\/10th of a degree Celcius",
+            "overview": "<p>Maximum Heat Set Point the Thermostat is allowed to be set to. If the Thermostat is used for Floor Heating, please make sure that this value is configured to the same value as (or lower than) the Max Floor Temperature. Given in 1\/10 of a degree Celcius, which means a value of 300 means 30 degrees C.\u00a0<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 270,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 500,
+            "options": []
+        },
+        {
+            "id": 34,
+            "label": "Thermostat Set Point Min",
+            "description": "Set Point Min in 1\/10th of a degree Celcius",
+            "overview": "<p>Minimum Heat Set Point the Thermostat is allowed to be set to. Given in 1\/10 of a degree Celcius, which means a value of 50 means 5 degrees C.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 50,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 500,
+            "options": []
+        },
+        {
+            "id": 36,
+            "label": "Thermostat Control Resend Interval",
+            "description": "Resend Interval in seconds",
+            "overview": "<p>Defines the interval between each time the Thermostat will repeat its last control command. This is used in combination with the Relay Safety configuration when controlling external Relays. If the Thermostat should fail, it would then stop sending control commands which in turn means the Relay will turn itself OFF after the safety mode delay has expired. This insures that heating will not be left ON indefinitely in failure situations.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 3600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 37,
+            "label": "Thermostat Minimum On\/Off Interval",
+            "description": "Minimum On\/Off interval in seconds",
+            "overview": "<p>This configuration defines the minimum interval the controlled Thermostat Relays will be ON and OFF. This is a feature intended to avoid turning control relays ON and OFF too frequently, which should insure a better lifetime of controlled relays. The default value is 5 minutes, which is OK for most electrical heating control. If used to control Water based heating, the value MUST be adjusted in accordance with the manufacturers specifications.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 300,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 60,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 38,
+            "label": "Thermostat Floor Temp Max",
+            "description": "Floor Temp Max in 1\/10th of a degree Celcius",
+            "overview": "<p>Max floor temperature if a\u00a0local\u00a0floor sensor is connected. If the Floor Sensor reads a temperature Higher than the configured value, it will immediately turn the relay (or any associated relays) OFF.<\/p> <p>The relay will stay off until the temperature sinks below this value, and the Thermostat issues it's\u00a0next control command. Disabled if zero (0) value, or if no floor sensor is connected. The value is given as 1\/10th of a degree Celcius. Range: 0\u00a0\u2013\u00a0500 (0-50 degrees).<\/p> <p>NOTE! MAX 27 degrees is recommended for Wooden Floors!<\/p> <p>NOTE! This function is always active as long as a Floor Sensor is connected, regardless of the sensor configuration described below.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 270,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 500,
+            "options": []
+        },
+        {
+            "id": 40,
+            "label": "Temperature Sensor Select",
+            "description": "Temperature Sensor Select",
+            "overview": "<p>Defines which temperature Sensor should be used for Heating Control. The default value is Both (3), which should work well in most scenarios (even when only a Floor or Room sensor is present). If both a Room and Floor sensor is used, the Thermostat will always control heating based on the lowest temperature reading of the two, to insure a comfortable floor temperature even if the room is already warm enough. If this is not wanted, the Thermostat should be configured to use the Room sensor Only. NOTE! The Floor Max Temperature feature will ALWAYS be active as long as a floor sensor is available, even if the Thermostat is configured to only use the Room Sensor.<\/p> <p>1 -\u00a0Local Room\u00a0- Use temperature from Locally connected Room sensor ONLY. Max Floor Temp protection is still active as long as a floor sensor is available.<\/p> <p>2 -\u00a0Local Floor\u00a0- Use temperature from Locally connected Floor sensor ONLY<br \/>3 -\u00a0Both\u00a0- Use temperature from Locally connected Floor AND Room sensor if available (Default).<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": []
+        },
+        {
+            "id": 44,
+            "label": "Cold Start Minimum Level",
+            "description": "Cold Start Minimum Level",
+            "overview": "<p>Sets the minimum level the Dimmer should go to when the light is switched ON. This is typically used for LED lamps which does not switch ON correctly when the dimming level is at the Minimum.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 20,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 64,
+            "label": "Temperature Report Inteval",
+            "description": "Report Interval in seconds",
+            "overview": "<p>Defines the Periodic Report interval for temperature readings. This can be configured to a minimum of 60 seconds and maximum of (32767 seconds. A 0 value disables the Interval based Periodic reporting, and any value below 60 results in a 60 second interval.<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32767,
+            "options": []
+        },
+        {
+            "id": 66,
+            "label": "Temperature Report Threshold",
+            "description": "Report Threshold in 1\/10th of a degree Celcius",
+            "overview": "<p>Defines a temperature change threshold where a temperature report is sent regardless of the Report Interval. This also works if the report interval is disabled. The value is given in 1\/10 of a degree\u00a0celsius, and can be in the range 1-127. A zero value disables the Threshold.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 67,
+            "label": "Thermostat On\u2215Off Interval Override Threshold",
+            "description": "Temperature Threshold in 1\/10th of a degree Celcius",
+            "overview": "<p>Defines a temperature threshold at which the configured On\/Off interval is overridden and the Heating relay state will change regardless. The value is given in 1\/10th of a degree, supporting a max threshold of 12.7 degrees celcius. A Zero (0) value disables this feature (the default).<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 80,
+            "label": "Button LED Mode",
+            "description": "Selected LED Mode",
+            "overview": "<p>Controls the operation of the LEDs. Possible values are:<br \/>0\u00a0\u2013\u00a0LEDs are always OFF (default)<br \/>1\u00a0\u2013\u00a0Momentary ON<\/p> <p>2\u00a0\u2013\u00a0Stable ON<\/p> <p>The LED operation is described in details later in this document, and depends on the Button Mode configuration.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": []
+        },
+        {
+            "id": 240,
+            "label": "Floor Sensor Temperature Offset",
+            "description": "Temperature Offset in 1\/10th of a degree Celcius",
+            "overview": "<p>Defines an offset to the Floor Temperature, given as a signed integer at 1\/10 of a degree celcius. This provides an offset range of\u00a0\u201312.8 to +12.7 degrees celcius.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -128,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 241,
+            "label": "Room Sensor Temperature Offset",
+            "description": "Temperature Offset in 1\/10th of a degree Celcius",
+            "overview": "<p>Defines an offset to the Room Temperature, given as a signed integer at 1\/10 of a degree celcius. This provides an offset range of\u00a0\u201312.8 to +12.7 degrees celcius.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -128,
+            "value_max": 127,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<div title=\"Page 15\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>The Lifeline group where all Local State Changes are reported. All unsolicited Reports for the supported command classes will be issued to this group.<br \/>Commands Issued:<\/p>\r\n<p>- Basic Report\u00a0- Notifies Local Light Zone changes (button press)<br \/>- Central Scene Notification\u00a0- Notifies Scene events from the controller (in Scene Mode)<br \/>- Sensor Multilevel Report\u00a0- Reports Power Consumption and Temperatures<br \/>-\u00a0Meter\u00a0- Reports power consumption to the Controller every 15 minutes.<br \/>-\u00a0Device Reset Locally\u00a0\u2013\u00a0Reports factory resets to the Controller<\/p>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        },
+        {
+            "id": 2,
+            "label": "Light Zone 1",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<div title=\"Page 15\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>Associated devices will be controlled by Light Zone 1. Also supports multichannel association in any combination. Command Issued:\u00a0Basic Set<\/p>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        },
+        {
+            "id": 3,
+            "label": "Light Zone 2",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<div title=\"Page 15\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>Associated devices will be controlled by Light Zone 2.<br \/>Also supports multichannel association in any combination. Command Issued:\u00a0Basic Set<\/p>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        },
+        {
+            "id": 4,
+            "label": "Light Zone 3",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<div title=\"Page 15\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>Associated devices will be controlled by Light Zone 3.<br \/>Also supports multichannel association in any combination. Command Issued:\u00a0Basic Set<\/p>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        },
+        {
+            "id": 5,
+            "label": "Light Zone 4",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<div title=\"Page 15\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>Associated devices will be controlled by Light Zone 4.<br \/>Also supports multichannel association in any combination. Command Issued:\u00a0Basic Set<\/p>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        },
+        {
+            "id": 6,
+            "label": "Thermostat Control",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<div title=\"Page 15\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>Control Set-Point and Mode of an external Thermostat Device Commands Issued:\u00a0Thermostat Setpoint Set\u00a0and\u00a0Thermostat Mode Set<\/p>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        },
+        {
+            "id": 7,
+            "label": "Thermostat Relay Control",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<div title=\"Page 15\">\r\n<div>\r\n<div>\r\n<div>\r\n<p>Control external Relay from the Local Thermostat Command Issued:\u00a0Basic Set\u00a0(ON and OFF values ONLY).<\/p>\r\n<\/div>\r\n<\/div>\r\n<\/div>\r\n<\/div>"
+        }
+    ]
+}

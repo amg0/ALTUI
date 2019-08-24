@@ -1,0 +1,246 @@
+{
+    "database_id": 1042,
+    "label": "SHWM10000",
+    "manufacturer_name": "ABUS Security-Center GmbH & Co. KG ",
+    "manufacturer_id": "0403",
+    "device_ref": [
+        "0002:0002"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Flood Sensor",
+    "overview": "<p>The SHWM10000 consists of a base unit (detector) and a water sensor (sensor), which are connected by a cable. If the sensor comes into contact with water, inform\u00a0the detector the gateway and an alarm is triggered.<\/p> <p>It detects sabotage when opening the case, has a battery-empty warning function and was designed for indoor installation.<\/p>",
+    "inclusion": "<p>Within 3 seconds, press 3 times on the\u00a0tamper\u00a0button.<\/p> <p>The status LED on the sensor front 3 x on.\u00a0Repeat the inclusion process again if\u00a0this was not successful.<\/p>",
+    "exclusion": "<p>Within 3 seconds, press 3 times on the tamper\u00a0button.\u00a0The status LED on the sensor front 3 x on.<\/p>",
+    "wakeup": "<table><tr><td>To wake-up the device immediately, please remove the front cover, and press the tamper key once.<\/td> <\/tr><\/table>",
+    "protocol_version": 5.003,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 3,
+        "name": "BASIC_TYPE_SLAVE"
+    },
+    "generic_class": {
+        "id": 3,
+        "name": "GENERIC_TYPE_SENSOR_ALARM"
+    },
+    "specific_class": {
+        "id": 3,
+        "name": "SPECIFIC_TYPE_ALARM_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        },
+                        {
+                            "type": "alarm_flood",
+                            "label": "Alarm (flood)",
+                            "config": [
+                                "type=FLOOD"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p>The device sends a notification report of the command class battery report, notification report, and local device reset notification, binary report.<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Root-Device-Group (Binary Sensor)",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>Binary Sensor Command Class: Compatible with 300 Series<\/p>\r\n<ul>\r\n<li>Sensor indicates the status of the open or closed door via lifeline.<\/li>\r\n<li>When the sensor changes state between closedand door is opened, the device is triggered.<\/li>\r\n<\/ul>"
+        },
+        {
+            "id": 3,
+            "label": "Root device group",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>Binary Sensor Command Class: Compatible with 300 Series<\/p>\r\n<ul>\r\n<li>Sensor indicates the status, door sensor has been removed.<\/li>\r\n<li>Device triggers when the sensor changes state\u00a0tamper\u00a0button detects.<\/li>\r\n<\/ul>"
+        },
+        {
+            "id": 4,
+            "label": "Root device group (notification)",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<ul>\r\n<li>Notification Open or Closed Status via Lifeline<\/li>\r\n<li>Device triggers when the sensor has a status change between\u00a0closed and opened door recognizes.<\/li>\r\n<\/ul>"
+        },
+        {
+            "id": 5,
+            "label": "Root device group (notification)",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<ul>\r\n<li>Sensor reports the status door sensor has been removed.<\/li>\r\n<li>The device triggers when the sensor changes state\u00a0tamper\u00a0button detects.<\/li>\r\n<\/ul>"
+        }
+    ]
+}

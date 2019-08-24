@@ -1,0 +1,367 @@
+{
+    "database_id": 793,
+    "label": "ZV9102FA-CCT",
+    "manufacturer_name": "Sunricher",
+    "manufacturer_id": "0330",
+    "device_ref": [
+        "0200:D002"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Z-wave CCT LED controller",
+    "overview": "<p>The SR-ZV9102FA-CCT is a dual color zwave lighting device and z wave slave that adopts z-wave RF Plus and z-wave mesh network technology with 4 channel, 5A per channel output for dual color LED lights. As a z-wave slave, the device can be added to z-wave network or removed from z-wave network by z-wave primary (master) controllers or gateway. The z wave devices are transceivers that enable to receive and transmit RF signal from the z wave remote while both of them are added to the network. The transceiver is a universal z wave slave which is compatible with universal z wave primary (master) controllers\/gateway.<\/p>",
+    "inclusion": "<p>Power on the receiver. By factory default setting, the connected LED lights will be under a slow rhythm breath status which means the receiver is waiting to be searched by the master (primary) controller or z-wave gateway -&gt; set the z-wave master (primary) controller or gateway into network inclusion mode (please refer to the user manual to learn how)<\/p> <p>There shall be an indication on the master (primary) controller or gateway -&gt; LED light connected with the receiver flashes 5 times quickly to indicate successful and automatic adding to z-wave network<\/p>",
+    "exclusion": "<p>When the receiver has already been added to z-wave network and connected LED light is switched on, set the z-wave master (primary) controller or gateway into network exclusion mode (please refer to the user manual to learn how).<\/p> <p>Click the \u201cprog\u201d key on the receiver -&gt; there shall be an indication on the master (primary) controller -&gt; the connected LED light with the receiver flashes twice to indicate successful removal from z-wave network<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.061,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": false,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2B",
+                    "name": "SCENE_ACTIVATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2C",
+                    "name": "SCENE_ACTUATOR_CONF",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "33",
+                    "name": "COLOR",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "color_color",
+                            "label": "Color Control",
+                            "config": []
+                        },
+                        {
+                            "type": "color_temperature",
+                            "label": "Color Temperature",
+                            "config": [
+                                "colorMode=DIFF_WHITE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_system",
+                            "label": "Alarm (system)",
+                            "config": [
+                                "type=SYSTEM"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 2,
+            "label": "Save state on power failure",
+            "description": "Shut off load (default), turn on load or restore saved state after power failure",
+            "overview": "<p>Load state after power failure<\/p> <p>0 - (default) shut off load<\/p> <p>1 - turn on load<\/p> <p>2 - restore saved state after power failure<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "Enable\/disable BASIC report",
+            "description": "Enable\/disable sending of BASIC reports",
+            "overview": "<p>Enable or disable sending of BASIC reports<\/p> <p>0 - Disable sending of BASIC reports<\/p> <p>1 - (default) Enable sending of BASIC reports<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Colour channels",
+            "description": "Set number of channels of LED load - single colour, CCT or RGBW",
+            "overview": "<p>Set number of channels of LED load<\/p> <p>0 - single colour - 4 channel PWM output to drive 4 channels of single colour LEDs<\/p> <p>1 - CCT - 2 channel PWM output to drive CCT LEDs R\/B control warm white, G\/W control cool white<\/p> <p>2 - (default) RGBW - single channel PWM output to control RGBW LEDs<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Stage mode",
+            "description": "Set stage mode for lighting changes",
+            "overview": "<p>Set lighting stage mode<\/p> <p>0 - (Default) - no stage mode<\/p> <p>1 - flash mode, colors set by parameter 8<\/p> <p>2 - rainbow mode, system fixed changing effect<\/p> <p>4 - fade in and fade out mode, color changes randomly<\/p> <p>5 - flash mode, color changes randomly<\/p> <p>6 - rainbow mode, color changes randomly<\/p> <p>7 - random mode, the colors switch randomly<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 7,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Stage mode speed",
+            "description": "Set speed of changes in stage mode",
+            "overview": "<p>Set speed of stage mode 0-255<\/p> <p>0 is slowest 255 is fastest<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Stage mode execution time",
+            "description": "Set execution time for stage mode",
+            "overview": "<p>Set execution time for stage mode<\/p> <p>0 (default) - unlimited time<\/p> <p>1 - 255 set execution time<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "Stage mode hue",
+            "description": "Set stage mode hue 0-255",
+            "overview": "<p>Set hue for stage mode<\/p> <p>0 - 255 (default)<\/p> <p>Only valid for fade in, fade out and flash mode.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Set external switch function",
+            "description": "Enable \/ disable external switch for inclusion \/ exclusion",
+            "overview": "<p>Enable \/ disable external switch for inclusion \/ excluison of the device to \/ from the network<\/p> <p>0 - (default) disable switch<\/p> <p>1 - enable switch<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": "<p>Single Cast DEVICE_RESET_LOCALLY_NOTIFICATION (sent when factory reset the device)<\/p>"
+        }
+    ]
+}

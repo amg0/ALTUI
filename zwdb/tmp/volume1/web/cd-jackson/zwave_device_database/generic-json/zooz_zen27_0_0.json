@@ -1,0 +1,445 @@
+{
+    "database_id": 945,
+    "label": "ZEN27",
+    "manufacturer_name": "Zooz",
+    "manufacturer_id": "027A",
+    "device_ref": [
+        "A000:A002"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Z-Wave Plus S2 Dimmer Light Switch",
+    "overview": "<ul><li>Manual or Z-Wave on\/off and brightness control<\/li> <li>Simple Direct 3-Way: connect with existing on\/off switches in 3-way,4-way, and 5-way set-ups, no add-on needed (neutral wire required)<\/li> <li>Fully adjustable ramp rate for just the right on\/off speed<\/li> <li>Double tap to full brightness feature<\/li> <li>Remembers and restores on\/off status a?er power failure<\/li> <li>Built-in Z-Wave Plus signal repeater to extend network range<\/li> <li>Extended compatibility with LED bulbs, no more flickering!<\/li> <li>S2 security protocol and the latest 500 Z-Wave chip<\/li> <li>Customizable LED indicator and air-gap switch for added safety<\/li> <\/ul>",
+    "inclusion": "<ol><li>Initiate inclusion (pairing) in the app (or web interface).<\/li> <li>Finalize inclusion at the switch. TAP 3 TIMES QUICKLY.\u00a0The LED indicator will blink to signal communication\u00a0and remain on for 2 seconds to confirm inclusion.<\/li> <\/ol>",
+    "exclusion": "<ol><li>Bring your Z-Wave gateway (hub) close to the switch if possible<\/li> <li>Put the Z-Wave hub into exclusion mode<\/li> <li>Tap the lower paddle on the switch 3 times quickly<\/li> <li>Your hub will confirm exclusion and the device will disappear from your controller's device list<\/li> <\/ol>",
+    "wakeup": "",
+    "protocol_version": 5.003,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Paddle Control",
+            "description": "Choose Paddle Functionality",
+            "overview": "<p>Paddle Control<\/p> <p>Parameter 1: Choose if you want the upper paddle to turn the light on or turn the light off when tapped<\/p> <p>Values:<\/p> <p>0 \u2013 Upper paddle turns the light on, lower paddle turns the light off (default);<\/p> <p>1 \u2013 Upper paddle turns the light off, lower paddle turns the light on<\/p> <p>Size: 1 byte dec.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Upper light on, lower light off"
+                },
+                {
+                    "value": 1,
+                    "label": "Upper light off, lower light on"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "LED Indicator Control",
+            "description": "Change behavior of the LED indicator",
+            "overview": "<p>LED Indicator Control<\/p> <p>Parameter 2: Choose if you want the\u00a0LED indicator to turn on when the switch (light) is on or off, or if you\u00a0want it to remain on or off at all times<\/p> <p>Values:<\/p> <p>0 \u2013 LED indicator is on when switch is off, LED indicator is off when switch is on (default);<\/p> <p>1 \u2013 LED indicator is on when switch is on, LED indicator is off when switch is off;<\/p> <p>2 \u2013 LED indicator is always OFF; 3 \u2013 LED indicator is always ON<\/p> <p>3 \u2013 LED indicator is always ON<\/p> <p>Size: 1 byte dec.<\/p> <p>OR<\/p> <p>6 x TAP PADDLE to change the LED indicator mode<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED on when switch off, LED off when switch on"
+                },
+                {
+                    "value": 1,
+                    "label": "LED on when switch on, LED off when switch off"
+                },
+                {
+                    "value": 2,
+                    "label": "LED indicator is always OFF"
+                },
+                {
+                    "value": 3,
+                    "label": "LED indicator is always ON"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "Auto Turn-Off Timer",
+            "description": "enable the Auto Turn-Off Timer",
+            "overview": "<p>Auto Turn-Off Timer<\/p> <p>Parameter 3: Use this parameter to enable or disable the auto turn-off timer function<\/p> <p>Values:<\/p> <p>0 \u2013 timer disabled (default);<\/p> <p>1 \u2013 timer enabled.<\/p> <p>Size: 1 byte dec.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "timer disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "timer enabled"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "label": "Auto Turn-Off Timer Duration",
+            "description": "set Auto Turn-Off Timer Duration",
+            "overview": "<p>Parameter 4: Use this parameter to set the time a?er which you want the switch to automatically turn off once it has been turned on. The number entered as value corresponds to the number of minutes.<\/p> <p>Values: 1 \u2013 65535 (minutes). 60 \u2013default.<\/p> <p>Size: 4 byte dec.<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Auto Turn-On Timer",
+            "description": "enable the Auto Turn-On Timer",
+            "overview": "<p>Auto Turn-On Timer<\/p> <p>Parameter 5: Use this parameter to enable or disable the auto turn-on timer function<\/p> <p>Values:<\/p> <p>0 \u2013 timer disabled (default);<\/p> <p>1 \u2013 timer enabled.<\/p> <p>Size: 1 byte dec.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "timer disabled"
+                },
+                {
+                    "value": 1,
+                    "label": "timer enabled"
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "label": "Auto Turn-On Timer Duration",
+            "description": "set Auto Turn-On Timer Duration",
+            "overview": "<p>Parameter 6: Use this parameter to set the time a?er which you want the switch to automatically turn on once it has been turned off. The number entered as value corresponds to the number of minutes.<\/p> <p>Values: 1 \u2013 65535 (minutes). Default<\/p> <p>set to 60.<\/p> <p>Size: 4 byte dec.<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "On Off Status After Power Failure",
+            "description": "Set the on off status for the switch after power failure.",
+            "overview": "<p>On Off Status After Power Failure<\/p> <p>Parameter 8:\u00a0Set the on off status for the switch after power failure.<\/p> <p>Values:<\/p> <p>0 \u2013 forced to OFF (regardless of state prior to power outage);<\/p> <p>1 \u2013 forced to ON (regardless of state prior to power outage);<\/p> <p>2 \u2013 remembers and restores on\/off status a?er power failure (default)<\/p> <p>Size: 1 byte dec.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "forced to OFF"
+                },
+                {
+                    "value": 1,
+                    "label": "forced to ON"
+                },
+                {
+                    "value": 2,
+                    "label": "remembers on\/off status"
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "label": "Ramp Rate Control",
+            "description": "Adjust the ramp rate for your dimmer",
+            "overview": "<p>Ramp Rate Control<\/p> <p>Parameter 9: Adjust the ramp rate for your dimmer (fade-in \/ fade-out effect for on \/ off operation). Values\u00a0correspond to the number of seconds<\/p> <p>it takes for the dimmer to reach full brightness or turn off when operated manually.<\/p> <p>Values: 1 \u2013 99 (seconds). Default set to 1.<\/p> <p>Size: 1 byte dec.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Minimum Brightness",
+            "description": "Set the minimum brightness level %",
+            "overview": "<p>Minimum and Maximum Brightness<\/p> <p>Parameter 10: Set the minimum brightness level (in %) for your dimmer. You won\u2019t be able to dim the light below the set value.<\/p> <p>Values: 1 \u2013 99 (%). Default set to 1.<\/p> <p>Size: 1 byte dec.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Maximum Brightness",
+            "description": "Set the maximum brightness level %",
+            "overview": "<p>Minimum and Maximum Brightness<\/p> <p>Parameter 11: Set the maximum brightness level (in %) for your dimmer. You won\u2019t be able to add brightness to the light beyond the set value. Note: if Parameter 12 is set to value 0, Parameter 11 is automatically disabled.<\/p> <p>Values: 1 \u2013 99 (%). Default set to 99.<\/p> <p>Size: 1 byte dec.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 99,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 99,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "Double Tap Function",
+            "description": "brightness level after you double-tap upper paddle",
+            "overview": "<p>Double Tap Function<\/p> <p>Parameter 12: Choose if you want the dimmer to turn on to full brightness or custom brightness level after you double-tap the upper paddle.<\/p> <p>Values:<\/p> <p>0 \u2013 the light will turn on to full brightness with double tap (default).<\/p> <p>1 \u2013 the light will turn on to the maximum brightness level set in Parameter 11 with double tap.<\/p> <p>Size: 1 byte dec.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "full brightness"
+                },
+                {
+                    "value": 1,
+                    "label": "maximum brightness level set"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": "<p>This dimmer switch supports Group 1 with up to 1 devices for lifeline communication<\/p>\r\n<p>and Group 2 with up to 5 devices. This device will send<\/p>\r\n<p>MULTILEVEL REPORT to Group 1 and 2 when operated manually.<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Status",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p>This dimmer switch supports Group 1 with up to 1 devices for lifeline communication and Group 2 with up to 5 devices. This device will send MULTILEVEL REPORT to Group 1 and 2 when operated manually.<\/p>"
+        }
+    ]
+}

@@ -1,0 +1,424 @@
+{
+    "database_id": 996,
+    "label": "DRY",
+    "manufacturer_name": "wiDom",
+    "manufacturer_id": "0149",
+    "device_ref": [
+        "1214:0900"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Widom Smart Dry contact",
+    "overview": "<p>WiDom Smart Dry Contact Switch can turn ON and OFF equipments with an independent power supply, such as solenoid valves (e.g. gas, water and irrigation), power operated valves etc.\u00a0<\/p> <p>WiDom Smart Dry Contact Switch is very easy to install and works with both momentary and toggle switches.\u00a0<\/p> <p>The device is equipped with contact protection technology (Zero Crossing) which reduces the electrical stress on the relay contacts and ensures a longer life. The open \/ closed switching of the device always occur when the instantaneous value of voltage is 0.\u00a0<\/p> <p>It operates in any Z-Wave network with other Z-Wave\/Z-Wave Plus certified devices and controllers from any other manufacturer. As a constantly powered node, WiDom Smart Double Switch will act as repeater regardless of the vendor in order to increase the reliability of the network.<\/p>",
+    "inclusion": "<p>WiDom Smart Dry Contact Switch is compatible with all Z-Wave\/Z-Wave Plus certified controllers. The device supports both the Network Wide Inclusion mechanism (which offers the ability to be included in a network, even if the device is not directly connected to the controller) and Normal Inclusion. By default, the inclusion procedure starts in Normal Inclusion mode and after a short time out the procedure continues in Network Wide Inclusion mode that lasts for about 20 Seconds.<\/p> <p>Before including the device the LED status indicator is solid RED. The procedure of inclusion is activated by clicking Add in the inclusion interface and by pressing any sequence of click on the integrated button. As soon as the inclusion procedure initiates the LED indicator starts a sequence of GREEN-BLUE blinks. The device is included in the network when the LED status is OFF and the interview is completed.\u00a0<\/p>",
+    "exclusion": "<p>Only a controller can remove the device from the network. After activating the exclusion function by the controller, the device can be removed by setting it in Learning Mode. As soon as the exclusion initiates, the LED indicator starts a sequence of RED-BLUE blinks. The device is excluded from the network when the LED status indicator is solid RED and the App_status in the interface is OK.\u00a0<\/p>",
+    "wakeup": "",
+    "protocol_version": 6.4,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": true,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Numbers of clicks to control the load",
+            "description": "Defines which sequences of clicks control the load",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 7,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 7,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Value used for devices belonging to Group 2",
+            "description": "Value sent when the external switch receives 1 Click",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": " Value used for devices belonging to Group 3",
+            "description": " Value sent wen the external switch receives 2 Clicks",
+            "overview": "<p>\u00a0Value used for devices belonging to Group 3 when the external switch receives 2 Clicks<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": " Value used for devices belonging to Group 4",
+            "description": "Value sent when external switch receives 3 Clicks",
+            "overview": "<p>\u00a0Value used for devices belonging to Group 4 when external switch receives 3 Clicks<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -1,
+            "value_max": 100,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "Timer to switch OFF the Relay",
+            "description": "Defines the time after which the relay is switched OFF",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32000,
+            "options": []
+        },
+        {
+            "id": 11,
+            "label": "Timer to switch ON the Relay",
+            "description": "Defines the time after which the relay is switched ON",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32000,
+            "options": []
+        },
+        {
+            "id": 15,
+            "label": "Timer scale",
+            "description": "Defines the time unit used for parameters No.10 and No.11. ",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": true,
+            "value_min": 1,
+            "value_max": 2,
+            "options": []
+        },
+        {
+            "id": 20,
+            "label": "One Click Scene Activation Set",
+            "description": "Defines the Scene Activation Set value sent to the Lifeline group with 1 Click",
+            "overview": "<p>Defines the Scene Activation Set value sent to the Lifeline group with 1 Click on the external switch<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 21,
+            "label": "Two Clicks Scene Activation Set ",
+            "description": "Defines the Scene Activation Set value sent to the Lifeline group with 2 Clicks",
+            "overview": "<p>Defines the Scene Activation Set value sent to the Lifeline group with 2 Clicks on the external switch<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 22,
+            "label": "Three Clicks Scene Activation Set",
+            "description": "Defines the Scene Activation Set value sent to the Lifeline group with 3 Clicks",
+            "overview": "<p>Defines the Scene Activation Set value sent to the Lifeline group with 3 Clicks on the external switch<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 60,
+            "label": "Start-up Status",
+            "description": "Defines the status of the device following a restart",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 3,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "ON"
+                },
+                {
+                    "value": 2,
+                    "label": "OFF"
+                },
+                {
+                    "value": 3,
+                    "label": "PREVIOUS STATUS"
+                }
+            ]
+        },
+        {
+            "id": 62,
+            "label": "Type of external switch",
+            "description": "Defines the type of external switch connected to the device",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "IGNORE"
+                },
+                {
+                    "value": 1,
+                    "label": "BUTTON"
+                },
+                {
+                    "value": 2,
+                    "label": "SWITCH"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 8,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "1 Click",
+            "max_nodes": 8,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "2 Clicks",
+            "max_nodes": 8,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "3 Clicks",
+            "max_nodes": 8,
+            "controller": false,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

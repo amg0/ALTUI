@@ -1,0 +1,357 @@
+{
+    "database_id": 1006,
+    "label": "Aeotec NanoMote Quad",
+    "manufacturer_name": "Aeotec Limited",
+    "manufacturer_id": "0371",
+    "device_ref": [
+        "0102:0003"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "NanoMote Quad",
+    "overview": "<p>Aeotec NanoMote Quad has been crafted to control connected lighting using\u00a0Z-Wave Plus\u00a0as a Z-Wave S2 device. It is powered by Aeotec\u2019s\u00a0Gen5\u00a0technology. You can find out\u00a0more about NanoMote Quad\u00a0by following that link.<\/p> <p><br \/>To see whether NanoMote Quad is known to be compatible with your Z-Wave system or not, please reference our\u00a0Z-Wave gateway comparison\u00a0listing. The\u00a0technical specifications of NanoMote Quad\u00a0can be viewed at that link.<\/p> <ol><li>Z-Wave Plus certified for good compatibility (500 serials chipset)<\/li> <li>Z-Wave S2 system<\/li> <li>Support remote control anywhere and anytime<\/li> <li>Program up to 4 customized scenes<\/li> <li>The battery is rechargeable and replacable, will run for three months per charge<\/li> <li>Support low battery alarm with buzzer<\/li> <li>Support Child Lock function<\/li> <li>Supports OTA firmware update<\/li> <\/ol><p>Note: You need to send a wakeup notification to the controller to add the device as a Thing. Follow\u00a0the \"Adding Your NanoMote Quad to your Network\" instructions.<\/p>",
+    "inclusion": "<p><strong>Adding your NanoMote Quad to your Z-Wave network.<\/strong><\/p> <p>With your \u00a0NanoMote Quad now powered, it\u2019s time to add it to your Z-Wave network.<\/p> <ol><li>Place your Z-Wave primary controller\/gateway enter into pairing\/inclusion mode.\u00a0<\/li> <li>Take your NanoMote near to your primary controller.\u00a0\u00a0<\/li> <li>Double click the NanoMote button (can be any button), the LED will blink rapidly with a white color.\u00a0<\/li> <li>If your NanoMote has been successfully added to your Z-Wave \u00a0network, its white LED will be solid for about 10 seconds, then flash green to indicate it is awake. If the adding was unsuccessful and the red LED will be solid for 2 seconds and then off, repeat the above steps.<\/li> <li>If your NanoMote does not go to sleep on its own, press and hold for 2 seconds (or until LED turns orange) then release its button to put your NanoMote to sleep.<\/li> <\/ol>",
+    "exclusion": "<p>Your NanoMote can be removed from your Z-Wave network at any time. You'll need to use your Z-Wave network's main controller\/gateway. To do this, please refer to the part of their respective manuals that tell you how to remove devices from your network.<\/p> <ol><li>Put your primary controller into device removal mode.<\/li> <li>Take your NanoMote near to your primary controller.<\/li> <li>Double click the NanoMote button (can be any button), the LED will become a solid green color.<\/li> <li>If your NanoMote has been removed from your Z-Wave \u00a0network, its LED will begin cycling through rainbow colors.\u00a0<\/li> <\/ol>",
+    "wakeup": "<p><strong>Send a wake up notification.<\/strong><\/p> <p>In order to send your NanoMote Quad new configuration commands, OTA, or receive other commands from your Z-Wave controller or gateway, it will need to be woken up.<\/p> <p>Enable Wakeup:<\/p> <ol><li>Press and hold button (any button) for 5 seconds or until LED turns to a green color<br \/><br \/>LED will change from:<br \/><br \/>Orange<br \/>Green \/\/at 5 seconds.<br \/><br \/><\/li> <li>Release the button and the LED will flash green rapidly to indicate it is in an awake state.<\/li> <\/ol><p>Disable Wakeup:<\/p> <ol><li>Press and hold button (any button) for 2 seconds or until LED turns to a orange\/red color<\/li> <li>Release the button and the LED should be deactivated<\/li> <\/ol>",
+    "protocol_version": 4.061,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_WALL_CONTROLLER"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 24,
+                "name": "GENERIC_TYPE_WALL_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_BASIC_WALL_CONTROLLER"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "2",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 32,
+            "label": "Level for low battery",
+            "description": "Set the level for \"low battery\" alert",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 20,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 10,
+            "value_max": 50,
+            "options": []
+        },
+        {
+            "id": 43,
+            "label": "Low battery buzzer",
+            "description": "Enable\/disable low battery buzzer",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Central scene notification",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Button 1 basic",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "On\/off control via button 1",
+            "overview": ""
+        },
+        {
+            "id": 3,
+            "label": "Button 1 multilevel",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Dim control via button 1",
+            "overview": ""
+        },
+        {
+            "id": 4,
+            "label": "Button 2 basic",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "On\/off control via button 2",
+            "overview": ""
+        },
+        {
+            "id": 5,
+            "label": "Button 2 multilevel",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Dim control via button 2",
+            "overview": ""
+        },
+        {
+            "id": 6,
+            "label": "Button 3 basic",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "On\/off control via button 3",
+            "overview": ""
+        },
+        {
+            "id": 7,
+            "label": "Button 3 multilevel",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Dim control via button 3",
+            "overview": ""
+        },
+        {
+            "id": 8,
+            "label": "Button 4 basic",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "On\/off control via button 4",
+            "overview": ""
+        },
+        {
+            "id": 9,
+            "label": "Button 4 multilevel",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Dim control via button 4",
+            "overview": ""
+        }
+    ]
+}

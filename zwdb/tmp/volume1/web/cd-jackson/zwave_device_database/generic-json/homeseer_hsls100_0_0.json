@@ -1,0 +1,461 @@
+{
+    "database_id": 803,
+    "label": "HS-LS100+",
+    "manufacturer_name": "HomeSeer Technologies",
+    "manufacturer_id": "000C",
+    "device_ref": [
+        "0201:000A"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "HomeSeer Z-Wave Plus Leak Sensor",
+    "overview": "<p>Homeseer HS-LS100+ is a compact, easy to install leak sensor. It designed control other ZLS100+ is a compact, easy to install leak sensor. It designed control other Z-Wave devices directly or it may be used with a variety of Z-Wave certified home controllers to launch automation events or scenes.<\/p>",
+    "inclusion": "<p>Inclusion (recommended if your home controller supports \u201cS0\u201d or \u201cS2\u201d Z-Wave encryption)<br \/>1. Put your home controller into Z-Wave \u2018inclusion\u2019 mode.<br \/>2. Quickly triple-press the Z-Wave network button, then release it. Wait for the inclusion process to finish.<\/p>",
+    "exclusion": "<p>Exclusion<br \/>1. Put your home automation controller into Z-Wave \u2018exclusion\u2019 mode.<br \/>2. Quickly triple-press the Z-Wave network button. Wait for the exclusion process to finish.<\/p>",
+    "wakeup": "<p>Press and hold the Z button for more that 5 seconds and release<\/p>",
+    "protocol_version": 4.061,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "5",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_temperature",
+                            "label": "Sensor (temperature)",
+                            "config": [
+                                "type=TEMPERATURE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "5",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_heat",
+                            "label": "Heat Alarm",
+                            "config": [
+                                "type=HEAT"
+                            ]
+                        },
+                        {
+                            "type": "alarm_flood",
+                            "label": "Flood Alarm",
+                            "config": [
+                                "type=FLOOD"
+                            ]
+                        },
+                        {
+                            "type": "alarm_tamper",
+                            "label": "Tamper Alarm",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 14,
+            "label": "Enabe\/Disable BASIC SET command",
+            "description": "Enabe\/Disable BASIC SET command",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "label": "Value of the BASIC SET",
+            "description": "Value of the BASIC SET",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "BASIC SET 255"
+                },
+                {
+                    "value": 1,
+                    "label": "BASIC SET 0"
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "label": "Set flooding alarm interval (Minute)",
+            "description": "Set flooding alarm interval (Minute)",
+            "overview": "<p>The higher the value, the long the report periodically - in hexadecimal values from 0x01 to 0xFF, or 1 to 255 if your controller allows unsigned decimal values.<\/p> <p>0 - Disable flooding alarm<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 18,
+            "label": "Enabe\/Disable shock alarm",
+            "description": "Enabe\/Disable shock alarm",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        },
+        {
+            "id": 19,
+            "label": "Temperature report time (minute)",
+            "description": "Temperature report time (minute)",
+            "overview": "<p>The higher the value ,the long the report time<\/p> <p>0 - Disable report<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 20,
+            "label": "Set the high temperature alarm trigger value ",
+            "description": "Set the high temperature alarm trigger value ",
+            "overview": "<p>The larger the value , the higher the high temperature in Fahrenheits (US)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1040,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -670,
+            "value_max": 2570,
+            "options": []
+        },
+        {
+            "id": 22,
+            "label": "Set the low temperature alarm trigger value",
+            "description": "Set the low temperature alarm trigger value",
+            "overview": "<p>The smaller the value , the lower the low temperature in Fahrenheits (US)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 320,
+            "read_only": false,
+            "write_only": false,
+            "value_min": -670,
+            "value_max": 2570,
+            "options": []
+        },
+        {
+            "id": 24,
+            "label": "Enable\/Disable blinking LED when alarm being triggered",
+            "description": "Enable\/Disable blinking LED when alarm being triggered",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        },
+        {
+            "id": 32,
+            "label": "Level of low battery",
+            "description": "Level of low battery",
+            "overview": "<p>Set the trigger value for the low battery alarm<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 20,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 10,
+            "value_max": 50,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 5,
+            "controller": true,
+            "description": "",
+            "overview": "<p>1. Notification Report. Sensor will send Notification Report to the associated nodes<\/p>\r\n<p>2. Battery Report. Sensor will send Battery Report when the battery level is low and the battery report\u2019s value is 0xFF.<\/p>\r\n<p>3. Device Reset Locally Notification. Sensor will send Device Reset Locally Notification when reset<\/p>\r\n<p>4.Sensor multilevel report When associated to Group 1, you can adjust the temperature reporting cycle according to the configuration settings.<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Control",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "",
+            "overview": "<p>1. Basic Set. Flood Sensor will send Basic Set to associated nodes when Water leak detected.<\/p>"
+        }
+    ]
+}

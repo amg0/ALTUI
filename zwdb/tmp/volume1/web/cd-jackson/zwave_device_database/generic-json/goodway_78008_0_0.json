@@ -1,0 +1,369 @@
+{
+    "database_id": 827,
+    "label": "78008",
+    "manufacturer_name": "Good Way Technology Co., Ltd",
+    "manufacturer_id": "0068",
+    "device_ref": [
+        "0000:000D"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Door\/Window Sensor with Magnet",
+    "overview": "<p>Z-Wave Door\/Window sensor with magnet<\/p> <p>can include 2 extern sensors<\/p>",
+    "inclusion": "<p>1. Install the battery and close the lid<\/p> <p>2. Set your gateway\/controller to the inclusion mode<\/p> <p>3. Push the TMP button on the bottom side 3 times in 2 seconds<\/p> <p>4. if the inclusion was succesfully the software will show it<\/p>",
+    "exclusion": "<p>1. Set your gateway\/controller to the exclusion mode<\/p> <p>2.\u00a0Push the TMP button on the bottom side 3 times in 2 seconds<\/p> <p>3. The device is logged off<\/p>",
+    "wakeup": "<p>The Dorr\/Window sensor stays in sleep mode\u00a0for\u00a0the majority of time. It can be woken up at specified intervals by setting WAKE_UP_INTERVAL_SET command.<\/p>",
+    "protocol_version": 4.005,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_ROUTING_SENSOR_BINARY"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 32,
+                "name": "GENERIC_TYPE_SENSOR_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_ROUTING_SENSOR_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_general",
+                            "label": "Alarm",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Basic set level for nodes of group2",
+            "description": "255: Binary switch ON, 1-99: Dimmer level ",
+            "overview": "<p>255: Binary switch ON<\/p> <p>1-99: Dimmer level\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "Basic set OFF delay time for nodes of group2",
+            "description": "0: Disable, 0-127 Second",
+            "overview": "<p>0: Disable<\/p> <p>0-127 Seconds<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 127,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "Delay time to enter standby mode",
+            "description": "After force to wake up, delay time to enter standby mode again",
+            "overview": "<p>After force to wake up, delay time to enter standby mode again<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "In standby, delay time to enter standby after wake up",
+            "description": "In standby mode, after wake up, delay time for standby again",
+            "overview": "<p>In standby mode, after wake up, delay time for standby again<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Set waiting exclusion time",
+            "description": "Set waiting exclusion time",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Activate\/Deactivate WUT standby mode",
+            "description": "0: Always wake up, 1: Enter standby mode",
+            "overview": "<p>0: Always wake up<\/p> <p>1: Enter standby mode<\/p> <p>(Auto-reboot after setting completed)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Alwas wake up"
+                },
+                {
+                    "value": 1,
+                    "label": "Enter standby mode"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "Activate\/Deactivate Tamper alarm mode",
+            "description": "0: Disable, 1: Enable",
+            "overview": "<p>0: Disable tamper alarm mode<\/p> <p>1: Enable tamper alarm mode<\/p> <p>(Auto reboot after setting completed)<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Disable"
+                },
+                {
+                    "value": 1,
+                    "label": "Enable"
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "label": "Tamper alarm continuously send",
+            "description": "In tamper alarm mode, delay time for continuously send Sensor_Binary_report",
+            "overview": "<p>In tamper alarm mode, delay time for continuously send Sensor_Binary_report<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 3,
+            "value_max": 30,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Interval time for sending battery report",
+            "description": "The interval time of sending battery report",
+            "overview": "<p>The interval time of sending battery report when the battery runs out of electricity<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 3,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 3,
+            "value_max": 10,
+            "options": [
+                {
+                    "value": 3,
+                    "label": "3 minutes"
+                },
+                {
+                    "value": 5,
+                    "label": "5 minutes"
+                },
+                {
+                    "value": 10,
+                    "label": "10 minutes"
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "label": "set the configuration of 2 external sensors",
+            "description": "BIT0: sensor1 (S1), BIT1: sensor2 (S2)",
+            "overview": "<p>BIT0: sensor1 (S1)<\/p> <p>BIT1: sensor2 (S2)<\/p> <p>0 (00b): S2 NO, S1 NO<\/p> <p>1 (01b): S2 NO, S1 NC<\/p> <p>2 (10b): S2 NC, S1 NO<\/p> <p>3 (11b): S2 NC, S1 NC<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 3,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Reports",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "All autoreports send to Group 1",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Sensor",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "ON\/OFF status (Basic_set command)",
+            "overview": ""
+        }
+    ]
+}

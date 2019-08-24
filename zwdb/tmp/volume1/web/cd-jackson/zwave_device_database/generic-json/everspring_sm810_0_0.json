@@ -1,0 +1,262 @@
+{
+    "database_id": 903,
+    "label": "SM810",
+    "manufacturer_name": "Everspring",
+    "manufacturer_id": "0060",
+    "device_ref": [
+        "0002:0003"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Door\/Window Detector",
+    "overview": "<p>The Door\/Window Detector is a Z-Wave Plus enabled device and is fully compatible with any Z-Wave enabled network. The device can be set up in a Z-wave network to communicate directly with other end devices such as lighting controllers, or to report directly to a Z-wave controller (usually a gateway).<\/p>",
+    "inclusion": "<p>Auto Inclusion -The power is applied for the first time and no node ID has been stored in the module, or after executing reset.<\/p> <p>Manual Inclusion<\/p> <ol><li>Put the Z-Wave Controller into inclusion mode.<\/li> <li>Press the tamper switch 3 times within 1.5 seconds to put the unit into inclusion mode. \u00a0<\/li> <\/ol>",
+    "exclusion": "<ol><li>Put the Z - Wave Controller into exclusion mode. \u00a0<\/li> <li>Press the tamper switch 3 times within 1.5 Seconds to put the unit into exclusion mode. \u00a0<\/li> <\/ol>",
+    "wakeup": "<p>After it has been included into a Z-wave network, the detector will go to sleep but send a Wakeup Notifiication Command periodically at preset period to the controller. The detector will stay awake for 10 seconds at least and then go back to sleep to conserve battery life.<\/p> <p>The time internal between Wakeup Notification Commands can be set in the Wakeup Command Class based on the range values below:<\/p> <table><tr><td>Minimum Wake Up Interval<\/td> <td> <p>600s (10 minutes)<\/p> <\/td> <\/tr><tr><td>Maximum Wake Up Interval<\/td> <td>86400s (1 day)<\/td> <\/tr><tr><td>Default Wake Up Interval<\/td> <td>14400s (4 hours)<\/td> <\/tr><tr><td>Wake Up Interval Step Seconds<\/td> <td>600s (10 minutes)<\/td> <\/tr><\/table>",
+    "protocol_version": 4.6,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_door",
+                            "label": "Door Sensor",
+                            "config": []
+                        },
+                        {
+                            "type": "alarm_battery",
+                            "label": "Alarm (Low battery)",
+                            "config": []
+                        },
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (Burglar)",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "4",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": true,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "Notification Report, Device Reset Locally Notification",
+            "overview": "<p>Group 1 commands:<\/p>\r\n<ul>\r\n<li>When the unit is powered up and was already a part of a Z-Wave network, the unit will send a Notification Report to the node of Group 1.<\/li>\r\n<li>When the tamper switch is released, the unit will send ALARM REPORT command to the nodes of Group 1.<\/li>\r\n<li>Upon detector status being changed, the unit will check its battery status simultaneously. When the battery level of the unit drops to an unacceptable level, the unit will emit Battery report to the nodes of Group 1.<\/li>\r\n<li>When performing Factory Reset the unit will send Device Reset Locally Notification to the node of Group 1.<\/li>\r\n<\/ul>"
+        },
+        {
+            "id": 2,
+            "label": "Basic Set",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "Basic Set",
+            "overview": "<p>Group 2 Commands:<\/p>\r\n<ul>\r\n<li>When the door\/window is opened, the unit will send BASIC_SET command which contains a value to the nodes of Group 2.<\/li>\r\n<li>When the door\/window is closed, the BASIC_SET command will also be sent to the nodes of Group 2.<\/li>\r\n<\/ul>"
+        }
+    ]
+}

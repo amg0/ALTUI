@@ -1,0 +1,405 @@
+{
+    "database_id": 735,
+    "label": "NE-NAS-PD01Z",
+    "manufacturer_name": "Zipato",
+    "manufacturer_id": "0131",
+    "device_ref": [
+        "0003:1089"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "PIR motion sensor and light measurement",
+    "overview": "",
+    "inclusion": "",
+    "exclusion": "",
+    "wakeup": "",
+    "protocol_version": 4.005,
+    "listening": false,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 7,
+                "name": "GENERIC_TYPE_SENSOR_NOTIFICATION"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_NOTIFICATION_SENSOR"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "30",
+                    "name": "SENSOR_BINARY",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_binary",
+                            "label": "Binary Sensor",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "31",
+                    "name": "SENSOR_MULTILEVEL",
+                    "version": "7",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "sensor_luminance",
+                            "label": "Sensor (luminance)",
+                            "config": [
+                                "type=LUMINANCE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_burglar",
+                            "label": "Alarm (burglar)",
+                            "config": [
+                                "type=BURGLAR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "80",
+                    "name": "BATTERY",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "84",
+                    "name": "WAKE_UP",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "Sensitivity level",
+            "description": "8 = Highest sensitivity, 255 = lowest sesitivity",
+            "overview": "<p>1. SENSITIVITY LEVEL SETTING<\/p> <p>This parameter defines the sensitivity of PIR sensor. It\u2019s recommended to test the sensor with moevements from a farthest end of the coverage area at the first time of use. If movements cannot be detected sensitively, simply adjust the sensitivity level with this parameter. This parameter can be configured with the value of 8 through 255, where 8 means high sensitivity and 255 means low sensitivity. Function: Sensivity Level Setting<\/p> <p>Parameter size: 1 byte<\/p> <p>Parameter number: 1<\/p> <p>Available settings: 8 ~ 255<\/p> <p>Default settings: 12<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 12,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 8,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 2,
+            "label": "ON \/ OFF Duration",
+            "description": "How long should the associated devices have ON status. ",
+            "overview": "<p>2. ON \/ OFF DURATION<\/p> <p>This parameter determines how long the associated devices should have ON status. For instace, if this parameter is set to 30 (sec), the PIR sensor will send a BASIC_SET command to associated device with valu BASIC_SET level if PIR sensor is triggered and associated device will be turned on 30 seconds begore it\u2019s turned off. This parameter value must be large as Parameter #. If user set this parameter to default by Configure CC, the parameter # will be set to default value.<\/p> <p>Function: ON \/ OFF duration setting<\/p> <p>Parameter size: 2 byte<\/p> <p>Parameter number: 2<\/p> <p>Available settings: 5~600 (seconds)<\/p> <p>Default setting: 30<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 5,
+            "value_max": 600,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "BASIC SET Level",
+            "description": "BASIC SET LEVEL",
+            "overview": "<p>3. BASIC SET LEVEL BASIC_SET command will be sent when PIR sensor is triggered. The receiver will take it into consideration; for instance, if a lamp module is receiving the BASIC_SET command of which value is decisive as to how bright of dim level of lamp module shall be.<\/p> <p>Function: Basic Set Level<\/p> <p>Parameter size: 1 byte<\/p> <p>Parameter number: 2<\/p> <p>Available settings: 0,1 ~ 99 or 255 0 - OFF, Alarm cancelling or turning device off<\/p> <p>1 ~ 99 or 255 - ON (Binary Switch Device)<\/p> <p>Dim level (Multilevel Switch Device)<\/p> <p>Default setting: 255<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": " PIR detection ENABLED \/ DISABLED",
+            "description": "Enable og disable the PIR sensor",
+            "overview": "<p>4. PIR DETECTION FUNCTION ENABLED \/ DISABLED This parameter can enable or disable the PIR sensor detecting function. Function: Enabled \/ Disabled PIR function<\/p> <p>Parameter size: 1 byte<\/p> <p>Parameter number: 4<\/p> <p>Available settings: 0 (disable) or 255 (enable)<\/p> <p>Default setting: 255\u00a0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Ambent illumination LUX level",
+            "description": "Lux value which determines when the light sensor is activated",
+            "overview": "<p>5. AMBIENT ILLUMINATION LUX LEVEL This parameter can set Lux value which determines when the light sensor is activated. If the ambient illumination level falls bellow this value and a person moves across or within the detection area, PIR sensor will send Z-Wave ON command (i.e. BASIC_set (value = parameter 3) to an associated device and activate it.<\/p> <p>Function: Lux Level Set<\/p> <p>Parameter size: 2 byte<\/p> <p>Parameter number: 5<\/p> <p>Available settings: 0~1000 (Lux)<\/p> <p>Default setting: 100 (Lux)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 100,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "Re-Trigger Interval",
+            "description": "Adjust the interval of being re-triggered",
+            "overview": "<p>6. RE-TRIGGER INTERVAL SETTING This parameter can be used to adjust the interval of being re-triggered after the PIR sensor has been triggered. This parameter value must be less than Paramater #2. If user sets this parameter to default by Configure CC, the parameter #2 will be set to default value.<\/p> <p>Function: Re-trigger interval setting<\/p> <p>Parameter size: 1 byte<\/p> <p>Parameter number: 6<\/p> <p>Available settings: 1~8 (s)<\/p> <p>Default setting: 8<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 8,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 8,
+            "options": []
+        },
+        {
+            "id": 7,
+            "label": "Light sensor polling interval",
+            "description": "How often should ambient illumination be evaluated",
+            "overview": "<p>7. LIGHT SENSOR POLLING INTERVAL This parameter can set the light sensor to measure ambient illumination level interval time. NOTE: This value must be less than Wakeup Interval Time!<\/p> <p>Function: Light Sensor Polling Interval<\/p> <p>Parameter size: 2 byte<\/p> <p>Parameter number: 7<\/p> <p>Available settings: 60~3600 (seconds)<\/p> <p>Default setting: 180 (s)<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 180,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 60,
+            "value_max": 3600,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "LUX level function enable",
+            "description": "See overview",
+            "overview": "<p>8. LUX LEVEL FUNCTION ENABLE If this parameter is set to \u201c1\u201d and when Lux level is less than the value defined by parameter #5, PIR sensor will send a BASIC_SET command frame (i.e. BASIC_SET (value = parameter 3) to an associated device and activate it. If Lux level is greater than the value defined by parameter #5, PIR sensor will not send BASIC_SET command frame.<\/p> <p>Function: Lux Level Enable<\/p> <p>Parameter size: 1 byte<\/p> <p>Parameter number: 8<\/p> <p>Available sttings: 0, 1<\/p> <p>Default setting: 0<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": []
+        },
+        {
+            "id": 9,
+            "label": "Ambient illumination report",
+            "description": "when lux changes by the number in this setting it is reported",
+            "overview": "<p>9. AMBIENT ILLUMINATION LUX LEVEL REPORT This parameter defines by how much Lux level must change in Lux to be reported to the main controller.<\/p> <p>Function: Lux Level Report<\/p> <p>Parameter size: 2 byte<\/p> <p>Parameter number: 9<\/p> <p>Available settings: 0~1000 (Lux)<\/p> <p>Default setting: 1<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1000,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Group 1",
+            "max_nodes": 4,
+            "controller": true,
+            "description": " lifeline service",
+            "overview": "<p><strong>GROUP 1<\/strong> is lifeline service that is assigned to sensor status - Open\/Close. It enables the sensor to send reports and readings to Z-Wave controller or Z-Wave Gateway whenever the sensor is triggered. This group supports: NOTIFICATION_REPORT_V4 SENSOR_BINARY_REPORT_V2 SENSOR_MULTILEVEL_REPORT_V7 BATTERY_REPORT_DEVICE_RESET_LOCALLY_NOTIFICATION<\/p>"
+        },
+        {
+            "id": 2,
+            "label": "Group 2",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "BASIC_SET control command group",
+            "overview": "<p><strong>GROUP 2<\/strong> allows sending control commands to associated devices such as relay module, lighting, etc. This association group is configured through the advanced parameters no. 2, 3, 5 and 8. This griup supports: BASIC_SET<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Group 3",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "NOTIFICATION_REPORT_V4",
+            "overview": "<p><strong>GROUP 3<\/strong> allows sending notifications to associated devices int his group. This group supports: NOTIFICATION_REPORT_V4<\/p>"
+        },
+        {
+            "id": 4,
+            "label": "Group 4",
+            "max_nodes": 4,
+            "controller": false,
+            "description": "Sensor Binary Report ",
+            "overview": "<p><strong>GROUP 4<\/strong> allows sending sending Sensor Binary Report to associated devices in this group. This group supports: SENSOR_BINARY_REPORT_V2<\/p>"
+        }
+    ]
+}

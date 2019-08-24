@@ -1,0 +1,835 @@
+{
+    "database_id": 541,
+    "label": "ZEN20",
+    "manufacturer_name": "Willis Electric Co., Ltd.",
+    "manufacturer_id": "015D",
+    "device_ref": [
+        "0651:F51C"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Smart Energy Power Strip",
+    "overview": "<ul><li>Wireless control of up to 5 electrical devices<\/li> <li>Scene inclusion for custom automation scenarios when included to a Z-Wave gateway controller<\/li> <li>Z-Wave Plus with improved 500 chip for faster and safer wireless communication\\<\/li> <li>Signal repeater for a stronger, more reliable network<\/li> <li>2 USB charging ports for your smart phone or tablet (no Z-Wave functionality)<\/li> <li>Built-in overload protection<\/li> <\/ul>",
+    "inclusion": "<ol><li>Plug the power strip into a grounded receptacle located within direct range from your Z- Wave gateway controller<\/li> <li>Put your Z-Wave controller in inclusion mode<\/li> <li>Press and release the CH1 power button on the strip 3 times quickly<\/li> <li>A new on \/ off device should appear on your controller's device list<\/li> <\/ol><h1>Troubleshooting Tips<\/h1> <p>If you are unable to include the Z-Wave power strip to your controller, please try one of the following:<\/p> <ul><li>Bring the power strip closer to your Z-Wave controller<\/li> <li>Press and release the CH1 power button quickly 7-8 times once you put the controller in the inclusion mode to ensure the command has gone through<\/li> <li>Put your controller in the EXCLUSION mode and press and release the CH1 power button quickly 3 times, then try adding it to your network again<\/li> <\/ul>",
+    "exclusion": "<ol><li>Plug the power strip into a grounded receptacle located within direct range from your Z-Wave gateway controller<\/li> <li>Put your Z-Wave controller in exclusion mode<\/li> <li>Press and release the CH1 power button on the strip 3 times quickly<\/li> <li>The device should disappear from your controller's device list<\/li> <\/ol><p>Please repeat the process following all steps carefully if the first attempt is unsuccessful<\/p>",
+    "wakeup": "",
+    "protocol_version": 4.005,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_BINARY"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_STRIP"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_BINARY"
+            },
+            "commandclasses": [
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 4,
+                "name": "SPECIFIC_TYPE_POWER_STRIP"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 1",
+                            "config": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 4,
+                "name": "SPECIFIC_TYPE_POWER_STRIP"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 2",
+                            "config": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 4,
+                "name": "SPECIFIC_TYPE_POWER_STRIP"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 3",
+                            "config": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 4,
+                "name": "SPECIFIC_TYPE_POWER_STRIP"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 4",
+                            "config": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 16,
+                "name": "GENERIC_TYPE_SWITCH_BINARY"
+            },
+            "specific_class": {
+                "id": 4,
+                "name": "SPECIFIC_TYPE_POWER_STRIP"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "25",
+                    "name": "SWITCH_BINARY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": false,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_binary",
+                            "label": "Switch 5",
+                            "config": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 1,
+            "label": "On\/Off Status Recovery After Power Failure",
+            "description": "",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Remember Previous State After Power Failure"
+                },
+                {
+                    "value": 1,
+                    "label": "Power Strip Automatically ON After Power Failure"
+                },
+                {
+                    "value": 2,
+                    "label": "Power Strip Automatically OFF After Power Failure"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Power Wattage Report Value Threshold",
+            "description": "Choose how you want your Power Strip to report power consumption to your hub",
+            "overview": "<p>Choose how you want your Power Strip to report power consumption to your hub. The number entered as value corresponds to the number of Watts the appliance needs to go over for the change to be reported. So if 5 Watts are entered by default, the smart plug will report any change in power usage over 5 Watts for each outlet (whether it\u2019s at least 5 Watts more or 5\u00a0Watts\u00a0less compared to previous report).<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 3,
+            "label": "Power Wattage Report Frequency",
+            "description": "The number entered as value corresponds to the number of seconds",
+            "overview": "<p>If 30 is entered, by default, the Strip will report power consumption (Wattage) every 30 seconds.\u00a0\u00a0Default set to 30.<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 30,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 5,
+            "value_max": 2678400,
+            "options": []
+        },
+        {
+            "id": 4,
+            "label": "Energy (kWh) Report Frequency",
+            "description": "Report interval of power consumption (W) to your controller (hub)",
+            "overview": "<p>The number entered as value corresponds to the number of seconds. So if 300 is entered by default, the power strip will report energy usage every 300 seconds (5 minutes).\u00a0 Default set to 300.<\/p>",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 300,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 5,
+            "value_max": 2678400,
+            "options": []
+        },
+        {
+            "id": 5,
+            "label": "Overload Protection",
+            "description": " Set the Watt level for overload protection to kick in",
+            "overview": "<p>The number entered as the value corresponds to the total number of Watts the Strip needs to detect across all 5 outlets to turn off automatically and send a notification to the hub.\u00a0 0 = overload protection disabled (we DON\u2019T recommend changing to this setting). Default set to 1500 Watts.\u00a0<\/p>",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 1500,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1500,
+            "options": []
+        },
+        {
+            "id": 6,
+            "label": "CH1 Auto Turn-Off Timer",
+            "description": "Enable or disable the auto turn-off timer for CH1 outlet",
+            "overview": "<p>If this feature is enabled, the device connected to CH1 outlet will automatically turn off after a fixed period of time from being turned on (set in parameter 7).<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "label": "CH1 Auto Turn-Off Setting",
+            "description": "Time in minutes to turn off the device connected to CH1 after being turned on",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 8,
+            "label": "CH1 Auto Turn-On Timer",
+            "description": "Enable or disable the auto turn-on timer for CH1 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "label": "CH1 Auto Turn-On Setting",
+            "description": "Time in minutes to turn on the device connected to CH1 after being turned off.",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 10,
+            "label": "CH2 Auto Turn-Off Timer",
+            "description": "Enable or disable the auto turn-off timer for CH2 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "label": "CH2 Auto Turn-Off Setting",
+            "description": "Time in minutes to turn off the device connected to CH2 after being turned on",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 12,
+            "label": "CH2 Auto Turn-On Timer",
+            "description": "Enable or disable the auto turn-on timer for CH2 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "label": "CH2 Auto Turn-On Setting",
+            "description": "Time in minutes to turn on the device connected to CH2 after being turned off",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 14,
+            "label": "CH3 Auto Turn-Off Timer",
+            "description": "Enable or disable the auto turn-off timer for CH3 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "label": "CH3  Auto Turn-Off Setting",
+            "description": "Time in minutes to turn off the device connected to CH3 after being turned on",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 16,
+            "label": "CH3 Auto Turn-On Timer",
+            "description": "Enable or disable the auto turn-on timer for CH3 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "label": "CH3 Auto Turn-On Setting",
+            "description": " Time in minutes to turn on the device connected to CH3 after being turned off",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 18,
+            "label": "CH4 Auto Turn-Off Timer",
+            "description": "Enable or disable the auto turn-off timer for CH4 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 19,
+            "label": "CH4 Auto Turn-Off Setting",
+            "description": "Time in minutes to turn off the device connected to CH4 after being turned on.",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 20,
+            "label": "CH4 Auto Turn-On Timer",
+            "description": "Enable or disable the auto turn-on timer for CH4 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "label": "CH4 Auto Turn-On Setting",
+            "description": "Time in minutes to turn on the device connected to CH4 after being turned off",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 22,
+            "label": "CH5 Auto Turn-Off Timer",
+            "description": "Enable or disable the auto turn-off timer for CH5 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 23,
+            "label": "CH5 Auto Turn-Off Setting",
+            "description": "Time in minutes to turn off the device connected to CH5 after being turned on.",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 24,
+            "label": "CH5 Auto Turn-On Timer",
+            "description": "Enable or disable the auto turn-on timer for CH5 outlet",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Timer Disabled (Default)"
+                },
+                {
+                    "value": 1,
+                    "label": "Timer Enabled"
+                }
+            ]
+        },
+        {
+            "id": 25,
+            "label": "CH5 Auto Turn-On Setting",
+            "description": "Time in minutes to turn on the device connected to CH5 after being turned off",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 60,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 65535,
+            "options": []
+        },
+        {
+            "id": 26,
+            "label": "Manual Control",
+            "description": "Enable \/ Disable Physical Button Functionality",
+            "overview": "<p>Choose if you want to use the physical buttons on Strip to turn the outlets on or off manually or if you want to disable this function. If this parameter is set to 0 (disabled), you will only be able to turn any of the outlets on or off remotely using your Z-Wave gateway controller.<\/p> <p>Value 0 \u2013 manual control disabled for all outlets;<\/p> <p>Value 1 \u2013 manual control enabled for all outlets (default)<\/p> <p>You can also disable\/enable manual control from all outlets by performing the following sequence on any of the channel buttons: click-click-click-click\u2019n-hold for at least 10 seconds. All LED indicators will flash to confirm the setting change.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Manual control disabled for all outlets"
+                },
+                {
+                    "value": 1,
+                    "label": "Manual control enabled for all outlets (Default)"
+                }
+            ]
+        },
+        {
+            "id": 27,
+            "label": "LED Indicator Mode",
+            "description": "LED Outlet Indicator Behavior",
+            "overview": "<p>Choose if you want the LED indicators next to each outlet to come on when power is on or off, or if you want to disable the LED lights.<\/p> <p>Values:<\/p> <p>0 \u2013 LED indicator is on when power is of and off when power is on;\u00a0<\/p> <p>1 \u2013 LED indicator is on when power is on and off when power is off (default);<\/p> <p>2 \u2013 LED indicator is always off, regardless of power status.\u00a0<\/p> <p>You can also switch between the LED indicator modes by clicking the CH1 button 6 times quickly. All LED indicators will flash to confirm the setting change<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "LED on when power is off and off when power is on"
+                },
+                {
+                    "value": 1,
+                    "label": "LED on when power is on and off when power is off"
+                },
+                {
+                    "value": 2,
+                    "label": "LED is always off, regardless of power status"
+                }
+            ]
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        }
+    ]
+}

@@ -1,0 +1,102 @@
+{
+    "database_id": 941,
+    "label": "Tuxedo Touch",
+    "manufacturer_name": "Honeywell",
+    "manufacturer_id": "0039",
+    "device_ref": [
+        "0001:0001"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Tuxedo Touch Keypad and Z-Wave Controller",
+    "overview": "<p>Honeywell Home Tuxedo Touch is a 7\", high-resolution graphic touchscreen and controller that integrates security with home and business automation. It provides opportunities to capture new prospects and markets by seamlessly integrating security with voice commands, video viewing and recording, and the ability to control Z-Wave\u00ae enabled thermostats, lights, locks and shades.\u00a0 It may be used as a secondary controller within a Z-Wave network.<\/p>",
+    "inclusion": "<p><strong>Note that any z-wave devices that may be on the Tuxedo Touch if it acts as a primary controller will be removed when it is added as a secondary controller!\u00a0 <\/strong>It is recommended that all devices that may be on the Tuxedo Touch if it acts as primary controller be manually removed and added to the new primary controller before changing the Tuxedo Touch to a secondary controller.<\/p> <p>Note that all devices on the primary controller will be added to the Tuxedo Touch when it becomes a secondary controller, but device names will not be moved over.\u00a0 They must manually be changed on the Tuxedo Touch if this is desired.<\/p> <p>Access the Automation menu from the main page of the Tuxedo Touch.\u00a0 Press the Z-Wave Setup button (third button from the left) and toggle the Z-Wave Primary Ctrl button to change the Tuxedo Touch to be a secondary controller.\u00a0 It will prompt you to allow the change.<\/p> <p>Put the primary controller in inclusion mode.<\/p> <p>From the Z-Wave Setup screen on the Tuxedo Touch, press the Add Device button.\u00a0 The primary controller should add the Tuxedo Touch as a secondary controller.\u00a0 If successful, the Tuxedo Touch will display \"Controller Add Success.\"<\/p>",
+    "exclusion": "<p>Put the primary controller in exclusion mode.<\/p> <p>On the Tuxedo Touch, press Automation and then Z-Wave Setup.\u00a0 From the Z-Wave Setup screen, press Remove Device.<\/p> <p>From the Z-Wave Setup screen on the Tuxedo Touch, press the Add Device button.\u00a0 The primary controller should exclude the Tuxedo Touch as a secondary controller.<\/p>",
+    "wakeup": "",
+    "protocol_version": 0,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": false,
+    "beaming": true,
+    "library_type": {
+        "id": 0,
+        "name": "Unknown"
+    },
+    "basic_class": {
+        "id": 2,
+        "name": "BASIC_TYPE_STATIC_CONTROLLER"
+    },
+    "generic_class": {
+        "id": 2,
+        "name": "GENERIC_TYPE_STATIC_CONTROLLER"
+    },
+    "specific_class": {
+        "id": 2,
+        "name": "SPECIFIC_TYPE_NOT_USED"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 2,
+                "name": "BASIC_TYPE_STATIC_CONTROLLER"
+            },
+            "generic_class": {
+                "id": 2,
+                "name": "GENERIC_TYPE_STATIC_CONTROLLER"
+            },
+            "specific_class": {
+                "id": 0,
+                "name": null
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": []
+}

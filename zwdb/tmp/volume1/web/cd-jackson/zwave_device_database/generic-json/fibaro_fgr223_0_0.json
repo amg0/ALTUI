@@ -1,0 +1,1389 @@
+{
+    "database_id": 983,
+    "label": "FGR223",
+    "manufacturer_name": "Fibargroup",
+    "manufacturer_id": "010F",
+    "device_ref": [
+        "0303:1000"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Roller Shutter 3",
+    "overview": "<p>FIBARO Roller Shutter 3\u00a0is a device designed to control roller blinds, awnings, venetian blinds, gates and other single phase, AC powered devices.<\/p> <p>Roller Shutter 3\u00a0allows precise positioning of roller blinds or venetian blind lamellas. The device is equipped with power and energy monitoring. It allows to control connected devices either via the Z-Wave network or via a switch connected directly to it.<\/p>",
+    "inclusion": "<p>Adding (Inclusion)\u00a0\u2013 Z-Wave device learning mode, allowing to add the device to existing Z-Wave network.<\/p> <p>To add the device to the Z-Wave network\u00a0using Smart Start:<\/p> <ol><li>Set the main controller in Security S2 Authenticated add mode (see the controller\u2019s manual).<\/li> <li>Scan the DSK QR code or input the underlined part of the DSK (label on the bottom of the box).<br \/>(on the device label).<\/li> <li>Power the device (turn on the mains voltage).<\/li> <li>LED will start blinking yellow, wait for the adding process to end.<\/li> <li>Successful adding will be confirmed by the Z-Wave controller\u2019s message.<\/li> <\/ol><p>To add the device to the Z-Wave network\u00a0manually:<\/p> <ol><li>Power the device.<\/li> <li>Identify the S1 switch.<\/li> <li>Set the main controller in (Security\/non-Security Mode) add mode (see the controller\u2019s manual).<\/li> <li>Quickly, triple click the S1 switch.<\/li> <li>If you are adding in Security S2, scan the DSK QR code or input the underlined part of the DSK (label on the bottom of the box)<\/li> <li>Wait for the adding process to end.<\/li> <li>Successful adding will be confirmed by the Z-Wave controller\u2019s message.<\/li> <\/ol><p>In case of problems with adding using the S1 switch, use B-button instead (located on the housing).<br \/>SmartStart enabled products can be added to SmartStart enabled Z-Wave controller by scanning the Z-Wave QR Code present on the product. SmartStart product will be added automatically within 10 minutes of being switched on in the network range.<\/p>",
+    "exclusion": "<p>Removing (Exclusion)\u00a0\u2013 Z-Wave device learning mode, allowing to remove the device from existing Z-Wave network. Removing the device restores all the default parameters of the device, but does not reset power metering data.<\/p> <p>To remove the device from the Z-Wave network:<\/p> <ol><li>Make sure the device is powered.<\/li> <li>Identify the S1 switch.<\/li> <li>Set the main controller in remove mode (see the controller\u2019s manual).<\/li> <li>Quickly, triple click the S1 switch.<\/li> <li>Wait for the removing process to end.<\/li> <li>Successful removing will be confirmed by the Z-Wave controller\u2019s message.<\/li> <\/ol><p>In case of problems with removing using the S1 switch, use B-button instead (located on the housing).<\/p> <p>If parameter 40 enables scenes for triple S1 click, disable it or use B-button instead to remove the device.<\/p> <p>If parameter 24 is set to 1, use S2 switch instead to remove the device.<\/p>",
+    "wakeup": "",
+    "protocol_version": 6.002,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": true,
+    "library_type": {
+        "id": 3,
+        "name": "LIB_SLAVE_ENHANCED"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_CLASS_B_MOTOR_CONTROL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_CLASS_B_MOTOR_CONTROL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "22",
+                    "name": "APPLICATION_STATUS",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "blinds_control",
+                            "label": "Blinds Control",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh)",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts)",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "56",
+                    "name": "CRC_16_ENCAP",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5A",
+                    "name": "DEVICE_RESET_LOCALLY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5B",
+                    "name": "CENTRAL_SCENE",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "scene_number",
+                            "label": "Scene Number",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "60",
+                    "name": "MULTI_INSTANCE",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "70",
+                    "name": "CONFIGURATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_power",
+                            "label": "Alarm (power)",
+                            "config": [
+                                "type=POWER_MANAGEMENT"
+                            ]
+                        },
+                        {
+                            "type": "alarm_system",
+                            "label": "Alarm (system)",
+                            "config": [
+                                "type=SYSTEM"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "75",
+                    "name": "PROTECTION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "7A",
+                    "name": "FIRMWARE_UPDATE_MD",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_CLASS_B_MOTOR_CONTROL"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "22",
+                    "name": "APPLICATION_STATUS",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "blinds_control",
+                            "label": "Blinds Control 1",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "32",
+                    "name": "METER",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "meter_kwh",
+                            "label": "Electric meter (kWh) 1",
+                            "config": [
+                                "type=E_KWh"
+                            ]
+                        },
+                        {
+                            "type": "meter_watts",
+                            "label": "Electric meter (watts) 1",
+                            "config": [
+                                "type=E_W"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "71",
+                    "name": "ALARM",
+                    "version": "8",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "alarm_power",
+                            "label": "Alarm (power) 1",
+                            "config": [
+                                "type=POWER_MANAGEMENT"
+                            ]
+                        },
+                        {
+                            "type": "alarm_system",
+                            "label": "Alarm (system) 1",
+                            "config": [
+                                "type=SYSTEM"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 6,
+                "name": "SPECIFIC_TYPE_CLASS_B_MOTOR_CONTROL"
+            },
+            "commandclasses": [
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "0",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "22",
+                    "name": "APPLICATION_STATUS",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "blinds_control",
+                            "label": "Blinds Control 2",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "59",
+                    "name": "ASSOCIATION_GROUP_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "5E",
+                    "name": "ZWAVE_PLUS_INFO",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "2",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "8E",
+                    "name": "MULTI_INSTANCE_ASSOCIATION",
+                    "version": "3",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "98",
+                    "name": "SECURITY",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [
+        {
+            "id": 20,
+            "label": "Switch type",
+            "description": "Switch type",
+            "overview": "<p>This parameter defines as what type the device should treat the switch connected to the S1 and S2 terminals.<\/p> <p>This parameter is not relevant in gate operating modes (parameter 151 set to 3 or 4). In this case switch always works as a momentary and has to be connected to S1 terminal.<\/p> <p>If parameter 20 is set to 1 (toggle switch), change value of pa- rameter 153 to 0 for slats to work properly.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "momentary switches"
+                },
+                {
+                    "value": 1,
+                    "label": "toggle switches"
+                },
+                {
+                    "value": 2,
+                    "label": "single"
+                }
+            ]
+        },
+        {
+            "id": 24,
+            "label": "Inputs orientation",
+            "description": "Inputs orientation",
+            "overview": "<p>This parameter allows reversing the operation of switches connected to S1 and S2 without changing the wiring.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "default"
+                },
+                {
+                    "value": 1,
+                    "label": "reversed"
+                }
+            ]
+        },
+        {
+            "id": 25,
+            "label": "Outputs orientation",
+            "description": "Outputs orientation",
+            "overview": "<p>This parameter allows reversing the operation of Q1 and Q2 without changing the wiring (in case of invalid motor connection) to ensure proper operation.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "default"
+                },
+                {
+                    "value": 1,
+                    "label": "reversed"
+                }
+            ]
+        },
+        {
+            "id": 30,
+            "label": "Alarm configuration",
+            "description": "Alarm configuration - Blinds",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": []
+        },
+        {
+            "id": 30,
+            "label": "Action",
+            "description": "Action for Blinds",
+            "overview": "",
+            "size": 4,
+            "bitmask": "000000FF",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No action"
+                },
+                {
+                    "value": 1,
+                    "label": "Open blinds"
+                },
+                {
+                    "value": 2,
+                    "label": "Close blinds"
+                }
+            ]
+        },
+        {
+            "id": 30,
+            "label": "Event\/State Parameters",
+            "description": "Event\/State Parameters for blinds",
+            "overview": "",
+            "size": 4,
+            "bitmask": "0000FF00",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 30,
+            "label": "Notification Status",
+            "description": "Notification Status for Blinds",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00FF0000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 30,
+            "label": "Notification Type",
+            "description": "Notification Type for Blinds",
+            "overview": "",
+            "size": 4,
+            "bitmask": "7F000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 31,
+            "label": "Alarm configuration",
+            "description": "Alarm configuration - Water",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": []
+        },
+        {
+            "id": 31,
+            "label": "Action",
+            "description": "Action for Water",
+            "overview": "",
+            "size": 4,
+            "bitmask": "000000FF",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No action"
+                },
+                {
+                    "value": 1,
+                    "label": "Open blinds"
+                },
+                {
+                    "value": 2,
+                    "label": "Close blinds"
+                }
+            ]
+        },
+        {
+            "id": 31,
+            "label": "Event\/State Parameters",
+            "description": "Event\/State Parameters for Water",
+            "overview": "",
+            "size": 4,
+            "bitmask": "0000FF00",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 31,
+            "label": "Notification Status",
+            "description": "Notification Status for Water",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00FF0000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 31,
+            "label": "Notification Type",
+            "description": "Notification Type for Water",
+            "overview": "",
+            "size": 4,
+            "bitmask": "7F000000",
+            "default": 5,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 32,
+            "label": "Alarm configuration",
+            "description": "Alarm configuration - Smoke",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": []
+        },
+        {
+            "id": 32,
+            "label": "Action",
+            "description": "Action for Smoke",
+            "overview": "",
+            "size": 4,
+            "bitmask": "000000FF",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No action"
+                },
+                {
+                    "value": 1,
+                    "label": "Open blinds"
+                },
+                {
+                    "value": 2,
+                    "label": "Close blinds"
+                }
+            ]
+        },
+        {
+            "id": 32,
+            "label": "Event\/State Parameters",
+            "description": "Event\/State Parameters for Smoke",
+            "overview": "",
+            "size": 4,
+            "bitmask": "0000FF00",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 32,
+            "label": "Notification Status",
+            "description": "Notification Status for Smoke",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00FF0000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 32,
+            "label": "Notification Type",
+            "description": "Notification Type for Smoke",
+            "overview": "",
+            "size": 4,
+            "bitmask": "7F000000",
+            "default": 1,
+            "read_only": true,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 33,
+            "label": "Alarm configuration",
+            "description": "Alarm configuration - CO",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": []
+        },
+        {
+            "id": 33,
+            "label": "Action",
+            "description": "Action for CO",
+            "overview": "",
+            "size": 4,
+            "bitmask": "000000FF",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No action"
+                },
+                {
+                    "value": 1,
+                    "label": "Open blinds"
+                },
+                {
+                    "value": 2,
+                    "label": "Close blinds"
+                }
+            ]
+        },
+        {
+            "id": 33,
+            "label": "Event\/State Parameters",
+            "description": "Event\/State Parameters for CO",
+            "overview": "",
+            "size": 4,
+            "bitmask": "0000FF00",
+            "default": 0,
+            "read_only": true,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 33,
+            "label": "Notification Status",
+            "description": "Notification Status for CO",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00FF0000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 33,
+            "label": "Notification Type",
+            "description": "Notification Type for CO",
+            "overview": "",
+            "size": 4,
+            "bitmask": "7F000000",
+            "default": 2,
+            "read_only": false,
+            "write_only": true,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 34,
+            "label": "Alarm configuration",
+            "description": "Alarm configuration - Heat",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 0,
+            "options": []
+        },
+        {
+            "id": 34,
+            "label": "Action",
+            "description": "Action for Heat",
+            "overview": "",
+            "size": 4,
+            "bitmask": "000000FF",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "No action"
+                },
+                {
+                    "value": 1,
+                    "label": "Open blinds"
+                },
+                {
+                    "value": 2,
+                    "label": "Close blinds"
+                }
+            ]
+        },
+        {
+            "id": 34,
+            "label": "Event\/State Parameters",
+            "description": "Event\/State Parameters for Heat",
+            "overview": "",
+            "size": 4,
+            "bitmask": "0000FF00",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 34,
+            "label": "Notification Status",
+            "description": "Notification Status for Heat",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00FF0000",
+            "default": 255,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 34,
+            "label": "Notification Type",
+            "description": "Notification Status for Heat",
+            "overview": "",
+            "size": 4,
+            "bitmask": "7F000000",
+            "default": 4,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 40,
+            "label": "S1 Switch Scenes sent",
+            "description": "Parameter values may be combined",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 15,
+            "options": []
+        },
+        {
+            "id": 41,
+            "label": "S2 Switch Scenes sent",
+            "description": "Parameter values may be combined",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 15,
+            "options": []
+        },
+        {
+            "id": 60,
+            "label": "Measuring power consumed by the device itself",
+            "description": "Measuring power consumed by the device itself",
+            "overview": "",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 1,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Function inactive"
+                },
+                {
+                    "value": 1,
+                    "label": "Function active"
+                }
+            ]
+        },
+        {
+            "id": 61,
+            "label": "Power reports",
+            "description": "Power reports - on change",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 15,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 500,
+            "options": []
+        },
+        {
+            "id": 62,
+            "label": "Power reports",
+            "description": "Power reports - periodic",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 3600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32400,
+            "options": []
+        },
+        {
+            "id": 65,
+            "label": "Energy reports",
+            "description": "Energy reports - on change",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 500,
+            "options": []
+        },
+        {
+            "id": 66,
+            "label": "Energy reports",
+            "description": "Energy reports - periodic",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 3600,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 32400,
+            "options": []
+        },
+        {
+            "id": 150,
+            "label": "Force calibration",
+            "description": "Force calibration",
+            "overview": "<p>By setting this parameter to 2 the device enters the calibration mode. The parameter relevant only if the device is set to work in positioning mode (parameter 151 set to 1, 2 or 4).<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 0,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "device is not calibrated"
+                },
+                {
+                    "value": 1,
+                    "label": "device is calibrated"
+                },
+                {
+                    "value": 2,
+                    "label": "force device calibration"
+                }
+            ]
+        },
+        {
+            "id": 151,
+            "label": "Operating mode",
+            "description": "Operating mode",
+            "overview": "<p>This parameter allows adjusting operation according to the connect- ed device.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 1,
+            "value_max": 6,
+            "options": [
+                {
+                    "value": 1,
+                    "label": "roller blind"
+                },
+                {
+                    "value": 2,
+                    "label": "Venetian blind"
+                },
+                {
+                    "value": 3,
+                    "label": "gate w\/o positioning"
+                },
+                {
+                    "value": 4,
+                    "label": "gate with positioning"
+                },
+                {
+                    "value": 5,
+                    "label": "roller blind with built-in driver"
+                },
+                {
+                    "value": 6,
+                    "label": "roller blind with built-in driver (impulse)"
+                }
+            ]
+        },
+        {
+            "id": 152,
+            "label": "Venetian blind - time of full turn of the slats",
+            "description": "Venetian blind - time of full turn of the slats",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 150,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 90000,
+            "options": []
+        },
+        {
+            "id": 153,
+            "label": "Set slats back to previous position",
+            "description": "Set slats back to previous position",
+            "overview": "<p>For Venetian blinds (parameter 151 set to 2) the parameter determines slats positioning in various situations.<br \/>The parameter is irrelevant for other modes.<br \/>If parameter 20 is set to 1 (toggle switch), change value of pa- rameter 153 to 0 for slats to work properly.<\/p>",
+            "size": 1,
+            "bitmask": "00000000",
+            "default": 1,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 2,
+            "options": [
+                {
+                    "value": 0,
+                    "label": "slats return #1"
+                },
+                {
+                    "value": 1,
+                    "label": "slats return #2"
+                },
+                {
+                    "value": 2,
+                    "label": "slats return #3"
+                }
+            ]
+        },
+        {
+            "id": 154,
+            "label": "Delay motor stop",
+            "description": "Delay motor stop after reaching end switch",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 600,
+            "options": []
+        },
+        {
+            "id": 155,
+            "label": "Motor operation detection",
+            "description": "Motor operation detection",
+            "overview": "",
+            "size": 2,
+            "bitmask": "00000000",
+            "default": 10,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 255,
+            "options": []
+        },
+        {
+            "id": 156,
+            "label": "Time of up movement",
+            "description": "Time of up movement",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 6000,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 90000,
+            "options": []
+        },
+        {
+            "id": 157,
+            "label": "Time of down movement",
+            "description": "Time of down movement",
+            "overview": "",
+            "size": 4,
+            "bitmask": "00000000",
+            "default": 6000,
+            "read_only": false,
+            "write_only": false,
+            "value_min": 0,
+            "value_max": 90000,
+            "options": []
+        }
+    ],
+    "associations": [
+        {
+            "id": 1,
+            "label": "Lifeline",
+            "max_nodes": 1,
+            "controller": true,
+            "description": "",
+            "overview": ""
+        },
+        {
+            "id": 2,
+            "label": "Roller Shutter",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Shutter position control",
+            "overview": "<p>\"Roller Shutter\" is assigned to shutter position control \u2013 UP\/DOWN (uses Switch Multilevel command class).<\/p>"
+        },
+        {
+            "id": 3,
+            "label": "Slats",
+            "max_nodes": 5,
+            "controller": false,
+            "description": "Slats position control",
+            "overview": "<p>\"Slats\" is assigned to slats position control \u2013 UP\/DOWN (uses Switch Multilevel command class).<\/p>"
+        }
+    ]
+}

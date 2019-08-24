@@ -1,0 +1,163 @@
+{
+    "database_id": 656,
+    "label": "CA600",
+    "manufacturer_name": "Intermatic",
+    "manufacturer_id": "0005",
+    "device_ref": [
+        "4341:0600"
+    ],
+    "version_min": 0,
+    "version_max": 255.255,
+    "decription": "Dimmer Switch",
+    "overview": "<p>CA 600 is a 600 watt wall-mounted dimmer switch.<\/p>",
+    "inclusion": "<p>If you\u2019re using a Z-Stick:<\/p> <ol><li>Follow installation instructions for the light switch<\/li> <li>If light switch is ready for pairing the LED will pulse red &amp; blue<\/li> <li>If your Z-Stick is plugged into a gateway or a computer, unplug it.<\/li> <li>Take your Z-Stick to your\u00a0light Switch.<\/li> <li>Press the Action Button on your Z-Stick.<\/li> <li>Press press the toggle on your light Switch.<\/li> <li>If your switch has been successfully linked to your Z-Wave network, its Status LED will no longer blink. If the linking was unsuccessful, the Status LED continues to blink. Repeat the above steps.<\/li> <li>Press the Action Button on your Z-Stick to take it out of installation mode<\/li> <\/ol>",
+    "exclusion": "<p>If you\u2019re using a Z-Stick:<\/p> <ol><li>Unplug the Z-Stick from your gateway or computer.<\/li> <li>Take your Z-Stick to your\u00a0light\u00a0switch.<\/li> <li>Press the Action Button on your Z-Stick.<\/li> <li>Press the toggle on your light switch.<\/li> <li>If your\u00a0light switch has been successfully removed from your network, its Status LED will blink. If the removal was unsuccessful, its Status LED will not blink.<\/li> <li>Press the Action Button on your Z-Stick to take it out of removal mode.<\/li> <\/ol>",
+    "wakeup": "",
+    "protocol_version": 2.009,
+    "listening": true,
+    "frequently_listening": false,
+    "routing": true,
+    "beaming": false,
+    "library_type": {
+        "id": 6,
+        "name": "LIB_SLAVE_ROUTING"
+    },
+    "basic_class": {
+        "id": 4,
+        "name": "BASIC_TYPE_ROUTING_SLAVE"
+    },
+    "generic_class": {
+        "id": 4,
+        "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+    },
+    "specific_class": {
+        "id": 4,
+        "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+    },
+    "endpoints": [
+        {
+            "id": 0,
+            "basic_class": {
+                "id": 4,
+                "name": "BASIC_TYPE_ROUTING_SLAVE"
+            },
+            "generic_class": {
+                "id": 17,
+                "name": "GENERIC_TYPE_SWITCH_MULTILEVEL"
+            },
+            "specific_class": {
+                "id": 1,
+                "name": "SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL"
+            },
+            "commandclasses": [
+                {
+                    "id": "00",
+                    "name": "NO_OPERATION",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "20",
+                    "name": "BASIC",
+                    "version": "1",
+                    "nif": false,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "26",
+                    "name": "SWITCH_MULTILEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": true,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": [
+                        {
+                            "type": "switch_dimmer",
+                            "label": "Dimmer",
+                            "config": []
+                        }
+                    ]
+                },
+                {
+                    "id": "27",
+                    "name": "SWITCH_ALL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "72",
+                    "name": "MANUFACTURER_SPECIFIC",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "73",
+                    "name": "POWERLEVEL",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "85",
+                    "name": "ASSOCIATION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "86",
+                    "name": "VERSION",
+                    "version": "1",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                },
+                {
+                    "id": "91",
+                    "name": "MANUFACTURER_PROPRIETARY",
+                    "version": "0",
+                    "nif": true,
+                    "basic": false,
+                    "secure": false,
+                    "nonsecure": true,
+                    "config": "",
+                    "channels": []
+                }
+            ]
+        }
+    ],
+    "parameters": [],
+    "associations": []
+}
