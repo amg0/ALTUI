@@ -1,1 +1,0 @@
-( for i in *.json ; do cat $i ; echo ',' ; done ) >all.txt
