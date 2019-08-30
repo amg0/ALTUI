@@ -1387,6 +1387,11 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return jqxhr;
 	};
 
+	function _forceRefreshWorkflows(cbfunc) {
+		var jqxhr = _httpGet("?id=lr_ALTUI_Handler&command=refreshWorkflows",{dataType: "json",},cbfunc);
+		return jqxhr;
+	}
+	
 	function _getWorkflowHistory(altuiid,cbfunc) {
 		// var cmd = "cat /var/log/cmh/LuaUPnP.log | grep 'Wkflow - nextWorkflowState('".format(altuiid);
 		// var cmd = "tail -n 2000 /var/log/cmh/LuaUPnP.log | grep '[0123456789]: ALTUI: Wkflow - nextWorkflowState(.*, {0},.*==>'".format(altuiid);
@@ -2314,6 +2319,13 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 				// console.log("doPart() - clearData %o",context)
 				// no more data to send but we need to clean up Vera to remove extra variable
 				_clearData(context.doPost, context.handle, context.key, context.name, context.npage, function(data) {
+					// vera specific logic: if saveData was for "Wflow", "Workflows"  we force a workflow refresh of the lua driver cache )
+					if ((context.key=="Wflow") && (context.name=="Workflows")) {
+						_forceRefreshWorkflows( function(data) {
+							cbfunc("ok");	// callback when the refresh was done
+						})
+						return // we will call back later
+					}
 					// now it is finished
 					cbfunc("ok");
 				});
@@ -2706,6 +2718,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 	getWorkflows	: _getWorkflows,
 	getWorkflowStatus : _getWorkflowStatus,
 	getWorkflowHistory: _getWorkflowHistory,
+	forceRefreshWorkflows: _forceRefreshWorkflows,
 	isWorkflowEnabled : _isWorkflowEnabled,
 	getPlugins		: _getPlugins,
 	getPluginByID	: _getPluginByID,

@@ -9,7 +9,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.44"
+local version = "v2.45"
 local SWVERSION = "3.4.1" -- "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_TMP_PREFIX = "altui-"
@@ -841,6 +841,20 @@ local function getWorkflowsDescr(lul_device)
 		end
 
 	end
+	
+	-- unpacking the graph json for all
+	for k,v in pairs(workflows) do
+		local status,results = pcall( json.decode, v["graph_json"])
+		if (status==true) then
+			workflows[k]["graph_json"] = results
+		else
+			error(string.format("Wkflow - initWorkflows fails to decode graph string for workflow %s", v.altuiid ))
+			workflows[k]["graph_json"] = {
+				cells={}
+			}
+		end
+	end
+	
 	debug(string.format("Wkflow - getWorkflowsDescr returning %s",	json.encode(workflows)	))
 	return workflows
 end
@@ -987,18 +1001,9 @@ local function initWorkflows(lul_device,pendingReset)
 	debug(string.format("Wkflow - WorkflowsActiveState = %s",json.encode(WorkflowsActiveState)))
 
 	Workflows = getWorkflowsDescr(lul_device)
+
 	-- decode the graph json which is stored as a string inside the string
 	for k,v in pairs(Workflows) do
-
-		local status,results = pcall( json.decode, Workflows[k]["graph_json"])
-		if (status==true) then
-			Workflows[k]["graph_json"] = results
-		else
-			error(string.format("Wkflow - initWorkflows fails to decode graph string for workflow %s", Workflows[k].altuiid ))
-			Workflows[k]["graph_json"] = {
-				cells={}
-			}
-		end
 
 		if (WorkflowsVariableBag[Workflows[k].altuiid]==nil) then
 			WorkflowsVariableBag[Workflows[k].altuiid] = {}
@@ -1879,8 +1884,8 @@ local htmlAltuiScripts = [[
 
 local htmlScripts = [[
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/@swversion@/jquery.min.js" ></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.14/lodash.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.js" ></script>
 	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
@@ -2294,6 +2299,13 @@ local function GoogleAuthCallback(command,lul_device)
 	return _helperGoogleAuthCallback(url,lul_device)
 end
 
+function refreshWorkflows(lul_device)
+	debug('refreshWorkflows: for '.. lul_device)
+	lul_device = tonumber(lul_device)
+	Workflows = getWorkflowsDescr(lul_device) 
+	return true
+end
+
 function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 	debug('myALTUI_Handler: request is: '..tostring(lul_request))
 	debug('myALTUI_Handler: parameters is: '..json.encode(lul_parameters))
@@ -2669,8 +2681,15 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				return	json.encode(WorkflowsVariableBag), "application/json"
 			end,
 		["getWorkflows"] =
-			function(params)	-- return the data providers database in JSON
+			function(params)	
+				--Workflows = getWorkflowsDescr(lul_device) -- this hangs lua,  too many thread probably at this point.
 				return	json.encode(Workflows), "application/json"
+			end,
+		["refreshWorkflows"] =
+			function(params)	
+				local result = luup.call_delay("refreshWorkflows",1, deviceID)
+				--Workflows = getWorkflowsDescr(lul_device) -- this hangs lua,  too many thread probably at this point.
+				return	json.encode( (result==0) and "success" or "failure" ), "application/json"
 			end,
 		["getCustomPages"]=
 			function(params)

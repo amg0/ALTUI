@@ -735,6 +735,9 @@ var MultiBox = ( function( window, undefined ) {
 	function _getWorkflows(cbfunc) {
 		return _controllers[0].controller.getWorkflows(cbfunc);
 	};
+	function _forceRefreshWorkflows(cbfunc) {
+		return _controllers[0].controller.forceRefreshWorkflows(cbfunc);
+	};
 	function _getCustomPages(cbfunc) {
 		return _controllers[0].controller.getCustomPages(cbfunc);
 	}
@@ -1008,6 +1011,7 @@ var MultiBox = ( function( window, undefined ) {
 	getWorkflows		: _getWorkflows,
 	getWorkflowStatus	: _getWorkflowStatus,
 	getWorkflowHistory	: _getWorkflowHistory,
+	forceRefreshWorkflows: _forceRefreshWorkflows,
 	isWorkflowEnabled	: _isWorkflowEnabled,
 
 	// pages
