@@ -1868,7 +1868,35 @@ var UIManager  = ( function( window, undefined ) {
 	};
 
 	function _displayJson(type,obj) {
-		return "<pre id='altui-json-"+type+"' class='altui-json-code'>"+JSON.stringify( obj )+"</pre>";
+		return "<pre id='altui-"+type+"' class='altui-code'>"+JSON.stringify( obj )+"</pre>";
+	};
+  
+  function _displayLua(type,obj) {
+    function paramsFromArray(args) {
+      var str=[]
+      $.each(args, function(idx,arg) {
+        str.push('["{0}"]="{1}"'.format(arg.name, arg.value))
+      })
+      return "{"+ str.join(",") +"}"
+    }
+    
+    var lua = ""
+    $.each(obj, function(idx,group) {
+      lua += "function delay_{0}()\n".format(group.delay)
+      $.each(group.actions, function(idx2,action) {
+        lua+='\tluup.call_action("{0}", "{1}", {3}, {2})\n'.format(
+          action.service,
+          action.action,
+          action.device,
+          paramsFromArray(action.arguments)
+        )
+      })
+      lua += "end\n"
+    })
+    $.each(obj, function(idx,group) {
+      lua += 'luup.call_delay("delay_{0}", {0}, "")\n'.format(group.delay)
+    })
+		return "<pre id='altui-"+type+"' class='altui-code'>"+lua+"</pre>";
 	};
 
 	function _displayTimer(timer,options) {
@@ -1927,7 +1955,7 @@ var UIManager  = ( function( window, undefined ) {
 		var html = "";
 		options = $.extend({ only_text:false, add_button:true , add_json:true },options);	// set defaults
 		if (options.add_json==true)
-			html += _displayJson( 'Timers', timers);
+			html += _displayJson( 'json-Timers', timers);
 		try {
 			html +="<table class='table table-responsive-OFF table-sm'>";
 			html +="<tbody>";
@@ -6443,6 +6471,7 @@ var UIManager  = ( function( window, undefined ) {
 
 	//drawing functions
 	displayJson			: _displayJson,
+  displayLua			: _displayLua,
 	displayTimer		: _displayTimer,
 	displayTimers		: _displayTimers,
 	jobStatusToColor	: _jobStatusToColor,

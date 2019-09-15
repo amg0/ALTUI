@@ -1968,7 +1968,7 @@ var HTMLUtils = (function() {
 	// {id:'Lua', title:_T("Lua"), html:_displayLua()},
 	// {id:'Actions', title:_T("Actions"), html:_displayActions()},
 	// ];
-	function _createAccordeon(cls,panels,button,id) {
+	function _createAccordeon(cls,panels,buttons,id) {
 		var bFirst = true;
 		var html="";
 		var id = id||""
@@ -1976,8 +1976,10 @@ var HTMLUtils = (function() {
 		$.each( panels, function (idx,panel){
 			html += "		 <div class='card' id='"+panel.id+"'>";
 			html += "			 <div class='card-header p-1' role='tab'>";
-			if (button) {
-				html += xsbuttonTemplate.format(button.id, button.class, button.label, button.title);
+			if (buttons) {
+        $(buttons).each( function(idb,button) {
+              html += xsbuttonTemplate.format(button.id, button.class, button.label, button.title);
+        })
 			}
 			html += "				 <h5 class='mb-0'>";
 			html += "					 <a data-toggle='collapse' href='#collapse"+panel.id+"'>"+panel.title+"</a><span class='altui-hint' id='altui-hint-"+panel.id+"'></span>"
@@ -4879,7 +4881,8 @@ var SceneEditor = function (scene) {
 
 	function _displayActions() {
 		var html="";
-		html += UIManager.displayJson( 'Actions', scene.groups );
+		html += UIManager.displayJson( 'json-Actions', scene.groups );
+    html += UIManager.displayLua( 'lua-Actions', scene.groups );
 		try {
 			html +="<table class='table table-responsive-OFF table-sm'>";
 			html +="<tbody>";
@@ -4963,7 +4966,7 @@ var SceneEditor = function (scene) {
 			var html="";
 			try {
 				var opmode = scene.triggers_operator || "OR"
-				html += UIManager.displayJson( 'Triggers', scene.triggers);
+				html += UIManager.displayJson( 'json-Triggers', scene.triggers);
 				if (UIManager.UI7Check()==true) {
 					html += _T("Scene Trigger Evaluation mode") + ": "+ HTMLUtils.drawButtonGroup('altui-trigger-mode-grp', {
 						attr:"data-toggle='buttons'",
@@ -5010,10 +5013,11 @@ var SceneEditor = function (scene) {
 			return html;
 		}
 
-		var jsonbutton = {id:'', class:'altui-toggle-json pull-right', label:'json', title:'json' };
+		var jsonbutton = {id:'altui-json', class:'altui-toggle-code pull-right', label:'json', title:'json' };
+    var luabutton = {id:'altui-lua', class:'altui-toggle-code pull-right', label:'lua', title:'lua' };
 		var htmlSceneEditButton = "	 <button type='submit' class='btn btn-primary pull-right altui-scene-editbutton'>"+_T("Submit")+"</button>";
 		var html="";
-		html += HTMLUtils.createAccordeon('altui-scene-editor',panels,jsonbutton,scene.altuiid );
+		html += HTMLUtils.createAccordeon('altui-scene-editor',panels,[luabutton,jsonbutton],scene.altuiid );
 		html += BlocklyArea.createBlocklyArea();
 		html += htmlSceneEditButton;
 		return html;
@@ -5070,7 +5074,7 @@ var SceneEditor = function (scene) {
 		_updateAccordeonHeaders();
 		$('#blocklyDiv').data("scenecontroller",scenecontroller);	// indicates to Blockly which scene controller to filter on
 
-		$(".altui-json-code").hide();
+		$(".altui-code").hide();
 		$(".altui-mainpanel")
 			.off("click")
 			.on("click",".altui-delscene",function() {
@@ -5327,9 +5331,10 @@ var SceneEditor = function (scene) {
 			});
 
 
-		$(".altui-toggle-json").click( function() {
+		$(".altui-toggle-code").click( function() {
+      var btnid = $(this).prop("id").substring('altui-'.length)
 			var id = $(this).closest('.card').prop('id');
-			var type = "#altui-json-"+id;
+			var type = "#altui-" + btnid + "-" + id;
 			$(type).toggle();
 		});
 
