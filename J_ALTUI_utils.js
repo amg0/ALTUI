@@ -4882,7 +4882,7 @@ var SceneEditor = function (scene) {
 	function _displayActions() {
 		var html="";
 		html += UIManager.displayJson( 'json-Actions', scene.groups );
-    html += UIManager.displayLua( 'lua-Actions', scene.groups );
+		html += UIManager.displayLua( 'lua-Actions', scene.groups );
 		try {
 			html +="<table class='table table-responsive-OFF table-sm'>";
 			html +="<tbody>";
@@ -5014,7 +5014,7 @@ var SceneEditor = function (scene) {
 		}
 
 		var jsonbutton = {id:'altui-json', class:'altui-toggle-code pull-right', label:'json', title:'json' };
-    var luabutton = {id:'altui-lua', class:'altui-toggle-code pull-right', label:'lua', title:'lua' };
+		var luabutton = {id:'altui-lua', class:'altui-toggle-code pull-right', label:'lua', title:'lua' };
 		var htmlSceneEditButton = "	 <button type='submit' class='btn btn-primary pull-right altui-scene-editbutton'>"+_T("Submit")+"</button>";
 		var html="";
 		html += HTMLUtils.createAccordeon('altui-scene-editor',panels,[luabutton,jsonbutton],scene.altuiid );
@@ -5332,7 +5332,12 @@ var SceneEditor = function (scene) {
 
 
 		$(".altui-toggle-code").click( function() {
-      var btnid = $(this).prop("id").substring('altui-'.length)
+			// trick to show the accordeon pannel corresponding to the code button that was pressed
+			$(this).parent().parent().find(".panel-collapse").collapse('show');
+			
+			// hide all codes and display just the one wanted
+			$(".altui-code").hide();
+			var btnid = $(this).prop("id").substring('altui-'.length)
 			var id = $(this).closest('.card').prop('id');
 			var type = "#altui-" + btnid + "-" + id;
 			$(type).toggle();
