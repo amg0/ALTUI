@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$MyRevision: 2530 $";
+var ALTUI_revision = "$MyRevision: 2531 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -7627,6 +7627,7 @@ var UIManager  = ( function( window, undefined ) {
 		}
 		var _deviceDisplayFilter = $.extend( {
 			filterformvisible	: false,
+			sort			: MyLocalStorage.getSettings("DeviceSortField") || "name",
 			room			: MyLocalStorage.getSettings("DeviceRoomFilter") || -1,
 			favorites		: (MyLocalStorage.getSettings("ShowFavoriteDevice")==true),
 			invisible		: (MyLocalStorage.getSettings("ShowInvisibleDevice")==true),
@@ -7760,11 +7761,34 @@ var UIManager  = ( function( window, undefined ) {
 		}
 
 		function endDrawDevice(devices) {
+			// display sort == 'name" means do nothing as it is the default
+			if (_deviceDisplayFilter.sort == "altuiid") {
+				devices=devices.sort(altuiSortByAltuiID)
+			}
+			$.each(devices, function(idx,device) {
+					drawDeviceEmptyContainer( idx, device )
+			})
 			UIManager.refreshUI(true);
 		};
 
 		function drawDeviceEmptyContainer(idx, device) {
 			_domMainPanel.append(ALTUI_Templates.deviceEmptyContainerTemplate.format(device.id,device.altuiid,'altui-device-container col-sm-6 col-md-4 col-lg-3'));
+		};
+		
+		function _drawSortSelect() {
+			var optionGlyph = glyphTemplate.format("cogs",_T("Options"))
+			var selected = [ _deviceDisplayFilter.sort ]
+			//selected.push(_deviceDisplayFilter.sort)
+			return HTMLUtils.drawDropDown({
+				id:'altui-dropdown-sort', 
+				label:optionGlyph+"<span class='d-inline'> {0}</span>".format(_T("Sort")),
+				cls:'altui-dropdown-sort d-inline',
+				options: [
+					{ id:'name', cls:'altui-option-sort', label:_T("Name"), glyph:'fa-sort-alpha-asc' },
+					{ id:'altuiid', cls:'altui-option-sort', label:_T("ID"), glyph:'fa-sort-numeric-asc' }
+				],
+				selected: selected
+			});			
 		};
 		
 		function _drawDeviceToolbar() {
@@ -7805,12 +7829,15 @@ var UIManager  = ( function( window, undefined ) {
 			var roomfilterHtml="";
 			var categoryfilterHtml="";
 			var tagfilterHtml="";
+			var sortHtml="";
 			var dfd = $.Deferred();
 			$.when( _drawRoomFilterButtonAsync(_deviceDisplayFilter.room) )
 			.then( function(html) {
 				roomfilterHtml = html;
 				tagfilterHtml = _drawTagFilter(tagModel, deviceTags)
+				sortHtml = _drawSortSelect()
 				categoryfilterHtml+='<select id="altui-device-category-filter" multiple="multiple">';
+				createHtml= " <button type='button' class='btn btn-light' id='altui-device-create' >" +(plusGlyph + "&nbsp;" + _T("Create")) + "</button> "
 				$.when( MultiBox.getCategories(
 					function(idx,category) {
 						categoryfilterHtml+='<option value="{0}" {2}>{1}</option>'.format(
@@ -7823,9 +7850,6 @@ var UIManager  = ( function( window, undefined ) {
 						categoryfilterHtml+='</select>';
 						categoryfilterHtml+="  <button type='button' class='btn btn-light' id='altui-device-filter' >";
 						categoryfilterHtml+=  (searchGlyph + '&nbsp;' +_T('Filter') + "<span class='caret'></span>");
-						categoryfilterHtml+="  </button>";
-						categoryfilterHtml+="  <button type='button' class='btn btn-light' id='altui-device-create' >";
-						categoryfilterHtml+= (plusGlyph + "&nbsp;" + _T("Create"));
 						categoryfilterHtml+="  </button>";
 					}
 				))
@@ -7857,8 +7881,9 @@ var UIManager  = ( function( window, undefined ) {
 						$("#altui-dropdown-tags .dropdown-toggle").toggleClass("btn-info",isTagFilterValid()).toggleClass("btn-light",isTagFilterValid()==false)
 						_drawDevices(deviceFilter,false);	// do not redraw toolbar
 					};
+					
 					// Display
-					$(".altui-device-toolbar").replaceWith( "<div class='col-12 altui-device-toolbar'>"+roomfilterHtml+tagfilterHtml+categoryfilterHtml+filterHtml+"</div>" );
+					$(".altui-device-toolbar").replaceWith( "<div class='col-12 altui-device-toolbar'>"+roomfilterHtml+tagfilterHtml+categoryfilterHtml+sortHtml+createHtml+filterHtml+"</div>" );
 					$(".altui-pagefilter").css("display","inline");
 					$('#altui-device-room-filter').multiselect({
 						disableIfEmpty: true,
@@ -7887,6 +7912,11 @@ var UIManager  = ( function( window, undefined ) {
 
 					// interactivity
 					$(".altui-filter-tag").click( _onChangeTagFilter );
+					$(".altui-option-sort").click( function(e) {
+							_deviceDisplayFilter.sort = $(this).prop("id")
+							MyLocalStorage.setSettings("DeviceSortField",_deviceDisplayFilter.sort );
+							_drawDevices(deviceFilter)
+					});
 					
 					$('#altui-device-category-filter').multiselect({
 						disableIfEmpty: true,
@@ -7988,7 +8018,8 @@ var UIManager  = ( function( window, undefined ) {
 
 			// Category & Form filter
 			_domMainPanel = $(".altui-mainpanel").empty();
-			MultiBox.getDevices( drawDeviceEmptyContainer , filterfunc, endDrawDevice);
+			//MultiBox.getDevices( drawDeviceEmptyContainer , filterfunc, endDrawDevice);
+			MultiBox.getDevices( null , filterfunc, endDrawDevice);
 		};
 
 		function _onClickRoomButton(htmlid,altuiid)
