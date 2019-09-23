@@ -1871,7 +1871,7 @@ var UIManager  = ( function( window, undefined ) {
 		return "<pre id='altui-"+type+"' class='altui-code'>"+JSON.stringify( obj )+"</pre>";
 	};
   
-  function _displayLua(type,obj) {
+  function _displayLua(type,obj,controller) {
     function paramsFromArray(args) {
       var str=[]
       $.each(args, function(idx,arg) {
@@ -1885,7 +1885,7 @@ var UIManager  = ( function( window, undefined ) {
     $.each(obj, function(idx,group) {
       lua += "function delay_{0}()\n".format(group.delay)
       $.each(group.actions, function(idx2,action) {
-				var device = MultiBox.getDeviceByID(0,action.device)
+				var device = MultiBox.getDeviceByID(controller,action.device)
         lua+='\t-- #{0} {1} ({2} {3})\n'.format(device.altuiid, device.name || "", device.manufacturer || "", device.model || "")
         lua+='\tluup.call_action("{0}", "{1}", {3}, {2})\n'.format(
           action.service,
@@ -6474,7 +6474,7 @@ var UIManager  = ( function( window, undefined ) {
 
 	//drawing functions
 	displayJson			: _displayJson,
-  displayLua			: _displayLua,
+	displayLua			: _displayLua,
 	displayTimer		: _displayTimer,
 	displayTimers		: _displayTimers,
 	jobStatusToColor	: _jobStatusToColor,

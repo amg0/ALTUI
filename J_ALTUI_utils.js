@@ -4880,9 +4880,10 @@ var SceneEditor = function (scene) {
 	};
 
 	function _displayActions() {
+		var controller = MultiBox.controllerOf(scene.altuiid).controller
 		var html="";
 		html += UIManager.displayJson( 'json-Actions', scene.groups );
-		html += UIManager.displayLua( 'lua-Actions', scene.groups );
+		html += UIManager.displayLua( 'lua-Actions', scene.groups, controller );
 		try {
 			html +="<table class='table table-responsive-OFF table-sm'>";
 			html +="<tbody>";
