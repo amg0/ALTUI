@@ -15,7 +15,8 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	//---------------------------------------------------------	
 	var _cfg = {
 		isOpenLuup: false,
-		candoPost: false
+		candoPost: false,
+		candoCORS: false
 	};
 	var _veraidx = veraidx || 0;
 	var _ipaddr = (ip_addr.trim()) || '';

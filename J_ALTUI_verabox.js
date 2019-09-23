@@ -1806,7 +1806,8 @@ function testcors() {
 			});
 			_upnpHelper.setConfig( {
 				isOpenLuup: _isOpenLuup(_user_data),
-				candoPost: _candoPost(_user_data)
+				candoPost: _candoPost(_user_data),
+				candoCORS: _candoCORS(_user_data),
 			});
 			result = (data.devices != null);
 		} 
@@ -1910,11 +1911,14 @@ function testcors() {
 		);
 		return _isOpenLuup(user_data) ||  (( _uniqID==0) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 ));
 	};
+	function _candoCORS(user_data) {
+		return (_user_data.AllowCORS == "1")
+	};
 	function _isOpenLuup(user_data) {
 		if ( (user_data.BuildVersion==undefined) || (user_data.BuildVersion.startsWith("*1.5")==true) )
 			return false;
 		return (user_data.SvnVersion==undefined)
-	}
+	};
 	function _getLuaStartup() {
 		if (_user_data.encoded_lua==1) {
 			try {
@@ -2710,6 +2714,7 @@ function testcors() {
 	isUI5			: _isUI5,
 	isOpenLuup		: function() { return _isOpenLuup(_user_data) },
 	candoPost		: function() { return _candoPost(_user_data) },
+	candoCORS		: function() { return _candoCORS(_user_data) }, 
 	getBoxInfo		: _getBoxInfo,		//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()
 	getLuaStartup	: _getLuaStartup,
@@ -3045,6 +3050,7 @@ var LearnBox = ( function( uniq_id ) {
 		isUI5			: function()	{return false},
 		isOpenLuup 		: function()	{return false},
 		candoPost		: function() 	{return false},
+		candoCORS		: function() 	{return false},
 		getBoxInfo		: _getBoxInfo,				//()
 		getBoxFullInfo	: _getBoxFullInfo,		//()
 		getRooms		: _getRooms,	// in the future getRooms could cache the information and only call _getRooms when needed

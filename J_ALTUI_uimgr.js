@@ -14185,6 +14185,7 @@ var UIManager  = ( function( window, undefined ) {
 			var html ="";
 			html += "<div class='altui-ctrl-tools'>{0}</div>".format(HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _buttons ));
 			html +=	 HTMLUtils.array2Table(_buildArrayFromParams({
+				"Can Do CORS": ctrl.controller.candoCORS(),
 				"Can Do http POST": ctrl.controller.candoPost(),
 				"Is Open Luup": ctrl.controller.isOpenLuup(),
 				"Is UI5": ctrl.controller.isUI5()
