@@ -1581,8 +1581,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return UserDataHelper(_user_data).evaluateConditions(deviceid,cat,subcat,conditions);
 	};
 
+/*
 function testcors() {
-var url="http://192.168.1.16/port_3480/data_request?id=lu_status2&output_format=json&DataVersion=1&Timeout=5&MinimumDelay=1500"
+	var url = "http://192.168.1.16/port_3480/data_request?id=variableset&Variable=AllowCORS&Value=1"
+	$.get(url)		
+	.done( function (data, textStatus, jqXHR) {
+		console.log("enable cors:",data)
+		//url="http://192.168.1.16/port_3480/data_request?id=lu_status2&output_format=json&DataVersion=1&Timeout=5&MinimumDelay=1500"
+		url="http://192.168.1.16/port_3480/data_request?id=user_data"
 		$.ajax({
 				// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
 				url: url,
@@ -1593,12 +1599,17 @@ var url="http://192.168.1.16/port_3480/data_request?id=lu_status2&output_format=
 				// processData: false			// prevent jquery to process data to receive it as pure TEXT
 			})
 		.done( function (data, textStatus, jqXHR) {
-			console.log(data)
+			console.log("test user data",data)
 		})
 		.fail( function( jqXHR, textStatus, errorThrown ) {
 			console.log(textStatus)
 		})
+	})
+	.fail( function( jqXHR, textStatus, errorThrown ) {
+		console.log(textStatus)
+	})
 }
+*/
 
 	function _refreshEngine() {
 		// console.log("controller #%s refreshEngine %s",_uniqID, "?id=lu_status2&output_format=json&DataVersion="+_status_data_DataVersion)
