@@ -1581,8 +1581,28 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return UserDataHelper(_user_data).evaluateConditions(deviceid,cat,subcat,conditions);
 	};
 
+function testcors() {
+var url="http://192.168.1.16/port_3480/data_request?id=lu_status2&output_format=json&DataVersion=1&Timeout=5&MinimumDelay=1500"
+		$.ajax({
+				// url:'https://script.google.com/macros/s/AKfycbyu0Xc8Hd3ruJolJGUsi5Chbq4GUnAl89LeDpky-1_nQA23kHs/exec',	// test
+				url: url,
+				method:	"GET",
+				cache:false,
+				//dataType: "json",
+				crossDomain:true
+				// processData: false			// prevent jquery to process data to receive it as pure TEXT
+			})
+		.done( function (data, textStatus, jqXHR) {
+			console.log(data)
+		})
+		.fail( function( jqXHR, textStatus, errorThrown ) {
+			console.log(textStatus)
+		})
+}
+
 	function _refreshEngine() {
 		// console.log("controller #%s refreshEngine %s",_uniqID, "?id=lu_status2&output_format=json&DataVersion="+_status_data_DataVersion)
+		//testcors()
 		var jqxhr = _httpGet("?id=lu_status2&output_format=json&DataVersion="+_status_data_DataVersion+"&Timeout={0}&MinimumDelay={1}".format(
 				(_uniqID==0 ? LU_STATUS_TIMEOUT : 5 ),			// cannot afford to wait 60 sec in the Lua handler for Proxied units
 				LU_STATUS_MINDELAY

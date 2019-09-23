@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$MyRevision: 2531 $";
+var ALTUI_revision = "$MyRevision: 2532 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1881,9 +1881,12 @@ var UIManager  = ( function( window, undefined ) {
     }
     
     var lua = ""
+		
     $.each(obj, function(idx,group) {
       lua += "function delay_{0}()\n".format(group.delay)
       $.each(group.actions, function(idx2,action) {
+				var device = MultiBox.getDeviceByID(0,action.device)
+        lua+='\t-- #{0} {1} ({2} {3})\n'.format(device.altuiid, device.name || "", device.manufacturer || "", device.model || "")
         lua+='\tluup.call_action("{0}", "{1}", {3}, {2})\n'.format(
           action.service,
           action.action,
