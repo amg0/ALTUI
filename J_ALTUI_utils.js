@@ -2139,15 +2139,19 @@ var HTMLUtils = (function() {
 				case "input":
 					if (line.inputtype=="checkbox") {
 						var checked = (line.value==true)? "checked" : "";
-						html += "<div class='form-checked'>"
-						html += "<label for='{0}' class='form-check-label'> <input id='{0}' type='checkbox' class='form-check-input' value='{2}' {3} {4}> {1}</input></label>".format(
+                        //html += "<div class='form-group'>"
+                        html += "<div class='form-group'>"
+                        html += "<div class='form-check'>"
+						html += "<input id='{0}' type='checkbox' class='form-check-input' value='{2}' {3} {4}></input><label for='{0}' class='form-check-label'> {1} </label>".format(
 							line.id,
 							line.label,
 							line.value,
 							HTMLUtils.optionsToString(line.opt),
 							checked
 							);
-						html += '</div>'
+                        html += '</div>'
+                        html += '</div>'
+                        //html += '</div>'
 					} else {
 						html += "<div class='form-group'>"
 						html += "<label for='{0}' '>{1}</label>".format(line.id,line.label);

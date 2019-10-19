@@ -1,3 +1,4 @@
+-- // Plugin ALTUI
 -- // This program is free software: you can redistribute it and/or modify
 -- // it under the condition that it is for private or home useage and
 -- // this whole comment is reproduced in the source code file.
@@ -1419,7 +1420,7 @@ function workflowTimerCB(lul_data)
 		-- is timer obsolete ?
 		-- are we still in the same state ?
 		local active_state = Workflows[workflow_idx]["graph_json"].active_state		-- id of active state
-		debug(string.format("Wkflow - %s, active state:%s timerstate:%s",Workflows[workflow_idx].name,active_state,timerstateid))
+		debug(string.format("Wkflow - %s, active state:%s timerstate:%s",Workflows[workflow_idx].name,active_state or 'nil',timerstateid or 'nil'))
 		if (active_state == timerstateid) then
 			-- if yes, execute link transition
 			local cells = Workflows[workflow_idx]["graph_json"].cells
