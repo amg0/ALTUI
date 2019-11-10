@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$MyRevision: 2534 $";
+var ALTUI_revision = "$MyRevision: 2535 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2071,7 +2071,10 @@ var UIManager  = ( function( window, undefined ) {
 
 				html += "<form id='form-{0}' class='form mt-2'>".format(varid);
 				$.each(pushData, function(idx,pushDataOneProvider) {
-					html += _pushFormFields( providers[ pushDataOneProvider.provider ].parameters, pushDataOneProvider.provider, varid, pushDataOneProvider );
+                    // prevent crash if provider does not exist
+                       if (providers[ pushDataOneProvider.provider ] != null ) {
+                           html += _pushFormFields( providers[ pushDataOneProvider.provider ].parameters, pushDataOneProvider.provider, varid, pushDataOneProvider );
+                       }
 				});
 				html += "</form>"
 			return html;
