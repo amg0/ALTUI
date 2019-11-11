@@ -1,6 +1,6 @@
 //#	 sourceURL=J_ALTUI_uimgr.js
 // "use strict";
-// http://192.168.1.16:3480/data_request?id=lr_ALTUI_Handler&command=home
+// http://192.168.0.17:3480/data_request?id=lr_ALTUI_Handler&command=home
 // ALTUI: This program is free software: you can redistribute it and/or modify
 // it under the condition that it is for private or home useage and
 // this whole comment is reproduced in the source code file
