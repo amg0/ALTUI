@@ -2033,8 +2033,8 @@ var HTMLUtils = (function() {
 		return html;
 	};
                  
-    function _drawButton(htmlid,html_attributes,title,cls,label,glyph) {
-        var glyph = glyphTemplate.format(glyph,label || title || '');
+    function _drawButton(htmlid,html_attributes,title,cls,label,glyphname) {
+        var glyph = glyphTemplate.format(glyphname,label || title || '');
         return "<button type='button' class='btn {3} ' title='{2}' {1} id='{0}'>{4}&nbsp;{5}</button>"
            .format(
                    htmlid||'',
@@ -2068,13 +2068,6 @@ var HTMLUtils = (function() {
 				case 'button':
 				default:
                     toolbarHtml+= (" "+_drawButton(tool.id,collapsecss,tool.title,tool.cls,tool.label,tool.glyph))
-					/*toolbarHtml+="	<button type='button' class='btn {3} ' title='{2}' {1} id='{0}' >".format(tool.id||'',collapsecss,tool.title||'',tool.cls||'btn-light');
-					var glyph = glyphTemplate.format(tool.glyph,tool.label || tool.title || '');
-					toolbarHtml += glyph;
-					if (tool.label)
-						toolbarHtml+=("&nbsp;" + tool.label);
-					toolbarHtml+="	</button>";
-					*/
                     break;
 			}
 		});
@@ -2286,7 +2279,7 @@ var HTMLUtils = (function() {
 		createAccordeon : _createAccordeon,		// (panels)
 		drawTags 		: _drawTags,
 		drawButtonGroup : _drawButtonGroup,
-        drawButton      : _drawButton,          //(htmlid,html_attributes,title,cls,label,glyph)
+        drawButton      : _drawButton,          //(htmlid,html_attributes,title,cls,label,glyphname)
 		drawToolbar		: _drawToolbar,
 		drawSelect		: _drawSelect,
 		drawDropDown	: _drawDropDown,

@@ -1441,6 +1441,16 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			return 12;
 		return ( parseInt(_user_data.mode_change_delay || 9) +3);
 	};
+
+	function _allowCors( bEnable , cbfunc ) {
+		//Example request:
+		// http://IP:3480/data_request?id=variableset&Variable=AllowCORS&Value=1 //enable
+		// http://IP:3480/data_request?id=variableset&Variable=AllowCORS&Value=0 //disable
+		var value = (bEnable==true) ? 1 : 0
+		var jqxhr = _httpGet("?id=variableset&Variable=AllowCORS&Value="+value,{},cbfunc);
+		return jqxhr;
+	};
+	
 	function _getDeviceByType( device_type , opt_parents_arr) {
 		for (var i=0; i<_user_data.devices.length; i++ ) {
 			if	( (_user_data.devices[i].device_type==device_type) && (opt_parents_arr==undefined || opt_parents_arr.indexOf(_user_data.devices[i].id_parent)!=-1) )

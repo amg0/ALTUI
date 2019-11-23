@@ -14180,6 +14180,12 @@ var UIManager  = ( function( window, undefined ) {
 			{id:"altui-ctrl-support", glyph:"envelope-o", label:_T("Support Ticket")},
 		];
 
+		function _getControllerID(obj){
+			var panel = $(obj).closest('.altui-controller-panel');
+			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			return id;
+		}
+		
 		function _displayControllerInfo(ctrl) {
 			var box_info = ctrl.box_info
 			$.each(box_info, function(k,v) {
@@ -14187,12 +14193,15 @@ var UIManager  = ( function( window, undefined ) {
 			});
 			var html ="";
 			html += "<div class='altui-ctrl-tools'>{0}</div>".format(HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _buttons ));
-			html +=	 HTMLUtils.array2Table(_buildArrayFromParams({
-				"Can Do CORS": ctrl.controller.candoCORS(),
-				"Can Do http POST": ctrl.controller.candoPost(),
-				"Is Open Luup": ctrl.controller.isOpenLuup(),
-				"Is UI5": ctrl.controller.isUI5()
-			}),null,[],_T("Info"),null,'altui-controller-info');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
+			var bCorsEnabled = ctrl.controller.candoCORS() 
+			var sCorsLabel = bCorsEnabled ? _T("Disable") : _T("Enable")
+			var capabilities = [
+				{ name: "Can Do CORS", value: bCorsEnabled, command: HTMLUtils.drawButton('altui-togglecors','',sCorsLabel,'btn-sm btn-light',sCorsLabel,'cog') },
+				{ name: "Can Do http POST", value: ctrl.controller.candoPost() },				
+				{ name: "Is Open Luup", value: ctrl.controller.isOpenLuup() },				
+				{ name: "Is UI5", value: ctrl.controller.isUI5() },				
+			];
+			html +=	 HTMLUtils.array2Table(capabilities,null,[],_T("Info"),null,'altui-controller-info');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
 			html +=	 HTMLUtils.array2Table(_buildArrayFromParams(box_info),null,[],_T("Details"),null,'altui-controller-params');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
 			return html;
 		};
@@ -14226,19 +14235,21 @@ var UIManager  = ( function( window, undefined ) {
 		$(".altui-mainpanel").append( html );
 
 		// interactivity
+		$("#altui-togglecors").click( function() {
+			var id = _getControllerID( $(this) );
+			alert('action')
+		})
 		$("#altui-ctrl-support").click(function() {
 			window.open( "https://support.getvera.com/hc/en-us/requests/new", '_blank');
 		})
 		$("#altui-ctrl-backup").click(function() {
-			var panel = $(this).closest('.altui-controller-panel');
-			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			var id = _getControllerID( $(this) );
 			MultiBox.RequestBackup( id, function(data) {
 				PageMessage.message(_T("Backup competed"));
 			});
 		});
 		$("#altui-ctrl-heal").click(function() {
-			var panel = $(this).closest('.altui-controller-panel');
-			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			var id = _getControllerID( $(this) );
 			var zwavenet = MultiBox.getDeviceByType(id,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
 			if (zwavenet!=null) {
 				DialogManager.confirmDialog(_T("Are you sure you want to heal your zwave network"),function(result) {
@@ -14263,8 +14274,7 @@ var UIManager  = ( function( window, undefined ) {
 			}
 		});
 		$("#altui-ctrl-inclusion").click( function() {
-			var panel = $(this).closest('.altui-controller-panel');
-			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			var id = _getControllerID( $(this) );
 			var zwavenet = MultiBox.getDeviceByType(id,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
 			if (zwavenet!=null) {
 				DialogManager.confirmDialog(_T("Are you sure you want to enter Inclusion mode"),function(result) {
@@ -14284,8 +14294,7 @@ var UIManager  = ( function( window, undefined ) {
 			}
 		});
 		$("#altui-ctrl-exclusion").click( function() {
-			var panel = $(this).closest('.altui-controller-panel');
-			var id = $(panel).prop('id').substring('altui_ctrl_'.length);
+			var id = _getControllerID( $(this) );
 			var zwavenet = MultiBox.getDeviceByType(id,"urn:schemas-micasaverde-com:device:ZWaveNetwork:1");
 			if (zwavenet!=null) {
 				DialogManager.confirmDialog(_T("Are you sure you want to enter Exclusion mode"),function(result) {
