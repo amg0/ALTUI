@@ -1442,15 +1442,24 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return ( parseInt(_user_data.mode_change_delay || 9) +3);
 	};
 
-	function _allowCors( bEnable , cbfunc ) {
+	function _candoCORS(user_data) {
+		return (_user_data.AllowCORS == "1")
+	};
+	
+	function _enableCORS( bEnable , cbfunc ) {
 		//Example request:
 		// http://IP:3480/data_request?id=variableset&Variable=AllowCORS&Value=1 //enable
 		// http://IP:3480/data_request?id=variableset&Variable=AllowCORS&Value=0 //disable
 		var value = (bEnable==true) ? 1 : 0
-		var jqxhr = _httpGet("?id=variableset&Variable=AllowCORS&Value="+value,{},cbfunc);
+		var jqxhr = _httpGet("?id=variableset&Variable=AllowCORS&Value="+value,{},function(){
+			_user_data.AllowCORS = value.toString();
+			if ($.isFunction(cbfunc)) {
+				(cbfunc)();
+			}
+		});
 		return jqxhr;
 	};
-	
+
 	function _getDeviceByType( device_type , opt_parents_arr) {
 		for (var i=0; i<_user_data.devices.length; i++ ) {
 			if	( (_user_data.devices[i].device_type==device_type) && (opt_parents_arr==undefined || opt_parents_arr.indexOf(_user_data.devices[i].id_parent)!=-1) )
@@ -1921,9 +1930,7 @@ function testcors() {
 		);
 		return _isOpenLuup(user_data) ||  (( _uniqID==0) && ( versioninfo.length>=4 ) && (versioninfo[1] >=1 ) && (versioninfo[2] >=7 ) && (versioninfo[3] >= 2138 ));
 	};
-	function _candoCORS(user_data) {
-		return (_user_data.AllowCORS == "1")
-	};
+
 	function _isOpenLuup(user_data) {
 		if ( (user_data.BuildVersion==undefined) || (user_data.BuildVersion.startsWith("*1.5")==true) )
 			return false;
@@ -2725,6 +2732,7 @@ function testcors() {
 	isOpenLuup		: function() { return _isOpenLuup(_user_data) },
 	candoPost		: function() { return _candoPost(_user_data) },
 	candoCORS		: function() { return _candoCORS(_user_data) }, 
+	enableCORS		: _enableCORS,		// (bEnable, cbfunc )
 	getBoxInfo		: _getBoxInfo,		//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()
 	getLuaStartup	: _getLuaStartup,

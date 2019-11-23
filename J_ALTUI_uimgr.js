@@ -14186,8 +14186,8 @@ var UIManager  = ( function( window, undefined ) {
 			return id;
 		}
 		
-		function _displayControllerInfo(ctrl) {
-			var box_info = ctrl.box_info
+		function _displayOneControllerInfo(ctrl) {
+			var box_info = ctrl.controller.getBoxFullInfo()
 			$.each(box_info, function(k,v) {
 				box_info[k]= HTMLUtils.enhanceValue(v);
 			});
@@ -14206,38 +14206,41 @@ var UIManager  = ( function( window, undefined ) {
 			return html;
 		};
 
+		function _displayControllersHTML(_displayControllerInfo) {
+			var html = "<div id='altui-controllers-info' class='col-12'>";
+			html += "	 <ul class='nav nav-tabs' role='tablist'>";
+			var controllers = MultiBox.getControllers();
+			var bFirst = true;
+			$.each(controllers, function (idx, controller) {
+				var name = controller.name || controller.ip;
+				html += "	   <li role='presentation' class='nav-item'><a class='nav-link {2}' href='#altui_ctrl_{0}' aria-controls='home' role='tab' data-toggle='tab'>{1}</a></li>".format(idx, name, (bFirst == true ? 'active' : ''));
+				bFirst = false;
+			});
+			html += "	 </ul>";
+			html += "	 <div class='tab-content'>";
+			bFirst = true;
+			$.each(controllers, function (idx, controller) {
+				var name = (controller.ip == "") ? "Main" : controller.ip;
+				html += "	   <div role='tabpanel' class='altui-controller-panel tab-pane {2}' id='altui_ctrl_{0}'>{1}</div>".format(idx, _displayOneControllerInfo(controller), (bFirst == true ? 'active' : ''));
+				bFirst = false;
+			});
+			html += "	 </div>";
+			html += "</div>";
+			return html;
+		}
+		
 		UIManager.clearPage('TblControllers',_T("Table Controllers"),UIManager.oneColumnLayout);
-		var html="";
-		html+="<div class='col-12'>";
-		html+="	 <ul class='nav nav-tabs' role='tablist'>";
-		var controllers = MultiBox.getControllers();
-		var bFirst=true;
-		$.each(controllers, function( idx, controller) {
-			var name  = controller.name || controller.ip ;
-			html+="	   <li role='presentation' class='nav-item'><a class='nav-link {2}' href='#altui_ctrl_{0}' aria-controls='home' role='tab' data-toggle='tab'>{1}</a></li>".format(
-				idx,name,
-				(bFirst==true ? 'active' : ''));
-			bFirst=false;
-		});
-		html+="	 </ul>";
-		html+="	 <div class='tab-content'>";
-		bFirst=true;
-		$.each(controllers, function( idx, controller) {
-			var name  = (controller.ip == "" ) ? "Main" : controller.ip ;
-			html+="	   <div role='tabpanel' class='altui-controller-panel tab-pane {2}' id='altui_ctrl_{0}'>{1}</div>".format(
-				idx,
-				_displayControllerInfo(controller),
-				(bFirst==true ? 'active' : ''));
-			bFirst=false;
-		});
-		html+="	 </div>";
-		html+="</div>";
+		var html = _displayControllersHTML();
 		$(".altui-mainpanel").append( html );
 
 		// interactivity
-		$("#altui-togglecors").click( function() {
+		$("#altui-controllers-info").off("click").on("click","#altui-togglecors",function() {
 			var id = _getControllerID( $(this) );
-			alert('action')
+			var bCurrent = MultiBox.candoCORS(id);
+			var controllers = MultiBox.getControllers();
+			MultiBox.enableCORS( id, ! bCurrent, function() {
+				$("#altui_ctrl_"+id).html( _displayOneControllerInfo(controllers[id]) )
+			})
 		})
 		$("#altui-ctrl-support").click(function() {
 			window.open( "https://support.getvera.com/hc/en-us/requests/new", '_blank');

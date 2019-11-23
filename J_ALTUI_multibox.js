@@ -844,6 +844,12 @@ var MultiBox = ( function( window, undefined ) {
 		});
 		return dfd.promise();
 	};
+	function _enableCORS(controller, bEnable, cbfunc) {
+		return _controllers[controller].controller.enableCORS(bEnable,cbfunc);
+	}
+	function _candoCORS(controller) {
+		return _controllers[controller].controller.candoCORS();
+	}
 	function _isUserDataCached(controllerid) {
 		var id = controllerid || 0;
 		return _controllers[id].controller.isUserDataCached();
@@ -1045,6 +1051,8 @@ var MultiBox = ( function( window, undefined ) {
 	getPower			: _getPower,			//(cbfunc)
 	resetPollCounters	: _resetPollCounters,	//()	!  promise API
 	isUserDataCached	: _isUserDataCached,	//()
+	enableCORS			: _enableCORS,			//(controller, bEnable, cbfunc)
+	candoCORS			: _candoCORS,			//(controller)
 	getIconPath			: _getIconPath,			// (device,str)
 	getIcon				: _getIcon,				// ( controllerid, imgpath , cbfunc )
 	// buildUPnPGetFileUrl : _buildUPnPGetFileUrl,	// (name)
