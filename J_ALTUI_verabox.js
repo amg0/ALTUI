@@ -2836,12 +2836,13 @@ function testcors() {
 	saveEngine		: _saveEngine,
 	clearEngine		: _clearEngine,
 	loadEngine		: _loadEngine,		// optional user_data
+	initDataEngine : _initDataEngine,
 	isUserDataCached	: _isUserDataCached,
 	RequestBackup : _RequestBackup,
 	initEngine		: function( firstuserdata )		{
-						_bStopEngine = false;
-						_loadEngine( firstuserdata );
-						return _initDataEngine();				// init the data collection engine
+		_bStopEngine = false;
+		_loadEngine( firstuserdata );
+		return _initDataEngine();				// init the data collection engine
 	},
   };
 });	// not invoked, object does not exists
