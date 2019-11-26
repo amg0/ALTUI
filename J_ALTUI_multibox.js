@@ -141,13 +141,7 @@ var MultiBox = ( function( window, undefined ) {
 	};
 
 	function _initEngine(extraController,firstuserdata, maincontrollertype) {
-
-		function _AllLoaded(eventname) {
-			// case "on_ui_userDataLoaded":
-			// case "on_ui_userDataFirstLoaded":
-			// console.log("All loaded : ",eventname);
-			EventBus.publishEvent(eventname);
-		};
+		var dfd = $.Deferred();
 
 		// initialize controller 0 right away, no need to wait
 		maincontrollertype = maincontrollertype || "V";
@@ -205,7 +199,6 @@ var MultiBox = ( function( window, undefined ) {
 		}
 
 		// prepare to wait for proper initialization
-		// EventBus.waitForAll( "on_ui_userDataFirstLoaded", _getAllEvents("on_ui_userDataFirstLoaded"), this, _AllLoaded );
 		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, null , g_ALTUI.g_CtrlTimeout )
 		.always( function(data) {
 			// check data , if a controller is missing, disable it
@@ -230,7 +223,8 @@ var MultiBox = ( function( window, undefined ) {
 					console.log("Cannot disable main controller, trying to continue...")
 				}
 			})
-			_AllLoaded( "on_ui_userDataLoaded" )
+			EventBus.publishEvent("on_ui_userDataLoaded");
+			dfd.resolve(true)
 		})
 
 		// now start the engine
@@ -238,6 +232,7 @@ var MultiBox = ( function( window, undefined ) {
 			box.controller.initEngine( (idx==0) ? firstuserdata : null );		// will raise("on_ui_userDataFirstLoaded_"+_uniqID) ("on_ui_userDataLoaded_"+_uniqID)
 		});
 
+		return dfd.promise();
 	};
 	
 	function _stopEngine(controller) {

@@ -5407,7 +5407,7 @@ var UIManager  = ( function( window, undefined ) {
 		$("title").before("<style type='text/css'>{0}</style>".format(bootstrap_multiselect_css));
 	};
 
-	function _initUIEngine(css) {
+	function _initUIStyles(css) {
 		$("title").before("<style type='text/css'>{0}</style>".format(css));
 	};
 
@@ -5451,14 +5451,21 @@ var UIManager  = ( function( window, undefined ) {
 		}
 	};
 
-	function _initEngine(styles, devicetypes, themecss, serveroptions, cbfunc) {
+	function _initUI(styles, devicetypes, themecss, serveroptions, cbfunc) {
+		var dfd = $.Deferred()
 		_initOptions(serveroptions);
-		_initUIEngine(styles);
-		_initDB(devicetypes,cbfunc);
+		_initUIStyles(styles);
 		_setTheme(themecss);
 		_initMultiSelect();
+		_initDB(devicetypes,function() {
+			if ($.isFunction(cbfunc)) {
+				(cbfunc)();
+			}
+			dfd.resolve(true)
+		});
 		// _initACEandJoint();
 		// _initBlockly();
+		return dfd.promise();
 	};
 
 	function _clearScripts() {
@@ -6447,7 +6454,7 @@ var UIManager  = ( function( window, undefined ) {
 	//---------------------------------------------------------
 	// UIMANAGER PUBLIC functions
 	//---------------------------------------------------------
-	initEngine		: _initEngine,
+	initUI			: _initUI,
 	initBlockly		: _initBlockly,
 	initLocalizedGlobals : _initLocalizedGlobals,
 	generateNavBarHTML : _generateNavBarHTML,
@@ -15963,21 +15970,23 @@ $(function() {
 			$("body").addClass('withBackground')
 		}
 
-		UIManager.initEngine(styles.format(window.location.hostname), g_ALTUI.g_DeviceTypes, g_ALTUI.g_CustomTheme, g_ALTUI.g_Options, function() {
-			MultiBox.initEngine(g_ALTUI.g_ExtraController,g_ALTUI.g_FirstUserData,g_ALTUI.g_DeviceTypes.info["controllerType"]);
+		$.when( UIManager.initUI(styles.format(window.location.hostname), g_ALTUI.g_DeviceTypes, g_ALTUI.g_CustomTheme, g_ALTUI.g_Options) )
+		.done( function() {
+			$.when( MultiBox.initEngine(g_ALTUI.g_ExtraController,g_ALTUI.g_FirstUserData,g_ALTUI.g_DeviceTypes.info["controllerType"]) )
+			.done( function(result) {
+				// prepared defered calls
+				var toload = [
+					MultiBox.getCustomPages(function(pages) { PageManager.init(pages) }),
+					MultiBox.getWorkflows( function(workflows) { WorkflowManager.init(workflows) })
+				];
 
-			// prepared defered calls
-			var toload = [
-				MultiBox.getCustomPages(function(pages) { PageManager.init(pages) }),
-				MultiBox.getWorkflows( function(workflows) { WorkflowManager.init(workflows) })
-			];
-
-			// when all is done, signal we are ready
-			$.when.apply( $, toload)
-			.then( function() {
-				EventBus.publishEvent("on_ui_initFinished");
-			});
-		});
+				// when all is done, signal we are ready
+				$.when.apply( $, toload)
+				.then( function() {
+					EventBus.publishEvent("on_ui_initFinished");
+				});
+			})
+		})
 	};
 
 	function _onInitLocalization() {

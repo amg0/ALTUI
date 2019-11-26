@@ -1133,7 +1133,7 @@ var api = {
 		// API version 6 - this function need to call a success/fail callback
 		var dynamic = (options.dynamic && (options.dynamic === true))?1:0;
 		var onSuccess = (options.onSuccess && (typeof options.onSuccess == "function"))?options.onSuccess:void 0;
-		var deferred = $.Deferred();
+		//var deferred = $.Deferred();
 		try {
 			// set_device_state does not return a value - fail callback not usable
 			set_device_state(deviceId, service, variable, value, dynamic);
@@ -1160,7 +1160,7 @@ var api = {
 				onSuccess = options.onSuccess
 		}
 		// var onSuccess = (options.onSuccess && (typeof options.onSuccess == "function"))?options.onSuccess:void 0;
-		var deferred = $.Deferred();
+		//var deferred = $.Deferred();
 		try {
 			// set_device_state does not return a value - fail callback not usable
 			set_device_state(deviceId, service, variable, value, -1);
