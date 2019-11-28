@@ -64,6 +64,7 @@ var MultiBox = ( function( window, undefined ) {
 		return $.extend(true,_devicetypesDB[id][devtype],obj);
 	};
 	function _updateDeviceTypeUPnpDB( controllerid, devtype, Dfilename )	{
+		var dfd = $.Deferred();
 		var id = controllerid || 0;
 		if (_devicetypesDB[id][devtype]==null)
 			_devicetypesDB[id][devtype]={};
@@ -91,13 +92,18 @@ var MultiBox = ( function( window, undefined ) {
 							Actions : []
 						});
 					});
+					dfd.resolve(true);
 				}
 				catch(e) {
 					console.log("error in xml parsing, Dfile:"+Dfilename);
 					console.log("xmlstr"+xmlstr);
+					dfd.reject()
 				}
 			});
+		} else {
+			dfd.resolve(true);	
 		}
+		return dfd.promise()
 	};
 	function _updateDeviceTypeUIDB(controllerid, devtype, ui_definitions)	{
 		if (_devicetypesDB[controllerid]==null) {
@@ -165,7 +171,6 @@ var MultiBox = ( function( window, undefined ) {
 		// add the extra controllers
 		if (extraController.trim().length>0) {
 			$.each(extraController.split(','), function(idx,ctrlinfo) {
-				ctrlinfo = ctrlinfo;
 				var splits = ctrlinfo.trim().split("-");
 				var newcontroller = {
 					ip:splits[0],

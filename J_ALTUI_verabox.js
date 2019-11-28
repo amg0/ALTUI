@@ -1813,21 +1813,25 @@ function testcors() {
 			});
 
 			// update upnp information
+			var promises = []
 			$.each(_user_data.devices || [], function(idx,device) {
 				var dt = device.device_type;
 				var df = device.device_file;
 				if (dt && (dt!="") && df && (df!="") )
-					MultiBox.updateDeviceTypeUPnpDB( _uniqID, dt, device.device_file);	// pass device file so UPNP data can be read
+					promises.push( MultiBox.updateDeviceTypeUPnpDB( _uniqID, dt, device.device_file) ) ;	// pass device file so UPNP data can be read
 				if (device!=null) {
 					device.dirty=true;
 					EventBus.publishEvent("on_ui_deviceStatusChanged",device);
 				}
 			});
-			_upnpHelper.setConfig( {
-				isOpenLuup: _isOpenLuup(_user_data),
-				candoPost: _candoPost(_user_data),
-				candoCORS: _candoCORS(_user_data),
-			});
+			$.when.apply($,promises)
+			.then(function(){
+				_upnpHelper.setConfig( {
+					isOpenLuup: _isOpenLuup(_user_data),
+					candoPost: _candoPost(_user_data),
+					candoCORS: _candoCORS(_user_data),
+				});
+			})
 			result = (data.devices != null);
 		} 
 		return result
