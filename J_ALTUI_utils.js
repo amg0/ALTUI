@@ -3998,14 +3998,22 @@ var IconDB = ( function (window, undefined) {
 		// if undefined and not yet started to fetch, then go fetch it
 		if (_dbIcon[name]==undefined) {
 			_dbIcon[name]="pending"
-			$.ajax({
+			/*$.ajax({
 				url:  MultiBox.getIconPath(controllerid, name ),
 				dataType: "xml",
+				crossDomain: true,
 				cache:false,
 				async:false,
 				success: function (data) {
 					_dbIcon[name] = data;
 				}
+			});
+			*/
+			MultiBox.loadIcon(controllerid,	MultiBox.getIconPath(controllerid, name ), function(data) {
+				// store in cache and call callback
+				_dbIcon[name]=$.parseXML(data);
+				if ($.isFunction(cbfunc))
+					cbfunc(data);
 			});
 		}
 
@@ -4031,7 +4039,7 @@ var IconDB = ( function (window, undefined) {
 		// if undefined and not yet started to fetch, then go fetch it
 		if (_dbIcon[name]==undefined) {
 			_dbIcon[name]="pending"
-			MultiBox.getIcon(controllerid,	name, function(data) {
+			MultiBox.getIconContent(controllerid,	name, function(data) {
 				// store in cache and call callback
 				_dbIcon[name]=data;
 				if ($.isFunction(cbfunc))

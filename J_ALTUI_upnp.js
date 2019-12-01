@@ -28,8 +28,11 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 
 	function _proxify(url) {
 		//console.log("ipaddr:%s  _cfg:%s _directCallPossible:%s, url:%s",_ipaddr,JSON.stringify(_cfg),_directCallPossible(),url)
-		var url = _directCallPossible() ? url : (_proxyhead + encodeURIComponent( url ));
-		return url;
+		if (_directCallPossible())
+			return url;
+		if (url.substr(0,4) != "http")
+			url = "http:"+url
+		return (_proxyhead + encodeURIComponent( url ))
 	}
 	
 	function _proxifySoap(url) {
@@ -137,7 +140,8 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 	function _exec(url,cbfunc,mimetype) {
 		var options = {
 			url: url,
-			type: "GET"
+			type: "GET",
+			crossDomain:true,
 		};
 		if (mimetype != undefined) {
 			// options.dataType = "xml text";		NOTHING works in FF

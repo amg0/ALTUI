@@ -1361,8 +1361,22 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return "//{0}/cmh/skins/default/img/devices/device_states/{1}".format( _upnpHelper.getIpAddr(), name);
 	};
 
-	function _getIcon( imgpath , cbfunc ) {
+	function _getIconContent( imgpath , cbfunc ) {
 		var jqxhr = _httpGet("?id=lr_ALTUI_Handler&command=image",{ data: { path: imgpath } },cbfunc);
+		return jqxhr;
+	};
+
+	function _loadIcon( imgpath , cbfunc ) {
+		var options = {
+			url:	_upnpHelper.proxify( imgpath ),
+			dataType: "text",
+			crossDomain: true,
+			cache:false,
+			async:false
+		}
+		var jqxhr = _httpGet("",options, function(data) {
+			(cbfunc)(data)
+		})
 		return jqxhr;
 	};
 
@@ -2730,7 +2744,8 @@ function testcors() {
 	getFileContent :  _getFileContent,			//( filename , cbfunc)
 	triggerAltUIUpgrade : _triggerAltUIUpgrade,	// (newversion,newtracnum)	: newrev number in TRAC
 	getIconPath		: _getIconPath,		// ( src )
-	getIcon			: _getIcon,			// workaround to get image from vera box
+	getIconContent		: _getIconContent,			// workaround to get image from vera box
+	loadIcon		: _loadIcon,
 	getWeatherSettings : _getWeatherSettings,
 	isUI5			: _isUI5,
 	isOpenLuup		: function() { return _isOpenLuup(_user_data) },
@@ -3068,7 +3083,8 @@ var LearnBox = ( function( uniq_id ) {
 		getDataProviders	: _todo,	// (cbfunc)
 		triggerAltUIUpgrade : _todo,	// (newversion,newtracnum)	: newrev number in TRAC
 		getIconPath		: _getIconPath,		// ( src )
-		getIcon			: _todo,		// workaround to get image from vera box
+		getIconContent	: _todo,		// workaround to get image from vera box
+		loadIcon		: _todo,
 		getWeatherSettings : _getWeatherSettings,
 		isUI5			: function()	{return false},
 		isOpenLuup 		: function()	{return false},
@@ -3584,7 +3600,8 @@ var AltuiBox = ( function( uniq_id, ip_addr ) {
 	getDataProviders	: _todo,	// (cbfunc)
 	triggerAltUIUpgrade : _todo,	// (newversion,newtracnum)	: newrev number in TRAC
 	getIconPath		: _getIconPath,		// ( src )
-	getIcon			: _todo,		// workaround to get image from vera box
+	getIconContent	: _todo,		// workaround to get image from vera box
+	loadIcon		: _todo,
 	getWeatherSettings : _getWeatherSettings,
 	isUI5			: function()	{return false},
 	isOpenLuup : function()		{return false},

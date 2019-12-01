@@ -858,9 +858,13 @@ var MultiBox = ( function( window, undefined ) {
 		var id = controllerid || 0;
 		return _controllers[id].controller.getIconPath( iconname );
 	};
-	function _getIcon( controllerid, imgpath , cbfunc ) {
+	function _getIconContent( controllerid, imgpath , cbfunc ) {
 		var id = controllerid || 0;
-		return _controllers[id].controller.getIcon( imgpath , cbfunc );
+		return _controllers[id].controller.getIconContent( imgpath , cbfunc );
+	};
+	function _loadIcon( controllerid, imgpath , cbfunc ) {
+		var id = controllerid || 0;
+		return _controllers[id].controller.loadIcon( imgpath , cbfunc );
 	};
 	function _triggerAltUIUpgrade(newversion,newtracnum) {
 		return _controllers[0].controller.triggerAltUIUpgrade(newversion,newtracnum);
@@ -1054,7 +1058,8 @@ var MultiBox = ( function( window, undefined ) {
 	enableCORS			: _enableCORS,			//(controller, bEnable, cbfunc)
 	candoCORS			: _candoCORS,			//(controller)
 	getIconPath			: _getIconPath,			// (device,str)
-	getIcon				: _getIcon,				// ( controllerid, imgpath , cbfunc )
+	getIconContent		: _getIconContent,				// ( controllerid, imgpath , cbfunc )
+	loadIcon			: _loadIcon,			//
 	// buildUPnPGetFileUrl : _buildUPnPGetFileUrl,	// (name)
 
 	// Upgrade
