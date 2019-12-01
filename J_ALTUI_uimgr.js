@@ -8236,7 +8236,7 @@ var UIManager  = ( function( window, undefined ) {
 					action_argument:"newLoadlevelTarget"
 				}
 			}
-			$.each( MultiBox.getDevicesSync(), function( idx,dev ) {
+			$.each( MultiBox.getDevicesSync().filter( function(d) { return MultiBox.controllerOf(d.altuiid).controller == 0 } ), function( idx,dev ) {
 				if (map[dev.device_type || "x"] != null) {
 					var state = MultiBox.getStatus( dev, map[dev.device_type].service, map[dev.device_type].state)
 					actions.push({

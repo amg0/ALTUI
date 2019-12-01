@@ -339,12 +339,12 @@ var Ajax = (function(window,undefined) {
 			}
 			var jqxhr = $.ajax(ajaxopts )
 				.done(function(data, textStatus, jqXHR) {
-					upnphelper.unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
+					upnpHelper.unproxifyResult.apply(this,[data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
 						if ($.isFunction( options.onSuccess )) {
 							var response = new Response(data,jqXHR);
 							(options.onSuccess)(response);
 						}
-					});
+					}]);
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
 					if ($.isFunction( options.onFailure )) {

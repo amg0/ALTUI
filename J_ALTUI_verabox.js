@@ -1098,14 +1098,14 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			//dataType: "text",
 		})
 		.done(function(data, textStatus, jqXHR) {
-			_upnpHelper.unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
+			_upnpHelper.unproxifyResult.apply(this,[data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
 				if (isNullOrEmpty(data))
 					_sysinfo=={};
 				else if ($.isPlainObject( data ))
 					_sysinfo = data;
 				else
 					_sysinfo = JSON.parse(data);
-			});
+			}]);
 		})
 		.fail(function(jqXHR, textStatus, errorThrown) {
 			PageMessage.message( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr()) , "warning");
@@ -1132,10 +1132,10 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 
 		var jqxhr = $.ajax( options)
 				.done(function(data, textStatus, jqXHR) {
-					_upnpHelper.unproxifyResult(data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
+					_upnpHelper.unproxifyResult.apply(this,[data, textStatus, jqXHR, function(data,textStatus,jqXHR) {
 						if ($.isFunction(cbfunc))
 							(cbfunc)(data, textStatus, jqXHR);
-					});
+					}]);
 				})
 				.fail(function(jqXHR, textStatus, errorThrown) {
 					PageMessage.message( _T("Controller {0} did not respond").format(_upnpHelper.getIpAddr()) , "warning");
@@ -1372,7 +1372,7 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 			dataType: "text",
 			crossDomain: true,
 			cache:false,
-			async:false
+			//async:false			CORS does not support async
 		}
 		var jqxhr = _httpGet("",options, function(data) {
 			(cbfunc)(data)
