@@ -29,7 +29,7 @@ var UPnPHelper = (function(ip_addr,veraidx) {
 		if ((_cfg.candoCORS==true) && (url.includes("data_request")) ) {
 			bResult = true
 		}
-		console.log( (bResult ? "DIRECT" : "Indirect") , "-",url )
+		//console.log( (bResult ? "DIRECT" : "Indirect") , "-",url )
 		return bResult
 	}
 	var _urlhead = (_ipaddr=='') ? window.location.pathname : ("http://{0}/port_3480/data_request".format(_ipaddr));
