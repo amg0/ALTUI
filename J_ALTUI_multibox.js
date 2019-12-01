@@ -158,9 +158,9 @@ var MultiBox = ( function( window, undefined ) {
 			controller:null
 		};
 		switch(newcontroller.type) {
-			case "A":
-				newcontroller.controller = new AltuiBox(0,'');		// create the main controller
-				break;
+			// case "A":
+			// 	newcontroller.controller = new AltuiBox(0,'');		// create the main controller
+			// 	break;
 			case "V":
 			default:
 				newcontroller.controller = new VeraBox(0,'');		// create the main controller
@@ -179,9 +179,9 @@ var MultiBox = ( function( window, undefined ) {
 					controller:null
 				}
 				switch (newcontroller.type) {
-					case 'A':
-						newcontroller.controller = new AltuiBox(1+idx,newcontroller.ip);
-						break;
+					// case 'A':
+					// 	newcontroller.controller = new AltuiBox(1+idx,newcontroller.ip);
+					// 	break;
 					case 'V':
 					default:
 						newcontroller.controller = new VeraBox(1+idx,newcontroller.ip);
