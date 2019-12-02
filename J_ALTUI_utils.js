@@ -2042,7 +2042,7 @@ var HTMLUtils = (function() {
                    title||'',
                    cls||'btn-light',
                    glyph,
-                   label);
+                   label||'');
     };
                  
 	function _drawToolbar(htmlid,tools,cls) {

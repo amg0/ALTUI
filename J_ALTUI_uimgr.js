@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$MyRevision: 2536 $";
+var ALTUI_revision = "$MyRevision: 2538 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -1688,7 +1688,8 @@ var UIManager  = ( function( window, undefined ) {
 
 	function _loadJointJSScript( drawfunc ) {
 		//https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.0.1/joint.min.js
-		var ver = "2.2.1/" //"2.1.4/" //"2.0.1/";	// "1.1.0/"; // "1.0.3"
+		//https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.1.1/joint.min.js
+		var ver = "3.1.1/" //"2.2.1/" //"2.1.4/" //"2.0.1/";	// "1.1.0/"; // "1.0.3"
 		_loadCssIfNeeded( "joint.css", "//cdnjs.cloudflare.com/ajax/libs/jointjs/"+ver)
 		_loadScriptIfNeeded('joint.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
 			_loadScriptIfNeeded('joint.shapes.fsa.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
@@ -9855,12 +9856,12 @@ var UIManager  = ( function( window, undefined ) {
 			_refreshFromRemote('altui-workflow-timer',null);
 		})
 		$("#altui-workflow-zoomin").click(function() {
-			var scale = V(paper.viewport).scale();
+			var scale = paper.scale() // V(paper.viewport).scale();
 			paper.scale(1.20*scale.sx, 1.20*scale.sy);
 			paper.fitToContent({ padding:2 })
 		});
 		$("#altui-workflow-zoomout").click(function() {
-			var scale = V(paper.viewport).scale();
+			var scale = paper.scale() // V(paper.viewport).scale();
 			paper.scale(0.80*scale.sx, 0.80*scale.sy)
 			paper.fitToContent({ padding:2 })
 		});
