@@ -4052,6 +4052,8 @@ var UIManager  = ( function( window, undefined ) {
 			};
 
 			if (MultiBox.isDeviceZwave(device)) {
+/* 				var info = MultiBox.controllerOf(device.altuiid)
+				var bi = MultiBox.getControllers()[info.controller].box_info */
 				var html = HTMLUtils.drawTabs('altui-id-tabs',[ 
 					{ iditem: 'altui-zwconfig', label: _T("Configuration") , html: _getConfigHtml(device) },
 					{ iditem: 'altui-options', label: _T("Options") , html: _getParamsHtml(device) }

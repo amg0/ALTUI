@@ -43,7 +43,7 @@ var MultiBox = ( function( window, undefined ) {
 		var arr = _controllers.filter( function(c) {
 			return (required_feature==null ) || ( $.isFunction(c.controller[required_feature])==true )
 		})
-		return $.map(arr,function(c) { return {	ip:c.ip , name:c.name, box_info:c.controller.getBoxFullInfo(), controller: c.controller } });
+		return arr; //$.map(arr,function(c) { return {	ip:c.ip , name:c.name, box_info:c.controller.getBoxFullInfo(), controller: c.controller } });
 	};
 	function _initDB(devicetypes) {
 		$.extend(true,_devicetypesDB[0],devicetypes);	// data received initially comes from ctrl 0
