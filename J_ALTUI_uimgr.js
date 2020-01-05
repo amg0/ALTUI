@@ -3996,18 +3996,24 @@ var UIManager  = ( function( window, undefined ) {
 			return html;
 		};
 		function _deviceDrawDeviceConfig( device ) {
-			if (MultiBox.isDeviceZwave(device)) {
+			function _getConfigHtml(device) {
 				var html ="";
+				html +="<div class='row altui-device-config '>";
+				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 '>"
+				html += _drawDeviceZWConfiguration( device );
+				// if (isNullOrEmpty(setvariables) == false) {
+				// }
+				html += "</div>";	// device-config
+				html += "</div>";	// row
+				return html;
+			};
+			function _getParamsHtml(device) {
 				var curvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "ConfiguredVariable") || "";
 				var setvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "VariablesSet");
 				if (isNullOrEmpty(setvariables))
 					setvariables = curvariables || "";
 				var getvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "VariablesGet") || "";
-				html +="<div class='row altui-device-config '>";
-				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 '>"
-				html += _drawDeviceZWConfiguration( device );
-				// if (isNullOrEmpty(setvariables) == false) {
-				html += "<h6>{0}</h6>".format(_T("Device zWave Parameters"))
+				var html = "";
 				html += "<form id='myform' role='form' action='javascript:void(0);' novalidate >";
 				html += "<table class='table table-responsive-OFF table-sm altui-config-variables'>";
 				html +=("<caption><button id='{0}' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(device.altuiid,_T('Save Changes'));
@@ -4042,9 +4048,15 @@ var UIManager  = ( function( window, undefined ) {
 				html += "</tbody>";
 				html += "</table>";
 				html += "</form>";
-				// }
-				html += "</div>";	// device-config
-				html += "</div>";	// row
+				return html;
+			};
+
+			if (MultiBox.isDeviceZwave(device)) {
+				var html = HTMLUtils.drawTabs('altui-id-tabs',[ 
+					{ iditem: 'altui-zwconfig', label: _T("Configuration") , html: _getConfigHtml(device) },
+					{ iditem: 'altui-options', label: _T("Options") , html: _getParamsHtml(device) }
+				]);
+				
 				return html
 			}
 			return ""
@@ -4398,7 +4410,7 @@ var UIManager  = ( function( window, undefined ) {
 				}
 			})
 		// ZWCONFIG PAGE
-		$(".altui-device-config")
+		$(".altui-config-variables")
 			.on('click',".altui-add-variable", function() {
 				var tr = $(this).closest('tr');	// remove the line purely
 				$(tr).before( _displayConfigVariable( device,'0','m','','' ) );

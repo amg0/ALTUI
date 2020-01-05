@@ -2196,8 +2196,32 @@ var HTMLUtils = (function() {
 		return html;
 	};
 
+	/*
+	_drawTabs('id', [ 
+		{ iditem: 'zwconfig', label: 'Config' , html: 'xxx' },
+		{ iditem: 'options', label: 'Options' , html: 'xxx' }
+	])
+	*/
 	function _drawTabs(htmlid, model) {
-		return "";
+		var html = '<ul class="nav nav-tabs" id="myTab" role="tablist">'
+		var active = true;
+		$.each(model, function(idx,item) {
+			html += '<li class="nav-item">'
+			html += '<a class="nav-link {2}" id="{0}-tab" data-toggle="tab" href="#{0}" role="tab" aria-controls="home" aria-selected="true">{1}</a>'
+				.format( item.iditem, item.label, (active) ? "active" : "");
+			active=false;
+			html += '</li>'
+		})
+		html += '</ul>'
+		html += '<div class="tab-content" id="myTabContent">'
+		active = true;
+		$.each(model, function(idx,item) {
+			html += '<div class="tab-pane fade show {2}" id="{0}" role="tabpanel" aria-labelledby="{0}-tab">{3}</div>'
+				.format( item.iditem, item.label, (active) ? "active" : "" , item.html );
+			active=false;
+		})
+		html += '</div>'
+		return html;
 	};
 
 	function _drawForm( htmlid, title, model, extraattrs ) {
