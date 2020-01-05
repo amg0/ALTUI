@@ -2196,6 +2196,10 @@ var HTMLUtils = (function() {
 		return html;
 	};
 
+	function _drawTabs(htmlid, model) {
+		return "";
+	};
+
 	function _drawForm( htmlid, title, model, extraattrs ) {
 		var html ="";
 		if (isNullOrEmpty(title) == false)
@@ -2285,6 +2289,7 @@ var HTMLUtils = (function() {
 		drawDropDown	: _drawDropDown,
 		drawFormFields	: _drawFormFields,
 		drawForm		: _drawForm,
+		drawTabs		: _drawTabs,
 		startTimer		: _startTimer,
 		stopTimer		: _stopTimer,
 		stopAllTimers	: _stopAllTimers,
