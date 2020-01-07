@@ -4008,14 +4008,11 @@ var UIManager  = ( function( window, undefined ) {
 				return html;
 			};
 			function _getConfigHtml(device) {
-				var html ="";
-				html += HTMLUtils.drawForm( 'altui-ctrlconfig-form', _T("Controller Behaviors"),
-				[
-					{ id:"altui-enableNNU", label:_T("Enable Wakeup NNU"), type:"input", inputtype:"checkbox", value: false, opt:{required:'','data-altuiid':device.altuiid } },
-				],
-				"novalidate" //"data-toggle='validator'"
-				);
-				return html;
+				var model = [];
+				if (MultiBox.isDeviceZwave(device) && MultiBox.isDeviceBattery(device)) {
+					model.push( { id:"altui-disableNNU", label:_T("Disable Wakeup AAR_NNU"), type:"input", inputtype:"checkbox", value: false, opt:{required:'','data-altuiid':device.altuiid } } );
+				}
+				return HTMLUtils.drawForm( 'altui-ctrlconfig-form', null, model, "novalidate" );
 			};
 			function _getParamsHtml(device) {
 				var curvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "ConfiguredVariable") || "";
@@ -4068,9 +4065,7 @@ var UIManager  = ( function( window, undefined ) {
 					{ iditem: 'altui-zwave', label: _T("ZWave") , html: _getReportHtml(device) },
 					{ iditem: 'altui-options', label: _T("Options") , html: _getParamsHtml(device) },
 					{ iditem: 'altui-controller', label: _T("Controller") , html: _getConfigHtml(device) },
-
 				]);
-				
 				return html
 			}
 			return ""
@@ -4466,9 +4461,18 @@ var UIManager  = ( function( window, undefined ) {
 		});
 
 		// CONTROLLER BEHAVIORS
-		$("#altui-enableNNU").click(function(e){
+		$("#altui-disableNNU").click(function(e){
 			var altuiid = $(this).data('altuiid');
-			alert(altuiid)	
+			var device = MultiBox.getDeviceByAltuiID(altuiid)
+			if (device) {
+				var status = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "DisableWakeupARR_NNU" )
+				if (status==null)
+					status = false
+				MultiBox.setStatus(
+					device,
+					"urn:micasaverde-com:serviceId:ZWaveDevice1", "DisableWakeupARR_NNU", 
+					(status) ? "0" : "1" );
+			}
 		})
 
 		//ATTRIBUTE PAGE

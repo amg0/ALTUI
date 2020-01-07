@@ -582,6 +582,10 @@ var MultiBox = ( function( window, undefined ) {
 		var elems = device.altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.isDeviceBT(device);
 	};
+	function _isDeviceBattery(device) {
+		var level = MultiBox.getDeviceBatteryLevel(device)
+		return (level!=null)
+	};
 	function _updateNeighbors(device) {
 		var elems = device.altuiid.split("-");
 		return (_controllers[elems[0]]==undefined)	? null : _controllers[elems[0]].controller.updateNeighbors(elems[1]);
@@ -984,6 +988,7 @@ var MultiBox = ( function( window, undefined ) {
 	isDeviceZwave			: _isDeviceZwave,			// (device)
 	isDeviceZigbee			: _isDeviceZigbee,			// (device)
 	isDeviceBT				: _isDeviceBT,				// (device)
+	isDeviceBattery			: _isDeviceBattery,			// (device)
 	updateNeighbors			: _updateNeighbors,			// (device)
 	modifyDevice		: _modifyDevice,
 
