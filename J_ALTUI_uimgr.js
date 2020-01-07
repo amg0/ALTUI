@@ -3758,8 +3758,8 @@ var UIManager  = ( function( window, undefined ) {
 			{val : '4h', text: '4 byte hex'},
 			{val : '4d', text: '4 byte dec'},
 		];
-		var sel = $("<select id='altui-deviceconfig-select' class='form-control form-control-sm'></select>");
-		$(options).each(function() {
+		var sel = $("<select id='altui-deviceconfig-select-{0}' class='form-control form-control-sm'></select>".format(varnum));
+		$(options).each(function(idx) {
 			var opt = $("<option>").attr('value',this.val).text(this.text);
 			if (this.val == lengthtype)
 				opt.attr('selected','selected');
@@ -3996,7 +3996,7 @@ var UIManager  = ( function( window, undefined ) {
 			return html;
 		};
 		function _deviceDrawDeviceConfig( device ) {
-			function _getConfigHtml(device) {
+			function _getReportHtml(device) {
 				var html ="";
 				html +="<div class='row altui-device-config '>";
 				html += "<div id='altui-device-config-"+device.altuiid+"' class='col-12 '>"
@@ -4007,6 +4007,16 @@ var UIManager  = ( function( window, undefined ) {
 				html += "</div>";	// row
 				return html;
 			};
+			function _getConfigHtml(device) {
+				var html ="";
+				html += HTMLUtils.drawForm( 'altui-ctrlconfig-form', _T("Controller Behaviors"),
+				[
+					{ id:"altui-enableNNU", label:_T("Enable Wakeup NNU"), type:"input", inputtype:"checkbox", value: false, opt:{required:'','data-altuiid':device.altuiid } },
+				],
+				"novalidate" //"data-toggle='validator'"
+				);
+				return html;
+			};
 			function _getParamsHtml(device) {
 				var curvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "ConfiguredVariable") || "";
 				var setvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "VariablesSet");
@@ -4015,7 +4025,7 @@ var UIManager  = ( function( window, undefined ) {
 				var getvariables = MultiBox.getStatus(device, "urn:micasaverde-com:serviceId:ZWaveDevice1", "VariablesGet") || "";
 				var html = "";
 				html += "<form id='myform' role='form' action='javascript:void(0);' novalidate >";
-				html += "<table class='table table-responsive-OFF table-sm altui-config-variables'>";
+				html += "<table class='table table-responsive-OFF table-sm altui-config-variables' data-altuiid='{0}'>".format(device.altuiid);
 				html +=("<caption><button id='{0}' type='submit' class='btn btn-sm btn-primary altui-device-config-save'>{1}</button></caption>").format(device.altuiid,_T('Save Changes'));
 				html += "<thead>";
 				html += "<tr>";
@@ -4052,11 +4062,13 @@ var UIManager  = ( function( window, undefined ) {
 			};
 
 			if (MultiBox.isDeviceZwave(device)) {
-/* 				var info = MultiBox.controllerOf(device.altuiid)
-				var bi = MultiBox.getControllers()[info.controller].box_info */
+				var info = MultiBox.controllerOf(device.altuiid)
+				var bi = MultiBox.getControllers()[info.controller].box_info
 				var html = HTMLUtils.drawTabs('altui-id-tabs',[ 
-					{ iditem: 'altui-zwconfig', label: _T("Configuration") , html: _getConfigHtml(device) },
-					{ iditem: 'altui-options', label: _T("Options") , html: _getParamsHtml(device) }
+					{ iditem: 'altui-zwave', label: _T("ZWave") , html: _getReportHtml(device) },
+					{ iditem: 'altui-options', label: _T("Options") , html: _getParamsHtml(device) },
+					{ iditem: 'altui-controller', label: _T("Controller") , html: _getConfigHtml(device) },
+
 				]);
 				
 				return html
@@ -4453,6 +4465,12 @@ var UIManager  = ( function( window, undefined ) {
 			return false;
 		});
 
+		// CONTROLLER BEHAVIORS
+		$("#altui-enableNNU").click(function(e){
+			var altuiid = $(this).data('altuiid');
+			alert(altuiid)	
+		})
+
 		//ATTRIBUTE PAGE
 		$(".altui-device-attributes input").focusout( function( event ) {
 			var altuiid = $(this).data('altuiid');
@@ -4480,6 +4498,7 @@ var UIManager  = ( function( window, undefined ) {
 				});
 			}
 		});
+
 		$(".altui-device-controlpanel-container")
 			.on('click',".altui-wflow-goto",function(){
 				var altuiid = $(this).prop("id");
@@ -6989,8 +7008,9 @@ var UIManager  = ( function( window, undefined ) {
 					});
 
 		// register a handler on tab changes to update height of domparent ( usefulk when child are in absolute positioning )
-		$(container).off('shown.bs.tab', 'a[data-toggle="tab"]');
-		$(container).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+		var container2 = $("#altui-device-controlpanel-"+altuiid);
+		$(container2).off('shown.bs.tab', 'a[data-toggle="tab"]');
+		$(container2).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 			var controlpanel = $(e.target).closest(".altui-device-controlpanel");
 			var altuiid = $(controlpanel).data("altuiid")
 			var device = MultiBox.getDeviceByAltuiID( altuiid );
