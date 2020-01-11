@@ -934,6 +934,7 @@ var MultiBox = ( function( window, undefined ) {
 	isRemoteAccess	: function()	{	return window.location.href.indexOf("mios.com")!=-1; /*return true;*/ },
 	getBoxInfo		: function( ctrlid )	{	return _controllers[ctrlid || 0].controller.getBoxInfo(); },
 	getBoxFullInfo	: function( ctrlid )	{	return _controllers[ctrlid || 0].controller.getBoxFullInfo(); },
+	getMajorMinor	: function( ctrlid )	{	return _controllers[ctrlid || 0].controller.getMajorMinor(); },
 	getHouseMode	: function(cb)	{	return _controllers[0].controller.getHouseMode(cb); },		// (cbfunc)
 	setHouseMode	: _setHouseMode,		// (newmode,cbfunc)
 	getHouseModeSwitchDelay : _getHouseModeSwitchDelay,

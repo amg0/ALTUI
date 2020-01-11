@@ -1456,6 +1456,19 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return ( parseInt(_user_data.mode_change_delay || 9) +3);
 	};
 
+	function _getMajorMinor() {
+		var bi = _getBoxFullInfo()
+		if (bi.ShortVersion) {
+			var results = bi.ShortVersion.match(/(\d+)\.(\d+)/)
+			if ( results.length >2 )
+				return {
+					major: parseInt(results[1]),
+					minor: parseInt(results[2])
+				}
+		}
+		return null 	// UNKNOWN
+	};
+
 	function _candoCORS(user_data) {
 		return (_user_data.AllowCORS == "1")
 	};
@@ -2751,6 +2764,7 @@ function testcors() {
 	isOpenLuup		: function() { return _isOpenLuup(_user_data) },
 	candoPost		: function() { return _candoPost(_user_data) },
 	candoCORS		: function() { return _candoCORS(_user_data) }, 
+	getMajorMinor	: _getMajorMinor,
 	enableCORS		: _enableCORS,		// (bEnable, cbfunc )
 	getBoxInfo		: _getBoxInfo,		//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()

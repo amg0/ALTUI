@@ -4009,8 +4009,15 @@ var UIManager  = ( function( window, undefined ) {
 			};
 			function _getConfigHtml(device) {
 				var model = [];
+				var info = MultiBox.controllerOf(device.altuiid)
 				if (MultiBox.isDeviceZwave(device) && MultiBox.isDeviceBattery(device)) {
-					model.push( { id:"altui-disableNNU", label:_T("Disable Wakeup AAR_NNU"), type:"input", inputtype:"checkbox", value: false, opt:{required:'','data-altuiid':device.altuiid } } );
+					var majorminor = MultiBox.getMajorMinor(info.controller)
+					if (majorminor) {
+						if ( (majorminor.major>7) || 
+							 ((majorminor.major==7) && (majorminor.minor>=30)) ) {
+								model.push( { id:"altui-disableNNU", label:_T("Disable Wakeup AAR_NNU"), type:"input", inputtype:"checkbox", value: false, opt:{required:'','data-altuiid':device.altuiid } } );
+						}
+					}
 				}
 				return HTMLUtils.drawForm( 'altui-ctrlconfig-form', null, model, "novalidate" );
 			};
