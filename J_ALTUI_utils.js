@@ -375,6 +375,7 @@ function _formatTrigger(controller,trigger)
 	line.lastrun = trigger.last_run ? _toIso(new Date(trigger.last_run*1000)," ") : "";
 
 	if (trigger.arguments && event.argumentList)  {
+		var condarr = []
 		$.each(trigger.arguments, function( idx,argument) {
 			var id = argument.id;
 			var eventargtemplate = null;
@@ -394,14 +395,16 @@ function _formatTrigger(controller,trigger)
 						});
 					} else if (eventarg.HumanFriendlyText && eventarg.HumanFriendlyText.text)
 						line.descr = eventarg.HumanFriendlyText.text.replace("_DEVICE_NAME_","<b>"+device.name+"</b>").replace("_ARGUMENT_VALUE_",value)
-					line.condition +="{0} {1} {2}".format(
-						eventarg.name,
-						eventarg.comparisson,
-						value );
+						condarr.push( "{0} {1} {2}".format(
+							eventarg.name,
+							eventarg.comparisson,
+							value )
+						);
 					return false;	// we had a match
 				}
 			});
 		});
+		line.condition = condarr.join(",")
 	} else {
 		var lines = [];
 		if (event.serviceStateTable)
