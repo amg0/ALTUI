@@ -404,7 +404,7 @@ function _formatTrigger(controller,trigger)
 				}
 			});
 		});
-		line.condition = condarr.join(",")
+		line.condition = condarr.join(", ")
 	} else {
 		var lines = [];
 		if (event.serviceStateTable)
