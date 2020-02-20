@@ -14248,11 +14248,17 @@ var UIManager  = ( function( window, undefined ) {
 			html += "<div class='altui-ctrl-tools'>{0}</div>".format(HTMLUtils.drawToolbar( 'altui-workflow-toolbar', _buttons ));
 			var bCorsEnabled = ctrl.controller.candoCORS() 
 			var sCorsLabel = bCorsEnabled ? _T("Disable") : _T("Enable")
+			var bHeal = ctrl.controller.enableNightlyHeal() 
+			var sHeal = bHeal ? _T("Disable") : _T("Enable")
 			var capabilities = [
+				{ 	name: "Enable Nightly Heal", 
+					value: bHeal,
+					command: HTMLUtils.drawButton('altui-toggleNightlyHeal','',sHeal,'btn-sm btn-light',sHeal,'cog')
+				 },			
 				{ name: "Can Do CORS", value: bCorsEnabled, command: HTMLUtils.drawButton('altui-togglecors','',sCorsLabel,'btn-sm btn-light',sCorsLabel,'cog') },
 				{ name: "Can Do http POST", value: ctrl.controller.candoPost() },				
 				{ name: "Is Open Luup", value: ctrl.controller.isOpenLuup() },				
-				{ name: "Is UI5", value: ctrl.controller.isUI5() },				
+				{ name: "Is UI5", value: ctrl.controller.isUI5() },			
 			];
 			html +=	 HTMLUtils.array2Table(capabilities,null,[],_T("Info"),null,'altui-controller-info');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
 			html +=	 HTMLUtils.array2Table(_buildArrayFromParams(box_info),null,[],_T("Details"),null,'altui-controller-params');//"<pre class='pre-scrollable'>{0}</pre>".format( JSON.stringify(box_info,null,2) )
@@ -14287,17 +14293,26 @@ var UIManager  = ( function( window, undefined ) {
 		$(".altui-mainpanel").append( html );
 
 		// interactivity
-		$("#altui-controllers-info").off("click").on("click","#altui-togglecors",function() {
-			var id = _getControllerID( $(this) );
-			var bCurrent = MultiBox.candoCORS(id);
-			var controllers = MultiBox.getControllers();
-			MultiBox.enableCORS( id, ! bCurrent, function() {
-				$("#altui_ctrl_"+id).html( _displayOneControllerInfo(controllers[id]) )
+		$("#altui-controllers-info").off("click")
+			.on("click","#altui-toggleNightlyHeal",function() {
+				var id = _getControllerID( $(this) );
+				var bCurrent = MultiBox.enableNightlyHeal(id);
+				var controllers = MultiBox.getControllers();
+				MultiBox.enableNightlyHeal( id, ! bCurrent, function() {
+					$("#altui_ctrl_"+id).html( _displayOneControllerInfo(controllers[id]) )
+				})
 			})
-		})
+			.on("click","#altui-togglecors",function() {
+				var id = _getControllerID( $(this) );
+				var bCurrent = MultiBox.candoCORS(id);
+				var controllers = MultiBox.getControllers();
+				MultiBox.enableCORS( id, ! bCurrent, function() {
+					$("#altui_ctrl_"+id).html( _displayOneControllerInfo(controllers[id]) )
+				})
+			});
 		$("#altui-ctrl-support").click(function() {
 			window.open( "https://support.getvera.com/hc/en-us/requests/new", '_blank');
-		})
+		});
 		$("#altui-ctrl-backup").click(function() {
 			var id = _getControllerID( $(this) );
 			MultiBox.RequestBackup( id, function(data) {

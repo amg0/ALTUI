@@ -851,6 +851,9 @@ var MultiBox = ( function( window, undefined ) {
 	function _enableCORS(controller, bEnable, cbfunc) {
 		return _controllers[controller].controller.enableCORS(bEnable,cbfunc);
 	}
+	function _enableNightlyHeal(controller, bEnableOrNull,  cbfunc) {
+		return _controllers[controller].controller.enableNightlyHeal(bEnableOrNull, cbfunc);
+	}
 	function _candoCORS(controller) {
 		return _controllers[controller].controller.candoCORS();
 	}
@@ -1061,6 +1064,7 @@ var MultiBox = ( function( window, undefined ) {
 	getPower			: _getPower,			//(cbfunc)
 	resetPollCounters	: _resetPollCounters,	//()	!  promise API
 	isUserDataCached	: _isUserDataCached,	//()
+	enableNightlyHeal	: _enableNightlyHeal,	//(controller, bEnableOrNull)
 	enableCORS			: _enableCORS,			//(controller, bEnable, cbfunc)
 	candoCORS			: _candoCORS,			//(controller)
 	getIconPath			: _getIconPath,			// (device,str)

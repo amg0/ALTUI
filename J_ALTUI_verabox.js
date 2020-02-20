@@ -1473,6 +1473,21 @@ var VeraBox = ( function( uniq_id, ip_addr ) {
 		return (_user_data.AllowCORS == "1")
 	};
 	
+	function _enableNightlyHeal(bEnableOrNull, cbfunc) {
+		var value = _user_data.EnableNightlyHeal
+		if (bEnableOrNull != null) {
+			var value = bEnableOrNull ? 1 : 0 
+			var jqxhr = _httpGet("?id=variableset&Variable=EnableNightlyHeal&Value="+value,{},function(){
+				_user_data.EnableNightlyHeal = value.toString();
+				if ($.isFunction(cbfunc)) { 
+				    (cbfunc)();
+			    }
+			});
+			return jqxhr
+		}
+		return (value=="0") ? false : true  
+	};
+
 	function _enableCORS( bEnable , cbfunc ) {
 		//Example request:
 		// http://IP:3480/data_request?id=variableset&Variable=AllowCORS&Value=1 //enable
@@ -2765,6 +2780,7 @@ function testcors() {
 	candoPost		: function() { return _candoPost(_user_data) },
 	candoCORS		: function() { return _candoCORS(_user_data) }, 
 	getMajorMinor	: _getMajorMinor,
+	enableNightlyHeal : _enableNightlyHeal, //(bEnableOrNull) 
 	enableCORS		: _enableCORS,		// (bEnable, cbfunc )
 	getBoxInfo		: _getBoxInfo,		//()
 	getBoxFullInfo	: _getBoxFullInfo,		//()
