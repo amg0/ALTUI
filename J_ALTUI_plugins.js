@@ -149,7 +149,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-storage-info {font-size: 12px;}";
 		style += ".altui-watts, .altui-volts, .altui-countdown	{font-size: 16px;}";
 		style += ".altui-watts-unit {font-size: 12px;}";
-		style += ".altui-denon-lastresult  {font-size: 10px; white-space: nowrap; overflow: hidden;}";
+		style += ".altui-denon-lastresult {font-size: 10px; white-space: nowrap; overflow: hidden;}";
 		style += ".altui-denonoff-btngrp  {clear: right; }";
 		style += ".altui-denonoff-btn  {margin: 1px 1px 1px 1px; padding: 3px 3px 3px 3px !important; font-size: 11px !important; }";
 		style += ".altui-temperature  {font-size: 16px;}";
@@ -158,7 +158,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-humidity, .altui-light	 {font-size: 18px;}";
 		style += ".altui-motion {font-size: 22px;}";
 		style += ".altui-mysensorsext {font-size: 16px;}";
-		style += ".altui-keypad-status {font-size: 14px;}";
+		style += ".altui-keypad-status, .altui-vclock  {font-size: 14px;}";
 		style += ".altui-weather-text, .altui-lasttrip-text, .altui-lastread-text, .altui-vswitch-text, .altui-gcal3-text {font-size: 11px;}";
 		style += ".altui-red , .btn.altui-red { color:red;}";
 		style += ".altui-blue, .btn.altui-blue { color:blue;}";
@@ -1277,6 +1277,15 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += "</script>";
 		return html;
 	};
+	function _drawVClock( device ) {
+		var html = "";
+		var type  = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VClock1', 'AlarmType' ) || ''
+		var time  = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VClock1', 'AlarmTime' ) || ''
+		var end  = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VClock1', 'AlarmEnd' ) || ''
+		html += ("<div class='altui-vclock'>{0}</div>").format( type);
+		html += ("<div class='altui-vclock'>{0} {1}</div>").format(  time, end );
+		return html;
+	};
 	//Rafale77 end
 	function _drawAltDenon( device ) {
 		var html="";
@@ -2167,6 +2176,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 	drawBinaryLight : _drawBinaryLight,
 	drawWaterValve : _drawWaterValve,
 	drawAltDenon : _drawAltDenon,
+	drawVClock : _drawVClock,
 	drawVeraSecure : _drawVeraSecure,
 	drawBinLightControlPanel : _drawBinLightControlPanel,
 	drawSceneController: _drawSceneController,
