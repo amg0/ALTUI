@@ -148,7 +148,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".cpanelSection {  border-bottom: 1px dashed #000; }";		// Hue plugin compat
 		style += ".altui-storage-info {font-size: 12px;}";
 		style += ".altui-watts, .altui-volts, .altui-countdown	{font-size: 16px;}";
-		style += ".altui-watts-unit {font-size: 12px;}";
+		style += ".altui-watts-unit, .altui-vclock2 {font-size: 12px;}";
 		style += ".altui-denon-lastresult {font-size: 10px; white-space: nowrap; overflow: hidden;}";
 		style += ".altui-denonoff-btngrp  {clear: right; }";
 		style += ".altui-denonoff-btn  {margin: 1px 1px 1px 1px; padding: 3px 3px 3px 3px !important; font-size: 11px !important; }";
@@ -1283,7 +1283,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		var time  = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VClock1', 'AlarmTime' ) || ''
 		var end  = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:VClock1', 'AlarmEnd' ) || ''
 		html += ("<div class='altui-vclock'>{0}</div>").format( type);
-		html += ("<div class='altui-vclock'>{0} {1}</div>").format(  time, end );
+		html += ("<div class='altui-vclock2'>{0} {1}</div>").format(  time, end );
 		return html;
 	};
 	//Rafale77 end
