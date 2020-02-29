@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$MyRevision: 2542 $";
+var ALTUI_revision = "$MyRevision: 2543 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -2859,7 +2859,7 @@ var UIManager  = ( function( window, undefined ) {
 		var favoriteHtml = (scene.favorite==true) ? starGlyph : staremtpyGlyph;
 		var label = ((scene.hidden==true) ? hiddenGlyph+' ' : '') + scene.name;
 		var modeStatusHtml = 
-			(scene.modeStatus == "0") 
+			((scene.modeStatus == null) || (scene.modeStatus == "0"))
 			? ""
 			: $.map( scene.modeStatus.split(","),function(m) { 
 				var mode = _HouseModes[ parseInt(m)-1 ]
