@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$MyRevision: 2543 $";
+var ALTUI_revision = "$MyRevision: 2544 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -3579,10 +3579,16 @@ var UIManager  = ( function( window, undefined ) {
 					break;
 				};
 				case 'spinner_horizontal':
+
 					var val = MultiBox.getStatus( device, control.Display.Service, control.Display.Variable );
-					var symbol = MultiBox.getStatus( device, control.Display.Service, control.Display.Variable );
+					var symbol=''
+					var current = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature');
+					if (isNullOrEmpty(current)==false) {
+						symbol = (' / ' + current ) 
+					}
 					var uniqid = devid+"-"+idx;
-					var symbol = control.LabelSymbol ? control.LabelSymbol.text : '';
+					//var symbol = control.LabelSymbol ? control.LabelSymbol.text : '';
+
 					$.extend( true, control.Display, {MinValue:-10, MaxValue:100, Step:0.5}, control.Display )	// ensure defaults
 					var html = `
 					<div id='altui-spinner_horizontal-{0}' class=''>
