@@ -426,6 +426,8 @@ var styles =`
 	.altui-plugin-title { height: 21px;	 overflow:hidden; }
 	.altui-plugin-version { font-size:1em;	}
 	.altui-plugin-version .form-control-sm { height: 20px;	 line-height: 20px; }
+	.altui-plugin-help { font-size:18px; }
+	.altui-plugin-help:hover { cursor:pointer; }
 	a.altui-goto-scene, a.altui-goto-device, a.altui-goto-workflow { color:black; cursor:pointer; }
 	.altui-sortable-placeholder { border: 2px solid blue; background-color: blue;  opacity: 0.5; }
 	.altui-ace-editor .ui-resizable-helper { border: 2px dotted #00F; }
@@ -10778,7 +10780,11 @@ var UIManager  = ( function( window, undefined ) {
 						html += "<div class='card-body'>"
 							html += "<div class='altui-plugin-version pull-right'>{0}</div>".format(_drawVersionSelect(plugin,arr))
 							html += ( plugin.Icon && plugin.Icon.startsWith('https') ? "<img {1} class='altui-plugin-icon' src='{0}'></img>"  : "<img {1} class='altui-plugin-icon' src='//apps.mios.com/{0}'></img>" ) .format(plugin.Icon,"onerror='this.src=defaultIconSrc'");
-							html += "<div class='altui-plugin-title'>{0}</div>".format(plugin.Title.htmlEncode())
+							html += "<div class='altui-plugin-title'>{0}<span class='pull-right altui-plugin-help' title='{2}'>{1}</span></div>".format(
+								plugin.Title.htmlEncode(),
+								glyphTemplate.format("info-circle",plugin.Description,"text-info"),
+								plugin.Description
+								)
 							// if ($.isArray(plugin.Repository) == false) {
 								// plugin.Repository = [plugin.Repository]
 							// }
@@ -10925,6 +10931,12 @@ var UIManager  = ( function( window, undefined ) {
 				var versionid = UIManager._findVersionId(plugin,vernum)
 				// var repositories = UIManager._findRepositories(plugin,versionid)
 				$(installbuttons).replaceWith( _displayInstallButtons(plugin,versionid) );
+			})
+			.on("click",".altui-plugin-help",function() {
+				var pluginid= $(this).closest(".altui-pluginbox").data("pluginid");
+				var plugin = UIManager._findPlugin(_plugins_data.details.plugins,pluginid)
+				if (plugin.Instructions) 
+					window.open( plugin.Instructions, '_blank');
 			})
 			.on("click",".altui-plugin-reviews",function() {
 				var pluginid= $(this).closest(".altui-pluginbox").data("pluginid");
