@@ -10,7 +10,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.49b"
+local version = "v2.50"
 local SWVERSION = "3.4.1" -- "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_TMP_PREFIX = "altui-"
@@ -53,7 +53,8 @@ local WorkflowTriggers = {}			-- array of workflow triggers ( waiting for a work
 
 -- local strWorkflowDescription = ""
 local strWorkflowTransitionTemplate = "Wkflow - Workflow: %s, Valid Transition found:%s, Active State:%s=>%s"	-- needed for ALTUI grep & history log feature
-local Timers = {}					-- to Persist timers accross VERA reboots
+local Timers = {}					-- to Persist timers across VERA reboots
+local TimersDisabled = {} 			-- octo - flag to stop interrupts from clearing timer 
 local ReceivedData = {}				-- buffer for receiving split data chunks
 
 --calling a function from HTTP in the device context
@@ -471,8 +472,10 @@ local function addWorkflowTrigger( lul_device, altuiid, state, listener_altuiid,
 end
 
 local function removeWorkflowTrigger( lul_device, listener_altuiid )
+
 	debug(string.format("removeWorkflowTrigger(%s,%s)",lul_device,	listener_altuiid ))
 	WorkflowTriggers[listener_altuiid]=nil
+
 end
 
 local function getWorkflowTriggeredBy( lul_device, altuiid, state )
@@ -558,25 +561,24 @@ local function _addWatch( service, variable, devid, scene, expression, xml, prov
 			}
 			if (DataProviders[provider]==nil) or ( data=="" )  then
 				warning(string.format("Unknown data push provider:%s or data:%s",provider or"", data or ""))
-			else
-				if (registeredWatches[devidstr][service][variable]['DataProviders'] == nil) then
-					registeredWatches[devidstr][service][variable]['DataProviders']={}
+			end
+			if (registeredWatches[devidstr][service][variable]['DataProviders'] == nil) then
+				registeredWatches[devidstr][service][variable]['DataProviders']={}
+			end
+			if (registeredWatches[devidstr][service][variable]['DataProviders'][provider] == nil) then
+				registeredWatches[devidstr][service][variable]['DataProviders'][provider]={}
+			end
+			local n2 = tablelength(registeredWatches[devidstr][service][variable]['DataProviders'][provider])
+			local bFound = false
+			for i=1,n2 do
+				if (registeredWatches[devidstr][service][variable]['DataProviders'][provider][i]['Data']==data) then
+					bFound = true
 				end
-				if (registeredWatches[devidstr][service][variable]['DataProviders'][provider] == nil) then
-					registeredWatches[devidstr][service][variable]['DataProviders'][provider]={}
-				end
-				local n2 = tablelength(registeredWatches[devidstr][service][variable]['DataProviders'][provider])
-				local bFound = false
-				for i=1,n2 do
-					if (registeredWatches[devidstr][service][variable]['DataProviders'][provider][i]['Data']==data) then
-						bFound = true
-					end
-				end
-				if (bFound==false) then
-					registeredWatches[devidstr][service][variable]['DataProviders'][provider][n2+1] = {
-						['Data']=data
-					}
-				end
+			end
+			if (bFound==false) then
+				registeredWatches[devidstr][service][variable]['DataProviders'][provider][n2+1] = {
+					['Data']=data
+				}
 			end
 		else
 			local bFound = false
@@ -1156,11 +1158,12 @@ local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent
 		return true
 	end
 	-- otherwise check if timer expired
-	if (link.prop.timer ~= "") then
+	if (link.prop.timer ~= "") and TimersDisabled[workflow_idx] == false then --octo, ignore timer expiry if in the process of enabling them
 		debug(string.format("Wkflow - link has a timer."))
-		local res = link.prop.expired
-		link.prop.expired = false
+		local res = link.prop.expired 
+		link.prop.expired = false  
 		if (res==true) then
+			debug(string.format("Wkflow - link had expired."))  -- octo
 			return true
 		end
 	end
@@ -1293,13 +1296,13 @@ end
 local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate,comment)
 	if (WFLOW_MODE==true) and (newstate.id ~= oldstate.id ) then
 		log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, comment or "", getCellName(oldstate), getCellName(newstate)));
-		-- debug(string.format("Wkflow - Workflow:'%s' nextWorkflowState(%s, %s ==> %s) ", Workflows[workflow_idx].name,Workflows[workflow_idx].altuiid, oldstate.attrs.text.text,newstate.attrs.text.text))
 
 		-- cancel timers originated from that state
 		cancelStateTimers(lul_device,workflow_idx,oldstate.id)
 		removeWorkflowTrigger(lul_device,Workflows[workflow_idx].altuiid)
 
 		-- execute onExit of old state
+		TimersDisabled[workflow_idx] = true -- octo - stop timers getting cleared as they are currently expired
 		executeStateLua(lul_device,workflow_idx,oldstate,"onExitLua")
 		executeStateActions(lul_device,workflow_idx,oldstate,"onExit")
 		executeStateScenes(lul_device,workflow_idx,oldstate,"onExitScenes")
@@ -1312,6 +1315,7 @@ local function nextWorkflowState(lul_device,workflow_idx,oldstate, newstate,comm
 		executeStateActions(lul_device,workflow_idx,newstate,"onEnter")
 		executeStateScenes(lul_device,workflow_idx,newstate,"onEnterScenes")
 		armLinkTransitions(lul_device,workflow_idx,newstate)
+		TimersDisabled[workflow_idx] = false --octo - timers are now running
 
 		-- execute all other workflows triggered by that new state
 		local to_launch = getWorkflowTriggeredBy( lul_device, Workflows[workflow_idx].altuiid, newstate.id )
@@ -1347,7 +1351,7 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 
 	local evalstartcond = evaluateStateTransition(lul_device,start,workflow_idx,watchevent)
 	local blocked = Workflows[workflow_idx].blocked or Workflows[workflow_idx].paused	-- blocked by start conditions or by user request
-	debug(string.format("Wkflow - blocked:%s, paused:%s", tostring(Workflows[workflow_idx].blocked or ''), tostring(Workflows[workflow_idx].paused or '')))
+	debug(string.format("Wkflow - blocked:%s, paused:%s", tostring(Workflows[workflow_idx].blocked or false), tostring(Workflows[workflow_idx].paused or false))) --octo
 
 	if (blocked==true) then
 		if (evalstartcond==true) then
@@ -1396,7 +1400,7 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 				cancelTimer( table.concat(tbl, "#") )
 			end
 
-			-- log(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, link.labels[1].attrs.text.text, oldstate.attrs.text.text, targetstate.attrs.text.text));
+			debug(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, link.labels[1].attrs.text.text, oldstate.attrs.text.text, targetstate.attrs.text.text)); --Octo
 			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate , getCellName(link))
 			return true;	-- todo
 		end
