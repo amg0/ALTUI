@@ -561,24 +561,25 @@ local function _addWatch( service, variable, devid, scene, expression, xml, prov
 			}
 			if (DataProviders[provider]==nil) or ( data=="" )  then
 				warning(string.format("Unknown data push provider:%s or data:%s",provider or"", data or ""))
-			end
-			if (registeredWatches[devidstr][service][variable]['DataProviders'] == nil) then
-				registeredWatches[devidstr][service][variable]['DataProviders']={}
-			end
-			if (registeredWatches[devidstr][service][variable]['DataProviders'][provider] == nil) then
-				registeredWatches[devidstr][service][variable]['DataProviders'][provider]={}
-			end
-			local n2 = tablelength(registeredWatches[devidstr][service][variable]['DataProviders'][provider])
-			local bFound = false
-			for i=1,n2 do
-				if (registeredWatches[devidstr][service][variable]['DataProviders'][provider][i]['Data']==data) then
-					bFound = true
+			else
+				if (registeredWatches[devidstr][service][variable]['DataProviders'] == nil) then
+					registeredWatches[devidstr][service][variable]['DataProviders']={}
 				end
-			end
-			if (bFound==false) then
-				registeredWatches[devidstr][service][variable]['DataProviders'][provider][n2+1] = {
-					['Data']=data
-				}
+				if (registeredWatches[devidstr][service][variable]['DataProviders'][provider] == nil) then
+					registeredWatches[devidstr][service][variable]['DataProviders'][provider]={}
+				end
+				local n2 = tablelength(registeredWatches[devidstr][service][variable]['DataProviders'][provider])
+				local bFound = false
+				for i=1,n2 do
+					if (registeredWatches[devidstr][service][variable]['DataProviders'][provider][i]['Data']==data) then
+						bFound = true
+					end
+				end
+				if (bFound==false) then
+					registeredWatches[devidstr][service][variable]['DataProviders'][provider][n2+1] = {
+						['Data']=data
+					}
+				end
 			end
 		else
 			local bFound = false
