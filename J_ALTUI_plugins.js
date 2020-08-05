@@ -394,8 +394,11 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		if (ws.tempFormat==undefined)
 			ws.tempFormat="";
 
-		var status = parseFloat(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' ));
-		html += ("<span class='altui-temperature' >"+status+"&deg;"+ws.tempFormat+"</span>");
+		var curtemp = MultiBox.getStatus( device, 'urn:upnp-org:serviceId:TemperatureSensor1', 'CurrentTemperature' );
+		if (curtemp !=null) {
+			var status =  parseFloat(curtemp);
+			html += ("<span class='altui-temperature' >"+status+"&deg;"+ws.tempFormat+"</span>");
+		}
 		return html;
 	}
 
