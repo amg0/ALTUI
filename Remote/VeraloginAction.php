@@ -53,7 +53,7 @@
 							$options=array(
 								  CURLOPT_URL            => $url, // Url cible (l'url la page que vous voulez télécharger)
 								  CURLOPT_RETURNTRANSFER => true, // Retourner le contenu téléchargé dans une chaine (au lieu de l'afficher directement)
-								  CURLOPT_VERBOSE 		 => TRUE,
+								  CURLOPT_VERBOSE 		 => false,
 								  CURLOPT_HEADER         => false // Ne pas inclure l'entête de réponse du serveur dans la chaine retournée
 							);
 							 
@@ -97,7 +97,7 @@
 							$pwdSeed = "oZ7QE6LcLJp6fiWzdqZc";
 							$SHA1UserPassword = sha1( $user.$pwd.$pwdSeed );
 							// new srv to be confirmed => $url = "https://vera-us-oem-autha11.mios.com/autha/auth/username/"."$user"."?SHA1Password="."$SHA1UserPassword"."&PK_Oem=1";
-							$url = "https://us-autha11.mios.com/autha/auth/username/"."$user"."?SHA1Password="."$SHA1UserPassword"."&PK_Oem=1";
+							$url = "https://us-autha11.mios.com/autha/auth/username/"."$user"."?SHA1Password="."$SHA1UserPassword"."&PK_Oem=1&TokenVersion=2";
 							//$url="http://www.google.com";
 
 							$req = new MyHttpRequest();
@@ -172,16 +172,17 @@
 
 					$obj = json_decode( base64_decode($AuthTokens->Identity) );
 					$PK_Account = $obj->PK_Account;
-
 					$OtherSessionToken = $mms->getSessionToken( $AuthTokens->Server_Account, $AuthTokens->Identity, $AuthTokens->IdentitySignature );
 					$DeviceTable = $mms->getAccountDevices($AuthTokens->Server_Account,$PK_Account,$OtherSessionToken);
-					
 					foreach( $DeviceTable as $key => $device) {
-						$ServerDeviceToken = $mms->getSessionToken( $device->Server_Device, $AuthTokens->Identity, $AuthTokens->IdentitySignature );
-						$RelayInfo = $mms->getRelayInfo( $device->Server_Device , $device->PK_Device , $ServerDeviceToken );
-						$device->RelayInfo = $RelayInfo ;
-						$ServerRelayToken = $mms->getSessionToken( $device->RelayInfo->Server_Relay, $AuthTokens->Identity, $AuthTokens->IdentitySignature );
-						$device->RelayInfo->ServerRelayToken = $ServerRelayToken;
+						// Only include Vera hub types.
+						if ("1" === $device->PK_DeviceType) {
+							$ServerDeviceToken = $mms->getSessionToken( $device->Server_Device, $AuthTokens->Identity, $AuthTokens->IdentitySignature );
+							$RelayInfo = $mms->getRelayInfo( $device->Server_Device , $device->PK_Device , $ServerDeviceToken );
+							$device->RelayInfo = $RelayInfo ;
+							$ServerRelayToken = $mms->getSessionToken( $device->RelayInfo->Server_Relay, $AuthTokens->Identity, $AuthTokens->IdentitySignature );
+							$device->RelayInfo->ServerRelayToken = $ServerRelayToken;
+						}
 					}
 					
 					?>
@@ -200,14 +201,17 @@
 					<tbody>
 					<?php
 					foreach( $DeviceTable as $key => $device) {
-						echo '<tr class="altui-remote-device" id="'.$key.'">';
-						echo '<td>'.$device->Name.'</td>';
-						echo '<td>'.$device->RelayInfo->InternalIP.'</td>';
-						echo '<td>'.$device->RelayInfo->Platform.' #'.$device->PK_Device.'</td>';
-						echo '<td>'.$device->RelayInfo->FirmwareVersion.'</td>';
-						echo '<td>'.$device->MacAddress.'</td>';
-						echo '<td>'.$device->RelayInfo->Server_Relay.'</td>';
-						echo '</tr>';
+						// Only include Vera hub types.
+						if ("1" === $device->PK_DeviceType) {
+							echo '<tr class="altui-remote-device" id="'.$key.'">';
+							echo '<td>'.$device->Name.'</td>';
+							echo '<td>'.$device->RelayInfo->InternalIP.'</td>';
+							echo '<td>'.$device->RelayInfo->Platform.' #'.$device->PK_Device.'</td>';
+							echo '<td>'.$device->RelayInfo->FirmwareVersion.'</td>';
+							echo '<td>'.$device->MacAddress.'</td>';
+							echo '<td>'.$device->RelayInfo->Server_Relay.'</td>';
+							echo '</tr>';
+						}
 					}
 					?>
 					</tbody>
