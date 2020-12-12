@@ -198,6 +198,7 @@ var styles =`
 		opacity:0.3;
 	}
 	.altui-clock {
+		font-size: 12px;
 	}
 	.multiselect-container>li>a>label {
 		padding: 3px 3px 3px 3px !important;
