@@ -10,7 +10,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.51"
+local version = "v2.52"
 local SWVERSION = "3.5.1" -- "3.4.1" -- "3.3.1"	-- "2.2.4"
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_TMP_PREFIX = "altui-"
@@ -21,6 +21,8 @@ local THINGSPEAK_PUSH_SEC = 15	-- thingspeak limits
 local this_device = nil
 local DEBUG_MODE = false	-- controlled by UPNP action
 local WFLOW_MODE = false	-- controlled by UPNP action
+local REMOTEACCESS_URL = "https://bpspec.com/altui/Veralogin.php"
+
 local json = require("dkjson")
 if (type(json) == "string") then
 	luup.log("ALTUI warning dkjson missing, falling back to L_ALTUIjson", 2)
@@ -3550,7 +3552,7 @@ function resetDevice(lul_device,reload)
 	luup.variable_set(ALTUI_SERVICE, "Timers", "", lul_device)
 	-- setVariableIfChanged(ALTUI_SERVICE, "EmonCmsUrl", "https://emoncms.org", lul_device)
 	-- setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", "https://remotevera.000webhostapp.com/veralogin.php", lul_device)
-	setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", "https://hirwatech.com/veralogin/Veralogin.php", lul_device)
+	setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", REMOTEACCESS_URL, lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
 
 	if (reload==true) then
@@ -4365,7 +4367,7 @@ function startupDeferred(lul_device)
 	local present = getSetVariable(ALTUI_SERVICE,"Present", lul_device, 0)
 	-- local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://remotevera.000webhostapp.com/veralogin.php")
 	--local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://hirwatech.com/veralogin/Veralogin.php")
-	local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, "https://bpspec.com/altui/Veralogin.php")
+	local remoteurl =getSetVariable(ALTUI_SERVICE,"RemoteAccess", lul_device, REMOTEACCESS_URL)
 	local css = getSetVariable(ALTUI_SERVICE,"ThemeCSS", lul_device, "")
 	local imgpath = getSetVariable(ALTUI_SERVICE,"ImagePath", lul_device, "")
 	local background = getSetVariable(ALTUI_SERVICE,"BackgroundImg", lul_device, "")
