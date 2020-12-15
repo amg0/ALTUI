@@ -38,7 +38,7 @@ THE SOFTWARE.
 // Transparent : //drive.google.com/uc?id=0B6TVdm2A9rnNMkx5M0FsLWk2djg&authuser=0&export=download
 
 // UIManager.loadScript('https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","gauge"]}]}');
-var ALTUI_revision = "$MyRevision: 2549 $";
+var ALTUI_revision = "$MyRevision: 2550 $";
 var ALTUI_registered = null;
 var NULL_DEVICE = "0-0";
 var NULL_SCENE = "0-0";
@@ -15903,7 +15903,7 @@ $(function() {
 		];
 		// 0: table	 1: devicename 2: id
 		deviceModalTemplate = "<div id='deviceModal' class='modal fade'>";
-		deviceModalTemplate += "  <div class='modal-dialog modal-lg'>";
+		deviceModalTemplate += "  <div class='modal-dialog modal-dialog-scrollable modal-lg'>";
 		deviceModalTemplate += "	<div class='modal-content'>";
 		deviceModalTemplate += "	  <div class='modal-header'>";
 		deviceModalTemplate += "		<h5 class='modal-title'>{1} <small>#{2}</small> - Variables</h5>";
@@ -15939,7 +15939,7 @@ $(function() {
 
 		// 0: table	 1: devicename 2: id
 		deviceActionModalTemplate = "<div id='deviceActionModal' class='modal fade'>";
-		deviceActionModalTemplate += "	<div class='modal-dialog modal-lg'>";
+		deviceActionModalTemplate += "	<div class='modal-dialog modal-dialog-scrollable modal-lg'>";
 		deviceActionModalTemplate += "	  <div class='modal-content'>";
 		deviceActionModalTemplate += "		<div class='modal-header'>";
 		deviceActionModalTemplate += "		  <h5 class='modal-title'>{1} <small>#{2}</small> - Actions</h5>";
