@@ -8194,6 +8194,7 @@ var UIManager  = ( function( window, undefined ) {
 		var _sceneFilter={
 			name: $("#altui-search-text").val().toUpperCase(),
 			room: MyLocalStorage.getSettings("SceneRoomFilter") || -1,
+			hidenotif: ($('#altui-shownotifications').prop('checked')!=true),
 			isValid: function() { return ($.isArray(this.room)) ? (this.room.length>0) : (this.room!=-1); }
 		};
 		function _sceneInThisRoom(scene) {
@@ -8201,7 +8202,7 @@ var UIManager  = ( function( window, undefined ) {
 				var controller = MultiBox.controllerOf(scene.altuiid).controller;
 				_sceneID2RoomName[scene.altuiid] = _roomID2Name["{0}-{1}".format(controller,scene.room)];
 			}
-			if (scene.notification_only && scene.notification_only!=0)
+			if (_sceneFilter.hidenotif && scene.notification_only && scene.notification_only!=0)
 				return false;
 			if ((_sceneFilter.name.length>0) && (scene.name.toUpperCase().contains( _sceneFilter.name ) != true))
 				return false;
@@ -8247,6 +8248,7 @@ var UIManager  = ( function( window, undefined ) {
 		function _onChangeRoomFilter() {
 			//_roomID2Name[_deviceDisplayFilter.room]
 			_sceneFilter.room =	 $.map($('#altui-device-room-filter :selected'),function(e)	 { return (e.value); })		// array of room names
+			_sceneFilter.hidenotif = ($('#altui-shownotifications').prop('checked')!=true);
 			UIManager.setLeftnavRoomsActive( _sceneFilter.room );
 			MyLocalStorage.setSettings("SceneRoomFilter",_sceneFilter.room);
 			if ( MyLocalStorage.getSettings('SyncLastRoom')==1 )
@@ -8313,17 +8315,29 @@ var UIManager  = ( function( window, undefined ) {
 			$.when( _drawRoomFilterButtonAsync( _sceneFilter.room ) )
 			.then(function( html) {
 				toolbarHtml+= html;	// room filter
+				toolbarHtml+=`
+					<button class="btn btn-light" type="button">
+						<input class="" type="checkbox" value="" id="altui-shownotifications">
+						<label class="form-check-label" for="defaultCheck1">Notifications</label>
+					</button>`;
 				toolbarHtml+="	<button type='button' class='btn btn-light' id='altui-scene-create' >";
 				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create"));
 				toolbarHtml+="	</button>";
 				toolbarHtml+="	<button type='button' class='btn btn-light' id='altui-scene-create-fromstate' >";
 				toolbarHtml+=(plusGlyph + "&nbsp;" + _T("Create From State"));
 				toolbarHtml+="	</button>";
+
+
 				$(".altui-scene-toolbar").replaceWith( "<div class='col-12 altui-scene-toolbar'>"+toolbarHtml+"</div>" );
+
+				$("#altui-shownotifications").change( function() {
+					_onChangeRoomFilter();	
+				});
 
 				$("#altui-scene-create").click( function() {
 					UIControler.changePage('Scene Edit',[NULL_SCENE])
 				});
+
 				$("#altui-scene-create-fromstate").click( function() {
 					var actions = _getActionsFromState()
 					var scenetemplate = {
