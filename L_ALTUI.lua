@@ -10,8 +10,9 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.52"
+local version = "v2.53"
 local SWVERSION = "3.5.1" -- "3.4.1" -- "3.3.1"	-- "2.2.4"
+local BOOTSTRAPVERSION = "4.5.3" 
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
 local ALTUI_TMP_PREFIX = "altui-"
 local ALTUI_SONOS_MP3 = ALTUI_TMP_PREFIX .. "sonos.mp3"
@@ -1890,14 +1891,17 @@ local htmlAltuiScripts = [[
 -- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.shapes.fsa.min.js"></script>
 -- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jointjs/1.0.3/joint.shapes.devs.min.js"></script>
 
---<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+-- %s to inject bootstrap verion
+local htmlBootstrapScript = [[	
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@%s/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+]]
 
 local htmlScripts = [[
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/@swversion@/jquery.min.js" ></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.14/lodash.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.5/umd/popper.js" ></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+@bootstrapscript@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" ></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-bootgrid/1.3.1/jquery.bootgrid.min.js" defer></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js"></script>
@@ -1921,7 +1925,7 @@ local htmlStyle = [[
 
 --https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css
 --local defaultBootstrapPath = "//maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-local defaultBootstrapPath = "https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+local defaultBootstrapPath = "https://cdn.jsdelivr.net/npm/bootstrap@%s/dist/css/bootstrap.min.css"
 
 -- WARNING: put the proper class name to work with the UIManager preload check. '.' are replaced by '_'
 local htmlLocalCSSlinks = [[
@@ -2430,12 +2434,15 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local serverOptions= getSetVariable(ALTUI_SERVICE, "ServerOptions", deviceID, "")
 				local localcdn = getSetVariable(ALTUI_SERVICE, "LocalCDN", deviceID, "")
 				local altuipath = getSetVariable(ALTUI_SERVICE, "ALTUIPath", deviceID, "")
-				local swversion = getSetVariable(ALTUI_SERVICE, "SWVersion", deviceID, SWVERSION)
+				local tmp_swversion = getSetVariable(ALTUI_SERVICE, "SWVersion", deviceID, SWVERSION.."/"..BOOTSTRAPVERSION)
+				local parts = tmp_swversion:altui_split("/")
+				local swversion = parts[1] or SWVERSION
+				local bootstrapversion  = parts[2] or BOOTSTRAPVERSION
 				local favicon = getSetVariable(ALTUI_SERVICE, "FavIcon", deviceID, "/favicon.ico")
 				local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, DEFAULT_TIMEOUT)
 				local localbootstrap = getSetVariable(ALTUI_SERVICE, "LocalBootstrap", deviceID, "")
 				if (localbootstrap == "") then
-					localbootstrap=defaultBootstrapPath
+					localbootstrap=string.format(defaultBootstrapPath,bootstrapversion)
 				end
 				if (localcdn=="~") then
 					localcdn=""
@@ -2448,6 +2455,7 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				variables["localcdn"] = localcdn
 				variables["altuipath"] = altuipath
 				variables["swversion"] = swversion
+				variables["bootstrapscript"] = string.format(htmlBootstrapScript,bootstrapversion)
 				variables["favicon"] = favicon
 				variables["ctrltimeout"] = ctrltimeout
 				variables["localbootstrap"] = localbootstrap
@@ -3547,10 +3555,9 @@ function resetDevice(lul_device,reload)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsActiveState", json.encode(WorkflowsActiveState), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 	luup.variable_set(ALTUI_SERVICE, "Timers", "", lul_device)
-	-- setVariableIfChanged(ALTUI_SERVICE, "EmonCmsUrl", "https://emoncms.org", lul_device)
-	-- setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", "https://remotevera.000webhostapp.com/veralogin.php", lul_device)
 	setVariableIfChanged(ALTUI_SERVICE, "RemoteAccess", REMOTEACCESS_URL, lul_device)
-	setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION, lul_device)
+	-- default jquery and bootstrap version
+	setVariableIfChanged(ALTUI_SERVICE, "SWVersion", SWVERSION .. "/" .. BOOTSTRAPVERSION, lul_device)
 
 	if (reload==true) then
 		debug("Forcing a Luup reload")
