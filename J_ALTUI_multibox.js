@@ -194,15 +194,6 @@ var MultiBox = ( function( window, undefined ) {
 			});
 		}
 
-		if (g_ALTUI.g_MachineLearning == '1') {
-			_controllers.push( {
-				ip:'',
-				type:"Z",				// machine learning controller
-				name:'Machine Learning',
-				controller:new LearnBox(_controllers.length)
-			});
-		}
-
 		// prepare to wait for proper initialization
 		EventBus.waitForAll("on_ui_userDataLoaded", _getAllEvents("on_ui_userDataLoaded"), this, null , g_ALTUI.g_CtrlTimeout )
 		.always( function(data) {

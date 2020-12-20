@@ -2023,7 +2023,6 @@ local htmlLayout = [[
 			 g_Options : '@ServerOptions@',
 			 g_CtrlOptions : '@ctrloptions@',
 			 g_DeviceTypes :  JSON.parse('@devicetypes@'),
-			 g_MachineLearning : '@machinelearning@',
 			 g_CtrlTimeout : '@ctrltimeout@',
 			 //g_CustomPages : @custompages@,
 			 //g_Workflows : @workflows@
@@ -2433,7 +2432,6 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				local altuipath = getSetVariable(ALTUI_SERVICE, "ALTUIPath", deviceID, "")
 				local swversion = getSetVariable(ALTUI_SERVICE, "SWVersion", deviceID, SWVERSION)
 				local favicon = getSetVariable(ALTUI_SERVICE, "FavIcon", deviceID, "/favicon.ico")
-				local machinelearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
 				local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, DEFAULT_TIMEOUT)
 				local localbootstrap = getSetVariable(ALTUI_SERVICE, "LocalBootstrap", deviceID, "")
 				if (localbootstrap == "") then
@@ -2452,7 +2450,6 @@ function myALTUI_Handler(lul_request, lul_parameters, lul_outputformat)
 				variables["swversion"] = swversion
 				variables["favicon"] = favicon
 				variables["ctrltimeout"] = ctrltimeout
-				variables["machinelearning"] = machinelearning
 				variables["localbootstrap"] = localbootstrap
 				variables["devicetypes"] = json.encode(tbl)
 				-- variables["custompages"] = "["..table.concat(result_tbl, ",").."]"
@@ -4385,7 +4382,6 @@ function startupDeferred(lul_device)
 	local custompages = getSetVariable(ALTUI_SERVICE, "Data_CustomPages_0", lul_device, "[]")
 	local emoncmsurl = getSetVariableIfEmpty(ALTUI_SERVICE, "EmonCmsUrl", lul_device, "https://emoncms.org")
 	local pendingReset = getSetVariable(ALTUI_SERVICE, "PendingReset", lul_device, 0)
-	local machineLearning = getSetVariable(ALTUI_SERVICE, "EnableMachineLearning", lul_device, 0)
 	local ctrltimeout = getSetVariable(ALTUI_SERVICE, "ControlTimeout", lul_device, DEFAULT_TIMEOUT)
 
 	getSetVariable(ALTUI_SERVICE, "GoogleLastError", lul_device, "")
