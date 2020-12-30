@@ -10,7 +10,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.53"
+local version = "v2.53b"
 local SWVERSION = "3.5.1" -- "3.4.1" -- "3.3.1"	-- "2.2.4"
 local BOOTSTRAPVERSION = "4.5.3" 
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
@@ -1213,23 +1213,11 @@ local function evaluateStateTransition(lul_device,link, workflow_idx, watchevent
 			old = old or ""
 			new = new or ""
 			local results = _evaluateUserExpression(lul_device,devid, cond.service, cond.variable,old,new,lastupdate,cond.luaexpr,workflow_idx)
-			-- if (bMatchingWatch==true) then
-				-- watchevent.watch['Expressions']['results'][cond.luaexpr]["LastEval"] = results[1]
-				-- debug(string.format("Wkflow - setting watch results to %s",json.encode(watchevent.watch['Expressions']['results'][cond.luaexpr])))
-			-- end
 
 			local res,delay = results[1], results[2] or nil
 			if (  res ~= true) then
 				return false
 			end
-
-			-- if (cond.triggeronly == true) then
-				-- debug(string.format("Wkflow - watchevent for workflow was:%s",json.encode(watchevent.watch['Expressions']['results'])))
-				-- if (watchevent.watch['Expressions']['results'][cond.luaexpr]["LastEval"] == watchevent.watch['Expressions']['results'][cond.luaexpr]["OldEval"]) then
-					-- debug("Wkflow - Watch expression value is the same as before, ignoring the trigger & return false")
-					-- return false
-				-- end
-			-- end
 		end
 		return true	-- logical AND of all expressions
 	end
@@ -3659,7 +3647,7 @@ function UPNPregisterDataProvider(lul_device, newName, newUrl, newJsonParameters
 		registerDataProvider(newName, nil, nil, newUrl, obj )
 		return 1
 	end
-	warning("invalid json parameters, %s",newJsonParameters);
+	warning(string.format("invalid json parameters, %s",newJsonParameters));
 	return 0
 end
 
@@ -3772,9 +3760,9 @@ function _evaluateUserExpression(lul_device, devid, lul_service, lul_variable,ol
 				WorkflowsVariableBag[ Workflows[opt_wkflowidx].altuiid ] = env.Bag
 				setVariableIfChanged(ALTUI_SERVICE, "WorkflowsVariableBag", json.encode(WorkflowsVariableBag), lul_device)
 			end
-			debug(string.format("Evaluation of user watch expression returned: %s",json.encode(results)))
+			debug(string.format("Evaluation: user expression %s returned: %s",expr,json.encode(results)))
 		else
-			debug(string.format("Exception occured, Err Msg: %s",results))
+			warning(string.format("Evaluation: user expression %s -- Exception occured: %s",expr,results))
 			results = { false }
 		end
 	end
@@ -3856,7 +3844,7 @@ function evaluateExpression(watch,lul_device, lul_service, lul_variable,expr,old
 			end
 		end
 	end
-	debug(string.format("evaluateExpression() returns %s",tostring(res)))
+	debug(string.format("evaluateExpression(%s) returns %s",expr,tostring(res)))
 	return res
 end
 
