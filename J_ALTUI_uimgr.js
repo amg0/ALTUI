@@ -1692,7 +1692,7 @@ var UIManager  = ( function( window, undefined ) {
 	function _loadJointJSScript( drawfunc ) {
 		//https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.0.1/joint.min.js
 		//https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.1.1/joint.min.js
-		var ver = "3.1.1/" //"2.2.1/" //"2.1.4/" //"2.0.1/";	// "1.1.0/"; // "1.0.3"
+		var ver = "3.2.0/" //"3.1.1/" //"2.2.1/" //"2.1.4/" //"2.0.1/";	// "1.1.0/"; // "1.0.3"
 		_loadCssIfNeeded( "joint.css", "//cdnjs.cloudflare.com/ajax/libs/jointjs/"+ver)
 		_loadScriptIfNeeded('joint.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
 			_loadScriptIfNeeded('joint.shapes.fsa.min.js','//cdnjs.cloudflare.com/ajax/libs/jointjs/'+ver,function() {
