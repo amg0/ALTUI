@@ -176,6 +176,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		style += ".altui-dimmable-qubino-btn  { padding: 3px 0px 0px 0px; height:25px;}";
 		style += ".altui-dimmable-qubino-btn-img  { width:100%; height:100% }";
 		style += ".altui-dimmable-slider { margin-left: 60px; margin-right: 70px; margin-top:5px;}";
+		style += ".altui-window-slider { margin-left: 60px; margin-right: 110px; margin-top:5px;}";
 		style += ".altui-colorpicker { margin-top: 2px; width:30px; margin-right: 15px; }";
 		style += ".altui-infoviewer-log-btn,.altui-infoviewer-btn,.altui-window-btn,.altui-datamine-open { margin-top: 10px; }";
 		style += ".altui-infoviewer-pattern { font-size: 14px; }";
@@ -689,11 +690,12 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		html += ("	<button id ='altui-window-Down' type='button' class='altui-window-btn btn btn-light btn-sm {0}'>"+_T("Down")+"</button>").format( (status==0) ? 'active' : '' );
 		html += "</div>";
 		html += "</div>";
-
+		html += ("<span id='slider-val-"+device.altuiid+"' class='altui-dimmable' >"+status+"% </span>");
+		html += ("<div id='slider-{0}' class='altui-window-slider' ></div>").format(device.altuiid);
 		html += "<script type='text/javascript'>";
 		html += " $('div#altui-wc-{0} button').on('click', function() { ALTUI_PluginDisplays.onClickWindowCoverButton($(this)); } );".format(device.altuiid);
+		html += "$('div#slider-{0}.altui-window-slider').slider({ max:100,min:0,value:{1},change:ALTUI_PluginDisplays.onSliderChange });".format(device.altuiid,status);
 		html += "</script>";
-
 		return html;
 	};
 
@@ -751,9 +753,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		// if (colorpicker!=true)
 			// html += UIManager.defaultDeviceDrawWatts(device);
 		// load level
-		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelTarget' ));
-		if (isNaN(level)==true)
-			level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' ));
+		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' ));
+		//if (isNaN(level)==true)
+		//	level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' ));
 
 		html += ("<span id='slider-val-"+device.altuiid+"' class='altui-dimmable' >"+level+"% </span>");
 
@@ -776,8 +778,8 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 			// "w,c,r,g,b"	- w = warm white value, c = cool white value
 			// "ct" - ct = color temperature value in Kelvin (integer between 2000 and 9000)
 
-			// try Target then Current
-			current = MultiBox.getStatus(device,'urn:micasaverde-com:serviceId:Color1','TargetColor') || MultiBox.getStatus(device,'urn:micasaverde-com:serviceId:Color1','CurrentColor');
+			// try Current then Target
+			current = MultiBox.getStatus(device,'urn:micasaverde-com:serviceId:Color1','CurrentColor') || MultiBox.getStatus(device,'urn:micasaverde-com:serviceId:Color1','TargetColor');
 			if (current!=null) {
 				var parts = current.split(","); // 0=0,1=0,2=0,3=0,4=255
 				// normalize the values
@@ -1840,7 +1842,7 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 				}
 				html += " </div>"+
 					"</div>";
-			} 
+			}
 			html += "<div style='height: 20px;'>&nbsp;</div>"+
 				"<div class='container-fluid'>"+
 				" <div class='row' style='height: 30px;'>"+
