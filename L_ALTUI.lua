@@ -10,7 +10,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.53b"
+local version = "v2.53c"
 local SWVERSION = "3.5.1" -- "3.4.1" -- "3.3.1"	-- "2.2.4"
 local BOOTSTRAPVERSION = "4.5.3" 
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
@@ -3466,7 +3466,7 @@ local function table_search (tt, v,stack,level)
 	-- debug(string.format("table_search(v=%s,stack%s)",v,stack))
 	if type(tt) == "table" then
 		for key, value in pairs (tt) do
-			if key ~= v then
+			if type(key) == "string" and key ~= v then
 				--debug(string.format("table_search: new table found , key=%s",key))
 				local r = table_search(value, v,stack.."-"..key,level+1 )
 				if r ~= nil then
