@@ -753,9 +753,9 @@ var ALTUI_PluginDisplays= ( function( window, undefined ) {
 		// if (colorpicker!=true)
 			// html += UIManager.defaultDeviceDrawWatts(device);
 		// load level
-		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' ));
-		//if (isNaN(level)==true)
-		//	level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' ));
+		var level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelTarget' ));
+		if (isNaN(level)==true)
+			level = parseInt(MultiBox.getStatus( device, 'urn:upnp-org:serviceId:Dimming1', 'LoadLevelStatus' ));
 
 		html += ("<span id='slider-val-"+device.altuiid+"' class='altui-dimmable' >"+level+"% </span>");
 
