@@ -10,7 +10,7 @@
 local MSG_CLASS = "ALTUI"
 local ALTUI_SERVICE = "urn:upnp-org:serviceId:altui1"
 local devicetype = "urn:schemas-upnp-org:device:altui:1"
-local version = "v2.53c"
+local version = "v2.54"
 local SWVERSION = "3.5.1" -- "3.4.1" -- "3.3.1"	-- "2.2.4"
 local BOOTSTRAPVERSION = "4.5.3" 
 local UI7_JSON_FILE= "D_ALTUI_UI7.json"
@@ -1392,7 +1392,7 @@ local function evalWorkflowState(lul_device, workflow_idx, watchevent )
 				cancelTimer( table.concat(tbl, "#") )
 			end
 
-			debug(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, link.labels[1].attrs.text.text, oldstate.attrs.text.text, targetstate.attrs.text.text)); --Octo
+			-- debug(string.format(strWorkflowTransitionTemplate, Workflows[workflow_idx].altuiid, link.labels[1].attrs.text.text, oldstate.attrs.text.text, targetstate.attrs.text.text)); --Octo
 			nextWorkflowState( lul_device, workflow_idx, oldstate, targetstate , getCellName(link))
 			return true;	-- todo
 		end
